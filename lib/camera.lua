@@ -82,6 +82,10 @@ function camera:position()
 	return self.x, self.y
 end
 
+function camera:getBounds()
+  return self._sx, self._sy, self._sw, self._sh
+end
+
 function camera:rotate(phi)
 	self.rot = self.rot + phi
 	return self

@@ -8,7 +8,6 @@ local Component = Class {
     if visible == nil then visible = true end
     
     self.entity = nil
-    self.transform = Transform.new()
     self.enabled = enabled
     self.visible = visible
   end

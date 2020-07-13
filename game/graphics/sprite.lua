@@ -20,6 +20,28 @@ function Sprite:getBounds()
   return self.offsetX, self.offsetY, w, h
 end
 
+function Sprite:getOffset()
+  return self.offsetX, self.offsetY
+end
+
+function Sprite:getOffsetX()
+  return self.offsetX
+end
+
+function Sprite:getOffsetY()
+  return self.offsetY
+end
+
+function Sprite:getWidth()
+  local w, _ = self.subtexture:getDimensions()
+  return w
+end
+
+function Sprite:getHeight()
+  local _, h = self.subtexture:getDimensions()
+  return h
+end
+
 function Sprite:draw()
   --todo
 end
