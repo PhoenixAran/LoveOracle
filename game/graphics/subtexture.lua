@@ -7,4 +7,13 @@ local Subtexture = class {
   end
 }
 
+function Subtexture:getType()
+  return 'subtexture'
+end
+
+function Subtexture:getDimensions()
+  local _, _, w, h = self.quad:getViewport()
+  return w, h
+end
+
 return Subtexture

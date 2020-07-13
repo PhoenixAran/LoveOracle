@@ -30,7 +30,6 @@ local Entity = Class {
     -- bump box variables
     self.x, self.y = rect.x - rect.w / 2, rect.y - rect.h / 2
     self.w, self.h = rect.w, rect.h
-
   end
 }
 
