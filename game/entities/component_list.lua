@@ -46,6 +46,10 @@ local ComponentList = Class {
   end
 }
 
+function ComponentList:getType()
+  return "componentlist"
+end
+
 function ComponentList:setLockMode(lockmode) 
   self.lockMode = value
   if #self.toAdd > 0 then
@@ -121,7 +125,7 @@ function ComponentList:update(dt)
   self:setLockMode(LockModes.Locked)
   for _, component in ipairs(self.components) do
     if component:isEnabled() then
-      component:update()
+      component:update(dt)
     end
   end
   self:setLockMode(LockModes.Open)
@@ -146,3 +150,5 @@ function ComponentList:debugDraw()
   end
   self:setLockMode(LockModes.Open)
 end
+
+return ComponentList
