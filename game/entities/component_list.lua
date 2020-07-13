@@ -42,7 +42,7 @@ local ComponentList = Class {
     -- hashsets
     self.current = { }
     self.adding = { }
-    self.removing  { }
+    self.removing = { }
   end
 }
 
@@ -67,7 +67,7 @@ function ComponentList:setLockMode(lockmode)
   end
   
   if #self.toRemove > 0 then
-    for _, component in ipairs(self.toRemove)
+    for _, component in ipairs(self.toRemove) do
       if self.current[component] then
         self.current.remove(component)
         removeValue(self.current, component)

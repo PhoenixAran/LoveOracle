@@ -1,17 +1,16 @@
 local Class = require 'lib.class'
 local Transform = require 'lib.transform'
 local Vector2 = require 'lib.vector'
+local Entity = require 'game.entities.entity'
 
-local TestPlayer = Class {
-  init = function(self, x, y)
-    if x == nil then x = 0 end
-    if y == nil then y = 0 end
-    self.x = x
-    self.y = y
+local TestPlayer = Class { __includes = Entity,
+  init = function(self)
+    Entity.init(self, true, true, {x = 24, y = 24, h = 16, w = 16 })
   end
 }
 
 function TestPlayer:update(dt)
+  Entity.update(self)
   local inputX, inputY = 0, 0
   if love.keyboard.isDown("w") then
     inputY = -1
@@ -25,14 +24,11 @@ function TestPlayer:update(dt)
   if love.keyboard.isDown("d") then
     inputX = 1
   end
-    
-  self.x = self.x + ( inputX * 60 * dt )
-  self.y = self.y + ( inputY * 60 * dt )
-end
-
-function TestPlayer:draw()
-  love.graphics.setColor(0 / 255, 128 / 255, 0 / 255)
-  love.graphics.rectangle("fill", self.x, self.y, 16, 16)
+  
+  local x, y = self:getPosition()
+  x = x + ( inputX * 60 * dt )
+  y = y + ( inputY * 60 * dt )
+  self:setPosition(x, y)  
 end
 
 return TestPlayer

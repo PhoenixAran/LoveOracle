@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local Transform = require 'lib.transform'
 local Vector = require 'lib.vector'
-local ComponentList = require './component_list'
+local ComponentList = require 'game.entities.component_list'
 
 local Entity = Class {
   init = function(self, enabled, visible, rect)
@@ -54,14 +54,14 @@ function Entity:isEnabled()
   return self.enabled
 end
 
--- transform passthroughs
+--transform passthroughs
 function Entity:getLocalPosition()
   local x, y, z = self.transform:getLocalPosition()
   return x, y
 end
 
 function Entity:getPosition()
-  local x, y, z = self:transform:getPosition()
+  local x, y, z = self.transform:getPosition()
   return x, y
 end
 
@@ -81,6 +81,10 @@ function Entity:setPositionWithBumpCoords(x, y)
   self.transform:setPosition(x + self.w / 2, y + self.h / 2)
 end
 
+function Entity:setLocalPosition(x, y)
+  self.transform:setLocalPosition(x, y)
+end
+
 -- gameloop callbacks
 function Entity:update(dt)
   self.componentList:update(dt)
@@ -93,7 +97,8 @@ end
 function Entity:debugDraw()
   --love draws from the upper left corner so we use our bump coordinates
   local positionX, positionY = self:getBumpPosition()
-  love.graphics.setColor(0, 0, 225 / 225, 70 / 255)
+  love.graphics.setColor(0, 0, 225 / 225)
+  --love.graphics.setColor(0, 1, 0)
   love.graphics.rectangle("fill", positionX, positionY, self.w, self.h)
   self.componentList:debugDraw()
 end
