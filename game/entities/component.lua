@@ -22,6 +22,4 @@ function Component:added(entity)
   self.entity = entity
 end
 
-function Component:
-
 return Component

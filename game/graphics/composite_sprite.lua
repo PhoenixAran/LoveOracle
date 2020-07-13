@@ -9,6 +9,8 @@ local CompositeSprite = Class {
     self.sprites = sprites
     self.offsetX = offsetX
     self.offsetY = offsetY
+    self.boundsRect = { }
+    self:calculateBounds()
   end
 }
 
@@ -20,6 +22,10 @@ function CompositeSprite:draw()
   for _, sprite in ipairs(self.sprites) do
     sprite:draw()
   end
+end
+
+function CompositeSprite:calculateBounds()
+  
 end
 
 return CompositeSprite

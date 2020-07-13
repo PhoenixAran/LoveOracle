@@ -17,7 +17,7 @@ function maid64.setup(x,y,overscan)
     maid64.x = love.graphics.getWidth()/2 - (maid64.scaler * (maid64.sizeX/2))
     maid64.y = love.graphics.getHeight()/2 - (maid64.scaler * (maid64.sizeY/2))
     maid64.canvas = love.graphics.newCanvas(maid64.sizeX, maid64.sizeY)
-    maid64.canvas:setFilter("nearest")
+    maid64.canvas:setFilter("nearest", "nearest")
 
     -- run resize so the sceen is reset corectly
     maid64.resize(love.graphics.getDimensions())
