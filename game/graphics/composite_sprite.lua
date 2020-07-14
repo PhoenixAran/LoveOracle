@@ -94,9 +94,10 @@ function Sprite:getOffsetY()
   return self.offsetY
 end
 
-function CompositeSprite:draw(position)
+function CompositeSprite:draw(x, y, alpha)
+  if alpha == nil then alpha = 1 end
   for _, sprite in ipairs(self.sprites) do
-    sprite:draw()
+    sprite:draw(x, y, alpha)
   end
 end
 

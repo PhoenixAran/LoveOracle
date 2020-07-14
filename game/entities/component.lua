@@ -1,5 +1,4 @@
 local Class = require 'lib.class'
-local Transform = require 'lib.transform'
 local Vector = require 'lib.vector'
 
 local Component = Class {
@@ -13,12 +12,24 @@ local Component = Class {
   end
 }
 
-function component:getType()
+function Component:getType()
   return 'component'
+end
+
+function Component:isEnabled()
+  return self.enabled
+end
+
+function Component:isVisible()
+  return self.visible
 end
 
 function Component:added(entity)
   self.entity = entity
+end
+
+function Component:removed(entity)
+  self.entity = nil
 end
 
 return Component

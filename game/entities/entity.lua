@@ -53,7 +53,7 @@ function Entity:isEnabled()
   return self.enabled
 end
 
---transform passthroughs
+-- position stuff
 function Entity:getLocalPosition()
   local x, y, z = self.transform:getLocalPosition()
   return x, y
@@ -84,6 +84,15 @@ function Entity:setLocalPosition(x, y)
   self.transform:setLocalPosition(x, y)
 end
 
+-- component list stuff
+function Entity:add(component)
+  self.componentList:add(component)
+end
+
+function Entity:remove(component)
+  self.componentList:remove(component)
+end
+
 -- gameloop callbacks
 function Entity:update(dt)
   self.componentList:update(dt)
@@ -96,10 +105,11 @@ end
 function Entity:debugDraw()
   --love draws from the upper left corner so we use our bump coordinates
   local positionX, positionY = self:getBumpPosition()
-  love.graphics.setColor(0, 0, 225 / 225)
+  love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
   --love.graphics.setColor(0, 1, 0)
   love.graphics.rectangle("fill", positionX, positionY, self.w, self.h)
   self.componentList:debugDraw()
+  love.graphics.setColor(1, 1, 1, 0)
 end
 
 return Entity

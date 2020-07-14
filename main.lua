@@ -7,9 +7,9 @@ function love.load()
   love.graphics.setDefaultFilter("nearest", "nearest")
   love.window.setMode(160 * 4, 144 * 4, { resizable = true, vsync = true,  minwidth = 160, minheight = 144 })
   maid64.setup(160, 144)
-  -- exclude draw callback since we need to use maid64 scaling and resizing
+  -- exclude draw and resize callback since we need to use maid64 scaling and resizing
   screenManager:hook({ exclude = {'draw', 'resize'}})
-  screenManager:enter( require 'game.test_screens.entity_test' )
+  screenManager:enter( require 'game.test_screens.sprite_test' )
 
 end
 

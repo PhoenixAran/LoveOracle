@@ -124,7 +124,7 @@ end
 function ComponentList:update(dt)
   self:setLockMode(LockModes.Locked)
   for _, component in ipairs(self.components) do
-    if component:isEnabled() then
+    if component:isEnabled() and component.update ~= nil then
       component:update(dt)
     end
   end
@@ -149,6 +149,15 @@ function ComponentList:debugDraw()
     end
   end
   self:setLockMode(LockModes.Open)
+end
+
+function ComponentList:getComponent(typeName)
+  for _, component in ipairs(self.components) do
+    if component:getType() == typeName then
+      return component
+    end
+  end
+  return nil
 end
 
 return ComponentList
