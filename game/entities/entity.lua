@@ -106,7 +106,6 @@ function Entity:debugDraw()
   --love draws from the upper left corner so we use our bump coordinates
   local positionX, positionY = self:getBumpPosition()
   love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
-  --love.graphics.setColor(0, 1, 0)
   love.graphics.rectangle("fill", positionX, positionY, self.w, self.h)
   self.componentList:debugDraw()
   love.graphics.setColor(1, 1, 1, 0)

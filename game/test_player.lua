@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local Transform = require 'lib.transform'
-local Vector2 = require 'lib.vector'
+local Vector = require 'lib.vector'
 local Entity = require 'game.entities.entity'
 
 local TestPlayer = Class { __includes = Entity,
@@ -26,6 +26,7 @@ function TestPlayer:update(dt)
   end
   
   local x, y = self:getPosition()
+  local inputVector = Vector(x, y)
   x = x + ( inputX * 60 * dt )
   y = y + ( inputY * 60 * dt )
   self:setPosition(x, y)  
