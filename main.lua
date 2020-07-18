@@ -10,7 +10,7 @@ function love.load()
   love.graphics.setFont(love.graphics.newFont("monogram.ttf", 16))
   -- exclude draw and resize callback since we need to use maid64 scaling and resizing
   screenManager:hook({ exclude = {'draw', 'resize'}})
-  screenManager:enter( require 'game.test_screens.sprite_test' )
+  screenManager:enter( require 'game.test_screens.entity_test'() )
 
 end
 

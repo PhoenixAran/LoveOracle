@@ -36,10 +36,16 @@ function SpriteRenderer:setOffset(x, y)
   self.offsetY = y
 end
 
---TODO
 function SpriteRenderer:getBounds()
+  local ex, ey = self.entity:getPosition()
   local x, y, w, h = self.sprite:getBounds()
-  x = x + self.offsetX
+  x = x + self.offsetX + ex
+  y = y + self.offsetY + ey
+  
+  x = x - w / 2
+  y = y - h / 2
+  
+  return x, y, w, h
 end
 
 function SpriteRenderer:draw()

@@ -50,6 +50,15 @@ function ComponentList:getType()
   return "componentlist"
 end
 
+-- notify components that the entity transform has changed
+function ComponentList:transformChanged()
+  for _, component in ipairs(self.components) do
+    if component.transformChanged ~= nil then
+      component:transformChanged()
+    end
+  end
+end
+
 function ComponentList:setLockMode(lockmode) 
   self.lockMode = value
   if #self.toAdd > 0 then

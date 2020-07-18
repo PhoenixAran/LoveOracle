@@ -1,9 +1,9 @@
 local Class = require 'lib.class'
-local Transform = require 'lib.transform'
+local Transform = require 'game.entities.transform'
 local Vector = require 'lib.vector'
 local ComponentList = require 'game.entities.component_list'
 
-local Entity = Class {
+local Entity = Class { 
   init = function(self, enabled, visible, rect)
     if enabled == nil then enabled = true end
     if visible == nil then visible = true end
@@ -20,16 +20,20 @@ local Entity = Class {
       if rect.w == nil then rect.w = 1 end
       if rect.h == nil then rect.h = 1 end
     end
-
+    
+    --BumpBox init
+    self.x = rect.x
+    self.y = rect.y
+    self.w = rect.w
+    self.h = rect.h    
+    self.collidesWithLayers = { }
+    self.physicsLayer = { }
+    
     self.componentList = ComponentList(self)
     self.enabled = enabled
     self.visible = visible
-    self.transform = Transform.new()
-    self.transform:setPosition(x, y)
-    
-    -- bump box variables
-    self.x, self.y = rect.x - rect.w / 2, rect.y - rect.h / 2
-    self.w, self.h = rect.w, rect.h
+    self.transform = Transform:new(self)
+    self.transform:setPosition(self.x, self.y)
   end
 }
 
@@ -53,7 +57,14 @@ function Entity:isEnabled()
   return self.enabled
 end
 
--- position stuff
+-- position and transform stuff
+function Entity:transformChanged()
+  local ex, ey = self:getPosition()
+  self.x = ex - self.w / 2
+  self.y = ey - self.h / 2
+  self.componentList:transformChanged()
+end
+
 function Entity:getLocalPosition()
   local x, y, z = self.transform:getLocalPosition()
   return x, y
@@ -69,14 +80,10 @@ function Entity:getBumpPosition()
 end
 
 function Entity:setPosition(x, y)
-  self.x = x - self.w / 2
-  self.y = y - self.h / 2
   self.transform:setPosition(x, y)
 end
 
 function Entity:setPositionWithBumpCoords(x, y)
-  self.x = x
-  self.y = y
   self.transform:setPosition(x + self.w / 2, y + self.h / 2)
 end
 

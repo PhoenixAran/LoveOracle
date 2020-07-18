@@ -27,7 +27,7 @@ end
 
 function SpriteTest:draw()
   self.testEntity:draw()
-  self.testEntity:debugDraw()
+  --self.testEntity:debugDraw()
 end
 
 return SpriteTest

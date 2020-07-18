@@ -5,12 +5,13 @@ Transform.__index = Transform
 Transform.x, Transform.y, Transform.z = 0, 0, 0
 
 -- @description: Creates a new transformation
-function Transform:new()
+function Transform:new(entity)
 
 	local self = setmetatable({}, Transform)
 
 	self.Children = {}
-	self:setLocalRotation(0)
+  self.Entity = entity
+
 
 	return self
 
@@ -51,6 +52,7 @@ end
 function Transform:change()
 
 	self.Haschanged = true
+  self.Entity:transformChanged()
 
 	for ID, Child in pairs(self.Children) do
 
