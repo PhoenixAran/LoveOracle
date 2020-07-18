@@ -59,6 +59,14 @@ function ComponentList:transformChanged()
   end
 end
 
+function ComponentList:entityAwake()
+  for _, component in ipairs(self.components) do
+    if component.entityAwake ~= nil then
+      component:entityAwake()
+    end
+  end
+end
+
 function ComponentList:setLockMode(lockmode) 
   self.lockMode = value
   if #self.toAdd > 0 then

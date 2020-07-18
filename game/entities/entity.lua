@@ -101,6 +101,14 @@ function Entity:remove(component)
 end
 
 -- gameloop callbacks
+function Entity:awake()
+  bumpWorld:add(self, self.x, self.y, self.w, self.h)
+  
+  if self.entityAwake ~= nil then
+    self:onAwake()
+  end
+end
+
 function Entity:update(dt)
   self.componentList:update(dt)
 end

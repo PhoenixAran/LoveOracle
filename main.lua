@@ -2,6 +2,7 @@ local maid64 = require 'lib.maid64'
 
 -- globals >:)
 screenManager = require('lib.roomy').new()
+bumpWorld = require('lib.bump').newWorld(32)
 
 function love.load()
   love.graphics.setDefaultFilter("nearest", "nearest")
