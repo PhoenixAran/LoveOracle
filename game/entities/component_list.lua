@@ -59,14 +59,6 @@ function ComponentList:transformChanged()
   end
 end
 
-function ComponentList:entityAwake()
-  for _, component in ipairs(self.components) do
-    if component.entityAwake ~= nil then
-      component:entityAwake()
-    end
-  end
-end
-
 function ComponentList:setLockMode(lockmode) 
   self.lockMode = value
   if #self.toAdd > 0 then
@@ -138,6 +130,22 @@ function ComponentList:remove(component)
   end
 end
 
+function ComponentList:entityAdded(scene)
+  for _, component in ipairs(self.components) do
+    if component.entityAdded ~= nil then
+      component:entityAdded(scene)
+    end
+  end
+end
+
+function ComponentList:entityAwake()
+  for _, component in ipairs(self.components) do
+    if component.entityAwake ~= nil then
+      component:entityAwake()
+    end
+  end
+end
+
 function ComponentList:update(dt)
   self:setLockMode(LockModes.Locked)
   for _, component in ipairs(self.components) do
@@ -166,6 +174,14 @@ function ComponentList:debugDraw()
     end
   end
   self:setLockMode(LockModes.Open)
+end
+
+function ComponentList:entityRemoved(scene)
+  for _, component in ipairs(self.components) do
+    if component.entityRemoved ~= nil then
+      component:entityRemoved(scene)
+    end
+  end
 end
 
 function ComponentList:getComponent(typeName)

@@ -28,10 +28,6 @@ function TestPlayer:update(dt)
   local x, y = self:getPosition()
   local velX, velY = Vector.mul(dt * 60, Vector.normalize(inputX, inputY))
   self:setPosition(x + velX, y + velY)
-  --local x, y = self:getPosition()
-  --local inputVector = Vector(inputX, inputY):getNormalized()
-  --inputVector = inputVector * dt * 60
-  --self:setPosition(x + inputVector.x, y + inputVector.y)  
 end
 
 return TestPlayer

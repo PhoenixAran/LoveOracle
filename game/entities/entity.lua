@@ -21,7 +21,6 @@ local Entity = Class {
       if rect.h == nil then rect.h = 1 end
     end
     
-    --BumpBox init
     self.x = rect.x
     self.y = rect.y
     self.w = rect.w
@@ -103,8 +102,8 @@ end
 -- gameloop callbacks
 function Entity:awake()
   bumpWorld:add(self, self.x, self.y, self.w, self.h)
-  
-  if self.entityAwake ~= nil then
+  self.componentList:entityAwake()
+  if self.onAwake ~= nil then
     self:onAwake()
   end
 end
@@ -117,13 +116,22 @@ function Entity:draw()
   self.componentList:draw()
 end
 
+function Entity:removed(scene)
+  bumpWorld:remove(self)
+  self.componentList:entityRemoved(scene)
+  self.scene = nil
+  if self.onRemoved ~= nil then
+    self:onRemoved(scene)
+  end
+end
+
 function Entity:debugDraw()
   --love draws from the upper left corner so we use our bump coordinates
   local positionX, positionY = self:getBumpPosition()
   love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
   love.graphics.rectangle("fill", positionX, positionY, self.w, self.h)
-  self.componentList:debugDraw()
   love.graphics.setColor(1, 1, 1, 0)
+  self.componentList:debugDraw()
 end
 
 return Entity
