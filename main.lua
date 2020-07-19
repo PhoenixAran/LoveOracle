@@ -3,16 +3,22 @@ local maid64 = require 'lib.maid64'
 -- globals >:)
 screenManager = require('lib.roomy').new()
 bumpWorld = require('lib.bump').newWorld(32)
+assets = require('lib.cargo').init({
+  dir = 'assets',
+  processors = {
+    ['images/'] = function(image, filename)
+      image:setFilter('nearest', 'nearest')
+    end
+  }
+})
 
 function love.load()
-  love.graphics.setDefaultFilter("nearest", "nearest")
   love.window.setMode(160 * 4, 144 * 4, { resizable = true, vsync = true,  minwidth = 160, minheight = 144 })
   maid64.setup(160, 144)
-  love.graphics.setFont(love.graphics.newFont("monogram.ttf", 16))
+  love.graphics.setFont(assets.fonts.monogram(16))
   -- exclude draw and resize callback since we need to use maid64 scaling and resizing
   screenManager:hook({ exclude = {'draw', 'resize'}})
-  screenManager:enter( require 'game.test_screens.entity_test'() )
-
+  screenManager:enter( require 'game.test_screens.sprite_sheet_test' ())
 end
 
 function love.draw()

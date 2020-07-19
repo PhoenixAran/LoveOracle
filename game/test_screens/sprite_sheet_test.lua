@@ -13,7 +13,7 @@ local SpriteSheetTest = Class {
 }
 
 function SpriteSheetTest:enter(previous, ...)
-  local image = love.graphics.newImage("assets/images/entities/player.png")
+  local image = assets.images.entities.player
   self.spriteSheet = SpriteSheet(image, 16, 16, 1, 1)
   self.maxIndex = self.spriteSheet:size()
 end
