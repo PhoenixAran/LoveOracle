@@ -21,8 +21,8 @@ local Entity = Class {
       if rect.h == nil then rect.h = 1 end
     end
     
-    self.x = rect.x
-    self.y = rect.y
+    self.x = rect.x - rect.w / 2
+    self.y = rect.y - rect.h / 2
     self.w = rect.w
     self.h = rect.h    
     self.collidesWithLayers = { }
@@ -32,7 +32,7 @@ local Entity = Class {
     self.enabled = enabled
     self.visible = visible
     self.transform = Transform:new(self)
-    self.transform:setPosition(self.x, self.y)
+    self:setPositionWithBumpCoords(self.x, self.y)
   end
 }
 

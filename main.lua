@@ -19,13 +19,13 @@ local function drawFpsAndMemory()
 end
 
 function love.load()
-  love.window.setMode(160 * 4, 144 * 4, { resizable = true, vsync = true,  minwidth = 160, minheight = 144 })
+  --love.window.setMode(160 * 4, 144 * 4, { resizable = true, vsync = true,  minwidth = 160, minheight = 144 })
   monocle.setup(160, 144, 160 * 4, 144 * 4)
   local font = assets.fonts.monogram(16)
   font:setFilter("nearest", "nearest")
   love.graphics.setFont(font)
   -- exclude draw and resize callback since we need to use maid64 scaling
-  screenManager:hook({ exclude = {'draw',}})
+  screenManager:hook({ exclude = {'draw', 'resize'}})
   screenManager:enter( require 'game.test_screens.entity_test' ())
 end
 
@@ -37,7 +37,7 @@ function love.draw()
   monocle.finish()
 end
 
---function love.resize(w, h)
---  maid64.resize(w, h)
---  screenManager:emit('resize', w, h)
---end
+function love.resize(w, h)
+  monocle.resize(w, h)
+  screenManager:emit('resize', w, h)
+end

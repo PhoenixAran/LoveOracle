@@ -4,7 +4,7 @@ local Entity = require 'game.entities.entity'
 
 local TestPlayer = Class { __includes = Entity,
   init = function(self)
-    Entity.init(self, true, true, {x = 24, y = 24, h = 16, w = 16})
+    Entity.init(self, true, true, {x = 0, y = 0, h = 16, w = 16})
   end
 }
 
@@ -22,6 +22,11 @@ function TestPlayer:update(dt)
   end
   if love.keyboard.isDown("d") then
     inputX = 1
+  end
+  
+  if love.keyboard.isDown("p") then
+    print('transform position: ' .. self:getPosition())
+    print('bump position: ' .. self:getBumpPosition())
   end
   
   
