@@ -10,26 +10,8 @@ local TestPlayer = Class { __includes = Entity,
 
 function TestPlayer:update(dt)
   Entity.update(self)
-  local inputX, inputY = 0, 0
-  if love.keyboard.isDown("w") then
-    inputY = -1
-  end
-  if love.keyboard.isDown("s") then
-    inputY = 1
-  end
-  if love.keyboard.isDown("a") then
-    inputX = -1 
-  end
-  if love.keyboard.isDown("d") then
-    inputX = 1
-  end
   
-  if love.keyboard.isDown("p") then
-    print('transform position: ' .. self:getPosition())
-    print('bump position: ' .. self:getBumpPosition())
-  end
-  
-  
+  local inputX, inputY = input:get('move')
   local x, y = self:getPosition()
   local velX, velY = Vector.mul(dt * 60, Vector.normalize(inputX, inputY))
   self:setPosition(x + velX, y + velY)

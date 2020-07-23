@@ -130,7 +130,7 @@ function Entity:debugDraw()
   local positionX, positionY = self:getBumpPosition()
   love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
   love.graphics.rectangle("fill", positionX, positionY, self.w, self.h)
-  love.graphics.setColor(1, 1, 1, 0)
+  love.graphics.setColor(1, 1, 1)
   self.componentList:debugDraw()
 end
 

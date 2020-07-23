@@ -4,7 +4,7 @@ function monocle.setup(virtualWidth, virtualHeight, windowWidth, windowHeight, w
   if windowConfig == nil then
     love.window.setMode(windowWidth, windowHeight)
   else
-    love.window.setMode(windowWidth, windowHeight, {resizable = true, minwidth = virtualWidth, minheight = virtualHeight})
+    love.window.setMode(windowWidth, windowHeight, windowConfig)
   end
   monocle.virtualWidth = virtualWidth
   monocle.virtualHeight = virtualHeight
@@ -39,7 +39,7 @@ function monocle.updateView()
   end
   
   monocle.canvas = love.graphics.newCanvas(viewWidth, viewHeight)
-  monocle.canvas:setFilter("nearest", "nearest") 
+  monocle.canvas:setFilter('nearest', 'nearest') 
 end
 
 function monocle.begin()
@@ -52,10 +52,12 @@ end
 function monocle.finish()
   love.graphics.setCanvas()
   love.graphics.pop()
+  love.graphics.setColor(1, 1, 1)
   love.graphics.draw(monocle.canvas, monocle.x, monocle.y)
+  love.graphics.setBlendMode('alpha')
 end
 
-function monocle.resize(w, h)
+function monocle.resize(w, h) 
   monocle.updateView()
 end
 

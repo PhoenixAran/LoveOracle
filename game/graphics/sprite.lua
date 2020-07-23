@@ -43,12 +43,12 @@ function Sprite:getHeight()
 end
 
 function Sprite:draw(x, y, alpha)
-  x = x - self:getWidth() / 2
-  y = y - self:getHeight() / 2
+  x = (x - self:getWidth() / 2) + self:getOffsetX()
+  y = (y - self:getHeight() / 2) + self:getOffsetY()
   if alpha == nil then alpha = 1 end
   love.graphics.setColor(1, 1, 1, alpha)
   love.graphics.draw(self.subtexture.image, self.subtexture.quad, x, y)
-  love.graphics.setColor(1, 1, 1, 0)
+  love.graphics.setColor(1, 1, 1)
 end
 
 return Sprite

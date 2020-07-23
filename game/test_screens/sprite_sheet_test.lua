@@ -37,7 +37,7 @@ function SpriteSheetTest:draw()
   love.graphics.draw(subtexture.image, subtexture.quad, 160 / 2, 144 / 2)
   love.graphics.setColor(0, 70 / 255, 120 / 255, 255 / 255)
   love.graphics.rectangle("line", (160 / 2) - 1, (144 / 2) - 1, 18, 18)
-  love.graphics.setColor(1, 1, 1, 0)
+  love.graphics.setColor(1, 1, 1)
 end
 
 return SpriteSheetTest

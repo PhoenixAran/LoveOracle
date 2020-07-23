@@ -28,8 +28,8 @@ local SpriteSheet = Class {
 function SpriteSheet:getTexture(x, y)
   if y == nil then -- treat x as a one dimensional index
     return self.textures[x]
-  end
-  return self.textures[x * self.colCount + y]
+  end 
+  return self.textures[(x * self.colCount + y) + 1]
 end
 
 function SpriteSheet:size()

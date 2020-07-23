@@ -31,7 +31,8 @@ function CompositeSprite:calculateBounds()
   self.boundsRect.x = self.offsetX
   self.boundsRect.y = self.offsetY
   self.boundsRect.w = right - left
-  self.boundsRect.y = bottom - top
+  self.boundsRect.h = bottom - top
+
 end
 
 function CompositeSprite:getLeftMostBoundary()
@@ -82,22 +83,22 @@ function CompositeSprite:getBounds()
   return self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h
 end
 
-function Sprite:getOffset()
+function CompositeSprite:getOffset()
   return self.offsetX, self.offsetY
 end
 
-function Sprite:getOffsetX()
+function CompositeSprite:getOffsetX()
   return self.offsetX
 end
 
-function Sprite:getOffsetY()
+function CompositeSprite:getOffsetY()
   return self.offsetY
 end
 
 function CompositeSprite:draw(x, y, alpha)
   if alpha == nil then alpha = 1 end
   for _, sprite in ipairs(self.sprites) do
-    sprite:draw(x, y, alpha)
+    sprite:draw(x + self:getOffsetX(), y + self:getOffsetY(), alpha)
   end
 end
 

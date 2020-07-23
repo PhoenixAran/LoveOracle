@@ -4,6 +4,7 @@ local TestEntity = require 'game.test_player'
 local EntityTest = Class {
   init = function(self)
     self.testEntity = nil
+    self.effect = nil
   end
 }
 
@@ -17,7 +18,7 @@ end
 
 function EntityTest:draw()
   self.testEntity:draw()
-  self.testEntity:debugDraw()
+  self.testEntity:debugDraw() 
 end
 
 return EntityTest
