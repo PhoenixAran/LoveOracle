@@ -27,12 +27,11 @@ function CompositeSprite:calculateBounds()
   local bottom = self:getBottomMostBoundary()
   local left = self:getLeftMostBoundary()
   local right = self:getRightMostBoundary()
-  
-  self.boundsRect.x = self.offsetX
-  self.boundsRect.y = self.offsetY
+  self.boundsRect.x = self.offsetX + left
+  self.boundsRect.y = self.offsetY + top
   self.boundsRect.w = right - left
   self.boundsRect.h = bottom - top
-
+  print(self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h)
 end
 
 function CompositeSprite:getLeftMostBoundary()

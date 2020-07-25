@@ -37,14 +37,10 @@ function SpriteRenderer:setOffset(x, y)
 end
 
 function SpriteRenderer:getBounds()
-  local ex, ey = self.entity:getPosition()
   local x, y, w, h = self.sprite:getBounds()
-  x = x + self.offsetX + ex
-  y = y + self.offsetY + ey
-  
-  x = x - w / 2
-  y = y - h / 2
-  
+  local ex, ey = self.entity:getPosition()
+  x = x + ex + self.offsetX
+  y = y + ey + self.offsetY
   return x, y, w, h
 end
 
@@ -56,18 +52,14 @@ function SpriteRenderer:draw()
 end
 
 function SpriteRenderer:debugDraw()
-  local ex, ey = self.entity:getPosition()
-  local x, y, w, h = self.sprite:getBounds()
-  love.graphics.setColor(0, 1, 0)
-  
-  x = x + self.offsetX + ex
-  y = y + self.offsetY + ey
-  
+  local x, y, w, h = self:getBounds()
+  love.graphics.setColor(1, 0, 0)
+  love.graphics.rectangle('line', x, y, w, h)
   x = x - w / 2
   y = y - h / 2
-  
-  love.graphics.rectangle("line", x, y, w, h)
-  love.graphics.setColor(1, 1, 1, 0)
+  love.graphics.setColor(0, 1, 0)
+  love.graphics.rectangle('line', x, y, w, h)
+  love.graphics.setColor(1, 1, 1)
 end
 
 return SpriteRenderer

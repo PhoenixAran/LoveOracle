@@ -1,6 +1,6 @@
 local monocle = require 'lib.monocle'
 
-function drawFpsAndMemory()  
+local function drawFpsAndMemory()  
   local fps = ("fps:%d, %d kbs"):format(love.timer.getFPS(), collectgarbage("count"))
   love.graphics.setColor(1, 1, 1)
   love.graphics.printf(fps, 0, 132, 200, 'left')
@@ -21,7 +21,7 @@ function love.load()
   camera = require('lib.camera')(0,0,160, 144)
   input = require('lib.baton').new(require('controls'))
 
-  monocle.setup(160, 144, 160 * 4, 144 * 4, { resizable = true, vsync = true,  minwidth = 160, minheight = 144 })
+  monocle.setup(160, 144, 160 * 4, 144 * 4)
   
   local font = assets.fonts.monogram(16)
   font:setFilter("nearest", "nearest")
