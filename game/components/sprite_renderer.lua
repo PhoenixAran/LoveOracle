@@ -38,11 +38,12 @@ end
 
 function SpriteRenderer:getBounds()
   local ex, ey = self.entity:getPosition()
-  local sx, sy, sw, sh = self.sprite:getBounds()
+  local x,y,w,h = self.sprite:getBounds()
   local ox, oy = self.sprite:getOrigin()
-  local x = sx + ex + self.offsetX - ox
-  local y = sy + ey + self.offsetY - oy
-  return x, y, sw, sh
+  x = x + ex + self.offsetX - ox
+  y = y + ey + self.offsetY - oy
+  return x, y, w, h
+
 end
 
 function SpriteRenderer:draw()

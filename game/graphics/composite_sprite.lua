@@ -13,8 +13,8 @@ local CompositeSprite = Class {
     self.boundsRect = { x = 0, y = 0, w = 0, h = 0 }
     self:calculateBounds()
     if originX == nil or originY == nil then
-      self.originX = self.boundsRect.x / 2
-      self.originY = self.boundsRect.y / 2
+      self.originX = self.boundsRect.w / 2
+      self.originY = self.boundsRect.h / 2
     else
       self.originX = originX
       self.originY = originY
@@ -36,8 +36,8 @@ function CompositeSprite:calculateBounds()
   local bottom = self:getBottomMostBoundary()
   local left = self:getLeftMostBoundary()
   local right = self:getRightMostBoundary()
-  self.boundsRect.x = self.offsetX + left
-  self.boundsRect.y = self.offsetY + top
+  self.boundsRect.x = self.offsetX
+  self.boundsRect.y = self.offsetY
   self.boundsRect.w = right - left
   self.boundsRect.h = bottom - top
 end
