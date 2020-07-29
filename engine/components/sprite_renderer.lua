@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Component = require 'game.entities.component'
+local Component = require 'engine.entities.component'
 
 local SpriteRenderer = Class { __includes = Component,
   init = function(self, sprite, offsetX, offsetY, enabled, visible)

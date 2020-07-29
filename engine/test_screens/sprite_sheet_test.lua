@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local SpriteSheet = require 'game.graphics.sprite_sheet'
+local SpriteSheet = require 'engine.graphics.sprite_sheet'
 
 local SpriteSheetTest = Class {
   init = function(self)

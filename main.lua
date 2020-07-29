@@ -28,7 +28,7 @@ function love.load()
   love.graphics.setFont(font)
   
   screenManager:hook({ exclude = {'update','draw', 'resize'}})
-  screenManager:enter( require 'game.test_screens.composite_sprite_test' ())
+  screenManager:enter( require 'engine.test_screens.composite_sprite_test' ())
 end
 
 function love.update(dt)

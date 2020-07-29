@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Subtexture = require 'game.graphics.subtexture'
+local Subtexture = require 'engine.graphics.subtexture'
 
 local SpriteSheet = Class {
   init = function(self, image, width, height, padding, margin)

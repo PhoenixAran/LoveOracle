@@ -1,9 +1,9 @@
 local Class = require 'lib.class'
-local TestEntity = require 'game.test_player'
-local SpriteRenderer = require 'game.components.sprite_renderer'
-local SpriteSheet = require 'game.graphics.sprite_sheet'
-local Sprite = require 'game.graphics.sprite'
-local CompositeSprite = require 'game.graphics.composite_sprite'
+local TestEntity = require 'engine.test_player'
+local SpriteRenderer = require 'engine.components.sprite_renderer'
+local SpriteSheet = require 'engine.graphics.sprite_sheet'
+local Sprite = require 'engine.graphics.sprite'
+local CompositeSprite = require 'engine.graphics.composite_sprite'
 
 local CompositeSpriteTest = Class {
   init = function(self)

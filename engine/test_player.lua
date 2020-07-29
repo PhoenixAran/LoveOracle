@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local Vector = require 'lib.vector'
-local Entity = require 'game.entities.entity'
+local Entity = require 'engine.entities.entity'
 
 local TestPlayer = Class { __includes = Entity,
   init = function(self)

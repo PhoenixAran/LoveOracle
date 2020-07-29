@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
-local Transform = require 'game.entities.transform'
+local Transform = require 'engine.entities.transform'
 local Vector = require 'lib.vector'
-local ComponentList = require 'game.entities.component_list'
+local ComponentList = require 'engine.entities.component_list'
 
 local Entity = Class { 
   init = function(self, enabled, visible, rect)

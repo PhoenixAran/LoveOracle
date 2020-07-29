@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local TestEntity = require 'game.test_player'
+local TestEntity = require 'engine.test_player'
 
 local EntityTest = Class {
   init = function(self)
