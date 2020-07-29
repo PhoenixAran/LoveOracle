@@ -1,15 +1,24 @@
 local Class = require 'lib.class'
 
 local CompositeSprite = Class {
-  init = function(self, sprites, offsetX, offsetY)
+  init = function(self, sprites, originX, originY, offsetX, offsetY)
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end
 
     self.sprites = sprites
     self.offsetX = offsetX
     self.offsetY = offsetY
+    self.width = 0
+    self.height = 0
     self.boundsRect = { x = 0, y = 0, w = 0, h = 0 }
     self:calculateBounds()
+    if originX == nil or originY == nil then
+      self.originX = self.boundsRect.x / 2
+      self.originY = self.boundsRect.y / 2
+    else
+      self.originX = originX
+      self.originY = originY
+    end
   end
 }
 
@@ -20,7 +29,7 @@ end
 function CompositeSprite:calculateBounds()
   if #self.sprites == 0 then return end
   if #self.sprites == 1 then
-    self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h = self.sprites[1]:getBounds()
+    self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h = self.sprites[0]:getBounds()
     return
   end
   local top = self:getTopMostBoundary()
@@ -31,7 +40,6 @@ function CompositeSprite:calculateBounds()
   self.boundsRect.y = self.offsetY + top
   self.boundsRect.w = right - left
   self.boundsRect.h = bottom - top
-  print(self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h)
 end
 
 function CompositeSprite:getLeftMostBoundary()
@@ -78,10 +86,6 @@ function CompositeSprite:getBottomMostBoundary()
   return returnVal
 end
 
-function CompositeSprite:getBounds()
-  return self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h
-end
-
 function CompositeSprite:getOffset()
   return self.offsetX, self.offsetY
 end
@@ -92,6 +96,26 @@ end
 
 function CompositeSprite:getOffsetY()
   return self.offsetY
+end
+
+function CompositeSprite:getWidth()
+  return self.boundsRect.w
+end
+
+function CompositeSprite:getHeight()
+  return self.boundsRect.h
+end
+
+function CompositeSprite:getDimensions()
+  return self.boundsRect.w, self.boundsRect.h
+end
+
+function CompositeSprite:getBounds()
+  return self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h
+end
+
+function CompositeSprite:getOrigin()
+  return self.originX, self.originY
 end
 
 function CompositeSprite:draw(x, y, alpha)

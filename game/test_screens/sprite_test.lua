@@ -16,8 +16,8 @@ function SpriteTest:enter(previous, ...)
   local image = assets.images.entities.player
   local quad = love.graphics.newQuad( 103, 1, 16, 16, image:getWidth(), image:getHeight())
   local subtexture = Subtexture(image, quad)
-  local sprite = Sprite(subtexture)
-  local spriteRenderer = SpriteRenderer(sprite)
+  local sprite = Sprite(subtexture, 16, 16)
+  local spriteRenderer = SpriteRenderer(sprite, -16, -16)
   self.testEntity:add(spriteRenderer)
 end
 
@@ -27,7 +27,7 @@ end
 
 function SpriteTest:draw()
   self.testEntity:draw()
-  --self.testEntity:debugDraw()
+  self.testEntity:debugDraw()
 end
 
 return SpriteTest

@@ -8,16 +8,14 @@ local Sprite = Class {
     self.subtexture = subtexture
     self.offsetX = offsetX
     self.offsetY = offsetY
+    local w, h = self:getDimensions()
+    self.originX = w / 2
+    self.originY = h / 2
   end
 }
 
 function Sprite:getType()
   return 'sprite'
-end
-
-function Sprite:getBounds()
-  local w, h = self.subtexture:getDimensions()
-  return self.offsetX, self.offsetY, w, h
 end
 
 function Sprite:getOffset()
@@ -40,6 +38,20 @@ end
 function Sprite:getHeight()
   local _, h = self.subtexture:getDimensions()
   return h
+end
+
+function Sprite:getDimensions()
+  return self.subtexture:getDimensions()
+end
+
+function Sprite:getBounds()
+  local x, y = self:getOffset()
+  local w, h = self:getDimensions()
+  return x, y, w, h
+end
+
+function Sprite:getOrigin()
+  return self.originX, self.originY
 end
 
 function Sprite:draw(x, y, alpha)
