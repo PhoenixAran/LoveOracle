@@ -13,7 +13,8 @@ local CompositeSpriteTest = Class {
 }
 
 function CompositeSpriteTest:enter(previous, ...)
-  local spriteSheet = SpriteSheet(assets.images.entities.player, 16, 16, 1, 1)
+  print('CompositeSpriteTest:enter')
+  local spriteSheet = assets.spritesheets.player
   local sprites = { }
   sprites[#sprites + 1] = Sprite(spriteSheet:getTexture(21, 6), 0, 0)
   sprites[#sprites + 1] = Sprite(spriteSheet:getTexture(21, 7), 0, -16)

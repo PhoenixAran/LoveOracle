@@ -13,8 +13,7 @@ local SpriteSheetTest = Class {
 }
 
 function SpriteSheetTest:enter(previous, ...)
-  local image = assets.images.entities.player
-  self.spriteSheet = SpriteSheet(image, 16, 16, 1, 1)
+  self.spriteSheet = assets.spritesheets.player
   self.maxIndex = self.spriteSheet:size()
 end
 
