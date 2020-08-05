@@ -29,40 +29,48 @@ local function split(str, inSplitPattern)
   return outResults
 end
 
+-- create spritesheets from spritesheet file and cache them into the 
+-- global spriteSheets table, and into assets.spritesheets
+local function parseSpriteSheet(filePath)
+  assets.spritesheets = assets.spritesheets or { }
+  for line in love.filesystem.lines(filePath) do
+    local args = split(line, ',')
+    assert(#args == 2 or #args == 5, 'invalid spritesheet argument line: ' .. tostring(line) .. '\n Argument count: ' .. tostring(#args))
+    local key = args[1]
+    assert(images[key], 'No image with key ' .. key .. ' exists despite being declared in ' .. filePath .. 'spritesheet file')
+    spriteSheets[key] = SpriteSheet(images[key], tonumber(args[2]), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
+    assets.spritesheets[key] = spriteSheets[key]
+  end
+end
+
+-- assumes spritesheets directory is just a flat directory
+local function loadSpriteSheets(dir)
+  local spriteSheetFiles = love.filesystem.getDirectoryItems(dir)
+  for _, file in ipairs(spriteSheetFiles) do
+    parseSpriteSheet(dir .. '/' .. file)
+  end
+end
 
 function love.load()
+  -- can access images and spritesheets simply by string name, instead of manually through cargo
   images = {} 
   spriteSheets = { }
   assets = cargo.init({
     dir = 'assets',
-    loaders = {
-      spritesheet = function(filename)
-        local contents, _ = love.filesystem.read(filename)
-        local args = split(contents, ',')
-        if #args == 2 or #args == 5 then
-          return SpriteSheet(images[args[1]], tonumber(args[2]), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
-        else
-          error('invalid spritesheet argument count: ', #args)
-        end
-      end
-    },
     processors = {
       ['images/'] = function(image, filename)
         image:setFilter('nearest', 'nearest')
         local imageKey = getFileName(filename)
         images[imageKey] = image
-      end,
-      ['spritesheets/'] = function(spritesheet, filename)
-        local key = getFileName(filename)
-        spriteSheets[key] = spritesheet
       end
     }
   })
 
-  -- preload images and spritesheets
-  -- order is important, spritesheets need images
+  -- preload images
   assets.images(true)
-  assets.spritesheets(true)
+  
+  -- load spritesheets
+  loadSpriteSheets('assets/spritesheets')
   
   screenManager = require('lib.roomy').new()
   bumpWorld = require('lib.bump').newWorld(32)
