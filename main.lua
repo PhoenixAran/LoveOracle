@@ -1,5 +1,6 @@
 local monocle = require 'lib.monocle'
 local cargo = require 'lib.cargo'
+local gameConfig = require 'game_config'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 
 local function drawFpsAndMemory()  
@@ -34,12 +35,13 @@ end
 local function parseSpriteSheet(filePath)
   assets.spritesheets = assets.spritesheets or { }
   for line in love.filesystem.lines(filePath) do
-    local args = split(line, ',')
-    assert(#args == 2 or #args == 5, 'invalid spritesheet argument line: ' .. tostring(line) .. '\n Argument count: ' .. tostring(#args))
-    local key = args[1]
-    assert(images[key], 'No image with key ' .. key .. ' exists despite being declared in ' .. filePath .. 'spritesheet file')
-    spriteSheets[key] = SpriteSheet(images[key], tonumber(args[2]), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
-    assets.spritesheets[key] = spriteSheets[key]
+    if not (line == nil or line == '' or line[1] == '#') then
+      local args = split(line, ',')
+      local key = args[1]
+      spriteSheets[key] = SpriteSheet(images[key], tonumber(args[2]), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
+      assets.spritesheets[key] = spriteSheets[key]
+    end
+
   end
 end
 
@@ -51,6 +53,7 @@ local function loadSpriteSheets(dir)
   end
 end
 
+-- alot of globals are declared here
 function love.load()
   -- can access images and spritesheets simply by string name, instead of manually through cargo
   images = {} 
@@ -75,15 +78,14 @@ function love.load()
   screenManager = require('lib.roomy').new()
   bumpWorld = require('lib.bump').newWorld(32)
   camera = require('lib.camera')(0,0,160, 144)
-  input = require('lib.baton').new(require('controls'))
-
-  monocle.setup(160, 144, 160 * 4, 144 * 4)
+  input = require('lib.baton').new(gameConfig.controls)
+  love.window.setTitle(gameConfig.window.title)
+  monocle.setup(gameConfig.window.getMonocleArguments())
   font = assets.fonts.monogram(16)
   font:setFilter("nearest", "nearest")
   love.graphics.setFont(font)
-  
   screenManager:hook({ exclude = {'update','draw', 'resize'}})
-  screenManager:enter( require 'engine.test_screens.composite_sprite_test' ())
+  screenManager:enter( require(gameConfig.startupScreen) ())
 end
 
 function love.update(dt)
