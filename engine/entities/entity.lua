@@ -1,9 +1,10 @@
 local Class = require 'lib.class'
+local BumpBox = require 'engine.entities.bump_box'
 local Transform = require 'engine.entities.transform'
 local Vector = require 'lib.vector'
 local ComponentList = require 'engine.entities.component_list'
 
-local Entity = Class { 
+local Entity = Class { __includes = BumpBox,
   init = function(self, enabled, visible, rect)
     if enabled == nil then enabled = true end
     if visible == nil then visible = true end
@@ -21,13 +22,7 @@ local Entity = Class {
       if rect.h == nil then rect.h = 1 end
     end
     
-    self.x = rect.x - rect.w / 2
-    self.y = rect.y - rect.h / 2
-    self.w = rect.w
-    self.h = rect.h    
-    self.collidesWithLayers = { }
-    self.physicsLayer = { }
-    
+    BumpBox.init(self, rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h)
     self.componentList = ComponentList(self)
     self.enabled = enabled
     self.visible = visible
@@ -37,7 +32,11 @@ local Entity = Class {
 }
 
 function Entity:getType()
-  return "entity"
+  return 'entity'
+end
+
+function Entity:getCollisionTag()
+  return 'entity'
 end
 
 function Entity:setVisible(value)
@@ -72,10 +71,6 @@ end
 function Entity:getPosition()
   local x, y, z = self.transform:getPosition()
   return x, y
-end
-
-function Entity:getBumpPosition()
-  return self.x, self.y
 end
 
 function Entity:setPosition(x, y)

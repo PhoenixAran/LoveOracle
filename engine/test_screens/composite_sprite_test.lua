@@ -13,7 +13,6 @@ local CompositeSpriteTest = Class {
 }
 
 function CompositeSpriteTest:enter(previous, ...)
-  print('CompositeSpriteTest:enter')
   local spriteSheet = assets.spritesheets.player
   local sprites = { }
   sprites[#sprites + 1] = Sprite(spriteSheet:getTexture(21, 6), 0, 0)
@@ -23,6 +22,8 @@ function CompositeSpriteTest:enter(previous, ...)
   self.testEntity:add(SpriteRenderer(self.compositeSprite))
   self.testEntity:add(SpriteRenderer(Sprite(spriteSheet:getTexture(21, 6)), 18, 0))
   self.testEntity:add(SpriteRenderer(Sprite(spriteSheet:getTexture(21, 7)), 18, -16))
+  
+  self.testEntity:awake()
 end
 
 function CompositeSpriteTest:update(dt)
