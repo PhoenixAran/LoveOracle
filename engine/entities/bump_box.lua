@@ -42,7 +42,7 @@ end
 
 function BumpBox:setCollidesWithLayer(layer)
   if type(layer) == 'table' then
-    for _, v in ipairs(layer) do
+    for _, v in pairs(layer) do
       self.collidesWithLayer[v] = true
     end
   else
@@ -52,7 +52,7 @@ end
 
 function BumpBox:unsetCollidesWithLayer(layer)
   if type(layer) == 'table' then
-    for _, v in ipairs(layer) do
+    for _, v in pairs(layer) do
       self.collidesWithLayer[layer] = nil
     end
   else
@@ -62,7 +62,7 @@ end
 
 function BumpBox:setPhysicsLayer(layer)
   if type(layer) == 'table' then
-    for _, v in ipairs(layer) do
+    for _, v in pairs(layer) do
       self.physicsLayer[v] = true
     end
   else
@@ -72,7 +72,7 @@ end
 
 function BumpBox:unsetPhysicsLayer(layer)
   if type(layer) == 'table' then
-    for _, v in ipairs(layer) do
+    for _, v in pairs(layer) do
       self.physicsLayer[layer] = nil
     end
   else

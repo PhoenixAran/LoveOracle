@@ -29,7 +29,7 @@ function window.getMonocleArguments()
   return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig
 end
 
-local startupScreen = "engine.test_screens.composite_sprite_test"
+local startupScreen = "engine.test_screens.signal_test"
 
 return {
  controls = controls,

@@ -97,7 +97,7 @@ function love.draw()
   monocle.begin()
   -- manually call draw in current screen
   screenManager:emit('draw')
-  --drawFpsAndMemory()
+  drawFpsAndMemory()
   monocle.finish()
 end
 
