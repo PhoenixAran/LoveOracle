@@ -1,21 +1,26 @@
 local Class = require 'lib.class'
+local lume = require 'lib.lume'
 
 -- friend type SignalConnection
 local SignalConnection = Class {
-  init = function(self, signal, targetObject, targetMethod, bindArgs)
+  init = function(self, signal, targetObject, targetMethod, bindingArgs)
     self.signal = signal
     self.targetObject = targetObject
     self.targetMethod = targetMethod
-    self.bindingArgs = bindArgs
+    self.bindingArgs = bindingArgs
+    self.argumentHolder = { }
   end
 }
 
 function SignalConnection:emit(...)
-  if self.bindingArgs ~= nil and #self.bindingArgs > 1 then
-    self.targetObject[self.targetMethod](unpack(self.bindingArgs), ...)
-  else
-    self.targetObject[self.targetMethod](...)
+  if self.bindingArgs ~= nil and #self.bindingArgs > 0 then
+    for i, v in ipairs(self.bindingArgs) do
+      self.argumentHolder[#self.argumentHolder + 1] = v
+    end
   end
+  lume.push(self.argumentHolder, ...)
+  self.targetObject[self.targetMethod](self.targetObject, unpack(self.argumentHolder))
+  lume.clear(self.argumentHolder)
 end
 
 function SignalConnection:disconnect()

@@ -14,8 +14,9 @@ local B = Class { __includes = SignalObject,
   end
 }
 
-function B:_onAPressed()
+function B:_onAPressed(arg1, arg2, arg3)
   print('B:_onAPressed')
+  print(arg1, arg2, arg3)
 end
 
 local SignalTest = Class {
@@ -34,7 +35,7 @@ end
 function SignalTest:update(dt)
   if input:pressed('left') then
     print('a:emit()')
-    self.a:emit('APressed')
+    self.a:emit('APressed', 'arg1', 'arg2', 'arg3')
   end
   if not self.disconnected and input:pressed('down') then
     print('a:disconnect()')
@@ -55,6 +56,7 @@ end
 
 function SignalTest:draw()
   love.graphics.print(tostring( not self.disconnected), 0, 16)
+  love.graphics.print('Dream', 50, 50)
 end
 
 return SignalTest
