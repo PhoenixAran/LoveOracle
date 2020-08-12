@@ -1,8 +1,8 @@
 local Class = require 'lib.class'
-local TestEntity = require 'game.test_player'
-local Sprite = require 'game.graphics.sprite'
-local SpriteRenderer = require 'game.components.sprite_renderer'
-local Subtexture = require 'game.graphics.subtexture'
+local TestEntity = require 'engine.test_player'
+local Sprite = require 'engine.graphics.sprite'
+local SpriteRenderer = require 'engine.components.sprite_renderer'
+local Subtexture = require 'engine.graphics.subtexture'
 
 
 local SpriteTest = Class {

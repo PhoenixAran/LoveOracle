@@ -14,9 +14,11 @@ local B = Class { __includes = SignalObject,
   end
 }
 
-function B:_onAPressed(arg1, arg2, arg3)
+function B:_onAPressed(bindArg, arg1, arg2)
   print('B:_onAPressed')
-  print(arg1, arg2, arg3)
+  print(bindArg)
+  print(arg1)
+  print(arg2)
 end
 
 local SignalTest = Class {
@@ -29,7 +31,7 @@ function SignalTest:enter(prev, ...)
   self.a = A()
   self.b = B()
   
-  self.a:connect('APressed', self.b, '_onAPressed')
+  self.a:connect('APressed', self.b, '_onAPressed', { 'bindArg' })
 end
 
 function SignalTest:update(dt)
@@ -49,7 +51,7 @@ function SignalTest:update(dt)
   end
   if self.disconnected and input:pressed('up') then
     print('a:connect()')
-    self.a:connect('APressed', self.b, '_onAPressed')
+    self.a:connect('APressed', self.b, '_onAPressed', { 'bindArg' })
     self.disconnected = false
   end
 end

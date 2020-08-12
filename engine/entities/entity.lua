@@ -1,11 +1,13 @@
 local Class = require 'lib.class'
+local SignalObject = require 'engine.signal_object'
 local BumpBox = require 'engine.entities.bump_box'
 local Transform = require 'engine.entities.transform'
 local Vector = require 'lib.vector'
 local ComponentList = require 'engine.entities.component_list'
 
-local Entity = Class { __includes = BumpBox,
+local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, enabled, visible, rect)
+    SignalObject.init(self)
     if enabled == nil then enabled = true end
     if visible == nil then visible = true end
     if rect == nil then

@@ -4,7 +4,8 @@ local Entity = require 'engine.entities.entity'
 
 local TestPlayer = Class { __includes = Entity,
   init = function(self)
-    Entity.init(self, true, true, {x = 0, y = 0, h = 2, w = 2})
+    Entity.init(self, true, true, {x = 0, y = 0, h = 16, w = 16})
+    self:signal('test')
   end
 }
 
