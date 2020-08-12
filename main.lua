@@ -4,6 +4,7 @@ local gameConfig = require 'game_config'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 
 local function drawFpsAndMemory()  
+  love.graphics.setFont(monogram)
   local fps = ("fps:%d, %d kbs"):format(love.timer.getFPS(), collectgarbage("count"))
   love.graphics.setColor(1, 1, 1)
   love.graphics.printf(fps, 0, 132, 200, 'left')
@@ -75,16 +76,20 @@ function love.load()
   -- load spritesheets
   loadSpriteSheets('assets/spritesheets')
   
+  -- fonts
+  monogram = assets.fonts.monogram(16)
+  monogram:setFilter('nearest', 'nearest')
+  dialogue = assets.fonts.dialogue(10)
+  dialogue:setFilter('nearest', 'nearest')
+  
   screenManager = require('lib.roomy').new()
   bumpWorld = require('lib.bump').newWorld(32)
   camera = require('lib.camera')(0,0,160, 144)
   input = require('lib.baton').new(gameConfig.controls)
   love.window.setTitle(gameConfig.window.title)
   monocle.setup(gameConfig.window.getMonocleArguments())
-  font = assets.fonts.ZeldaOracles(10)
-  font:setFilter("nearest", "nearest")
-  love.graphics.setFont(font)
-  screenManager:hook({ exclude = {'update','draw', 'resize'}})
+  love.graphics.setFont(monogram)
+  screenManager:hook({ exclude = {'update','draw', 'resize'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
 end
 
