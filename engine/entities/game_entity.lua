@@ -1,6 +1,8 @@
 local Class = require 'lib.class'
-local Vector = require 'lib.vector'
-local Entity = require 'entity'
+local Entity = require 'engine.entities.entity'
+local Movement = require 'engine.components.movement'
+
+local vector = require 'lib.vector'
 
 --[[
   The GameEntity class is what most entities will derive from.
@@ -9,16 +11,45 @@ local Entity = require 'entity'
 ]]
 
 local GameEntity = Class { __includes = Entity,
-  init = function(self)
+  init = function(self, enabled, visible, rect)
+    Entity.init(self, enabled, visible, rect)
+    self.bumpFilter = nil
+    self.movement = Movement()
     
+    -- add components
+    self:add(self.movement)
   end
 }
 
-
-
-function GameEntity:move(motionX, motionY, filter)
-  
+function GameEntity:getType()
+  return 'gameentity'
 end
 
+function GameEntity:getCollisionTag()
+  return 'gameentity'
+end
+
+-- movement component pass throughs
+function GameEntity:getVector()
+  return self.movement:getVector()
+end
+
+function GameEntity:setVector(x, y)
+  return self.movement:setVector(x, y)
+end
+
+function GameEntity:getLinearVelocity(x, y)
+  return self.movement:getLinearVelocity(x, y)
+end
+
+function GameEntity:move(dt)
+  local velX, velY = self:getLinearVelocity(dt)
+  local x, y = self:getBumpPosition()
+  local goalX, goalY = x + velX, y + velY
+  local actualX, actualY, collisions, count = bumpWorld:move(self, goalX, goalY, self.bumpFilter)
+  local translatedX, translatedY = actualX - x, actualY - y
+  self:setPositionWithBumpCoords(actualX, actualY)
+  return translatedX, translatedY, collisions, count
+end
 
 return GameEntity

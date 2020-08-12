@@ -10,6 +10,7 @@ local EntityTest = Class {
 
 function EntityTest:enter(previous, ...)
   self.testEntity = TestEntity()
+  self.testEntity:awake()
 end
 
 function EntityTest:update(dt)
