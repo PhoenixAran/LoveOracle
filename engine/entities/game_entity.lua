@@ -9,7 +9,6 @@ local vector = require 'lib.vector'
   It includes more actions out of the box than the plain Entity class, at the cost
   of including default components
 ]]
-
 local GameEntity = Class { __includes = Entity,
   init = function(self, enabled, visible, rect)
     Entity.init(self, enabled, visible, rect)

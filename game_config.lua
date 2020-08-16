@@ -5,9 +5,6 @@ local controls = {
     up = {'key:up', 'key:w', 'axis:lefty-', 'button:dpup'},
     down = {'key:down', 'key:s', 'axis:lefty+', 'button:dpdown'}
   },
-  pairs = {
-    move = {'left', 'right', 'up', 'down'}
-  },
   joystick = love.joystick.getJoysticks()[1]
 }
 
@@ -29,7 +26,7 @@ function window.getMonocleArguments()
   return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig
 end
 
-local startupScreen = "engine.test_screens.game_entity_test"
+local startupScreen = 'engine.test_screens.game_entity_test'
 
 return {
  controls = controls,

@@ -96,6 +96,18 @@ function Entity:remove(component)
   self.componentList:remove(component)
 end
 
+function Entity:updateComponents(dt)
+  self.componentList:update(dt)
+end
+
+function Entity:drawComponents()
+  self.componentList:draw()
+end
+
+function Entity:debugDrawComponents()
+  self.componentList:debugDraw()
+end
+
 -- gameloop callbacks
 function Entity:awake()
   bumpWorld:add(self, self.x, self.y, self.w, self.h)
@@ -106,11 +118,11 @@ function Entity:awake()
 end
 
 function Entity:update(dt)
-  self.componentList:update(dt)
+  self:updateComponents(dt)
 end
 
 function Entity:draw()
-  self.componentList:draw()
+  self:drawComponents()
 end
 
 function Entity:removed(scene)
@@ -123,7 +135,7 @@ function Entity:removed(scene)
 end
 
 function Entity:debugDraw()
-  self.componentList:debugDraw()
+  self:debugDrawComponents()
   
   --love draws from the upper left corner so we use our bump coordinates
   local positionX, positionY = self:getBumpPosition()

@@ -33,6 +33,9 @@ function GameEntityTest:enter(previous, ...)
 end
 
 function GameEntityTest:update(dt)
+  for _, box in ipairs(self.testBoxes) do
+    bumpWorld:move(box, box.x, box.y)
+  end
   self.testEntity:update(dt)
 end
 

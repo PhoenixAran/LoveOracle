@@ -1,7 +1,7 @@
 local bump = {
   _VERSION     = 'bump v3.1.7',
   _URL         = 'https://github.com/kikito/bump.lua',
-  _DESCRIPTION = 'A collision detection library for Lua. Not official version, optimizations to reduce memory has been made.',
+  _DESCRIPTION = 'A collision detection library for Lua',
   _LICENSE     = [[
     MIT LICENSE
 

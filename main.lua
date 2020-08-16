@@ -3,9 +3,16 @@ local cargo = require 'lib.cargo'
 local gameConfig = require 'game_config'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 
-local function drawFpsAndMemory()  
+local function drawFPSAndMemory()  
   love.graphics.setFont(monogram)
   local fps = ("fps:%d, %d kbs"):format(love.timer.getFPS(), collectgarbage("count"))
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.printf(fps, 0, 132, 200, 'left')
+end
+
+local function drawFPS()
+  love.graphics.setFont(monogram)
+  local fps = ("fps:%d"):format(love.timer.getFPS())
   love.graphics.setColor(1, 1, 1)
   love.graphics.printf(fps, 0, 132, 200, 'left')
 end
@@ -102,7 +109,7 @@ function love.draw()
   monocle.begin()
   -- manually call draw in current screen
   screenManager:emit('draw')
-  drawFpsAndMemory()
+  drawFPSAndMemory()
   monocle.finish()
 end
 

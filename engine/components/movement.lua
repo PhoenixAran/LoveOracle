@@ -7,7 +7,7 @@ local Movement = Class { __includes = Component,
     if enabled == nil then enabled = true end
     Component.init(self, enabled)
     
-    self.staticSpeed = 70
+    self.staticSpeed = 60
     self.staticAcceleration = 1
     self.staticDeceleration = 1
     
@@ -40,8 +40,7 @@ function Movement:setVector(x, y)
   if x ~= 0 or y ~= 0 then
     self.cachedCounterVectorX = self.vectorX
     self.cachedCounterVectorY = self.vectorY
-  else
-    self.cachedCounterSpeed = 0
+    self.cachedCounterSpeed = self.currentSpeed
   end
   self.vectorX = x
   self.vectorY = y
@@ -54,7 +53,7 @@ function Movement:getLinearVelocity(dt)
     if self.currentSpeed < 0 then
       self.currentSpeed = 0
     end
-    velocityX, velocityY = vector.mul(self.cachedCounterSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY))
+    velocityX, velocityY = vector.mul(self.currentSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY))
   else
     self.currentSpeed = self.currentSpeed + (self.targetSpeed * self.currentAcceleration)
     if self.currentSpeed > self.targetSpeed then
@@ -70,6 +69,14 @@ function Movement:getLinearVelocity(dt)
     end
   end
   return velocityX * dt, velocityY * dt
+end
+
+function Movement:recalculateLinearVelocity(dt, newX, newY)
+  local velocityX, velocityY = 0, 0
+  local oldX, oldY = self:getVector()
+  if newX == oldX and newY == oldY then
+    print('Warning: Trying to recalculate linear velocity with the same vector!')
+  end
 end
 
 return Movement
