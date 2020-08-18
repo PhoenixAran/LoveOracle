@@ -46,15 +46,15 @@ function SpatialHash:register(box)
     for y = py1, py2 do 
       -- we need to create the cell if there is non
       local c = self:cellAtPosition(x, y, true)
-      c[#c + 1] = box
+      lume.push(c, box)
     end
   end
 end
 
 function SpatialHash:remove(box)
   local bounds = box.registeredPhysicsBounds
-  local px1, py1 = self:cellCoords(bx, by)
-  local px2, py2 = self:cellCoords(bx + bw, by + bh)  -- ( right, bottom )
+  local px1, py1 = self:cellCoords(bounds.x, bounds.y)
+  local px2, py2 = self:cellCoords(bounds.x + bounds.w, bounds.y + bounds.h)  -- ( right, bottom )
   for x = px1, px2 do
     for y = py1, py2 do 
       -- this cell should always exist since this collider should be in all queryed cells
@@ -72,6 +72,22 @@ end
 
 function SpatialHash:clear()
   lume.clear(self.cellDict)
+end
+
+function SpatialHash:aabbBroadphase(bound, box)
+  lume.clear(self.tempHashSet)
+  local px1, py1 = self:cellCoords(bounds.x, bounds.y)
+  local px2, py2 = self:cellCoords(bounds.x + bounds.w, bounds.y + bounds.h)  -- ( right, bottom )
+  for x = px1, px2 do
+    for y = py1, py2 do
+      local cell = self:cellAtPosition(x, y)
+      for i, otherBox in ipairs(cell) do
+        if box:reportsCollisionsWith(otherBox) and rect.intersects(box, otherBox) then
+          lume.push(self.tempHashSet, otherBox)
+        end
+      end
+    end
+  end
 end
 
 return SpatialHash
