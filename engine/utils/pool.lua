@@ -5,5 +5,4 @@ function pool.register(key, class)
   
 end
 
-
 return pool

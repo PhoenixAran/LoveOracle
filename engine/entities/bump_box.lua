@@ -32,6 +32,10 @@ function BumpBox:getBumpPosition()
   return self.x, self.y
 end
 
+function BumpBox:getBounds()
+  return self.x, self.y, self.w, self.h
+end
+
 function BumpBox:getCollidesWithLayer()
   return self.collidesWithLayer
 end

@@ -24,9 +24,7 @@ local function getFileName(file)
 end
 
 local function split(str, inSplitPattern)
-  if not outResults then
-    outResults = { }
-  end
+  local outResults = { }
   local theStart = 1
   local theSplitStart, theSplitEnd = string.find( str, inSplitPattern, theStart )
   while theSplitStart do
@@ -88,10 +86,11 @@ function love.load()
   monogram:setFilter('nearest', 'nearest')
   dialogue = assets.fonts.dialogue(10)
   dialogue:setFilter('nearest', 'nearest')
-  
+
   screenManager = require('lib.roomy').new()
   bumpWorld = require('lib.bump').newWorld(32)
   camera = require('lib.camera')(0,0,160, 144)
+  tablePool = require 'engine.utils.table_pool'
   input = require('lib.baton').new(gameConfig.controls)
   love.window.setTitle(gameConfig.window.title)
   monocle.setup(gameConfig.window.getMonocleArguments())

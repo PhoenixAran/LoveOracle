@@ -25,7 +25,7 @@ local function removeValue(table, val)
       break
     end
   end
-  table.remove(indexPosition)
+  table.remove(table, indexPosition)
 end
 
 local ComponentList = Class {
