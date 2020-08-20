@@ -88,9 +88,11 @@ function love.load()
   dialogue:setFilter('nearest', 'nearest')
 
   screenManager = require('lib.roomy').new()
+  physics = require 'engine.physics.physics'
   bumpWorld = require('lib.bump').newWorld(32)
   camera = require('lib.camera')(0,0,160, 144)
   tablePool = require 'engine.utils.table_pool'
+  tablePool.warmCache(200)
   input = require('lib.baton').new(gameConfig.controls)
   love.window.setTitle(gameConfig.window.title)
   monocle.setup(gameConfig.window.getMonocleArguments())

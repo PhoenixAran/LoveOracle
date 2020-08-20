@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local rect = require 'engine.utils.rectangle'
 
 local BumpBox = Class {
   init = function(self, x, y, w, h)
@@ -36,6 +37,7 @@ function BumpBox:getBounds()
   return self.x, self.y, self.w, self.h
 end
 
+-- layer stuff
 function BumpBox:getCollidesWithLayer()
   return self.collidesWithLayer
 end
@@ -93,6 +95,18 @@ function BumpBox:reportsCollisionsWith(otherBumpBox)
     end
   end
   return false
+end
+
+function BumpBox:collidesWith(otherBumpBox, motionX, motionY)
+  if motionX == nil then motionX = 0 end
+  if motionY == nil then motionY = 0 end
+  local oldX, oldY = self:getBumpPosition()
+  self.x = oldX + motionX
+  self.y = oldY + motionY
+  local didCollide = rect.intersects(self, otherBumpBox)
+  self.x = oldX
+  self.y = oldY
+  return didCollide
 end
 
 return BumpBox

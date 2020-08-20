@@ -14,4 +14,10 @@ function TablePool.free(table)
   tables[#tables + 1]  = table
 end
 
+function TablePool.warmCache(amount)
+  for i = 1, amount do
+    tables[#tables + 1] = { }
+  end
+end
+
 return TablePool

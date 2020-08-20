@@ -1,3 +1,23 @@
+local SpatialHash = require 'engine.physics.spatial_hash'
+local lume = require 'lib.lume'
 
-local gridBounds = { x = 0, y = 0, w = 1, h = 1 
+local physics = { }
 
+local spatialHash
+
+-- cell size when new spatial hash is created
+local spatialHashCellSize = 32
+
+-- allocation avoidance for overlap checks and shape casts
+local colliderTable = { }
+
+function physics.reset()
+  spatialHash = SpatialHash(spatialHashCellSize)
+  lume.clear(colliderTable)
+end
+
+function physics.boxcastBroadphase(box, bounds)
+  return SpatialHash:aabbBroadphase(bounds, box)
+end
+
+return physics

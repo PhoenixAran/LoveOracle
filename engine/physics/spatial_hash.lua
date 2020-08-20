@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local rect = require 'lib.rectangle'
+local rect = require 'engine.utils.rectangle'
 
 local SpatialHash = Class {
   init = function(self, cellSize)
@@ -19,12 +19,14 @@ function SpatialHash:cellCoords(x, y)
 end
 
 function SpatialHash:cellAtPosition(x, y)
-  local cell = self.cellDict[tostring(x) .. tostring(y)]
-  if cell == nil then
-    cell = { }
-    self.cellDict[tostring(x) .. tostring(y)] = cell
+  local cellRow = self.cellDict[x]
+  if cellRow == nil then
+    cellRow = { }
+    cellRow[y] = { }
+    self.cellDict[x] = cellRow
+    return cellRow[y]
   end
-  return cell
+  return cellRow[y]
 end
 
 function SpatialHash:register(box)
@@ -58,15 +60,17 @@ function SpatialHash:remove(box)
   for x = px1, px2 do
     for y = py1, py2 do 
       -- this cell should always exist since this collider should be in all queryed cells
-      local c = self:cellAtPosition(x, y, true)
+      local c = self:cellAtPosition(x, y)
       lume.remove(c, box)
     end
   end
 end
 
 function SpatialHash:removeWithBruteForce(box)
-  for k, v in pairs(self.cellDict) do
-    lume.remove(v, box)
+  for x, cr in ipairs(self.cellDict) do
+    for y, c in ipairs(cr) do
+      lume.remove(c, box)
+    end
   end
 end
 
@@ -74,7 +78,7 @@ function SpatialHash:clear()
   lume.clear(self.cellDict)
 end
 
-function SpatialHash:aabbBroadphase(bound, box)
+function SpatialHash:aabbBroadphase(bounds, box)
   lume.clear(self.tempHashSet)
   local px1, py1 = self:cellCoords(bounds.x, bounds.y)
   local px2, py2 = self:cellCoords(bounds.x + bounds.w, bounds.y + bounds.h)  -- ( right, bottom )
