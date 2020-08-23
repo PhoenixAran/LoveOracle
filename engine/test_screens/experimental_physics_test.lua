@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Entity = require 'lib.entities.entity'
+local Entity = require 'engine.entities.entity'
 
 local PhysicsEntity = Class { __includes = Entity,
   init = function(self)
@@ -10,7 +10,7 @@ local PhysicsEntity = Class { __includes = Entity,
 }
 
 function PhysicsEntity:entityAwake()
-  physics.register(self)
+  physics.add(self)
 end
 
 function PhysicsEntity:update(dt)
@@ -27,6 +27,9 @@ function PhysicsEntity:update(dt)
   if input:down('down') then
     inputY = inputY + 1
   end
+  
+  local posX, posY = self:getPosition()
+  
   local velX = inputX * dt * 60
   local velY = inputY * dt * 60
   
@@ -46,6 +49,8 @@ function PhysicsEntity:update(dt)
       end
     end
   end
+  self:setPosition(posX + velX, posY + velY)
+  physics.update(self)
 end
 
 
@@ -56,11 +61,17 @@ local Screen = Class {
   end
 }
 
+function Screen:enter(prev, ...)
+  self.testEntity = PhysicsEntity()
+  self.testEntity:entityAwake()
+end
+
 function Screen:update(dt)
+  self.testEntity:update(dt)
 end
 
 function Screen:draw()
-  love.graphics.print("Hello World!", 24, 24)
+  self.testEntity:draw()
 end
 
 return Screen

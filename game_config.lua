@@ -1,3 +1,5 @@
+local version = '0.0.1.0'
+
 local controls = {
   controls = {
     left = {'key:left', 'key:a', 'axis:leftx-', 'button:dpleft'},
@@ -9,7 +11,7 @@ local controls = {
 }
 
 local window = {
-  title = "Love Oracle Alpha 0.01",
+  title = "Love Oracle " .. version,
   width = 160, 
   height = 144, 
   virtualWidth = 160 * 4,
@@ -26,7 +28,7 @@ function window.getMonocleArguments()
   return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig
 end
 
-local startupScreen = 'engine.test_screens.game_entity_test'
+local startupScreen = 'engine.test_screens.experimental_physics_test'
 
 return {
  controls = controls,

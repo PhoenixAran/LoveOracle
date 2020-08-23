@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 
 local physics = { }
 
-local spatialHash
+local spatialHash = SpatialHash()
 
 -- cell size when new spatial hash is created
 local spatialHashCellSize = 32
@@ -17,7 +17,20 @@ function physics.reset()
 end
 
 function physics.boxcastBroadphase(box, bounds)
-  return SpatialHash:aabbBroadphase(bounds, box)
+  return spatialHash:aabbBroadphase(bounds, box)
+end
+
+function physics.add(box)
+  spatialHash:register(box)
+end
+
+function physics.update(box)
+  spatialHash:remove(box)
+  spatialHash:register(box)
+end
+
+function physics.remove(box)
+  spatialHash:remove(box)
 end
 
 return physics

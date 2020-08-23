@@ -89,7 +89,7 @@ end
 -- check if the other bumpbox's physicsLayer matches 
 -- this bumpbox's collidesWithLayer
 function BumpBox:reportsCollisionsWith(otherBumpBox)
-  for k, v in pairs(otherBumpBox:getPhysicsLayers()) do
+  for k, v in pairs(otherBumpBox:getPhysicsLayer()) do
     if self.colldesWithLayers[k] then 
       return true 
     end
@@ -103,10 +103,10 @@ function BumpBox:collidesWith(otherBumpBox, motionX, motionY)
   local oldX, oldY = self:getBumpPosition()
   self.x = oldX + motionX
   self.y = oldY + motionY
-  local didCollide = rect.intersects(self, otherBumpBox)
+  local didCollide, mtvx, mtvy, nx, ny = rect.boxToBox(self, otherBumpBox)
   self.x = oldX
   self.y = oldY
-  return didCollide
+  return didCollide, mtvx, mtvy, nx, ny
 end
 
 return BumpBox

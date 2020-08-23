@@ -6,8 +6,8 @@ local SpatialHash = Class {
   init = function(self, cellSize)
     if cellSize == nil then cellSize = 32 end
     self.gridBounds = { x = 0, y = 0, w = 0, h = 0 }
-    self.cellSize = nil
-    self.inverseCellSize = nil
+    self.cellSize = cellSize
+    self.inverseCellSize = 1 / cellSize
     self.overlapTestBox = { x = 0, y = 0, w = 0, h = 0 }
     self.cellDict = { }
     self.tempHashSet = { }
@@ -26,6 +26,9 @@ function SpatialHash:cellAtPosition(x, y)
     self.cellDict[x] = cellRow
     return cellRow[y]
   end
+  if cellRow[y] == nil then
+    cellRow[y] = { }
+  end
   return cellRow[y]
 end
 
@@ -34,12 +37,11 @@ function SpatialHash:register(box)
   box.registeredPhysicsBounds = { x = bx, y = by, w = bw, h = bh }
   local px1, py1 = self:cellCoords(bx, by)
   local px2, py2 = self:cellCoords(bx + bw, by + bh)  -- ( right, bottom )
-  
   -- update our bounds to keep track of our grid size
   if not rect.containsPoint(self.gridBounds, px1, py2) then
     self.gridBounds = rect.union(self.gridBounds, { x = 0, y = 0, w = px1, h = py2 })
   end
-  
+
   if not rect.containsPoint(self.gridBounds, px2, py2) then
     self.gridBounds = rect.union(self.gridBounds, { x = 0, y = 0, w = px2, h = py2})
   end
@@ -79,6 +81,7 @@ function SpatialHash:clear()
 end
 
 function SpatialHash:aabbBroadphase(bounds, box)
+  print(self.tempHashSet)
   lume.clear(self.tempHashSet)
   local px1, py1 = self:cellCoords(bounds.x, bounds.y)
   local px2, py2 = self:cellCoords(bounds.x + bounds.w, bounds.y + bounds.h)  -- ( right, bottom )
@@ -92,6 +95,7 @@ function SpatialHash:aabbBroadphase(bounds, box)
       end
     end
   end
+  return self.tempHashSet
 end
 
 return SpatialHash

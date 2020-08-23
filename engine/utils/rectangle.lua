@@ -15,8 +15,10 @@ function rectMethods.union(rect1, rect2)
   
   result.x = resultX
   result.y = resultY
-  result.W = resultW
-  result.H = resultH
+  result.w = resultW
+  result.h = resultH
+  
+  return result
 end
 
 function rectMethods.intersects(rect1, rect2)
