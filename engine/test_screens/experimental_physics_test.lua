@@ -1,11 +1,13 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
+local vector = require 'lib.vector'
 
 local PhysicsEntity = Class { __includes = Entity,
   init = function(self)
-    Entity.init(self)
+    Entity.init(self, true, true, { x = 0, y = 0, w = 16, h = 16 })
     -- avoid allocation
     self._boundsCalcTable = { }
+    self:setCollidesWithLayer('1')
   end
 }
 
@@ -33,6 +35,8 @@ function PhysicsEntity:update(dt)
   local velX = inputX * dt * 60
   local velY = inputY * dt * 60
   
+  velX, velY = vector.normalize(velX, velY)
+  
   self._boundsCalcTable.x = self.x + velX
   self._boundsCalcTable.y = self.y + velY
   self._boundsCalcTable.w = self.w
@@ -53,25 +57,46 @@ function PhysicsEntity:update(dt)
   physics.update(self)
 end
 
+local TestBox = Class { __includes = Entity,
+  init = function(self, rect)
+    Entity.init(self, true, true, rect)
+    self:setPhysicsLayer('1')
+  end
+}
+
+function TestBox:entityAwake()
+  physics.add(self)
+end
 
 -- experiental physics test screen
 local Screen = Class {
   init = function(self)
     self.testEntity = nil
+    self.testBoxes = { }
   end
 }
 
 function Screen:enter(prev, ...)
   self.testEntity = PhysicsEntity()
   self.testEntity:entityAwake()
+  self.testBoxes[#self.testBoxes+ 1] = TestBox({x = 24, y = 24, w = 24, h = 24})
+  self.testBoxes[#self.testBoxes]:entityAwake()
 end
 
 function Screen:update(dt)
+  for _, b in ipairs(self.testBoxes) do
+    b:update(dt)
+  end
   self.testEntity:update(dt)
 end
 
 function Screen:draw()
+  for _, b in ipairs(self.testBoxes) do
+    b:draw()
+    b:debugDraw()
+  end
   self.testEntity:draw()
+  self.testEntity:debugDraw()
 end
 
 return Screen

@@ -18,6 +18,10 @@ local BumpBox = Class {
     self.collidesWithLayer = { }
     -- layers this bumpbox exists in
     self.physicsLayer = { }
+    -- the bounds of this xo when it was registered with they physics system
+    -- storing this allows us to always be able to safely remove the box even if it was moved
+    -- before attempting to remove it
+    self.registeredPhysicsBounds = { x = 0, y = 0, w = 0, h = 0 }
   end
 }
 
@@ -90,7 +94,7 @@ end
 -- this bumpbox's collidesWithLayer
 function BumpBox:reportsCollisionsWith(otherBumpBox)
   for k, v in pairs(otherBumpBox:getPhysicsLayer()) do
-    if self.colldesWithLayers[k] then 
+    if self.collidesWithLayer[k] then 
       return true 
     end
   end

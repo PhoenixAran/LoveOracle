@@ -3,10 +3,11 @@ local lume = require 'lib.lume'
 
 local physics = { }
 
-local spatialHash = SpatialHash()
-
 -- cell size when new spatial hash is created
-local spatialHashCellSize = 32
+local spatialHashCellSize = 100
+
+-- spatial hash instance
+local spatialHash = SpatialHash(specialHashCellSize)
 
 -- allocation avoidance for overlap checks and shape casts
 local colliderTable = { }
