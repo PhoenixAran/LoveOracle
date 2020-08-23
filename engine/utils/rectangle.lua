@@ -28,7 +28,7 @@ function rectMethods.getClosestPointOnBoundsToOrigin(x, y, w, h)
   local maxX = x + w
   local maxY = y + h
   local minDist = math.abs(x)
-  local boundsX, boundsY = minDist, 0  
+  local boundsX, boundsY = x, 0  
   if math.abs(maxX) < minDist then
     minDist = math.abs(maxX)
     boundsX = maxX
@@ -51,24 +51,24 @@ function rectMethods.getClosestPointOnBoundsToOrigin(x, y, w, h)
 end
 
 -- returns if the box1 collides with box2, the minimum translation vector, and the normal vector 
--- between box1 and box2
-function rectMethods.boxToBox(box1, box2)
-  local mdX, mdY, mdW, mdH = rectMethods.minkowskiDifference(box1, box2)
+function rectMethods.boxToBox(x1, y1, w1, h1,  x2, y2, w2, h2)
+  local mdX, mdY, mdW, mdH = rectMethods.minkowskiDifference(x1, y1, w1, h1,  x2, y2, w2, h2)
   if rectMethods.containsPoint(mdX, mdY, mdW, mdH, 0, 0) then
     local mtvX, mtvY = rectMethods.getClosestPointOnBoundsToOrigin(mdX, mdY, mdW, mdH)
+    if mtvX == 0 and mtvY == 0 then
+      return false, 0, 0, 0, 0
+    end
     local normX, normY = vector.normalize(vector.mul(-1, mtvX, mtvY))
     return true, mtvX, mtvY, normX, normY
   end
   return false, 0, 0, 0, 0
 end
 
--- temporary rectangle used in minkowskiDifference
-function rectMethods.minkowskiDifference(box1, box2)
-  local mdx = box2.x - box1.x - box1.w
-  local mdy = box2.y - box1.y - box1.h
-  local mdw = box1.w + box2.w
-  local mdh = box1.h + box2.h
-  return mdx, mdy, mdw, mdh
+function rectMethods.minkowskiDifference(x1, y1, w1, h1,  x2, y2, w2, h2)
+  return x2 - x1 - w1,
+         y2 - y1 - h1,
+         w1 + w2,
+         h1 + h2
 end
 
 return rectMethods

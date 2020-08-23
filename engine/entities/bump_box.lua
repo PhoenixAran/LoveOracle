@@ -101,13 +101,13 @@ function BumpBox:reportsCollisionsWith(otherBumpBox)
   return false
 end
 
-function BumpBox:collidesWith(otherBumpBox, motionX, motionY)
+function BumpBox:boxCast(otherBumpBox, motionX, motionY)
   if motionX == nil then motionX = 0 end
   if motionY == nil then motionY = 0 end
   local oldX, oldY = self:getBumpPosition()
   self.x = oldX + motionX
   self.y = oldY + motionY
-  local didCollide, mtvx, mtvy, nx, ny = rect.boxToBox(self, otherBumpBox)
+  local didCollide, mtvx, mtvy, nx, ny = rect.boxToBox(self.x, self.y, self.w, self.h, otherBumpBox.x, otherBumpBox.y, otherBumpBox.w, otherBumpBox.h)
   self.x = oldX
   self.y = oldY
   return didCollide, mtvx, mtvy, nx, ny
