@@ -2,6 +2,9 @@
 local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 
+-- floating-point margin of error
+local DELTA = 1e-10
+
 -- module function holder
 local rectMethods = { }
 
@@ -20,8 +23,8 @@ function rectMethods.intersects(x1, y1, w1, h1,  x2, y2, w2, h2)
 end
 
 function rectMethods.containsPoint(x, y, w, h, px, py)
-  return x <= px and px < x + w and
-         y <= py and py < y + h
+  return px - x > DELTA      and py - y > DELTA and
+         x + w - px > DELTA  and y + h - py > DELTA
 end
 
 function rectMethods.getClosestPointOnBoundsToOrigin(x, y, w, h)

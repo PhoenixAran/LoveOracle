@@ -46,7 +46,7 @@ function PhysicsEntity:update(dt)
   local neighbors = physics.boxcastBroadphase(self, self._boundsCalcTable)
   for i, neighbor in ipairs(neighbors) do
     if self:reportsCollisionsWith(neighbor) then
-      local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor)
+      local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
       if collided then
         -- hit, back off our motion
         velX, velY = vector.sub(velX, velY, mtvX, mtvY)
