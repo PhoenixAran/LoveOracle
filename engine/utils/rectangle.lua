@@ -29,6 +29,7 @@ function rectMethods.getClosestPointOnBoundsToOrigin(x, y, w, h)
   local maxY = y + h
   local minDist = math.abs(x)
   local boundsX, boundsY = x, 0  
+  
   if math.abs(maxX) < minDist then
     minDist = math.abs(maxX)
     boundsX = maxX
@@ -52,7 +53,7 @@ end
 
 -- returns if the box1 collides with box2, the minimum translation vector, and the normal vector 
 function rectMethods.boxToBox(x1, y1, w1, h1,  x2, y2, w2, h2)
-  local mdX, mdY, mdW, mdH = rectMethods.minkowskiDifference(x1, y1, w1, h1,  x2, y2, w2, h2)
+  local mdX, mdY, mdW, mdH = rectMethods.minkowskiDifference(x2, y2, w2, h2, x1, y1, w1, h1)
   if rectMethods.containsPoint(mdX, mdY, mdW, mdH, 0, 0) then
     local mtvX, mtvY = rectMethods.getClosestPointOnBoundsToOrigin(mdX, mdY, mdW, mdH)
     if mtvX == 0 and mtvY == 0 then

@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
 local vector = require 'lib.vector'
+local rect = require 'engine.utils.rectangle'
 
 local PhysicsEntity = Class { __includes = Entity,
   init = function(self)
