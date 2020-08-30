@@ -41,13 +41,13 @@ end
 local function parseSpriteSheet(filePath)
   assets.spritesheets = assets.spritesheets or { }
   for line in love.filesystem.lines(filePath) do
-    if not (line == nil or line == '' or line[1] == '#') then
+    if line then line = line:gsub('%$s+', '') end
+    if not (line == nil or line == '' or line:sub(1, 1) == '#') then
       local args = split(line, ',')
       local key = args[1]
       spriteSheets[key] = SpriteSheet(images[key], tonumber(args[2]), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
       assets.spritesheets[key] = spriteSheets[key]
     end
-
   end
 end
 
@@ -65,7 +65,7 @@ function love.load()
   images = {} 
   spriteSheets = { }
   assets = cargo.init({
-    dir = 'assets',
+    dir = 'data/assets',
     processors = {
       ['images/'] = function(image, filename)
         image:setFilter('nearest', 'nearest')
