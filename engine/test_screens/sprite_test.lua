@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local TestEntity = require 'engine.test_player'
+local TestEntity = require 'engine.test_game_entity'
 local Sprite = require 'engine.graphics.sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local Subtexture = require 'engine.graphics.subtexture'

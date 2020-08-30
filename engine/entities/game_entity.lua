@@ -1,7 +1,6 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
 local Movement = require 'engine.components.movement'
-
 local vector = require 'lib.vector'
 
 --[[
@@ -14,7 +13,7 @@ local GameEntity = Class { __includes = Entity,
     Entity.init(self, enabled, visible, rect)
     self.bumpFilter = nil
     self.movement = Movement()
-    
+    self._boundsCalcTable = { x = 0, y = 0, w = 0, h = 0 }
     -- add components
     self:add(self.movement)
   end
@@ -41,14 +40,27 @@ function GameEntity:getLinearVelocity(x, y)
   return self.movement:getLinearVelocity(x, y)
 end
 
-function GameEntity:move(dt)
-  local velX, velY = self:getLinearVelocity(dt)
-  local x, y = self:getBumpPosition()
-  local goalX, goalY = x + velX, y + velY
-  local actualX, actualY, collisions, count = bumpWorld:move(self, goalX, goalY, self.bumpFilter)
-  local translatedX, translatedY = actualX - x, actualY - y
-  self:setPositionWithBumpCoords(actualX, actualY)
-  return translatedX, translatedY, collisions, count
+function GameEntity:move(dt)  
+  local posX, posY = self:getPosition()
+  local velX, velY = self.movement:getLinearVelocity(dt)
+  
+  self._boundsCalcTable.x = self.x + velX
+  self._boundsCalcTable.y = self.y + velY
+  self._boundsCalcTable.w = self.w
+  self._boundsCalcTable.h = self.h
+  
+  local neighbors = physics.boxcastBroadphase(self, self._boundsCalcTable)
+  for i, neighbor in ipairs(neighbors) do
+    if self:reportsCollisionsWith(neighbor) then
+      local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
+      if collided then
+        -- hit, back off our motion
+        velX, velY = vector.sub(velX, velY, mtvX, mtvY)
+      end
+    end
+  end
+  self:setPosition(posX + velX, posY + velY)
+  physics.update(self)
 end
 
 return GameEntity

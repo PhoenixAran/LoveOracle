@@ -110,7 +110,7 @@ end
 
 -- gameloop callbacks
 function Entity:awake()
-  bumpWorld:add(self, self.x, self.y, self.w, self.h)
+  physics.add(self)
   self.componentList:entityAwake()
   if self.onAwake ~= nil then
     self:onAwake()
@@ -126,7 +126,7 @@ function Entity:draw()
 end
 
 function Entity:removed(scene)
-  bumpWorld:remove(self)
+  physics.remove(self)
   self.componentList:entityRemoved(scene)
   self.scene = nil
   if self.onRemoved ~= nil then

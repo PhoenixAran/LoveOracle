@@ -27,9 +27,11 @@ function SpatialHash:cellAtPosition(x, y)
     cellRow = { }
     cellRow[y] = { }
     self.cellDict[x] = cellRow
+    print('cell created at ', x, y)
   end
   if cellRow[y] == nil then
     cellRow[y] = { }
+    print('cell created at ', x, y)
   end
   return cellRow[y]
 end
@@ -62,7 +64,7 @@ function SpatialHash:register(box)
   
   for x = px1, px2 do
     for y = py1, py2 do 
-      -- we need to create the cell if there is non
+      -- we need to create the cell if there is none
       local c = self:cellAtPosition(x, y, true)
       lume.push(c, box)
     end
