@@ -96,16 +96,16 @@ function SpatialHash:clear()
   lume.clear(self.cellDict)
 end
 
-function SpatialHash:aabbBroadphase(bounds, box)
+function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
   lume.clear(self.tempHashSet)
-  local px1, py1 = self:cellCoords(bounds.x, bounds.y)
-  local px2, py2 = self:cellCoords(bounds.x + bounds.w, bounds.y + bounds.h)  -- ( right, bottom )
+  local px1, py1 = self:cellCoords(boundsX, boundsY)
+  local px2, py2 = self:cellCoords(boundsX + boundsW, boundsY + boundsH)  -- ( right, bottom )
   for x = px1, px2 do
     for y = py1, py2 do
       local cell = self:cellAtPosition(x, y)
       for i, otherBox in ipairs(cell) do
         if otherBox ~= box then
-          if box:reportsCollisionsWith(otherBox) and rect.intersects(bounds.x, bounds.y, bounds.w, bounds.h, otherBox.x, otherBox.y, otherBox.w, otherBox.h) then
+          if box:reportsCollisionsWith(otherBox) and rect.intersects(boundsX, boundsY, boundsW, boundsH, otherBox.x, otherBox.y, otherBox.w, otherBox.h) then
             lume.push(self.tempHashSet, otherBox)
           end
         end

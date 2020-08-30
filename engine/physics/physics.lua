@@ -17,8 +17,8 @@ function physics.reset()
   lume.clear(colliderTable)
 end
 
-function physics.boxcastBroadphase(box, bounds)
-  return spatialHash:aabbBroadphase(bounds, box)
+function physics.boxcastBroadphase(box, boundsX, boundsY, boundsW, boundsH)
+  return spatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
 end
 
 function physics.add(box)

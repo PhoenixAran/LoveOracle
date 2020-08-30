@@ -13,7 +13,6 @@ local GameEntity = Class { __includes = Entity,
     Entity.init(self, enabled, visible, rect)
     self.bumpFilter = nil
     self.movement = Movement()
-    self._boundsCalcTable = { x = 0, y = 0, w = 0, h = 0 }
     -- add components
     self:add(self.movement)
   end
@@ -44,12 +43,12 @@ function GameEntity:move(dt)
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
   
-  self._boundsCalcTable.x = self.x + velX
-  self._boundsCalcTable.y = self.y + velY
-  self._boundsCalcTable.w = self.w
-  self._boundsCalcTable.h = self.h
+  local bx = self.x + velX
+  local by = self.y + velY
+  local bw = self.w
+  local bh = self.h
   
-  local neighbors = physics.boxcastBroadphase(self, self._boundsCalcTable)
+  local neighbors = physics.boxcastBroadphase(self, bx, by, bw, bh)
   for i, neighbor in ipairs(neighbors) do
     if self:reportsCollisionsWith(neighbor) then
       local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
