@@ -27,11 +27,9 @@ function SpatialHash:cellAtPosition(x, y)
     cellRow = { }
     cellRow[y] = { }
     self.cellDict[x] = cellRow
-    print('cell created at ', x, y)
   end
   if cellRow[y] == nil then
     cellRow[y] = { }
-    print('cell created at ', x, y)
   end
   return cellRow[y]
 end

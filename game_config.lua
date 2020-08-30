@@ -28,7 +28,7 @@ function window.getMonocleArguments()
   return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig
 end
 
-local startupScreen = 'engine.test_screens.physics_test'
+local startupScreen = 'engine.test_screens.entity_resize_test'
 
 return {
  controls = controls,

@@ -4,6 +4,7 @@ local BumpBox = require 'engine.entities.bump_box'
 local Transform = require 'engine.entities.transform'
 local Vector = require 'lib.vector'
 local ComponentList = require 'engine.entities.component_list'
+local rect = require 'engine.utils.rectangle'
 
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, enabled, visible, rect)
@@ -85,6 +86,12 @@ end
 
 function Entity:setLocalPosition(x, y)
   self.transform:setLocalPosition(x, y)
+end
+
+function Entity:resize(width, height)
+  physics.remove(self)
+  self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
+  physics.add(self)
 end
 
 -- component list stuff

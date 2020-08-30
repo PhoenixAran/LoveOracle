@@ -75,4 +75,13 @@ function rectMethods.minkowskiDifference(x1, y1, w1, h1,  x2, y2, w2, h2)
          h1 + h2
 end
 
+function rectMethods.resizeAroundCenter(x, y, w, h, newWidth, newHeight)
+  local ox, oy = x + w / 2, y + h / 2
+  w = newWidth
+  h = newHeight
+  x = ox - w / 2
+  y = oy - h / 2
+  return x, y, w, h
+end
+
 return rectMethods
