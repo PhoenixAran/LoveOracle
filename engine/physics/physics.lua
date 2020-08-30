@@ -4,7 +4,7 @@ local lume = require 'lib.lume'
 local physics = { }
 
 -- cell size when new spatial hash is created
-local spatialHashCellSize = 100
+local spatialHashCellSize = 64
 
 -- spatial hash instance
 local spatialHash = SpatialHash(specialHashCellSize)
