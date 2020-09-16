@@ -1,14 +1,17 @@
 local Class = require 'lib.class'
-local Vector = require 'lib.vector'
 local GameEntity = require 'engine.entities.game_entity'
+local PrototypeSprite = require 'engine.graphics.prototype_sprite'
+local SpriteRenderer = require 'engine.components.sprite_renderer'
 
-local TestPlayer = Class { __includes = GameEntity,
-  init = function(self)
-    GameEntity.init(self, true, true, {x = 50, y = 50, h = 16, w = 16})
+local Player = Class { __includes = GameEntity,
+  init = function(self, enabled, visible, rect) 
+    GameEntity.init(self, enabled, visible, rect)
+    local prototypeSprite = PrototypeSprite(.3, 0, .7, 16, 16)
+    self:add(SpriteRenderer(prototypeSprite))
   end
 }
 
-function TestPlayer:update(dt)
+function Player:update(dt)
   GameEntity.update(self, dt)
   local inputX, inputY = 0, 0
   if input:down('left') then
@@ -27,4 +30,4 @@ function TestPlayer:update(dt)
   self:move(dt)
 end
 
-return TestPlayer
+return Player

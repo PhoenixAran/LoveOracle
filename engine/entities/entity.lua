@@ -83,7 +83,6 @@ end
 function Entity:setPositionWithBumpCoords(x, y)
   self.transform:setPosition(x + self.w / 2, y + self.h / 2)
 end
-
 function Entity:setLocalPosition(x, y)
   self.transform:setLocalPosition(x, y)
 end
