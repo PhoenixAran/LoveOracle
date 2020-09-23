@@ -79,7 +79,7 @@ function love.load()
   assets.images(true)
   
   -- load spritesheets
-  loadSpriteSheets('assets/spritesheets')
+  loadSpriteSheets('data/assets/spritesheets')
   
   -- fonts
   monogram = assets.fonts.monogram(16)
@@ -96,7 +96,7 @@ function love.load()
   love.window.setTitle(gameConfig.window.title)
   monocle.setup(gameConfig.window.getMonocleArguments())
   love.graphics.setFont(monogram)
-  screenManager:hook({ exclude = {'update','draw', 'resize'} })
+  screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
 end
 

@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local rect = require 'engine.utils.rectangle'
 
 local BumpBox = Class {
-  init = function(self, x, y, w, h)
+  init = function(self, x, y, w, h, collisionTag)
     if x == nil then x = 0 end
     if y == nil then y = 0 end
     if w == nil then w = 1 end
