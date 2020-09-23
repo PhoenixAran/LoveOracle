@@ -13,6 +13,9 @@ local GameEntity = Class { __includes = Entity,
     Entity.init(self, enabled, visible, rect)
     self.bumpFilter = nil
     self.movement = Movement()
+    -- not sure if i need these bottom two animation variables yet
+    self.animationState = nil
+    self.animationDirection = nil
     -- add components
     self:add(self.movement)
   end

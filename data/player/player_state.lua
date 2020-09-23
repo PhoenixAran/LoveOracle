@@ -45,9 +45,4 @@ function PlayerState:endState(newState)
   self:onEnd(newState)
 end
 
-
-
-
-
-
-
+return PlayerState

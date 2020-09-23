@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local PlayerStateParameters = require 'data.player.player_state_parameters'
 
-local PlayerController = Class {
+local PlayerStateMachine = Class {
   init = function(self, player)
     self.player = player
     self.previousState = nil
@@ -11,7 +11,7 @@ local PlayerController = Class {
 
 -- states
 -- todo instead of nil should there just be an emptystate?
-function PlayerController:canTransitionTo(newState)
+function PlayerStateMachine:canTransitionTo(newState)
   if newState ~= nil then
     -- lazy initialize
     newState.player = self.player
@@ -26,7 +26,7 @@ function PlayerController:canTransitionTo(newState)
   return true
 end
 
-function PlayerController:beginState(newState)
+function PlayerStateMachine:beginState(newState)
   if self:canTransitionToState(newState) then
     if newState ~= self.currentState then
       self:forceBeginState(newState)
@@ -37,7 +37,7 @@ function PlayerController:beginState(newState)
   end
 end
 
-function PlayerController:forceBeginState(newState)
+function PlayerStateMachine:forceBeginState(newState)
   -- end the current state
   self.previousState = self.currentState
   if self.currentState ~= nil then
@@ -51,7 +51,7 @@ function PlayerController:forceBeginState(newState)
   end
 end
 
-function PlayerController:update(dt)
+function PlayerStateMachine:update(dt)
   if self.currentState ~= nil then
     self.currentState:update(dt)
     if not self.active then
@@ -62,7 +62,9 @@ function PlayerController:update(dt)
   end
 end
 
-function PlayerController:getStateParameters()
+function PlayerStateMachine:getStateParameters()
   if self.currentState ~= nil then return self.currentState.stateParameters end
   return PlayerStateParameters()
 end
+
+return PlayerStateMachine
