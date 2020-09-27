@@ -14,7 +14,7 @@ local PlayerStateMachine = Class { _includes = SignalObject,
 }
 
 -- states
--- todo instead of nil should there just be an emptystate?
+-- TODOMAYBE - instead of nil should there just be an emptystate?
 function PlayerStateMachine:canTransitionTo(newState)
   if newState ~= nil then
     -- lazy initialize

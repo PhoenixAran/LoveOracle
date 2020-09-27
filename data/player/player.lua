@@ -10,6 +10,8 @@ local Player = Class { __includes = GameEntity,
     GameEntity.init(self, enabled, visible, rect)
     
     -- declarations
+    self.animDirection
+    
     self.stateCollection = { }
     self.environmentStateMachine = PlayerStateMachine()
     self.controlStateMachine = PlayerStateMachine()
@@ -27,6 +29,28 @@ local Player = Class { __includes = GameEntity,
     self:add(SpriteRenderer(prototypeSprite))
   end
 }
+
+function Player:matchAnimationDirection(inputX, inputY)
+  local direction = self.animDirection
+  if inputX == -1 and inputY == -1 and direction ~= 'up' and direction ~= 'left' then
+    direction = 'up'
+  elseif inputX == 1 and inputY == 1 and direction ~= 'down' and direction ~= 'right' then
+    direction = 'down'
+  elseif inputX == 1 and inputY == -1 and direction ~= 'up' and direction ~= 'right' then
+    direction = 'up'
+  elseif inputX == -1 and inputY = 1 and direction ~= 'down' and direction ~= 'left' then
+    direction = 'left'
+  elseif inputX == 0 and inputY == -1 and direction ~= 'up' then
+    direction = 'up'
+  elseif inputX == 0 and inputY == 1 and direction ~= 'down' then 
+    direction = 'down'
+  elseif inputX == -1 and inputY == 0 and direction ~= 'left' then
+    direction = 'left'
+  elseif inputX == 1 and inputY == 0 and direction ~= 'right' then
+    direction = 'right'
+  end
+  self.animDirection = direction
+end
 
 -- gets the desired state from player state collection
 function Player:getState(name)

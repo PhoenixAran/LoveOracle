@@ -13,7 +13,8 @@ local PlayerMovementController = Class {
     self.strokeSpeedScale = 1.0
     self.moveAxesX, self.moveAxesY = false, false
     self.motionX, self.motionY = 0, 0
-    self.isMoving = false
+    self.moving = false
+    self.stroking = false
     self.mode = PlayerMotionType()
     --self.moveAngle = 'south'  -- not sure if I need this
     self.holeTile = nil
@@ -26,6 +27,36 @@ local PlayerMovementController = Class {
   end
 }
 
+function PlayerMovementController:pollMovementControls(allowMovementControl)
+  local x, y = 0, 0
+  self.moving = false
+  if allowMovementControl then 
+  -- check movement keys
+    if input:down('up') then
+      y = -1
+    end
+    if input:down('down') then
+      y = 1
+    end
+    if input:down('left') then
+      x = -1
+    end
+    if input:down('right') then
+      x = 1
+    end
+    
+    if x ~= 0 or y ~= 0 then 
+      self.moving = true
+    end
+  end
+  
+  return x, y
+end
+
+function PlayerMovementController:chooseAnimation()
+  -- TODO
+end
+
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentState ~= nil then
     self.mode = self.player.environentState.motionType
@@ -35,8 +66,36 @@ function PlayerMovementController:updateMoveMode()
 end
 
 function PlayerMovementController:updateMoveControls()
-  -- TODO
-  -- check if player is allowed to move
+  if self.player.isInAir() then
+    if not self.player:getStateParameters().canControlInAir then
+      self.allowMovementControl = false
+    else
+      self.allowMovementControl = true
+    end
+  else
+    self.allowMovementControl = not self.player:inHitstun() and not self.player:inKnockback() 
+                                and self.player:getStateParameters().canControlOnGround 
+  end
+  local inputX, inputY = self:pollMovementKeys(self.allowMovementControl)
+  
+  local canUpdateDirection = false
+  if self.player:getStateParameters().alwaysFaceUp then
+    canUpdateDirection = inputX == 0 and inputY == -1
+  elseif self.player:getStateParameters().alwaysFaceLeft then
+    canUpdateDirection = inputX == -1 and inputY == 0
+  elseif self.player:getStateParameters().alwaysFaceRight then
+    canUpdateDirection = inputX == 1 and inputY == 0
+  elseif self.player:getStateParameters().alwaysFaceDown then
+    canUpdateDirection = inputX == 0 and inputY == 1
+  else
+    canUpdateDirection = self.player:getStateParameters().canStrafe
+  end
+  
+  if canUpdateDirection and self.allowMovementControl and self.moving then
+    self.player:matchAnimationDirection(inputX, inputY)
+  end
+  
+  self:chooseAnimation()
 end
 
 function PlayerMovementController:update(dt)

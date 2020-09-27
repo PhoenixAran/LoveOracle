@@ -3,10 +3,10 @@ local Class = require 'lib.class'
 local PlayerStateParameters = Class {
   init = function(self)
     -- everything is false by default
-    self.canMove = false
     self.canJump = false
     self.canWarp = false
     self.canLedgeJump = false
+    self.canControlOnGround = false
     self.canControlInAir = false
     self.canPush = false
     self.canUseWeapons = false

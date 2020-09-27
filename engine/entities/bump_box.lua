@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local rect = require 'engine.utils.rectangle'
 
+-- TODO implement Z-range for pseudo 3D collisions
 
 local BumpBox = Class {
   init = function(self, x, y, w, h, collisionTag)
