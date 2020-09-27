@@ -53,7 +53,7 @@ end
 -- notify components that the entity transform has changed
 function ComponentList:transformChanged()
   for _, component in ipairs(self.components) do
-    if component.transformChanged ~= nil then
+    if component:isEnabled() then
       component:transformChanged()
     end
   end
@@ -130,19 +130,15 @@ function ComponentList:remove(component)
   end
 end
 
-function ComponentList:entityAdded(scene)
+function ComponentList:entityAdded(screen)
   for _, component in ipairs(self.components) do
-    if component.entityAdded ~= nil then
-      component:entityAdded(scene)
-    end
+    component:entityAdded(screen)
   end
 end
 
 function ComponentList:entityAwake()
   for _, component in ipairs(self.components) do
-    if component.entityAwake ~= nil then
-      component:entityAwake()
-    end
+    component:entityAwake()
   end
 end
 

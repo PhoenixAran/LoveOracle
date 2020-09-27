@@ -18,20 +18,53 @@ function Component:getType()
   return 'component'
 end
 
+function Component:transformChanged()
+  local px, py = self.entity:getPosition()
+  self.x = x
+  self.y = y
+  
+end
+
 function Component:isEnabled()
   return self.enabled
+end
+
+function Component:setEnabled(enabled)
+  self.enabled = enabled
+  if enabled then
+    self:onEnabled()
+  else 
+    self:onDisabled()
+  end
 end
 
 function Component:isVisible()
   return self.visible
 end
 
+function Component:entityAwake()
+end
+
+function Component:onEnabled()
+end
+
+function Component:onDisabled()
+end
+
 function Component:added(entity)
   self.entity = entity
+  self:onAdded()
+end
+
+function Component:onAdded()
 end
 
 function Component:removed(entity)
   self.entity = nil
+  self:onRemoved(entity)
+end
+
+function Component:onRemoved(entity)
 end
 
 return Component

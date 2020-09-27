@@ -103,7 +103,9 @@ function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
       local cell = self:cellAtPosition(x, y)
       for i, otherBox in ipairs(cell) do
         if otherBox ~= box then
-          if box:reportsCollisionsWith(otherBox) and rect.intersects(boundsX, boundsY, boundsW, boundsH, otherBox.x, otherBox.y, otherBox.w, otherBox.h) then
+          if box:reportsCollisionsWith(otherBox)
+            and rect.intersects(boundsX, boundsY, boundsW, boundsH, otherBox.x, otherBox.y, otherBox.w, otherBox.h)  
+            and box:additionalPhysicsFilter(otherBox) then
             lume.push(self.tempHashSet, otherBox)
           end
         end

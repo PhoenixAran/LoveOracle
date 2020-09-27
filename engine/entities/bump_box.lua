@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local rect = require 'engine.utils.rectangle'
 
+
 local BumpBox = Class {
   init = function(self, x, y, w, h, collisionTag)
     if x == nil then x = 0 end
@@ -8,7 +9,7 @@ local BumpBox = Class {
     if w == nil then w = 1 end
     if h == nil then h = 1 end
     if collisionTag == nil then collisionTag = 'bumpbox' end
-    
+      
     self.x = x
     self.y = y
     self.w = w
@@ -18,7 +19,7 @@ local BumpBox = Class {
     self.collidesWithLayer = { }
     -- layers this bumpbox exists in
     self.physicsLayer = { }
-    -- the bounds of this xo when it was registered with they physics system
+    -- the bounds of this box when it was registered with they physics system
     -- storing this allows us to always be able to safely remove the box even if it was moved
     -- before attempting to remove it
     self.registeredPhysicsBounds = { x = 0, y = 0, w = 0, h = 0 }
@@ -31,6 +32,10 @@ end
 
 function BumpBox:getCollisionTag()
   return 'bumpbox'
+end
+
+function BumpBox:additionalPhysicsFilter(otherBox)
+  return true
 end
 
 function BumpBox:getBumpPosition()
@@ -95,7 +100,7 @@ end
 function BumpBox:reportsCollisionsWith(otherBumpBox)
   for k, v in pairs(otherBumpBox:getPhysicsLayer()) do
     if self.collidesWithLayer[k] then 
-      return true 
+      return self.additionalPhysicsFilter(otherBumpBox)
     end
   end
   return false

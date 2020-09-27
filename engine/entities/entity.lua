@@ -77,7 +77,7 @@ function Entity:getZPosition()
 end
 
 function Entity:setZPosition(z)
-  local x, y, = self:getPosition()
+  local x, y = self:getPosition()
   self.transform:setPosition(x, y, z)
 end
 

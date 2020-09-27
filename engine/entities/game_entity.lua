@@ -11,6 +11,7 @@ local GameEntity = Class { __includes = Entity,
     -- declarations
     self.movement = Movement()    
     self.groundObserver = GroundObserver()
+    self.inAir = false
     -- not sure if i need these bottom two animation variables yet
     self.animationState = nil
     self.animationDirection = nil
