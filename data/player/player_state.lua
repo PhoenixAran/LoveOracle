@@ -10,6 +10,10 @@ local PlayerState = Class {
   end
 }
 
+function PlayerState:getType()
+  return 'playerstate'
+end
+
 -- "Virtual" methods
 function PlayerState:onBegin(previousState) end
 

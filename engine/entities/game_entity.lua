@@ -1,21 +1,27 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
 local Movement = require 'engine.components.movement'
+local GroundObserver = require 'engine.components.ground_observer'
 local vector = require 'lib.vector'
 
---[[
-  The GameEntity class is what most entities will derive from.
-  It includes more actions out of the box than the plain Entity class, at the cost
-  of including default components
-]]
 local GameEntity = Class { __includes = Entity,
   init = function(self, enabled, visible, rect)
     Entity.init(self, enabled, visible, rect)
-    self.bumpFilter = nil
-    self.movement = Movement()
+    
+    -- declarations
+    self.movement = Movement()    
+    self.groundObserver = GroundObserver()
     -- not sure if i need these bottom two animation variables yet
     self.animationState = nil
     self.animationDirection = nil
+    
+    self:signal('entityDestroyed')
+    self:signal('entityCreated')
+    self:signal('entityHit')
+    self:signal('entityBumped')
+    self:signal('entityImmobolized')
+    self:signal('entityMarkedDead')
+    
     -- add components
     self:add(self.movement)
   end

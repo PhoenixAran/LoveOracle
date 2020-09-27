@@ -67,4 +67,13 @@ function PlayerStateMachine:getStateParameters()
   return PlayerStateParameters()
 end
 
+function PlayerStateMachine:isActive()
+  return self.state ~= nil and self.state.active
+end
+
+function PlayerStateMachine:clear()
+    self.previousState = nil
+    self.currentState = nil
+end
+
 return PlayerStateMachine

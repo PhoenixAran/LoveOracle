@@ -71,6 +71,16 @@ function Entity:getLocalPosition()
   return x, y
 end
 
+function Entity:getZPosition()
+  local x, y, z= self.transform:getLocalPosition()
+  return z
+end
+
+function Entity:setZPosition(z)
+  local x, y, = self:getPosition()
+  self.transform:setPosition(x, y, z)
+end
+
 function Entity:getPosition()
   local x, y, z = self.transform:getPosition()
   return x, y
