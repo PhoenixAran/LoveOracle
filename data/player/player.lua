@@ -10,6 +10,7 @@ local Player = Class { __includes = GameEntity,
     GameEntity.init(self, enabled, visible, rect)
     
     -- declarations
+    self.stateCollection = { }
     self.environmentStateMachine = PlayerStateMachine()
     self.controlStateMachine = PlayerStateMachine()
     self.weaponStateMachine = PlayerStateMachine()
@@ -26,6 +27,11 @@ local Player = Class { __includes = GameEntity,
     self:add(SpriteRenderer(prototypeSprite))
   end
 }
+
+-- gets the desired state from player state collection
+function Player:getState(name)
+  return self.stateCollection[name]
+end
 
 function Player:beginConditionState(state)
   --TODO
@@ -68,7 +74,20 @@ function Player:requestNaturalState()
 end
 
 function Player:getDesiredNaturalState()
-  --TODO
+  -- get ground observer
+  local go = self.groundObserver
+  if go.inGrass then
+    return self:getState('environmentstategrass')
+  end
+  -- TODO implement rest of environment states
+  
+  return nil
+end
+
+function Player:updateStates()
+  -- prestate update
+  self:requestNaturalState()
+  
 end
 
 function Player:update(dt)

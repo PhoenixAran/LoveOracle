@@ -8,10 +8,13 @@ local GameEntity = Class { __includes = Entity,
   init = function(self, enabled, visible, rect)
     Entity.init(self, enabled, visible, rect)
     
-    -- declarations
+    -- component declarations
     self.movement = Movement()    
     self.groundObserver = GroundObserver()
+    
+    -- declarations
     self.inAir = false
+    self.persistant = false
     -- not sure if i need these bottom two animation variables yet
     self.animationState = nil
     self.animationDirection = nil
@@ -25,7 +28,7 @@ local GameEntity = Class { __includes = Entity,
     
     -- add components
     self:add(self.movement)
-  end
+  end 
 }
 
 function GameEntity:getType()
@@ -70,6 +73,15 @@ function GameEntity:move(dt)
   end
   self:setPosition(posX + velX, posY + velY)
   physics.update(self)
+end
+
+-- other
+function GameEntity:isInAir()
+  return self.inAir
+end
+
+function GameEntity:isPersistant()
+  return self.persistant
 end
 
 return GameEntity

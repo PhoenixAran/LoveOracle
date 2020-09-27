@@ -1,8 +1,12 @@
 local Class = require 'lib.class'
+local SignalObject = require 'engine.signal_object'
 local PlayerStateParameters = require 'data.player.player_state_parameters'
 
-local PlayerStateMachine = Class {
+local defaultPlayerStateParameters = PlayerStateParameters()
+
+local PlayerStateMachine = Class { _includes = SignalObject,
   init = function(self, player)
+    SignalOabject.init(self)
     self.player = player
     self.previousState = nil
     self.currentState = nil
@@ -64,7 +68,7 @@ end
 
 function PlayerStateMachine:getStateParameters()
   if self.currentState ~= nil then return self.currentState.stateParameters end
-  return PlayerStateParameters()
+  return defaultPlayerStateParameters
 end
 
 function PlayerStateMachine:isActive()
