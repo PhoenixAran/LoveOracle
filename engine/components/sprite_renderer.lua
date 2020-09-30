@@ -15,6 +15,10 @@ local SpriteRenderer = Class { __includes = Component,
   end
 }
 
+function SpriteRenderer:setSprite(sprite)
+  self.sprite = sprite
+end
+
 function SpriteRenderer:getType()
   return 'spriterenderer'
 end
