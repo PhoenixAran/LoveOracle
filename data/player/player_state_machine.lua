@@ -6,7 +6,7 @@ local defaultPlayerStateParameters = PlayerStateParameters()
 
 local PlayerStateMachine = Class { _includes = SignalObject,
   init = function(self, player)
-    SignalOabject.init(self)
+    SignalObject.init(self)
     self.player = player
     self.previousState = nil
     self.currentState = nil

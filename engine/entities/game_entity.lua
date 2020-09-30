@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
+local Combat = require 'engine.components.combat'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local vector = require 'lib.vector'
@@ -11,7 +12,7 @@ local GameEntity = Class { __includes = Entity,
     -- component declarations
     self.movement = Movement()    
     self.groundObserver = GroundObserver()
-    
+    self.combat = Combat()
     -- declarations
     self.inAir = false
     self.persistant = false
@@ -28,6 +29,8 @@ local GameEntity = Class { __includes = Entity,
     
     -- add components
     self:add(self.movement)
+    self:add(self.groundObserver)
+    self:add(self.combat)
   end 
 }
 

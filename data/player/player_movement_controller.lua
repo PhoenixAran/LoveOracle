@@ -66,7 +66,7 @@ function PlayerMovementController:updateMoveMode()
 end
 
 function PlayerMovementController:updateMoveControls()
-  if self.player.isInAir() then
+  if self.player:isInAir() then
     if not self.player:getStateParameters().canControlInAir then
       self.allowMovementControl = false
     else

@@ -10,7 +10,7 @@ local Player = Class { __includes = GameEntity,
     GameEntity.init(self, enabled, visible, rect)
     
     -- declarations
-    self.animDirection
+    self.animDirection = 'down'
     
     self.stateCollection = { }
     self.environmentStateMachine = PlayerStateMachine()
@@ -38,7 +38,7 @@ function Player:matchAnimationDirection(inputX, inputY)
     direction = 'down'
   elseif inputX == 1 and inputY == -1 and direction ~= 'up' and direction ~= 'right' then
     direction = 'up'
-  elseif inputX == -1 and inputY = 1 and direction ~= 'down' and direction ~= 'left' then
+  elseif inputX == -1 and inputY == 1 and direction ~= 'down' and direction ~= 'left' then
     direction = 'left'
   elseif inputX == 0 and inputY == -1 and direction ~= 'up' then
     direction = 'up'
@@ -88,7 +88,7 @@ function Player:beginEnvironmentState(state)
 end
 
 function Player:beginBusyState(duration, animation)
-  if self.weaponState
+  --TODO
 end
 
 function Player:requestNaturalState()
