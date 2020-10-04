@@ -13,7 +13,7 @@ local CompositeSpriteTest = Class {
 }
 
 function CompositeSpriteTest:enter(previous, ...)
-  local spriteSheet = assets.spritesheets.player
+  local spriteSheet = assetManager.getSpriteSheet('player')
   local sprites = { }
   sprites[#sprites + 1] = Sprite(spriteSheet:getTexture(21, 6), 0, 0)
   sprites[#sprites + 1] = Sprite(spriteSheet:getTexture(21, 7), 0, -16)

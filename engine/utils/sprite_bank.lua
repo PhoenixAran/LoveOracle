@@ -4,7 +4,9 @@ local SpriteBank = {
 
 -- assumes flat directory because i'm lazy
 function SpriteBank.initialize(directory)
+  directory = assetManager.directory .. '/' .. directory
   local files = love.filesystem.getDirectoryItems(directory)
+  print(#files)
   for _, file in ipairs(files) do
     local builder = require(directory .. '.' .. file)
     local key, sprite = builder.construct()

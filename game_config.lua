@@ -1,5 +1,4 @@
 local version = '0.0.2.0'
-
 local controls = {
   controls = {
     left = {'key:left', 'key:a', 'axis:leftx-', 'button:dpleft'},
@@ -24,11 +23,11 @@ local window = {
   }
 }
 
+local startupScreen = 'engine.test_screens.composite_sprite_test'
+
 function window.getMonocleArguments()
   return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig
 end
-
-local startupScreen = 'data.test_screens.player_playground'
 
 return {
  controls = controls,

@@ -4,7 +4,6 @@ local Subtexture = require 'engine.graphics.subtexture'
 local SpriteSheet = Class {
   init = function(self, image, width, height, padding, margin)
     self.textures = { }
-    
     if padding == nil then padding = 1 end
     if margin == nil then margin = 0 end
     local countedCols = false

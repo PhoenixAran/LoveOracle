@@ -1,97 +1,67 @@
 local monocle = require 'lib.monocle'
-local cargo = require 'lib.cargo'
 local gameConfig = require 'game_config'
-local SpriteSheet = require 'engine.graphics.sprite_sheet'
+
+-- asset loading methods
+local function loadFonts()
+  assetManager.getFont('fonts/monogram.ttf', 16)
+  assetManager.getFont('fonts/dialogue.ttf', 10)
+end
+
+local function loadImages(directory)
+  directory = directory or 'images'
+  local imageFiles = love.filesystem.getDirectoryItems(assetManager.directory .. directory)
+  for _, file in ipairs(imageFiles) do
+    local path = directory .. '/' .. file
+    if love.filesystem.getInfo(assetManager.directory .. path).type == 'directory' then
+      loadImages(path)
+    else
+      assetManager.getImage(path)
+    end
+  end
+end
+
+local function loadSpriteSheets(directory)
+  directory = directory or 'spritesheets'
+  local spritesheetFiles = love.filesystem.getDirectoryItems(assetManager.directory .. directory)
+  for _, file in ipairs(spritesheetFiles) do
+    local path = directory .. '/' .. file
+    -- assetManager combines base asset path for us so we need to manually combine path to get correct 
+    -- path for love.filesystem.getinfo
+    if love.filesystem.getInfo(assetManager.directory .. path).type == 'directory' then
+      loadSpriteSheets(path)
+    else
+      assetManager.loadSpriteSheetFile(path)
+    end
+  end
+end
 
 local function drawFPSAndMemory()  
+  local monogram = assetManager.getFont('fonts/monogram.ttf')
   love.graphics.setFont(monogram)
   local fps = ("fps:%d, %d kbs"):format(love.timer.getFPS(), collectgarbage("count"))
   love.graphics.setColor(1, 1, 1)
   love.graphics.printf(fps, 0, 132, 200, 'left')
 end
 
-local function drawFPS()
-  love.graphics.setFont(monogram)
+local function drawFPS()  
+  local monogram = assetManager.getFont('fonts/monogram.ttf')  love.graphics.setFont(monogram)
   local fps = ("fps:%d"):format(love.timer.getFPS())
   love.graphics.setColor(1, 1, 1)
   love.graphics.printf(fps, 0, 132, 200, 'left')
 end
 
---gets name of file without path and extension
-local function getFileName(file)
-  local name = file:match("^.+/(.+)$"):match("(.+)%.")
-  return name
-end
-
-local function split(str, inSplitPattern)
-  local outResults = { }
-  local theStart = 1
-  local theSplitStart, theSplitEnd = string.find( str, inSplitPattern, theStart )
-  while theSplitStart do
-    table.insert( outResults, string.sub( str, theStart, theSplitStart-1 ) )
-    theStart = theSplitEnd + 1
-    theSplitStart, theSplitEnd = string.find( str, inSplitPattern, theStart )
-  end
-  table.insert( outResults, string.sub( str, theStart ) )
-  return outResults
-end
-
--- create spritesheets from spritesheet file and cache them into the 
--- global spriteSheets table, and into assets.spritesheets
-local function parseSpriteSheet(filePath)
-  assets.spritesheets = assets.spritesheets or { }
-  for line in love.filesystem.lines(filePath) do
-    if line then line = line:gsub('%$s+', '') end
-    if not (line == nil or line == '' or line:sub(1, 1) == '#') then
-      local args = split(line, ',')
-      local key = args[1]
-      spriteSheets[key] = SpriteSheet(images[key], tonumber(args[2]), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
-      assets.spritesheets[key] = spriteSheets[key]
-    end
-  end
-end
-
--- assumes spritesheets directory is just a flat directory
-local function loadSpriteSheets(dir)
-  local spriteSheetFiles = love.filesystem.getDirectoryItems(dir)
-  for _, file in ipairs(spriteSheetFiles) do
-    parseSpriteSheet(dir .. '/' .. file)
-  end
-end
-
 -- alot of globals are declared here
 function love.load()
-  -- can access images and spritesheets simply by string name, instead of manually through cargo
-  images = {} 
-  spriteSheets = { }
-  assets = cargo.init({
-    dir = 'data/assets',
-    processors = {
-      ['images/'] = function(image, filename)
-        image:setFilter('nearest', 'nearest')
-        local imageKey = getFileName(filename)
-        images[imageKey] = image
-      end
-    }
-  })
-
-
-  -- preload images
-  assets.images(true)
-  
-  -- load spritesheets
-  loadSpriteSheets('data/assets/spritesheets')
+  assetManager = require 'engine.utils.asset_manager'
+  assetManager.setDirectory('data/assets/')
+  loadFonts() 
+  loadImages() 
+  loadSpriteSheets()
   
   -- after we load images and spritesheet initialize the sprite bank
   spriteBank = require 'engine.utils.sprite_bank'
   -- use dot notation since its really just calling a bunch of requires
-  spriteBank.initialize('data.builders')
-  
-  -- fonts
-  monogram = assets.fonts.monogram(16)
-  monogram:setFilter('nearest', 'nearest')
-  dialogue = assets.fonts.dialogue(10)
-  dialogue:setFilter('nearest', 'nearest')
+  spriteBank.initialize('data.builders')  
 
   screenManager = require('lib.roomy').new()
   physics = require 'engine.physics.physics'
@@ -101,7 +71,7 @@ function love.load()
   input = require('lib.baton').new(gameConfig.controls)
   love.window.setTitle(gameConfig.window.title)
   monocle.setup(gameConfig.window.getMonocleArguments())
-  love.graphics.setFont(monogram)
+  love.graphics.setFont(assetManager.getFont('fonts/monogram.ttf'))
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
 end

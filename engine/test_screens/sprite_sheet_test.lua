@@ -13,7 +13,7 @@ local SpriteSheetTest = Class {
 }
 
 function SpriteSheetTest:enter(previous, ...)
-  self.spriteSheet = assets.spritesheets.player
+  self.spriteSheet = assetManager.getSpriteSheet('player')
   self.maxIndex = self.spriteSheet:size()
 end
 

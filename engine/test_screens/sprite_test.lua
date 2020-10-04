@@ -13,7 +13,7 @@ local SpriteTest = Class {
 
 function SpriteTest:enter(previous, ...)
   self.testEntity = TestEntity()
-  local image = assets.images.entities.player
+  local image = assetManager.getImage('images/entities/player.png')
   local quad = love.graphics.newQuad( 103, 1, 16, 16, image:getWidth(), image:getHeight())
   local subtexture = Subtexture(image, quad)
   local sprite = Sprite(subtexture, 16, 16)
