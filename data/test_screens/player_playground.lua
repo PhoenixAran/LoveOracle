@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Player = require 'data.player.player'
+local Player = require 'engine.player.player'
 
 local PlayerPlayground = Class {
   init = function(self)

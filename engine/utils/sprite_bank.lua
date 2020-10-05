@@ -1,15 +1,16 @@
+local fh = require 'engine.utils.file_helper'
 local SpriteBank = { 
   sprites = { }
 }
 
 -- assumes flat directory because i'm lazy
 function SpriteBank.initialize(directory)
-  directory = assetManager.directory .. '/' .. directory
   local files = love.filesystem.getDirectoryItems(directory)
-  print(#files)
   for _, file in ipairs(files) do
-    local builder = require(directory .. '.' .. file)
-    local key, sprite = builder.construct()
+    local requirePath = fh.getFilePathWithoutExtension(directory .. '/' .. file):gsub('%/', '.')
+    print(requirePath)
+    local builder = require(requirePath)
+    local key, sprite = builder.build()
     builder[key] = sprite
   end
 end

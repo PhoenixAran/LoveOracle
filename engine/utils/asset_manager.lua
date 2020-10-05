@@ -56,7 +56,7 @@ function AssetManager.getFont(path, fontSize)
   return font
 end
 
--- should probably put this in the sprite bank class instead
+-- sprite sheet keys will be defined by whatever is defined in the spritesheet line
 function AssetManager.loadSpriteSheetFile(path)
   path = getCombinedPath(path)
   for line in love.filesystem.lines(path) do

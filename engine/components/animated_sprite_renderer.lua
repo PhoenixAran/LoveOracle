@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Component = require 'lib.entity.component'
+local Component = require 'engine.entities.component'
 
 local States = { 
   None = 0, 
