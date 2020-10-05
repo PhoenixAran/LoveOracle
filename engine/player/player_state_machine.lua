@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
-local PlayerStateParameters = require 'data.player.player_state_parameters'
+local PlayerStateParameters = require 'engine.player.player_state_parameters'
 
 local defaultPlayerStateParameters = PlayerStateParameters()
 

@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local PlayerStateParameters = require 'data.player.player_state_parameters'
+local PlayerStateParameters = require 'engine.player.player_state_parameters'
 
 local PlayerState = Class {
   init = function(self)

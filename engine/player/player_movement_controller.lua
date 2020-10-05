@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local PlayerMotionType = require 'data.player.player_motion_type'
+local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'lib.vector'
 
 

@@ -2,8 +2,8 @@ local Class = require 'lib.class'
 local GameEntity = require 'engine.entities.game_entity'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
-local PlayerStateMachine = require 'data.player.player_state_machine'
-local PlayerStateParameters = require 'data.player.player_state_parameters'
+local PlayerStateMachine = require 'engine.player.player_state_machine'
+local PlayerStateParameters = require 'engine.player.player_state_parameters'
 
 local Player = Class { __includes = GameEntity,
   init = function(self, enabled, visible, rect) 
