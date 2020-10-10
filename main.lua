@@ -3,31 +3,29 @@ local gameConfig = require 'game_config'
 
 -- asset loading methods
 local function loadFonts()
-  assetManager.getFont('fonts/monogram.ttf', 16)
-  assetManager.getFont('fonts/dialogue.ttf', 10)
+  assetManager.loadFont('data/assets/fonts/monogram.ttf', 16)
+  assetManager.loadFont('data/assets/fonts/dialogue.ttf', 10)
 end
 
 local function loadImages(directory)
-  directory = directory or 'images'
-  local imageFiles = love.filesystem.getDirectoryItems(assetManager.directory .. directory)
+  local imageFiles = love.filesystem.getDirectoryItems(directory)
   for _, file in ipairs(imageFiles) do
     local path = directory .. '/' .. file
-    if love.filesystem.getInfo(assetManager.directory .. path).type == 'directory' then
+    if love.filesystem.getInfo(path).type == 'directory' then
       loadImages(path)
     else
-      assetManager.getImage(path)
+      assetManager.loadImage(path)
     end
   end
 end
 
 local function loadSpriteSheets(directory)
-  directory = directory or 'spritesheets'
-  local spritesheetFiles = love.filesystem.getDirectoryItems(assetManager.directory .. directory)
+  local spritesheetFiles = love.filesystem.getDirectoryItems(directory)
   for _, file in ipairs(spritesheetFiles) do
     local path = directory .. '/' .. file
     -- assetManager combines base asset path for us so we need to manually combine path to get correct 
     -- path for love.filesystem.getinfo
-    if love.filesystem.getInfo(assetManager.directory .. path).type == 'directory' then
+    if love.filesystem.getInfo(path).type == 'directory' then
       loadSpriteSheets(path)
     else
       assetManager.loadSpriteSheetFile(path)
@@ -36,7 +34,7 @@ local function loadSpriteSheets(directory)
 end
 
 local function drawFPSAndMemory()  
-  local monogram = assetManager.getFont('fonts/monogram.ttf')
+  local monogram = assetManager.getFont('monogram')
   love.graphics.setFont(monogram)
   local fps = ("fps:%d, %d kbs"):format(love.timer.getFPS(), collectgarbage("count"))
   love.graphics.setColor(1, 1, 1)
@@ -44,7 +42,7 @@ local function drawFPSAndMemory()
 end
 
 local function drawFPS()  
-  local monogram = assetManager.getFont('fonts/monogram.ttf')  love.graphics.setFont(monogram)
+  local monogram = assetManager.getFont('monogram')  love.graphics.setFont(monogram)
   local fps = ("fps:%d"):format(love.timer.getFPS())
   love.graphics.setColor(1, 1, 1)
   love.graphics.printf(fps, 0, 132, 200, 'left')
@@ -53,10 +51,9 @@ end
 -- alot of globals are declared here
 function love.load()
   assetManager = require 'engine.utils.asset_manager'
-  assetManager.setDirectory('data/assets/')
   loadFonts() 
-  loadImages() 
-  loadSpriteSheets()
+  loadImages('data/assets/images') 
+  loadSpriteSheets('data/assets/spritesheets')
   
   -- after we load images and spritesheet initialize the sprite bank
   spriteBank = require 'engine.utils.sprite_bank'
@@ -71,7 +68,7 @@ function love.load()
   input = require('lib.baton').new(gameConfig.controls)
   love.window.setTitle(gameConfig.window.title)
   monocle.setup(gameConfig.window.getMonocleArguments())
-  love.graphics.setFont(assetManager.getFont('fonts/monogram.ttf'))
+  love.graphics.setFont(assetManager.getFont('monogram'))
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
 end

@@ -1,14 +1,14 @@
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
+local fh = require 'engine.utils.file_helper'
 
 local AssetManager = { 
-  directory = nil,
-  cache = { }
+  imageCache = { },
+  fontCache = { },
+  soundCache = { },
+  spriteSheetCache = { }
 }
 
-local function getCombinedPath(path)
-  return AssetManager.directory .. path
-end
-
+-- helper functions. mainly used to parse sprite sheet declarations
 local function split(str, inSplitPattern)
   local outResults = { }
   local theStart = 1
@@ -22,55 +22,110 @@ local function split(str, inSplitPattern)
   return outResults
 end
 
-function AssetManager.setDirectory(directory)
-  AssetManager.directory = directory
+local function trim(str)
+  return (str:gsub("^%s*(.-)%s*$", "%1"))
 end
 
-function AssetManager.getImage(path)
-  if AssetManager.cache[path] then
-    return AssetManager.cache[path]
-  end
-  local image = love.graphics.newImage(getCombinedPath(path))
+local function argIsString(arg)
+  if arg == nil then return false end
+  arg = trim(arg)
+  return string.len(arg) >= 2 and arg:sub(1, 1) == '"' and arg:sub(-1) == '"'
+end
+
+local function parseStringArg(arg)
+  -- strip the quotation marks aroudn string
+  arg = trim(arg)
+  return string.sub(arg, 2, string.len(arg) - 1)
+end
+
+local function argIsNumber(arg)
+  if arg == nil then return false end
+  return tonumber(arg) ~= nil
+end
+
+-- image
+function AssetManager.loadImage(path)
+  local key = fh.getFileNameWithoutExtension(path)
+  assert(not AssetManager.imageCache[key], 'Image with key ' .. key .. ' already exists. Are you loading it twice?')
+  local image = love.graphics.newImage(path)
   image:setFilter('nearest', 'nearest')
-  AssetManager.cache[path] = image
+  AssetManager.imageCache[key] = image
   return image
 end
 
-function AssetManager.getSoundSource(path, sourceType)
-  if AssetManager.cache[path] then
-    return AssetManager.cache[path]
-  end
-  local soundSource = love.audio.newSource(getCombinedPath(path), sourceType)
-  AssetManager.cache[path] = soundSource
-  return image
+function AssetManager.getImage(key)
+  assert(AssetManager.imageCache[key], 'Image with key ' .. key .. ' does not exist. Did you remember to load it?')
+  return AssetManager.imageCache[key]
 end
 
-function AssetManager.getFont(path, fontSize)
+-- sound
+function AssetManager.loadSoundSource(path, sourceType)
+  local key = fh.getFileNameWithoutExtension(path)
+  assert(not AssetManager.soundCache[key], 'Sound Source with key ' .. key .. ' already exists. Are you loading it twice?')
+  local soundSource = love.audio.newSource(path, sourceType)
+  AssetManager.soundCache[key] = soundSource
+  return soundSource
+end
+
+function AssetManager.getSoundSource(key)
+  assert(AssetManager.soundCache[key], 'Sound Source with key ' .. key .. ' does not exist. Did you remember to load it?')
+  return AssetManager.soundCache[key]
+end
+
+-- font
+function AssetManager.loadFont(path, fontSize)
   fontSize = fontSize or 16
-  if AssetManager.cache[path] then
-    return AssetManager.cache[path]
-  end
-  local font = love.graphics.newFont(getCombinedPath(path), fontSize)
+  local key = fh.getFileNameWithoutExtension(path)
+  assert(not AssetManager.fontCache[key], 'Font with key ' .. key .. ' already exists. Are you loading it twice?')
+  local font = love.graphics.newFont(path, fontSize)
   font:setFilter('nearest', 'nearest')
-  AssetManager.cache[path] = font
+  AssetManager.fontCache[key] = font
   return font
 end
 
--- sprite sheet keys will be defined by whatever is defined in the spritesheet line
+function AssetManager.getFont(key)
+  assert(AssetManager.fontCache[key], 'Font with key ' .. key .. ' does not exist exists. Did you remember to load it?')
+  return AssetManager.fontCache[key]
+end
+
+-- sprite sheets
+
+-- load sprite sheet(s) via .spritesheet file
+-- sprite sheet keys will be defined by whatever is defined in the sprite sheet line
 function AssetManager.loadSpriteSheetFile(path)
-  path = getCombinedPath(path)
+  local lineCounter = 1
   for line in love.filesystem.lines(path) do
     if line then line = line:gsub('%$s+', '') end
     if not (line == nil or line == '' or line:sub(1, 1) == '#') then
       local args = split(line, ',')
-      local image = AssetManager.getImage(args[2])
-      AssetManager.cache[args[1]] = SpriteSheet(image, tonumber(args[3]), tonumber(args[4]), tonumber(args[5]), tonumber(args[6]))
+      assert(#args == 4 or #args == 5 or #args == 6, 'Not enough arguments in ' .. path .. ' on line ' .. tostring(lineCounter) )
+      
+      local key = args[1]
+      local imageKey = args[2]
+      local width = args[3]
+      local height = args[4]
+      local padding = args[5]
+      local margin = args[6]
+      assert(argIsString(key), 'Expected string in argument 1, but received : ' .. tostring(key) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(argIsString(imageKey), 'Expected string in argument 2, but received : ' .. tostring(imageKey) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(argIsNumber(width), 'Expected number in argument 3, but received : ' .. tostring(width) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(argIsNumber(height), 'Expected number in argument 4, but received : ' .. tostring(height) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(padding == nil or argIsNumber(padding), 'Expected nil or number in argument 5, but received : ' .. tostring(padding) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(margin == nil or argIsNumber(margin), 'Expected nil or number in argument 6, but received : ' .. tostring(margin) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      
+      key = parseStringArg(key)
+      imageKey = parseStringArg(imageKey)
+      
+      assert(not AssetManager.spriteSheetCache[key], 'Sprite Sheet with key ' .. key .. ' already exists.')
+      AssetManager.spriteSheetCache[key] = SpriteSheet(AssetManager.getImage(imageKey), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]), tonumber(args[6]))
     end
+    lineCounter = lineCounter + 1
   end
 end
 
 function AssetManager.getSpriteSheet(key)
-  return AssetManager.cache[key]
+  assert(AssetManager.spriteSheetCache[key], 'Sprite Sheet with ' .. key .. ' does not exist')
+  return AssetManager.spriteSheetCache[key]
 end
 
 return AssetManager

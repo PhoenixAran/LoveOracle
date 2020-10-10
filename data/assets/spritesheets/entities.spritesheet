@@ -1,6 +1,5 @@
 # argument examples below
-# for now no spaces between commas! will fix later
-# <spritesheet key>, <image path>, <sprite width>, <sprite height>, optional <margin x>, optional <margin y>
+# <spritesheet key>, <image key>, <sprite width>, <sprite height>, optional <margin x>, optional <margin y>
 
 # entity Spritesheet Declarations
-player,images/entities/player.png,16,16,1,1
+"player", "player", 16, 16, 1, 1

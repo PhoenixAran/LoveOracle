@@ -19,4 +19,9 @@ function FileHelper.getFilePathWithoutExtension(path)
   return newPath
 end
 
+function FileHelper.getFileNameWithoutExtension(file)
+  local name = file:match("^.+/(.+)$"):match("(.+)%.")
+  return name
+end
+
 return FileHelper
