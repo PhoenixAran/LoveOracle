@@ -9,3 +9,9 @@ local SpriteAnimation = Class {
     self.loopType = loopType
   end
 }
+
+function SpriteAnimation:getType()
+  return 'spriteanimation'
+end
+
+return SpriteAnimation

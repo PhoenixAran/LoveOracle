@@ -7,7 +7,7 @@ local Component = Class { __includes = SignalObject,
     SignalObject.init(self)
     if enabled == nil then enabled = true end
     if visible == nil then visible = true end
-    
+  
     self.entity = nil
     self.enabled = enabled
     self.visible = visible
@@ -22,7 +22,6 @@ function Component:transformChanged()
   local px, py = self.entity:getPosition()
   self.x = x
   self.y = y
-  
 end
 
 function Component:isEnabled()

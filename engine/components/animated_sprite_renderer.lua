@@ -10,7 +10,6 @@ local States = {
 }
 
 local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
-  -- caveat is that the initial animation HAS to have a SpriteFrame and not just timed actions
   init = function(self, animations, defaultAnimation, offsetX, offsetY, enabled, visible)
     self.state = States.None
     self.animations = animations
@@ -20,9 +19,15 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     self.currentTick = 1
     self.loopType = 'once'
     
-    SpriteRenderer.init(self.currentAnimation.spriteFrames[1], offsetX, offsetY, enabled, visible)
+    -- caveat is that the initial animation HAS to have a SpriteFrame and not just timed actions
+    SpriteRenderer.init(self, self.currentAnimation.spriteFrames[1].sprite, offsetX, offsetY, enabled, visible)
+    self:play(defaultAnimation)
   end
 }
+
+function AnimatedSpriteRenderer:getType()
+  return 'animatedspriterenderer'
+end
 
 function AnimatedSpriteRenderer:isPlaying()
   return self.state == States.Running
@@ -33,6 +38,7 @@ function AnimatedSpriteRenderer:play(animation)
   self.currentAnimationKey = animation
   self.currentFrameIndex = 1
   self.currentTick = 1
+  self.loopType = self.currentAnimation.loopType
   self.state = States.Running
 end
 
@@ -63,23 +69,25 @@ function AnimatedSpriteRenderer:update(dt)
     timedAction(self.entity) 
   end
   -- some animation can have no spriteframes and just action frames
-  if #self.currentAnimation.spritesFrames == 0 then return end
+  if #self.currentAnimation.spriteFrames == 0 then return end
   
   local currentFrame = self.currentAnimation.spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
   -- add one to delay since our indices start at 1
-  if self.currentFrame.delay + 1 <= self.currentTick then
+  if currentFrame.delay + 1 <= self.currentTick then
     self.currentTick = 1
     self.currentFrameIndex = self.currentFrameIndex + 1
-    if self.loopType == 'once' then
-      self.state = States.Completed
-      self.currentFrameIndex = 0
-    elseif self.loopType == 'cycle' then
-      self.currentFrameIndex = 1
+    if #self.currentAnimation.spriteFrames < self.currentFrameIndex then
+      if self.loopType == 'once' then
+        self.state = States.Completed
+        self.currentFrameIndex = 0
+      elseif self.loopType == 'cycle' then
+        self.currentFrameIndex = 1
+        currentFrame = self.currentAnimation.spriteFrames[self.currentFrameIndex]
+      end
     end
-    self.currentFrame = self.currentAnimation.spriteFrames[self.currentFrameIndex]
   end
-  self:setSprite(self.currentFrame.sprite)
+  self:setSprite(currentFrame.sprite)
 end
 
 return AnimatedSpriteRenderer

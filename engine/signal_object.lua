@@ -29,11 +29,11 @@ end
 
 -- friend type Signal
 local Signal = Class {
-    init = function(self, sourceObject, name)
-      self.sourceObject = sourceObject
-      self.name = name
-      self.connections = { }
-    end
+  init = function(self, sourceObject, name)
+    self.sourceObject = sourceObject
+    self.name = name
+    self.connections = { }
+  end
 }
 
 function Signal:emit(...)

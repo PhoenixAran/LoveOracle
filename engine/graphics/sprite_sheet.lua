@@ -24,6 +24,10 @@ local SpriteSheet = Class {
   end
 }
 
+function SpriteSheet:getType()
+  return 'spritesheet'
+end
+
 function SpriteSheet:getTexture(x, y)
   if y == nil then -- treat x as a one dimensional index
     return self.textures[x]

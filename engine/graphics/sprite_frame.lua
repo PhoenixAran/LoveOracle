@@ -7,3 +7,9 @@ local SpriteFrame = Class {
     self.delay = delay
   end
 }
+
+function SpriteFrame:getType()
+  return 'spriteframe'
+end
+
+return SpriteFrame

@@ -30,7 +30,7 @@ end
 function SpriteAnimationBuilder:setSpriteSheet(spriteSheet)
   assert(assetManager, 'Global variable "assetManager" instance does not exist')
   if type(spriteSheet) == 'string' then
-    assetManager.getSpriteSheet(spriteSheet)
+    self.spriteSheet = assetManager.getSpriteSheet(spriteSheet)
   else
     self.spriteSheet = spriteSheet
   end
@@ -42,7 +42,7 @@ function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
   if offsetY == nil then offsetY = 0 end
   
   local subtexture = self.spriteSheet:getTexture(x, y)
-  local sprite = Sprite(subtexture, x, y, offsetX, offsetY)
+  local sprite = Sprite(subtexture, offsetX, offsetY)
   local spriteFrame = SpriteFrame(sprite, delay)
   lume.push(self.frames, spriteFrame)
 end
@@ -53,12 +53,12 @@ function SpriteAnimationBuilder:addCompositeSprite(x, y, offsetX, offsetY)
   if offsetY == nil then offsetY = 0 end
   
   local subtexture = self.spriteSheet:getTexture(x, y)
-  local sprite = Sprite(subtexture, x, y, offsetX, offsetY)
+  local sprite = Sprite(subtexture, offsetX, offsetY)
   lume.push(self.compositeSprites, sprite)
 end
 
 -- use the current stored sprite frames to make composite sprite frames
-function SpriteAnimationBuilder:addCompositeSpriteFrame(originX, originY, offsetX, offsetY, delay)
+function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, offsetY, delay)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
   
@@ -72,11 +72,14 @@ function SpriteAnimationBuilder:addTimedAction(tick, func)
   self.timedActions[tick] = func
 end
 
-function SpriteAnimationBuilder:buildAnimation()
+function SpriteAnimationBuilder:build()
   local animation = SpriteAnimation(self.frames, self.timedActions, self.loopType)
   self.frames = { }
   self.timedActions = { }
   self.compositeSprites = { }
   self.loopType = self.defaultLoopType
+  print(self.loopType)
   return animation
 end
+
+return SpriteAnimationBuilder
