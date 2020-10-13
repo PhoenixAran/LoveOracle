@@ -43,7 +43,7 @@ function CompositeSprite:calculateBounds()
 end
 
 function CompositeSprite:getLeftMostBoundary()
-  local returnVal = 100000
+  local returnVal = 10000
   for _, sprite in ipairs(self.sprites) do
     local x = sprite:getOffsetX()
     if x < returnVal then 
@@ -54,7 +54,7 @@ function CompositeSprite:getLeftMostBoundary()
 end
 
 function CompositeSprite:getRightMostBoundary()
-  local returnVal = -100000
+  local returnVal = -10000
   for _, sprite in ipairs(self.sprites) do
     local x = sprite:getOffsetX() + sprite:getWidth()
     if returnVal < x then

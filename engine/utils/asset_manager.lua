@@ -106,12 +106,12 @@ function AssetManager.loadSpriteSheetFile(path)
       local height = args[4]
       local padding = args[5]
       local margin = args[6]
-      assert(argIsString(key), 'Expected string in argument 1, but received : ' .. tostring(key) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(argIsString(imageKey), 'Expected string in argument 2, but received : ' .. tostring(imageKey) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(argIsNumber(width), 'Expected number in argument 3, but received : ' .. tostring(width) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(argIsNumber(height), 'Expected number in argument 4, but received : ' .. tostring(height) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(padding == nil or argIsNumber(padding), 'Expected nil or number in argument 5, but received : ' .. tostring(padding) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(margin == nil or argIsNumber(margin), 'Expected nil or number in argument 6, but received : ' .. tostring(margin) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(argIsString(key), 'Expected string in argument 1, but received :' .. tostring(key) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(argIsString(imageKey), 'Expected string in argument 2, but received :' .. tostring(imageKey) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(argIsNumber(width), 'Expected number in argument 3, but received :' .. tostring(width) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(argIsNumber(height), 'Expected number in argument 4, but received :' .. tostring(height) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(padding == nil or argIsNumber(padding), 'Expected nil or number in argument 5, but received :' .. tostring(padding) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(margin == nil or argIsNumber(margin), 'Expected nil or number in argument 6, but received :' .. tostring(margin) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
       
       key = parseStringArg(key)
       imageKey = parseStringArg(imageKey)

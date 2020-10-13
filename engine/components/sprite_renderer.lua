@@ -47,7 +47,6 @@ function SpriteRenderer:getBounds()
   x = x + ex + self.offsetX - ox
   y = y + ey + self.offsetY - oy
   return x, y, w, h
-
 end
 
 function SpriteRenderer:draw()

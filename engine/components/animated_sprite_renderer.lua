@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local SpriteRenderer = require 'engine.components.sprite_renderer'
 local Component = require 'engine.entities.component'
 
 local States = { 
@@ -8,16 +9,18 @@ local States = {
   Completed = 3
 }
 
-local AnimatedSpriteRenderer = Class { __includes = Component,
-  init = function(self)
-    Component.init(self)
+local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
+  -- caveat is that the initial animation HAS to have a SpriteFrame and not just timed actions
+  init = function(self, animations, defaultAnimation, offsetX, offsetY, enabled, visible)
     self.state = States.None
-    self.animations = { }
-    self.currentAnimation = nil
-    self.currentAnimationKey = nil
+    self.animations = animations
+    self.currentAnimationKey = defaultAnimation
+    self.currentAnimation = animations[defaultAnimation]
     self.currentFrameIndex = 1
     self.currentTick = 1
     self.loopType = 'once'
+    
+    SpriteRenderer.init(self.currentAnimation.spriteFrames[1], offsetX, offsetY, enabled, visible)
   end
 }
 
