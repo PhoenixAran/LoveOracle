@@ -59,6 +59,7 @@ function AnimatedSpriteRenderer:stop()
   self.currentAnimation = nil
   self.currentAnimationKey = nil
   self.currentFrameIndex = 1
+  self.currentTick = 1
   self.state = States.None
 end
 
@@ -73,19 +74,18 @@ function AnimatedSpriteRenderer:update(dt)
   
   local currentFrame = self.currentAnimation.spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
-  -- add one to delay since our indices start at 1
-  if currentFrame.delay + 1 <= self.currentTick then
+  if currentFrame.delay <= self.currentTick then
     self.currentTick = 1
     self.currentFrameIndex = self.currentFrameIndex + 1
     if #self.currentAnimation.spriteFrames < self.currentFrameIndex then
       if self.loopType == 'once' then
         self.state = States.Completed
-        self.currentFrameIndex = 0
+        self.currentFrameIndex = self.currentFrameIndex - 1
       elseif self.loopType == 'cycle' then
         self.currentFrameIndex = 1
-        currentFrame = self.currentAnimation.spriteFrames[self.currentFrameIndex]
       end
     end
+    currentFrame = self.currentAnimation.spriteFrames[self.currentFrameIndex]
   end
   self:setSprite(currentFrame.sprite)
 end
