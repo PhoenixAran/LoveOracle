@@ -1,6 +1,15 @@
-local monocle = {mouse = {}}
+local Monocle = { 
+  mouse = { }
+}
+Monocle.__index = Monocle
 
-function monocle.setup(virtualWidth, virtualHeight, windowWidth, windowHeight, windowConfig)
+
+function Monocle.new()
+  local self = setmetatable({}, Monocle)
+  return self
+end
+
+function Monocle.setup(monocle, virtualWidth, virtualHeight, windowWidth, windowHeight, windowConfig)
   if windowConfig == nil then
     love.window.setMode(windowWidth, windowHeight)
   else
@@ -8,13 +17,12 @@ function monocle.setup(virtualWidth, virtualHeight, windowWidth, windowHeight, w
   end
   monocle.virtualWidth = virtualWidth
   monocle.virtualHeight = virtualHeight
-  monocle.updateView()
+  monocle.updateView(monocle)
 end
 
-function monocle.updateView()
+function Monocle.updateView(monocle)
   local screenWidth = love.graphics.getWidth()
   local screenHeight = love.graphics.getHeight()
-  
   local scaleX = math.floor(screenWidth / monocle.virtualWidth)
   local scaleY = math.floor(screenHeight / monocle.virtualHeight)
   
@@ -42,14 +50,14 @@ function monocle.updateView()
   monocle.canvas:setFilter('nearest', 'nearest') 
 end
 
-function monocle.begin()
+function Monocle.begin(monocle)
   love.graphics.push()
   love.graphics.scale(monocle.scale, monocle.scale)
   love.graphics.setCanvas(monocle.canvas)
   love.graphics.clear(111 / 255, 203 / 255, 171 / 255)
 end
 
-function monocle.finish()
+function Monocle.finish(monocle)
   love.graphics.setCanvas()
   love.graphics.pop()
   love.graphics.setColor(1, 1, 1)
@@ -57,8 +65,8 @@ function monocle.finish()
   love.graphics.setBlendMode('alpha')
 end
 
-function monocle.resize(w, h) 
-  monocle.updateView()
+function Monocle.resize(monocle, w, h)
+  monocle.updateView(monocle)
 end
 
-return monocle
+return Monocle

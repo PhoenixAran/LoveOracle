@@ -13,8 +13,14 @@ local PlayerStateMachine = Class { _includes = SignalObject,
   end
 }
 
--- states
--- TODOMAYBE - instead of nil should there just be an emptystate?
+function PlayerStateMachine:getCurrentState()
+  return self.currentState
+end
+
+function PlayerStateMachine:getPreviousState()
+  return self.previousState
+end
+
 function PlayerStateMachine:canTransitionTo(newState)
   if newState ~= nil then
     -- lazy initialize

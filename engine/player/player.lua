@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local GameEntity = require 'engine.entities.game_entity'
+local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local PlayerStateMachine = require 'engine.player.player_state_machine'
@@ -8,6 +9,12 @@ local PlayerStateParameters = require 'engine.player.player_state_parameters'
 local Player = Class { __includes = GameEntity,
   init = function(self, enabled, visible, rect) 
     GameEntity.init(self, enabled, visible, rect)
+    
+    -- components
+    local prototypeSprite = PrototypeSprite(.3, 0, .7, 16, 16)
+    -- uncomment this when the player sprite is ready
+    -- self.sprite = spriteBank.build('player')
+    
     
     -- declarations
     self.animDirection = 'down'
@@ -25,7 +32,6 @@ local Player = Class { __includes = GameEntity,
     self.moveAnimation = nil
   
     -- add components
-    local prototypeSprite = PrototypeSprite(.3, 0, .7, 16, 16)
     self:add(SpriteRenderer(prototypeSprite))
   end
 }
@@ -52,9 +58,17 @@ function Player:matchAnimationDirection(inputX, inputY)
   self.animDirection = direction
 end
 
--- gets the desired state from player state collection
-function Player:getState(name)
+-- gets the desired state from state cache collection
+function Player:getStateFromCollection(name)
   return self.stateCollection[name]
+end
+
+function Player:getWeaponState()
+  return self.weaponStateMachine:getCurrentState()
+end
+
+function Player:getPlayerAnimations()
+  return self.stateParameters.playerAnimations
 end
 
 function Player:beginConditionState(state)
@@ -101,7 +115,7 @@ function Player:getDesiredNaturalState()
   -- get ground observer
   local go = self.groundObserver
   if go.inGrass then
-    return self:getState('environmentstategrass')
+    return self:getStateFromCollection('environmentstategrass')
   end
   -- TODO implement rest of environment states
   

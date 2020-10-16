@@ -17,6 +17,7 @@ local PlayerMovementController = Class {
     self.stroking = false
     self.mode = PlayerMotionType()
     --self.moveAngle = 'south'  -- not sure if I need this
+    self.capeDeployed = false
     self.holeTile = nil
     self.holeDoomTimer = 0
     self.holeSlipVelocityX, self.holeSlipVelocityY = 0, 0
@@ -49,12 +50,42 @@ function PlayerMovementController:pollMovementControls(allowMovementControl)
       self.moving = true
     end
   end
-  
   return x, y
 end
 
 function PlayerMovementController:chooseAnimation()
-  -- TODO
+  local player = self.player
+  local sprite = self.player.sprite
+  local animation = sprite:getCurrentAnimationKey()
+  local stateParameters = self.player:getStateParameters()
+  
+  -- update movement animation
+  if player:isOnGround() and self.allowMovementControl and
+     (animation == player:getAnimations().default or animation == 'walk'
+      or animation == 'idle' or animation == 'carry') then
+      
+    if self.moving or stateParameters.disableAnimationPauseWhenNotMoving then
+      if not sprite:isPlaying() then
+        sprite:play()
+      end
+    else
+      sprite:stop()
+    end
+  end
+  
+  -- change to the default animation while in the air and not using weapon
+  if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and 
+     animation ~= player:getAnimations().default or animation ~= 'jump' then
+       
+    sprite:play(player:getAnimations().default)
+  end
+  
+  -- move animation can be replaced by cap animation
+  if animation == player:getAnimations().default and player:isInAir() and self.capeDeployed then
+    sprite:play('cape')
+  elseif player:isOnGround() and animation == 'cape' then
+    sprite:play(player:getAnimations().default)
+  end
 end
 
 function PlayerMovementController:updateMoveMode()

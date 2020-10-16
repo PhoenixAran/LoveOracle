@@ -1,4 +1,4 @@
-local monocle = require 'lib.monocle'
+local Monocle = require 'lib.monocle'
 local gameConfig = require 'game_config'
 
 -- asset loading methods
@@ -59,7 +59,7 @@ function love.load()
   spriteBank = require 'engine.utils.sprite_bank'
   -- use dot notation since its really just calling a bunch of requires
   spriteBank.initialize('data/builders')  
-
+  
   screenManager = require('lib.roomy').new()
   physics = require 'engine.physics.physics'
   camera = require('lib.camera')(0,0,160, 144)
@@ -67,7 +67,8 @@ function love.load()
   tablePool.warmCache(200)
   input = require('lib.baton').new(gameConfig.controls)
   love.window.setTitle(gameConfig.window.title)
-  monocle.setup(gameConfig.window.getMonocleArguments())
+  monocle = Monocle.new()
+  monocle:setup(gameConfig.window.getMonocleArguments())
   love.graphics.setFont(assetManager.getFont('monogram'))
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
@@ -79,14 +80,14 @@ function love.update(dt)
 end
 
 function love.draw()
-  monocle.begin()
+  monocle:begin()
   -- manually call draw in current screen
   screenManager:emit('draw')
   --drawFPSAndMemory()
-  monocle.finish()
+  monocle:finish()
 end
 
 function love.resize(w, h)
-  monocle.resize(w, h)
+  monocle:resize(w, h)
   screenManager:emit('resize', w, h)
 end

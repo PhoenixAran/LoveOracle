@@ -33,9 +33,18 @@ function AnimatedSpriteRenderer:isPlaying()
   return self.state == States.Running
 end
 
+function AnimatedSpriteRenderer:getCurrentAnimationKey()
+  return self.currentAnimationKey
+end
+
+-- animation is optional
+-- allows for sprite to be paused / stopped, then played again without knowing
+-- what animation it was on
 function AnimatedSpriteRenderer:play(animation)
-  self.currentAnimation = self.animations[animation]
-  self.currentAnimationKey = animation
+  if animation ~= nil then
+    self.currentAnimationKey = animation
+    self.currentAnimation = self.animations[animation]
+  end
   self.currentFrameIndex = 1
   self.currentTick = 1
   self.loopType = self.currentAnimation.loopType
@@ -56,8 +65,9 @@ function AnimatedSpriteRenderer:unPause()
 end
 
 function AnimatedSpriteRenderer:stop()
-  self.currentAnimation = nil
-  self.currentAnimationKey = nil
+  -- no need to set these to nil im pretty sure?
+  --self.currentAnimation = nil
+  --self.currentAnimationKey = nil
   self.currentFrameIndex = 1
   self.currentTick = 1
   self.state = States.None

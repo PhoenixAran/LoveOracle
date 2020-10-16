@@ -13,13 +13,12 @@ local GameEntity = Class { __includes = Entity,
     self.movement = Movement()    
     self.groundObserver = GroundObserver()
     self.combat = Combat()
-    -- declarations
-    self.inAir = false
-    self.persistant = false
-    -- not sure if i need these bottom two animation variables yet
-    self.animationState = nil
-    self.animationDirection = nil
     
+    -- declarations
+    self.persistant = false
+    self.direction = 'none'
+    
+    -- signals
     self:signal('entityDestroyed')
     self:signal('entityCreated')
     self:signal('entityHit')
@@ -80,7 +79,11 @@ end
 
 -- other
 function GameEntity:isInAir()
-  return self.inAir
+  return self:getZPosition() > 0
+end
+
+function GameEntity:isOnGround()
+  return !self:isInAir()
 end
 
 function GameEntity:isPersistant()
