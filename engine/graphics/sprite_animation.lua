@@ -48,7 +48,6 @@ local SpriteAnimation = Class {
   end
 }
 
--- Should it error out if they try using a substripkey on a non substriped animation?
 function SpriteAnimation:getSpriteFrames(substripKey)
   if substripKey == nil then
     if self:hasSubstrips() then
@@ -57,7 +56,7 @@ function SpriteAnimation:getSpriteFrames(substripKey)
     return self.spriteFrames
   else
     if not self:hasSubstrips() then
-      error('Trying to index substrip index"' .. substripKey .. '"spriteframes in animation without substrip')
+      return self.spriteFrames
     end
     return self.spriteFrames[substripKey]
   end
@@ -71,7 +70,7 @@ function SpriteAnimation:getTimedActions(substripKey)
     return self.timedActions
   else
     if not self:hasSubstrips() then
-      error('Trying to index substrip index"' .. substripKey .. '"timed action in animation without substrip')
+      return self.timedActions
     end
     return self.timedActions[substripKey]
   end
