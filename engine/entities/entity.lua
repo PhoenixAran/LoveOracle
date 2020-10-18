@@ -7,7 +7,7 @@ local ComponentList = require 'engine.entities.component_list'
 local rect = require 'engine.utils.rectangle'
 
 local Entity = Class { __includes = { SignalObject, BumpBox },
-  init = function(self, enabled, visible, rect)
+  init = function(self, enabled, visible, rect, zRange)
     SignalObject.init(self)
     if enabled == nil then enabled = true end
     if visible == nil then visible = true end
@@ -25,7 +25,12 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
       if rect.h == nil then rect.h = 1 end
     end
     
-    BumpBox.init(self, rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h)
+    print(rect.x)
+    print(rect.y)
+    print(rect.x - rect.w / 2)
+    print(rect.y - rect.h / 2)
+    print('-------')
+    BumpBox.init(self, rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h, zRange)
     self.componentList = ComponentList(self)
     self.enabled = enabled
     self.visible = visible

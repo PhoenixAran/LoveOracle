@@ -23,7 +23,7 @@ local window = {
   }
 }
 
-local startupScreen = 'engine.test_screens.animated_sprite_renderer_test'
+local startupScreen = 'engine.test_screens.physics_test'
 
 function window.getMonocleArguments()
   return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig

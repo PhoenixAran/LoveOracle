@@ -4,16 +4,14 @@ local vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
 local TestEntity = require 'engine.test_game_entity'
 
+local lume = require 'lib.lume'
+
 local TestBox = Class { __includes = Entity,
-  init = function(self, rect)
-    Entity.init(self, true, true, rect)
+  init = function(self, rect, zRange)
+    Entity.init(self, true, true, rect, zRange)
     self:setPhysicsLayer('1')
   end
 }
-
-function TestBox:entityAwake()
-  physics.add(self)
-end
 
 -- experiental physics test screen
 local Screen = Class {
@@ -28,8 +26,19 @@ function Screen:enter(prev, ...)
   self.testEntity = TestEntity()
   self.testEntity:setCollidesWithLayer('1')
   self.testEntity:awake()
-  self.testBoxes[#self.testBoxes+ 1] = TestBox({x = 24, y = 24, w = 24, h = 24})
-  self.testBoxes[#self.testBoxes]:entityAwake()
+  -- set range to 0, 50 for test player
+  self.testEntity:setZRange(0, 50)
+  
+  -- this test box will be in the same range as the player
+  lume.push(self.testBoxes, TestBox({x = 24, y = 24, w = 24, h = 24}, {min = 20, max = 30}))
+  
+  -- this test box will be 'under' the player
+  lume.push(self.testBoxes, TestBox({x = 65, y = 40, w = 16, h = 12}, {min = -30, max = -4}))
+  
+  -- this test box will be 'above' the player
+  lume.push(self.testBoxes, TestBox({x = 60, y = 16, w = 24, h = 21}, {min = 51, max = 200}))
+  
+  lume.each(self.testBoxes, 'awake')
 end
 
 function Screen:update(dt)

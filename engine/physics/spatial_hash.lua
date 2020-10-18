@@ -104,7 +104,8 @@ function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
       for i, otherBox in ipairs(cell) do
         if otherBox ~= box then
           if box:reportsCollisionsWith(otherBox)
-            and rect.intersects(boundsX, boundsY, boundsW, boundsH, otherBox.x, otherBox.y, otherBox.w, otherBox.h)  
+            and rect.intersects(boundsX, boundsY, boundsW, boundsH, otherBox.x, otherBox.y, otherBox.w, otherBox.h) 
+            and box.zRange.max > otherBox.zRange.min and box.zRange.min < otherBox.zRange.max
             and box:additionalPhysicsFilter(otherBox) then
             lume.push(self.tempHashSet, otherBox)
           end

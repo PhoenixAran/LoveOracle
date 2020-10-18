@@ -4,7 +4,7 @@ local GameEntity = require 'engine.entities.game_entity'
 
 local TestPlayer = Class { __includes = GameEntity,
   init = function(self)
-    GameEntity.init(self, true, true, {x = 50, y = 50, h = 16, w = 16})
+    GameEntity.init(self, true, true, {x = 24, y =24, h = 16, w = 16})
   end
 }
 

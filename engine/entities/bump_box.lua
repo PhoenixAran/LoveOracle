@@ -1,16 +1,26 @@
 local Class = require 'lib.class'
 local rect = require 'engine.utils.rectangle'
 
--- TODO implement Z-range for pseudo 3D collisions
-
 local BumpBox = Class {
-  init = function(self, x, y, w, h, collisionTag)
+  init = function(self, x, y, w, h, zRange, collisionTag)
     if x == nil then x = 0 end
     if y == nil then y = 0 end
     if w == nil then w = 1 end
     if h == nil then h = 1 end
+    if zRange == nil then
+      zRange = {
+        min = -100,
+        max = 100
+      }
+    else
+      if zRange.min == nil then range.min = -100 end
+      if zRange.max == nil then range.max = 100 end
+    end    
+    
+    assert(zRange.min <= zRange.max)
+    self.zRange = zRange
     if collisionTag == nil then collisionTag = 'bumpbox' end
-      
+  
     self.x = x
     self.y = y
     self.w = w
@@ -33,6 +43,24 @@ end
 
 function BumpBox:getCollisionTag()
   return 'bumpbox'
+end
+
+function BumpBox:getZRange()
+  return self.zRange.min, self.zRange.max
+end
+
+function BumpBox:setZRange(min, max)
+  assert(min <= max)
+  self.zRange.min = min
+  self.zRange.max = max
+end
+
+function BumpBox:setMinZRange(value)
+  self.zRange.min = value
+end
+
+function BumpBox:setMaxZRange(value)
+  self.zRange.max = value
 end
 
 function BumpBox:additionalPhysicsFilter(otherBox)
@@ -107,6 +135,7 @@ function BumpBox:reportsCollisionsWith(otherBumpBox)
   return false
 end
 
+-- does not account for zrange. dont think it really should
 function BumpBox:boxCast(otherBumpBox, motionX, motionY)
   if motionX == nil then motionX = 0 end
   if motionY == nil then motionY = 0 end

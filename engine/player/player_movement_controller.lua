@@ -2,8 +2,6 @@ local Class = require 'lib.class'
 local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'lib.vector'
 
-
--- handles more advance manipulation of the Movement component for the player
 local PlayerMovementController = Class {
   init = function(self, player, movement)
     self.player = player

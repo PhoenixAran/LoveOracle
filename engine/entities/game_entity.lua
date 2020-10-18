@@ -83,7 +83,7 @@ function GameEntity:isInAir()
 end
 
 function GameEntity:isOnGround()
-  return !self:isInAir()
+  return not self:isInAir()
 end
 
 function GameEntity:isPersistant()
