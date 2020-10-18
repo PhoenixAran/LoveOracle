@@ -2,4 +2,4 @@
 
 Fan made Zelda game using Love2D
 
-![preview](https://media.giphy.com/media/NEQCTncvgfyrEijyJi/giphy.gif)
+![preview](https://media.giphy.com/media/1nQGJlxGnEYyTtXDmr/giphy.gif)
