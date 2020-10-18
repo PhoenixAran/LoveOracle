@@ -7,14 +7,22 @@ local lume = require 'lib.lume'
 
 local SpriteAnimationBuilder = Class {
   init = function(self)
-    self.spriteSheet = nil
+    self.spriteSheet = nil   
     self.frames = { }
     self.compositeSprites = { }
     self.timedActions = { }
     self.loopType = 'once'
     self.defaultLoopType = 'once'
+    
+    self.hasSubstrips = false
+    self.subFrames = { }
+    self.subTimedActions = { }
   end
 }
+
+function SpriteAnimationBuilder:setSubstrips(bool)
+  self.hasSubstrips = bool
+end
 
 function SpriteAnimationBuilder:setLoopType(loopType)
   self.loopType = loopType
@@ -72,13 +80,39 @@ function SpriteAnimationBuilder:addTimedAction(tick, func)
   self.timedActions[tick] = func
 end
 
+function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
+  if makeDefault == nil then
+    makeDefault = false
+  end
+  
+  
+  self.subFrames[substripKey] = self.frames
+  self.subTimedActions[substripKey] = self.timedActions
+  
+  if makeDefault then
+    self.subFrames[1] = self.frames
+    self.subTimedActions[1] = self.timedActions
+  end
+  
+  self.frames = { }
+  self.timedActions = { }
+  self.compositeSprites = { }
+end
+
 function SpriteAnimationBuilder:build()
-  local animation = SpriteAnimation(self.frames, self.timedActions, self.loopType)
+  local animation = nil
+  if self.hasSubstrips then
+    animation = SpriteAnimation(self.subFrames, self.subTimedActions, self.loopType, true)
+    self.subFrames = { }
+    self.subTimedActions = { }
+  else
+    animation = SpriteAnimation(self.frames, self.timedActions, self.loopType, false)
+  end
   self.frames = { }
   self.timedActions = { }
   self.compositeSprites = { }
   self.loopType = self.defaultLoopType
-  print(self.loopType)
+  self.hasSubstrips = false
   return animation
 end
 

@@ -11,7 +11,8 @@ local AnimatedSpriteRendererTest= Class {
     self.sprite = nil
     self.animations = {
       'idle',
-      'walking',
+      { 'walk', 'down'},
+      { 'walk', 'up' },
       'flying',
       'squish'
     }
@@ -31,9 +32,16 @@ function AnimatedSpriteRendererTest:enter(previous, ...)
   animations['idle'] = sb:build()
   
   -- walking
+  sb:setSubstrips(true)
+  
   sb:addSpriteFrame(1, 7)
   sb:addSpriteFrame(1, 8)
-  animations['walking'] = sb:build()
+  sb:buildSubstrip('down', true)
+  
+  sb:addSpriteFrame(1, 3)
+  sb:addSpriteFrame(1, 4)
+  sb:buildSubstrip('up')  
+  animations['walk'] = sb:build()
   
   -- flying
   sb:addSpriteFrame(11, 7)
@@ -64,7 +72,12 @@ function AnimatedSpriteRendererTest:update(dt)
   
   if changed then
     self.currentAnimationIndex = ( (self.currentAnimationIndex - 1) % #self.animations + #self.animations) % #self.animations + 1
-    self.sprite:play(self.animations[self.currentAnimationIndex])
+    local animation = self.animations[self.currentAnimationIndex]
+    if type(animation) == 'table' then
+      self.sprite:play(animation[1], animation[2])
+    else
+      self.sprite:play(animation)
+    end
   end
   self.entity:update(dt)
 end
@@ -79,7 +92,11 @@ function AnimatedSpriteRendererTest:draw()
     else
       love.graphics.setColor(1, 1, 1)
     end
-    love.graphics.print(v, x, y)
+    if type(v) == 'table' then
+      love.graphics.print(v[1] .. v[2], x, y)
+    else
+      love.graphics.print(v, x, y)
+    end
     y = y + 16
   end
 end

@@ -8,6 +8,14 @@ local SpriteFrame = Class {
   end
 }
 
+function SpriteFrame:getDelay()
+  return self.delay
+end
+
+function SpriteFrame:getSprite()
+  return self.sprite
+end
+
 function SpriteFrame:getType()
   return 'spriteframe'
 end

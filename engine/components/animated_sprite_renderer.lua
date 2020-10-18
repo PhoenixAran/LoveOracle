@@ -13,6 +13,7 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
   init = function(self, animations, defaultAnimation, offsetX, offsetY, enabled, visible)
     self.state = States.None
     self.animations = animations
+    self.substripKey = nil
     self.currentAnimationKey = defaultAnimation
     self.currentAnimation = animations[defaultAnimation]
     self.currentFrameIndex = 1
@@ -20,7 +21,8 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     self.loopType = 'once'
     
     -- caveat is that the initial animation HAS to have a SpriteFrame and not just timed actions
-    SpriteRenderer.init(self, self.currentAnimation.spriteFrames[1].sprite, offsetX, offsetY, enabled, visible)
+    local spriteFrames = self.currentAnimation:getSpriteFrames()
+    SpriteRenderer.init(self, spriteFrames[1]:getSprite(), offsetX, offsetY, enabled, visible)
     self:play(defaultAnimation)
   end
 }
@@ -37,14 +39,18 @@ function AnimatedSpriteRenderer:getCurrentAnimationKey()
   return self.currentAnimationKey
 end
 
--- animation is optional
--- allows for sprite to be paused / stopped, then played again without knowing
--- what animation it was on
-function AnimatedSpriteRenderer:play(animation)
+function AnimatedSpriteRenderer:getSubstripKey()
+  return self.substripKey
+end
+
+function AnimatedSpriteRenderer:play(animation, substripKey)
   if animation ~= nil then
     self.currentAnimationKey = animation
     self.currentAnimation = self.animations[animation]
+    assert(self.currentAnimation, 'Animation: ' .. animation .. ' does not exist')
   end
+  -- we want substripKey to be set to null
+  self.substripKey = substripKey
   self.currentFrameIndex = 1
   self.currentTick = 1
   self.loopType = self.currentAnimation.loopType
@@ -75,19 +81,21 @@ end
 
 function AnimatedSpriteRenderer:update(dt)
   if not self:isPlaying() then return end
-  local timedAction = self.currentAnimation.timedActions[self.currentTick]
+  local timedActions = self.currentAnimation:getTimedActions(self.substripKey)
+  local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
+  local timedAction = timedActions[self.currentTick]
   if timedAction then 
     timedAction(self.entity) 
   end
   -- some animation can have no spriteframes and just action frames
-  if #self.currentAnimation.spriteFrames == 0 then return end
+  if #spriteFrames == 0 then return end
   
-  local currentFrame = self.currentAnimation.spriteFrames[self.currentFrameIndex]
+  local currentFrame = spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
-  if currentFrame.delay <= self.currentTick then
+  if currentFrame:getDelay() <= self.currentTick then
     self.currentTick = 1
     self.currentFrameIndex = self.currentFrameIndex + 1
-    if #self.currentAnimation.spriteFrames < self.currentFrameIndex then
+    if #spriteFrames < self.currentFrameIndex then
       if self.loopType == 'once' then
         self.state = States.Completed
         self.currentFrameIndex = self.currentFrameIndex - 1
@@ -95,9 +103,9 @@ function AnimatedSpriteRenderer:update(dt)
         self.currentFrameIndex = 1
       end
     end
-    currentFrame = self.currentAnimation.spriteFrames[self.currentFrameIndex]
+    currentFrame = spriteFrames[self.currentFrameIndex]
   end
-  self:setSprite(currentFrame.sprite)
+  self:setSprite(currentFrame:getSprite())
 end
 
 return AnimatedSpriteRenderer

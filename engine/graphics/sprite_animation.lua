@@ -2,15 +2,18 @@ local Class = require 'lib.class'
 
 -- should this really be a class? it kinda just serves at documentation at this point
 local SpriteAnimation = Class {
-  init = function(self, spriteFrames, timedActions, loopType)
+  init = function(self, spriteFrames, timedActions, loopType, substrips)
+    if substrips == nil then substrips = false end
     assert(loopType == 'once' or loopType == 'cycle', 'Invalid loop type:' .. loopType)
     self.spriteFrames = spriteFrames
     self.timedActions = timedActions
     self.loopType = loopType
+    self.substrips = substrips
     --[[
-      if self.hasSubStrips is false, spriteFrames and timedActions will just be a flat table
-      if self.hasSubStrips is true, spriteFrames will be structured as
+      if self.substrips is false, spriteFrames and timedActions will just be a flat table
+      if self.substrips is true, spriteFrames will be structured as
       {
+        1 = { ... } -- default when no substripKey is used in getter function
         up = { ... },
         down = { ... },
         left = { ... },
@@ -18,6 +21,7 @@ local SpriteAnimation = Class {
       }
       timedActions will also be structured as 
       {
+        1 = { ... } -- default when no substripKey is used in getter function
         up = { 
           2 : func(),
           ...
@@ -41,9 +45,41 @@ local SpriteAnimation = Class {
       This reduces the amount of animation keys, which makes programming entities easier since we're not constantly contatenating 
       a direction to the animationkey
     --]]
-    self.hasSubStrips = false 
   end
 }
+
+-- Should it error out if they try using a substripkey on a non substriped animation?
+function SpriteAnimation:getSpriteFrames(substripKey)
+  if substripKey == nil then
+    if self:hasSubstrips() then
+      return self.spriteFrames[1]
+    end
+    return self.spriteFrames
+  else
+    if not self:hasSubstrips() then
+      error('Trying to index substrip index"' .. substripKey .. '"spriteframes in animation without substrip')
+    end
+    return self.spriteFrames[substripKey]
+  end
+end
+
+function SpriteAnimation:getTimedActions(substripKey)
+  if substripKey == nil then
+    if self:hasSubstrips() then
+      return self.timedActions[1]
+    end
+    return self.timedActions
+  else
+    if not self:hasSubstrips() then
+      error('Trying to index substrip index"' .. substripKey .. '"timed action in animation without substrip')
+    end
+    return self.timedActions[substripKey]
+  end
+end
+
+function SpriteAnimation:hasSubstrips()
+  return self.substrips
+end
 
 function SpriteAnimation:getType()
   return 'spriteanimation'
