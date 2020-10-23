@@ -63,6 +63,7 @@ function love.load()
   screenManager = require('lib.roomy').new()
   physics = require 'engine.physics.physics'
   camera = require('lib.camera')(0,0,160, 144)
+  pool = require 'engine.utils.pool'
   tablePool = require 'engine.utils.table_pool'
   tablePool.warmCache(200)
   input = require('lib.baton').new(gameConfig.controls)

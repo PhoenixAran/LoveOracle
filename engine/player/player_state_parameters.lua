@@ -4,27 +4,40 @@ local PlayerStateParameters = Class {
   init = function(self)
     
     self.playerAnimations = { 
-      -- Swing, SwingNoLunge, SwingBig, Spin, Stab, Aim, Throw, Default, Carry
+      swing = nil,
+      swingNoLunge = nil,
+      swingBig = nil,
+      spin = nil,
+      stab = nil,
+      aim = nil,
+      throw = nil,
+      default = nil,
+      carry = nil,
+      
+      count = nil
     }
     
-    -- everything is false by default
-    self.canJump = false
-    self.canWarp = false
-    self.canLedgeJump = false
-    self.canControlOnGround = false
-    self.canControlInAir = false
-    self.canPush = false
-    self.canUseWeapons = false
-    self.canRoomTransition = false
-    self.canStrafe = false
+    -- default values
+    self.canJump = true
+    self.canWarp = true
+    self.canLedgeJump = true
+    self.canControlOnGround = true
+    self.canControlInAir = true
+    self.canPush = true
+    self.canUseWeapons = true
+    self.canRoomTransition = true
+    self.canStrafe = true
+    self.animationPauseWhenMoving = true
+    
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false
     self.alwaysFaceRight = false
-    self.disableAnimationPauseWhenNotMoving = false
+
     
-    self.disableMovement = false
-    self.disableUpdateMethod = false
+    --self.disableMovement = false
+    --self.disableUpdateMethod = false
+    
     self.movementSpeedScale = 1.0
   end
 }

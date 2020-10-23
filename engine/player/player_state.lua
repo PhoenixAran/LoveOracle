@@ -14,6 +14,10 @@ function PlayerState:getType()
   return 'playerstate'
 end
 
+function PlayerState:isActive()
+  return self.active
+end
+
 -- "Virtual" methods
 function PlayerState:onBegin(previousState) end
 

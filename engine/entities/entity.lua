@@ -24,12 +24,6 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
       if rect.w == nil then rect.w = 1 end
       if rect.h == nil then rect.h = 1 end
     end
-    
-    print(rect.x)
-    print(rect.y)
-    print(rect.x - rect.w / 2)
-    print(rect.y - rect.h / 2)
-    print('-------')
     BumpBox.init(self, rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h, zRange)
     self.componentList = ComponentList(self)
     self.enabled = enabled

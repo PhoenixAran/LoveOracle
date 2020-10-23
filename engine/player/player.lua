@@ -5,6 +5,8 @@ local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local PlayerStateMachine = require 'engine.player.player_state_machine'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
+local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
+local lume = require 'lib.lume'
 
 local Player = Class { __includes = GameEntity,
   init = function(self, enabled, visible, rect) 
@@ -20,9 +22,9 @@ local Player = Class { __includes = GameEntity,
     self.animDirection = 'down'
     
     self.stateCollection = { }
-    self.environmentStateMachine = PlayerStateMachine()
-    self.controlStateMachine = PlayerStateMachine()
-    self.weaponStateMachine = PlayerStateMachine()
+    self.environmentStateMachine = PlayerStateMachine(self)
+    self.controlStateMachine = PlayerStateMachine(self)
+    self.weaponStateMachine = PlayerStateMachine(self)
     self.conditionStateMachines = { }
     self.stateParameters = nil
     
@@ -36,6 +38,7 @@ local Player = Class { __includes = GameEntity,
   end
 }
 
+-- this is made obsolete with animation substrips
 function Player:matchAnimationDirection(inputX, inputY)
   local direction = self.animDirection
   if inputX == -1 and inputY == -1 and direction ~= 'up' and direction ~= 'left' then
@@ -72,21 +75,42 @@ function Player:getPlayerAnimations()
 end
 
 function Player:beginConditionState(state)
-  --TODO
+  local count = lume.count(self.conditionStatesMachines)
+  for i = count, 1, -1 do
+    if not self.conditionStateMachines[i]:isActive() then
+      table.remove(self.conditionStateMachines, i)
+    end
+  end
+  
+  local stateMachine = PlayerStateMachine(self)
+  lume.push(self.conditionStateMachines, stateMachine)
+  stateMachine:beginState(state)
 end
 
 function Player:hasConditionState(conditionType)
-  --TODO
+  for _, conditionState in ipairs(self.conditionStateMachines) do
+    if conditionState:isActive() and conditionState:getType() == conditionType then
+      return true
+    end
+  end
+  return false
 end
 
 function Player:endConditionState(conditionType)
-  --TODO
+  for _, conditionState in ipairs(self.conditionStateMachines) do
+    if conditionState:isActive() and conditionState:getType() == conditionType then
+      conditionState:endState()
+      break
+    end
+  end
 end
 
+-- begin a new weapon state, replacing the previous weapon state
 function Player:beginWeaponState(state)
   self.weaponStateMachine:beginState(state)
 end
 
+-- begin a new constrol state, replacing the previuos control state
 function Player:beginControlState(state)
   self.controlStateMachine:beginState(state)
 end
@@ -97,20 +121,20 @@ function Player:endControlState()
   end
 end
 
+-- begin a new environment state, replacing the previous environment state
 function Player:beginEnvironmentState(state)
   self.environmentState:beginState(state)
 end
 
-function Player:beginBusyState(duration, animation)
-  --TODO
-end
-
+-- try to switch to a natural state
 function Player:requestNaturalState()
   local desiredNaturalState = self:getDesiredNaturalState()
   self.environmentState:beginState(desiredNaturalState)
   self:integrateStateParameters()
 end
 
+-- return the player environment state that the player wants to be in
+-- based on his current surface and jumping state
 function Player:getDesiredNaturalState()
   -- get ground observer
   local go = self.groundObserver
@@ -122,6 +146,19 @@ function Player:getDesiredNaturalState()
   return nil
 end
 
+-- begin a new busy condition state with the specified duration
+-- and optional specified animation
+function Player:beginBusyState(duration, animation)
+  if animation == nil then animation = self.sprite:getCurrentAnimationKey() end
+  if self:getWeaponState() == nil then
+    -- should i check if the current animation is the same? not sure yet
+    self.sprite:play(animation)
+  end
+  local busyState = PlayerBusyState(self, duration, animation)
+  self:beginConditionState(busyState)
+  return busyState
+end
+
 function Player:updateStates()
   -- prestate update
   self:requestNaturalState()
@@ -130,6 +167,7 @@ end
 
 function Player:update(dt)
   GameEntity.update(self, dt)
+  self:updateStates()
 end
 
 
