@@ -202,6 +202,7 @@ end
 function Player:integrateStateParameters()
   self.stateParameters = PlayerStateParameters()
   self.stateParameters.animations.default = 'idle'
+  self.stateParameters.animations.move = 'walk'
   self.stateParameters.animations.aim = 'aim'
   self.stateParameters.animations.throw = 'throw'
   self.stateParameters.animations.swing = 'swing'
@@ -239,9 +240,9 @@ function Player:updateStates(dt)
     end
   end
   
-  -- play the default animation
-  if self:isOnGround() and self.stateParameters.canMoveOnGround then
-    self.sprite.play(self:getPlayerAnimations().default)
+  -- play the move animation
+  if self:isOnGround() and self.stateParameters.canControlOnGround and self.playerMovementController:isMoving() then
+    self.sprite:play(self:getPlayerAnimations().move)
   end
 end
 

@@ -12,8 +12,8 @@ local PlayerStateParameters = Class {
       aim = nil,
       throw = nil,
       default = nil,
+      move = nil,
       carry = nil,
-      
       count = nil
     }
     
@@ -27,16 +27,11 @@ local PlayerStateParameters = Class {
     self.canUseWeapons = true
     self.canRoomTransition = true
     self.canStrafe = true
-    self.animationPauseWhenNotMoving = true
     
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false
     self.alwaysFaceRight = false
-
-    
-    --self.disableMovement = false
-    --self.disableUpdateMethod = false
     
     self.movementSpeedScale = 1.0
   end
@@ -52,7 +47,6 @@ function PlayerStateParameters:integrateParameters(other)
   self.canUseWeapons = self.canUseWeapons or other.canUseWeapons
   self.canRoomTransition = self.canRoomTransition or other.canRoomTransition
   self.canStrafe = self.canStrafe or other.canStrafe
-  self.animationPauseWhenMoving = self.animationPauseWhenMoving or other.animationPauseWhenMoving
   
   self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp
   self.alwaysFaceDown = self.alwaysFaceDown or other.alwaysFaceDown

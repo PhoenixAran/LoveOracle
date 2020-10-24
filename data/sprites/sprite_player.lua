@@ -16,6 +16,12 @@ function builder.configureSpriteBuilder(builder)
   sb:addPrototypeFrame(.662, .451, .662, 16, 16, 0, 0)
   builder:addAnimation('idle', sb:build())
 
+  sb:addPrototypeFrame(.662, .451, .662, 16, 16, 0, 0)
+  builder:addAnimation('walk', sb:build())
+  
+  sb:addPrototypeFrame(.662, .451, .662, 16, 16, 0, 0)
+  builder:addAnimation('jump', sb:build())
+  
   
   sb:addPrototypeFrame(.662, .451, .662, 16, 16, 0, 0)
   builder:addAnimation('aim', sb:build())

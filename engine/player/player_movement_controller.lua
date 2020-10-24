@@ -71,31 +71,31 @@ end
 function PlayerMovementController:chooseAnimation()
   local player = self.player
   local sprite = self.player.sprite
-  local animation = sprite:getCurrentAnimationKey()
   local stateParameters = self.player:getStateParameters()
-  
-  -- update movement animation
+  local animation = sprite:getCurrentAnimationKey()
+
   if player:isOnGround() and self.allowMovementControl and
      (animation == player:getPlayerAnimations().default or animation == 'walk'
       or animation == 'idle' or animation == 'carry') then
-    if self.moving or not stateParameters.animationPauseWhenNotMoving then
-      if not sprite:isPlaying() then
-        sprite:play()
-      end
+      
+    if self.moving and not sprite:isPlaying() then
+      sprite:play()
     else
       sprite:stop()
     end
+    
   end
   
   -- change to the default animation while in the air and not using weapon
   if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and 
-     animation ~= player:getPlayerAnimations().default or animation ~= 'jump' then
-       
+      animation ~= player:getPlayerAnimations().default or sprite:getCurrentAnimationKey() ~= 'jump' then
     sprite:play(player:getPlayerAnimations().default)
   end
   
+  animation = sprite:getCurrentAnimationKey()
+  
   -- move animation can be replaced by cap animation
-  if animation == player:getPlayerAnimations().default and player:isInAir() and self.capeDeployed then
+  if animation == player:getPlayerAnimations().move and player:isInAir() and self.capeDeployed then
     sprite:play('cape')
   elseif player:isOnGround() and animation == 'cape' then
     sprite:play(player:getPlayerAnimations().default)
@@ -145,8 +145,8 @@ end
 
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
-  self:updateMoveControls()
   
+  self:updateMoveControls()
   if self.allowMovementControl then
     if self.player:getStateParameters().alwaysFaceUp then
       if self.player.direction ~= 'up' then
