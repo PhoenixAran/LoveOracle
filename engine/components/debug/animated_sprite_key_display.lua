@@ -23,5 +23,4 @@ function AnimatedSpriteKeyDisplay:draw()
   end
 end
 
-
 return AnimatedSpriteKeyDisplay

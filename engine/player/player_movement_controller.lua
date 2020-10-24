@@ -78,8 +78,7 @@ function PlayerMovementController:chooseAnimation()
   if player:isOnGround() and self.allowMovementControl and
      (animation == player:getPlayerAnimations().default or animation == 'walk'
       or animation == 'idle' or animation == 'carry') then
-      
-    if self.moving or stateParameters.disableAnimationPauseWhenNotMoving then
+    if self.moving or not stateParameters.animationPauseWhenNotMoving then
       if not sprite:isPlaying() then
         sprite:play()
       end
@@ -146,8 +145,8 @@ end
 
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
-  
   self:updateMoveControls()
+  
   if self.allowMovementControl then
     if self.player:getStateParameters().alwaysFaceUp then
       if self.player.direction ~= 'up' then

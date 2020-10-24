@@ -100,10 +100,8 @@ function GameEntity:isOnGround()
 end
 
 function GameEntity:setDirection(value)
+  if self.direction ~= value then print(value) end
   self.direction = value
-  if self.sprite ~= nil then
-    
-  end
 end
 
 function GameEntity:isPersistant()

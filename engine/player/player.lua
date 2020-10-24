@@ -60,7 +60,7 @@ function Player:matchAnimationDirection(inputX, inputY)
   elseif inputX == 1 and inputY == 0 and direction ~= 'right' then
     direction = 'right'
   end
-  self.animDirection = direction
+  self:setDirection(direction)
 end
 
 function Player:updateUseDirections()
