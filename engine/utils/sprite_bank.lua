@@ -17,12 +17,14 @@ local SpriteBankPayload = Class {
 -- builds AnimatedSpriteRenderers
 local SpriteBuilder = Class {
   init = function(self)
-    self.key = nil
-    self.type = nil
+    -- by default this is used to configure an animated sprite
+    -- its the most common use case
+    self.type = 'animatedspriterenderer'
     
     -- used if type is 'animatedsprite'
     self.animations = { }
     self.deferredAnimations = { }
+    self.defaultAnimation = nil
     
     -- used if type is 'sprite'
     self.sprite = nil
@@ -33,12 +35,13 @@ local SpriteBuilder = Class {
   end
 }
 
-function SpriteBuilder:getKey()
-  return self.key
+
+function SpriteBuilder:setDefaultAnimation(value)
+  self.defaultAnimation = value
 end
 
 function SpriteBuilder:build()
-  assert(self.type == 'animatedspriterenderer' or self.type == 'spriterenderer', 'Invalid type in SpriteBuilder: ' .. self.type)
+  assert(self.type == 'animatedspriterenderer' or self.type == 'spriterenderer', 'Invalid type in SpriteBuilder: ' .. tostring(self.type))
   assert(spriteBank, 'Global variable "spriteBank" does not exist')
   if self.type == 'spriterenderer' then
     if self.sprite == nil then
@@ -50,12 +53,20 @@ function SpriteBuilder:build()
     end
   elseif self.type == 'animatedspriterenderer' then
     local animations = { }
-    lume.merge(animations, self.animations)
+    animations = lume.merge(animations, self.animations)
     for k, v in pairs(self.deferredAnimations) do
       animations[k] = spriteBank.getAnimation(v)
     end
-    return AnimatedSpriteRenderer()
+    return AnimatedSpriteRenderer(animations, self.defaultAnimation)
   end
+end
+
+function SpriteBuilder:addAnimation(key, animation)
+  self.animations[key] = animation
+end
+
+function SpriteBuilder:addDeferredAnimation(animationKey, realKey)
+  self.deferredAnimations[key] = realKey
 end
 
 -- export type
@@ -96,7 +107,7 @@ function SpriteBank.registerBuilder(key, builder)
 end
 
 function SpriteBank.build(key)
-  assert(SpriteBank.bulders[key], 'SpriteBank does not have SpriteBuilder with key ' .. key)
+  assert(SpriteBank.builders[key], 'SpriteBank does not have SpriteBuilder with key ' .. key)
   return SpriteBank.builders[key]:build()
 end
 
@@ -127,4 +138,5 @@ function SpriteBank.initialize(directory)
     end
   end
 end
+
 return SpriteBank

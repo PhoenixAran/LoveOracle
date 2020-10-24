@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local Sprite = require 'engine.graphics.sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'
 local SpriteFrame = require 'engine.graphics.sprite_frame'
@@ -74,6 +75,12 @@ function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, off
   local spriteFrame = SpriteFrame(compositeSprite, delay)
   lume.push(self.frames, spriteFrame)
   self.compositeSprites = { }
+end
+
+function SpriteAnimationBuilder:addPrototypeFrame(r, g, b, width, height, offsetX, offsetY, delay) 
+  local sprite = PrototypeSprite(r, g, b, width, height, offsetX, offsetY)
+  local spriteFrame = SpriteFrame(sprite, delay)
+  lume.push(self.frames, spriteFrame)
 end
 
 function SpriteAnimationBuilder:addTimedAction(tick, func)

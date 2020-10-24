@@ -11,18 +11,14 @@ local lume = require 'lib.lume'
 
 local Player = Class { __includes = GameEntity,
   init = function(self, enabled, visible, rect) 
-    GameEntity.init(self, enabled, visible, rect)
-    
+    GameEntity.init(self, enabled, visible, rect)    
     -- components
-    local prototypeSprite = PrototypeSprite(.3, 0, .7, 16, 16)
-    local playerMovement = PlayerMovementController(self.movement)
+    self.playerMovementController = PlayerMovementController(self, self.movement)
     -- uncomment this when the player sprite is ready
-    -- self.sprite = spriteBank.build('player')
+    self.sprite = spriteBank.build('player')
     
     
     -- declarations
-    self.animDirection = 'down'
-    
     self.stateCollection = { }
     self.environmentStateMachine = PlayerStateMachine(self)
     self.controlStateMachine = PlayerStateMachine(self)
@@ -39,10 +35,11 @@ local Player = Class { __includes = GameEntity,
     self.moveAnimation = nil
   
     -- add components
-    self:add(SpriteRenderer(prototypeSprite))
+    self:add(self.sprite)
   end
 }
 
+-- obsolete
 function Player:matchAnimationDirection(inputX, inputY)
   local direction = self.animDirection
   if inputX == -1 and inputY == -1 and direction ~= 'up' and direction ~= 'left' then
@@ -67,19 +64,18 @@ end
 
 function Player:updateUseDirections()
   local x, y = 0, 0
-  if input:isDown('up') then
+  if input:down('up') then
     y = y + 1
   end
-  if input:isDown('down') then
+  if input:down('down') then
     y = y - 1
   end
-  if input:isDown('left') then
+  if input:down('left') then
     x = x - 1
   end
-  if input:isDown('right') then
+  if input:down('right') then
     x = x + 1
   end
-  
   if self.playerMovementController:isMoving() and self:getStateParameters().canStrafe then
     self.useDirectionX = self.playerMovementController.directionX
     self.useDirectionY = self.playerMovementController.directionY
@@ -99,6 +95,10 @@ function Player:checkPressInteractions(key)
   return false
 end
 
+function Player:getStateParameters()
+  return self.stateParameters
+end
+
 -- gets the desired state from state cache collection
 function Player:getStateFromCollection(name)
   return self.stateCollection[name]
@@ -109,7 +109,7 @@ function Player:getWeaponState()
 end
 
 function Player:getPlayerAnimations()
-  return self.stateParameters.playerAnimations
+  return self.stateParameters.animations
 end
 
 function Player:beginConditionState(state)
@@ -228,11 +228,11 @@ function Player:updateStates(dt)
   self:requestNaturalState()
   
   -- update control state
-  self.controlStateUpdate:update(dt)
+  self.controlStateMachine:update(dt)
   
   -- update condition states
-  for i = lume.count(self.conditionStates), 1, -1 do
-    self.conditionStates[i]:update(dt)
+  for i = lume.count(self.conditionStateMachines), 1, -1 do
+    self.conditionStateMachines[i]:update(dt)
     if not self.conditionStates[i]:isActive() then
       table.remove(self.conditionStates, i)
     end
@@ -256,10 +256,10 @@ function Player:update(dt)
     -- TODO add x and y action buttons
   self.pressedActionButtons['a'] = false
   self.pressedActionButtons['b'] = false
-  if input:isDown('a') then
+  if input:down('a') then
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
   end
-    if input:isDown('b') then
+    if input:down('b') then
     self.pressedActionButtons['b'] = self:checkPressInteractions('a')
   end
   
@@ -268,6 +268,7 @@ function Player:update(dt)
   
   self:updateStates()
   
+  self:setVector(self.useDirectionX, self.useDirectionY)
   --TODO update equipped items
 end
 

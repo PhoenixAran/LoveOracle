@@ -67,7 +67,7 @@ function PlayerMovementController:chooseAnimation()
   
   -- update movement animation
   if player:isOnGround() and self.allowMovementControl and
-     (animation == player:getAnimations().default or animation == 'walk'
+     (animation == player:getPlayerAnimations().default or animation == 'walk'
       or animation == 'idle' or animation == 'carry') then
       
     if self.moving or stateParameters.disableAnimationPauseWhenNotMoving then
@@ -81,16 +81,16 @@ function PlayerMovementController:chooseAnimation()
   
   -- change to the default animation while in the air and not using weapon
   if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and 
-     animation ~= player:getAnimations().default or animation ~= 'jump' then
+     animation ~= player:getPlayerAnimations().default or animation ~= 'jump' then
        
-    sprite:play(player:getAnimations().default)
+    sprite:play(player:getPlayerAnimations().default)
   end
   
   -- move animation can be replaced by cap animation
-  if animation == player:getAnimations().default and player:isInAir() and self.capeDeployed then
+  if animation == player:getPlayerAnimations().default and player:isInAir() and self.capeDeployed then
     sprite:play('cape')
   elseif player:isOnGround() and animation == 'cape' then
-    sprite:play(player:getAnimations().default)
+    sprite:play(player:getPlayerAnimations().default)
   end
 end
 
@@ -113,7 +113,7 @@ function PlayerMovementController:updateMoveControls()
     self.allowMovementControl = not self.player:inHitstun() and not self.player:inKnockback() 
                                 and self.player:getStateParameters().canControlOnGround 
   end
-  local inputX, inputY = self:pollMovementKeys(self.allowMovementControl)
+  local inputX, inputY = self:pollMovementControls(self.allowMovementControl)
   
   local canUpdateDirection = false
   if self.player:getStateParameters().alwaysFaceUp then
@@ -137,6 +137,27 @@ end
 
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
+  
+  self:updateMoveControls()
+  if self.allowMovementControl then
+    if self.player:getStateParameters().alwaysFaceUp then
+      if self.player.direction ~= 'up' then
+        self.player:setDirection('up')
+      end
+    elseif self.player:getStateParameters().alwaysFaceLeft then
+      if self.player.direction ~= 'left' then
+        self.player:setDirection('left')
+      end
+    elseif self.player:getStateParameters().alwaysFaceRight  then
+      if self.player.direction ~= 'right' then
+        self.player:setDirection('right')
+      end
+    elseif self.player:getStateParameters().alwaysFaceDown then
+      if self.player.direction ~= 'down' then
+        self.player:setDirection('down')
+      end
+    end
+  end
 end
 
 return PlayerMovementController

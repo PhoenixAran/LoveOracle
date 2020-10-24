@@ -16,7 +16,7 @@ local GameEntity = Class { __includes = Entity,
     
     -- declarations
     self.persistant = false
-    self.direction = 'none'
+    self.direction = 'none'   -- used in animation substrips
     
     -- signals
     self:signal('entityDestroyed')
@@ -77,6 +77,19 @@ function GameEntity:move(dt)
   physics.update(self)
 end
 
+-- combat component pass throughs
+function GameEntity:isIntangible()
+  return self.combat:isIntangible()
+end
+
+function GameEntity:inHitstun()
+  return self.combat:inHitstun()
+end
+
+function GameEntity:inKnockback()
+  return self.combat:inKnockback()
+end
+
 -- other
 function GameEntity:isInAir()
   return self:getZPosition() > 0
@@ -84,6 +97,13 @@ end
 
 function GameEntity:isOnGround()
   return not self:isInAir()
+end
+
+function GameEntity:setDirection(value)
+  self.direction = value
+  if self.sprite ~= nil then
+    
+  end
 end
 
 function GameEntity:isPersistant()

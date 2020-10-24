@@ -43,6 +43,10 @@ function AnimatedSpriteRenderer:getSubstripKey()
   return self.substripKey
 end
 
+function AnimatedSpriteRenderer:setSubstripKey(value)
+  self.substripKey = value
+end
+
 function AnimatedSpriteRenderer:play(animation, substripKey)
   if animation ~= nil then
     self.currentAnimationKey = animation
