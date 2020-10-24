@@ -100,7 +100,6 @@ function GameEntity:isOnGround()
 end
 
 function GameEntity:setDirection(value)
-  if self.direction ~= value then print(value) end
   self.direction = value
 end
 

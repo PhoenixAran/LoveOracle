@@ -73,22 +73,22 @@ function PlayerMovementController:chooseAnimation()
   local sprite = self.player.sprite
   local stateParameters = self.player:getStateParameters()
   local animation = sprite:getCurrentAnimationKey()
-
+  
   if player:isOnGround() and self.allowMovementControl and
-     (animation == player:getPlayerAnimations().default or animation == 'walk'
-      or animation == 'idle' or animation == 'carry') then
+     (animation == player:getPlayerAnimations().move or animation == 'idle' or animation == 'carry') then
       
-    if self.moving and not sprite:isPlaying() then
-      sprite:play()
+    if self.moving or not player:getStateParameters().defaultAnimationWhenNotMoving then
+      if not sprite:isPlaying() then
+        sprite:play()
+      end
     else
-      sprite:stop()
-    end
-    
+      sprite:play(player:getPlayerAnimations().default)
+    end    
   end
   
+  
   -- change to the default animation while in the air and not using weapon
-  if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and 
-      animation ~= player:getPlayerAnimations().default or sprite:getCurrentAnimationKey() ~= 'jump' then
+  if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and animation ~= player:getPlayerAnimations().default and sprite:getCurrentAnimationKey() ~= 'jump' then
     sprite:play(player:getPlayerAnimations().default)
   end
   

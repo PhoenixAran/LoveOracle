@@ -14,6 +14,10 @@ end
 
 function AnimatedSpriteKeyDisplay:draw()
   if self.sprite:getCurrentAnimationKey() ~= nil then
+      local textValue = self.sprite:getCurrentAnimationKey()
+      if self.sprite:getSubstripKey() ~= nil then
+        textValue = textValue .. '[' .. self.sprite:getSubstripKey() .. ']'
+      end
       local text = love.graphics.newText(assetManager.getFont('monogram'), self.sprite:getCurrentAnimationKey())
       local ex, ey = self.entity:getPosition()
       local x = ex - (text:getWidth() / 2)

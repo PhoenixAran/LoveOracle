@@ -27,6 +27,7 @@ local PlayerStateParameters = Class {
     self.canUseWeapons = true
     self.canRoomTransition = true
     self.canStrafe = true
+    self.defaultAnimationWhenNotMoving = true
     
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
@@ -37,7 +38,6 @@ local PlayerStateParameters = Class {
   end
 }
 
--- should this just create a new instance?
 function PlayerStateParameters:integrateParameters(other)
   self.canJump = self.canJump or other.canJump
   self.canWarp = self.canWarp or other.canWarp
@@ -47,6 +47,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.canUseWeapons = self.canUseWeapons or other.canUseWeapons
   self.canRoomTransition = self.canRoomTransition or other.canRoomTransition
   self.canStrafe = self.canStrafe or other.canStrafe
+  self.defaultAnimationWhenNotMoving = self.defaultAnimationWhenNotMoving or other.defaultAnimationWhenNotMoving
   
   self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp
   self.alwaysFaceDown = self.alwaysFaceDown or other.alwaysFaceDown
