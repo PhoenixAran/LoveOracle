@@ -36,6 +36,7 @@ local Player = Class { __includes = GameEntity,
   
     -- add components
     self:add(self.sprite)
+    self:add(require('engine.components.debug.animated_sprite_key_display')(self.sprite))
   end
 }
 
@@ -267,8 +268,6 @@ function Player:update(dt)
   self:requestNaturalState()
   
   self:updateStates()
-  
-  self:setVector(self.useDirectionX, self.useDirectionY)
   self:move(dt)
   --TODO update equipped items
 end

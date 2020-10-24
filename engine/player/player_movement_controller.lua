@@ -25,12 +25,21 @@ local PlayerMovementController = Class {
     self.fallingInHole = false
     
     self.moveNormalMode = PlayerMotionType()
-    self.mode = self.moveNormalMode
+    self.mode = nil
+    self:setMode(self.moveNormalMode)
   end
 }
 
 function PlayerMovementController:isMoving()
   return self.moving
+end
+
+function PlayerMovementController:setMode(mode)
+  if self.mode ~= mode then
+    self.movement.targetSpeed = self.movement.staticSpeed * mode.speed
+    self.movement.currentAcceleration = self.movement.staticAcceleration * mode.acceleration
+    self.movement.currentDeceleration = self.movement.staticDeceleration * mode.deceleration
+  end
 end
 
 function PlayerMovementController:pollMovementControls(allowMovementControl)
@@ -96,9 +105,9 @@ end
 
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentState ~= nil then
-    self.mode = self.player.environentState.motionType
+    self:setMode(self.player.environmentState.motionType)
   else
-    self.mode = self.moveNormalMode
+    self:setMode(self.moveNormalMode)
   end
 end
 
@@ -131,7 +140,7 @@ function PlayerMovementController:updateMoveControls()
   if canUpdateDirection and self.allowMovementControl and self.moving then
     self.player:matchAnimationDirection(inputX, inputY)
   end
-  
+  self.player:setVector(inputX, inputY)
   self:chooseAnimation()
 end
 
