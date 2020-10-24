@@ -269,6 +269,7 @@ function Player:update(dt)
   self:updateStates()
   
   self:setVector(self.useDirectionX, self.useDirectionY)
+  self:move(dt)
   --TODO update equipped items
 end
 

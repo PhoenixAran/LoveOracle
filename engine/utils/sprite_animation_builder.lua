@@ -91,8 +91,7 @@ function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
   if makeDefault == nil then
     makeDefault = false
   end
-  
-  
+
   self.subFrames[substripKey] = self.frames
   self.subTimedActions[substripKey] = self.timedActions
   
