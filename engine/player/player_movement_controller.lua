@@ -9,8 +9,11 @@ local PlayerMovementController = Class {
     
     self.allowMovementControl = true
     self.strokeSpeedScale = 1.0
-    self.moveAxesX, self.moveAxesY = false, false
-    self.motionX, self.motionY = 0, 0
+    
+    --self.moveAxesX, self.moveAxesY = false, false
+    --self.motionX, self.motionY = 0, 0
+    
+    self.directionX, self.directionY = 0, 0
     self.moving = false
     self.stroking = false
     self.mode = PlayerMotionType()
@@ -26,24 +29,29 @@ local PlayerMovementController = Class {
   end
 }
 
+function PlayerMovementController:isMoving()
+  return self.moving
+end
+
 function PlayerMovementController:pollMovementControls(allowMovementControl)
   local x, y = 0, 0
   self.moving = false
   if allowMovementControl then 
   -- check movement keys
     if input:down('up') then
-      y = -1
+      y = y - 1
     end
     if input:down('down') then
-      y = 1
+      y = y + 1
     end
     if input:down('left') then
-      x = -1
+      x = x - 1
     end
     if input:down('right') then
-      x = 1
+      x = x + 1
     end
     
+    self.directionX, self.directionY = x, y
     if x ~= 0 or y ~= 0 then 
       self.moving = true
     end
@@ -131,3 +139,4 @@ function PlayerMovementController:update(dt)
   self:updateMoveMode()
 end
 
+return PlayerMovementController

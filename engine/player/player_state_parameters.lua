@@ -3,7 +3,7 @@ local Class = require 'lib.class'
 local PlayerStateParameters = Class {
   init = function(self)
     
-    self.playerAnimations = { 
+    self.animations = { 
       swing = nil,
       swingNoLunge = nil,
       swingBig = nil,
@@ -42,6 +42,28 @@ local PlayerStateParameters = Class {
   end
 }
 
-
+-- should this just create a new instance?
+function PlayerStateParameters:integrateParameters(other)
+  self.canJump = self.canJump or other.canJump
+  self.canWarp = self.canWarp or other.canWarp
+  self.canLedgeJump = self.canLedgeJump or other.canLedgeJump
+  self.canControlOnGround = self.canControlOnGround or other.canControlOnGround
+  self.canPush = self.canPush or other.canPush
+  self.canUseWeapons = self.canUseWeapons or other.canUseWeapons
+  self.canRoomTransition = self.canRoomTransition or other.canRoomTransition
+  self.canStrafe = self.canStrafe or other.canStrafe
+  self.animationPauseWhenMoving = self.animationPauseWhenMoving or other.animationPauseWhenMoving
+  
+  self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp
+  self.alwaysFaceDown = self.alwaysFaceDown or other.alwaysFaceDown
+  self.alwaysFaceLeft = self.alwaysFaceLeft or other.alwaysFaceLeft
+  self.alwaysFaceRight = self.alwaysFaceRight or other.alwaysFaceRight
+  
+  -- prefer the other animations if they are non null
+  for k, v in ipairs(self.animations) do
+    self.animations[k] = other.animations[k] or self.animations[k]
+  end
+  
+end
 
 return PlayerStateParameters

@@ -2,8 +2,6 @@ local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
 
-local defaultPlayerStateParameters = PlayerStateParameters()
-
 local PlayerStateMachine = Class { _includes = SignalObject,
   init = function(self, player)
     SignalObject.init(self)
@@ -37,7 +35,7 @@ function PlayerStateMachine:canTransitionTo(newState)
 end
 
 function PlayerStateMachine:beginState(newState)
-  if self:canTransitionToState(newState) then
+  if self:canTransitionTo(newState) then
     if newState ~= self.currentState then
       self:forceBeginState(newState)
     end
@@ -74,7 +72,7 @@ end
 
 function PlayerStateMachine:getStateParameters()
   if self.currentState ~= nil then return self.currentState.stateParameters end
-  return defaultPlayerStateParameters
+  return PlayerStateParameters()
 end
 
 function PlayerStateMachine:isActive()
