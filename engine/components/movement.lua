@@ -68,7 +68,7 @@ function Movement:getLinearVelocity(dt)
       velocityX, velocityY = vector.add(velocityX, velocityY, vector.mul(self.cachedCounterSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY)))
     end
   end
-  return velocityX * dt, velocityY * dt
+  return vector.mul(dt, velocityX, velocityY)
 end
 
 function Movement:recalculateLinearVelocity(dt, newX, newY)
@@ -77,6 +77,16 @@ function Movement:recalculateLinearVelocity(dt, newX, newY)
   if newX == oldX and newY == oldY then
     print('Warning: Trying to recalculate linear velocity with the same vector!')
   end
+  if newX == 0 and oldX == 0 then
+    velocityX, velocityY = vector.mul(self.currentSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY))
+  else
+    velocityX, velocityY = vector.mul(self.currentSpeed, vector.normalize(newX, newY))
+    if self.cachedCounterVectorX ~= newX or self.cachedCounterVectorY ~= newY then
+      velocityX, velocityY = vector.add(velocityX, velocityY, vector.mul(self.cachedCounterSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY)))
+    end
+  end
+  self:setVector(newX, newY)
+  return vector.mul(dt, velocityX, velocityY)
 end
 
 return Movement

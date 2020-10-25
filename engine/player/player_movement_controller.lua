@@ -81,14 +81,15 @@ function PlayerMovementController:chooseAnimation()
       if not sprite:isPlaying() then
         sprite:play()
       end
-    else
+    elseif animation ~= player:getPlayerAnimations().default then
       sprite:play(player:getPlayerAnimations().default)
     end    
   end
   
   
   -- change to the default animation while in the air and not using weapon
-  if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and animation ~= player:getPlayerAnimations().default and sprite:getCurrentAnimationKey() ~= 'jump' then
+  if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil 
+    and animation ~= player:getPlayerAnimations().default and sprite:getCurrentAnimationKey() ~= 'jump' then
     sprite:play(player:getPlayerAnimations().default)
   end
   
@@ -145,8 +146,8 @@ end
 
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
-  
   self:updateMoveControls()
+  
   if self.allowMovementControl then
     if self.player:getStateParameters().alwaysFaceUp then
       if self.player.direction ~= 'up' then
