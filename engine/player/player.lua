@@ -42,7 +42,7 @@ local Player = Class { __includes = GameEntity,
 
 -- obsolete
 function Player:matchAnimationDirection(inputX, inputY)
-  local direction = self.animDirection
+  local direction = self.animationDirection
   if inputX == -1 and inputY == -1 and direction ~= 'up' and direction ~= 'left' then
     direction = 'up'
   elseif inputX == 1 and inputY == 1 and direction ~= 'down' and direction ~= 'right' then
@@ -60,7 +60,7 @@ function Player:matchAnimationDirection(inputX, inputY)
   elseif inputX == 1 and inputY == 0 and direction ~= 'right' then
     direction = 'right'
   end
-  self:setDirection(direction)
+  self:setAnimationDirection(direction)
 end
 
 function Player:updateUseDirections()
@@ -242,7 +242,9 @@ function Player:updateStates(dt)
   
   -- play the move animation
   if self:isOnGround() and self.stateParameters.canControlOnGround and self.playerMovementController:isMoving() then
-    self.sprite:play(self:getPlayerAnimations().move)
+    if self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().move then
+      self.sprite:play(self:getPlayerAnimations().move)
+    end
   end
 end
 

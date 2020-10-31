@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local SpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local fh = require 'engine.utils.file_helper'
-
+local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
 
 -- friend type
 local SpriteBankPayload = Class {
@@ -34,6 +34,10 @@ local SpriteBuilder = Class {
     self.offsetX, self.offsetY = 0, 0
   end
 }
+
+function SpriteBuilder:createSpriteAnimationBuilder()
+  return SpriteAnimationBuilder()
+end
 
 
 function SpriteBuilder:setDefaultAnimation(value)
@@ -66,6 +70,7 @@ function SpriteBuilder:addAnimation(key, animation)
 end
 
 function SpriteBuilder:addDeferredAnimation(animationKey, realKey)
+  if realKey == nil then realKey = animationKey end
   self.deferredAnimations[key] = realKey
 end
 

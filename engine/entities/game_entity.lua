@@ -13,10 +13,12 @@ local GameEntity = Class { __includes = Entity,
     self.movement = Movement()    
     self.groundObserver = GroundObserver()
     self.combat = Combat()
+    self.sprite = nil   -- declare this yourself
     
     -- declarations
     self.persistant = false
-    self.direction = 'none'   -- used in animation substrips
+    self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
+    self.animationDirection = nil -- will be used as substrip key if syncDirectionWithAnimation is true
     
     -- signals
     self:signal('entityDestroyed')
@@ -25,7 +27,7 @@ local GameEntity = Class { __includes = Entity,
     self:signal('entityBumped')
     self:signal('entityImmobolized')
     self:signal('entityMarkedDead')
-    
+
     -- add components
     self:add(self.movement)
     self:add(self.groundObserver)
@@ -39,6 +41,32 @@ end
 
 function GameEntity:getCollisionTag()
   return 'gameentity'
+end
+
+function GameEntity:isPersistant()
+  return self.persistant
+end
+
+function GameEntity:setSyncDirectionWithAnimation(value)
+  self.syncDirectionWithAnimation = true
+end
+
+function GameEntity:doesSyncDirectionWithAnimation()
+  return self.syncDirectionWithAnimation
+end
+
+function GameEntity:setAnimationDirection(value)
+  self.animationDirection = value
+  if self:doesSyncDirectionWithAnimation() and self.sprite ~= nil then
+    assert(self.sprite:getType() == 'animatedspriterenderer')
+    if self.sprite:getSubstripKey() ~= value then
+      self.sprite:setSubstripKey(value)
+    end
+  end
+end
+
+function GameEntity:getAnimationDirection()
+  return self.animationDirection
 end
 
 -- movement component pass throughs
@@ -97,10 +125,6 @@ end
 
 function GameEntity:isOnGround()
   return not self:isInAir()
-end
-
-function GameEntity:setDirection(value)
-  self.direction = value
 end
 
 function GameEntity:isPersistant()

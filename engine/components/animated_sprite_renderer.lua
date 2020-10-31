@@ -43,8 +43,12 @@ function AnimatedSpriteRenderer:getSubstripKey()
   return self.substripKey
 end
 
+-- replays the current animation with the current substrip key
 function AnimatedSpriteRenderer:setSubstripKey(value)
-  self.substripKey = value
+  if self.substripKey ~= value then
+    self.substripKey = value
+    self:play(self.currentAnimationKey, value)
+  end
 end
 
 function AnimatedSpriteRenderer:play(animation, substripKey)
@@ -53,8 +57,9 @@ function AnimatedSpriteRenderer:play(animation, substripKey)
     self.currentAnimation = self.animations[animation]
     assert(self.currentAnimation, 'Animation: ' .. animation .. ' does not exist')
   end
-  -- we want substripKey to be set to null
-  self.substripKey = substripKey
+  if substripKey ~= nil then
+    self.substripKey = substripKey
+  end
   self.currentFrameIndex = 1
   self.currentTick = 1
   self.loopType = self.currentAnimation.loopType
@@ -84,6 +89,7 @@ function AnimatedSpriteRenderer:stop()
 end
 
 function AnimatedSpriteRenderer:update(dt)
+  temp = nil
   if not self:isPlaying() then return end
   local timedActions = self.currentAnimation:getTimedActions(self.substripKey)
   local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
