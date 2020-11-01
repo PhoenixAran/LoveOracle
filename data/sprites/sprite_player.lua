@@ -12,9 +12,9 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   -- sprite animation builder setup
   sb:setSpriteSheet('player')
   sb:setDefaultLoopType('cycle')
-  sb:setSubstrips(true)
   
   -- @animation: idle
+  sb:setSubstrips(true)
   -- #substrip up
   sb:addSpriteFrame(1, 3)
   sb:buildSubstrip('up')
@@ -31,25 +31,29 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   builder:addAnimation('idle', sb:build())
   
   -- @animation: walk
+  sb:setSubstrips(true)
   -- #substrip up
   sb:addSpriteFrame(1, 4)
   sb:addSpriteFrame(1, 3)
+  print('walkup')
   sb:buildSubstrip('up')
   -- #substrip down
   sb:addSpriteFrame(1, 7)
   sb:addSpriteFrame(1, 8)
+  print('walkdown')
   sb:buildSubstrip('down', true)
   -- #substrip left
   sb:addSpriteFrame(1, 6)
   sb:addSpriteFrame(1, 5)
+  print('walkleft')
   sb:buildSubstrip('left')
   -- #substrip right
   sb:addSpriteFrame(1, 2)
   sb:addSpriteFrame(1, 1)
+  print('walkright')
   sb:buildSubstrip('right')
   -- BUILD walk
   builder:addAnimation('walk', sb:build())
-  
 end
 
 function playerSpriteBuilder.placeholderAnimations(builder)
