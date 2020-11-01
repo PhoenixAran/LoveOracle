@@ -47,21 +47,31 @@ end
 function AnimatedSpriteRenderer:setSubstripKey(value)
   if self.substripKey ~= value then
     self.substripKey = value
-    self:play(self.currentAnimationKey, value)
+    if self.state ~= States.Paused then
+      self:play(self.currentAnimationKey, value)
+    end
   end
 end
 
 function AnimatedSpriteRenderer:play(animation, substripKey)
+  local playFromStart = false
   if animation ~= nil then
     self.currentAnimationKey = animation
     self.currentAnimation = self.animations[animation]
     assert(self.currentAnimation, 'Animation: ' .. animation .. ' does not exist')
+    playFromStart = true
   end
   if substripKey ~= nil then
     self.substripKey = substripKey
+    playFromStart = true
   end
-  self.currentFrameIndex = 1
-  self.currentTick = 1
+  if self.state == States.Completed then
+    playFromStart = true
+  end
+  if playFromStart then
+    self.currentFrameIndex = 1
+    self.currentTick = 1
+  end
   self.loopType = self.currentAnimation.loopType
   self.state = States.Running
 end
@@ -94,7 +104,7 @@ function AnimatedSpriteRenderer:update(dt)
   local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
   local timedAction = timedActions[self.currentTick]
   if timedAction then 
-    timedAction(self.entity) 
+    timedAction(self.entity)   
   end
   -- some animation can have no spriteframes and just action frames
   if #spriteFrames == 0 then return end

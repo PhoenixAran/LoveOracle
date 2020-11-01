@@ -38,8 +38,8 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   print('walkup')
   sb:buildSubstrip('up')
   -- #substrip down
-  sb:addSpriteFrame(1, 7)
   sb:addSpriteFrame(1, 8)
+  sb:addSpriteFrame(1, 7)
   print('walkdown')
   sb:buildSubstrip('down', true)
   -- #substrip left
