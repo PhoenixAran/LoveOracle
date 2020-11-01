@@ -242,9 +242,7 @@ function Player:updateStates(dt)
   
   -- play the move animation
   if self:isOnGround() and self.stateParameters.canControlOnGround and self.playerMovementController:isMoving() then
-    if self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().move then
-      self.sprite:play(self:getPlayerAnimations().move)
-    end
+    self.sprite:play(self:getPlayerAnimations().move)
   end
 end
 

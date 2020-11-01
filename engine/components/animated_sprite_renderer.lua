@@ -56,18 +56,16 @@ end
 function AnimatedSpriteRenderer:play(animation, substripKey)
   local playFromStart = false
   if animation ~= nil then
+    playFromStart = self.currentAnimationKey ~= animation
     self.currentAnimationKey = animation
     self.currentAnimation = self.animations[animation]
     assert(self.currentAnimation, 'Animation: ' .. animation .. ' does not exist')
-    playFromStart = true
   end
   if substripKey ~= nil then
+    playFromStart = playFromStart or self.substripKey ~= substripKey
     self.substripKey = substripKey
-    playFromStart = true
   end
-  if self.state == States.Completed then
-    playFromStart = true
-  end
+  playFromStart = playFromStart or self.state == States.Completed
   if playFromStart then
     self.currentFrameIndex = 1
     self.currentTick = 1
