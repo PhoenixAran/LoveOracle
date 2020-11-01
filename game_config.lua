@@ -1,4 +1,5 @@
 local version = '0.0.2.0'
+local debug = true
 local controls = {
   controls = {
     left = {'key:left', 'key:a', 'axis:leftx-', 'button:dpleft'},
@@ -32,6 +33,7 @@ function window.getMonocleArguments()
 end
 
 return {
+ debug = debug,
  controls = controls,
  window = window,
  startupScreen = startupScreen

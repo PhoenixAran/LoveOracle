@@ -49,7 +49,12 @@ local function drawFPS()
 end
 
 -- alot of globals are declared here
-function love.load()
+function love.load(arg)
+  -- enable debugging
+  if gameConfig.debug then
+    if arg[#arg] == '-debug' then require('mobdebug').start() end
+  end
+  
   -- declare global pool
   pool = require 'engine.utils.pool'
   
