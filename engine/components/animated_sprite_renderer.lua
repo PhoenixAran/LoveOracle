@@ -53,8 +53,9 @@ function AnimatedSpriteRenderer:setSubstripKey(value)
   end
 end
 
-function AnimatedSpriteRenderer:play(animation, substripKey)
-  local playFromStart = false
+function AnimatedSpriteRenderer:play(animation, substripKey, forcePlayFromStart)
+  if forcePlayFromStart == nil then forcePlayFromStart = false end
+  local playFromStart = forcePlayFromStart
   if animation ~= nil then
     playFromStart = self.currentAnimationKey ~= animation
     self.currentAnimationKey = animation

@@ -11,6 +11,14 @@ local PlayerStateMachine = Class { _includes = SignalObject,
   end
 }
 
+function PlayerStateMachine:getType()
+  return 'playerstatemachine'
+end
+
+function PlayerStateMachine:setPlayer(player)
+  self.player = player
+end
+
 function PlayerStateMachine:getCurrentState()
   return self.currentState
 end
@@ -72,16 +80,21 @@ end
 
 function PlayerStateMachine:getStateParameters()
   if self.currentState ~= nil then return self.currentState.stateParameters end
-  return PlayerStateParameters()
+  return PlayerStateParameters.EmptyStateParameters
 end
 
 function PlayerStateMachine:isActive()
   return self.state ~= nil and self.state:isActive()
 end
 
-function PlayerStateMachine:clear()
-    self.previousState = nil
-    self.currentState = nil
+function PlayerStateMachine:reset()
+  self.player = nil
+  self.previousState = nil
+  self.currentState = nil
+end
+
+if pool then
+  pool.register('playerstatemachine', PlayerStateMachine)
 end
 
 return PlayerStateMachine

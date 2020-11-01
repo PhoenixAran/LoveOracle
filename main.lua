@@ -50,6 +50,9 @@ end
 
 -- alot of globals are declared here
 function love.load()
+  -- declare global pool
+  pool = require 'engine.utils.pool'
+  
   assetManager = require 'engine.utils.asset_manager'
   loadFonts() 
   loadImages('data/assets/images') 
@@ -63,7 +66,6 @@ function love.load()
   screenManager = require('lib.roomy').new()
   physics = require 'engine.physics.physics'
   camera = require('lib.camera')(0,0,160, 144)
-  pool = require 'engine.utils.pool'
   tablePool = require 'engine.utils.table_pool'
   tablePool.warmCache(200)
   input = require('lib.baton').new(gameConfig.controls)

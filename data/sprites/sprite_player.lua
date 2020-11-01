@@ -35,22 +35,18 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   -- #substrip up
   sb:addSpriteFrame(1, 4)
   sb:addSpriteFrame(1, 3)
-  print('walkup')
   sb:buildSubstrip('up')
   -- #substrip down
   sb:addSpriteFrame(1, 8)
   sb:addSpriteFrame(1, 7)
-  print('walkdown')
   sb:buildSubstrip('down', true)
   -- #substrip left
   sb:addSpriteFrame(1, 6)
   sb:addSpriteFrame(1, 5)
-  print('walkleft')
   sb:buildSubstrip('left')
   -- #substrip right
   sb:addSpriteFrame(1, 2)
   sb:addSpriteFrame(1, 1)
-  print('walkright')
   sb:buildSubstrip('right')
   -- BUILD walk
   builder:addAnimation('walk', sb:build())

@@ -10,12 +10,12 @@ function pool.register(key, class)
 end
 
 function pool.obtain(key)
-  local table = pools[key]
+  local pTable = pools[key]
   -- return cached object
-  if 0 < lume.count(table) then
-    local index = lume.count(table)
-    local returnValue = table[index]
-    table.remove(table, index)
+  if 0 < lume.count(pTable) then
+    local index = lume.count(pTable)
+    local returnValue = pTable[index]
+    table.remove(pTable, index)
     return returnValue
   end
   -- create new object

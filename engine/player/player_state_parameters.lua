@@ -38,6 +38,12 @@ local PlayerStateParameters = Class {
   end
 }
 
+PlayerStateParameters.EmptyStateParameters = PlayerStateParameters()
+
+function PlayerStateParameters:getType()
+  return 'playerstateparameters'
+end
+
 function PlayerStateParameters:integrateParameters(other)
   self.canJump = self.canJump or other.canJump
   self.canWarp = self.canWarp or other.canWarp
@@ -57,8 +63,36 @@ function PlayerStateParameters:integrateParameters(other)
   -- prefer the other animations if they are non null
   for k, v in ipairs(self.animations) do
     self.animations[k] = other.animations[k] or self.animations[k]
-  end
-  
+  end  
+end
+
+function PlayerStateParameters:reset()
+    -- default values
+    self.canJump = true
+    self.canWarp = true
+    self.canLedgeJump = true
+    self.canControlOnGround = true
+    self.canControlInAir = true
+    self.canPush = true
+    self.canUseWeapons = true
+    self.canRoomTransition = true
+    self.canStrafe = true
+    self.defaultAnimationWhenNotMoving = true
+    
+    self.alwaysFaceUp = false
+    self.alwaysFaceDown = false
+    self.alwaysFaceLeft = false
+    self.alwaysFaceRight = false
+    
+    self.movementSpeedScale = 1.0
+    
+    for k, v in pairs(self.animations) do
+      self.animations[k] = nil
+    end
+end
+
+if pool then
+  pool.register('playerstateparameters', PlayerStateParameters)
 end
 
 return PlayerStateParameters

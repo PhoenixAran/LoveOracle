@@ -40,7 +40,6 @@ local Player = Class { __includes = GameEntity,
   end
 }
 
--- obsolete
 function Player:matchAnimationDirection(inputX, inputY)
   local direction = self.animationDirection
   if inputX == -1 and inputY == -1 and direction ~= 'up' and direction ~= 'left' then
@@ -117,11 +116,13 @@ function Player:beginConditionState(state)
   local count = lume.count(self.conditionStatesMachines)
   for i = count, 1, -1 do
     if not self.conditionStateMachines[i]:isActive() then
+      local conditionStateMachine = self.conditionStateMachines[i]
       table.remove(self.conditionStateMachines, i)
+      pool.free(conditionStateMachine)
     end
   end
-  
-  local stateMachine = PlayerStateMachine(self)
+  local stateMachine = pool.obtain('playerstatemachine')
+  stateMachine:setPlayer(self)
   lume.push(self.conditionStateMachines, stateMachine)
   stateMachine:beginState(state)
 end
@@ -181,7 +182,6 @@ function Player:getDesiredNaturalState()
     return self:getStateFromCollection('environmentstategrass')
   end
   -- TODO implement rest of environment states
-  
   return nil
 end
 
@@ -200,7 +200,10 @@ end
 
 -- combine all state parameters in each active state
 function Player:integrateStateParameters()
-  self.stateParameters = PlayerStateParameters()
+  if self.stateParameters ~= nil then
+    pool.free(self.stateParameters)
+  end
+  self.stateParameters = pool.obtain('playerstateparameters')
   self.stateParameters.animations.default = 'idle'
   self.stateParameters.animations.move = 'walk'
   self.stateParameters.animations.aim = 'aim'
@@ -262,7 +265,7 @@ function Player:update(dt)
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
   end
     if input:down('b') then
-    self.pressedActionButtons['b'] = self:checkPressInteractions('a')
+    self.pressedActionButtons['b'] = self:checkPressInteractions('b')
   end
   
   self:integrateStateParameters()
