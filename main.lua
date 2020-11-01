@@ -33,6 +33,7 @@ local function loadSpriteSheets(directory)
   end
 end
 
+-- note that enabling ZeroBrane Studio debugging heavily inflates memory usage
 local function drawFPSAndMemory()  
   local monogram = assetManager.getFont('monogram')
   love.graphics.setFont(monogram)
@@ -50,8 +51,8 @@ end
 
 -- alot of globals are declared here
 function love.load(arg)
-  -- enable debugging
-  if gameConfig.debug then
+  -- enable zerobrane studio debugging
+  if gameConfig.zbStudioDebug then
     if arg[#arg] == '-debug' then require('mobdebug').start() end
   end
   

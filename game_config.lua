@@ -1,5 +1,5 @@
 local version = '0.0.2.0'
-local debug = true
+local zbStudioDebug = true  -- enable breakpoint and step through with zbstudio
 local controls = {
   controls = {
     left = {'key:left', 'key:a', 'axis:leftx-', 'button:dpleft'},
@@ -33,7 +33,7 @@ function window.getMonocleArguments()
 end
 
 return {
- debug = debug,
+ zbStudioDebug = zbStudioDebug,
  controls = controls,
  window = window,
  startupScreen = startupScreen
