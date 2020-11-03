@@ -14,7 +14,7 @@ local Movement = Class { __includes = Component,
     self.staticSpeed = 60
     self.staticAcceleration = 1
     self.staticDeceleration = 1
-    self.maxFallSpeed = -140
+    self.maxFallSpeed = 4
     
     self.targetSpeed = self.staticSpeed
     self.currentSpeed = 0
@@ -110,13 +110,12 @@ end
 
 -- update z position
 function Movement:update(dt)
-  local zPosition = self.entity:getZPosition()
-  if zPosition > 0 or self.zVelocity ~= 0 then
+  if self.entity:getZPosition() > 0 or self.zVelocity ~= 0 then
     self.zVelocity = self.zVelocity - self.gravity
     if self.maxFallSpeed >= 0 and self.zVelocity < -self.maxFallSpeed then
       self.zVelocity = -self.maxFallSpeed
     end
-    self.entity:setZPosition(zPosition + self.zVelocity)
+    self.entity:setZPosition(self.entity:getZPosition() + self.zVelocity)
     if self.entity:getZPosition() <= 0 then
       self:land()
     end
@@ -127,6 +126,7 @@ end
 
 -- land entity on ground
 function Movement:land()
+  print('land')
   -- TODO if Movement.Bounces
   self.entity:setZPosition(0)
   self.zVelocity = 0

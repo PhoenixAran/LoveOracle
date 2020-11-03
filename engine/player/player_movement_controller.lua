@@ -51,13 +51,12 @@ function PlayerMovementController:jump()
         self.player:setVector(x, y)
         -- man handle the speed
         self.movement:setSpeed(self.movement.targetSpeed * self.player:getStateParameters().movementSpeedScale * self.strokeSpeedScale)
-        print(self.movement.targetSpeed)
       end
     end
     -- jump
     self.capeDeployed = false
-    self.movement.gravity = 98
-    self.movement:setZVelocity(24)
+    self.movement.gravity = .125
+    self.movement:setZVelocity(2)
     self.player:requestNaturalState()
     self.player:integrateStateParameters()
     if self.player:getWeaponState() == nil then
@@ -115,9 +114,9 @@ function PlayerMovementController:chooseAnimation()
   
   
   -- change to the default animation while in the air and not using weapon
-  if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil 
-    and animation ~= player:getPlayerAnimations().default and sprite:getCurrentAnimationKey() ~= 'jump' then
-    sprite:play(player:getPlayerAnimations().default)
+  if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and sprite:getCurrentAnimationKey() ~= 'jump' then
+    -- and animation ~= player:getPlayerAnimations().default and sprite:getCurrentAnimationKey() ~= 'jump' then
+    sprite:play('jump')
   end
   
   animation = sprite:getCurrentAnimationKey()

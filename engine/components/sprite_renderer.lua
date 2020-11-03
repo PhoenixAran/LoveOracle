@@ -47,7 +47,7 @@ function SpriteRenderer:getBounds()
   local ox, oy = self.sprite:getOrigin()
   local z = self.entity:getZPosition()
   x = x + ex + self.offsetX - ox
-  y = y + ey + self.offsetY - oy + y
+  y = y + ey + self.offsetY - oy - y
   return x, y, w, h
 end
 
@@ -56,7 +56,7 @@ function SpriteRenderer:draw()
   local z = self.entity:getZPosition()
   x = x + self.offsetX
   y = y + self.offsetY
-  self.sprite:draw(x, y + z)
+  self.sprite:draw(x, y - z)
 end
 
 function SpriteRenderer:debugDraw()

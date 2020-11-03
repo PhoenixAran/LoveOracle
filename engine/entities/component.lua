@@ -19,9 +19,9 @@ function Component:getType()
 end
 
 function Component:transformChanged()
-  local px, py = self.entity:getPosition()
-  self.x = x
-  self.y = y
+  --local px, py = self.entity:getPosition()
+  --self.x = x
+  --self.y = y
 end
 
 function Component:isEnabled()

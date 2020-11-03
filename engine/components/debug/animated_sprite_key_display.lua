@@ -24,7 +24,7 @@ function AnimatedSpriteKeyDisplay:draw()
       local ex, ey = self.entity:getPosition()
       local x = ex - (self.text:getWidth() / 2)
       local y = ey - self.entity.h - self.text:getHeight() / 2
-      love.graphics.draw(self.text, x, y)
+      love.graphics.draw(self.text, x, y  - self.entity:getZPosition())
   end
 end
 
