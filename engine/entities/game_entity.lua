@@ -21,6 +21,7 @@ local GameEntity = Class { __includes = Entity,
     self.animationDirection = nil -- will be used as substrip key if syncDirectionWithAnimation is true
     
     -- signals
+    self:signal('entityLanded')
     self:signal('entityDestroyed')
     self:signal('entityCreated')
     self:signal('entityHit')

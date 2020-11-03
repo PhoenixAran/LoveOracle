@@ -6,15 +6,21 @@ local Movement = Class { __includes = Component,
   init = function(self, enabled, values)
     if enabled == nil then enabled = true end
     Component.init(self, enabled)
+
+    
+    self:signal('landed')
+    self:signal('bounced')
     
     self.staticSpeed = 60
     self.staticAcceleration = 1
     self.staticDeceleration = 1
+    self.maxFallSpeed = -140
     
     self.targetSpeed = self.staticSpeed
     self.currentSpeed = 0
     self.currentAcceleration = self.staticAcceleration
     self.currentDeceleration = self.staticDeceleration
+    self.zVelocity = 0
     
     self.vectorX = 0
     self.vectorY = 0
@@ -25,6 +31,8 @@ local Movement = Class { __includes = Component,
     self.cachedCounterVectorX = 0
     self.cachedCounterVectorY = 0
     self.cachedCounterSpeed = 0
+    
+    self.gravity = .98
   end
 }
 
@@ -34,6 +42,13 @@ end
 
 function Movement:getVector()
   return self.vectorX, self.vectorY
+end
+
+function Movement:setSpeed(value)
+  self.targetSpeed = value
+  if self.currentSpeed > self.targetSpeed then
+    self.currentSpeed = self.targetSpeed
+  end
 end
 
 function Movement:setVector(x, y)
@@ -87,6 +102,35 @@ function Movement:recalculateLinearVelocity(dt, newX, newY)
   end
   self:setVector(newX, newY)
   return vector.mul(dt, velocityX, velocityY)
+end
+
+function Movement:setZVelocity(value)
+  self.zVelocity = value
+end
+
+-- update z position
+function Movement:update(dt)
+  local zPosition = self.entity:getZPosition()
+  if zPosition > 0 or self.zVelocity ~= 0 then
+    self.zVelocity = self.zVelocity - self.gravity
+    if self.maxFallSpeed >= 0 and self.zVelocity < -self.maxFallSpeed then
+      self.zVelocity = -self.maxFallSpeed
+    end
+    self.entity:setZPosition(zPosition + self.zVelocity)
+    if self.entity:getZPosition() <= 0 then
+      self:land()
+    end
+  else
+    self.zVelocity = 0
+  end
+end
+
+-- land entity on ground
+function Movement:land()
+  -- TODO if Movement.Bounces
+  self.entity:setZPosition(0)
+  self.zVelocity = 0
+  self:emit('landed')
 end
 
 return Movement

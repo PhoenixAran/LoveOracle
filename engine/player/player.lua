@@ -37,6 +37,10 @@ local Player = Class { __includes = GameEntity,
     -- add components
     self:add(self.sprite)
     self:add(require('engine.components.debug.animated_sprite_key_display')(self.sprite))
+    
+    self:addPressInteraction('a', function(player) 
+      self.playerMovementController:jump()
+    end)
   end
 }
 
@@ -85,11 +89,20 @@ function Player:updateUseDirections()
   end
 end
 
+function Player:addPressInteraction(key, func)
+  if self.buttonCallbacks[key] == nil then
+    self.buttonCallbacks[key] = { }
+  end
+  lume.push(self.buttonCallbacks[key], func)
+end
+
 function Player:checkPressInteractions(key)
   local callbacks = self.buttonCallbacks[key]
-  for _, func in self.buttonCallbacks do
-    if func(key) then
-      return true
+  if callbacks ~= nil then
+    for _, func in pairs(callbacks) do
+      if func(self) then
+        return true
+      end
     end
   end
   return false
@@ -244,15 +257,18 @@ function Player:updateStates(dt)
   end
   
   -- play the move animation
-  if self:isOnGround() and self.stateParameters.canControlOnGround and self.playerMovementController:isMoving() then
-    self.sprite:play(self:getPlayerAnimations().move)
+  if self:isOnGround() and self.stateParameters.canControlOnGround then
+    if self.playerMovementController:isMoving() then
+      self.sprite:play(self:getPlayerAnimations().move)
+    else
+      self.sprite:play(self:getPlayerAnimations().default)
+    end
   end
 end
 
 function Player:update(dt)
   -- TODO? determine if we update components before or after all the crap below
   GameEntity.update(self, dt)
-  
   -- pre-state update
   self:requestNaturalState()
   self.playerMovementController:update(dt)

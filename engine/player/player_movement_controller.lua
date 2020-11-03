@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'lib.vector'
+local Movement = require 'engine.components.movement'
 
 local PlayerMovementController = Class {
   init = function(self, player, movement)
@@ -39,6 +40,32 @@ function PlayerMovementController:setMode(mode)
     self.movement.targetSpeed = self.movement.staticSpeed * mode.speed
     self.movement.currentAcceleration = self.movement.staticAcceleration * mode.acceleration
     self.movement.currentDeceleration = self.movement.staticDeceleration * mode.deceleration
+  end
+end
+
+function PlayerMovementController:jump()
+  if self.player:isOnGround() then
+    if not self.player:getStateParameters().canControlOnGround then --todo check if slippery?
+      local x, y = self:pollMovementControls(true)
+      if self:isMoving() then
+        self.player:setVector(x, y)
+        -- man handle the speed
+        self.movement:setSpeed(self.movement.targetSpeed * self.player:getStateParameters().movementSpeedScale * self.strokeSpeedScale)
+        print(self.movement.targetSpeed)
+      end
+    end
+    -- jump
+    self.capeDeployed = false
+    self.movement.gravity = 98
+    self.movement:setZVelocity(24)
+    self.player:requestNaturalState()
+    self.player:integrateStateParameters()
+    if self.player:getWeaponState() == nil then
+      self.player.sprite:play('jump')
+    else
+      self.player.sprite:play(self.player:getAnimations().default)
+    end
+    -- TODO self.player:onJump()
   end
 end
 

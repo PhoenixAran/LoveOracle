@@ -13,7 +13,7 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   sb:setSpriteSheet('player')
   sb:setDefaultLoopType('cycle')
   
-  -- @animation: idle
+  -- @animation idle
   sb:setSubstrips(true)
   -- #substrip up
   sb:addSpriteFrame(1, 3)
@@ -30,7 +30,7 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   -- BUILD idle
   builder:addAnimation('idle', sb:build())
   
-  -- @animation: walk
+  -- @animation walk
   sb:setSubstrips(true)
   -- #substrip up
   sb:addSpriteFrame(1, 4)
@@ -50,6 +50,31 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   sb:buildSubstrip('right')
   -- BUILD walk
   builder:addAnimation('walk', sb:build())
+  
+  -- @animation jump
+  sb:setSubstrips(true)
+  -- #substrip up
+  sb:addSpriteFrame(12, 4)
+  sb:addSpriteFrame(12, 5)
+  sb:addSpriteFrame(12, 6)
+  sb:buildSubstrip('up')
+  -- #substrip down
+  sb:addSpriteFrame(13, 4)
+  sb:addSpriteFrame(13, 5)
+  sb:addSpriteFrame(13, 6)
+  sb:buildSubstrip('down', true)
+  -- #substrip left
+  sb:addSpriteFrame(13, 1)
+  sb:addSpriteFrame(13, 2)
+  sb:addSpriteFrame(13, 3)
+  sb:buildSubstrip('left')
+  -- #substrip right
+  sb:addSpriteFrame(12, 1)
+  sb:addSpriteFrame(12, 2)
+  sb:addSpriteFrame(12, 3)
+  sb:buildSubstrip('right')
+  -- BUILD jump
+  builder:addAnimation('jump', sb:build())
 end
 
 function playerSpriteBuilder.placeholderAnimations(builder)
