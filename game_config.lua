@@ -6,7 +6,7 @@ local controls = {
     right = {'key:right', 'key:d', 'axis:leftx+', 'button:dpright'},
     up = {'key:up', 'key:w', 'axis:lefty-', 'button:dpup'},
     down = {'key:down', 'key:s', 'axis:lefty+', 'button:dpdown'},
-    a = {'key:n'},
+    a = {'key:n', 'button:x'},
     b = {'key:b'}
   },
   joystick = love.joystick.getJoysticks()[1]

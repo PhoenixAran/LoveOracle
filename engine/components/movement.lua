@@ -131,6 +131,7 @@ function Movement:getLinearVelocity(dt)
 end
 
 function Movement:recalculateLinearVelocity(dt, newX, newY)
+  --TODO
 end
 
 -- update z position

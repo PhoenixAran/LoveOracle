@@ -44,17 +44,28 @@ function PlayerStateParameters:getType()
   return 'playerstateparameters'
 end
 
+-- helper function for integrateParameters
+-- some parameters we want to prioritize false values over true
+local function prioritizeFalse(a, b)
+  assert(a ~= nil)
+  assert(b ~= nil)
+  if not a then return a end
+  if not b then return b end
+  return a
+end
+
 function PlayerStateParameters:integrateParameters(other)
-  self.canJump = self.canJump or other.canJump
-  self.canWarp = self.canWarp or other.canWarp
-  self.canLedgeJump = self.canLedgeJump or other.canLedgeJump
-  self.canControlOnGround = self.canControlOnGround or other.canControlOnGround
-  self.canPush = self.canPush or other.canPush
-  self.canUseWeapons = self.canUseWeapons or other.canUseWeapons
-  self.canRoomTransition = self.canRoomTransition or other.canRoomTransition
-  self.canStrafe = self.canStrafe or other.canStrafe
-  self.defaultAnimationWhenNotMoving = self.defaultAnimationWhenNotMoving or other.defaultAnimationWhenNotMoving
+  self.canJump = prioritizeFalse(other.canJump, other.canJump)
+  self.canWarp =  prioritizeFalse(self.canWarp, other.canWarp)
+  self.canLedgeJump =  prioritizeFalse(self.canLedgeJump, other.canLedgeJump)
+  self.canControlOnGround =  prioritizeFalse(self.canControlOnGround, other.canControlOnGround)
+  self.canPush =  prioritizeFalse(self.canPush, other.canPush)
+  self.canUseWeapons =  prioritizeFalse(self.canUseWeapons, other.canUseWeapons)
+  self.canRoomTransition =  prioritizeFalse(self.canRoomTransition, other.canRoomTransition)
+  self.canStrafe =  prioritizeFalse(self.canStrafe, other.canStrafe)
+  self.defaultAnimationWhenNotMoving =  prioritizeFalse(self.defaultAnimationWhenNotMoving, other.defaultAnimationWhenNotMoving)
   
+  -- you wanna prioritize true for this one
   self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp
   self.alwaysFaceDown = self.alwaysFaceDown or other.alwaysFaceDown
   self.alwaysFaceLeft = self.alwaysFaceLeft or other.alwaysFaceLeft
@@ -65,6 +76,8 @@ function PlayerStateParameters:integrateParameters(other)
     self.animations[k] = other.animations[k] or self.animations[k]
   end  
 end
+
+
 
 function PlayerStateParameters:reset()
     -- default values

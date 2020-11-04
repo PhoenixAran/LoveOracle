@@ -178,8 +178,8 @@ end
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
   self:updateMoveControls()
-  
-  if self.allowMovementControl then
+
+  if self.allowMovementControl  then
     if self.player:getStateParameters().alwaysFaceUp then
       if self.player.direction ~= 'up' then
         self.player:setDirection('up')
@@ -198,6 +198,7 @@ function PlayerMovementController:update(dt)
       end
     end
   end
+
 end
 
 return PlayerMovementController

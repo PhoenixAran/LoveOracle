@@ -92,6 +92,7 @@ function Player:updateUseDirections()
   else
     self.useDirectionX = x
     self.useDirectionY = y
+    
   end
 end
 
