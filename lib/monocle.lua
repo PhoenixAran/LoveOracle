@@ -54,7 +54,7 @@ function Monocle.begin(monocle)
   love.graphics.push()
   love.graphics.scale(monocle.scale, monocle.scale)
   love.graphics.setCanvas(monocle.canvas)
-  love.graphics.clear(111 / 255, 203 / 255, 171 / 255)
+  love.graphics.clear(.4, .4, .4, 1.0)
 end
 
 function Monocle.finish(monocle)

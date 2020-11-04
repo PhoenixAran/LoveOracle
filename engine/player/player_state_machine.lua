@@ -36,7 +36,7 @@ function PlayerStateMachine:canTransitionTo(newState)
   if self.currentState ~= nil and not self.currentState:canTransitionToState(newState) then
     return false
   end
-  if newState ~= nil and not self.newState:canTransitionFromState(self.currentState) then
+  if newState ~= nil and not newState:canTransitionFromState(self.currentState) then
     return false
   end
   return true
@@ -63,7 +63,12 @@ function PlayerStateMachine:forceBeginState(newState)
   --begin the new state
   self.currentState = newState
   if self.currentState ~= nil then
-    self.currentState = self
+    self.currentState.playerController = self
+    self.currentState:beginState(self.previousState, self.player)
+    if not self.currentState:isActive() then
+      self.previousState = self.currentState
+      self.currentState = nil
+    end
   end
 end
 
@@ -84,7 +89,11 @@ function PlayerStateMachine:getStateParameters()
 end
 
 function PlayerStateMachine:isActive()
-  return self.state ~= nil and self.state:isActive()
+  return self.currentState ~= nil and self.currentState:isActive()
+end
+
+function PlayerStateMachine:getState()
+  return self.currentState
 end
 
 function PlayerStateMachine:reset()

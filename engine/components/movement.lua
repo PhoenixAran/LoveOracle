@@ -15,6 +15,7 @@ local Movement = Class { __includes = Component,
     self.staticAcceleration = 1
     self.staticDeceleration = 1
     self.maxFallSpeed = 4
+    self.minSpeed = 0
     
     self.targetSpeed = self.staticSpeed
     self.currentSpeed = 0
@@ -32,7 +33,7 @@ local Movement = Class { __includes = Component,
     self.cachedCounterVectorY = 0
     self.cachedCounterSpeed = 0
     
-    self.gravity = .98
+    self.gravity = .125
   end
 }
 
@@ -65,8 +66,8 @@ function Movement:getLinearVelocity(dt)
   local velocityX, velocityY = 0, 0
   if self.vectorX == 0 and self.vectorY == 0 then
     self.currentSpeed = self.currentSpeed - (self.targetSpeed * self.currentDeceleration)
-    if self.currentSpeed < 0 then
-      self.currentSpeed = 0
+    if self.currentSpeed < self.minSpeed then
+      self.currentSpeed = self.minSpeed
     end
     velocityX, velocityY = vector.mul(self.currentSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY))
   else
@@ -126,7 +127,6 @@ end
 
 -- land entity on ground
 function Movement:land()
-  print('land')
   -- TODO if Movement.Bounces
   self.entity:setZPosition(0)
   self.zVelocity = 0

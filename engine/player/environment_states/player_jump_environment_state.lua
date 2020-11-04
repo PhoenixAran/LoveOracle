@@ -7,12 +7,25 @@ local PlayerJumpEnvironmentState = Class { __includes = PlayerEnvironmentState,
   init = function(self)
     PlayerEnvironmentState.init(self)
     
-    self.stateParameters.
+    self.stateParameters.canStrafe = false
+    self.stateParameters.canPush = false
+    self.stateParameters.canLedgeJump = false
+    self.stateParameters.canRoomTransition = false
     
+    -- value modifiers for Movement component
     self.motionSettings.speed = 1
-    self.motionSettings.acceleration = 1
-    self.motionSettings.deceleration = 1
+    self.motionSettings.acceleration = 0.033
+    self.motionSettings.deceleration = 0
+    self.motionSettings.minSpeed = .5 -- TODO: implement minSpeed in Movement
+    
+    -- used for man handling movement in player
+    self.motionSettings.slippery = true
+    self.motionSettings.directionSnapCount = 8
   end
 }
 
-return PlayerGrassEnvironmentState
+function PlayerJumpEnvironmentState:getType()
+  return 'playerjumpenvironmentstate'
+end
+
+return PlayerJumpEnvironmentState

@@ -1,31 +1,37 @@
 local Class = require 'lib.class'
+local lume = require 'lib.lume'
 local GameEntity = require 'engine.entities.game_entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local PlayerStateMachine = require 'engine.player.player_state_machine'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
-local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
 local PlayerMovementController = require 'engine.player.player_movement_controller'
-local lume = require 'lib.lume'
+
+-- require states
+local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
+-- environment states
+local PlayerJumpEnvironmentState = require 'engine.player.environment_states.player_jump_environment_state'
 
 local Player = Class { __includes = GameEntity,
   init = function(self, enabled, visible, rect) 
     GameEntity.init(self, enabled, visible, rect)    
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
-    -- uncomment this when the player sprite is ready
     self.sprite = spriteBank.build('player')
     
-    
-    -- declarations
-    self.stateCollection = { }
+    -- states
     self.environmentStateMachine = PlayerStateMachine(self)
     self.controlStateMachine = PlayerStateMachine(self)
     self.weaponStateMachine = PlayerStateMachine(self)
     self.conditionStateMachines = { }
     self.stateParameters = nil
     
+    self.stateCollection = { 
+      ['playerjumpenvironmentstate'] = PlayerJumpEnvironmentState(self)
+    }
+    
+    -- other declarations
     self.useDirectionX, self.useDirectionY = 0
     self.pressedActionButtons = { }
     self.buttonCallbacks = { }
@@ -192,8 +198,11 @@ function Player:getDesiredNaturalState()
   -- get ground observer
   local go = self.groundObserver
   if go.inGrass then
-    return self:getStateFromCollection('environmentstategrass')
+    return self:getStateFromCollection('playergrassenvironmentstate')
+  elseif self:isInAir() then
+    return self:getStateFromCollection('playerjumpenvironmentstate')
   end
+  
   -- TODO implement rest of environment states
   return nil
 end

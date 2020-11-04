@@ -36,10 +36,13 @@ function PlayerMovementController:isMoving()
 end
 
 function PlayerMovementController:setMode(mode)
+
   if self.mode ~= mode then
+    self.mode = mode
     self.movement.targetSpeed = self.movement.staticSpeed * mode.speed
     self.movement.currentAcceleration = self.movement.staticAcceleration * mode.acceleration
     self.movement.currentDeceleration = self.movement.staticDeceleration * mode.deceleration
+    self.movement.minSpeed = mode.minSpeed
   end
 end
 
@@ -55,6 +58,7 @@ function PlayerMovementController:jump()
     end
     -- jump
     self.capeDeployed = false
+    -- TODO remove magic numbers
     self.movement.gravity = .125
     self.movement:setZVelocity(2)
     self.player:requestNaturalState()
@@ -103,7 +107,7 @@ function PlayerMovementController:chooseAnimation()
   if player:isOnGround() and self.allowMovementControl and
      (animation == player:getPlayerAnimations().move or animation == 'idle' or animation == 'carry') then
       
-    if self.moving or not player:getStateParameters().defaultAnimationWhenNotMoving then
+    if self.moving then
       if not sprite:isPlaying() then
         sprite:play()
       end
@@ -115,7 +119,6 @@ function PlayerMovementController:chooseAnimation()
   
   -- change to the default animation while in the air and not using weapon
   if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and sprite:getCurrentAnimationKey() ~= 'jump' then
-    -- and animation ~= player:getPlayerAnimations().default and sprite:getCurrentAnimationKey() ~= 'jump' then
     sprite:play('jump')
   end
   
@@ -130,8 +133,8 @@ function PlayerMovementController:chooseAnimation()
 end
 
 function PlayerMovementController:updateMoveMode()
-  if self.player.environmentState ~= nil then
-    self:setMode(self.player.environmentState.motionType)
+  if self.player.environmentStateMachine:isActive() then
+    self:setMode(self.player.environmentStateMachine:getState().motionSettings)
   else
     self:setMode(self.moveNormalMode)
   end
@@ -167,6 +170,8 @@ function PlayerMovementController:updateMoveControls()
     self.player:matchAnimationDirection(inputX, inputY)
   end
   self.player:setVector(inputX, inputY)
+  
+  
   self:chooseAnimation()
 end
 

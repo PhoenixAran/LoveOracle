@@ -50,7 +50,7 @@ function PlayerState:beginState(player, previousState)
 end
 
 function PlayerState:endState(newState)
-  this.active = false
+  self.active = false
   self:onEnd(newState)
 end
 
