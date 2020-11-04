@@ -86,7 +86,6 @@ end
 function GameEntity:move(dt)  
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
-  
   local bx = self.x + velX
   local by = self.y + velY
   local bw = self.w

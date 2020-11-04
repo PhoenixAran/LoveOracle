@@ -36,19 +36,15 @@ function PlayerMovementController:isMoving()
 end
 
 function PlayerMovementController:setMode(mode)
-
   if self.mode ~= mode then
     self.mode = mode
-    self.movement.targetSpeed = self.movement.staticSpeed * mode.speed
-    self.movement.currentAcceleration = self.movement.staticAcceleration * mode.acceleration
-    self.movement.currentDeceleration = self.movement.staticDeceleration * mode.deceleration
-    self.movement.minSpeed = mode.minSpeed
+    assert('Need to refactor movement stuff here')
   end
 end
 
 function PlayerMovementController:jump()
   if self.player:isOnGround() then
-    if not self.player:getStateParameters().canControlOnGround then --todo check if slippery?
+    if self.player:getStateParameters().canControlOnGround then --todo check if slippery?
       local x, y = self:pollMovementControls(true)
       if self:isMoving() then
         self.player:setVector(x, y)

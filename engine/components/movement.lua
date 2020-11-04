@@ -6,34 +6,25 @@ local Movement = Class { __includes = Component,
   init = function(self, enabled, values)
     if enabled == nil then enabled = true end
     Component.init(self, enabled)
-
     
     self:signal('landed')
     self:signal('bounced')
     
-    self.staticSpeed = 60
-    self.staticAcceleration = 1
-    self.staticDeceleration = 1
-    self.maxFallSpeed = 4
-    self.minSpeed = 0
+    -- think of this as the directional gamepad for this entity
+    self.vectorX, self.vectorY = 0, 0
     
-    self.targetSpeed = self.staticSpeed
-    self.currentSpeed = 0
-    self.currentAcceleration = self.staticAcceleration
-    self.currentDeceleration = self.staticDeceleration
+    self.speed = 60
+    self.minSpeed = 0
+    self.acceleration = 1
+    self.deceleration = 1
+    
+    self.slippery = false -- if true, this component will actually use acceleration and deceleration
+    self.gravity = .125
+    self.maxFallSpeed = 4
     self.zVelocity = 0
     
-    self.vectorX = 0
-    self.vectorY = 0
-    
-    self.externalForceX = 0
-    self.externalForceY = 0
-    
-    self.cachedCounterVectorX = 0
-    self.cachedCounterVectorY = 0
-    self.cachedCounterSpeed = 0
-    
-    self.gravity = .125
+    -- useful for calculating acceleration and knowing when to stop accelerating movement
+    self.motionX, self.motionY = 0, 0
   end
 }
 
@@ -45,68 +36,101 @@ function Movement:getVector()
   return self.vectorX, self.vectorY
 end
 
-function Movement:setSpeed(value)
-  self.targetSpeed = value
-  if self.currentSpeed > self.targetSpeed then
-    self.currentSpeed = self.targetSpeed
-  end
-end
-
 function Movement:setVector(x, y)
-  if x ~= 0 or y ~= 0 then
-    self.cachedCounterVectorX = self.vectorX
-    self.cachedCounterVectorY = self.vectorY
-    self.cachedCounterSpeed = self.currentSpeed
-  end
-  self.vectorX = x
-  self.vectorY = y
+  self.vectorX, self.vectorY = x, y
 end
 
-function Movement:getLinearVelocity(dt)
-  local velocityX, velocityY = 0, 0
-  if self.vectorX == 0 and self.vectorY == 0 then
-    self.currentSpeed = self.currentSpeed - (self.targetSpeed * self.currentDeceleration)
-    if self.currentSpeed < self.minSpeed then
-      self.currentSpeed = self.minSpeed
-    end
-    velocityX, velocityY = vector.mul(self.currentSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY))
-  else
-    self.currentSpeed = self.currentSpeed + (self.targetSpeed * self.currentAcceleration)
-    if self.currentSpeed > self.targetSpeed then
-      self.currentSpeed = self.targetSpeed
-    end
-    velocityX, velocityY = vector.mul(self.currentSpeed, vector.normalize(self.vectorX, self.vectorY))
-    if self.cachedCounterVectorX ~= self.vectorX or self.cachedCounterVectorY ~= self.vectorY then
-      self.cachedCounterSpeed = self.cachedCounterSpeed - (self.staticSpeed * self.currentDeceleration)
-      if self.cachedCounterSpeed < 0 then
-        self.cachedCounterSpeed = 0
-      end
-      velocityX, velocityY = vector.add(velocityX, velocityY, vector.mul(self.cachedCounterSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY)))
-    end
-  end
-  return vector.mul(dt, velocityX, velocityY)
+function Movement:getSpeed()
+  return self.speed
 end
 
-function Movement:recalculateLinearVelocity(dt, newX, newY)
-  local velocityX, velocityY = 0, 0
-  local oldX, oldY = self:getVector()
-  if newX == oldX and newY == oldY then
-    print('Warning: Trying to recalculate linear velocity with the same vector!')
-  end
-  if newX == 0 and oldX == 0 then
-    velocityX, velocityY = vector.mul(self.currentSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY))
-  else
-    velocityX, velocityY = vector.mul(self.currentSpeed, vector.normalize(newX, newY))
-    if self.cachedCounterVectorX ~= newX or self.cachedCounterVectorY ~= newY then
-      velocityX, velocityY = vector.add(velocityX, velocityY, vector.mul(self.cachedCounterSpeed, vector.normalize(self.cachedCounterVectorX, self.cachedCounterVectorY)))
-    end
-  end
-  self:setVector(newX, newY)
-  return vector.mul(dt, velocityX, velocityY)
+function Movement:setSpeed(value)
+  self.speed = value
+end
+
+function Movement:setMinSpeed(value)
+  self.minSpeed = value
+end
+
+function Movement:getMinSpeed()
+  return self.minSpeed
+end
+
+function Movement:getAcceleration()
+  return self.acceleration
+end
+
+function Movement:setAcceleration(value)
+  self.acceleration = value
+end
+
+function Movement:getDeceleration()
+  return self.deceleration
+end
+
+function Movement:setDeceleration(value)
+  self.deceleration = value
+end
+
+function Movement:isSlippery()
+  return self.slippery
+end
+
+function Movement:setSlippery(value)
+  self.slippery = value
+end
+
+function Movement:getMaxFallSpeed()
+  return self.maxFallSpeed
+end
+
+function Movement:setMaxFallSpeed(value)
+  self.maxFallSpeed = value
+end
+
+function Movement:getZVelocity()
+  return self.zVelocity
 end
 
 function Movement:setZVelocity(value)
   self.zVelocity = value
+end
+
+function Movement:getLinearVelocity(dt)
+  if self.vectorX == 0 and self.vectorY == 0 then
+    if self.slippery then
+      local length = vector.len(self.motionX, self.motionY)
+      if length < vector.mul(dt * self.minSpeed, self.motionX, self.motionY) then
+        self.motionX, self.motionY = 0, 0
+      elseif self.motionX ~= 0 and self.motionY ~= 0 then
+        self.motionX, self.motionY = vector.mul(self.motionX, self.motionY, vector.div(length, self.motionX, self.motionY))
+      end
+    else
+      self.motionX, self.motionY = 0, 0
+    end
+  else
+    if self.slippery then
+      -- get velocity without acceleration
+      local velocityX, velocityY = vector.mul(dt * self.speed, vector.normalize(self:getVector()))
+      local maxLength = vector.len(velocityX, velocityY)
+      
+      -- add accelerated velocity to our cached motionX and motionY values
+      self.motionX, self.motionY = vector.add(self.motionX, self.motionY, vector.mul(self.acceleration, velocityX, velocityY))
+      
+      -- if our motionX and motionY is too fast, just use our normal velocity
+      if vector.len(self.motionX, self.motionY) > maxLength then
+        self.motionX, self.motionY = velocityX, velocityY
+      end
+    else
+      -- simple velocity calculation
+      local velocityX, velocityY = vector.mul(dt * self.speed, vector.normalize(self:getVector()))
+      self.motionX, self.motionY = velocityX, velocityY
+    end
+  end
+  return self.motionX, self.motionY
+end
+
+function Movement:recalculateLinearVelocity(dt, newX, newY)
 end
 
 -- update z position
