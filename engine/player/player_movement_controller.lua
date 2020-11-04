@@ -38,7 +38,11 @@ end
 function PlayerMovementController:setMode(mode)
   if self.mode ~= mode then
     self.mode = mode
-    assert('Need to refactor movement stuff here')
+    self.movement:setSpeed(self.movement:getSpeed() * mode.speed)
+    self.movement:setAcceleration(self.movement:getAcceleration() * mode.acceleration)
+    self.movement:setDeceleration(self.movement:getDeceleration() * mode.deceleration)
+    self.movement:setMinSpeed(mode.minSpeed)
+    self.movement:setSlippery(mode.slippery)
   end
 end
 
@@ -49,7 +53,7 @@ function PlayerMovementController:jump()
       if self:isMoving() then
         self.player:setVector(x, y)
         -- man handle the speed
-        self.movement:setSpeed(self.movement.targetSpeed * self.player:getStateParameters().movementSpeedScale * self.strokeSpeedScale)
+        self.movement:setSpeed(self.movement:getSpeed() * self.player:getStateParameters().movementSpeedScale * self.strokeSpeedScale)
       end
     end
     -- jump
