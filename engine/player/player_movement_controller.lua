@@ -26,8 +26,8 @@ local PlayerMovementController = Class {
     self.fallingInHole = false
     
     self.moveNormalMode = PlayerMotionType()
-    self.mode = nil
-    self:setMode(self.moveNormalMode)
+    self.mode = self.moveNormalMode
+    
   end
 }
 
@@ -38,9 +38,9 @@ end
 function PlayerMovementController:setMode(mode)
   if self.mode ~= mode then
     self.mode = mode
-    self.movement:setSpeed(self.movement:getSpeed() * mode.speed)
-    self.movement:setAcceleration(self.movement:getAcceleration() * mode.acceleration)
-    self.movement:setDeceleration(self.movement:getDeceleration() * mode.deceleration)
+    self.movement:setSpeed(mode.speed)
+    self.movement:setAcceleration(mode.acceleration)
+    self.movement:setDeceleration(mode.deceleration)
     self.movement:setMinSpeed(mode.minSpeed)
     self.movement:setSlippery(mode.slippery)
   end
@@ -106,7 +106,6 @@ function PlayerMovementController:chooseAnimation()
   
   if player:isOnGround() and self.allowMovementControl and
      (animation == player:getPlayerAnimations().move or animation == 'idle' or animation == 'carry') then
-      
     if self.moving then
       if not sprite:isPlaying() then
         sprite:play()

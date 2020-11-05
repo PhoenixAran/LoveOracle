@@ -1,0 +1,5 @@
+# argument examples below
+# <spritesheet key>, <image key>, <sprite width>, <sprite height>, optional <margin x>, optional <margin y>
+
+# player items Spritesheet Declarations
+"player_items", "player_items", 16, 16, 1, 1

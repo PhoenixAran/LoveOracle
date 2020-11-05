@@ -98,12 +98,22 @@ end
 
 function Movement:getLinearVelocity(dt)
   if self.vectorX == 0 and self.vectorY == 0 then
-    if self.slippery and self.minSpeed >= 1  then
+    if self.slippery then
       local length = vector.len(self.motionX, self.motionY)
-      if length < vector.mul(dt * self.minSpeed, self.motionX, self.motionY) then
+      local maxLength = 0
+      if self.minSpeed > .1 then
+        maxLength = vector.mul(dt * self.minSpeed, self.motionX, self.motionY)
+      end
+      if length < maxLength then
         self.motionX, self.motionY = 0, 0
-      elseif self.motionX ~= 0 and self.motionY ~= 0 then
-        self.motionX, self.motionY = vector.mul(self.motionX, self.motionY, vector.div(length, self.motionX, self.motionY))
+      else
+        if self.motionX ~= 0 or self.motionY ~= 0 then
+          self.motionX = self.motionX * ( (length - self.deceleration) / length)
+          self.motionY = self.motionY * ( (length - self.deceleration) / length)
+        else
+          self.motionX = length - self.deceleration
+          self.motionY = 0
+        end
       end
     else
       self.motionX, self.motionY = 0, 0
@@ -116,7 +126,6 @@ function Movement:getLinearVelocity(dt)
       
       -- add accelerated velocity to our cached motionX and motionY values
       self.motionX, self.motionY = vector.add(self.motionX, self.motionY, vector.mul(self.acceleration, velocityX, velocityY))
-      
       -- if our motionX and motionY is too fast, just use our normal velocity
       if vector.len(self.motionX, self.motionY) > maxLength then
         self.motionX, self.motionY = velocityX, velocityY
