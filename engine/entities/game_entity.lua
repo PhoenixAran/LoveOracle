@@ -83,14 +83,13 @@ function GameEntity:getLinearVelocity(x, y)
   return self.movement:getLinearVelocity(x, y)
 end
 
-function GameEntity:move(dt)  
+function GameEntity:move(dt) 
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
   local bx = self.x + velX
   local by = self.y + velY
   local bw = self.w
   local bh = self.h
-  
   local neighbors = physics.boxcastBroadphase(self, bx, by, bw, bh)
   for i, neighbor in ipairs(neighbors) do
     if self:reportsCollisionsWith(neighbor) then

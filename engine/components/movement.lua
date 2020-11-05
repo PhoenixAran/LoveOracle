@@ -98,7 +98,7 @@ end
 
 function Movement:getLinearVelocity(dt)
   if self.vectorX == 0 and self.vectorY == 0 then
-    if self.slippery then
+    if self.slippery and self.minSpeed >= 1  then
       local length = vector.len(self.motionX, self.motionY)
       if length < vector.mul(dt * self.minSpeed, self.motionX, self.motionY) then
         self.motionX, self.motionY = 0, 0

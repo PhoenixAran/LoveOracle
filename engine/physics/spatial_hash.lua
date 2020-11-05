@@ -41,6 +41,7 @@ function SpatialHash:register(box)
   box.registeredPhysicsBounds.w = bw
   box.registeredPhysicsBounds.h = bh
   
+  
   local px1, py1 = self:cellCoords(bx, by)
   local px2, py2 = self:cellCoords(bx + bw, by + bh)  -- ( right, bottom )
   -- update our bounds to keep track of our grid size
