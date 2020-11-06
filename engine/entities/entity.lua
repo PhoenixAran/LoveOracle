@@ -102,6 +102,10 @@ function Entity:resize(width, height)
   physics.add(self)
 end
 
+function Entity:addChild(entity)
+  entity.transform:setParent(self.transform)
+end
+
 -- component list stuff
 function Entity:add(component)
   self.componentList:add(component)
