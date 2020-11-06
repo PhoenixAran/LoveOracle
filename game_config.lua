@@ -26,7 +26,7 @@ local window = {
   }
 }
 
-local startupScreen = 'engine.test_screens.sprite_sheet_test'
+local startupScreen = 'data.test_screens.player_playground'
 
 function window.getMonocleArguments()
   return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig

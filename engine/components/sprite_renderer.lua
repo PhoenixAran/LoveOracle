@@ -12,6 +12,7 @@ local SpriteRenderer = Class { __includes = Component,
     self.offsetY = offsetY
     self.sprite = sprite
     self.alpha = 0
+    self.color = { }
     self:setSprite(self.sprite)
   end
 }

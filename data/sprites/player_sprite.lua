@@ -1,10 +1,6 @@
 -- player sprites
 local playerSpriteBuilder = { }
 
-function playerSpriteBuilder.fillPayload(payload)
-  
-end
-
 function playerSpriteBuilder.configureSpriteBuilder(builder)
   builder:setDefaultAnimation('idle')
   local sb = builder:createSpriteAnimationBuilder()
@@ -75,6 +71,35 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   sb:buildSubstrip('right')
   -- BUILD jump
   builder:addAnimation('jump', sb:build())
+  
+  -- @animation sword_swing
+  sb:setSubstrips(true)
+  -- #substrip up
+  sb:addSpriteFrame(9, 4, 0, 0, 3)
+  sb:addSpriteFrame(5, 3, 0, 0, 3)
+  sb:addSpriteFrame(5, 3, 0, -4, 8)
+  sb:addSpriteFrame(5, 3, 0, 0, 3)
+  sb:buildSubstrip('up')
+  -- #substrip down
+  sb:addSpriteFrame(9, 2, 0, 0, 3)
+  sb:addSpriteFrame(5, 7, 0, 0, 3)
+  sb:addSpriteFrame(5, 7, 0, 4, 8)
+  sb:addSpriteFrame(5, 7, 0, 0, 3)
+  sb:buildSubstrip('down', true)
+  -- #substrip left
+  sb:addSpriteFrame(9, 3, 0, 0, 3)
+  sb:addSpriteFrame(5, 5, 0, 0, 3)
+  sb:addSpriteFrame(5, 5, -4, 0, 8)
+  sb:addSpriteFrame(5, 5, 0, 0, 3)
+  sb:buildSubstrip('left')
+  -- #substrip right
+  sb:addSpriteFrame(9, 5, 0, 0, 3)
+  sb:addSpriteFrame(5, 1, 0, 0, 3)
+  sb:addSpriteFrame(5, 1, 4, 0, 8)
+  sb:addSpriteFrame(5, 1, 0, 0, 3)
+  sb:buildSubstrip('right')
+  -- BUILD sword_swing
+  builder:addAnimation('sword_swing', sb:build())
 end
 
 function playerSpriteBuilder.placeholderAnimations(builder)
