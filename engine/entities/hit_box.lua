@@ -38,6 +38,10 @@ local HitBox = Class { __includes = { BumpBox, Component },
   end
 }
 
+function HitBox:getType()
+  return 'hit_box'
+end
+
 function HitBox:transformChanged()
   self.x, self.y = self.entity: getPosition()
   physics.update(self)

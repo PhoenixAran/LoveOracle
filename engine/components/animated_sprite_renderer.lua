@@ -28,7 +28,7 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
 }
 
 function AnimatedSpriteRenderer:getType()
-  return 'animatedspriterenderer'
+  return 'animated_sprite_renderer'
 end
 
 function AnimatedSpriteRenderer:isPlaying()

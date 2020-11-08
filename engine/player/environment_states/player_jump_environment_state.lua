@@ -25,7 +25,7 @@ local PlayerJumpEnvironmentState = Class { __includes = PlayerEnvironmentState,
 }
 
 function PlayerJumpEnvironmentState:getType()
-  return 'playerjumpenvironmentstate'
+  return 'player_jump_environment_state'
 end
 
 return PlayerJumpEnvironmentState

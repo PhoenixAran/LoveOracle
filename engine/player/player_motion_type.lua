@@ -15,7 +15,7 @@ local PlayerMotionType = Class {
 }
 
 function PlayerMotionType:getType()
-  return 'playermotiontype'
+  return 'player_motion_type'
 end
 
 return PlayerMotionType

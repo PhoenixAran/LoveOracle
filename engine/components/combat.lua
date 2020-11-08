@@ -16,6 +16,10 @@ local Combat = Class { __includes = Component,
   end
 }
 
+function Combat:getType()
+  return 'combat'
+end
+
 function Combat:update(dt)
   if self:isIntangible() then 
     self.currentIntangibilityTime = self.currentIntangibilityTime + 1

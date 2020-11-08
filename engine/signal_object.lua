@@ -94,4 +94,8 @@ function SignalObject:clearConnections()
   end
 end
 
+function SignalObject:getType()
+  return 'signal_object'
+end
+
 return SignalObject

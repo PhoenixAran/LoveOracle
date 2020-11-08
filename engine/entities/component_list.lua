@@ -47,7 +47,7 @@ local ComponentList = Class {
 }
 
 function ComponentList:getType()
-  return "componentlist"
+  return "component_list"
 end
 
 -- notify components that the entity transform has changed

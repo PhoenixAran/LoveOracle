@@ -28,7 +28,7 @@ local Player = Class { __includes = GameEntity,
     self.stateParameters = nil
     
     self.stateCollection = { 
-      ['playerjumpenvironmentstate'] = PlayerJumpEnvironmentState(self)
+      ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self)
     }
     
     -- other declarations
@@ -199,9 +199,9 @@ function Player:getDesiredNaturalState()
   -- get ground observer
   local go = self.groundObserver
   if go.inGrass then
-    return self:getStateFromCollection('playergrassenvironmentstate')
+    return self:getStateFromCollection('player_grass_environment_state')
   elseif self:isInAir() then
-    return self:getStateFromCollection('playerjumpenvironmentstate')
+    return self:getStateFromCollection('player_jump_environment_state')
   end
   
   -- TODO implement rest of environment states
@@ -226,7 +226,7 @@ function Player:integrateStateParameters()
   if self.stateParameters ~= nil then
     pool.free(self.stateParameters)
   end
-  self.stateParameters = pool.obtain('playerstateparameters')
+  self.stateParameters = pool.obtain('player_state_parameters')
   self.stateParameters.animations.default = 'idle'
   self.stateParameters.animations.move = 'walk'
   self.stateParameters.animations.aim = 'aim'

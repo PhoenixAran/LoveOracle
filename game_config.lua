@@ -36,5 +36,6 @@ return {
  zbStudioDebug = zbStudioDebug,
  controls = controls,
  window = window,
- startupScreen = startupScreen
+ startupScreen = startupScreen,
+ version = version
 }

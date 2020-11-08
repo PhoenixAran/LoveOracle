@@ -48,6 +48,10 @@ local SpriteAnimation = Class {
   end
 }
 
+function SpriteAnimation:getType()
+  return 'sprite_animation'
+end
+
 function SpriteAnimation:getSpriteFrames(substripKey)
   if substripKey == nil then
     if self:hasSubstrips() then
@@ -78,10 +82,6 @@ end
 
 function SpriteAnimation:hasSubstrips()
   return self.substrips
-end
-
-function SpriteAnimation:getType()
-  return 'spriteanimation'
 end
 
 return SpriteAnimation

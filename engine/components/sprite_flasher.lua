@@ -14,7 +14,7 @@ local SpriteFlasher = Class { __includes = Component,
 
 
 function SpriteFlasher:getType()
-  return 'spriteflasher'
+  return 'sprite_flasher'
 end
 
 function SpriteFlasher:addSprite()
@@ -27,7 +27,7 @@ function SpriteFlasher:reset()
 end
 
 if pool then
-  pool.register('spriteflasher', SpriteFlasher)
+  pool.register('sprite_flasher', SpriteFlasher)
 end
 
 return SpriteFlasher

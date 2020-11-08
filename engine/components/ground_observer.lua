@@ -15,7 +15,7 @@ local GroundObserver = Class { __includes = {BumpBox, Component},
 }
 
 function GroundObserver:getType()
-  return 'groundobserver'
+  return 'ground_observer'
 end
 
 function GroundObserver:update(dt)

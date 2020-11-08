@@ -9,4 +9,8 @@ local PlayerEnvironmentState = Class { __includes = PlayerState,
   end
 }
 
+function PlayerEnvironmentState:getType()
+  return 'player_environment_state'
+end
+
 return PlayerEnvironmentState

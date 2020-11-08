@@ -42,11 +42,28 @@ local function drawFPSAndMemory()
   love.graphics.printf(fps, 0, 132, 200, 'left')
 end
 
+local function drawMemory()
+  local monogram = assetManager.getFont('monogram')
+  love.graphics.setFont(monogram)
+  local memory = ("%d kbs"):format(collectgarbage("count"))
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.printf(memory, 0, 120, 200, 'left')
+end
+
 local function drawFPS()  
-  local monogram = assetManager.getFont('monogram')  love.graphics.setFont(monogram)
-  local fps = ("fps:%d"):format(love.timer.getFPS())
+  local monogram = assetManager.getFont('monogram')  
+  love.graphics.setFont(monogram)
+  local fps = ("%d fps"):format(love.timer.getFPS())
   love.graphics.setColor(1, 1, 1)
   love.graphics.printf(fps, 0, 132, 200, 'left')
+end
+
+local function drawVersion()
+  local monogram = assetManager.getFont('monogram')
+  love.graphics.setFont(monogram)
+  local version = 'Ver.' .. gameConfig.version
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.printf(version, 95, 132, 200, right)
 end
 
 -- alot of globals are declared here
@@ -92,7 +109,9 @@ function love.draw()
   monocle:begin()
   -- manually call draw in current screen
   screenManager:emit('draw')
-  drawFPSAndMemory()
+  drawFPS()
+  drawMemory()
+  drawVersion()
   monocle:finish()
 end
 

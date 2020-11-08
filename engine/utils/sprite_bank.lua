@@ -19,7 +19,7 @@ local SpriteBuilder = Class {
   init = function(self)
     -- by default this is used to configure an animated sprite
     -- its the most common use case
-    self.type = 'animatedspriterenderer'
+    self.type = 'animated_sprite_renderer'
     
     -- used if type is 'animatedsprite'
     self.animations = { }
@@ -45,9 +45,9 @@ function SpriteBuilder:setDefaultAnimation(value)
 end
 
 function SpriteBuilder:build()
-  assert(self.type == 'animatedspriterenderer' or self.type == 'spriterenderer', 'Invalid type in SpriteBuilder: ' .. tostring(self.type))
+  assert(self.type == 'animated_sprite_renderer' or self.type == 'sprite_renderer', 'Invalid type in SpriteBuilder: ' .. tostring(self.type))
   assert(spriteBank, 'Global variable "spriteBank" does not exist')
-  if self.type == 'spriterenderer' then
+  if self.type == 'sprite_renderer' then
     if self.sprite == nil then
        -- use deferred sprite
       return SpriteRenderer(spriteBank.getSprite(self.deferredSprite), self.offsetX, self.offsetY)
@@ -55,7 +55,7 @@ function SpriteBuilder:build()
       -- use sprite in SpriteBuilder instance
       return SpriteRenderer(self.sprite, self.offsetX, self.offsetY)
     end
-  elseif self.type == 'animatedspriterenderer' then
+  elseif self.type == 'animated_sprite_renderer' then
     local animations = { }
     animations = lume.merge(animations, self.animations)
     for k, v in pairs(self.deferredAnimations) do

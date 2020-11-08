@@ -10,7 +10,7 @@ local AnimatedSpriteKeyDisplay = Class { __includes = Component,
 }
 
 function AnimatedSpriteKeyDisplay:getType()
-  return 'animatedspritekeydisplay'
+  return 'animated_sprite_key_display'
 end
 
 function AnimatedSpriteKeyDisplay:draw()

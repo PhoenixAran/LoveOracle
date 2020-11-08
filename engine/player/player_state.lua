@@ -12,7 +12,7 @@ local PlayerState = Class {
 }
 
 function PlayerState:getType()
-  return 'playerstate'
+  return 'player_state'
 end
 
 function PlayerState:isActive()

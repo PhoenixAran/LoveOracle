@@ -41,7 +41,7 @@ local PlayerStateParameters = Class {
 PlayerStateParameters.EmptyStateParameters = PlayerStateParameters()
 
 function PlayerStateParameters:getType()
-  return 'playerstateparameters'
+  return 'player_state_parameters'
 end
 
 -- helper function for integrateParameters
@@ -105,7 +105,7 @@ function PlayerStateParameters:reset()
 end
 
 if pool then
-  pool.register('playerstateparameters', PlayerStateParameters)
+  pool.register('player_state_parameters', PlayerStateParameters)
 end
 
 return PlayerStateParameters

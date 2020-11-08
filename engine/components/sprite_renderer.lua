@@ -22,7 +22,7 @@ function SpriteRenderer:setSprite(sprite)
 end
 
 function SpriteRenderer:getType()
-  return 'spriterenderer'
+  return 'sprite_renderer'
 end
 
 function SpriteRenderer:getOffsetX()

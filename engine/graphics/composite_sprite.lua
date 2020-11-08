@@ -23,7 +23,7 @@ local CompositeSprite = Class {
 }
 
 function CompositeSprite:getType()
-  return 'compositesprite'
+  return 'composite_sprite'
 end
 
 function CompositeSprite:calculateBounds()

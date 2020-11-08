@@ -13,4 +13,8 @@ local ItemUseParameters = Class {
   end
 }
 
+function ItemUseParameters:getType()
+  return 'item_use_parameters'
+end
+
 return ItemUseParameters

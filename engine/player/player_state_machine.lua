@@ -12,7 +12,7 @@ local PlayerStateMachine = Class { _includes = SignalObject,
 }
 
 function PlayerStateMachine:getType()
-  return 'playerstatemachine'
+  return 'player_state_machine'
 end
 
 function PlayerStateMachine:setPlayer(player)
@@ -103,7 +103,7 @@ function PlayerStateMachine:reset()
 end
 
 if pool then
-  pool.register('playerstatemachine', PlayerStateMachine)
+  pool.register('player_state_machine', PlayerStateMachine)
 end
 
 return PlayerStateMachine

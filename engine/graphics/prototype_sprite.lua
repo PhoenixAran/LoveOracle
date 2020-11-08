@@ -18,7 +18,7 @@ local PrototypeSprite = Class {
 }
 
 function PrototypeSprite:getType()
-  return 'prototypesprite'
+  return 'prototype_sprite'
 end
 
 function PrototypeSprite:getOffset()

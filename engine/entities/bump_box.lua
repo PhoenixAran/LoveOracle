@@ -19,7 +19,7 @@ local BumpBox = Class {
     
     assert(zRange.min <= zRange.max)
     self.zRange = zRange
-    if collisionTag == nil then collisionTag = 'bumpbox' end
+    if collisionTag == nil then collisionTag = 'bump_box' end
   
     self.x = x
     self.y = y
@@ -38,11 +38,11 @@ local BumpBox = Class {
 }
 
 function BumpBox:getType()
-  return 'bumpbox'
+  return 'bump_box'
 end
 
 function BumpBox:getCollisionTag()
-  return 'bumpbox'
+  return 'bump_box'
 end
 
 function BumpBox:getZRange()

@@ -5,7 +5,6 @@ local ItemUseParameters = require 'engine.items.item_use_parameters'
 local Item = Class { __includes = Entity,
   init = function(self)
     self.useParameters = ItemUseParameters()
-    
     self.name = nil
     self.level = 0
     self.useButtons = { }
@@ -58,7 +57,6 @@ end
 
 -- feel free to override this
 function Item:isUsable()
-  -- TODO check if player is in hole
   local player = self.player
   if not player:getStateParameters().canUseWeapons then
     return false
@@ -69,12 +67,30 @@ function Item:isUsable()
           not self.useParameters.usableWithSword then
     return false
   end
+  -- TODO check if player is in hole
   return true
+end
+
+-- called when assigned buttons are down
+function Item:onButtonDown()
+  
+end
+
+-- called when items are pressed this frame
+function Item:onButtonPressed()
+  return false
 end
 
 function Item:interrupt()
   
 end
 
+function Item:DrawUnder()
+  
+end
+
+function Item:DrawOver()
+  
+end
 
 return item

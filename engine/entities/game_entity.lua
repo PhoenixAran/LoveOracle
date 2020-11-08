@@ -37,11 +37,11 @@ local GameEntity = Class { __includes = Entity,
 }
 
 function GameEntity:getType()
-  return 'gameentity'
+  return 'game_entity'
 end
 
 function GameEntity:getCollisionTag()
-  return 'gameentity'
+  return 'game_entity'
 end
 
 function GameEntity:isPersistant()
@@ -59,7 +59,7 @@ end
 function GameEntity:setAnimationDirection(value)
   self.animationDirection = value
   if self:doesSyncDirectionWithAnimation() and self.sprite ~= nil then
-    assert(self.sprite:getType() == 'animatedspriterenderer')
+    assert(self.sprite:getType() == 'animated_sprite_renderer')
     if self.sprite:getSubstripKey() ~= value then
       self.sprite:setSubstripKey(value)
     end

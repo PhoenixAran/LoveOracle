@@ -25,7 +25,7 @@ local SpriteSheet = Class {
 }
 
 function SpriteSheet:getType()
-  return 'spritesheet'
+  return 'sprite_sheet'
 end
 
 function SpriteSheet:getTexture(x, y)

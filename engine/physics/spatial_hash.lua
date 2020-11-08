@@ -17,6 +17,10 @@ local SpatialHash = Class {
   end
 }
 
+function SpatialHash:getType()
+  return 'spatial_hash'
+end
+
 function SpatialHash:cellCoords(x, y)
   return math.floor(x * self.inverseCellSize), math.floor(y * self.inverseCellSize)
 end

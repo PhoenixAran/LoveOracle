@@ -15,7 +15,7 @@ local PlayerBusyState = Class { __includes = PlayerState,
 }
 
 function PlayerBusyState:getType()
-  return 'playerbusystate'
+  return 'player_busy_state'
 end
 
 function PlayerBusyState:getAnimation()

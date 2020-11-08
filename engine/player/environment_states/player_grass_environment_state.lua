@@ -6,8 +6,12 @@ local PlayerEnvironmentState = require 'engine.player.environment_states.player_
 local PlayerGrassEnvironmentState = Class { __includes = PlayerEnvironmentState,
   init = function(self)
     PlayerEnvironmentState.init(self)
-    self.motionSettings.speed = 0.75
+    self.motionSettings.speed = 40
   end
 }
+
+function PlayerGrassEnvironmentState:getType()
+  return 'player_grass_environment_state'
+end
 
 return PlayerGrassEnvironmentState
