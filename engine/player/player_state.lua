@@ -7,7 +7,6 @@ local PlayerState = Class {
     self.player = nil
     self.playerController = nil
     self.stateParameters = PlayerStateParameters()
-
   end
 }
 

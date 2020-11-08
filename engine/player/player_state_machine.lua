@@ -64,7 +64,7 @@ function PlayerStateMachine:forceBeginState(newState)
   self.currentState = newState
   if self.currentState ~= nil then
     self.currentState.playerController = self
-    self.currentState:beginState(self.previousState, self.player)
+    self.currentState:beginState(self.player, self.previousState)
     if not self.currentState:isActive() then
       self.previousState = self.currentState
       self.currentState = nil

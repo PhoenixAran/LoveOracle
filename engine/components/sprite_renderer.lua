@@ -43,6 +43,9 @@ function SpriteRenderer:setOffset(x, y)
 end
 
 function SpriteRenderer:getBounds()
+  if self.sprite == nil then
+    return 0, 0, 0, 0
+  end
   local ex, ey = self.entity:getPosition()
   local x,y,w,h = self.sprite:getBounds()
   local ox, oy = self.sprite:getOrigin()
@@ -53,6 +56,9 @@ function SpriteRenderer:getBounds()
 end
 
 function SpriteRenderer:draw()
+  if self.sprite == nil then
+    return
+  end
   local x, y = self.entity:getPosition()
   local z = self.entity:getZPosition()
   x = x + self.offsetX
@@ -61,6 +67,9 @@ function SpriteRenderer:draw()
 end
 
 function SpriteRenderer:debugDraw()
+  if self.sprite == nil then
+    return
+  end
   local x, y, w, h = self:getBounds()
   love.graphics.setColor(0, 1, 0)
   love.graphics.rectangle('line', x, y, w, h)

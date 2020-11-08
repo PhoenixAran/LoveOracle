@@ -20,10 +20,8 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     self.currentTick = 1
     self.loopType = 'once'
     
-    -- caveat is that the initial animation HAS to have a SpriteFrame and not just timed actions
     local spriteFrames = self.currentAnimation:getSpriteFrames()
     SpriteRenderer.init(self, spriteFrames[1]:getSprite(), offsetX, offsetY, enabled, visible)
-    self:play(defaultAnimation)
   end
 }
 
@@ -58,6 +56,7 @@ function AnimatedSpriteRenderer:setSubstripKey(value)
 end
 
 function AnimatedSpriteRenderer:play(animation, substripKey, forcePlayFromStart)
+  if not self.entity then error() end
   if forcePlayFromStart == nil then forcePlayFromStart = false end
   local playFromStart = forcePlayFromStart
   if animation ~= nil then

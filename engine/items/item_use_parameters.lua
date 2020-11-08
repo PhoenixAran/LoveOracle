@@ -1,4 +1,4 @@
-local Class = local 'lib.class'
+local Class = require 'lib.class'
 
 -- determines if item can be used
 local ItemUseParameters = Class {

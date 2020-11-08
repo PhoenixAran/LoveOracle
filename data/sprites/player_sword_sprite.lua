@@ -2,7 +2,7 @@
 local playerSwordSpriteBuilder = { }
 
 function playerSwordSpriteBuilder.configureSpriteBuilder(builder)
-  builder:setDefaultAnimation('idle')
+  builder:setDefaultAnimation('swing')
   local sb = builder:createSpriteAnimationBuilder()
 
   -- sprite animation builder setup
@@ -36,7 +36,7 @@ function playerSwordSpriteBuilder.configureSpriteBuilder(builder)
   sb:addSpriteFrame(1, 1, 12, 4, 3)
   sb:buildSubstrip('right')
   -- BUILD sword_swing
-  builder:addAnimation('sword_swing', sb:build())
+  builder:addAnimation('swing', sb:build())
 end
 
 function playerSwordSpriteBuilder.getKey()

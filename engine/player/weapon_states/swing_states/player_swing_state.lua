@@ -2,8 +2,8 @@ local Class = require 'lib.class'
 local PlayerState = require 'engine.player.player_state'
 
 local PlayerSwingState = Class { __includes = PlayerState,
-  init = function(self)
-    PlayerState.init(self)
+  init = function(self, player)
+    PlayerState.init(self, player)
     self.stateParameters.canControlOnGround = false
     self.weapon = nil
     -- default values, feel free to override in other swing states
@@ -23,6 +23,8 @@ end
 function PlayerSwingState:swing()
   local direction = self.player:getAnimationDirection()
   self.weapon:swing(direction)
+  local playerAnimation = self:getPlayerSwingAnimation(self.lunge)
+  self.player.sprite:play(playerAnimation)
 end
 
 function PlayerSwingState:onBegin(previousState)

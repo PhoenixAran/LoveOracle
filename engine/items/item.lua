@@ -4,6 +4,7 @@ local ItemUseParameters = require 'engine.items.item_use_parameters'
 
 local Item = Class { __includes = Entity,
   init = function(self)
+    Entity.init(self)
     self.useParameters = ItemUseParameters()
     self.name = nil
     self.level = 0
@@ -47,7 +48,7 @@ end
 
 function Item:isButtonDown()
   for _, button in ipairs(self.useButtons) do
-    if input:isDown(button) then
+    if input:down(button) then
       return true
     end
   end
@@ -56,7 +57,7 @@ end
 
 function Item:isButtonPressed()
     for _, button in ipairs(self.useButtons) do
-    if input:isPressed(button) then
+    if input:pressed(button) then
       return true
     end
   end
@@ -101,4 +102,4 @@ function Item:DrawOver()
   
 end
 
-return item
+return Item

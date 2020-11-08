@@ -74,6 +74,7 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   
   -- @animation sword_swing
   sb:setSubstrips(true)
+  sb:setLoopType('once')
   -- #substrip up
   sb:addSpriteFrame(9, 4, 0, 0, 3)
   sb:addSpriteFrame(5, 3, 0, 0, 3)
@@ -99,7 +100,7 @@ function playerSpriteBuilder.configureSpriteBuilder(builder)
   sb:addSpriteFrame(5, 1, 0, 0, 3)
   sb:buildSubstrip('right')
   -- BUILD sword_swing
-  builder:addAnimation('sword_swing', sb:build())
+  builder:addAnimation('swing', sb:build())
 end
 
 function playerSpriteBuilder.placeholderAnimations(builder)

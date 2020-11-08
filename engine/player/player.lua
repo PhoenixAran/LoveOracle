@@ -8,10 +8,13 @@ local PlayerStateMachine = require 'engine.player.player_state_machine'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
 local PlayerMovementController = require 'engine.player.player_movement_controller'
 
--- require states
+-- ### STATES ###
+-- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
 -- environment states
 local PlayerJumpEnvironmentState = require 'engine.player.environment_states.player_jump_environment_state'
+-- weapon states
+local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 
 local Player = Class { __includes = GameEntity,
   init = function(self, enabled, visible, rect) 
@@ -29,7 +32,9 @@ local Player = Class { __includes = GameEntity,
     
     self.stateCollection = { 
       -- environment states
-      ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self)
+      ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self),
+      -- weapon states
+      ['player_swing_state'] = PlayerSwingState(self),
     }
     
     -- other declarations
@@ -46,7 +51,7 @@ local Player = Class { __includes = GameEntity,
     self:add(require('engine.components.debug.animated_sprite_key_display')(self.sprite))
     
     -- bind controls (except dpad, thats automatically done)
-    self:addPressInteraction('y', function(player) 
+    self:addPressInteraction('x', function(player) 
       self.playerMovementController:jump()
     end)
     self:addPressInteraction('a', function(player)
@@ -293,7 +298,7 @@ function Player:updateEquippedItems(dt)
   for key, item in pairs(self.items) do
     if item:isUsable() then
       if item:isButtonDown() then
-        item:onBGuttonDown()
+        item:onButtonDown()
       end
     end
   end
@@ -334,18 +339,18 @@ function Player:update(dt)
     self.pressedActionButtons['y'] = self:checkPressInteractions('y')
   end
   
-  
   self:integrateStateParameters()
   self:requestNaturalState()
-  
   self:updateStates()
   self:move(dt)
   self:updateEquippedItems(dt)
 end
 
 function Player:equipItem(item)
-  self:addChild(item)
-  lume.push(self.items, item)
+  item:setPlayer(self)
+  for i, v in ipairs(item.useButtons) do
+    self.items[v] = item
+  end
 end
 
 return Player
