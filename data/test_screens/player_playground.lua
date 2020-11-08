@@ -10,17 +10,19 @@ local PlayerPlayground = Class {
 
 function PlayerPlayground:enter(prev, ...)
   self.player = Player(true, true, { x = 24, y = 24, w = 16, h = 16 })
-  local sword = Sword()
-  sword.useButtons = { 'b' }
-  self.player:equipItem(sword)
+  self.sword = Sword()
+  self.sword.useButtons = { 'b' }
+  self.player:equipItem(self.sword)
 end
 
 function PlayerPlayground:update(dt)
   self.player:update(dt)
+  self.sword:update(dt)
 end
 
 function PlayerPlayground:draw()
   self.player:draw()
+  self.sword:draw()
 end
 
 return PlayerPlayground

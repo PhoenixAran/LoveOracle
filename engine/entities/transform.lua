@@ -12,7 +12,6 @@ function Transform:new(entity)
 	self.Children = {}
   self.Entity = entity
 
-
 	return self
 
 end

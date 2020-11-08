@@ -159,7 +159,7 @@ function Player:beginConditionState(state)
       pool.free(conditionStateMachine)
     end
   end
-  local stateMachine = pool.obtain('playerstatemachine')
+  local stateMachine = pool.obtain('player_state_machine')
   stateMachine:setPlayer(self)
   lume.push(self.conditionStateMachines, stateMachine)
   stateMachine:beginState(state)
@@ -266,7 +266,6 @@ function Player:integrateStateParameters()
 end
 
 function Player:updateStates(dt)
-  
   -- update weapon state
   self.weaponStateMachine:update(dt)
   -- update environment state  
@@ -313,12 +312,12 @@ function Player:actionUseWeapon(button)
 end
 
 function Player:update(dt)
+  
   -- TODO? determine if we update components before or after all the crap below
   GameEntity.update(self, dt)
   -- pre-state update
   self:requestNaturalState()
   self.playerMovementController:update(dt)
-  
   self:updateUseDirections()
 
   self.pressedActionButtons['a'] = false
@@ -338,6 +337,7 @@ function Player:update(dt)
   if input:down('y') then
     self.pressedActionButtons['y'] = self:checkPressInteractions('y')
   end
+  if self:getWeaponState() then d = true end
   
   self:integrateStateParameters()
   self:requestNaturalState()
@@ -347,6 +347,7 @@ function Player:update(dt)
 end
 
 function Player:equipItem(item)
+  self:addChild(item)
   item:setPlayer(self)
   for i, v in ipairs(item.useButtons) do
     self.items[v] = item

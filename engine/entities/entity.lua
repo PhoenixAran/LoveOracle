@@ -29,6 +29,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.enabled = enabled
     self.visible = visible
     self.transform = Transform:new(self)
+    self.transform:setRotation(0)
     self:setPositionWithBumpCoords(self.x, self.y)
   end
 }

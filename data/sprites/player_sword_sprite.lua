@@ -1,6 +1,5 @@
 -- player sprites
 local playerSwordSpriteBuilder = { }
-
 function playerSwordSpriteBuilder.configureSpriteBuilder(builder)
   builder:setDefaultAnimation('swing')
   local sb = builder:createSpriteAnimationBuilder()
@@ -15,7 +14,7 @@ function playerSwordSpriteBuilder.configureSpriteBuilder(builder)
   sb:addSpriteFrame(1, 1, 16, 0, 3)
   sb:addSpriteFrame(1, 2, 13, -13, 3)
   sb:addSpriteFrame(1, 3, -4, -20, 8)
-  sb:addSpriteFrame(1, 2, -4, -12, 3)
+  sb:addSpriteFrame(1, 3, -4, -12, 3)
   sb:buildSubstrip('up')
   -- #substrip down
   sb:addSpriteFrame(1, 5, -15, 2, 3)

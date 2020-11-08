@@ -66,7 +66,7 @@ function PlayerMovementController:jump()
     if self.player:getWeaponState() == nil then
       self.player.sprite:play('jump')
     else
-      self.player.sprite:play(self.player:getAnimations().default)
+      self.player.sprite:play(self.player:getPlayerAnimations().default)
     end
     -- TODO self.player:onJump()
   end
@@ -103,9 +103,9 @@ function PlayerMovementController:chooseAnimation()
   local sprite = self.player.sprite
   local stateParameters = self.player:getStateParameters()
   local animation = sprite:getCurrentAnimationKey()
-  
   if player:isOnGround() and self.allowMovementControl and
      (animation == player:getPlayerAnimations().move or animation == 'idle' or animation == 'carry') then
+
     if self.moving then
       if not sprite:isPlaying() then
         sprite:play()

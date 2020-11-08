@@ -21,6 +21,7 @@ function PlayerSwingState:getPlayerSwingAnimation(lunge)
 end
 
 function PlayerSwingState:swing()
+  print('swing!')
   local direction = self.player:getAnimationDirection()
   self.weapon:swing(direction)
   local playerAnimation = self:getPlayerSwingAnimation(self.lunge)

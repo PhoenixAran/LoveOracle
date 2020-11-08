@@ -75,7 +75,7 @@ end
 function PlayerStateMachine:update(dt)
   if self.currentState ~= nil then
     self.currentState:update(dt)
-    if not self.active then
+    if not self.currentState.active then
       self.currentState = nil
     end
   else
