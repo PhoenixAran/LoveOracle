@@ -28,6 +28,7 @@ local Player = Class { __includes = GameEntity,
     self.stateParameters = nil
     
     self.stateCollection = { 
+      -- environment states
       ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self)
     }
     
@@ -44,9 +45,21 @@ local Player = Class { __includes = GameEntity,
     self:add(self.sprite)
     self:add(require('engine.components.debug.animated_sprite_key_display')(self.sprite))
     
-    self:addPressInteraction('a', function(player) 
+    -- bind controls (except dpad, thats automatically done)
+    self:addPressInteraction('y', function(player) 
       self.playerMovementController:jump()
     end)
+    self:addPressInteraction('a', function(player)
+      self:actionUseWeapon('a')
+    end)
+    self:addPressInteraction('b', function(player)
+      self:actionUseWeapon('b')
+    end)
+  
+    self.items = { 
+      a = nil,
+      b = nil
+    }
   end
 }
 
@@ -276,6 +289,24 @@ function Player:updateStates(dt)
   end
 end
 
+function Player:updateEquippedItems(dt)
+  for key, item in pairs(self.items) do
+    if item:isUsable() then
+      if item:isButtonDown() then
+        item:onBGuttonDown()
+      end
+    end
+  end
+end
+
+function Player:actionUseWeapon(button)
+  local item = self.items[button]
+  if item ~= nil and item:isUsable() then
+    return item:onButtonPress()
+  end
+  return false
+end
+
 function Player:update(dt)
   -- TODO? determine if we update components before or after all the crap below
   GameEntity.update(self, dt)
@@ -284,23 +315,37 @@ function Player:update(dt)
   self.playerMovementController:update(dt)
   
   self:updateUseDirections()
-    -- TODO add x and y action buttons
+
   self.pressedActionButtons['a'] = false
   self.pressedActionButtons['b'] = false
+  self.pressedActionButtons['x'] = false
+  self.pressedActionButtons['y'] = false
+  
   if input:down('a') then
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
   end
-    if input:down('b') then
+  if input:down('b') then
     self.pressedActionButtons['b'] = self:checkPressInteractions('b')
   end
+  if input:down('x') then
+    self.pressedActionButtons['x'] = self:checkPressInteractions('x')
+  end
+  if input:down('y') then
+    self.pressedActionButtons['y'] = self:checkPressInteractions('y')
+  end
+  
   
   self:integrateStateParameters()
   self:requestNaturalState()
   
   self:updateStates()
   self:move(dt)
-  --TODO update equipped items
+  self:updateEquippedItems(dt)
 end
 
+function Player:equipItem(item)
+  self:addChild(item)
+  lume.push(self.items, item)
+end
 
 return Player

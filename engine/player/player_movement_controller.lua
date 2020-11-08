@@ -115,7 +115,6 @@ function PlayerMovementController:chooseAnimation()
     end    
   end
   
-  
   -- change to the default animation while in the air and not using weapon
   if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and sprite:getCurrentAnimationKey() ~= 'jump' then
     sprite:play('jump')

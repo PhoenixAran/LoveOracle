@@ -13,6 +13,14 @@ local Item = Class { __includes = Entity,
   end
 }
 
+function Item:getType()
+  return 'item'
+end
+
+function Item:getName()
+  return self.name
+end
+
 function Item:getUseParameters()
   return self.useParameters
 end
@@ -25,16 +33,16 @@ function Item:setPlayer(player)
   self.player = player
 end
 
+function Item:getLevel()
+  return self.level
+end
+
 function Item:isTwoHanded()
   return self.useParameters.twoHanded
 end
 
 function Item:getUseButton()
   return self.useButton
-end
-
-function Item:getType()
-  return 'item'
 end
 
 function Item:isButtonDown()

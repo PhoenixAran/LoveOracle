@@ -7,8 +7,9 @@ function playerSwordSpriteBuilder.configureSpriteBuilder(builder)
 
   -- sprite animation builder setup
   sb:setSpriteSheet('player_items')
+  -- TODO animate Hitboxes!!
   
-    -- @animation sword_swing
+  -- @animation sword_swing
   sb:setSubstrips(true)
   -- #substrip up
   sb:addSpriteFrame(1, 1, 16, 0, 3)

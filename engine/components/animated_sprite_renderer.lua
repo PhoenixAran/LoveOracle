@@ -35,6 +35,10 @@ function AnimatedSpriteRenderer:isPlaying()
   return self.state == States.Running
 end
 
+function AnimatedSpriteRenderer:isCompleted()
+  return self.state == States.Completed
+end
+
 function AnimatedSpriteRenderer:getCurrentAnimationKey()
   return self.currentAnimationKey
 end
