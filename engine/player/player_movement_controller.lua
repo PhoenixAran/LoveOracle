@@ -48,7 +48,7 @@ end
 
 function PlayerMovementController:jump()
   if self.player:isOnGround() then
-    if self.player:getStateParameters().canControlOnGround then --todo check if slippery?
+    if self.player:getStateParameters().canControlOnGround then
       local x, y = self:pollMovementControls(true)
       if self:isMoving() then
         self.player:setVector(x, y)
@@ -65,8 +65,6 @@ function PlayerMovementController:jump()
     self.player:integrateStateParameters()
     if self.player:getWeaponState() == nil then
       self.player.sprite:play('jump')
-    else
-      self.player.sprite:play(self.player:getPlayerAnimations().default)
     end
     -- TODO self.player:onJump()
   end
@@ -117,7 +115,7 @@ function PlayerMovementController:chooseAnimation()
   
   -- change to the default animation while in the air and not using weapon
   if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and sprite:getCurrentAnimationKey() ~= 'jump' then
-    sprite:play('jump')
+    sprite:play(player:getPlayerAnimations().move)
   end
   
   animation = sprite:getCurrentAnimationKey()
@@ -149,8 +147,8 @@ function PlayerMovementController:updateMoveControls()
     self.allowMovementControl = not self.player:inHitstun() and not self.player:inKnockback() 
                                 and self.player:getStateParameters().canControlOnGround 
   end
+
   local inputX, inputY = self:pollMovementControls(self.allowMovementControl)
-  
   local canUpdateDirection = false
   if self.player:getStateParameters().alwaysFaceUp then
     canUpdateDirection = inputX == 0 and inputY == -1

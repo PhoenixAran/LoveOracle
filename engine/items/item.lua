@@ -90,6 +90,10 @@ function Item:onButtonPressed()
   return false
 end
 
+function Item:update(dt)
+  Entity.update(self, dt)
+end
+
 function Item:interrupt()
   
 end

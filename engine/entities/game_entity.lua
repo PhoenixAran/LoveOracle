@@ -119,6 +119,9 @@ end
 
 -- other
 function GameEntity:isInAir()
+  if self.movement and self.movement:isEnabled() then
+    return self.movement:isInAir()
+  end
   return self:getZPosition() > 0
 end
 

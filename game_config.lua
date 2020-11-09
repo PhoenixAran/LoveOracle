@@ -1,4 +1,4 @@
-local version = '0.0.3.0'
+local version = '0.0.3.1'
 local zbStudioDebug = true  -- enable breakpoint and step through with zbstudio
 
 -- Made for SNES controllers

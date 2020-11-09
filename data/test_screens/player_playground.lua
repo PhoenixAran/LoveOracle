@@ -21,8 +21,8 @@ function PlayerPlayground:update(dt)
 end
 
 function PlayerPlayground:draw()
-  self.player:draw()
   self.sword:draw()
+  self.player:draw()
 end
 
 return PlayerPlayground

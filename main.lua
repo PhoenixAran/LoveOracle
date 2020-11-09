@@ -103,6 +103,7 @@ end
 function love.update(dt)
   input:update(dt)
   screenManager:emit('update', dt)
+  if love.keyboard.isDown('delete') then collectgarbage('count') end
 end
 
 function love.draw()

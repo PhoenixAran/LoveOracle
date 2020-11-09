@@ -37,8 +37,12 @@ local Player = Class { __includes = GameEntity,
       ['player_swing_state'] = PlayerSwingState(self),
     }
     
-    -- other declarations
+    -- use direction variables are useful for finding what way player
+    -- is holding dpad when they are not allowed to move (like during a sword swing)
+    -- if the player can move, it will match the direction they are moving in
     self.useDirectionX, self.useDirectionY = 0
+    self.useDirection = 'none'
+
     self.pressedActionButtons = { }
     self.buttonCallbacks = { }
     
@@ -91,12 +95,25 @@ function Player:matchAnimationDirection(inputX, inputY)
 end
 
 function Player:updateUseDirections()
+  local direction = 'none'
   local x, y = 0, 0
+  -- find control direction
   if input:down('up') then
-    y = y + 1
+    direction = 'up'
+  elseif input:down('down') then
+    direction = 'down'
+  elseif input:down('left') then
+    direction = 'left'
+  elseif input:down('right') then
+    direction = 'right'
+  end
+  
+  --- now get actual x y values
+  if input:down('up') then
+    y = y - 1
   end
   if input:down('down') then
-    y = y - 1
+    y = y + 1
   end
   if input:down('left') then
     x = x - 1
@@ -104,14 +121,27 @@ function Player:updateUseDirections()
   if input:down('right') then
     x = x + 1
   end
+  
   if self.playerMovementController:isMoving() and self:getStateParameters().canStrafe then
     self.useDirectionX = self.playerMovementController.directionX
     self.useDirectionY = self.playerMovementController.directionY
+    -- movement controller sets self.animationDirection according to playerMovementController.directionX
+    -- and playerMovementController.directionY
+    -- so we use self.animationDirection
+    self.useDirection = self.animationDirection
   else
     self.useDirectionX = x
     self.useDirectionY = y
-    
+    self.useDirection = direction
   end
+end
+
+function Player:getUseDirection()
+  return self.useDirection
+end
+
+function Player:getUseDirectionXY()
+  return self.useDirectionX, self.useDirectionY
 end
 
 function Player:addPressInteraction(key, func)
@@ -285,9 +315,9 @@ function Player:updateStates(dt)
   
   -- play the move animation
   if self:isOnGround() and self.stateParameters.canControlOnGround then
-    if self.playerMovementController:isMoving() then
+    if self.playerMovementController:isMoving() and self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().move then
       self.sprite:play(self:getPlayerAnimations().move)
-    else
+    elseif not self.playerMovementController:isMoving() and self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().default then
       self.sprite:play(self:getPlayerAnimations().default)
     end
   end
@@ -312,7 +342,6 @@ function Player:actionUseWeapon(button)
 end
 
 function Player:update(dt)
-  
   -- TODO? determine if we update components before or after all the crap below
   GameEntity.update(self, dt)
   -- pre-state update
@@ -325,19 +354,18 @@ function Player:update(dt)
   self.pressedActionButtons['x'] = false
   self.pressedActionButtons['y'] = false
   
-  if input:down('a') then
+  if input:pressed('a') then
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
   end
-  if input:down('b') then
+  if input:pressed('b') then
     self.pressedActionButtons['b'] = self:checkPressInteractions('b')
   end
-  if input:down('x') then
+  if input:pressed('x') then
     self.pressedActionButtons['x'] = self:checkPressInteractions('x')
   end
-  if input:down('y') then
+  if input:pressed('y') then
     self.pressedActionButtons['y'] = self:checkPressInteractions('y')
   end
-  if self:getWeaponState() then d = true end
   
   self:integrateStateParameters()
   self:requestNaturalState()

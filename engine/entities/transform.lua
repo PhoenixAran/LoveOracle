@@ -28,8 +28,8 @@ function Transform:setParent(Parent)
 
 		self.ID = #Parent.Children + 1
 		self.Parent = Parent
-
-		Parent[ self.ID ] = self
+    -- fix by PhoenixAran :)
+		Parent.Children[ self.ID ] = self
 
 	else
 
@@ -182,7 +182,6 @@ end
 
 -- @description: Sets the local position of a transform
 function Transform:setLocalPosition(x, y, z)
-
 	if x ~= self.x or y ~= self.y or ( z and z ~= self.z ) then
 
 		if z then

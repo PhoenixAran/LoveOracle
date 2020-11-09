@@ -86,8 +86,9 @@ function Entity:getPosition()
   return x, y
 end
 
-function Entity:setPosition(x, y)
-  self.transform:setPosition(x, y)
+function Entity:setPosition(x, y, z)
+  if z == nil then z = self:getZPosition() end
+  self.transform:setPosition(x, y, z)
 end
 
 function Entity:setPositionWithBumpCoords(x, y)

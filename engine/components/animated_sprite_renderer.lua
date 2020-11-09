@@ -55,13 +55,12 @@ function AnimatedSpriteRenderer:setSubstripKey(value)
   end
 end
 
-local cache = nil
 function AnimatedSpriteRenderer:play(animation, substripKey, forcePlayFromStart)
   assert(self.entity, 'Cannot play animated sprite renderer without declaring entity')
   if forcePlayFromStart == nil then forcePlayFromStart = false end
   local playFromStart = forcePlayFromStart
   if animation ~= nil then
-    playFromStart = self.currentAnimationKey ~= animation
+    playFromStart = playFromStart or self.currentAnimationKey ~= animation
     self.currentAnimationKey = animation
     self.currentAnimation = self.animations[animation]
     assert(self.currentAnimation, 'Animation: ' .. animation .. ' does not exist')

@@ -167,4 +167,10 @@ function Movement:land()
   self:emit('landed')
 end
 
+-- this is only here because i want entities to know they are in the air
+-- the frame they jump lol
+function Movement:isInAir()
+  return self.entity:getZPosition() > 0 or self:getZVelocity() > 0
+end
+
 return Movement
