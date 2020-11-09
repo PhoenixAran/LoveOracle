@@ -49,7 +49,7 @@ end
 
 -- @description: Tells the children that the transform has changed
 function Transform:change()
-
+  
 	self.Haschanged = true
   self.Entity:transformChanged()
 
@@ -225,7 +225,7 @@ end
 function Transform:getPosition()
 
 	if self.Parent then
-
+    
 		return self.Parent:toWorld(self.x, self.y, self.z)
 
 	end

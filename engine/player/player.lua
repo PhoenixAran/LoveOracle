@@ -72,6 +72,10 @@ local Player = Class { __includes = GameEntity,
   end
 }
 
+function Player:getType()
+  return 'player'
+end
+
 function Player:matchAnimationDirection(inputX, inputY)
   local direction = self.animationDirection
   if inputX == -1 and inputY == -1 and direction ~= 'up' and direction ~= 'left' then

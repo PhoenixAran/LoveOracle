@@ -13,6 +13,7 @@ function PlayerPlayground:enter(prev, ...)
   self.sword = Sword()
   self.sword.useButtons = { 'b' }
   self.player:equipItem(self.sword)
+  self.sword:setVisible(false)
 end
 
 function PlayerPlayground:update(dt)
@@ -21,7 +22,9 @@ function PlayerPlayground:update(dt)
 end
 
 function PlayerPlayground:draw()
-  self.sword:draw()
+  if self.sword:isVisible() then 
+    self.sword:draw()
+  end
   self.player:draw()
 end
 

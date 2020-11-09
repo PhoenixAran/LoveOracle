@@ -41,6 +41,7 @@ end
 
 function PlayerSwingState:onBegin(previousState)
   self:swing()
+  self.weapon:setVisible(true)
 end
 
 function PlayerSwingState:update(dt)
@@ -55,6 +56,7 @@ end
 
 function PlayerSwingState:onEnd()
   self.player:setAnimationDirection(self.cachedDirection)
+  self.weapon:setVisible(false)
 end
 
 return PlayerSwingState

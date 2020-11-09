@@ -72,7 +72,7 @@ function Entity:getLocalPosition()
 end
 
 function Entity:getZPosition()
-  local x, y, z= self.transform:getLocalPosition()
+  local x, y, z= self.transform:getPosition()
   return z
 end
 
