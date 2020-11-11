@@ -31,11 +31,12 @@ end
 function PlayerSwingState:swing()
   local direction = self.player:getUseDirection()
   if direction == 'none' then
-    direction = self.player:getAnimationDirection()
+    direction = self.cachedDirection or self.player:getAnimationDirection()
   end
   self.weapon:swing(direction)
   local playerAnimation = self:getPlayerSwingAnimation(self.lunge)
   self.player.sprite:play(playerAnimation, direction, true)
+  self.player:setAnimationDirection(direction)
   self.cachedDirection = direction
 end
 
@@ -55,7 +56,9 @@ function PlayerSwingState:update(dt)
 end
 
 function PlayerSwingState:onEnd()
+  self.isReswingable = true
   self.player:setAnimationDirection(self.cachedDirection)
+  self.cachedDirection = nil
   self.weapon:setVisible(false)
 end
 
