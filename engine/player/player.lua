@@ -69,6 +69,10 @@ local Player = Class { __includes = GameEntity,
       a = nil,
       b = nil
     }
+    
+    -- entity sprite effect configuration
+    self.effectSprite:setOffset(0, 6)
+    self.shadowVisible = true
   end
 }
 
@@ -346,8 +350,6 @@ function Player:actionUseWeapon(button)
 end
 
 function Player:update(dt)
-  -- TODO? determine if we update components before or after all the crap below
-  GameEntity.update(self, dt)
   -- pre-state update
   self:requestNaturalState()
   self.playerMovementController:update(dt)
@@ -376,6 +378,9 @@ function Player:update(dt)
   self:updateStates()
   self:move(dt)
   self:updateEquippedItems(dt)
+  self:updateEntitySpriteEffects()
+  
+  GameEntity.update(self, dt)
 end
 
 function Player:equipItem(item)

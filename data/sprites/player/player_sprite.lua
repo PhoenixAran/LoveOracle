@@ -3,6 +3,7 @@ local playerSpriteBuilder = { }
 
 function playerSpriteBuilder.configureSpriteBuilder(builder)
   builder:setDefaultAnimation('idle')
+  builder:setFollowZ(true)
   local sb = builder:createSpriteAnimationBuilder()
   
   -- sprite animation builder setup

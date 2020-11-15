@@ -2,27 +2,30 @@ local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
 
 local SpriteRenderer = Class { __includes = Component,
-  init = function(self, sprite, offsetX, offsetY, enabled, visible)
+  init = function(self, sprite, offsetX, offsetY, followZ, enabled, visible)
     Component.init(self, enabled, visible)
   
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end
+    if followZ == nil then followZ = true end
     
     self.offsetX = offsetX
     self.offsetY = offsetY
     self.sprite = sprite
+    self.followZ = followZ
     self.alpha = 0
     self.color = { }
     self:setSprite(self.sprite)
+    
   end
 }
 
-function SpriteRenderer:setSprite(sprite)
-  self.sprite = sprite
-end
-
 function SpriteRenderer:getType()
   return 'sprite_renderer'
+end
+
+function SpriteRenderer:setSprite(sprite)
+  self.sprite = sprite
 end
 
 function SpriteRenderer:getOffsetX()
@@ -51,7 +54,10 @@ function SpriteRenderer:getBounds()
   local ox, oy = self.sprite:getOrigin()
   local z = self.entity:getZPosition()
   x = x + ex + self.offsetX - ox
-  y = y + ey + self.offsetY - oy - y
+  y = y + ey + self.offsetY - oy
+  if self.followZ then
+    y = y - z
+  end
   return x, y, w, h
 end
 
@@ -63,11 +69,18 @@ function SpriteRenderer:draw()
   local z = self.entity:getZPosition()
   x = x + self.offsetX
   y = y + self.offsetY
-  self.sprite:draw(x, y - z)
+  if self.followZ then
+    self.sprite:draw(x, y - z)
+  else
+    self.sprite:draw(x, y)
+  end
 end
 
 function SpriteRenderer:debugDraw()
   if self.sprite == nil then
+    return
+  end
+  if drawn then
     return
   end
   local x, y, w, h = self:getBounds()

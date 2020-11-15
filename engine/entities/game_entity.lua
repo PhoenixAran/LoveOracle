@@ -13,15 +13,23 @@ local GameEntity = Class { __includes = Entity,
     self.movement = Movement()    
     self.groundObserver = GroundObserver()
     self.combat = Combat()
+    self.effectSprite = spriteBank.build('entity_effects')
     self.sprite = nil   -- declare this yourself
     
     -- declarations
     self.persistant = false
     self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
     self.animationDirection = nil -- will be used as substrip key if syncDirectionWithAnimation is true
+    -- shadow, ripple, and grass effects
+    -- TODO finish ripple and grass effecrts
+    self.shadowVisible = true   
+    --self.shadowOffsetX, self.shadowOffsetY = 0, 0
+    self.rippleVisible = false
+    --self.rippleOffsetX, self.rippleOffsetY = 0, 0
+    self.grassVisible = false
+    --self.grassOffsetX, self.grassOffsetY = 0, 0
     
     -- signals
-    self:signal('entityLanded')
     self:signal('entityDestroyed')
     self:signal('entityCreated')
     self:signal('entityHit')
@@ -33,6 +41,7 @@ local GameEntity = Class { __includes = Entity,
     self:add(self.movement)
     self:add(self.groundObserver)
     self:add(self.combat)
+    self:add(self.effectSprite)
   end 
 }
 
@@ -102,6 +111,18 @@ function GameEntity:move(dt)
   end
   self:setPosition(posX + velX, posY + velY)
   physics.update(self)
+end
+
+function GameEntity:updateEntitySpriteEffects()
+  if self.shadowVisible and self:isInAir() then
+    if self.effectSprite:getCurrentAnimationKey() ~= 'shadow' or not self.effectSprite:isVisible() then
+      self.effectSprite:play('shadow')
+      self.effectSprite:setVisible(true)
+    end
+  elseif self.effectSprite:isVisible() then
+    self.effectSprite:stop()
+    self.effectSprite:setVisible(false)
+  end
 end
 
 -- combat component pass throughs

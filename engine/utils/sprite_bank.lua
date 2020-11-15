@@ -32,6 +32,7 @@ local SpriteBuilder = Class {
     
     -- shared between animatedsprite and sprite
     self.offsetX, self.offsetY = 0, 0
+    self.followZ = true
   end
 }
 
@@ -50,10 +51,10 @@ function SpriteBuilder:build()
   if self.type == 'sprite_renderer' then
     if self.sprite == nil then
        -- use deferred sprite
-      return SpriteRenderer(spriteBank.getSprite(self.deferredSprite), self.offsetX, self.offsetY)
+      return SpriteRenderer(spriteBank.getSprite(self.deferredSprite), self.offsetX, self.offsetY, self.followZ)
     else
       -- use sprite in SpriteBuilder instance
-      return SpriteRenderer(self.sprite, self.offsetX, self.offsetY)
+      return SpriteRenderer(self.sprite, self.offsetX, self.offsetY, self.followZ)
     end
   elseif self.type == 'animated_sprite_renderer' then
     local animations = { }
@@ -61,7 +62,7 @@ function SpriteBuilder:build()
     for k, v in pairs(self.deferredAnimations) do
       animations[k] = spriteBank.getAnimation(v)
     end
-    return AnimatedSpriteRenderer(animations, self.defaultAnimation)
+    return AnimatedSpriteRenderer(animations, self.defaultAnimation, self.offsetX, self.offsetY, self.followZ)
   end
 end
 
@@ -72,6 +73,10 @@ end
 function SpriteBuilder:addDeferredAnimation(animationKey, realKey)
   if realKey == nil then realKey = animationKey end
   self.deferredAnimations[key] = realKey
+end
+
+function SpriteBuilder:setFollowZ(value)
+  self.followZ = value
 end
 
 -- export type
@@ -125,21 +130,25 @@ function SpriteBank.receivePayload(payload)
   end
 end
 
--- assumes flat directory because i'm lazy
 function SpriteBank.initialize(directory)
   local files = love.filesystem.getDirectoryItems(directory)
   for _, file in ipairs(files) do
-    local requirePath = fh.getFilePathWithoutExtension(directory .. '/' .. file):gsub('%/', '.')
-    local builder = require(requirePath)
-    if builder.fillPayload then
-      local payload = SpriteBankPayload()
-      builder.fillPayload(payload)
-      SpriteBank.receivePayload(payload)
-    end
-    if builder.configureSpriteBuilder then
-      local spriteBuilder = SpriteBuilder()
-      builder.configureSpriteBuilder(spriteBuilder)
-      SpriteBank.registerBuilder(builder.getKey(), spriteBuilder)
+    local path = directory .. '/' .. file
+    if love.filesystem.getInfo(path).type == 'directory' then
+      SpriteBank.initialize(path)
+    else
+      local requirePath = fh.getFilePathWithoutExtension(path):gsub('%/', '.')
+      local builder = require(requirePath)
+      if builder.fillPayload then
+        local payload = SpriteBankPayload()
+        builder.fillPayload(payload)
+        SpriteBank.receivePayload(payload)
+      end
+      if builder.configureSpriteBuilder then
+        local spriteBuilder = SpriteBuilder()
+        builder.configureSpriteBuilder(spriteBuilder)
+        SpriteBank.registerBuilder(builder.getKey(), spriteBuilder)
+      end
     end
   end
 end
