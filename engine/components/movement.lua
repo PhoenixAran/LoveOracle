@@ -100,11 +100,11 @@ function Movement:getLinearVelocity(dt)
   if self.vectorX == 0 and self.vectorY == 0 then
     if self.slippery then
       local length = vector.len(self.motionX, self.motionY)
-      local maxLength = 0
+      local minLength = 0
       if self.minSpeed > .1 then
-        maxLength = vector.mul(dt * self.minSpeed, self.motionX, self.motionY)
+        minLength = vector.mul(dt * self.minSpeed, self.motionX, self.motionY)
       end
-      if length < maxLength then
+      if length < minLength then
         self.motionX, self.motionY = 0, 0
       else
         if self.motionX ~= 0 or self.motionY ~= 0 then

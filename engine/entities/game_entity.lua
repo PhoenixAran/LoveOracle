@@ -118,6 +118,7 @@ function GameEntity:updateEntitySpriteEffects()
     if self.effectSprite:getCurrentAnimationKey() ~= 'shadow' or not self.effectSprite:isVisible() then
       self.effectSprite:play('shadow')
       self.effectSprite:setVisible(true)
+      self.effectSprite.alpha = .5
     end
   elseif self.effectSprite:isVisible() then
     self.effectSprite:stop()

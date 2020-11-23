@@ -13,7 +13,7 @@ local SpriteRenderer = Class { __includes = Component,
     self.offsetY = offsetY
     self.sprite = sprite
     self.followZ = followZ
-    self.alpha = 0
+    self.alpha = 1
     self.color = { }
     self:setSprite(self.sprite)
     
@@ -70,17 +70,14 @@ function SpriteRenderer:draw()
   x = x + self.offsetX
   y = y + self.offsetY
   if self.followZ then
-    self.sprite:draw(x, y - z)
+    self.sprite:draw(x, y - z, self.alpha)
   else
-    self.sprite:draw(x, y)
+    self.sprite:draw(x, y, self.alpha)
   end
 end
 
 function SpriteRenderer:debugDraw()
   if self.sprite == nil then
-    return
-  end
-  if drawn then
     return
   end
   local x, y, w, h = self:getBounds()

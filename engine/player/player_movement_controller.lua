@@ -27,7 +27,8 @@ local PlayerMovementController = Class {
     
     self.moveNormalMode = PlayerMotionType()
     self.mode = self.moveNormalMode
-    
+
+    self:setMode(self.mode)
   end
 }
 

@@ -14,7 +14,6 @@ function entityEffectsSpriteBuilder.configureSpriteBuilder(builder)
   builder:addAnimation('shadow', sb:build())
 end
 
-
 function entityEffectsSpriteBuilder.getKey()
   return 'entity_effects'
 end

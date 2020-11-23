@@ -333,6 +333,7 @@ end
 
 function Player:updateEquippedItems(dt)
   for key, item in pairs(self.items) do
+    item:update(dt)
     if item:isUsable() then
       if item:isButtonDown() then
         item:onButtonDown()
@@ -379,8 +380,21 @@ function Player:update(dt)
   self:move(dt)
   self:updateEquippedItems(dt)
   self:updateEntitySpriteEffects()
-  
   GameEntity.update(self, dt)
+end
+
+function Player:draw()
+  for _, item in pairs(self.items) do
+    if item.drawBelow then 
+      item:drawBelow()
+    end
+  end
+  GameEntity.draw(self)
+  for _, item in pairs(self.items) do
+    if item.drawAbove then
+      item:drawAbove()
+    end
+  end
 end
 
 function Player:equipItem(item)

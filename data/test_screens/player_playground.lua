@@ -18,14 +18,13 @@ end
 
 function PlayerPlayground:update(dt)
   self.player:update(dt)
-  self.sword:update(dt)
 end
 
 function PlayerPlayground:draw()
+  self.player:draw()
   if self.sword:isVisible() then 
     self.sword:draw()
   end
-  self.player:draw()
 end
 
 return PlayerPlayground
