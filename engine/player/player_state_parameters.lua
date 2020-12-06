@@ -47,8 +47,6 @@ end
 -- helper function for integrateParameters
 -- some parameters we want to prioritize false values over true
 local function prioritizeFalse(a, b)
-  assert(a ~= nil)
-  assert(b ~= nil)
   if not a then return a end
   if not b then return b end
   return a
