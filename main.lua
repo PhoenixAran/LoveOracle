@@ -109,7 +109,7 @@ love.frame = 0
 love.profilePrinted = false
 function love.update(dt)
   love.frame = love.frame + 1
-  if love.frame % 200 == 0 then
+  if not love.profilePrinted and love.frame % 200 == 0 then
     love.report = love.profiler.report(20)
     love.profiler.reset()
   end
