@@ -68,11 +68,7 @@ local function drawVersion()
 end
 
 -- alot of globals are declared here
-function love.load(arg)
-  -- profiler
-  love.profiler = require 'lib.profiler'
-  love.profiler.start()
-  
+function love.load(arg)  
   -- enable zerobrane studio debugging
   if gameConfig.zbStudioDebug then
     if arg[#arg] == '-debug' then require('mobdebug').start() end
@@ -105,26 +101,13 @@ function love.load(arg)
   screenManager:enter( require(gameConfig.startupScreen) ())
 end
 
-love.frame = 0
-love.profilePrinted = false
 function love.update(dt)
-  love.frame = love.frame + 1
-  if not love.profilePrinted and love.frame % 200 == 0 then
-    love.report = love.profiler.report(20)
-    love.profiler.reset()
-  end
   input:update(dt)
   screenManager:emit('update', dt)
   if love.keyboard.isDown('delete') then collectgarbage('count') end
 end
 
 function love.draw()
-  if not love.profilePrinted then
-    if love.report then
-      love.profilePrinted = true
-      print(love.report)
-    end
-  end
   monocle:begin()
   -- manually call draw in current screen
   screenManager:emit('draw')
