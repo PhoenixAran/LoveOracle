@@ -3,6 +3,7 @@ local Entity = require 'engine.entities.entity'
 local vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
 local TestEntity = require 'engine.test_game_entity'
+local BaseScreen = require 'engine.base_screen'
 
 local TestBox = Class { __includes = Entity,
   init = function(self, rect)
@@ -16,7 +17,7 @@ function TestBox:entityAwake()
 end
 
 -- experiental physics test screen
-local Screen = Class {
+local Screen = Class { __includes = BaseScreen,
   init = function(self)
     self.testEntity = nil
     self.testBoxes = { }

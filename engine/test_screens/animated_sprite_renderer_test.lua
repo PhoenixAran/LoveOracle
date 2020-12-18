@@ -1,11 +1,12 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local BaseScreen = require 'engine.base_screen'
 
 local Entity = require 'engine.entities.entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
 
-local AnimatedSpriteRendererTest= Class {
+local AnimatedSpriteRendererTest = Class { __includes = BaseScreen,
   init = function(self)
     self.entity = Entity()
     self.sprite = nil

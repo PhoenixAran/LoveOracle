@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local BaseScreen = require 'engine.screens.base_screen'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
 
@@ -21,10 +22,12 @@ function PlayerPlayground:update(dt)
 end
 
 function PlayerPlayground:draw()
+  monocle:begin()
   self.player:draw()
   if self.sword:isVisible() then 
     self.sword:draw()
   end
+  monocle:finish()
 end
 
 return PlayerPlayground

@@ -34,39 +34,6 @@ local function loadSpriteSheets(directory)
   end
 end
 
--- note that enabling ZeroBrane Studio debugging heavily inflates memory usage
-local function drawFPSAndMemory()  
-  local monogram = assetManager.getFont('monogram')
-  love.graphics.setFont(monogram)
-  local fps = ("fps:%d, %d kbs"):format(love.timer.getFPS(), collectgarbage("count"))
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.printf(fps, 0, 132, 200, 'left')
-end
-
-local function drawMemory()
-  local monogram = assetManager.getFont('monogram')
-  love.graphics.setFont(monogram)
-  local memory = ("%d kbs"):format(collectgarbage("count"))
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.printf(memory, 0, 120, 200, 'left')
-end
-
-local function drawFPS()  
-  local monogram = assetManager.getFont('monogram')  
-  love.graphics.setFont(monogram)
-  local fps = ("%d fps"):format(love.timer.getFPS())
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.printf(fps, 0, 132, 200, 'left')
-end
-
-local function drawVersion()
-  local monogram = assetManager.getFont('monogram')
-  love.graphics.setFont(monogram)
-  local version = 'Ver.' .. gameConfig.version
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.printf(version, 95, 132, 200, right)
-end
-
 -- alot of globals are declared here
 function love.load(arg)  
   -- enable zerobrane studio debugging
@@ -104,17 +71,10 @@ end
 function love.update(dt)
   input:update(dt)
   screenManager:emit('update', dt)
-  if love.keyboard.isDown('delete') then collectgarbage('count') end
 end
 
 function love.draw()
-  monocle:begin()
-  -- manually call draw in current screen
   screenManager:emit('draw')
-  drawFPS()
-  drawMemory()
-  drawVersion()
-  monocle:finish()
 end
 
 function love.resize(w, h)

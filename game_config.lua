@@ -30,7 +30,8 @@ local window = {
   }
 }
 
-local startupScreen = 'data.test_screens.player_playground'
+--local startupScreen = 'data.test_screens.player_playground'
+local startupScreen = 'engine.test_screens.slab_test_screen'
 
 function window.getMonocleArguments()
   return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig

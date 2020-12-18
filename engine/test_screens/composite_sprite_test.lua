@@ -1,11 +1,12 @@
 local Class = require 'lib.class'
+local BaseScreen = require 'engine.base_screen'
 local TestEntity = require 'engine.test_game_entity'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local Sprite = require 'engine.graphics.sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'
 
-local CompositeSpriteTest = Class {
+local CompositeSpriteTest = Class { __includes = BaseScreen,
   init = function(self)
     self.testEntity = nil
     self.compositeSprite = nil
