@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local Slab = require 'lib.slab'
 local BaseScreen = require 'engine.screens.base_screen'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
