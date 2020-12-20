@@ -21,6 +21,9 @@ end
 
 function Screen:draw()
   monocle:begin()
+  self:drawFPS()
+  self:drawMemory()
+  self:drawVersion()
   monocle:finish()
   Slab.Draw()
 end
