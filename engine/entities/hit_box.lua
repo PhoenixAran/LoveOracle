@@ -3,7 +3,7 @@ local BumpBox = require 'engine.entities.bump_box'
 local Component = require 'entine.entities.component'
 
 local HitBox = Class { __includes = { BumpBox, Component },
-  init = function(self, enabled, rect, collisionTag)
+  init = function(self, entity, enabled, rect, collisionTag)
     if enabled == nil then enabled = true end
     if rect == nil then
       rect = { }
@@ -18,7 +18,7 @@ local HitBox = Class { __includes = { BumpBox, Component },
       if rect.h == nil then rect.h = 1 end
     end
     BumpBox.init(self, rect, collisionTag)
-    Component.init(self, enabled)
+    Component.init(self, entity, enabled)
     
     self:signal('hitboxEntered')
     self:signal('damagedOther')
@@ -43,7 +43,7 @@ function HitBox:getType()
 end
 
 function HitBox:transformChanged()
-  self.x, self.y = self.entity: getPosition()
+  self.x, self.y = self.entity:getPosition()
   physics.update(self)
 end
 

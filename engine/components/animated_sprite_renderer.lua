@@ -111,7 +111,7 @@ function AnimatedSpriteRenderer:update(dt)
   
   local currentFrame = spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
-  if currentFrame:getDelay() <= self.currentTick then
+  if currentFrame:getDelay() < self.currentTick then
     self.currentTick = 1
     self.currentFrameIndex = self.currentFrameIndex + 1
     if #spriteFrames < self.currentFrameIndex then

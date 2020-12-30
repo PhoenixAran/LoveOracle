@@ -388,8 +388,12 @@ function Player:draw()
       item:drawBelow()
     end
   end
-  self.effectSprite:draw()
-  self.sprite:draw()
+  if self.effectSprite:isVisible() then
+    self.effectSprite:draw()
+  end
+  if self.sprite:isVisible() then
+    self.sprite:draw()
+  end
   for _, item in pairs(self.items) do
     if item.drawAbove then
       item:drawAbove()
