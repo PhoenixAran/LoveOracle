@@ -34,6 +34,12 @@ local function loadSpriteSheets(directory)
   end
 end
 
+local function initBitTags()
+  local BitTag = require 'engine.utils.bit_tag'
+  BitTag('player')
+  BitTag('')
+end
+
 -- alot of globals are declared here
 function love.load(arg)  
   -- enable zerobrane studio debugging
