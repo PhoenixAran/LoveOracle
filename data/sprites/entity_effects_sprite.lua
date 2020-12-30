@@ -8,7 +8,7 @@ function entityEffectsSpriteBuilder.configureSpriteBuilder(builder)
   
   sb:setSpriteSheet('effects')
   sb:setDefaultLoopType('cycle')
-  
+
   -- @animation shadow
   sb:addSpriteFrame(1, 1)
   builder:addAnimation('shadow', sb:build())

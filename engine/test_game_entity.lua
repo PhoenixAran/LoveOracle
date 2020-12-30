@@ -1,15 +1,14 @@
 local Class = require 'lib.class'
 local Vector = require 'lib.vector'
-local GameEntity = require 'engine.entities.game_entity'
+local MapEntity = require 'engine.entities.map_entity'
 
-local TestPlayer = Class { __includes = GameEntity,
+local TestPlayer = Class { __includes = MapEntity,
   init = function(self)
     GameEntity.init(self, true, true, {x = 24, y =24, h = 16, w = 16})
   end
 }
 
 function TestPlayer:update(dt)
-  GameEntity.update(self, dt)
   local inputX, inputY = 0, 0
   if input:down('left') then
     inputX = inputX - 1

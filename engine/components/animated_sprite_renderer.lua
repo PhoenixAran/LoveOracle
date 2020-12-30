@@ -10,7 +10,7 @@ local States = {
 }
 
 local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
-  init = function(self, animations, defaultAnimation, offsetX, offsetY, followZ, enabled, visible)
+  init = function(self, entity, animations, defaultAnimation, offsetX, offsetY, followZ, enabled, visible)
     self.state = States.None
     self.animations = animations
     self.substripKey = nil
@@ -19,9 +19,8 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     self.currentFrameIndex = 1
     self.currentTick = 1
     self.loopType = 'once'
-    
     local spriteFrames = self.currentAnimation:getSpriteFrames()
-    SpriteRenderer.init(self, spriteFrames[1]:getSprite(), offsetX, offsetY, followZ, enabled, visible)
+    SpriteRenderer.init(self, entity, spriteFrames[1]:getSprite(), offsetX, offsetY, followZ, enabled, visible)
   end
 }
 
@@ -56,7 +55,6 @@ function AnimatedSpriteRenderer:setSubstripKey(value)
 end
 
 function AnimatedSpriteRenderer:play(animation, substripKey, forcePlayFromStart)
-  assert(self.entity, 'Cannot play animated sprite renderer without declaring entity')
   if forcePlayFromStart == nil then forcePlayFromStart = false end
   local playFromStart = forcePlayFromStart
   if animation ~= nil then

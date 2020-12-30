@@ -28,8 +28,6 @@ function AnimatedSpriteKeyDisplay:draw()
   end
 end
 
-function AnimatedSpriteKeyDisplay:onRemoved(entity)
+return AnimatedSpriteKeyDisplay:entityRemoved()
   self.text:release()
 end
-
-return AnimatedSpriteKeyDisplay

@@ -3,9 +3,9 @@ local Component = require 'engine.entities.component'
 local vector = require 'lib.vector'
 
 local Movement = Class { __includes = Component,
-  init = function(self, enabled, values)
+  init = function(self, entity, enabled, values)
     if enabled == nil then enabled = true end
-    Component.init(self, enabled)
+    Component.init(self, entity, enabled)
     
     self:signal('landed')
     self:signal('bounced')

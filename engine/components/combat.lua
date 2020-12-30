@@ -2,8 +2,8 @@ local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
 
 local Combat = Class { __includes = Component,
-  init = function(self)
-    Component.init(self)
+  init = function(self, entity)
+    Component.init(self, entity)
     
     self.currentIntangibilityTime = 0
     self.currentHitstunTime = 0

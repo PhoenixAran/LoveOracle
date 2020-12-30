@@ -45,7 +45,7 @@ function SpriteBuilder:setDefaultAnimation(value)
   self.defaultAnimation = value
 end
 
-function SpriteBuilder:build()
+function SpriteBuilder:build(entity)
   assert(self.type == 'animated_sprite_renderer' or self.type == 'sprite_renderer', 'Invalid type in SpriteBuilder: ' .. tostring(self.type))
   assert(spriteBank, 'Global variable "spriteBank" does not exist')
   if self.type == 'sprite_renderer' then
@@ -62,7 +62,7 @@ function SpriteBuilder:build()
     for k, v in pairs(self.deferredAnimations) do
       animations[k] = spriteBank.getAnimation(v)
     end
-    return AnimatedSpriteRenderer(animations, self.defaultAnimation, self.offsetX, self.offsetY, self.followZ)
+    return AnimatedSpriteRenderer(entity, animations, self.defaultAnimation, self.offsetX, self.offsetY, self.followZ)
   end
 end
 
@@ -116,9 +116,9 @@ function SpriteBank.registerBuilder(key, builder)
   SpriteBank.builders[key] = builder
 end
 
-function SpriteBank.build(key)
+function SpriteBank.build(key, entity)
   assert(SpriteBank.builders[key], 'SpriteBank does not have SpriteBuilder with key ' .. key)
-  return SpriteBank.builders[key]:build()
+  return SpriteBank.builders[key]:build(entity)
 end
 
 function SpriteBank.receivePayload(payload)

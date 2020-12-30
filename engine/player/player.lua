@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local GameEntity = require 'engine.entities.game_entity'
+local MapEntity = require 'engine.entities.map_entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
@@ -16,12 +16,12 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 -- weapon states
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 
-local Player = Class { __includes = GameEntity,
+local Player = Class { __includes = MapEntity,
   init = function(self, enabled, visible, rect) 
-    GameEntity.init(self, enabled, visible, rect)    
+    MapEntity.init(self, enabled, visible, rect)    
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
-    self.sprite = spriteBank.build('player')
+    self.sprite = spriteBank.build('player', self)
     
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
@@ -50,10 +50,6 @@ local Player = Class { __includes = GameEntity,
     self.respawnDirection = nil
     self.moveAnimation = nil
   
-    -- add components
-    self:add(self.sprite)
-    self:add(require('engine.components.debug.animated_sprite_key_display')(self.sprite))
-    
     -- bind controls (except dpad, thats automatically done)
     self:addPressInteraction('x', function(player) 
       self.playerMovementController:jump()
@@ -379,8 +375,11 @@ function Player:update(dt)
   self:updateStates()
   self:move(dt)
   self:updateEquippedItems(dt)
-  self:updateEntitySpriteEffects()
-  GameEntity.update(self, dt)
+  self:updateEntitySpriteEffects(dt)
+
+  self.sprite:update(dt)
+  self.combat:update(dt)
+  self.movement:update(dt)
 end
 
 function Player:draw()
@@ -389,7 +388,8 @@ function Player:draw()
       item:drawBelow()
     end
   end
-  GameEntity.draw(self)
+  self.effectSprite:draw()
+  self.sprite:draw()
   for _, item in pairs(self.items) do
     if item.drawAbove then
       item:drawAbove()

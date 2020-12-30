@@ -4,8 +4,9 @@ local Component = require 'engine.entities.component'
 
 -- maybe not be a bumpbox and implement some linecast / pointcast
 -- in the global physics object
-local GroundObserver = Class { __includes = {BumpBox, Component},
-  init = function(self)
+local GroundObserver = Class { __includes = {Component},
+  init = function(self, entity, enabled)
+    Component.init(self, entity, enabled)
     self.inLava = false
     self.inGrass = false
     self.onStairs = false
@@ -19,8 +20,6 @@ function GroundObserver:getType()
 end
 
 function GroundObserver:update(dt)
-  -- TODO check tile
-  -- for now just pretend this works
 end
 
 return GroundObserver

@@ -7,10 +7,7 @@ local ItemSword = Class { __includes = Item,
     self.name = 'player_sword'
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWhileInHole = true
-    
-    self.sprite = spriteBank.build('player_sword')
-    
-    self:add(self.sprite)
+    self.sprite = spriteBank.build('player_sword', self)
   end
 }
 
@@ -23,6 +20,14 @@ function ItemSword:onButtonPress()
   swingSwordState.weapon = self
   self.player:beginWeaponState(swingSwordState)
   return true
+end
+
+function ItemSword:update(dt)
+  self.sprite:update(dt)
+end
+
+function ItemSword:draw()
+  self.sprite:draw()
 end
 
 function ItemSword:swing(direction)

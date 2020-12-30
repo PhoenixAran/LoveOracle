@@ -9,8 +9,7 @@ local Item = Class { __includes = Entity,
     self.name = nil
     self.level = 0
     self.useButtons = { }
-    self.player = nil
-    
+    self.player = nil    
   end
 }
 
@@ -91,18 +90,20 @@ function Item:onButtonPressed()
 end
 
 function Item:update(dt)
-  Entity.update(self, dt)
+end
+
+function Item:draw()
 end
 
 function Item:interrupt()
   
 end
 
-function Item:DrawUnder()
+function Item:drawUnder()
   
 end
 
-function Item:DrawOver()
+function Item:drawOver()
   
 end
 

@@ -2,8 +2,8 @@ local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
 
 local SpriteRenderer = Class { __includes = Component,
-  init = function(self, sprite, offsetX, offsetY, followZ, enabled, visible)
-    Component.init(self, enabled, visible)
+  init = function(self, entity, sprite, offsetX, offsetY, followZ, enabled, visible)
+    Component.init(self, entity, enabled, visible)
   
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end

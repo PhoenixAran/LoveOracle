@@ -49,7 +49,6 @@ function PlayerSwingState:update(dt)
   if self.isReswingable and self.weapon:isButtonPressed() then
     self:swing()
   end
-  
   if self.player.sprite:isCompleted() and self.weapon.sprite:isCompleted() then
     self:endState()
   end

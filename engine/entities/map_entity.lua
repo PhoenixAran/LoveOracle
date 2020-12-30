@@ -1,33 +1,14 @@
 local Class = require 'lib.class'
+local lume = require 'lib.lume'
 local Entity = require 'engine.entities.entity'
 local Combat = require 'engine.components.combat'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local vector = require 'lib.vector'
 
-local GameEntity = Class { __includes = Entity,
+local MapEntity = Class { __includes = Entity,
   init = function(self, enabled, visible, rect)
     Entity.init(self, enabled, visible, rect)
-    
-    -- component declarations
-    self.movement = Movement()    
-    self.groundObserver = GroundObserver()
-    self.combat = Combat()
-    self.effectSprite = spriteBank.build('entity_effects')
-    self.sprite = nil   -- declare this yourself
-    
-    -- declarations
-    self.persistant = false
-    self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
-    self.animationDirection = nil -- will be used as substrip key if syncDirectionWithAnimation is true
-    -- shadow, ripple, and grass effects
-    -- TODO finish ripple and grass effecrts
-    self.shadowVisible = true   
-    --self.shadowOffsetX, self.shadowOffsetY = 0, 0
-    self.rippleVisible = false
-    --self.rippleOffsetX, self.rippleOffsetY = 0, 0
-    self.grassVisible = false
-    --self.grassOffsetX, self.grassOffsetY = 0, 0
     
     -- signals
     self:signal('entityDestroyed')
@@ -36,36 +17,50 @@ local GameEntity = Class { __includes = Entity,
     self:signal('entityBumped')
     self:signal('entityImmobolized')
     self:signal('entityMarkedDead')
-
-    -- add components
-    self:add(self.movement)
-    self:add(self.groundObserver)
-    self:add(self.combat)
-    self:add(self.effectSprite)
+    
+    
+    self.movement = Movement(self)    
+    self.groundObserver = GroundObserver(self)
+    self.combat = Combat(self)
+    self.effectSprite = spriteBank.build('entity_effects', self)
+    self.sprite = nil   -- declare this yourself
+    
+    -- declarations
+    self.persistant = false
+    self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
+    self.animationDirection = nil -- will be used as substrip key if syncDirectionWithAnimation is true
+    -- shadow, ripple, and grass effects
+    -- TODO finish ripple and grass effects
+    self.shadowVisible = true   
+    --self.shadowOffsetX, self.shadowOffsetY = 0, 0
+    self.rippleVisible = false
+    --self.rippleOffsetX, self.rippleOffsetY = 0, 0
+    self.grassVisible = false
+    --self.grassOffsetX, self.grassOffsetY = 0, 0
   end 
 }
 
-function GameEntity:getType()
+function MapEntity:getType()
   return 'game_entity'
 end
 
-function GameEntity:getCollisionTag()
+function MapEntity:getCollisionTag()
   return 'game_entity'
 end
 
-function GameEntity:isPersistant()
+function MapEntity:isPersistant()
   return self.persistant
 end
 
-function GameEntity:setSyncDirectionWithAnimation(value)
+function MapEntity:setSyncDirectionWithAnimation(value)
   self.syncDirectionWithAnimation = true
 end
 
-function GameEntity:doesSyncDirectionWithAnimation()
+function MapEntity:doesSyncDirectionWithAnimation()
   return self.syncDirectionWithAnimation
 end
 
-function GameEntity:setAnimationDirection(value)
+function MapEntity:setAnimationDirection(value)
   self.animationDirection = value
   if self:doesSyncDirectionWithAnimation() and self.sprite ~= nil then
     assert(self.sprite:getType() == 'animated_sprite_renderer')
@@ -75,24 +70,24 @@ function GameEntity:setAnimationDirection(value)
   end
 end
 
-function GameEntity:getAnimationDirection()
+function MapEntity:getAnimationDirection()
   return self.animationDirection
 end
 
 -- movement component pass throughs
-function GameEntity:getVector()
+function MapEntity:getVector()
   return self.movement:getVector()
 end
 
-function GameEntity:setVector(x, y)
+function MapEntity:setVector(x, y)
   return self.movement:setVector(x, y)
 end
 
-function GameEntity:getLinearVelocity(x, y)
+function MapEntity:getLinearVelocity(x, y)
   return self.movement:getLinearVelocity(x, y)
 end
 
-function GameEntity:move(dt) 
+function MapEntity:move(dt) 
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
   local bx = self.x + velX
@@ -113,7 +108,7 @@ function GameEntity:move(dt)
   physics.update(self)
 end
 
-function GameEntity:updateEntitySpriteEffects()
+function MapEntity:updateEntitySpriteEffects(dt)
   if self.shadowVisible and self:isInAir() then
     if self.effectSprite:getCurrentAnimationKey() ~= 'shadow' or not self.effectSprite:isVisible() then
       self.effectSprite:play('shadow')
@@ -124,35 +119,36 @@ function GameEntity:updateEntitySpriteEffects()
     self.effectSprite:stop()
     self.effectSprite:setVisible(false)
   end
+  self.effectSprite:update(dt)
 end
 
 -- combat component pass throughs
-function GameEntity:isIntangible()
+function MapEntity:isIntangible()
   return self.combat:isIntangible()
 end
 
-function GameEntity:inHitstun()
+function MapEntity:inHitstun()
   return self.combat:inHitstun()
 end
 
-function GameEntity:inKnockback()
+function MapEntity:inKnockback()
   return self.combat:inKnockback()
 end
 
 -- other
-function GameEntity:isInAir()
+function MapEntity:isInAir()
   if self.movement and self.movement:isEnabled() then
     return self.movement:isInAir()
   end
   return self:getZPosition() > 0
 end
 
-function GameEntity:isOnGround()
+function MapEntity:isOnGround()
   return not self:isInAir()
 end
 
-function GameEntity:isPersistant()
+function MapEntity:isPersistant()
   return self.persistant
 end
 
-return GameEntity
+return MapEntity
