@@ -11,31 +11,30 @@ local controls = {
     a = {'key:n', 'button:b'},
     b = {'key:b', 'button:a'},
     x = {'key:j', 'button:y' },
-    y = {'key:h', 'button:x'}
+    y = {'key:h', 'button:x'},
+    leftClick = { 'mouse:1' }
   },
   joystick = love.joystick.getJoysticks()[1]
 }
 
 local window = {
   title = "Love Oracle " .. version,
-  width = 160, 
-  height = 144, 
-  virtualWidth = 160 * 4,
-  virtualHeight = 144 * 4,
+  monocleConfig = {
+    windowWidth = 160,
+    windowHeight = 144,
+    virtualWidth = 160 * 4,
+    virtualHeight = 144 * 4,
+    maxScale = 2
+  },
   windowConfig = {
-    minwidth = 160,
-    minheight = 144,
+    minwidth = 144,
+    minheight = 160,
     vsync = true,
     resizable = true
   }
 }
 
 local startupScreen = 'data.test_screens.player_playground'
---local startupScreen = 'engine.test_screens.slab_test_screen'
-
-function window.getMonocleArguments()
-  return window.width, window.height, window.virtualWidth, window.virtualHeight, window.windowConfig
-end
 
 return {
  zbStudioDebug = zbStudioDebug,

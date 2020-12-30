@@ -11,7 +11,7 @@ local Inventory = Class { __includes = SignalObject,
 }
 
 -- connect player signals to inventory
-function Inventory:setPlayer()
+function Inventory:setPlayer(player)
   
 end
 

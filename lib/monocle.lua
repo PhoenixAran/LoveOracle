@@ -9,22 +9,38 @@ function Monocle.new()
   return self
 end
 
-function Monocle.setup(monocle, virtualWidth, virtualHeight, windowWidth, windowHeight, windowConfig)
-  if windowConfig == nil then
-    love.window.setMode(windowWidth, windowHeight)
-  else
-    love.window.setMode(windowWidth, windowHeight, windowConfig)
+function Monocle.setup(monocle, monocleConfig, windowConfig)
+  if monocleConfig == nil then
+    monocleConfig = {
+      windowWidth = 160,
+      windowHeight = 144,
+      virtualWidth = 160 * 4,
+      virtualHeight = 144 * 4,
+      maxScale = 10000
+    }
   end
-  monocle.virtualWidth = virtualWidth
-  monocle.virtualHeight = virtualHeight
+  if windowConfig == nil then
+    windowConfig = {
+      minwidth = 144,
+      minheight = 160,
+      vsync = true,
+      resizable = true
+    }
+  end
+  love.window.setMode(monocleConfig.virtualWidth, monocleConfig.virtualHeight, windowConfig)  
+  monocle.virtualWidth = monocleConfig.virtualWidth
+  monocle.virtualHeight = monocleConfig.virtualHeight
+  monocle.windowWidth = monocleConfig.windowWidth
+  monocle.windowHeight = monocleConfig.windowHeight
+  monocle.maxScale = monocleConfig.maxScale
   monocle.updateView(monocle)
 end
 
 function Monocle.updateView(monocle)
   local screenWidth = love.graphics.getWidth()
   local screenHeight = love.graphics.getHeight()
-  local scaleX = math.floor(screenWidth / monocle.virtualWidth)
-  local scaleY = math.floor(screenHeight / monocle.virtualHeight)
+  local scaleX = math.floor(screenWidth / monocle.windowWidth)
+  local scaleY = math.floor(screenHeight / monocle.windowHeight)
   
   if scaleX ~= scaleY then
     if scaleX > scaleY then
@@ -35,9 +51,11 @@ function Monocle.updateView(monocle)
   else
     monocle.scale = scaleX
   end
-  
-  local viewWidth = monocle.virtualWidth * monocle.scale
-  local viewHeight = monocle.virtualHeight * monocle.scale
+  if monocle.scale > monocle.maxScale then
+    monocle.scale = monocle.maxScale
+  end
+  local viewWidth = monocle.windowWidth * monocle.scale
+  local viewHeight = monocle.windowHeight * monocle.scale
   
   monocle.x = math.floor(screenWidth / 2 - viewWidth / 2)
   monocle.y = math.floor(screenHeight / 2 - viewHeight / 2)
@@ -45,7 +63,6 @@ function Monocle.updateView(monocle)
   if monocle.canvas ~= nil then
     monocle.canvas:release()
   end
-  
   monocle.canvas = love.graphics.newCanvas(viewWidth, viewHeight)
   monocle.canvas:setFilter('nearest', 'nearest') 
 end
@@ -67,6 +84,12 @@ end
 
 function Monocle.resize(monocle, w, h)
   monocle.updateView(monocle)
+end
+
+function Monocle.dispose(monocle)
+  if monocle.canvas ~= nil then
+    monocle.canvas:release()
+  end
 end
 
 return Monocle
