@@ -3,6 +3,10 @@ local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'lib.vector'
 local Movement = require 'engine.components.movement'
 
+-- some class constants
+local JUMP_Z_VELOCITY = 2
+local JUMP_GRAVITY = .125
+
 local PlayerMovementController = Class {
   init = function(self, player, movement)
     self.player = player
@@ -55,11 +59,10 @@ function PlayerMovementController:jump()
         self.movement:setSpeed(self.movement:getSpeed() * self.player:getStateParameters().movementSpeedScale * self.strokeSpeedScale)
       end
     end
-    -- jump
+    -- jump!
     self.capeDeployed = false
-    -- TODO remove magic numbers
-    self.movement.gravity = .125
-    self.movement:setZVelocity(2)
+    self.movement.gravity = JUMP_GRAVITY
+    self.movement:setZVelocity(JUMP_Z_VELOCITY)
     self.player:requestNaturalState()
     self.player:integrateStateParameters()
     if self.player:getWeaponState() == nil then
