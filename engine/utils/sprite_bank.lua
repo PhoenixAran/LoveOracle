@@ -6,21 +6,12 @@ local fh = require 'engine.utils.file_helper'
 local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
 
 -- friend type
-local SpriteBankPayload = Class {
-  init = function(self)
-    self.sprites = { }
-    self.animations = { }
-  end
-}
-
--- friend type
--- builds AnimatedSpriteRenderers
-local SpriteBuilder = Class {
+-- builds SpriteRenderers or AnimatedSpriteRenderers
+local SpriteRendererBuilder = Class {
   init = function(self)
     -- by default this is used to configure an animated sprite
     -- its the most common use case
     self.type = 'animated_sprite_renderer'
-    
     -- used if type is 'animatedsprite'
     self.animations = { }
     self.deferredAnimations = { }
@@ -36,17 +27,12 @@ local SpriteBuilder = Class {
   end
 }
 
-function SpriteBuilder:createSpriteAnimationBuilder()
-  return SpriteAnimationBuilder()
-end
-
-
-function SpriteBuilder:setDefaultAnimation(value)
+function SpriteRendererBuilder:setDefaultAnimation(value)
   self.defaultAnimation = value
 end
 
-function SpriteBuilder:build(entity)
-  assert(self.type == 'animated_sprite_renderer' or self.type == 'sprite_renderer', 'Invalid type in SpriteBuilder: ' .. tostring(self.type))
+function SpriteRendererBuilder:build(entity)
+  assert(self.type == 'animated_sprite_renderer' or self.type == 'sprite_renderer', 'Invalid type in SpriteRendererBuilder: ' .. tostring(self.type))
   assert(spriteBank, 'Global variable "spriteBank" does not exist')
   if self.type == 'sprite_renderer' then
     if self.sprite == nil then
@@ -66,16 +52,16 @@ function SpriteBuilder:build(entity)
   end
 end
 
-function SpriteBuilder:addAnimation(key, animation)
+function SpriteRendererBuilder:addAnimation(key, animation)
   self.animations[key] = animation
 end
 
-function SpriteBuilder:addDeferredAnimation(animationKey, realKey)
+function SpriteRendererBuilder:addDeferredAnimation(animationKey, realKey)
   if realKey == nil then realKey = animationKey end
   self.deferredAnimations[key] = realKey
 end
 
-function SpriteBuilder:setFollowZ(value)
+function SpriteRendererBuilder:setFollowZ(value)
   self.followZ = value
 end
 
@@ -111,46 +97,28 @@ function SpriteBank.getAnimation(key)
   return SpriteBank.animations[key]
 end
 
-function SpriteBank.registerBuilder(key, builder)
-  assert(not SpriteBank.builders[key], 'SpriteBank already has SpriteBuilder with key ' .. key)
+function SpriteBank.registerSpriteRendererBuilder(key, builder)
+  assert(not SpriteBank.builders[key], 'SpriteBank already has SpriteRendererBuilder with key ' .. key)
   SpriteBank.builders[key] = builder
 end
 
 function SpriteBank.build(key, entity)
-  assert(SpriteBank.builders[key], 'SpriteBank does not have SpriteBuilder with key ' .. key)
+  assert(SpriteBank.builders[key], 'SpriteBank does not have SpriteRendererBuilder with key ' .. key)
   return SpriteBank.builders[key]:build(entity)
 end
 
-function SpriteBank.receivePayload(payload)
-  for k, v in pairs(payload.sprites) do
-    SpriteBank.registerSprite(k, v)
-  end
-  for k, v in pairs(payload.animations) do
-    SpriteBank.registerAnimation(k, v)
-  end
+function SpriteBank.createSpriteRendererBuilder()
+  return SpriteRendererBuilder()
 end
 
-function SpriteBank.initialize(directory)
-  local files = love.filesystem.getDirectoryItems(directory)
-  for _, file in ipairs(files) do
-    local path = directory .. '/' .. file
-    if love.filesystem.getInfo(path).type == 'directory' then
-      SpriteBank.initialize(path)
-    else
-      local requirePath = fh.getFilePathWithoutExtension(path):gsub('%/', '.')
-      local builder = require(requirePath)
-      if builder.fillPayload then
-        local payload = SpriteBankPayload()
-        builder.fillPayload(payload)
-        SpriteBank.receivePayload(payload)
-      end
-      if builder.configureSpriteBuilder then
-        local spriteBuilder = SpriteBuilder()
-        builder.configureSpriteBuilder(spriteBuilder)
-        SpriteBank.registerBuilder(builder.getKey(), spriteBuilder)
-      end
-    end
-  end
+function SpriteBank.createSpriteAnimationBuilder()
+  return SpriteAnimationBuilder()
+end
+-- TODO function SpriteBank.createSpriteBuilder()
+
+function SpriteBank.initialize(path)
+  path = path or 'data.assets.sprites'
+  require(path)(SpriteBank)
 end
 
 return SpriteBank

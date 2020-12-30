@@ -51,8 +51,7 @@ function love.load(arg)
   
   -- after we load images and spritesheet initialize the sprite bank
   spriteBank = require 'engine.utils.sprite_bank'
-  -- use dot notation since its really just calling a bunch of requires
-  spriteBank.initialize('data/sprites')  
+  spriteBank.initialize('data.sprites')  
   
   screenManager = require('lib.roomy').new()
   physics = require 'engine.physics.physics'

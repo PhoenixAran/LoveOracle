@@ -1,9 +1,10 @@
--- player sprites
-local playerSwordSpriteBuilder = { }
-function playerSwordSpriteBuilder.configureSpriteBuilder(builder)
+return function(spriteBank)
+  local builder = spriteBank.createSpriteRendererBuilder()
+  local sb = spriteBank.createSpriteAnimationBuilder()
+  
+  builder:setFollowZ(true)
   builder:setDefaultAnimation('swing')
-  local sb = builder:createSpriteAnimationBuilder()
-
+  
   -- sprite animation builder setup
   sb:setSpriteSheet('player_items')
   -- TODO animate Hitboxes!!
@@ -36,10 +37,7 @@ function playerSwordSpriteBuilder.configureSpriteBuilder(builder)
   sb:buildSubstrip('right')
   -- BUILD sword_swing
   builder:addAnimation('swing', sb:build())
+  
+  -- register builder
+  spriteBank.registerSpriteRendererBuilder('player_sword', builder)
 end
-
-function playerSwordSpriteBuilder.getKey()
-  return 'player_sword'
-end
-
-return playerSwordSpriteBuilder
