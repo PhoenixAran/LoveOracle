@@ -1,5 +1,7 @@
 local Class = require 'lib.class'
+local bit = require 'bit'
 local rect = require 'engine.utils.rectangle'
+local BitTag = require 'engine.utils.bit_tag'
 
 local BumpBox = Class {
   init = function(self, x, y, w, h, zRange, collisionTag)
@@ -20,16 +22,15 @@ local BumpBox = Class {
     assert(zRange.min <= zRange.max)
     self.zRange = zRange
     if collisionTag == nil then collisionTag = 'bump_box' end
-  
     self.x = x
     self.y = y
     self.w = w
     self.h = h
     
     -- layers this bumpbox should collide with
-    self.collidesWithLayer = { }
+    self.collidesWithLayer = 0
     -- layers this bumpbox exists in
-    self.physicsLayer = { }
+    self.physicsLayer = 0
     -- the bounds of this box when it was registered with they physics system
     -- storing this allows us to always be able to safely remove the box even if it was moved
     -- before attempting to remove it
@@ -84,53 +85,60 @@ function BumpBox:getPhysicsLayer()
   return self.physicsLayer
 end
 
+function BumpBox:setCollidesWithLayerExplicit(value)
+  self.collidesWithLayer = value
+end
+
 function BumpBox:setCollidesWithLayer(layer)
   if type(layer) == 'table' then
-    for _, v in pairs(layer) do
-      self.collidesWithLayer[v] = true
+    for _, v in ipairs(layer) do
+      self.collidesWithLayer = bit.bor(self.collidesWithLayer, BitTag.get(v).value)
     end
   else
-    self.collidesWithLayer[layer] = true
+    self.collidesWithLayer = bit.bor(self.collidesWithLayer, BitTag.get(layer).value)
   end
 end
 
 function BumpBox:unsetCollidesWithLayer(layer)
   if type(layer) == 'table' then
-    for _, v in pairs(layer) do
-      self.collidesWithLayer[layer] = nil
+    for _, v in ipairs(layer) do
+      self.collidesWithLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(v).value))
     end
   else
-    self.collidesWithLayer[layer] = nil
+    self.collidesWithLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(layer).value))
   end
+end
+
+function BumpBox:setPhysicsLayerExplicit(value)
+  self.physicsLayer = value
 end
 
 function BumpBox:setPhysicsLayer(layer)
   if type(layer) == 'table' then
-    for _, v in pairs(layer) do
-      self.physicsLayer[v] = true
+    for _, v in ipairs(layer) do
+      self.physicsLayer = bit.bor(self.collidesWithLayer, BitTag.get(v).value)
     end
   else
-    self.physicsLayer[layer] = true
+    self.physicsLayer = bit.bor(self.collidesWithLayer, BitTag.get(layer).value)
   end
 end
 
 function BumpBox:unsetPhysicsLayer(layer)
   if type(layer) == 'table' then
-    for _, v in pairs(layer) do
-      self.physicsLayer[layer] = nil
+    for _, v in ipairs(layer) do
+      self.physicsLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(v).value))
     end
   else
-    self.physicsLayer[layer] = nil
+    self.physicsLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(layer).value))
   end
 end
 
 -- check if the other bumpbox's physicsLayer matches 
 -- this bumpbox's collidesWithLayer
 function BumpBox:reportsCollisionsWith(otherBumpBox)
-  for k, v in pairs(otherBumpBox:getPhysicsLayer()) do
-    if self.collidesWithLayer[k] then 
-      return self.additionalPhysicsFilter(otherBumpBox)
-    end
+  local otherPhysicsLayer = otherBumpBox:getPhysicsLayer()
+  if bit.band(otherPhysicsLayer, self.collidesWithLayer) ~= 0 then
+    return self:additionalPhysicsFilter(otherBumpBox)
   end
   return false
 end

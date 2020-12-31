@@ -37,7 +37,7 @@ end
 local function initBitTags()
   local BitTag = require 'engine.utils.bit_tag'
   BitTag('player')
-  BitTag('')
+  BitTag('entity')
 end
 
 -- alot of globals are declared here
@@ -47,6 +47,7 @@ function love.load(arg)
     if arg[#arg] == '-debug' then require('mobdebug').start() end
   end
   
+  initBitTags()
   -- declare global pool
   pool = require 'engine.utils.pool'
   

@@ -4,7 +4,7 @@ local MapEntity = require 'engine.entities.map_entity'
 
 local TestPlayer = Class { __includes = MapEntity,
   init = function(self)
-    GameEntity.init(self, true, true, {x = 24, y = 24, h = 16, w = 16})
+    MapEntity.init(self, true, true, {x = 70, y = 70, h = 16, w = 16})
   end
 }
 

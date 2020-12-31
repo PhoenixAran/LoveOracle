@@ -24,7 +24,7 @@ local window = {
     windowHeight = 144,
     virtualWidth = 160 * 4,
     virtualHeight = 144 * 4,
-    maxScale = 2
+    maxScale = 100
   },
   windowConfig = {
     minwidth = 144,
@@ -34,8 +34,21 @@ local window = {
   }
 }
 
-local startupScreen = 'data.test_screens.player_playground'
+local bitTagFlags = {
+  physics = {
+    'entity',
+    'player',
+    'enemy',
+    'npc'
+  },
+  tiles = { 
 
+  }
+}
+
+
+--local startupScreen = 'data.test_screens.player_playground'
+local startupScreen = 'engine.test_screens.physics_test'
 return {
  zbStudioDebug = zbStudioDebug,
  controls = controls,

@@ -27,8 +27,8 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.enabled = enabled
     self.visible = visible
     self.transform = Transform:new(self)
-    self.transform:setRotation(0)
     self:setPositionWithBumpCoords(self.x, self.y)
+    self.transform:setRotation(0)
   end
 }
 
@@ -72,7 +72,7 @@ function Entity:getLocalPosition()
 end
 
 function Entity:getZPosition()
-  local x, y, z= self.transform:getPosition()
+  local x, y, z = self.transform:getPosition()
   return z
 end
 
@@ -94,6 +94,7 @@ end
 function Entity:setPositionWithBumpCoords(x, y)
   self.transform:setPosition(x + self.w / 2, y + self.h / 2)
 end
+
 function Entity:setLocalPosition(x, y)
   self.transform:setLocalPosition(x, y)
 end
