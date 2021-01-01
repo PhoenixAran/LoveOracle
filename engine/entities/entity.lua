@@ -26,8 +26,11 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     BumpBox.init(self, rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h, zRange)
     self.enabled = enabled
     self.visible = visible
+    
+    -- KEEP THESE TWO TOGETHER OR ELSE ENTITY POSITION GETS MESSED UP
     self.transform = Transform:new(self)
     self:setPositionWithBumpCoords(self.x, self.y)
+    
     self.transform:setRotation(0)
   end
 }
