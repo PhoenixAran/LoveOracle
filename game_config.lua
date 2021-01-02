@@ -34,21 +34,16 @@ local window = {
   }
 }
 
-local bitTagFlags = {
-  physics = {
-    'entity',
-    'player',
-    'enemy',
-    'npc'
-  },
-  tiles = { 
-
-  }
+local physicsFlags = {
+  'entity',
+  'player',
+  'enemy',
+  'npc'
 }
 
 
 --local startupScreen = 'data.test_screens.player_playground'
-local startupScreen = 'engine.test_screens.physics_test'
+local startupScreen = 'engine.test_screens.signal_test'
 return {
  zbStudioDebug = zbStudioDebug,
  controls = controls,

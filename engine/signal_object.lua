@@ -58,6 +58,7 @@ function Signal:disconnect(otherObject, targetMethod)
   for i, connection in ipairs(otherObject.connections) do
     if connection.targetMethod == targetMethod then
       table.remove(otherObject.connections, i)
+      break
     end
   end
 end
@@ -91,6 +92,17 @@ end
 function SignalObject:clearConnections()
   for _, connection in ipairs(self.connections) do
     connection:disconnect()
+  end
+end
+
+-- call this so this can actually get garbage collected
+-- if this isnt called, there is a possibility for dangling references
+function SignalObject:free()
+  self:clearConnections()
+  for k, signal in pairs(self.signals) do
+    for _, connection in ipairs(self.signals[k]) do
+      connection:disconnect()
+    end
   end
 end
 
