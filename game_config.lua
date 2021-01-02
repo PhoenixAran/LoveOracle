@@ -22,13 +22,13 @@ local window = {
   monocleConfig = {
     windowWidth = 160,
     windowHeight = 144,
-    virtualWidth = 160 * 4,
-    virtualHeight = 144 * 4,
-    maxScale = 100
+    virtualWidth = 1280,
+    virtualHeight = 720,
+    maxScale = 4
   },
   windowConfig = {
-    minwidth = 144,
-    minheight = 160,
+    minwidth = 800,
+    minheight = 600,
     vsync = true,
     resizable = true
   }

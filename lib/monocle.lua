@@ -21,8 +21,8 @@ function Monocle.setup(monocle, monocleConfig, windowConfig)
   end
   if windowConfig == nil then
     windowConfig = {
-      minwidth = 144,
-      minheight = 160,
+      minwidth = 160,
+      minheight = 144,
       vsync = true,
       resizable = true
     }
