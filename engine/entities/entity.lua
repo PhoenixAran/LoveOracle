@@ -160,7 +160,7 @@ function Entity:getInspectorProperties()
     return self._cachedInspectorProperties
   end
   local props = InspectorProperties(self)
-  props:addReadOnly('name', self.getName)
+  props:addReadOnly('Name', 'name')
   self._cachedInspectorProperties = props
   return props
 end

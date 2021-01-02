@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-
+local Slab = require 'lib.slab'
 
 local PropertyType = { 
   Int = 1, 
@@ -67,7 +67,7 @@ function Property:setIntRange(min, max)
 end
 
 function Property:setValue(value)
-  assert(not self.PropertyType == PropertyType.ReadOnly)
+  assert(not self.propType == PropertyType.ReadOnly)
   if self.mode == PropertyMode.Func then
     if self.isObjectFuncs then
       self.setFunc(self.source, value)
@@ -91,6 +91,14 @@ function Property:getValue(value)
   end
 end
 
+function Property:getLabel()
+  return self.label
+end
+
+function Property:getPropertyType()
+  return self.propType
+end
+
 -- export type
 local InspectorProperties = Class {
   init = function(self, source)
@@ -107,7 +115,7 @@ local function setAccessors(property, getFunc, setFunc, isObjectFuncs)
   if setFunc == nil then
     local propName = getFunc
     assert(type(getFunc) == 'string')
-    property:setPropName(getFunc)
+    property:setPropName(propName)
   else
     assert(type(getFunc) == 'function')
     assert(type(setFunc) == 'function')
@@ -115,29 +123,42 @@ local function setAccessors(property, getFunc, setFunc, isObjectFuncs)
   end
 end
 
+local function setReadOnlyAccessor(property, getFunc, isObjectFuncs)
+  if type(getFunc) == 'string' then
+    local propName = getFunc
+    property:setPropName(propName)
+  else
+    assert(type(getFunc) == 'function')
+    property:setAccessorFuncs(getFunc, nil, isObjectFuncs)
+  end
+end
+
 function InspectorProperties:addReadOnly(label, getFunc, isObjectFuncs)
-  local property = Property(self, label, PropertyType.ReadOnly)
-  setAccessors(property, getFunc, nil, isObjectFuncs)
+  local property = Property(self.source, label, PropertyType.ReadOnly)
+  setReadOnlyAccessor(property, getFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
 function InspectorProperties:addInt(label, getFunc, setFunc, isObjectFuncs)
-  local property = Property(self, label, PropertyType.Int)
+  local property = Property(self.source, label, PropertyType.Int)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
 function InspectorProperties:addFloat(label, getFunc, setFunc, isObjectFuncs)
-  local property = Property(self, label, PropertyType.Float)
+  local property = Property(self.source, label, PropertyType.Float)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
 function InspectorProperties:addString(label, getFunc, setFunc, isObjectFuncs)
-  local property = Property(self, label, PropertyType.String)
+  local property = Property(self.source, label, PropertyType.String)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)
   addProperty(self, property)
 end
+
+-- export PropertyType enum
+InspectorProperties.PropertyType = PropertyType
 
 -- TODO int range, float range, string list
 

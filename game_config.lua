@@ -42,7 +42,7 @@ local physicsFlags = {
 }
 
 
-local startupScreen = 'data.test_screens.player_playground'
+local startupScreen = 'engine.test_screens.entity_inspector_test'
 
 return {
  zbStudioDebug = zbStudioDebug,

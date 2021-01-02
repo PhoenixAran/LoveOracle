@@ -18,7 +18,7 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 
 local Player = Class { __includes = MapEntity,
   init = function(self, name, enabled, visible, rect)
-    MapEntity.init(self, enabled, visible, rect)    
+    MapEntity.init(self,name, enabled, visible, rect)    
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = spriteBank.build('player', self)
