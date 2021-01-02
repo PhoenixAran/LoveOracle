@@ -409,4 +409,16 @@ function Player:equipItem(item)
   end
 end
 
+function Player:getInspectorProperties()
+  local props = MapEntity.getInspectorProperties(self)
+  props:addReadOnlyString('Animated Sprite Key', function()
+      local textValue = self.sprite:getCurrentAnimationKey()
+      if self.sprite:getSubstripKey() ~= nil then
+        textValue = textValue .. '[' .. self.sprite:getSubstripKey() .. ']'
+      end
+      return textValue
+  end, false)
+  return props
+end
+
 return Player

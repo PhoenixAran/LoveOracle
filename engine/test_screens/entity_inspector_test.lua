@@ -26,9 +26,62 @@ function EntityInspectorTest:update(dt)
   local props = self.player:getInspectorProperties()
   for _, property in ipairs(props.properties) do
     local propType = property:getPropertyType()
-    if propType == PropertyType.ReadOnly then
-      Slab.Text(property:getLabel())
-      Slab.Input(self.player:getName() .. property:getLabel() , { Text = tostring(property:getValue()),  ReadOnly = true, Align = 'left' })
+    local slabId = self.player:getName() .. property:getLabel()
+    -- Draw the property name
+    Slab.Text(property:getLabel())
+    -- Then draw the necessary input elements
+    if propType == PropertyType.String then
+      local slabArgs = { 
+        Align = 'left',
+        Text = tostring(property:getValue()), 
+        ReadOnly = property:isReadOnly(),
+      }
+      if Slab.Input(slabId, slabArgs) then
+        property:setValue(Slab.GetInputText())
+      end
+    elseif propType == PropertyType.Int then
+      local slabArgs = { 
+        Align = 'left',
+        Text = tostring(property:getValue()),
+        ReadOnly = property:isReadOnly(),
+        NumbersOnly = true
+      }
+      if Slab.Input(slabId, slabArgs) then
+        property:setValue(math.floor(Slab.GetInputNumber()))
+      end
+
+    elseif propType == PropertyType.Float then
+      local slabArgs = { 
+        Align = 'left',
+        Text = tostring(property:getValue()),
+        ReadOnly = property:isReadOnly(),
+        NumbersOnly = true
+      }
+      if Slab.Input(slabId, slabArgs) then
+        property:setValue(Slab.GetInputNumber())
+      end
+    elseif propType == PropertyType.Vector then
+      Slab.BeginLayout(slabId .. 'vector_layout', { Columns = 2})
+      local ex, ey = property:getValue()
+      local slabArgs = { 
+        Align = 'left',
+        Text = tostring(ex),
+        ReadOnly = property:isReadOnly(),
+        NumbersOnly = true,
+        ReturnOnText = false
+      }
+      Slab.SetLayoutColumn(1)
+      if Slab.Input(slabId .. 'x', slabArgs) then
+        local x, y = property:getValue()
+        property:setValue(Slab.GetInputNumber(), y)
+      end
+      slabArgs.Text = tostring(ey)
+      Slab.SetLayoutColumn(2)
+      if Slab.Input(slabId .. 'y', slabArgs) then
+        local x, y = property:getValue()
+        property:setValue(x, Slab.GetInputNumber())
+      end
+      Slab.EndLayout()
     end
   end
   Slab.EndWindow()

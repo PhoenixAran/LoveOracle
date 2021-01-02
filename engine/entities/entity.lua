@@ -156,12 +156,9 @@ function Entity:debugDraw()
 end
 
 function Entity:getInspectorProperties()
-  if self._cachedInspectorProperties then
-    return self._cachedInspectorProperties
-  end
   local props = InspectorProperties(self)
-  props:addReadOnly('Name', 'name')
-  self._cachedInspectorProperties = props
+  props:addReadOnlyString('Name', 'name')
+  props:addVector('Position', self.getPosition, self.setPosition)
   return props
 end
 
