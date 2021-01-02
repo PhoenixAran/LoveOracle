@@ -42,12 +42,13 @@ local physicsFlags = {
 }
 
 
---local startupScreen = 'data.test_screens.player_playground'
-local startupScreen = 'engine.test_screens.signal_test'
+local startupScreen = 'data.test_screens.player_playground'
+
 return {
  zbStudioDebug = zbStudioDebug,
  controls = controls,
  window = window,
  startupScreen = startupScreen,
- version = version
+ version = version,
+ physicsFlags = physicsFlags
 }

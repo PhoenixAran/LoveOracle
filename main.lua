@@ -36,8 +36,9 @@ end
 
 local function initBitTags()
   local BitTag = require 'engine.utils.bit_tag'
-  BitTag('player')
-  BitTag('entity')
+  for k, v in ipairs(gameConfig.physicsFlags) do
+    BitTag(v)
+  end
 end
 
 -- alot of globals are declared here

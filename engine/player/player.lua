@@ -17,7 +17,7 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 
 local Player = Class { __includes = MapEntity,
-  init = function(self, enabled, visible, rect) 
+  init = function(self, name, enabled, visible, rect)
     MapEntity.init(self, enabled, visible, rect)    
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)

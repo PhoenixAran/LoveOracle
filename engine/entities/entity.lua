@@ -4,9 +4,10 @@ local BumpBox = require 'engine.entities.bump_box'
 local Transform = require 'engine.entities.transform'
 local Vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
+local InspectorProperties = require 'engine.entities.inspector_properties'
 
 local Entity = Class { __includes = { SignalObject, BumpBox },
-  init = function(self, enabled, visible, rect, zRange)
+  init = function(self, name, enabled, visible, rect, zRange)
     SignalObject.init(self)
     if enabled == nil then enabled = true end
     if visible == nil then visible = true end
@@ -32,8 +33,18 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self:setPositionWithBumpCoords(self.x, self.y)
     
     self.transform:setRotation(0)
+    
+    self.name = name
   end
 }
+
+function Entity:getName()
+  return self.name
+end
+
+function Entity:setName(value)
+  self.name = value
+end
 
 function Entity:getType()
   return 'entity'
@@ -142,6 +153,16 @@ function Entity:debugDraw()
   love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
   love.graphics.rectangle('fill', positionX, positionY, self.w, self.h)
   love.graphics.setColor(1, 1, 1)
+end
+
+function Entity:getInspectorProperties()
+  if self._cachedInspectorProperties then
+    return self._cachedInspectorProperties
+  end
+  local props = InspectorProperties(self)
+  props:addReadOnly('name', self.getName)
+  self._cachedInspectorProperties = props
+  return props
 end
 
 return Entity

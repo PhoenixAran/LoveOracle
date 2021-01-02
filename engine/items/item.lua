@@ -3,8 +3,8 @@ local Entity = require 'engine.entities.entity'
 local ItemUseParameters = require 'engine.items.item_use_parameters'
 
 local Item = Class { __includes = Entity,
-  init = function(self)
-    Entity.init(self)
+  init = function(self, name)
+    Entity.init(self, name)
     self.useParameters = ItemUseParameters()
     self.name = nil
     self.level = 0

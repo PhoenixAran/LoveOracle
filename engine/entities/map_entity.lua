@@ -7,8 +7,8 @@ local GroundObserver = require 'engine.components.ground_observer'
 local vector = require 'lib.vector'
 
 local MapEntity = Class { __includes = Entity,
-  init = function(self, enabled, visible, rect)
-    Entity.init(self, enabled, visible, rect)
+  init = function(self, name, enabled, visible, rect)
+    Entity.init(self, name, enabled, visible, rect)
     
     -- signals
     self:signal('entityDestroyed')
