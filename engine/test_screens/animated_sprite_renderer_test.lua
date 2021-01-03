@@ -18,6 +18,7 @@ local AnimatedSpriteRendererTest = Class { __includes = BaseScreen,
       'squish'
     }
     self.currentAnimationIndex = 1
+    
   end
 }
 

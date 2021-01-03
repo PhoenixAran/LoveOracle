@@ -8,7 +8,6 @@ local EntityInspector = Class { __includes = SignalObject,
   init = function(self, entities)
     self.entities = entities
     self.currentEntity = nil
-    
     self.searchText = ''
   end
 }
