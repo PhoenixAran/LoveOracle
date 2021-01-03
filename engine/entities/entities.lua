@@ -5,6 +5,7 @@ local lume = require 'lib.lume'
 local Entities = Class { __includes = SignalObject,
   init = function(self, gameScreen, camera, player)
     SignalObject.init(self)
+    
     self:signal('entityAdded')
     self:signal('entityRemoved')
     
@@ -21,7 +22,7 @@ function Entities:setPlayer(player)
   assert(not self.entitiesHash[player:getName()])
   self.player = player
   lume.push(self.entities, player)
-  lume.push(self.entitiesHash[self.player:getName()], player)
+  self.entitiesHash[self.player:getName()] = player
   lume.push(self.entitiesDraw, player)
 end
 
@@ -56,12 +57,12 @@ end
 
 function Entities:update(dt)
   self.player:update(dt)
-  for _, entity in self.entities do
+  for _, entity in ipairs(self.entities) do
     if entity ~= self.player then
       entity:update(dt)
     end
   end
-  self.camera:update(dt)
+  --self.camera:update(dt)
 end
 
 function Entities:draw()
@@ -72,3 +73,5 @@ function Entities:draw()
   end)
   lume.each(self.entitiesDraw, 'draw')
 end
+
+return Entities
