@@ -5,6 +5,8 @@ local Sword = require 'engine.items.weapons.item_sword'
 local Slab = require 'lib.slab'
 local PropertyType = require('engine.entities.inspector_properties').PropertyType
 
+-- TODO: wrap EntityInspector in a class / method so all screens can use it
+
 local EntityInspectorTest = Class { __includes = BaseScreen,
   init = function(self)
     self.player = nil
@@ -60,28 +62,44 @@ function EntityInspectorTest:update(dt)
       if Slab.Input(slabId, slabArgs) then
         property:setValue(Slab.GetInputNumber())
       end
-    elseif propType == PropertyType.Vector then
-      Slab.BeginLayout(slabId .. 'vector_layout', { Columns = 2})
-      local ex, ey = property:getValue()
+    elseif propType == PropertyType.Vector2 then
+      local vx, vy = property:getValue()
       local slabArgs = { 
         Align = 'left',
-        Text = tostring(ex),
+        Text = tostring(vx),
         ReadOnly = property:isReadOnly(),
         NumbersOnly = true,
         ReturnOnText = false
       }
-      Slab.SetLayoutColumn(1)
       if Slab.Input(slabId .. 'x', slabArgs) then
         local x, y = property:getValue()
         property:setValue(Slab.GetInputNumber(), y)
       end
-      slabArgs.Text = tostring(ey)
-      Slab.SetLayoutColumn(2)
+      slabArgs.Text = tostring(vy)
+      Slab.SameLine()
       if Slab.Input(slabId .. 'y', slabArgs) then
         local x, y = property:getValue()
         property:setValue(x, Slab.GetInputNumber())
       end
-      Slab.EndLayout()
+    elseif propType == PropertyType.Vector2I then
+      local vx, vy = property:getValue()
+      local slabArgs = {
+        Align = 'left',
+        Text = tostring(vx),
+        ReadOnly = property:isReadOnly(),
+        NumbersOnly = true, 
+        ReturnOnText = false
+      }
+      if Slab.Input(slabId .. 'x', slabArgs) then
+        local x, y = property:getValue()
+        property:setValue(math.floor(Slab.GetInputNumber()), y)
+      end
+      slabArgs.Text = tostring(vy)
+      Slab.SameLine()
+      if Slab.Input(slabId .. 'y', slabArgs) then
+        local x, y = property:getValue()
+        property:setValue(x, math.floor(Slab.GetInputNumber()))
+      end
     end
   end
   Slab.EndWindow()
@@ -91,6 +109,7 @@ end
 function EntityInspectorTest:draw()
   monocle:begin()
   self.player:draw()
+  self.player:debugDraw()
   if self.sword:isVisible() then 
     self.sword:draw()
   end

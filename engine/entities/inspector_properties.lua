@@ -8,7 +8,9 @@ local PropertyType = {
   String = 'string',
   IntRange = 'int_range',
   FloatRange = 'float_range',
-  Vector = 'vector'
+  Vector2 = 'vector2',
+  Vector2I = 'vectori',
+  Rect = 'rect'
 }
 
 local PropertyMode = { 
@@ -183,18 +185,45 @@ function InspectorProperties:addReadOnlyString(label, getFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
--- VECTOR
-function InspectorProperties:addVector(label, getFunc, setFunc, isObjectFuncs)
-  local property = Property(self.source, label, PropertyType.Vector)
+-- VECTOR2
+function InspectorProperties:addVector2(label, getFunc, setFunc, isObjectFuncs)
+  local property = Property(self.source, label, PropertyType.Vector2)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
-function InspectorProperties:addReadOnlyVector(label, getFunc, setFunc, isObjectFuncs)
-  local property = Property(self.source, label, PropertyType.Vector, true)
+function InspectorProperties:addReadOnlyVector2(label, getFunc, isObjectFuncs)
+  local property = Property(self.source, label, PropertyType.Vector2, true)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)
   addProperty(self, property)
 end
+
+-- VECTOR2I
+function InspectorProperties:addVector2I(label, getFunc, setFunc, isObjectFuncs)
+  local property = Property(self.source, label, PropertyType.Vector2I)
+  setAccessors(property, getFunc, setFunc, isObjectFuncs)
+  addProperty(self, property)
+end
+
+function InspectorProperties:addReadOnlyVector2I(label, getFunc, isObjectFuncs)
+  local property = Property(self.source, label, PropertyType.Vector2I, true)
+  setReadOnlyAccessor(property, getFunc, isObjectFuncs)
+  addProperty(self, property)
+end
+
+-- RECT
+function InspectorProperties:addRect(label, getFunc, setFunc, isObjectFuncs)
+  local property = Property(self.source, label, PropertyType.Rect)
+  setAccessors(property, getFunc, setFunc, isObjectFuncs)
+  addProperty(self, property)
+end
+
+function InspectorProperties:addReadOnlyRect(label, getFunc, isObjectFuncs)
+  local property = Property(self.source, label, PropertyType.Rect, true)
+  setReadOnlyAccessor(property, getFunc, isObjectFuncs)
+  addProperty(self, property)
+end
+
 
 function InspectorProperties:count()
   return lume.count(self.properties)

@@ -76,6 +76,10 @@ function BumpBox:getBounds()
   return self.x, self.y, self.w, self.h
 end
 
+function BumpBox:getSize()
+  return self.w, self.h
+end
+
 -- layer stuff
 function BumpBox:getCollidesWithLayer()
   return self.collidesWithLayer
