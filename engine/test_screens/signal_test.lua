@@ -46,7 +46,7 @@ function SignalTest:update(dt)
   end
   if not self.disconnected and input:pressed('right') then
     print('b:clearConnections')
-    self.b:clearConnections()
+    self.b:free()
     self.disconnected = true
   end
   if self.disconnected and input:pressed('up') then

@@ -42,10 +42,6 @@ function Entity:getName()
   return self.name
 end
 
-function Entity:setName(value)
-  self.name = value
-end
-
 function Entity:getType()
   return 'entity'
 end
@@ -124,6 +120,10 @@ function Entity:addChild(entity)
 end
 
 -- gameloop callbacks
+function Entity:added(gameScreen)
+  
+end
+
 function Entity:awake()
   physics.add(self)
   if self.onAwake then
