@@ -1,13 +1,11 @@
 local Monocle = require 'lib.monocle'
 local gameConfig = require 'game_config'
-local assetManager = require 'engine.utils.asset_manager'
-
-
+local AssetManager = require 'engine.utils.asset_manager'
 
 -- asset loading methods
 local function loadFonts()
-  assetManager.loadFont('data/assets/fonts/monogram.ttf', 16)
-  assetManager.loadFont('data/assets/fonts/dialogue.ttf', 10)
+  AssetManager.loadFont('data/assets/fonts/monogram.ttf', 16)
+  AssetManager.loadFont('data/assets/fonts/dialogue.ttf', 10)
 end
 
 local function loadImages(directory)
@@ -17,7 +15,7 @@ local function loadImages(directory)
     if love.filesystem.getInfo(path).type == 'directory' then
       loadImages(path)
     else
-      assetManager.loadImage(path)
+      AssetManager.loadImage(path)
     end
   end
 end
@@ -31,7 +29,7 @@ local function loadSpriteSheets(directory)
     if love.filesystem.getInfo(path).type == 'directory' then
       loadSpriteSheets(path)
     else
-      assetManager.loadSpriteSheetFile(path)
+      AssetManager.loadSpriteSheetFile(path)
     end
   end
 end
@@ -55,25 +53,29 @@ function love.load(arg)
   loadImages('data/assets/images') 
   loadSpriteSheets('data/assets/spritesheets')
   
+  -- init palettes
+  local paletteBank = require 'engine.utils.palette_bank'
+  paletteBank.initialize('data.palettes')
+  
   -- after we load images and spritesheet initialize the sprite bank
   local spriteBank = require 'engine.utils.sprite_bank'
   spriteBank.initialize('data.sprites')  
   
   local tablePool = require 'engine.utils.table_pool'
-  tablePool.warmCache(200)
+  tablePool.warmCache(64)
   
   --[[
     GLOBALS DECLARED HERE
   ]]
   screenManager = require('lib.roomy').new()
-  camera = require('lib.camera')(0,0,160, 144)
+  camera = require('lib.camera')(0,0, 160, 144)
   input = require('lib.baton').new(gameConfig.controls)
   monocle = Monocle.new()
   monocle:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
 
   
   love.window.setTitle(gameConfig.window.title)
-  love.graphics.setFont(assetManager.getFont('monogram'))
+  love.graphics.setFont(AssetManager.getFont('monogram'))
   
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())

@@ -61,7 +61,7 @@ end
 -- TODO function SpriteBank.createSpriteBuilder()
 
 function SpriteBank.initialize(path)
-  path = path or 'data.assets.sprites'
+  path = path or 'data.sprites'
   require(path)(SpriteBank)
 end
 

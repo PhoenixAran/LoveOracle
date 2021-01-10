@@ -20,8 +20,14 @@ function PaletteBank.getPalette(name)
   return PaletteBank.palettesByName[name]
 end
 
-function PaletteBank:compilePalettes()
-  lume.each(self.palettes, 'compileShader')
+function PaletteBank.compilePalettes()
+  lume.each(PaletteBank.palettes, 'compileShader')
+end
+
+function PaletteBank.initialize(path)
+  path = path or 'data.palettes'
+  require(path)(PaletteBank)
+  PaletteBank.compilePalettes()
 end
 
 return PaletteBank
