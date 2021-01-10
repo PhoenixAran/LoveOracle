@@ -6,11 +6,12 @@ local TestEntity = require 'engine.test_game_entity'
 local BaseScreen = require 'engine.screens.base_screen'
 local lume = require 'lib.lume'
 local bit = require 'bit'
+local Physics = require 'engine.physics'
 
 
 local TestBox = Class { __includes = Entity,
-  init = function(self, rect, zRange)
-    Entity.init(self, true, true, rect, zRange)
+  init = function(self, name, rect, zRange)
+    Entity.init(self, true, true, name, rect, zRange)
     self:setPhysicsLayer('entity')
   end
 }
@@ -24,7 +25,7 @@ local Screen = Class { __includes = BaseScreen,
 }
 
 function Screen:enter(prev, ...)
-  physics.reset()
+  Physics.reset()
   
   self.testEntity = TestEntity()
   self.testEntity:setCollidesWithLayer('entity')
@@ -34,13 +35,13 @@ function Screen:enter(prev, ...)
   self.testEntity:setZRange(0, 50)
 
   -- this test box will be in the same range as the player
-  lume.push(self.testBoxes, TestBox({x = 24, y = 24, w = 24, h = 24}, {min = 20, max = 30}))
+  lume.push(self.testBoxes, TestBox( 'testbox1', {x = 24, y = 24, w = 24, h = 24}, {min = 20, max = 30}))
 
   -- this test box will be 'under' the player
-  lume.push(self.testBoxes, TestBox({x = 65, y = 40, w = 16, h = 12}, {min = -30, max = -4}))
+  lume.push(self.testBoxes, TestBox('testbox2', {x = 65, y = 40, w = 16, h = 12}, {min = -30, max = -4}))
 
   -- this test box will be 'above' the player
-  lume.push(self.testBoxes, TestBox({x = 60, y = 16, w = 24, h = 21}, {min = 51, max = 200}))
+  lume.push(self.testBoxes, TestBox('testbox3', {x = 60, y = 16, w = 24, h = 21}, {min = 51, max = 200}))
   
   lume.each(self.testBoxes, 'awake')
 end

@@ -33,7 +33,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     -- KEEP THESE TWO TOGETHER OR ELSE ENTITY POSITION GETS MESSED UP
     self.transform = Transform:new(self)
     self:setPositionWithBumpCoords(self.x, self.y)
-    
+  
     self.transform:setRotation(0)
     
     self.name = name

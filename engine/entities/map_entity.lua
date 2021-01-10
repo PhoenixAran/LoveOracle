@@ -9,8 +9,8 @@ local vector = require 'lib.vector'
 local Physics = require 'engine.physics'
 
 local MapEntity = Class { __includes = Entity,
-  init = function(self, name, enabled, visible, rect)
-    Entity.init(self, name, enabled, visible, rect)
+  init = function(self, name, enabled, visible, rect, zRange)
+    Entity.init(self, name, enabled, visible, rect, zRange)
     
     -- signals
     self:signal('entityDestroyed')
