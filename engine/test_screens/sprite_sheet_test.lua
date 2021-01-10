@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
+local AssetManager = require 'engine.utils.asset_manager'
 
 local SpriteSheetTest = Class {
   init = function(self)
@@ -13,7 +14,7 @@ local SpriteSheetTest = Class {
 }
 
 function SpriteSheetTest:enter(previous, ...)
-  self.spriteSheet = assetManager.getSpriteSheet('player_items')
+  self.spriteSheet = AssetManager.getSpriteSheet('player_items')
   self.maxIndex = self.spriteSheet:size()
 end
 
@@ -32,11 +33,13 @@ function SpriteSheetTest:update(dt)
 end
 
 function SpriteSheetTest:draw()
+  monocle:begin()
   local subtexture = self.spriteSheet:getTexture(self.currentIndex)
   love.graphics.draw(subtexture.image, subtexture.quad, 160 / 2, 144 / 2)
   love.graphics.setColor(0, 70 / 255, 120 / 255, 255 / 255)
   love.graphics.rectangle("line", (160 / 2) - 1, (144 / 2) - 1, 18, 18)
   love.graphics.setColor(1, 1, 1)
+  monocle:finish()
 end
 
 return SpriteSheetTest

@@ -3,7 +3,7 @@ local TestEntity = require 'engine.test_game_entity'
 local Sprite = require 'engine.graphics.sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local Subtexture = require 'engine.graphics.subtexture'
-
+local AssetManager = require 'engine.utils.asset_manager'
 
 local SpriteTest = Class {
   init = function(self)
@@ -13,21 +13,20 @@ local SpriteTest = Class {
 
 function SpriteTest:enter(previous, ...)
   self.testEntity = TestEntity()
-  local image = assetManager.getImage('player')
+  local image = AssetManager.getImage('player')
   local quad = love.graphics.newQuad( 103, 1, 16, 16, image:getWidth(), image:getHeight())
   local subtexture = Subtexture(image, quad)
   local sprite = Sprite(subtexture, 16, 16)
-  local spriteRenderer = SpriteRenderer(sprite, -16, -16)
-  self.testEntity:add(spriteRenderer)
+  local spriteRenderer = SpriteRenderer(self.testEntity, sprite, -16, -16)
+  self.testEntity['sr'] = (spriteRenderer)
 end
 
-function SpriteTest:update(dt)
-  self.testEntity:update(dt)
-end
 
 function SpriteTest:draw()
-  self.testEntity:draw()
+  monocle:begin()
+  self.testEntity['sr']:draw(dt)
   self.testEntity:debugDraw()
+  monocle:finish()
 end
 
 return SpriteTest
