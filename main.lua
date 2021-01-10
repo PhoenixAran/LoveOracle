@@ -1,5 +1,7 @@
 local Monocle = require 'lib.monocle'
 local gameConfig = require 'game_config'
+local assetManager = require 'engine.utils.asset_manager'
+
 
 
 -- asset loading methods
@@ -41,7 +43,6 @@ local function initBitTags()
   end
 end
 
--- alot of globals are declared here
 function love.load(arg)  
   -- enable zerobrane studio debugging
   if gameConfig.zbStudioDebug then
@@ -49,28 +50,31 @@ function love.load(arg)
   end
   
   initBitTags()
-  -- declare global pool
-  pool = require 'engine.utils.pool'
   
-  assetManager = require 'engine.utils.asset_manager'
   loadFonts() 
   loadImages('data/assets/images') 
   loadSpriteSheets('data/assets/spritesheets')
   
   -- after we load images and spritesheet initialize the sprite bank
-  spriteBank = require 'engine.utils.sprite_bank'
+  local spriteBank = require 'engine.utils.sprite_bank'
   spriteBank.initialize('data.sprites')  
   
-  screenManager = require('lib.roomy').new()
-  physics = require 'engine.physics.physics'
-  camera = require('lib.camera')(0,0,160, 144)
-  tablePool = require 'engine.utils.table_pool'
+  local tablePool = require 'engine.utils.table_pool'
   tablePool.warmCache(200)
+  
+  --[[
+    GLOBALS DECLARED HERE
+  ]]
+  screenManager = require('lib.roomy').new()
+  camera = require('lib.camera')(0,0,160, 144)
   input = require('lib.baton').new(gameConfig.controls)
-  love.window.setTitle(gameConfig.window.title)
   monocle = Monocle.new()
   monocle:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
+
+  
+  love.window.setTitle(gameConfig.window.title)
   love.graphics.setFont(assetManager.getFont('monogram'))
+  
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
 end

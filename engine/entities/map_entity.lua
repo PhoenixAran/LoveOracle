@@ -1,10 +1,12 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local SpriteBank = require 'engine.utils.sprite_bank'
 local Entity = require 'engine.entities.entity'
 local Combat = require 'engine.components.combat'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local vector = require 'lib.vector'
+local Physics = require 'engine.physics'
 
 local MapEntity = Class { __includes = Entity,
   init = function(self, name, enabled, visible, rect)
@@ -22,7 +24,7 @@ local MapEntity = Class { __includes = Entity,
     self.movement = Movement(self)    
     self.groundObserver = GroundObserver(self)
     self.combat = Combat(self)
-    self.effectSprite = spriteBank.build('entity_effects', self)
+    self.effectSprite = SpriteBank.build('entity_effects', self)
     self.sprite = nil   -- declare this yourself
     
     -- declarations
@@ -94,7 +96,7 @@ function MapEntity:move(dt)
   local by = self.y + velY
   local bw = self.w
   local bh = self.h
-  local neighbors = physics.boxcastBroadphase(self, bx, by, bw, bh)
+  local neighbors = Physics.boxcastBroadphase(self, bx, by, bw, bh)
   for i, neighbor in ipairs(neighbors) do
     if self:reportsCollisionsWith(neighbor) then
       local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
@@ -105,7 +107,7 @@ function MapEntity:move(dt)
     end
   end
   self:setPosition(posX + velX, posY + velY)
-  physics.update(self)
+  Physics.update(self)
 end
 
 function MapEntity:updateEntitySpriteEffects(dt)

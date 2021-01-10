@@ -1,12 +1,13 @@
 local Class = require 'lib.class'
 local Item = require 'engine.items.item'
+local SpriteBank = require 'engine.utils.sprite_bank'
 
 local ItemSword = Class { __includes = Item,
   init = function(self, name)
     Item.init(self, name)
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWhileInHole = true
-    self.sprite = spriteBank.build('player_sword', self)
+    self.sprite = SpriteBank.build('player_sword', self)
   end
 }
 

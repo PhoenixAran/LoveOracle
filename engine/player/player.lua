@@ -1,5 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local Pool = require 'engine.utils.pool'
+local SpriteBank = require 'engine.utils.sprite_bank'
 local MapEntity = require 'engine.entities.map_entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
@@ -21,7 +23,7 @@ local Player = Class { __includes = MapEntity,
     MapEntity.init(self,name, enabled, visible, rect)    
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
-    self.sprite = spriteBank.build('player', self)
+    self.sprite = SpriteBank.build('player', self)
     
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
@@ -190,10 +192,10 @@ function Player:beginConditionState(state)
     if not self.conditionStateMachines[i]:isActive() then
       local conditionStateMachine = self.conditionStateMachines[i]
       table.remove(self.conditionStateMachines, i)
-      pool.free(conditionStateMachine)
+      Pool.free(conditionStateMachine)
     end
   end
-  local stateMachine = pool.obtain('player_state_machine')
+  local stateMachine = Pool.obtain('player_state_machine')
   stateMachine:setPlayer(self)
   lume.push(self.conditionStateMachines, stateMachine)
   stateMachine:beginState(state)
@@ -276,9 +278,9 @@ end
 -- combine all state parameters in each active state
 function Player:integrateStateParameters()
   if self.stateParameters ~= nil then
-    pool.free(self.stateParameters)
+    Pool.free(self.stateParameters)
   end
-  self.stateParameters = pool.obtain('player_state_parameters')
+  self.stateParameters = Pool.obtain('player_state_parameters')
   self.stateParameters.animations.default = 'idle'
   self.stateParameters.animations.move = 'walk'
   self.stateParameters.animations.aim = 'aim'

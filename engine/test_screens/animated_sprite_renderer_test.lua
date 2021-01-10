@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local BaseScreen = require 'engine.base_screen'
+local BaseScreen = require 'engine.screens.base_screen'
 
 local Entity = require 'engine.entities.entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
@@ -57,8 +57,7 @@ function AnimatedSpriteRendererTest:enter(previous, ...)
   sb:addCompositeFrame(8, 24, 0, 0, 24)
   animations['squish'] = sb:build()
   
-  self.sprite = AnimatedSpriteRenderer(animations, 'idle')
-  self.entity:add(self.sprite)
+  self.sprite = AnimatedSpriteRenderer(self.entity, animations, 'idle')
   self.entity:setPosition(144 / 2 + 8, 160 / 2)
 end
 
@@ -81,12 +80,12 @@ function AnimatedSpriteRendererTest:update(dt)
       self.sprite:play(animation)
     end
   end
-  self.entity:update(dt)
+  self.sprite:update(dt)
 end
 
 function AnimatedSpriteRendererTest:draw()
-  self.entity:draw()
-  self.entity:debugDraw()
+  monocle:begin()
+  self.sprite:draw()
   local x, y = 2, 2
   for i, v in ipairs(self.animations) do
     if i == self.currentAnimationIndex then
@@ -101,6 +100,7 @@ function AnimatedSpriteRendererTest:draw()
     end
     y = y + 16
   end
+  monocle:finish()
 end
 
 return AnimatedSpriteRendererTest

@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local Pool = require 'engine.utils.pool'
 
 local PlayerStateParameters = Class {
   init = function(self)
@@ -102,8 +103,8 @@ function PlayerStateParameters:reset()
     end
 end
 
-if pool then
-  pool.register('player_state_parameters', PlayerStateParameters)
+if Pool then
+  Pool.register('player_state_parameters', PlayerStateParameters)
 end
 
 return PlayerStateParameters

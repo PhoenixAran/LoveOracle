@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local gameConfig = require 'game_config'
 local rect = require 'engine.utils.rectangle'
+local assetManager = require 'engine.utils.asset_manager'
 
 local BaseScreen = Class {
   init = function(self)

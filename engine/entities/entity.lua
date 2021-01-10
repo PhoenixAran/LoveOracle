@@ -6,6 +6,8 @@ local Vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
 local InspectorProperties = require 'engine.entities.inspector_properties'
 
+local Physics = require 'engine.physics'
+
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, name, enabled, visible, rect, zRange)
     SignalObject.init(self)
@@ -110,9 +112,9 @@ function Entity:setLocalPosition(x, y)
 end
 
 function Entity:resize(width, height)
-  physics.remove(self)
+  Physics.remove(self)
   self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
-  physics.add(self)
+  Physics.add(self)
 end
 
 function Entity:addChild(entity)
@@ -125,7 +127,7 @@ function Entity:added(gameScreen)
 end
 
 function Entity:awake()
-  physics.add(self)
+  Physics.add(self)
   if self.onAwake then
     self:onAwake()
   end

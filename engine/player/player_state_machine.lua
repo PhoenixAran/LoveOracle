@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
+local Pool = require 'engine.utils.pool'
 
 local PlayerStateMachine = Class { _includes = SignalObject,
   init = function(self, player)
@@ -102,8 +103,8 @@ function PlayerStateMachine:reset()
   self.currentState = nil
 end
 
-if pool then
-  pool.register('player_state_machine', PlayerStateMachine)
+if Pool then
+  Pool.register('player_state_machine', PlayerStateMachine)
 end
 
 return PlayerStateMachine

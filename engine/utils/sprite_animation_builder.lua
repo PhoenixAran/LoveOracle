@@ -6,6 +6,8 @@ local SpriteFrame = require 'engine.graphics.sprite_frame'
 local SpriteAnimation = require 'engine.graphics.sprite_animation'
 local lume = require 'lib.lume'
 
+local assetManager = require 'engine.utils.asset_manager'
+
 local SpriteAnimationBuilder = Class {
   init = function(self)
     self.spriteSheet = nil   
@@ -37,7 +39,6 @@ function SpriteAnimationBuilder:setDefaultLoopType(loopType, overrideCurrentLoop
 end
 
 function SpriteAnimationBuilder:setSpriteSheet(spriteSheet)
-  assert(assetManager, 'Global variable "assetManager" instance does not exist')
   if type(spriteSheet) == 'string' then
     self.spriteSheet = assetManager.getSpriteSheet(spriteSheet)
   else
