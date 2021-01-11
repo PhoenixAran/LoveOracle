@@ -2,8 +2,7 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
 local function makePaletteShader(originalColors, alternateColors)
-
-  assert(lume.count(originalColors) == lume.count(alternateColors), 'OriginalColors and AlternateColors need to match for palette shader')
+  assert(lume.count(originalColors) == lume.count(alternateColors), 'OriginalColors and AlternateColors array length need to match for palette shader')
   local count = lume.count(originalColors)
   -- credits to https://github.com/thomasgoldstein/zabuyaki
   local shaderCode = 'const int colorCount = ' .. tostring(count) .. ';'  -- ironic that this is const lol
@@ -24,7 +23,6 @@ local function makePaletteShader(originalColors, alternateColors)
       return pixel * color;
     }
   ]]
-  
   return love.graphics.newShader(shaderCode)
 end
 
@@ -46,6 +44,9 @@ function Palette:getName()
 end
 
 function Palette:addColorPair(originalColor, alternateColor)
+  --lets automatically provide an alpha value
+  originalColor.a = 1
+  alternateColor.a = 1
   lume.push(self.originalColors, originalColor)
   lume.push(self.alternateColors, alternateColor)
 end
@@ -57,6 +58,8 @@ end
 function Palette:compileShader()
   assert(self.shader, 'Attempting to compile already compiled shader')
   self.shader = makePaletteShader(self.originalColors, self.alternateColors)
+  self.shader:sendColor('originalColors', self.originalColors)
+  self.shader:sendColor('alternateColors', self.alternateColors)
 end
 
 return Palette
