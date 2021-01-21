@@ -28,7 +28,7 @@ local PlayerStateParameters = Class {
     self.canUseWeapons = true
     self.canRoomTransition = true
     self.canStrafe = true
-    self.defaultAnimationWhenNotMoving = true
+    self.defaultAnimationWhenNotStill = true
     
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false

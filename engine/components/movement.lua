@@ -140,7 +140,8 @@ function Movement:getLinearVelocity(dt)
 end
 
 function Movement:recalculateLinearVelocity(dt, newX, newY)
-  --TODO
+  -- TODO BUT HOPEFULLY NOT
+  -- want to find a way to "autododge" without recalculating linear velocity
 end
 
 -- update z position

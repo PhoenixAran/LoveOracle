@@ -54,8 +54,6 @@ local function clone(other)
 	return setmetatable(include({}, other), getmetatable(other))
 end
 
-local counter = 1
-
 local function new(class)
 	-- mixins
 	class = class or {}  -- class can be nil
@@ -79,7 +77,6 @@ local function new(class)
 	return setmetatable(class, {__call = function(c, ...)
 		local o = setmetatable({}, c)
 		o:init(...)
-    if counter > 1000 then error() end
 		return o
 	end})
 end

@@ -2,7 +2,7 @@ local Palette = require 'engine.graphics.palette'
 local lume = require 'lib.lume'
 
 local PaletteBank = {
-  palettes = {}
+  palettes = { }
 }
 
 -- return a palette instance a data scripter can use
