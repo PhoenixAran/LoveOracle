@@ -1,4 +1,4 @@
-local version = '0.0.8.0'
+local version = '0.0.9.0'
 local zbStudioDebug = true  -- enable breakpoint and step through with zbstudio
 
 -- Made for SNES controllers
@@ -42,7 +42,7 @@ local physicsFlags = {
 }
 
 
-local startupScreen = 'data.test_screens.player_playground'
+local startupScreen = 'engine.test_screens.player_palette_test'
 
 return {
  zbStudioDebug = zbStudioDebug,

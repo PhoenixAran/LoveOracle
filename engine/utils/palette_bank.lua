@@ -11,13 +11,13 @@ function PaletteBank.createPalette(name)
 end
 
 function PaletteBank.register(palette)
-  assert(PaletteBank.palettes[palette:getName()], 'PaletteBank already has palette with key ' .. palette:getName())
+  assert(PaletteBank.palettes[palette:getName()] == nil, 'PaletteBank already has palette with key ' .. palette:getName())
   PaletteBank.palettes[palette:getName()] = palette
 end
 
 function PaletteBank.getPalette(name)
   assert(PaletteBank.palettes[name], 'PaletteBank does not have palette with key ' .. name)
-  return PaletteBank.palettesByName[name]
+  return PaletteBank.palettes[name]
 end
 
 function PaletteBank.compilePalettes()

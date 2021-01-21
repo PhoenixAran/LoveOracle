@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local inspect = require 'lib.inspect'
 
 local function makePaletteShader(originalColors, alternateColors)
   assert(lume.count(originalColors) == lume.count(alternateColors), 'OriginalColors and AlternateColors array length need to match for palette shader')
@@ -36,6 +37,7 @@ local Palette = Class {
     self.alternateColors = alternateColors or { }
     self.hash = nil
     self.shader = nil
+    self.normalizeValues = true
   end
 }
 
@@ -44,9 +46,25 @@ function Palette:getName()
 end
 
 function Palette:addColorPair(originalColor, alternateColor)
+  assert(lume.count(originalColor) == 3, 'color must be an array of 3 values')
+  assert(lume.count(alternateColor) == 3, 'alternateColor must be an array of 3 values')
+  -- clone because you never know if the table is stored as a local variable or something
+  -- normalizing values and appending the alpha value will cause the asserts above to fail
+  -- if table is used again
+  originalColor = lume.clone(originalColor)
+  alternateColor = lume.clone(alternateColor)
+  if self.normalizeValues then
+    for k, v in ipairs(originalColor) do
+      originalColor[k] = originalColor[k] / 255
+    end
+    for k, v in ipairs(alternateColor) do
+      alternateColor[k] = alternateColor[k] / 255
+    end
+  end  
   --lets automatically provide an alpha value
-  originalColor.a = 1
-  alternateColor.a = 1
+  lume.push(originalColor, 1)
+  lume.push(alternateColor, 1)
+  -- add colors to color array
   lume.push(self.originalColors, originalColor)
   lume.push(self.alternateColors, alternateColor)
 end
@@ -56,10 +74,18 @@ function Palette:getShader()
 end
 
 function Palette:compileShader()
-  assert(self.shader, 'Attempting to compile already compiled shader')
+  assert(not self.shader, 'Attempting to compile already compiled shader')
   self.shader = makePaletteShader(self.originalColors, self.alternateColors)
-  self.shader:sendColor('originalColors', self.originalColors)
-  self.shader:sendColor('alternateColors', self.alternateColors)
+  if lume.count(self.originalColors) == 0 then return end
+  if lume.count(self.originalColors) == 1 then
+    self.shader:sendColor('originalColors', self.originalColors[1])
+    self.shader:sendColor('alternateColors', self.alternateColors[1])
+  else
+    local otherOrignalColors = lume.slice(self.originalColors, 1)
+    local otherAlternateColors = lume.slice(self.alternateColors, 1)
+    self.shader:sendColor('originalColors', self.originalColors[1], otherOrignalColors)
+    self.shader:sendColor('alternateColors', self.alternateColors[1], otherAlternateColors)
+  end
 end
 
 return Palette
