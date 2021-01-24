@@ -7,33 +7,55 @@ local SpriteBank = require 'engine.utils.sprite_bank'
 -- used to validate tile types provided by data scripter
 local TileTypeInverse = lume.invert(TileType)
 
+local Templates = { }
 
 local TileData = Class {
-  init = function(self, id)
-    self.id = id
+  init = function(self)
     self.name =  ''
     self.type = TileType.Ground
     
     self.sprite = nil
-    self.isAnimated = false
+    self.animated = false
+    self.hitbox = false
     
     self.collisionRect = { x = 0, y = 0, w = 16, y = 16 }
-    self.hurtRect = { x = 0, y = 0, w = 16, y = 16 }
+    self.hitRect = { x = 0, y = 0, w = 16, y = 16 }
 
-    self.physicsLayer = -1
-    self.collidesWithLayer = -1
+    self.physicsLayer = 0
+    self.collidesWithLayer = 0
+    
+    self.hitPhysicsLayer = 0
+    self.hitCollidesWithLayer = 0 
     
     -- default type to assign this tile data too
     self.tileType = 'tile'  
   end
 }
 
-function TileData:getId()
-  return self.id
+-- do not confuse with tiletype!
+function TileData:getType()
+  return 'tile_data'
+end
+
+function TileData:getTileType()
+  return self.tileType
+end
+
+function TileData:setTileType(tileType)
+  assert(TileTypeInverse[tileType], tileType .. ' is not a valid tile type')
+  self.tileType = tileType
+end
+
+function TileData:getName()
+  return self.name
 end
 
 function TileData:isAnimated()
-  return self.isAnimated
+  return self.animated
+end
+
+function TileData:setAnimated(value)
+  self.animated = value
 end
 
 function TileData:getSprite()
@@ -46,6 +68,14 @@ function TileData:setSprite(name)
   else
     self.sprite = SpriteBank.getSprite(name)
   end
+end
+
+function TileData:hasHurtbox()
+  return self.hurtbox
+end
+
+function TileData:setHurtbox(value)
+  self.hurtbox = value
 end
 
 function TileData:getCollisionDimensions(x, y, w, h)
@@ -70,20 +100,20 @@ function TileData:setHurtBoxDimensions(x, y, w, h)
   self.hurtRect.h = h
 end
 
--- layer stuff
-function BumpBox:getCollidesWithLayer()
+-- collision layer stuff
+function TileData:getCollidesWithLayer()
   return self.collidesWithLayer
 end
 
-function BumpBox:getPhysicsLayer()
+function TileData:getPhysicsLayer()
   return self.physicsLayer
 end
 
-function BumpBox:setCollidesWithLayerExplicit(value)
+function TileData:setCollidesWithLayerExplicit(value)
   self.collidesWithLayer = value
 end
 
-function BumpBox:setCollidesWithLayer(layer)
+function TileData:setCollidesWithLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
       self.collidesWithLayer = bit.bor(self.collidesWithLayer, BitTag.get(v).value)
@@ -93,7 +123,7 @@ function BumpBox:setCollidesWithLayer(layer)
   end
 end
 
-function BumpBox:unsetCollidesWithLayer(layer)
+function TileData:unsetCollidesWithLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
       self.collidesWithLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(v).value))
@@ -103,11 +133,11 @@ function BumpBox:unsetCollidesWithLayer(layer)
   end
 end
 
-function BumpBox:setPhysicsLayerExplicit(value)
+function TileData:setPhysicsLayerExplicit(value)
   self.physicsLayer = value
 end
 
-function BumpBox:setPhysicsLayer(layer)
+function TileData:setPhysicsLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
       self.physicsLayer = bit.bor(self.physicsLayer, BitTag.get(v).value)
@@ -117,7 +147,7 @@ function BumpBox:setPhysicsLayer(layer)
   end
 end
 
-function BumpBox:unsetPhysicsLayer(layer)
+function TileData:unsetPhysicsLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
       self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(v).value))
@@ -125,6 +155,74 @@ function BumpBox:unsetPhysicsLayer(layer)
   else
     self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(layer).value))
   end
+end
+
+-- hurtbox collision layer
+function TileData:getHitBoxCollidesWithLayer()
+  return self.hitCollidesWithLayer
+end
+
+function TileData:getHitBoxPhysicsLayer()
+  return self.hitPhysicsLayer
+end
+
+function TileData:setHitBoxCollidesWithLayerExplicit(value)
+  self.hitCollidesWithLayer = value
+end
+
+function TileData:setHurtBoxCollidesWithLayer(layer)
+  if type(layer) == 'table' then
+    for _, v in ipairs(layer) do
+      self.hitCollidesWithLayer = bit.bor(self.hitCollidesWithLayer, BitTag.get(v).value)
+    end
+  else
+    self.hitCollidesWithLayer = bit.bor(self.hitCollidesWithLayer, BitTag.get(layer).value)
+  end
+end
+
+function TileData:unsetHurtBoxCollidesWithLayer(layer)
+  if type(layer) == 'table' then
+    for _, v in ipairs(layer) do
+      self.hitCollidesWithLayer = bit.band(self.hitCollidesWithLayer, bit.bnot(BitTag.get(v).value))
+    end
+  else
+    self.hitCollidesWithLayer = bit.band(self.hitCollidesWithLayer, bit.bnot(BitTag.get(layer).value))
+  end
+end
+
+function TileData:setHitBoxPhysicsLayerExplicit(value)
+  self.hitPhysicsLayer = value
+end
+
+function TileData:setHitBoxPhysicsLayer(layer)
+  if type(layer) == 'table' then
+    for _, v in ipairs(layer) do
+      self.hitPhysicsLayer = bit.bor(self.hitPhysicsLayer, BitTag.get(v).value)
+    end
+  else
+    self.hitPhysicsLayer = bit.bor(self.hitPhysicsLayer, BitTag.get(layer).value)
+  end
+end
+
+function TileData:unsetHitBoxPhysicsLayer(layer)
+  if type(layer) == 'table' then
+    for _, v in ipairs(layer) do
+      self.hitPhysicsLayer = bit.band(self.hitPhysicsLayer, bit.bnot(BitTag.get(v).value))
+    end
+  else
+    self.hitPhysicsLayer = bit.band(self.hitPhysicsLayer, bit.bnot(BitTag.get(layer).value))
+  end
+end
+
+-- Templates
+function Templates.addTemplate(name, tileData)
+  assert(not Templates[name], 'Tile Template with name ' .. name .. ' already exists')
+  Templates[name] = tileData
+end
+
+function Templates.createFromTemplate(name)
+  assert(Templates[name], 'Tile Template with name ' .. name .. ' does not exist')
+  return Templates[name]:clone()
 end
 
 return TileData
