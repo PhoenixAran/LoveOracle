@@ -5,7 +5,9 @@ local PaletteBank = require 'engine.utils.palette_bank'
 local TileData = require 'engine.tiles.tile_data'
 
 local Tileset = Class {
-  init = function(self, name, sizeX, sizeY)
+  init = function(self, name, sizeX, sizeY, tileSize)
+    
+    self.tileSize = tileSize or 16
     self.tileId = 1
     self.name = name
     -- holds TileData instances, don't confuse this with the Tile class

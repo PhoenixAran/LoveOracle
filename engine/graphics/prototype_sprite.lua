@@ -42,7 +42,7 @@ function PrototypeSprite:getHeight()
 end
 
 function PrototypeSprite:getDimensions()
-  return self.width, self.height
+  return self.w, self.h
 end
 
 function PrototypeSprite:getBounds()
