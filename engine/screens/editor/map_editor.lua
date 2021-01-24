@@ -21,6 +21,7 @@ function MapEditor:update(dt)
 end
 
 function MapEditor:draw()
+  love.graphics.clear(.4, .4, .4, 1.0)
   
 end
 
