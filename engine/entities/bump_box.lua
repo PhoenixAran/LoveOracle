@@ -130,10 +130,10 @@ end
 function BumpBox:unsetPhysicsLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
-      self.physicsLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(v).value))
+      self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(v).value))
     end
   else
-    self.physicsLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(layer).value))
+    self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(layer).value))
   end
 end
 
