@@ -30,5 +30,12 @@ function Templates.createFromTemplate(name)
 end
 -- end templates
 
+function TileDataBuilder:setFlags(flags)
+  if type(flags) == 'string' then
+    
+  else
+    
+  end
+end
 
 return TileDataBuilder
