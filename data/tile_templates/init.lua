@@ -1,4 +1,4 @@
 local path = ...
-return function(TileDataBuilder)
-  
+return function(TileData)
+  require(path .. '.default_tiles')(TileData)
 end

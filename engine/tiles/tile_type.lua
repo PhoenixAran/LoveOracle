@@ -1,12 +1,18 @@
 local TileTypes = {
-  Ground = 'ground',
+  Normal = 'normal',
+  Stairs = 'stairs',
+  Ladder = 'ladder',
+  Ice = 'ice',
+  Puddle = 'puddle',
   Grass = 'grass',
-  HighGrass = 'high_grass',
+  Hole = 'hole',
   Water = 'water',
   DeepWater = 'deep_water',
   Ocean = 'ocean',
-  Hole = 'hole',
-  Wall = 'wall',
+  WaterFall = 'waterfall',
+  Lava = 'lava',
+  LavaFall = 'lavafall',
+  Whirlpool = 'whirlpool'
 }
 
 return TileTypes

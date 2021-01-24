@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local lume = require 'lib.lume'
 local bit = require 'bit'
 local TileType = require 'engine.tiles.tile_type'
 local BitTag = require 'engine.utils.bit_tag'
@@ -6,13 +7,12 @@ local SpriteBank = require 'engine.utils.sprite_bank'
 
 -- used to validate tile types provided by data scripter
 local TileTypeInverse = lume.invert(TileType)
-
 local Templates = { }
 
 local TileData = Class {
   init = function(self)
-    self.name =  ''
-    self.type = TileType.Ground
+    self.name = nil
+    self.tileType = TileType.Normal
     
     self.sprite = nil
     self.animated = false
@@ -28,7 +28,10 @@ local TileData = Class {
     self.hitCollidesWithLayer = 0 
     
     -- default type to assign this tile data too
-    self.tileType = 'tile'  
+    -- when instancing actual tile in game
+    self.tileClassType = 'tile'
+    
+    self.physicsLayer = bit.bor(self.physicsLayer, BitTag.get('tile').value)   
   end
 }
 
@@ -41,13 +44,25 @@ function TileData:getTileType()
   return self.tileType
 end
 
-function TileData:setTileType(tileType)
-  assert(TileTypeInverse[tileType], tileType .. ' is not a valid tile type')
-  self.tileType = tileType
+function TileData:getTileClassType()
+  return self.tileClassType
 end
 
 function TileData:getName()
   return self.name
+end
+
+function TileData:setName(name)
+  self.name = name
+end
+
+function TileData:setTileClassType(value)
+  self.tileClassType = value
+end
+
+function TileData:setTileType(tileType)
+  assert(TileTypeInverse[tileType], tileType .. ' is not a valid tile type')
+  self.tileType = tileType
 end
 
 function TileData:isAnimated()
@@ -215,14 +230,19 @@ function TileData:unsetHitBoxPhysicsLayer(layer)
 end
 
 -- Templates
-function Templates.addTemplate(name, tileData)
+function TileData.addTemplate(name, tileData)
   assert(not Templates[name], 'Tile Template with name ' .. name .. ' already exists')
   Templates[name] = tileData
 end
 
-function Templates.createFromTemplate(name)
+function TileData.createFromTemplate(name)
   assert(Templates[name], 'Tile Template with name ' .. name .. ' does not exist')
   return Templates[name]:clone()
+end
+
+function TileData.initializeTemplates(path)
+  path = path or 'data.tile_templates'
+  require(path)(TileData)
 end
 
 return TileData

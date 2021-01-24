@@ -61,6 +61,10 @@ function love.load(arg)
   local spriteBank = require 'engine.utils.sprite_bank'
   spriteBank.initialize('data.sprites')  
   
+  -- initialize tilesets
+  local tilesetBank = require 'engine.utils.tileset_bank'
+  tilesetBank.initialize('data.tilesets')
+  
   local tablePool = require 'engine.utils.table_pool'
   tablePool.warmCache(64)
   

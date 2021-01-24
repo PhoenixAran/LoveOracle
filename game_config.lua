@@ -34,11 +34,14 @@ local window = {
   }
 }
 
+-- Do not exceed 32 flags!
 local physicsFlags = {
   'entity',
   'player',
   'enemy',
-  'npc'
+  'npc',
+  'platform',
+  'tile'
 }
 
 
