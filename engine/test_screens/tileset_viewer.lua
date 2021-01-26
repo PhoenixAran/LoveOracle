@@ -2,6 +2,8 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local Slab = require 'lib.slab'
 local TilesetBank = require 'engine.utils.tileset_bank'
+local vector = require 'lib.vector'
+local rect = require 'engine.utils.rectangle'
 
 local tileMargin = 1
 local tilePadding = 1
@@ -12,7 +14,10 @@ local TilesetViewer = Class {
     self.tilesetName = ''
     self.tileset = nil
     self.tilesetList = { }
-    self.tileCanvas = love.graphics.newCanvas(1, 1)
+    self.tilesetCanvas = love.graphics.newCanvas(1, 1)
+    self.selectedTileIndexX = 1
+    self.selectedTileIndexY = 1
+    
     self.zoomLevels = { 1, 2, 4, 6, 8, 12 }
     self.zoom = 1
     self.canvasCache = { }
@@ -32,27 +37,40 @@ function TilesetViewer:updateTileset(tilesetName)
     canvas:setFilter('nearest', 'nearest')
     self.canvasCache[self.tilesetName] = canvas
   end
-  self.tileCanvas = self.canvasCache[self.tilesetName]
-  self.tileCanvasDrawn = false
+  self.tilesetCanvas = self.canvasCache[self.tilesetName]
 end
 
-function TilesetViewer:drawTilesetOnTileCanvas()
-  love.graphics.setCanvas(self.tileCanvas)
+function TilesetViewer:drawTilesetOnTilesetCanvas()
+  love.graphics.setCanvas(self.tilesetCanvas)
+  love.graphics.clear()
   -- draw tiles
-  local x = tilesetDrawMargin
-  local y = tilesetPadding
   local tileSize = self.tileset.tileSize
   for x = 1, self.tileset.sizeX, 1 do
     for y = 1, self.tileset.sizeY, 1 do
       local tilesetData = self.tileset:getTile(x, y)
       local sprite = tilesetData:getSprite()
-      local posX = ((x - 1) * 16) + ((x - 1) * tilePadding) + (tileMargin)
-      local posY = ((y - 1) * 16) + ((y - 1) * tilePadding) + (tileMargin)
+      local posX = ((x - 1) * tileSize) + ((x - 1) * tilePadding) + (tileMargin)
+      local posY = ((y - 1) * tileSize) + ((y - 1) * tilePadding) + (tileMargin)
       sprite:draw(posX + tileSize / 2 , posY + tileSize / 2)
     end
   end
-  self.tileCanvasDrawn = true
+  -- draw border around selected tile
+  love.graphics.setLineWidth(1)
+  love.graphics.setColor(1, 0, 0)
+  love.graphics.rectangle('line', 
+    ((self.selectedTileIndexX - 1) * tileSize) + ((self.selectedTileIndexX - 1) * tilePadding) + tileMargin, 
+    ((self.selectedTileIndexY - 1) * tileSize) + ((self.selectedTileIndexY - 1) * tilePadding) + tileMargin, 
+    tileSize, 
+    tileSize) 
+  
   love.graphics.setCanvas()
+end
+
+function TilesetViewer:updateSelectedTileIndex(x, y)
+  if 1 <= x and x <= self.tileset.sizeX and 1 <= y and y <= self.tileset.sizeY then
+    self.selectedTileIndexX = x
+    self.selectedTileIndexY = y
+  end
 end
 
 function TilesetViewer:enter(prev, ...)
@@ -90,15 +108,28 @@ function TilesetViewer:update(dt)
     end
     Slab.EndComboBox()
   end
-  
-  if self.tileCanvas then
-    Slab.Image('tile-canvas-' .. self.tilesetName , {Image = self.tileCanvas, WrapH = 'clampzero', WrapV = 'clampzero', ScaleX = self.zoom, ScaleY = self.zoom})
+
+  if self.tilesetCanvas then
+    local wx, wy = Slab.GetWindowPosition()
+    local tilesetImagePosX, tilesetImagePosY = Slab.GetCursorPos({Absolute = true})
+    tilesetImagePosX, tilesetImagePosY = vector.sub(tilesetImagePosX, tilesetImagePosY, wx, wy)
+    Slab.Image('tile-canvas-' .. self.tilesetName , {Image = self.tilesetCanvas, WrapH = 'clampzero', WrapV = 'clampzero', ScaleX = self.zoom, ScaleY = self.zoom})
+    if Slab.IsMouseClicked(1) and not Slab.IsVoidClicked(1) then
+      local mx, my = Slab.GetMousePosition()
+      local windowClickX, windowClickY = vector.sub(mx, my, wx, wy)
+      local relClickX, relClickY = vector.div(self.zoom, vector.sub(windowClickX, windowClickY, tilesetImagePosX, tilesetImagePosY))
+      -- add 1 for lua index
+      local tileIndexX = math.floor(relClickX / self.tileset.tileSize) + 1
+      local tileIndexY = math.floor(relClickY / self.tileset.tileSize) + 1
+
+      self:updateSelectedTileIndex(tileIndexX, tileIndexY)
+    end
   end
   Slab.EndWindow()
 end
 
 function TilesetViewer:draw()
-  self:drawTilesetOnTileCanvas()
+  self:drawTilesetOnTilesetCanvas()
   Slab.Draw()
 end
 

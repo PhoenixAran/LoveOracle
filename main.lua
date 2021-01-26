@@ -1,6 +1,7 @@
 local Monocle = require 'lib.monocle'
 local gameConfig = require 'game_config'
 local AssetManager = require 'engine.utils.asset_manager'
+local Slab = require 'lib.slab'
 
 -- asset loading methods
 local function loadFonts()
@@ -83,6 +84,9 @@ function love.load(arg)
   
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
+  
+  Slab.SetINIStatePath(nil)
+  Slab.Initialize()
 end
 
 function love.update(dt)

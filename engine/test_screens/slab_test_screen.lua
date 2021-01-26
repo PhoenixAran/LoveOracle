@@ -8,10 +8,6 @@ local Screen = Class { __includes = BaseScreen,
   end
 }
 
-function Screen:enter(previous, ...)
-	Slab.Initialize(args)
-end
-
 function Screen:update(dt)
   Slab.Update(dt)
 	Slab.BeginWindow('MyFirstWindow', {Title = "My First Window"})
