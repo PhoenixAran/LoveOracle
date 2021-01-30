@@ -78,6 +78,9 @@ function TilesetViewer:enter(prev, ...)
   for k, _ in pairs(TilesetBank.tilesets) do
     lume.push(self.tilesetList, k)
   end
+  lume.sort(self.tilesetList, function(a, b)
+    return string.upper(a) < string.upper(b)
+  end)
   self:updateTileset(lume.first(self.tilesetList))
   Slab.Initialize()
 end
@@ -132,6 +135,5 @@ function TilesetViewer:draw()
   self:drawTilesetOnTilesetCanvas()
   Slab.Draw()
 end
-
 
 return TilesetViewer
