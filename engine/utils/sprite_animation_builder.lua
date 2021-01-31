@@ -52,6 +52,14 @@ end
 
 -- adds a regular sprite frame using the current internal spritesheet
 function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
+  -- user is adding an explicit Sprite object
+  if type(x) == 'table' then
+    -- x becomes a Sprite instance
+    -- y becomes the delay
+    delay = y
+    lume.push(self.frames, SpriteFrame(x, y))
+    return
+  end
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
   

@@ -2,7 +2,6 @@ local Class = require 'lib.class'
 local BaseScreen = require 'engine.screens.base_screen'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
-local Slab = require 'lib.slab'
 
 
 local PlayerPlayground = Class { __includes = BaseScreen,
@@ -17,14 +16,9 @@ function PlayerPlayground:enter(prev, ...)
   self.sword.useButtons = { 'b' }
   self.player:equipItem(self.sword)
   self.sword:setVisible(false)
-  Slab.Initialize()
 end
 
 function PlayerPlayground:update(dt)
-  Slab.Update(dt)
-	Slab.BeginWindow('MyFirstWindow', {Title = "My First Window"})
-	Slab.Text("Hello World")
-	Slab.EndWindow()
   self.player:update(dt)
 end
 
@@ -38,7 +32,6 @@ function PlayerPlayground:draw()
   self:drawMemory()
   self:drawVersion()
   monocle:finish()
-  Slab.Draw()
 end
 
 return PlayerPlayground

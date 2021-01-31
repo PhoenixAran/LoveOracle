@@ -63,5 +63,4 @@ function SpriteRendererBuilder:setFollowZ(value)
   self.followZ = value
 end
 
-
 return SpriteRendererBuilder

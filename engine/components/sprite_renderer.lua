@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
+local PaletteBank = require 'engine.utils.palette_bank'
 
 local SpriteRenderer = Class { __includes = Component,
   init = function(self, entity, sprite, offsetX, offsetY, followZ, enabled, visible)
@@ -9,6 +10,8 @@ local SpriteRenderer = Class { __includes = Component,
     if offsetY == nil then offsetY = 0 end
     if followZ == nil then followZ = true end
     
+    
+    self.palette = nil
     self.offsetX = offsetX
     self.offsetY = offsetY
     self.sprite = sprite
@@ -61,6 +64,14 @@ function SpriteRenderer:getBounds()
   return x, y, w, h
 end
 
+function SpriteRenderer:getPalette()
+  return self.palette
+end
+
+function SpriteRenderer:setPalette(palette)
+  self.palette = palette
+end
+
 function SpriteRenderer:draw()
   if self.sprite == nil then
     return
@@ -70,9 +81,19 @@ function SpriteRenderer:draw()
   x = x + self.offsetX
   y = y + self.offsetY
   if self.followZ then
-    self.sprite:draw(x, y - z, self.alpha)
-  else
-    self.sprite:draw(x, y, self.alpha)
+    y = y - z
+  end
+  local currentShader = love.graphics.getShader()
+  local shouldSwapBack = false
+  if self.palette then
+    if currentShader ~= self.palette:getShader() then
+      love.graphics.setShader(self.palette:setShader())
+      shouldSwapBack = true
+    end
+  end
+  self.sprite:draw(x, y, self.alpha)
+  if shouldSwapBack then
+    love.graphics.setShader(currentShader)
   end
 end
 
