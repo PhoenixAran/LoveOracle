@@ -23,6 +23,10 @@ local SpriteAnimationBuilder = Class {
   end
 }
 
+function SpriteAnimationBuilder:getType()
+  return 'sprite_animation_builder'
+end
+
 function SpriteAnimationBuilder:setSubstrips(bool)
   self.hasSubstrips = bool
 end
@@ -46,7 +50,7 @@ function SpriteAnimationBuilder:setSpriteSheet(spriteSheet)
   end
 end
 
--- adds a regular sprite frame using the curren tinternal spritesheet
+-- adds a regular sprite frame using the current internal spritesheet
 function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end

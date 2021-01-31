@@ -1,5 +1,8 @@
 local Class = require 'lib.class'
 
+-- Warning: Do not put a composite sprite inside itself
+-- This is a sprite composed of multiple sprites which will act
+-- as one singular sprite
 local CompositeSprite = Class {
   init = function(self, sprites, originX, originY, offsetX, offsetY)
     if offsetX == nil then offsetX = 0 end

@@ -1,5 +1,7 @@
 local Class = require 'lib.class'
 
+-- Acts as a sprite
+-- Its really just a colored rectangle
 local PrototypeSprite = Class {
   init = function(self, r, g, b, width, height, offsetX, offsetY)
     if offsetX == nil then offsetX = 0 end
