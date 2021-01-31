@@ -33,7 +33,6 @@ function PlayerPaletteTest:enter(prev, ...)
   self.player:equipItem(self.sword)
   self.sword:setVisible(false)
   self.entities:setPlayer(self.player)
-  Slab.Initialize()
 end
 
 function PlayerPaletteTest:update(dt)

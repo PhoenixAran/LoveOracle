@@ -1,6 +1,7 @@
 local Monocle = require 'lib.monocle'
 local gameConfig = require 'game_config'
 local AssetManager = require 'engine.utils.asset_manager'
+local Slab = require 'lib.slab'
 
 -- asset loading methods
 local function loadFonts()
@@ -41,7 +42,7 @@ local function initBitTags()
   end
 end
 
-function love.load(arg)  
+function love.load(arg)
   -- enable zerobrane studio debugging
   if gameConfig.zbStudioDebug then
     if arg[#arg] == '-debug' then require('mobdebug').start() end
@@ -61,6 +62,10 @@ function love.load(arg)
   local spriteBank = require 'engine.utils.sprite_bank'
   spriteBank.initialize('data.sprites')  
   
+  -- initialize tilesets
+  local tilesetBank = require 'engine.utils.tileset_bank'
+  tilesetBank.initialize('data.tilesets')
+  
   local tablePool = require 'engine.utils.table_pool'
   tablePool.warmCache(64)
   
@@ -79,6 +84,9 @@ function love.load(arg)
   
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
+  
+  Slab.SetINIStatePath(nil)
+  Slab.Initialize()
 end
 
 function love.update(dt)

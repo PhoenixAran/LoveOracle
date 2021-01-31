@@ -18,6 +18,12 @@ local Entities = Class { __includes = SignalObject,
   end
 }
 
+local function ySort(entityA, entityB)
+  local ax, ay = entityA:getPosition()
+  local bx, by = entityB:getPosition()
+  return ay - by
+end
+
 function Entities:setPlayer(player)
   assert(not self.entitiesHash[player:getName()])
   self.player = player
@@ -66,11 +72,7 @@ function Entities:update(dt)
 end
 
 function Entities:draw()
-  table.sort(self.entitiesDraw, function(a, b) 
-    local ax, ay = a:getPosition()
-    local bx, by = b:getPosition()
-    return ay - by
-  end)
+  lume.sort(self.entitiesDraw, ySort)
   lume.each(self.entitiesDraw, 'draw')
 end
 

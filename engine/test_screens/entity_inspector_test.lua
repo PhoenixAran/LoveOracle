@@ -23,7 +23,6 @@ function EntityInspectorTest:enter(prev, ...)
   self.player:equipItem(self.sword)
   self.sword:setVisible(false)
   self.entities:setPlayer(self.player)
-  Slab.Initialize()
 end
 
 function EntityInspectorTest:update(dt)

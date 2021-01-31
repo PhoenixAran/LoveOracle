@@ -89,6 +89,8 @@ function MapEntity:getLinearVelocity(x, y)
   return self.movement:getLinearVelocity(x, y)
 end
 
+
+
 function MapEntity:move(dt) 
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)

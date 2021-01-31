@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 
+-- Basic Sprite Class
 local Sprite = Class {
   init = function(self, subtexture, offsetX, offsetY)
     if offsetX == nil then offsetX = 0 end

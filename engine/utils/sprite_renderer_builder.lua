@@ -23,6 +23,10 @@ local SpriteRendererBuilder = Class {
   end
 }
 
+function SpriteRendererBuilder:getType()
+  return 'sprite_renderer_builder'
+end
+
 function SpriteRendererBuilder:setDefaultAnimation(value)
   self.defaultAnimation = value
 end
@@ -58,6 +62,5 @@ end
 function SpriteRendererBuilder:setFollowZ(value)
   self.followZ = value
 end
-
 
 return SpriteRendererBuilder

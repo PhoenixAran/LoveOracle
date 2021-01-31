@@ -12,7 +12,6 @@ local PaletteTest = Class {
 
 
 function PaletteTest:enter(prev, ...)
-  Slab.Initialize()
   self.spriteSheet = assetManager.getSpriteSheet('player')
   
   -- credits to https://github.com/thomasgoldstein/zabuyaki

@@ -62,6 +62,7 @@ function AnimatedSpriteRendererTest:enter(previous, ...)
 end
 
 function AnimatedSpriteRendererTest:update(dt)
+  -- dark times before Slab library lol
   local changed = false
   if input:pressed('up') then
     self.currentAnimationIndex = self.currentAnimationIndex - 1

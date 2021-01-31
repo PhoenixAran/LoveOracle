@@ -5,7 +5,7 @@ local SpriteSheet = Class {
   init = function(self, image, width, height, padding, margin)
     self.textures = { }
     if padding == nil then padding = 1 end
-    if margin == nil then margin = 0 end
+    if margin == nil then margin = 1 end
     local countedCols = false
     local rowCount, colCount = 0, 0
     

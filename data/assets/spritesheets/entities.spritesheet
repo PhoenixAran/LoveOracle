@@ -1,5 +1,5 @@
 # argument examples below
-# <spritesheet key>, <image key>, <sprite width>, <sprite height>, optional <margin x>, optional <margin y>
+# <spritesheet key>, <image key>, <sprite width>, <sprite height>, optional <margin x> (default = 1) , optional <margin y> (default = 1)
 
 # entity Spritesheet Declarations
-"player", "player", 16, 16, 1, 1
+"player", "player", 16, 16

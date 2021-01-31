@@ -34,15 +34,18 @@ local window = {
   }
 }
 
+-- Do not exceed 32 flags!
 local physicsFlags = {
   'entity',
   'player',
   'enemy',
-  'npc'
+  'npc',
+  'platform',
+  'tile'
 }
 
 
-local startupScreen = 'engine.test_screens.player_palette_test'
+local startupScreen = 'data.test_screens.player_playground'
 
 return {
  zbStudioDebug = zbStudioDebug,
