@@ -42,7 +42,7 @@ local function initBitTags()
   end
 end
 
-function love.load(arg)  
+function love.load(arg)
   -- enable zerobrane studio debugging
   if gameConfig.zbStudioDebug then
     if arg[#arg] == '-debug' then require('mobdebug').start() end

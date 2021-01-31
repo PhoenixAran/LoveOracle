@@ -17,7 +17,7 @@ function PlayerPlayground:enter(prev, ...)
   self.sword.useButtons = { 'b' }
   self.player:equipItem(self.sword)
   self.sword:setVisible(false)
-  Slab.Initialize(args)
+  Slab.Initialize()
 end
 
 function PlayerPlayground:update(dt)
