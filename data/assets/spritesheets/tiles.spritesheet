@@ -1,0 +1,56 @@
+# argument examples below
+# <spritesheet key>, <image key>, <sprite width>, <sprite height>, optional <margin x> (default = 1) , optional <margin y> (default = 1)
+
+### Action Tiles ###
+"action_tiles", "action_tiles", 16, 16
+
+### Indoor Tiles ###
+"cracked_floors", "cracked_floors", 16, 16
+"entrance_columns", "entrance_columns", 16, 16
+"entrance_lights", "entrance_lights", 8, 8
+"floor_square_patterns", "floor_square_patterns", 16, 16
+"floor_square_tiles", "floor_square_tiles", 16, 16
+"floor_square_tiles_8x8", "floor_square_tiles_8x8", 8, 8
+"floors_bricks", "floors_bricks", 16, 16
+"floors_bright_patterns", "floors_bright_patterns", 16, 16
+"floors_dungeon", "floors_dungeon", 16, 16
+"floors_interior", "floors_interior", 16, 16
+"floors_misc", "floors_misc", 16, 16
+"floors_overworld", "floors_overworld", 16, 16
+"interior", "interior", 16, 16
+"lanterns", "lanterns", 16, 8
+"railings", "railings", 8, 8
+"stairs", "stairs", 16, 16
+"torches", "torches", 8, 8
+"tunnels", "tunnels", 16, 16
+"wall_columns_horizontal", "wall_columns_horizontal", 16, 8
+"wall_columns_vertical", "wall_columns_vertical", 8, 16
+"walls", "walls", 16, 16
+"walls_jabu_jabu", "walls_jabu_jabu", 8, 8
+
+### Objects Tiles ###
+"color_cube", "color_cube", 16, 16
+"doors", "doors", 16, 16
+"entity_objects", "entity_objects", 16, 16
+"puzzle_objects", "puzzle_objects", 16, 16
+"turnstile", "turnstile", 16, 16
+
+### Overworld Tiles ###
+"bridges", "bridges", 16, 16
+"cliffs", "cliffs", 8, 8
+"ground", "ground", 8, 8
+"hedges", "hedges", 8, 8
+"hollow_logs", "hollow_logs", 16, 16
+"horizon", "horizon", 16, 16
+"obstacles", "obstacles", 16, 16
+"sand", "sand", 8, 8
+"town_8x8", "town_8x8", 8, 8
+"town_fountain", "town_fountain", 16, 16
+"town_house_walls", "town_house_walls", 16, 16
+"town_misc", "town_misc", 16, 16
+"town_roofs", "town_roofs", 16, 16
+"trees", "trees", 16, 16
+"vertical_walls", "vertical_walls", 16, 16
+"vines", "vines", 16, 8
+"water", "water", 8, 8
+"water_obstacles", "water_obstacles", 16, 16
