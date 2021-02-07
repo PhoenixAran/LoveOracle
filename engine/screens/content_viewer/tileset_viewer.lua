@@ -1,4 +1,4 @@
- local Class = require 'lib.class'
+local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local Slab = require 'lib.slab'
 local TilesetBank = require 'engine.utils.tileset_bank'
@@ -20,7 +20,9 @@ local TilesetViewer = Class {
     
     self.zoomLevels = { 1, 2, 4, 6, 8, 12 }
     self.zoom = 1
-    self.canvasCache = { }
+    self.canvasCache = {
+      ['1x1'] = self.tilesetCanvas
+    }
   end
 }
 
