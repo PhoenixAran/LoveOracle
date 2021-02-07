@@ -7,7 +7,7 @@ local SpriteRenderer = require 'engine.components.sprite_renderer'
 local AnimatedSpriteRenderer = require 'engine.components.sprite'
 
 local Tile = Class { __includes = Entity,
-  init = function(self, tileData, posX, posY, tileId)
+  init = function(self, tileData, posX, posY, tileEntityName)
     local collisionRectZRangeX, collisionRectZRangeY = tileData:getCollisionZRange()
     local collisionRectZRange = { min = collisionRectZRangeX, max = collisionRectZRangeY }
     Entity.init(self, tileId, true, true, tileData.collisionRect, collisionRectZRange)

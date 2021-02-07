@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
+local SpriteBuilder = require 'engine.utils.sprite_builder'
 local SpriteRendererBuilder = require 'engine.utils.sprite_renderer_builder'
 local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
 
@@ -59,7 +60,9 @@ function SpriteBank.createSpriteAnimationBuilder()
   return SpriteAnimationBuilder()
 end
 
--- TODO function SpriteBank.createSpriteBuilder()
+function SpriteBank.createSpriteBuilder()
+  return SpriteBuilder()
+end
 
 function SpriteBank.initialize(path)
   path = path or 'data.sprites'

@@ -4,10 +4,11 @@ local SpriteBank = require 'engine.utils.sprite_bank'
 local PaletteBank = require 'engine.utils.palette_bank'
 local TileData = require 'engine.tiles.tile_data'
 
+local DEFAULT_TILE_SIZE = 16
+
 local Tileset = Class {
   init = function(self, name, sizeX, sizeY, tileSize)
-    
-    self.tileSize = tileSize or 16
+    self.tileSize = tileSize or DEFAULT_TILE_SIZE
     self.tileId = 1
     self.name = name
     -- holds TileData instances, don't confuse this with the Tile class
@@ -70,7 +71,6 @@ function Tileset:createTileData(template)
   end
   return TileData()
 end
-
 
 
 return Tileset

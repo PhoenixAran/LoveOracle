@@ -45,7 +45,7 @@ local physicsFlags = {
 }
 
 
-local startupScreen = 'data.test_screens.player_playground'
+local startupScreen = 'engine.test_screens.tileset_viewer'
 
 return {
  zbStudioDebug = zbStudioDebug,
