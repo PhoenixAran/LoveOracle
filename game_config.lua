@@ -45,7 +45,7 @@ local physicsFlags = {
 }
 
 
-local startupScreen = 'engine.screens.content_viewer.sprite_viewer'
+local startupScreen = 'engine.screens.content_viewer'
 
 return {
  zbStudioDebug = zbStudioDebug,

@@ -1,3 +1,6 @@
+-- leave this here so I have a reference to look at 
+-- for selecting tiles when creating the TileMap editor
+
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local Slab = require 'lib.slab'
@@ -7,7 +10,7 @@ local rect = require 'engine.utils.rectangle'
 
 local tileMargin = 1
 local tilePadding = 1
-
+-- IMGUI window to view tilesets
 local TilesetViewer = Class {
   init = function(self)
     -- tileset stuff

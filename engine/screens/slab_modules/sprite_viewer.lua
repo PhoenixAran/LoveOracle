@@ -3,10 +3,6 @@ local lume = require 'lib.lume'
 local Slab = require 'lib.slab'
 local SpriteBank = require 'engine.utils.sprite_bank'
 
-local vector = require 'lib.vector'
-local rect = require 'engine.utils.rectangle'
-
--- TODO view sprite animations
 local SpriteViewer = Class {
   init = function(self)
     
@@ -23,9 +19,6 @@ local SpriteViewer = Class {
     }
   end
 }
-
-function SpriteViewer:enter(prev, ...)
-end
 
 function SpriteViewer:drawSpriteOnSpriteCanvas()
   if not self.sprite then
@@ -60,8 +53,6 @@ function SpriteViewer:updateSprite(spriteName)
 end
 
 function SpriteViewer:update(dt)
-  Slab.Update(dt)
-  
   Slab.BeginWindow('sprite-viewer', { Title = 'Sprite Viewer'})
   Slab.Text('Sprite')
   if Slab.Input('sprite-search', { Text = self.searchText, ReturnOnText = true }) then
@@ -89,7 +80,6 @@ end
 
 function SpriteViewer:draw()
   self:drawSpriteOnSpriteCanvas()
-  Slab.Draw()
 end
 
 return SpriteViewer

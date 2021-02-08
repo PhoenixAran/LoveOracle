@@ -3,7 +3,7 @@ local BaseScreen = require 'engine.screens.base_screen'
 local Entities = require 'engine.entities.entities'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
-local EntityInspector = require 'engine.screens.slab.entity_inspector'
+local EntityInspector = require 'engine.screens.slab_modules.entity_inspector'
 local Slab = require 'lib.slab'
 local PropertyType = require('engine.entities.inspector_properties').PropertyType
 
