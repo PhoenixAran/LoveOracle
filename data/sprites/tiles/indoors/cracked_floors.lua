@@ -1,4 +1,4 @@
--- Cracked Floors Sprites
+-- Cracked Floors Tile Sprites
 return function(SpriteBank)
   local register = SpriteBank.registerSprite
   local sb = SpriteBank.createSpriteBuilder()

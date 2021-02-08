@@ -1,4 +1,4 @@
--- Interior Sprites
+-- Interior Tile Sprites
 
 return function(SpriteBank)
   local sb = SpriteBank.createSpriteBuilder()
