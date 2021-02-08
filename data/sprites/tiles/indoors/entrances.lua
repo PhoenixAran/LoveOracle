@@ -1,10 +1,18 @@
 -- Entrance Tile Sprites
 return function(SpriteBank)
-  local register = SpriteBank.registerSprite
+  return function(todo)
+    
+  end
+  --[[
+  local register = SpriteBank.registerSpriteset
   local sb = SpriteBank.createSpriteBuilder()
-  
+  local spriteset = SpriteBank.createSpriteset('wall_columns', 20, 4)
+  local set = function(name, spriteX, spriteY, setX, setY)
+    spriteset:setSprite(name, sb:buildSprite(spriteX, spriteY), setX, setY)
+  end
   -- Bases
   sb:setSpriteSheet('wall_columns_vertical')
+  set('wall_down_column_left_cave', 1, 1, 1, 1)
   register('wall_down_column_left_cave', sb:buildSprite(1, 1))
   register('wall_down_column_left_interior', sb:buildSprite(2, 1))
   register('wall_down_column_left_subrosia', sb:buildSprite(3, 1))
@@ -56,6 +64,7 @@ return function(SpriteBank)
   
   -- Tiles
   sb:setSpriteSheet('entrance_columns')
-  register('entrance_column_bottom_down', sb:buildSprite(1, 1))
-  
+
+  -- TODO Finish
+  ]]
 end
