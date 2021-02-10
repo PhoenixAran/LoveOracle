@@ -3,6 +3,8 @@ local GameConfig = require 'game_config'
 local PaletteBank = require 'engine.utils.palette_bank'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local TilesetBank = require 'engine.utils.tileset_bank'
+local BitTag = require 'engine.utils.bit_tag'
+local lume = require 'lib.lume'
 
 --[[
   Module that will take care of loading in assets, setting
@@ -63,8 +65,13 @@ function ContentControl.buildContent()
   TilesetBank.initialize('data.tilesets')
 end
 
+-- TODO: free cdata properly
 function ContentControl.unloadContent()
-  
+  AssetManager = lume.hotswap 'engine.utils.asset_manager'
+  GameConfig = lume.hotswap 'game_config'
+  PaletteBank = lume.hotswap 'engine.utils.palette_bank'
+  SpriteBank = lume.hotswap 'engine.utils.sprite_bank'
+  local TilesetBank = lume.hotswap 'engine.utils.tileset_bank'
 end
 
 return ContentControl

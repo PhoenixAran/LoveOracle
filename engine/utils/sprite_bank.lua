@@ -86,4 +86,11 @@ function SpriteBank.initialize(path)
   require(path)(SpriteBank)
 end
 
+function SpriteBank.unload()
+  for _, sprite in pairs(SpriteBank.sprites) do
+    
+  end
+  SpriteBank.sprites = { }
+end
+
 return SpriteBank

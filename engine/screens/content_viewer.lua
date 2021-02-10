@@ -26,6 +26,8 @@ function ContentViewer:update(dt)
 end
 
 function ContentViewer:draw()
+  self.spriteViewer:draw()
+  self.tilesetViewer:draw()
   Slab.Draw()
 end
 
