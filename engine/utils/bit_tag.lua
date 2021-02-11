@@ -29,4 +29,10 @@ function BitTag.get(str)
   return byName[str]
 end
 
+function BitTag.reset()
+  byId = { }
+  byName = { }
+  totalTags = 0
+end
+
 return BitTag

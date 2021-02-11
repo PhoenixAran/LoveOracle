@@ -48,30 +48,34 @@ local function loadSpriteSheets(directory)
 end
 
 local function initBitTags()
-  local BitTag = require 'engine.utils.bit_tag'
   for k, v in ipairs(GameConfig.physicsFlags) do
     BitTag(v)
   end
 end
 
 function ContentControl.buildContent()
-  initBitTags()
-  loadFonts() 
-  loadImages('data/assets/images') 
-  loadSpriteSheets('data/assets/spritesheets')
-  
-  PaletteBank.initialize('data.palettes')
-  SpriteBank.initialize('data.sprites')
-  TilesetBank.initialize('data.tilesets')
+  local contentSandbox = {
+    require = lume.hotswap,
+    print = print
+  }
+  local buildFunc = function()
+    initBitTags()
+    loadFonts() 
+    loadImages('data/assets/images')
+    loadSpriteSheets('data/assets/spritesheets')
+    PaletteBank.initialize('data.palettes')
+    SpriteBank.initialize('data.sprites')
+    TilesetBank.initialize('data.tilesets')
+  end
+  setfenv(buildFunc, contentSandbox)()
 end
 
 -- TODO: free cdata properly
 function ContentControl.unloadContent()
-  AssetManager = lume.hotswap 'engine.utils.asset_manager'
-  GameConfig = lume.hotswap 'game_config'
-  PaletteBank = lume.hotswap 'engine.utils.palette_bank'
-  SpriteBank = lume.hotswap 'engine.utils.sprite_bank'
-  local TilesetBank = lume.hotswap 'engine.utils.tileset_bank'
+  BitTag.reset()
+  TilesetBank.unload()
+  SpriteBank.unload()
+  PaletteBank.unload()
 end
 
 return ContentControl

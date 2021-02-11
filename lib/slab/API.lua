@@ -406,7 +406,8 @@ end
 --]]
 function Slab.Draw()
 	if DidDraw then
-		return
+    print('canelling draw')
+		--return
 	end
 
 	local StatHandle = Stats.Begin('Draw', 'Slab')
