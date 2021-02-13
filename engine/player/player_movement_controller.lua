@@ -5,7 +5,7 @@ local Movement = require 'engine.components.movement'
 
 -- some class constants
 local JUMP_Z_VELOCITY = 2
-local JUMP_GRAVITY = .125
+local JUMP_GRAVITY = 8
 
 local PlayerMovementController = Class {
   init = function(self, player, movement)

@@ -405,11 +405,6 @@ end
 	Return: None.
 --]]
 function Slab.Draw()
-	if DidDraw then
-    print('canelling draw')
-		--return
-	end
-
 	local StatHandle = Stats.Begin('Draw', 'Slab')
 
 	Window.Validate()
@@ -441,7 +436,6 @@ function Slab.Draw()
 	Stats.End(StatHandle)
 	Stats.End(FrameStatHandle)
 
-	DidDraw = true
 	DidUpdate = false
 end
 

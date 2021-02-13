@@ -39,4 +39,10 @@ function SpriteSheet:size()
   return #self.textures
 end
 
+function SpriteSheet:release()
+  for _, subtexture in ipairs(self.textures) do
+    subtexture:release()
+  end
+end
+
 return SpriteSheet

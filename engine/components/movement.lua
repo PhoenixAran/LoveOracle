@@ -19,7 +19,7 @@ local Movement = Class { __includes = Component,
     self.deceleration = 1
     
     self.slippery = false -- if true, this component will actually use acceleration and deceleration
-    self.gravity = .125
+    self.gravity = 9.8
     self.maxFallSpeed = 4
     self.zVelocity = 0
     
@@ -147,7 +147,7 @@ end
 -- update z position
 function Movement:update(dt)
   if self.entity:getZPosition() > 0 or self.zVelocity ~= 0 then
-    self.zVelocity = self.zVelocity - self.gravity
+    self.zVelocity = self.zVelocity - (self.gravity * dt)
     if self.maxFallSpeed >= 0 and self.zVelocity < -self.maxFallSpeed then
       self.zVelocity = -self.maxFallSpeed
     end

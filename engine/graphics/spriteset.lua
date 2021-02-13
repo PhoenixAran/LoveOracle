@@ -60,6 +60,10 @@ function Spriteset:getSprite(x, y)
   return self.textures[(x - 1) * self.sizeY + y]
 end
 
-
+function Spriteset:release()
+  for _, sprite in ipairs(self.textures) do
+    sprite:release()
+  end
+end
 
 return Spriteset

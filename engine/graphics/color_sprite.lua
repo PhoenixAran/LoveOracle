@@ -79,4 +79,8 @@ function ColorSprite:draw(x, y, alpha)
   end
 end
 
+function ColorSprite:release()
+  self.sprite:release()
+end
+
 return ColorSprite

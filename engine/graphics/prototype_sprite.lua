@@ -66,4 +66,8 @@ function PrototypeSprite:draw(x, y, alpha)
   love.graphics.setColor(1, 1, 1)
 end
 
+function PrototypeSprite:release()
+  
+end
+
 return PrototypeSprite

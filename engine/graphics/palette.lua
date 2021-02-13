@@ -88,4 +88,10 @@ function Palette:compileShader()
   end
 end
 
+function Palette:release()
+  if self.shader then
+    self.shader:release()
+  end
+end
+
 return Palette
