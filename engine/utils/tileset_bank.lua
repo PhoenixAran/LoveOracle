@@ -25,4 +25,8 @@ function TilesetBank.initialize(path)
   require(path)(TilesetBank)
 end
 
+function TilesetBank.unload()
+  TilesetBank.tilesets = { }
+end
+
 return TilesetBank

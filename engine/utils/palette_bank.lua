@@ -30,4 +30,9 @@ function PaletteBank.initialize(path)
   PaletteBank.compilePalettes()
 end
 
+function PaletteBank.unload()
+  lume.each(PaletteBank.palettes, 'release')
+  PaletteBank.palettes = { }
+end
+
 return PaletteBank

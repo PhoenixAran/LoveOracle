@@ -4,7 +4,9 @@ local Slab = require 'lib.slab'
 local SpriteBank = require 'engine.utils.sprite_bank'
 
 local SpriteViewer = Class {
-  init = function(self)
+  init = function(self, initialX, initialY)
+    self.initialX = x or 24
+    self.initialY = y or 24
     
     self.searchText = ''
     
@@ -19,6 +21,13 @@ local SpriteViewer = Class {
     }
   end
 }
+
+function SpriteViewer:initialize()
+  self.sprite = nil
+  self.searchText = ''
+  self.spriteName = ''
+  self.spriteCanvas = self.canvasCache['1x1']
+end
 
 function SpriteViewer:drawSpriteOnSpriteCanvas()
   if not self.sprite then
@@ -53,7 +62,7 @@ function SpriteViewer:updateSprite(spriteName)
 end
 
 function SpriteViewer:update(dt)
-  Slab.BeginWindow('sprite-viewer', { Title = 'Sprite Viewer'})
+  Slab.BeginWindow('sprite-viewer', { Title = 'Sprite Viewer', X = self.initialX, Y = self.initialY})
   Slab.Text('Sprite')
   if Slab.Input('sprite-search', { Text = self.searchText, ReturnOnText = true }) then
     self.searchText = Slab.GetInputText()
@@ -63,7 +72,7 @@ function SpriteViewer:update(dt)
   
   Slab.Text('Zoom')
   local selectedZoom = self.zoom
-  if Slab.BeginComboBox('zoom-combobox', { Selected = selectedZoom }) then
+  if Slab.BeginComboBox('spriteset-zoom-combobox', { Selected = selectedZoom}) then
     for _, v in ipairs(self.zoomLevels) do
       if Slab.TextSelectable(v) then
         self.zoom = v

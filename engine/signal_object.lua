@@ -97,7 +97,7 @@ end
 
 -- call this so this can actually get garbage collected
 -- if this isnt called, there is a possibility for dangling references
-function SignalObject:free()
+function SignalObject:release()
   self:clearConnections()
   for k, signal in pairs(self.signals) do
     for _, connection in ipairs(self.signals[k]) do

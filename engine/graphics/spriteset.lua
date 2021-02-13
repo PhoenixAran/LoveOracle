@@ -57,13 +57,15 @@ function Spriteset:getSprite(x, y)
   end
   assert(1 <= x and x <= self.sizeX)
   assert(1 <= y and y <= self.sizeY)
-  return self.textures[(x - 1) * self.sizeY + y]
+  return self.sprites[(x - 1) * self.sizeY + y]
 end
 
 function Spriteset:release()
-  for _, sprite in ipairs(self.textures) do
+  for _, sprite in ipairs(self.sprites) do
     sprite:release()
   end
+  self.spriteHash = { }
+  self.sprites = { }
 end
 
 return Spriteset

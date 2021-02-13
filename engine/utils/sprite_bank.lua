@@ -87,9 +87,21 @@ function SpriteBank.initialize(path)
 end
 
 function SpriteBank.unload()
-  for _, sprite in pairs(SpriteBank.sprites) do
-    
+  SpriteBank.builders = { }
+  
+  for _, spriteset in pairs(SpriteBank.spritesets) do
+    spriteset:release()
   end
+  SpriteBank.spritesets = { }
+  
+  for _, animation in ipairs(SpriteBank.animations) do
+    animation:release()
+  end
+  
+  for _, sprite in pairs(SpriteBank.sprites) do
+    sprite:release()
+  end
+  
   SpriteBank.sprites = { }
 end
 

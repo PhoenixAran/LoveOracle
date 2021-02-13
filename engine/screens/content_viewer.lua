@@ -5,7 +5,7 @@ local BaseScreen = require 'engine.screens.base_screen'
 
 local SpriteViewer = require 'engine.screens.slab_modules.sprite_viewer'
 local TilesetViewer = require 'engine.screens.slab_modules.tileset_viewer'
-
+local ContentControl = require 'engine.control.content_control'
 local ContentViewer = Class { __includes = BaseScreen,
   init = function(self)
     BaseScreen.init(self)
@@ -16,11 +16,22 @@ local ContentViewer = Class { __includes = BaseScreen,
 
 function ContentViewer:enter(prev, ...)
   self.spriteViewer = SpriteViewer()
+  self.spriteViewer:initialize()
   self.tilesetViewer = TilesetViewer()
+  self.tilesetViewer:initialize()
 end
 
 function ContentViewer:update(dt)
   Slab.Update(dt)
+  
+  Slab.BeginWindow('content-controller', { Title = 'Content Control'})
+  if Slab.Button('Reload Content') then
+    ContentControl.unloadContent()
+    ContentControl.buildContent()
+    self.spriteViewer:initialize()
+    self.tilesetViewer:initialize()
+  end
+  Slab.EndWindow()
   self.spriteViewer:update(dt)
   self.tilesetViewer:update(dt)
 end

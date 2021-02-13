@@ -1,3 +1,4 @@
+local lume = require 'lib.lume'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local fh = require 'engine.utils.file_helper'
 
@@ -126,6 +127,17 @@ end
 function AssetManager.getSpriteSheet(key)
   assert(AssetManager.spriteSheetCache[key], 'Sprite Sheet with ' .. key .. ' does not exist')
   return AssetManager.spriteSheetCache[key]
+end
+
+function AssetManager.unload()
+  lume.each(AssetManager.fontCache, 'release')
+  AssetManager.fontCache = { }
+  lume.each(AssetManager.soundCache, 'release')
+  AssetManager.soundCache = { }
+  lume.each(AssetManager.spriteSheetCache, 'release')
+  AssetManager.spriteSheetCache = { }
+  lume.each(AssetManager.imageCache, 'release')
+  AssetManager.imageCache = { }
 end
 
 return AssetManager

@@ -7,7 +7,10 @@ local TILE_MARGIN = 1
 local TILE_PADDING = 1
 -- IMGUI window to view tilesets
 local TilesetViewer = Class {
-  init = function(self)
+  init = function(self, initialX, initialY)
+    self.initialX = x or 24
+    self.initialY = y or 24
+    
     self.tilesetName = ''
     self.tileset = nil
     self.tilesetList = { }
@@ -23,15 +26,31 @@ local TilesetViewer = Class {
   end
 }
 
+function TilesetViewer:initialize()
+  self.tilesetList = { }
+  for k, _ in pairs(TilesetBank.tilesets) do
+    lume.push(self.tilesetList, k)
+  end
+  lume.sort(self.tilesetList, function(a, b)
+    return string.upper(a) < string.upper(b)
+  end)
+  if self.tilesetList[1] then
+    self:updateTileset(self.tilesetList[1])
+  end
+end
+
 function TilesetViewer:updateTileset(tilesetName)
   if tilesetName == self.tilesetName then 
     return
   end
   self.tilesetName = tilesetName
+  if not TilesetBank.tilesets[tilesetName] then
+    return
+  end
   self.tileset = TilesetBank.getTileset(self.tilesetName)
   if not self.canvasCache[self.tilesetName] then
-    local canvasW = (self.tileset.tileSize * self.tileset.sizeX) + ((self.tileset.sizeX - 1) * tilePadding) + (tileMargin * 2)
-    local canvasH = (self.tileset.tileSize * self.tileset.sizeY) + ((self.tileset.sizeY - 1) * tilePadding) + (tileMargin * 2)
+    local canvasW = (self.tileset.tileSize * self.tileset.sizeX) + ((self.tileset.sizeX - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
+    local canvasH = (self.tileset.tileSize * self.tileset.sizeY) + ((self.tileset.sizeY - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
     local canvas = love.graphics.newCanvas(canvasW, canvasH)
     canvas:setFilter('nearest', 'nearest')
     self.canvasCache[self.tilesetName] = canvas
@@ -48,8 +67,8 @@ function TilesetViewer:drawTilesetOnTilesetCanvas()
     for y = 1, self.tileset.sizeY, 1 do
       local tilesetData = self.tileset:getTile(x, y)
       local sprite = tilesetData:getSprite()
-      local posX = ((x - 1) * tileSize) + ((x - 1) * tilePadding) + (tileMargin)
-      local posY = ((y - 1) * tileSize) + ((y - 1) * tilePadding) + (tileMargin)
+      local posX = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
+      local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
       sprite:draw(posX + tileSize / 2 , posY + tileSize / 2)
     end
   end
@@ -57,21 +76,8 @@ function TilesetViewer:drawTilesetOnTilesetCanvas()
   love.graphics.setCanvas()
 end
 
-function TilesetViewer:enter(prev, ...)
-  assert(lume.count(TilesetBank.tilesets) > 0, 'TilesetBank needs at least 1 tileset in order for TilesetViewer to use')
-  for k, _ in pairs(TilesetBank.tilesets) do
-    lume.push(self.tilesetList, k)
-  end
-  lume.sort(self.tilesetList, function(a, b)
-    return string.upper(a) < string.upper(b)
-  end)
-  self:updateTileset(lume.first(self.tilesetList))
-  Slab.Initialize()
-end
-
-
 function TilesetViewer:update(dt)
-  Slab.BeginWindow('tileset-viewer', { Title = 'Tileset Viewer'})
+  Slab.BeginWindow('tileset-viewer', { Title = 'Tileset Viewer', X = self.initialX, Y = self.initialY})
   
   Slab.Text('Tileset')
   local selected = self.tilesetName
@@ -86,7 +92,7 @@ function TilesetViewer:update(dt)
   
   Slab.Text('Zoom')
   local selectedZoom = self.zoom
-  if Slab.BeginComboBox('zoom-combobox', {Selected = selectedZoom }) then
+  if Slab.BeginComboBox('tileset-zoom-combobox', {Selected = selectedZoom }) then
     for _, v in ipairs(self.zoomLevels) do
       if Slab.TextSelectable(v) then
         self.zoom = v

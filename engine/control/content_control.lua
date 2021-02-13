@@ -76,6 +76,7 @@ function ContentControl.unloadContent()
   TilesetBank.unload()
   SpriteBank.unload()
   PaletteBank.unload()
+  AssetManager.unload()
 end
 
 return ContentControl
