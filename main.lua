@@ -1,8 +1,23 @@
 local Monocle = require 'lib.monocle'
+local lume = require 'lib.lume'
 local gameConfig = require 'game_config'
 local ContentControl = require 'engine.control.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
-local Slab = require 'lib.slab'
+
+--[[ Defning helper function used in data scripting
+     Hot reloading can't modify existing functions, but it works with tables.
+     To work around this, this function will create a metatable that is callable. 
+]]
+
+function makeModuleFunction(func)
+  local function dropSelfArg(func)
+    return function(...)
+      return func(select(2, ...))
+    end
+  end
+  return setmetatable({}, {__call = dropSelfArg(func)})
+end
+
 
 function love.load(arg)
   -- enable zerobrane studio debugging
@@ -24,14 +39,14 @@ function love.load(arg)
   
   love.window.setTitle(gameConfig.window.title)
   love.graphics.setFont(AssetManager.getFont('monogram'))
-  
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   screenManager:enter( require(gameConfig.startupScreen) ())
   
+  local Slab = require 'lib.slab'
   Slab.SetINIStatePath(nil)
   Slab.Initialize()
   Slab.Update(0)
-  
+
 end
 
 function love.update(dt)

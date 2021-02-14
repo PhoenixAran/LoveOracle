@@ -1,5 +1,7 @@
+
 -- prototype_tileset.lua
-return function(tilesetBank)
+local moduleFunction = function(tilesetBank)
+  print('hello 3')
   -- TILESET PROTOTYPE1
   local tileset = tilesetBank.createTileset('prototype', 2, 2)
   -- ground
@@ -30,7 +32,7 @@ return function(tilesetBank)
   
   -- TILESET PROTOTYPE2
   tileset = tilesetBank.createTileset('prototype2', 2, 2)
-  
+
   -- water
   tileData = tileset.createTileData('water')
   tileData:setName('prototype_water')
@@ -57,3 +59,5 @@ return function(tilesetBank)
 
   tilesetBank.register(tileset)
 end
+
+return makeModuleFunction(moduleFunction)

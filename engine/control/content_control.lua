@@ -54,20 +54,13 @@ local function initBitTags()
 end
 
 function ContentControl.buildContent()
-  local contentSandbox = {
-    require = lume.hotswap,
-    print = print
-  }
-  local buildFunc = function()
-    initBitTags()
-    loadFonts() 
-    loadImages('data/assets/images')
-    loadSpriteSheets('data/assets/spritesheets')
-    PaletteBank.initialize('data.palettes')
-    SpriteBank.initialize('data.sprites')
-    TilesetBank.initialize('data.tilesets')
-  end
-  setfenv(buildFunc, contentSandbox)()
+  initBitTags()
+  loadFonts() 
+  loadImages('data/assets/images')
+  loadSpriteSheets('data/assets/spritesheets')
+  PaletteBank.initialize('data.palettes')
+  SpriteBank.initialize('data.sprites')
+  TilesetBank.initialize('data.tilesets')
 end
 
 -- TODO: free cdata properly
