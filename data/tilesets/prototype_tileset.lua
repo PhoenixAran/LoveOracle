@@ -1,7 +1,6 @@
 
 -- prototype_tileset.lua
-local moduleFunction = function(tilesetBank)
-  print('hello 3')
+function moduleFunction(tilesetBank)
   -- TILESET PROTOTYPE1
   local tileset = tilesetBank.createTileset('prototype', 2, 2)
   -- ground

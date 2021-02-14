@@ -28,19 +28,26 @@ local TilesetViewer = Class {
 
 function TilesetViewer:initialize()
   self.tilesetList = { }
-  for k, _ in pairs(TilesetBank.tilesets) do
+  self.tileset = nil
+  for k, _ in pairs(TilesetBank.tilesets) do 
     lume.push(self.tilesetList, k)
   end
   lume.sort(self.tilesetList, function(a, b)
     return string.upper(a) < string.upper(b)
   end)
-  if self.tilesetList[1] then
-    self:updateTileset(self.tilesetList[1])
+  if lume.any(self.tilesetList, function(x) return x == self.tilesetName end) then
+    self:updateTileset(self.tilesetName, true)
+  elseif self.tilesetList[1] then
+    self.tilesetName = self.tilesetList[1]
+    self:updateTileset(self.tilesetName, true)
   end
 end
 
-function TilesetViewer:updateTileset(tilesetName)
-  if tilesetName == self.tilesetName then 
+function TilesetViewer:updateTileset(tilesetName, forceUpdate)
+  if forceUpdate == nil then
+    forceUpdate = false
+  end
+  if tilesetName == self.tilesetName and not forceUpdate then 
     return
   end
   self.tilesetName = tilesetName
@@ -61,15 +68,18 @@ end
 function TilesetViewer:drawTilesetOnTilesetCanvas()
   love.graphics.setCanvas(self.tilesetCanvas)
   love.graphics.clear()
-  -- draw tiles
-  local tileSize = self.tileset.tileSize
-  for x = 1, self.tileset.sizeX, 1 do
-    for y = 1, self.tileset.sizeY, 1 do
-      local tilesetData = self.tileset:getTile(x, y)
-      local sprite = tilesetData:getSprite()
-      local posX = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
-      local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
-      sprite:draw(posX + tileSize / 2 , posY + tileSize / 2)
+
+  if self.tileset then
+    -- draw tiles
+    local tileSize = self.tileset.tileSize
+    for x = 1, self.tileset.sizeX, 1 do
+      for y = 1, self.tileset.sizeY, 1 do
+        local tilesetData = self.tileset:getTile(x, y)
+        local sprite = tilesetData:getSprite()
+        local posX = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
+        local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
+        sprite:draw(posX + tileSize / 2 , posY + tileSize / 2)
+      end
     end
   end
   -- draw border around selected tile

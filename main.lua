@@ -4,11 +4,11 @@ local gameConfig = require 'game_config'
 local ContentControl = require 'engine.control.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
 
---[[ Defning helper function used in data scripting
+--[[ 
+     Defining helper function used in data scripting
      Hot reloading can't modify existing functions, but it works with tables.
      To work around this, this function will create a metatable that is callable. 
 ]]
-
 function makeModuleFunction(func)
   local function dropSelfArg(func)
     return function(...)
