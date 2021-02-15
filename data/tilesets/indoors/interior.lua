@@ -1,6 +1,6 @@
 -- interior Tileset
 
-local moduleFunction = function(TilesetBank)
+function moduleFunction(TilesetBank)
   
 end
 

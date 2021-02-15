@@ -1,16 +1,16 @@
 local Class = require 'lib.class'
-local gameConfig = require 'game_config'
+local GameConfig = require 'game_config'
 local rect = require 'engine.utils.rectangle'
-local assetManager = require 'engine.utils.asset_manager'
+local AssetManager = require 'engine.utils.asset_manager'
 
 local BaseScreen = Class {
   init = function(self)
-    
+    self.drawVersionText = love.graphics.newText(AssetManager.getFont('monogram'), 'Ver ' .. GameConfig.version)
   end
 }
 
 function BaseScreen:drawFPS()
-  local monogram = assetManager.getFont('monogram')  
+  local monogram = AssetManager.getFont('monogram')  
   love.graphics.setFont(monogram)
   local fps = ("%d fps"):format(love.timer.getFPS())
   love.graphics.setColor(1, 1, 1)
@@ -18,7 +18,7 @@ function BaseScreen:drawFPS()
 end
 
 function BaseScreen:drawMemory()
-  local monogram = assetManager.getFont('monogram')
+  local monogram = AssetManager.getFont('monogram')
   love.graphics.setFont(monogram)
   local memory = ("%d kbs"):format(collectgarbage("count"))
   love.graphics.setColor(1, 1, 1)
@@ -26,11 +26,11 @@ function BaseScreen:drawMemory()
 end
 
 function BaseScreen:drawVersion()
-  local monogram = assetManager.getFont('monogram')
+  local monogram = AssetManager.getFont('monogram')
   love.graphics.setFont(monogram)
-  local version = 'Ver ' .. gameConfig.version
+  local version = 'Ver ' .. GameConfig.version
   love.graphics.setColor(1, 1, 1)
-  love.graphics.printf(version, 95, 132, 200, right)
+  love.graphics.draw(self.drawVersionText, 160 - self.drawVersionText:getWidth(), 132)
 end
 
 function BaseScreen:mouseClickInGame(x, y)

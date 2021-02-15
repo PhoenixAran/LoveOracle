@@ -1,4 +1,4 @@
-local version = '0.0.9.1'
+local version = '0.0.10.2'
 local zbStudioDebug = true  -- enable breakpoint and step through with zbstudio
 
 -- Made for SNES controllers
@@ -24,7 +24,7 @@ local window = {
     windowHeight = 144,
     virtualWidth = 1280,
     virtualHeight = 720,
-    maxScale = 4
+    maxScale = 6
   },
   windowConfig = {
     minwidth = 800,
@@ -45,7 +45,8 @@ local physicsFlags = {
 }
 
 
-local startupScreen = 'engine.screens.content_viewer'
+--local startupScreen = 'engine.screens.content_viewer'
+local startupScreen = 'data.test_screens.player_playground'
 
 return {
  zbStudioDebug = zbStudioDebug,
