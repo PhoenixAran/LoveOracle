@@ -9,7 +9,6 @@ local DEFAULT_TILE_SIZE = 16
 local Tileset = Class {
   init = function(self, name, sizeX, sizeY, tileSize)
     self.tileSize = tileSize or DEFAULT_TILE_SIZE
-    self.tileId = 1
     self.name = name
     -- holds TileData instances, don't confuse this with the Tile class
     self.tiles = { }
@@ -41,28 +40,31 @@ end
 function Tileset:getTile(x, y)
   if y == nil then
     assert(x <= self.size, 'x is out of bounds')
+    assert(self.tiles[x].id == x, 'miscalculated tile id')
     return self.tiles[x]
   end
   local idx = (x - 1) * self.sizeY + y
   assert(idx <= self.size, '( ' .. tostring(x) .. ', ' .. tostring(y) .. ') is out of bounds')
+  assert(idx == self.tiles[idx].id, 'miscalculated tile id')
   return self.tiles[idx]
 end
 
 function Tileset:setTile(tileData, x, y)
   tileData.id = self.tileId
-  self.tileId = self.tileId + 1
   if y == nil then
     assert(x <= self.size, 'x is out of bounds')
     self.tiles[x] = tileData
+    tileData.id = x
   else
     local idx = (x - 1) * self.sizeY + y
     assert(idx <= self.size, '( ' .. tostring(x) .. ', ' .. tostring(y) .. ') is out of bounds')
     self.tiles[idx] = tileData
+    tileData.id = idx
   end
 end
 
-function Tileset:count()
-  return lume.count(self.tiles)
+function Tileset:getSize()
+  return self.size
 end
 
 function Tileset:createTileData(template)

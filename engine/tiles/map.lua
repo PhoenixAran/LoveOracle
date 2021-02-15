@@ -9,4 +9,5 @@ local Map = Class { __includes = SignalObject,
   end
 }
 
+
 return Map

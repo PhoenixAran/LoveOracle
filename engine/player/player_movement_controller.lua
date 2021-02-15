@@ -14,10 +14,6 @@ local PlayerMovementController = Class {
     
     self.allowMovementControl = true
     self.strokeSpeedScale = 1.0
-    
-    --self.moveAxesX, self.moveAxesY = false, false
-    --self.motionX, self.motionY = 0, 0
-    
     self.directionX, self.directionY = 0, 0
     self.moving = false
     self.stroking = false
