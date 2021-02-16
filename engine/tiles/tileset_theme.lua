@@ -8,7 +8,7 @@ local lume = require 'lib.lume'
    For example, if project defines tilesets as 'overworld, indoors, caves', then each theme
    must include the tilesets 'overworld, indoors, caves' in that EXACT order
 ]]
-local DECLARED_TILESETS = { }
+local REQUIRED_TILESETS = { }
 
 local TilesetTheme = Class {
   init = function(self, name)
@@ -27,8 +27,8 @@ function TilesetTheme:setName(name)
 end
 
 function TilesetTheme:addTileset(tileset)
-  local tilesetName = tileset:getName()
-  assert(tilestName, 'Attempting to add tileset without name to tileset theme')
+  local tilesetName = tileset:getAliasName()
+  assert(tilesetName, 'Attempting to add tileset without name to tileset theme')
   assert(not self.tilesets[tilesetName], 'Attempting add tileset ' .. tilesetName .. ' when it is already added to tileset theme')
   
   self.tilesets[tilesetName] = tileset
@@ -40,7 +40,7 @@ function TilesetTheme:getTile(id)
   local idModifier = 0
   for i = 1, lume.count(self.tilesets) do
     local tileset = self.tilesets[i]
-    local tilesetName = tileset:getName()
+    local tilesetName = tileset:getAliasName()
     local offset = self.tilesetIdOffsets[tilesetName]
     if offset >= id then
       return tileset:getTile(id - offset)
@@ -52,22 +52,20 @@ function TilesetTheme:getType()
   return 'tileset_theme'
 end
 
-function TilesetTheme.setDeclaredTilesets(declaredTilesets)
-  DECLARED_TILESETS = lume.clone(declaredTilesets)
+function TilesetTheme.setRequiredTilesets(requiredTilesets)
+  REQUIRED_TILESETS = lume.clone(requiredTilesets)
 end
 
 function TilesetTheme.validateTheme(tilesetTheme)
-  for k, tileset in ipairs(self.tilesets) do
+  assert(lume.count(tilesetTheme.tilesets) == lume.count(REQUIRED_TILESETS), 'Tileset Theme "' .. tilesetTheme:getName() .. '" does not have enough tilesets.')
+  for k, tileset in ipairs(tilesetTheme.tilesets) do
     local name = tileset:getName()
-    local expectedName = DECLARED_TILESETS[k]
+    local expectedName =  REQUIRED_TILESETS[k]
+    print('here')
     if name ~= expectedName then
       error('Expected tileset "' .. expectedName .. '", but got tileset "' ..  name .. '" in tileset theme ' .. self:getName())
     end
   end
-end
-
-function TilesetTheme:validateTheme()
-  return TilesetTheme.validateTheme(self)
 end
 
 return TilesetTheme

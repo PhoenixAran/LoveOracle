@@ -10,6 +10,7 @@ local Tileset = Class {
   init = function(self, name, sizeX, sizeY, tileSize)
     self.tileSize = tileSize or DEFAULT_TILE_SIZE
     self.name = name
+    self.aliasName = nil
     -- holds TileData instances, don't confuse this with the Tile class
     self.tiles = { }
     self.size = sizeX * sizeY
@@ -23,6 +24,23 @@ local Tileset = Class {
 
 function Tileset:getName()
   return self.name
+end
+
+--[[ 
+  Alias names are used in tilesets
+  Use Case: Autumn theme and Winter Theme will both have a Cave tileset. 
+  You can make two tilesets 'cave_autumn' and 'cave_winter'
+  These tilesets will then have the alias name 'cave'
+]]
+function Tileset:setAliasName(aliasName)
+  self.aliasName = aliasName
+end
+
+function Tileset:getAliasName()
+  if self.aliasName then
+    return self.aliasName
+  end
+  return self:getName()
 end
 
 function Tileset:getType()
@@ -73,6 +91,5 @@ function Tileset:createTileData(template)
   end
   return TileData()
 end
-
 
 return Tileset

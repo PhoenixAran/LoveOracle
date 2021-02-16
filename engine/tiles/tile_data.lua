@@ -23,8 +23,7 @@ local TileData = Class {
     self.collisionRectZRange = { min = 0, max = 1  }
     self.hitRect = { x = 0, y = 0, w = 16, y = 16 }
     self.hitRectZRange = { min = 0, max = 1 }
-    
-
+  
     self.physicsLayer = 0
     self.collidesWithLayer = 0
     
@@ -260,7 +259,7 @@ function TileData:unsetHitBoxPhysicsLayer(layer)
 end
 
 -- Templates
-function TileData.addTemplate(name, tileData)
+function TileData.registerTemplate(name, tileData)
   assert(not Templates[name], 'Tile Template with name ' .. name .. ' already exists')
   Templates[name] = tileData
 end
@@ -273,6 +272,10 @@ end
 function TileData.initializeTemplates(path)
   path = path or 'data.tile_templates'
   require(path)(TileData)
+end
+
+function TileData.clearTemplates()
+  Templates = { }
 end
 
 return TileData

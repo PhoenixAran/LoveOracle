@@ -44,9 +44,12 @@ local physicsFlags = {
   'tile'
 }
 
+local tilesetThemeRequirements = {
+  'prototype_a',
+  'prototype_b',
+}
 
---local startupScreen = 'engine.screens.content_viewer'
-local startupScreen = 'data.test_screens.player_playground'
+local startupScreen = 'engine.screens.content_viewer'
 
 return {
  zbStudioDebug = zbStudioDebug,
@@ -54,5 +57,6 @@ return {
  window = window,
  startupScreen = startupScreen,
  version = version,
- physicsFlags = physicsFlags
+ physicsFlags = physicsFlags,
+ tilesetThemeRequirements = tilesetThemeRequirements
 }

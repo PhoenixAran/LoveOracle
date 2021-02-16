@@ -16,9 +16,12 @@ local Inspect = require 'lib.inspect'
 local ContentViewer = Class { __includes = BaseScreen,
   init = function(self)
     BaseScreen.init(self)
-    self.spriteViewer = nil
+    
     self.tilesetViewer = nil
-    self.error = nil
+    self.spriteViewer = nil
+    
+    self.showSpriteViewer = false
+    self.showTilesetViewer = false
   end
 }
 
@@ -37,15 +40,28 @@ end
 
 function ContentViewer:update(dt)
   Slab.Update(dt)
+  
   Slab.BeginWindow('content-controller', { Title = 'Content Control'})
   if Slab.Button('Reload Content', {Tooltip = 'Look at the console window to check for errors'}) then
     self:reloadContent()
     self.spriteViewer:initialize()
     self.tilesetViewer:initialize()
   end
+  if Slab.CheckBox(self.showSpriteViewer, 'Sprite Viewer') then
+    self.showSpriteViewer = not self.showSpriteViewer
+  end
+  if Slab.CheckBox(self.showTilesetViewer, 'Tileset Viewer') then
+    self.showTilesetViewer = not self.showTilesetViewer
+  end
   Slab.EndWindow()
-  self.spriteViewer:update()
-  self.tilesetViewer:update()
+  
+  if self.showSpriteViewer then
+    self.spriteViewer:update()
+  end
+  
+  if self.showTilesetViewer then
+    self.tilesetViewer:update()
+  end
 
 end
 
