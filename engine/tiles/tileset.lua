@@ -27,6 +27,7 @@ function Tileset:getName()
 end
 
 --[[ 
+  NB: Tileset alias names are NOT unique
   Alias names are used in tilesets
   Use Case: Autumn theme and Winter Theme will both have a Cave tileset. 
   You can make two tilesets 'cave_autumn' and 'cave_winter'

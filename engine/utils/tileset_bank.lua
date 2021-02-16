@@ -32,10 +32,12 @@ function TilesetBank.registerTilesetTheme(theme)
   local name = theme:getName()
   assert(not TilesetBank.tilesetThemes[name], 'TilesetBank already has tileset theme with name ' .. name)
   TilesetTheme.validateTheme(theme)
+  TilesetBank.tilesetThemes[name] = theme
 end
 
 function TilesetBank.getTilesetTheme(name)
   assert(TilesetBank.tilesetThemes[name], 'TilesetBank does not have tileset theme with name ' .. name)
+  return TilesetBank.tilesetThemes[name]
 end
 
 function TilesetBank.initialize()

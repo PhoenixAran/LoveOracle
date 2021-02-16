@@ -32,9 +32,9 @@ function TilesetViewer:initialize()
   for k, _ in pairs(TilesetBank.tilesets) do 
     lume.push(self.tilesetList, k)
   end
-  lume.sort(self.tilesetList, function(a, b)
-    return string.upper(a) < string.upper(b)
-  end)
+  --lume.sort(self.tilesetList, function(a, b)
+  --  return string.upper(a) < string.upper(b)
+  --end)
   if lume.any(self.tilesetList, function(x) return x == self.tilesetName end) then
     self:updateTileset(self.tilesetName, true)
   elseif self.tilesetList[1] then
@@ -82,7 +82,6 @@ function TilesetViewer:drawTilesetOnTilesetCanvas()
       end
     end
   end
-  -- draw border around selected tile
   love.graphics.setCanvas()
 end
 

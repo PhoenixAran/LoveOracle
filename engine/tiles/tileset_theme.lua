@@ -35,6 +35,10 @@ function TilesetTheme:addTileset(tileset)
   self.tilesetIdOffsets[tilesetName] = tileset:getSize()
 end
 
+function TilesetTheme:getTileset(tilesetName)
+  return self.tilesets[tilesetName]
+end
+
 function TilesetTheme:getTile(id)
   -- find theme with tile id offset less than id
   local idModifier = 0
@@ -66,6 +70,10 @@ function TilesetTheme.validateTheme(tilesetTheme)
       error('Expected tileset "' .. expectedName .. '", but got tileset "' ..  name .. '" in tileset theme ' .. self:getName())
     end
   end
+end
+
+function TilesetTheme.getRequiredTilesets()
+  return lume.clone(REQUIRED_TILESETS)
 end
 
 return TilesetTheme

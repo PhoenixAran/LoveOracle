@@ -6,6 +6,7 @@ local BaseScreen = require 'engine.screens.base_screen'
 
 local SpriteViewer = require 'engine.screens.slab_modules.sprite_viewer'
 local TilesetViewer = require 'engine.screens.slab_modules.tileset_viewer'
+local TilesetThemeViewer = require 'engine.screens.slab_modules.tileset_theme_viewer'
 local ContentControl = require 'engine.control.content_control'
 
 local PaletteBank = require 'engine.utils.palette_bank'
@@ -19,9 +20,11 @@ local ContentViewer = Class { __includes = BaseScreen,
     
     self.tilesetViewer = nil
     self.spriteViewer = nil
+    self.tilesetThemeViewer = nil
     
     self.showSpriteViewer = false
     self.showTilesetViewer = false
+    self.showTilesetThemeViewer = true
   end
 }
 
@@ -30,6 +33,8 @@ function ContentViewer:enter(prev, ...)
   self.spriteViewer:initialize()
   self.tilesetViewer = TilesetViewer()
   self.tilesetViewer:initialize()
+  self.tilesetThemeViewer = TilesetThemeViewer()
+  self.tilesetThemeViewer:initialize()
 end
 
 function ContentViewer:reloadContent()
@@ -46,6 +51,7 @@ function ContentViewer:update(dt)
     self:reloadContent()
     self.spriteViewer:initialize()
     self.tilesetViewer:initialize()
+    self.tilesetThemeViewer:initialize()
   end
   if Slab.CheckBox(self.showSpriteViewer, 'Sprite Viewer') then
     self.showSpriteViewer = not self.showSpriteViewer
@@ -53,21 +59,26 @@ function ContentViewer:update(dt)
   if Slab.CheckBox(self.showTilesetViewer, 'Tileset Viewer') then
     self.showTilesetViewer = not self.showTilesetViewer
   end
+  if Slab.CheckBox(self.showTilesetThemeViewer, 'Tileset Theme Viewer') then
+    self.showTilesetThemeViewer = not self.showTilesetThemeViewer
+  end
   Slab.EndWindow()
   
   if self.showSpriteViewer then
-    self.spriteViewer:update()
+    self.spriteViewer:update(dt)
   end
-  
   if self.showTilesetViewer then
-    self.tilesetViewer:update()
+    self.tilesetViewer:update(dt)
   end
-
+  if self.showTilesetThemeViewer then
+    self.tilesetThemeViewer:update(dt)
+  end
 end
 
 function ContentViewer:draw()
   self.spriteViewer:draw()
   self.tilesetViewer:draw()
+  self.tilesetThemeViewer:draw()
   Slab.Draw()
 end
 
