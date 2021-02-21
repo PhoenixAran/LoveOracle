@@ -2,6 +2,10 @@ v0.8.0
 ==========
 [API]: Make Update and Draw functions private.
 [Android]: Receive feedback and make fixes to errant behavior. Applies to issue #35.
+[FileDialog]: "Up to" button in file dialogs. #61.
+[Frame]: API calls to setup frames (child regions in Dear ImGui). Can hook into Regions module and expose some functionality from this for this feature. #46.
+[Input]: Multiline Input paste with newline charecters. #64.
+[Mouse/Keyboard]: Allow multiple 'Update' calls. This will conflict with the async input processing. Might need to keep a cache of the last async update and always apply that to every 'Update' call.
 
 BUGS
 ==========
@@ -29,9 +33,9 @@ Controls: Convert all window bounds check to use region.
 [Date Time]: Initial implementation for a date/time control.
 Dialog: Function to close all dialog boxes.
 Dialog: Modal/Non-modal dialogs.
+[Dock]: Flickers when using a custom love.run function with a fixed update interval.
 [Documentation]: Command-line option to just dump all functions listed in API table.
 [Error]: Dialog that shows any error messages.
-[Frame]: API calls to setup frames (child regions in Dear ImGui). Can hook into Regions module and expose some functionality from this for this feature.
 [Graph]: Initial line graph implementation.
 [Input]: Drag select word versus character.
 [Input]: Auto-grow control with MulitLine.

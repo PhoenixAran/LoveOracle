@@ -1,4 +1,4 @@
-local version = '0.0.10.2'
+local version = '0.0.10.3'
 local zbStudioDebug = true  -- enable breakpoint and step through with zbstudio
 
 -- Made for SNES controllers
@@ -49,8 +49,8 @@ local tilesetThemeRequirements = {
   'prototype_b',
 }
 
-local startupScreen = 'engine.screens.content_viewer'
-
+--local startupScreen = 'engine.screens.content_viewer'
+local startupScreen = 'engine.test_screens.entity_inspector_test'
 return {
  zbStudioDebug = zbStudioDebug,
  controls = controls,

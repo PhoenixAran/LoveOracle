@@ -10,6 +10,7 @@ local PropertyType = require('engine.entities.inspector_properties').PropertyTyp
 
 local EntityInspectorTest = Class { __includes = BaseScreen,
   init = function(self)
+    BaseScreen.init(self)
     self.player = nil
     self.entities = Entities(self)
     self.entityInspector = EntityInspector(self.entities)

@@ -45,7 +45,6 @@ function love.load(arg)
   local Slab = require 'lib.slab'
   Slab.SetINIStatePath(nil)
   Slab.Initialize()
-  Slab.Update(0)
 
 end
 

@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2020 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -994,7 +994,7 @@ function Input.Begin(Id, Options)
 	local Result = false
 
 	W, H = LayoutManager.ComputeSize(W, H)
-	LayoutManager.AddControl(W, H)
+	LayoutManager.AddControl(W, H, 'Input')
 
 	Instance.W = W
 	Instance.H = H
@@ -1226,6 +1226,9 @@ function Input.Begin(Id, Options)
 						love.keyboard.setTextInput(true)
 					end
 				end
+
+				-- Enable key repeat when an input control is focused.
+				love.keyboard.setKeyRepeat(true)
 			else
 				local MouseInputX, MouseInputY = MouseX - X, MouseY - Y
 				local CX, CY = Region.InverseTransform(Instance.Id, MouseInputX, MouseInputY)
@@ -1394,6 +1397,9 @@ function Input.Begin(Id, Options)
 		if Utility.IsMobile() then
 			love.keyboard.setTextInput(false)
 		end
+
+		-- Restore the key repeat flag to the state before an input control gained focus.
+		love.keyboard.setKeyRepeat(false)
 	end
 
 	Stats.End(StatHandle)

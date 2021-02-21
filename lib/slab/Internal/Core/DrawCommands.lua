@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2020 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -73,7 +73,8 @@ local Layers =
 	ContextMenu = 3,
 	MainMenuBar = 4,
 	Dialog = 5,
-	Debug = 6
+	Debug = 6,
+	Mouse = 7
 }
 
 local ActiveLayer = Layers.Normal
@@ -115,8 +116,11 @@ end
 local function DrawRect(Rect)
 	local StatHandle = Stats.Begin('DrawRect', StatsCategory)
 
+	local LineW = love.graphics.getLineWidth()
+	love.graphics.setLineWidth(Rect.LineW)
 	love.graphics.setColor(Rect.Color)
 	love.graphics.rectangle(Rect.Mode, Rect.X, Rect.Y, Rect.Width, Rect.Height, Rect.Radius, Rect.Radius)
+	love.graphics.setLineWidth(LineW)
 
 	Stats.End(StatHandle)
 end
@@ -353,6 +357,10 @@ local function AssertActiveBatch()
 end
 
 local function DrawLayer(Layer, Name)
+	if Layer == nil then
+		return
+	end
+
 	if Layer.Channels == nil then
 		return
 	end
@@ -386,6 +394,7 @@ function DrawCommands.Reset()
 	LayerTable[Layers.MainMenuBar] = {}
 	LayerTable[Layers.Dialog] = {}
 	LayerTable[Layers.Debug] = {}
+	LayerTable[Layers.Mouse] = {}
 	ActiveLayer = Layers.Normal
 	PendingBatches = {}
 	ActiveBatch = nil
@@ -443,10 +452,12 @@ function DrawCommands.SetLayer(Layer)
 		ActiveLayer = Layers.Dialog
 	elseif Layer == 'Debug' then
 		ActiveLayer = Layers.Debug
+	elseif Layer == 'Mouse' then
+		ActiveLayer = Layers.Mouse
 	end
 end
 
-function DrawCommands.Rectangle(Mode, X, Y, Width, Height, Color, Radius, Segments)
+function DrawCommands.Rectangle(Mode, X, Y, Width, Height, Color, Radius, Segments, LineW)
 	AssertActiveBatch()
 	if type(Radius) == 'table' then
 		Segments = Segments == nil and 10 or Segments
@@ -478,6 +489,7 @@ function DrawCommands.Rectangle(Mode, X, Y, Width, Height, Color, Radius, Segmen
 		Item.Height = Height
 		Item.Color = Color and Color or {0.0, 0.0, 0.0, 1.0}
 		Item.Radius = Radius and Radius or 0.0
+		Item.LineW = LineW or love.graphics.getLineWidth()
 		insert(ActiveBatch.Elements, Item)
 	end
 end
@@ -728,6 +740,7 @@ function DrawCommands.Execute()
 	DrawLayer(LayerTable[Layers.MainMenuBar], 'MainMenuBar')
 	DrawLayer(LayerTable[Layers.Dialog], 'Dialog')
 	DrawLayer(LayerTable[Layers.Debug], 'Debug')
+	DrawLayer(LayerTable[Layers.Mouse], 'Mouse')
 
 	love.graphics.setShader()
 
@@ -743,6 +756,7 @@ function DrawCommands.GetDebugInfo()
 	Result['MainMenuBar'] = GetLayerDebugInfo(LayerTable[Layers.MainMenuBar])
 	Result['Dialog'] = GetLayerDebugInfo(LayerTable[Layers.Dialog])
 	Result['Debug'] = GetLayerDebugInfo(LayerTable[Layers.Debug])
+	Result['Mouse'] = GetLayerDebugInfo(LayerTable[Layers.Mouse])
 
 	return Result
 end

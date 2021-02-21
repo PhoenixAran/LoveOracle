@@ -63,7 +63,6 @@ function ContentControl.buildContent()
   TilesetBank.initialize('data.tilesets')
 end
 
--- TODO: free cdata properly
 function ContentControl.unloadContent()
   BitTag.reset()
   TilesetBank.unload()

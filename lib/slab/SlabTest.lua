@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2020 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -214,6 +214,10 @@ local function DrawCheckBox()
 	if Slab.CheckBox(DrawCheckBox_Checked_NoLabel) then
 		DrawCheckBox_Checked_NoLabel = not DrawCheckBox_Checked_NoLabel
 	end
+
+	Slab.NewLine()
+	Slab.Text("A disabled check box.")
+	Slab.CheckBox(true, "Disabled", {Disabled = true})
 end
 
 local DrawRadioButton_Selected = 1
@@ -645,8 +649,8 @@ local function DrawInput()
 	if DrawInput_Highlight_Table_Modify ~= nil then
 		local Result = Slab.ColorPicker({Color = DrawInput_Highlight_Table[DrawInput_Highlight_Table_Modify]})
 
-		if Result.Button ~= "" then
-			if Result.Button == "OK" then
+		if Result.Button ~= 0 then
+			if Result.Button == 1 then
 				DrawInput_Highlight_Table[DrawInput_Highlight_Table_Modify] = Result.Color
 			end
 
@@ -675,6 +679,10 @@ local DrawImage_Power_Off = {1, 0, 0, 1}
 local DrawImage_Icon_X = 0
 local DrawImage_Icon_Y = 0
 local DrawImage_Icon_Move = false
+local DrawImage_UseOutline = true
+local DrawImage_OutlineWidth = 1
+local DrawImage_OutlineColor = {0, 0, 0, 1}
+local DrawImage_OutlineColor_Edit = false
 
 local function DrawImage()
 	Slab.Textf(
@@ -696,16 +704,54 @@ local function DrawImage()
 	if DrawImage_Color_Edit then
 		local Result = Slab.ColorPicker({Color = DrawImage_Color})
 
-		if Result.Button ~= "" then
+		if Result.Button ~= 0 then
 			DrawImage_Color_Edit = false
 
-			if Result.Button == "OK" then
+			if Result.Button == 1 then
 				DrawImage_Color = Result.Color
 			end
 		end
 	end
 
 	Slab.Image('DrawImage_Color', {Path = DrawImage_Path, Color = DrawImage_Color})
+
+	Slab.NewLine()
+	Slab.Separator()
+
+	Slab.Textf(
+		"An outline can be applied to the image. The color and width of the outline is customizable.")
+
+	Slab.Text("Use Outline")
+	Slab.SameLine()
+	if Slab.CheckBox(DrawImage_UseOutline) then
+		DrawImage_UseOutline = not DrawImage_UseOutline
+	end
+
+	Slab.SameLine()
+	Slab.Text("Width")
+	Slab.SameLine()
+	if Slab.Input('DrawImage_OutlineWidth', {Text = DrawImage_OutlineWidth, NumbersOnly = true, ReturnOnText = false, MinNumber = 1}) then
+		DrawImage_OutlineWidth = Slab.GetInputNumber()
+	end
+
+	Slab.SameLine()
+	if Slab.Button("Color") then
+		DrawImage_OutlineColor_Edit = true
+	end
+
+	if DrawImage_OutlineColor_Edit then
+		local Result = Slab.ColorPicker({Color = DrawImage_OutlineColor})
+
+		if Result.Button ~= 0 then
+			DrawImage_OutlineColor_Edit = false
+
+			if Result.Button == 1 then
+				DrawImage_OutlineColor = Result.Color
+			end
+		end
+	end
+
+	Slab.Image('DrawImage_Outline', {Path = DrawImage_Path, UseOutline = DrawImage_UseOutline, OutlineW = DrawImage_OutlineWidth, OutlineColor = DrawImage_OutlineColor})
 
 	Slab.NewLine()
 	Slab.Separator()
@@ -1245,6 +1291,7 @@ local DrawInteraction_MouseDoubleClicked_Left = 0
 local DrawInteraction_MouseDoubleClicked_Right = 0
 local DrawInteraction_MouseDoubleClicked_Middle = 0
 local DrawInteraction_MouseVoidClicked_Left = 0
+local DrawInteraction_MouseCustomCursors = nil
 local DrawInteraction_KeyPressed_A = 0
 local DrawInteraction_KeyPressed_S = 0
 local DrawInteraction_KeyPressed_D = 0
@@ -1363,6 +1410,39 @@ local function DrawInteraction()
 	Slab.Text("Is Void Hovered: " .. tostring(IsVoidHovered))
 
 	Slab.NewLine()
+	Slab.Textf(
+		"The rendered mouse can also be customized. This is done by overriding what the default system cursor displays. A custom Image " ..
+		"can be supplied but must be managed by the developer. Alternatively, 'nil' can be passed to disable rendering any cursor for a " ..
+		"given system cursor type. Below is a list of available system cursors that can be overridden. Each custom cursor is associated with " ..
+		"a test image for this example.")
+
+	if DrawInteraction_MouseCustomCursors == nil then
+		DrawInteraction_MouseCustomCursors = {}
+		local Image = love.graphics.newImage(DrawImage_Path_Icons)
+		DrawInteraction_MouseCustomCursors['arrow'] = {Image = Image, Quad = love.graphics.newQuad(100, 0, 50, 50, Image:getWidth(), Image:getHeight())}
+		DrawInteraction_MouseCustomCursors['sizewe'] = {Image = Image, Quad = love.graphics.newQuad(50, 0, 50, 50, Image:getWidth(), Image:getHeight())}
+		DrawInteraction_MouseCustomCursors['sizens'] = {Image = Image, Quad = love.graphics.newQuad(100, 50, 50, 50, Image:getWidth(), Image:getHeight())}
+		DrawInteraction_MouseCustomCursors['sizenesw'] = {Image = Image, Quad = love.graphics.newQuad(150, 0, 50, 50, Image:getWidth(), Image:getHeight())}
+		DrawInteraction_MouseCustomCursors['sizenwse'] = {Image = Image, Quad = love.graphics.newQuad(200, 0, 50, 50, Image:getWidth(), Image:getHeight())}
+		DrawInteraction_MouseCustomCursors['ibeam'] = {Image = Image, Quad = love.graphics.newQuad(250, 0, 50, 50, Image:getWidth(), Image:getHeight())}
+		DrawInteraction_MouseCustomCursors['hand'] = {Image = Image, Quad = love.graphics.newQuad(300, 0, 50, 50, Image:getWidth(), Image:getHeight())}
+	end
+
+	Slab.NewLine()
+
+	for K, V in pairs(DrawInteraction_MouseCustomCursors) do
+		if Slab.CheckBox(V.Enabled, K) then
+			V.Enabled = not V.Enabled
+
+			if V.Enabled then
+				Slab.SetCustomMouseCursor(K, V.Image, V.Quad)
+			else
+				Slab.ClearCustomMouseCursor(K)
+			end
+		end
+	end
+
+	Slab.NewLine()
 	Slab.Separator()
 
 	Slab.Textf(
@@ -1450,10 +1530,10 @@ local function DrawShapes()
 	if DrawShapes_Rectangle_ChangeColor then
 		local Result = Slab.ColorPicker({Color = DrawShapes_Rectangle_Color})
 
-		if Result.Button ~= "" then
+		if Result.Button ~= 0 then
 			DrawShapes_Rectangle_ChangeColor = false
 
-			if Result.Button == "OK" then
+			if Result.Button == 1 then
 				DrawShapes_Rectangle_Color = Result.Color
 			end
 		end
@@ -1650,7 +1730,12 @@ local DrawWindow_X = 900
 local DrawWindow_Y = 100
 local DrawWindow_W = 200
 local DrawWindow_H = 200
-local DrawWindow_Title = "Example"
+local DrawWindow_Title = "A"
+local DrawWindow_TitleH = nil
+local DrawWindow_TitleAlignmentX = 'center'
+local DrawWindow_TitleAlignmentY = 'center'
+local DrawWindow_TitleAlignmentX_Options = {'left', 'center', 'right'}
+local DrawWindow_TitleAlignmentY_Options = {'top', 'center', 'bottom'}
 local DrawWindow_ResetLayout = false
 local DrawWindow_ResetSize = false
 local DrawWindow_AutoSizeWindow = true
@@ -1661,6 +1746,7 @@ local DrawWindow_Border = 4.0
 local DrawWindow_BgColor = nil
 local DrawWindow_BgColor_ChangeColor = false
 local DrawWindow_NoOutline = false
+local DrawWindow_Constrain = false
 local DrawWindow_SizerFilter = {}
 local DrawWindow_SizerFiltersOptions = {
 	N = true,
@@ -1680,6 +1766,9 @@ local function DrawWindow_SizerCheckBox(Key)
 end
 
 local function DrawWindow()
+	-- Ensure a valid height. This could be due to a first run.
+	DrawWindow_TitleH = DrawWindow_TitleH or Slab.GetStyle().Font:getHeight()
+
 	Slab.Textf(
 		"Windows are the basis for which all controls are rendered on and for all user interactions to occur. This area will contain information on the " ..
 		"various options that a window can take and what their expected behaviors will be. The window rendered to the right of this window will be affected " ..
@@ -1690,7 +1779,8 @@ local function DrawWindow()
 
 	Slab.Textf(
 		"The title of the window can be customized. If no title exists, then the title bar is not rendered and the window can not be moved. There is also an " ..
-		"option, AllowMove, to disable movement even with the title bar.")
+		"option, AllowMove, to disable movement even with the title bar. The position of the window can be constrained to the viewport through the 'ConstrainPosition' " ..
+		"option. The height of the title bar is also adjustable. The default height will be the height of the current font.")
 
 	Slab.NewLine()
 
@@ -1700,9 +1790,46 @@ local function DrawWindow()
 		DrawWindow_Title = Slab.GetInputText()
 	end
 
-	Slab.SameLine()
 	if Slab.CheckBox(DrawWindow_AllowMove, "Allow Move") then
 		DrawWindow_AllowMove = not DrawWindow_AllowMove
+	end
+
+	if Slab.CheckBox(DrawWindow_Constrain, "Constrain Position To Viewport") then
+		DrawWindow_Constrain = not DrawWindow_Constrain
+	end
+
+	Slab.Text("Height")
+	Slab.SameLine()
+	if Slab.Input('DrawWindow_TitleHeight', {Text = DrawWindow_TitleH, ReturnOnText = false}) then
+		DrawWindow_TitleH = Slab.GetInputNumber()
+	end
+
+	Slab.NewLine()
+
+	Slab.Textf("The text alignment of the title can also be changed.")
+	Slab.Text("Horizontal")
+	Slab.SameLine()
+	if Slab.BeginComboBox('DrawWindow_TitleAlignmentX', {Selected = DrawWindow_TitleAlignmentX}) then
+		for I, V in ipairs(DrawWindow_TitleAlignmentX_Options) do
+			if Slab.TextSelectable(V) then
+				DrawWindow_TitleAlignmentX = V
+			end
+		end
+
+		Slab.EndComboBox()
+	end
+
+	Slab.SameLine()
+	Slab.Text("Vertical")
+	Slab.SameLine()
+	if Slab.BeginComboBox('DrawWindow_TitleAlignmentY', {Selected = DrawWindow_TitleAlignmentY}) then
+		for I, V in ipairs(DrawWindow_TitleAlignmentY_Options) do
+			if Slab.TextSelectable(V) then
+				DrawWindow_TitleAlignmentY = V
+			end
+		end
+
+		Slab.EndComboBox()
 	end
 
 	Slab.NewLine()
@@ -1864,17 +1991,20 @@ local function DrawWindow()
 	if DrawWindow_BgColor_ChangeColor then
 		local Result = Slab.ColorPicker({Color = DrawWindow_BgColor})
 
-		if Result.Button ~= "" then
+		if Result.Button ~= 0 then
 			DrawWindow_BgColor_ChangeColor = false
 
-			if Result.Button == "OK" then
+			if Result.Button == 1 then
 				DrawWindow_BgColor = Result.Color
 			end
 		end
 	end
 
 	Slab.BeginWindow('DrawWindow_Example', {
-		Title = DrawWindow_Title, 
+		Title = DrawWindow_Title,
+		TitleH = DrawWindow_TitleH,
+		TitleAlignX = DrawWindow_TitleAlignmentX,
+		TitleAlignY = DrawWindow_TitleAlignmentY,
 		X = DrawWindow_X,
 		Y = DrawWindow_Y,
 		W = DrawWindow_W,
@@ -1888,7 +2018,8 @@ local function DrawWindow()
 		AllowFocus = DrawWindow_AllowFocus,
 		Border = DrawWindow_Border,
 		BgColor = DrawWindow_BgColor,
-		NoOutline = DrawWindow_NoOutline
+		NoOutline = DrawWindow_NoOutline,
+		ConstrainPosition = DrawWindow_Constrain
 	})
 	Slab.Text("Hello World")
 	Slab.EndWindow()
