@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local Room = require 'engine.tiles.room'
+local RoomData = require 'engine.tiles.room_data'
 
 local NIL_TABLE = { }
 
@@ -27,7 +27,7 @@ local MapData = Class {
     data.rooms = data.rooms or { }
     local rooms = { }
     lume.each(data.rooms, function(roomData)
-      lume.push(Room(roomData))
+      rooms.push(RoomData(roomData))
     end)
     self.rooms = rooms
   end

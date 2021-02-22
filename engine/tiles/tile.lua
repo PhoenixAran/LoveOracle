@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local bit = require 'bit'
-
+local BitTag = require 'engine.utils.bit_tag'
 local Entity = require 'engine.entities.bump_box'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local AnimatedSpriteRenderer = require 'engine.components.sprite'
@@ -10,7 +10,7 @@ local Tile = Class { __includes = Entity,
   init = function(self, tileData, tileIndexX, tileIndexY, tileEntityName)
     local collisionRectZRangeX, collisionRectZRangeY = tileData:getCollisionZRange()
     local collisionRectZRange = { min = collisionRectZRangeX, max = collisionRectZRangeY }
-    Entity.init(self, tileId, true, true, tileData.collisionRect, collisionRectZRange)
+    Entity.init(self, tileEntityName, true, true, tileData.collisionRect, collisionRectZRange)
     
     -- TODO: check if it has a hurtbox
     -- TODO: make hurtbox
@@ -43,11 +43,7 @@ function Tile:getSprite()
 end
 
 function Tile:draw()
-  self.tileSprite.draw(self:getPosition())
-end
-
-function Tile:pick()
-  return nil
+  self.tileSprite:draw(self:getPosition())
 end
 
 return Tile

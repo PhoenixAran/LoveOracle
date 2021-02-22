@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local Slab = require 'lib.slab'
+local vector = require 'lib.vector'
 local TilesetBank = require 'engine.utils.tileset_bank'
 local TilesetTheme = require 'engine.tiles.tileset_theme'
 
@@ -26,6 +27,8 @@ local TilesetThemeViewer = Class {
     self.canvasCache = {
         ['1x1'] = self.tilesetCanvas
     }
+    self.hoverTileIndexX = nil
+    self.hoverTileIndexY = nil
   end
 }
 
@@ -81,9 +84,22 @@ function TilesetThemeViewer:updateTileset(tilesetThemeName, tilesetName, forceUp
   self.tilesetThemeName = tilesetThemeName
 end
 
+function TilesetThemeViewer:updateHoverIndex(x, y)
+  if not self.tileset then
+    return
+  end
+  if 1 <= x and x <= self.tileset.sizeX and 1 <= y and y <= self.tileset.sizeY then
+    self.hoverTileIndexX = x
+    self.hoverTileIndexY = y
+  else
+    self.hoverTileIndexX = nil
+    self.hoverTileIndexY = nil
+  end
+end
+
 function TilesetThemeViewer:drawTilesetOnTilesetCanvas()
   love.graphics.setCanvas(self.tilesetCanvas)
-  love.graphics.clear()
+  love.graphics.clear(1, 1, 1)
 
   if self.tileset then
     -- draw tiles
@@ -96,6 +112,16 @@ function TilesetThemeViewer:drawTilesetOnTilesetCanvas()
         local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
         sprite:draw(posX + tileSize / 2 , posY + tileSize / 2)
       end
+    end
+    
+    if self.hoverTileIndexX ~= nil and self.hoverTileIndexY ~= nil then
+      love.graphics.setLineWidth(1)
+      love.graphics.setColor(1, 0, 0)
+      love.graphics.rectangle('line',
+        ((self.hoverTileIndexX - 1) * tileSize) + ((self.hoverTileIndexX - 1) * TILE_PADDING) + TILE_MARGIN,
+        ((self.hoverTileIndexY - 1) * tileSize) + ((self.hoverTileIndexY - 1) * TILE_PADDING) + TILE_MARGIN,
+        tileSize,
+        tileSize)
     end
   end
   love.graphics.setCanvas()
@@ -138,7 +164,36 @@ function TilesetThemeViewer:update(dt)
     Slab.EndComboBox()
   end
   if self.tilesetCanvas then
+    local wx, wy = Slab.GetWindowPosition()
+    local tilesetImagePosX, tilesetImagePosY = Slab.GetCursorPos({Absolute = true})
+    tilesetImagePosX, tilesetImagePosY = vector.sub(tilesetImagePosX, tilesetImagePosY, wx, wy)
     Slab.Image('tileset-canvas-' .. self.tilesetThemeName .. '-' .. self.tilesetName, { Image = self.tilesetCanvas, WrapH = 'clampzero', WrapV = 'clampzero', ScaleX = self.zoom, ScaleY = self.zoom })
+    local mx, my = Slab.GetMousePosition()
+    local windowHoverX, windowHoverY = vector.sub(mx, my, wx, wy)
+    local relHoverX, relHoverY = vector.div(self.zoom, vector.sub(windowHoverX, windowHoverY, tilesetImagePosX, tilesetImagePosY))
+    
+    -- don't update if they click inbetween the tiles (tile padding or tile margin)
+    print(relHoverX, relHoverY)
+    if relHoverX == TILE_MARGIN or relHoverX % (self.tileset.tileSize + TILE_PADDING) == 0 or relHoverX == self.tilesetCanvas:getWidth() then
+      relHoverX = -100
+    end
+    if relHoverY == TILE_MARGIN or relHoverY % (self.tileset.tileSize + TILE_PADDING) == 0 or relHoverY == self.tilesetCanvas:getHeight() then
+      relHoverY = -100
+    end
+    
+    
+    local tileIndexX = math.floor(relHoverX / (self.tileset.tileSize + TILE_PADDING)) + 1
+    local tileIndexY = math.floor(relHoverY / (self.tileset.tileSize + TILE_PADDING)) + 1
+
+    self:updateHoverIndex(tileIndexX, tileIndexY)
+    Slab.Text('Tile Name: ')
+    Slab.SameLine()
+    if self.hoverTileIndexX == nil then
+      Slab.Text('')
+    else
+      local tilesetName = self.tileset:getTile(self.hoverTileIndexX, self.hoverTileIndexY):getName()
+      Slab.Text(tilesetName)
+    end
   end
   Slab.EndWindow()
 end

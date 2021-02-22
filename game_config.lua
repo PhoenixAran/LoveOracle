@@ -49,8 +49,8 @@ local tilesetThemeRequirements = {
   'prototype_b',
 }
 
---local startupScreen = 'engine.screens.content_viewer'
-local startupScreen = 'engine.test_screens.entity_inspector_test'
+local startupScreen = 'engine.screens.content_viewer'
+
 return {
  zbStudioDebug = zbStudioDebug,
  controls = controls,

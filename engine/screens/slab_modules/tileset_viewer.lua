@@ -113,6 +113,9 @@ function TilesetViewer:update(dt)
   if self.tilesetCanvas then
     Slab.Image('tile-canvas-' .. self.tilesetName , {Image = self.tilesetCanvas, WrapH = 'clampzero', WrapV = 'clampzero', ScaleX = self.zoom, ScaleY = self.zoom})
   end
+  
+  
+  
   Slab.EndWindow()
 end
 
