@@ -45,25 +45,27 @@ end
 
 function ContentViewer:update(dt)
   Slab.Update(dt)
-  
-  Slab.BeginWindow('content-controller', { Title = 'Content Control'})
-  if Slab.Button('Reload Content', {Tooltip = 'Look at the console window to check for errors'}) then
-    self:reloadContent()
-    self.spriteViewer:initialize()
-    self.tilesetViewer:initialize()
-    self.tilesetThemeViewer:initialize()
+  if Slab.BeginMainMenuBar() then
+    if Slab.BeginMenu("View") then
+      if Slab.MenuItemChecked("Sprite Viewer", self.showSpriteViewer) then
+        self.showSpriteViewer = not self.showSpriteViewer
+      end
+      if Slab.MenuItemChecked("Tileset Viewer", self.showTilesetViewer) then
+        self.showTilesetViewer = not self.showTilesetViewer
+      end
+      if Slab.MenuItemChecked("Tileset Theme Viewer", self.showTilesetThemeViewer) then
+        self.showTilewsetThemeViewer = not self.showTilesetThemeViewer
+      end
+      Slab.EndMenu()
+    end
+    if Slab.Button('Reload Content') then
+      self:reloadContent()
+      self.spriteViewer:initialize()
+      self.tilesetViewer:initialize()
+      self.tilesetThemeViewer:initialize()
+    end
+    Slab.EndMainMenuBar()
   end
-  if Slab.CheckBox(self.showSpriteViewer, 'Sprite Viewer') then
-    self.showSpriteViewer = not self.showSpriteViewer
-  end
-  if Slab.CheckBox(self.showTilesetViewer, 'Tileset Viewer') then
-    self.showTilesetViewer = not self.showTilesetViewer
-  end
-  if Slab.CheckBox(self.showTilesetThemeViewer, 'Tileset Theme Viewer') then
-    self.showTilesetThemeViewer = not self.showTilesetThemeViewer
-  end
-  Slab.EndWindow()
-  
   if self.showSpriteViewer then
     self.spriteViewer:update(dt)
   end

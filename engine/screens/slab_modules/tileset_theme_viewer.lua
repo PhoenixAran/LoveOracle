@@ -173,7 +173,6 @@ function TilesetThemeViewer:update(dt)
     local relHoverX, relHoverY = vector.div(self.zoom, vector.sub(windowHoverX, windowHoverY, tilesetImagePosX, tilesetImagePosY))
     
     -- don't update if they click inbetween the tiles (tile padding or tile margin)
-    print(relHoverX, relHoverY)
     if relHoverX == TILE_MARGIN or relHoverX % (self.tileset.tileSize + TILE_PADDING) == 0 or relHoverX == self.tilesetCanvas:getWidth() then
       relHoverX = -100
     end
