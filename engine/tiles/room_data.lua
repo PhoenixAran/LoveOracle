@@ -50,6 +50,18 @@ function RoomData:setTopLeftPositionY(y)
   self.topLeftPosY = y
 end
 
+function RoomData:getBottomRightPositionX()
+  return self.topLeftPosX + self.width
+end
+
+function RoomData:getBottomRightPositionY()
+  return self.topLeftPosY + self.height
+end
+
+function RoomData:getBottomRightPosition()
+  return self.topLeftPosX + self.width, self.topLeftPosY = self.height
+end
+
 function RoomData:getWidth()
   return self.width
 end

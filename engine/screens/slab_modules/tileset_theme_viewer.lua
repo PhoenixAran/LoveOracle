@@ -171,7 +171,8 @@ function TilesetThemeViewer:update(dt)
     local mx, my = Slab.GetMousePosition()
     local windowHoverX, windowHoverY = vector.sub(mx, my, wx, wy)
     local relHoverX, relHoverY = vector.div(self.zoom, vector.sub(windowHoverX, windowHoverY, tilesetImagePosX, tilesetImagePosY))
-    
+    relHoverX = math.floor(relHoverX)
+    relHoverY = math.floor(relHoverY)
     -- don't update if they click inbetween the tiles (tile padding or tile margin)
     if relHoverX == TILE_MARGIN or relHoverX % (self.tileset.tileSize + TILE_PADDING) == 0 or relHoverX == self.tilesetCanvas:getWidth() then
       relHoverX = -100
@@ -179,7 +180,6 @@ function TilesetThemeViewer:update(dt)
     if relHoverY == TILE_MARGIN or relHoverY % (self.tileset.tileSize + TILE_PADDING) == 0 or relHoverY == self.tilesetCanvas:getHeight() then
       relHoverY = -100
     end
-    
     
     local tileIndexX = math.floor(relHoverX / (self.tileset.tileSize + TILE_PADDING)) + 1
     local tileIndexY = math.floor(relHoverY / (self.tileset.tileSize + TILE_PADDING)) + 1

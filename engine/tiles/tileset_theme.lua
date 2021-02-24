@@ -14,6 +14,7 @@ local TilesetTheme = Class {
   init = function(self, name)
     self.name = name
     self.tilesets = { }
+    self.tilesetsByName = { }
     self.tilesetIdOffsets = { }
   end
 }
@@ -29,14 +30,19 @@ end
 function TilesetTheme:addTileset(tileset)
   local tilesetName = tileset:getAliasName()
   assert(tilesetName, 'Attempting to add tileset without name to tileset theme')
-  assert(not self.tilesets[tilesetName], 'Attempting add tileset ' .. tilesetName .. ' when it is already added to tileset theme')
+  assert(not self.tilesetsByName[tilesetName], 'Attempting add tileset ' .. tilesetName .. ' when it is already added to tileset theme')
   
-  self.tilesets[tilesetName] = tileset
+  lume.push(self.tilesets, tileset)
+  self.tilesetsByName[tilesetName] = tileset
   self.tilesetIdOffsets[tilesetName] = tileset:getSize()
 end
 
-function TilesetTheme:getTileset(tilesetName)
-  return self.tilesets[tilesetName]
+function TilesetTheme:getTileset(index)
+  if type(index) == 'string' then
+    return self.tilesetsByName[index]
+  else
+    return self.tilesets[index]
+  end
 end
 
 function TilesetTheme:getTile(id)
@@ -65,9 +71,8 @@ function TilesetTheme.validateTheme(tilesetTheme)
   for k, tileset in ipairs(tilesetTheme.tilesets) do
     local name = tileset:getName()
     local expectedName =  REQUIRED_TILESETS[k]
-    print('here')
     if name ~= expectedName then
-      error('Expected tileset "' .. expectedName .. '", but got tileset "' ..  name .. '" in tileset theme ' .. self:getName())
+      error('Expected tileset "' .. expectedName .. '", but got tileset "' ..  name .. '" in tileset theme ' .. tilesetTheme:getName())
     end
   end
 end
