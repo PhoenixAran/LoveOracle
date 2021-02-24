@@ -59,7 +59,7 @@ function RoomData:getBottomRightPositionY()
 end
 
 function RoomData:getBottomRightPosition()
-  return self.topLeftPosX + self.width, self.topLeftPosY = self.height
+  return self.topLeftPosX + self.width, self.topLeftPosY + self.height
 end
 
 function RoomData:getWidth()

@@ -3,7 +3,6 @@ local lume = require 'lib.lume'
 local RoomData = require 'engine.tiles.room_data'
 local TileLayer = require 'engine.tiles.layers.tile_layer'
 
-
 local NIL_TABLE = { }
 
 -- TODO: ObjectLayer
