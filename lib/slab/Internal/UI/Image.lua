@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2020 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -72,6 +72,9 @@ function Image.Begin(Id, Options)
 	Options.SubH = Options.SubH == nil and 0.0 or Options.SubH
 	Options.WrapH = Options.WrapH == nil and "clamp" or Options.WrapH
 	Options.WrapV = Options.WrapV == nil and "clamp" or Options.WrapV
+	Options.UseOutline = Options.UseOutline or false
+	Options.OutlineColor = Options.OutlineColor or {0, 0, 0, 1}
+	Options.OutlineW = Options.OutlineW or 1
 
 	local Instance = GetInstance(Id)
 	local WinItemId = Window.GetItemId(Id)
@@ -97,7 +100,8 @@ function Image.Begin(Id, Options)
 		UseSubImage = true
 	end
 
-	LayoutManager.AddControl(W, H)
+	W, H = LayoutManager.ComputeSize(W, H)
+	LayoutManager.AddControl(W, H, 'Image')
 
 	local X, Y = Cursor.GetPosition()
 	local MouseX, MouseY = Window.GetMousePosition()
@@ -122,6 +126,20 @@ function Image.Begin(Id, Options)
 			Options.Color)
 	else
 		DrawCommands.Image(X, Y, Instance.Image, Options.Rotation, Options.ScaleX, Options.ScaleY, Options.Color)
+	end
+
+	if Options.UseOutline then
+		DrawCommands.Rectangle(
+			'line',
+			X,
+			Y,
+			UseSubImage and Options.SubW or W,
+			UseSubImage and Options.SubH or H,
+			Options.OutlineColor,
+			nil,
+			nil,
+			Options.OutlineW
+		)
 	end
 
 	Cursor.SetItemBounds(X, Y, W, H)

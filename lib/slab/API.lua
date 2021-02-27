@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2020 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -162,6 +162,7 @@ local Window = require(SLAB_PATH .. '.Internal.UI.Window')
 			CloseDialog
 			MessageBox
 			FileDialog
+			ColorPicker
 
 		Mouse:
 			IsMouseDown
@@ -172,6 +173,8 @@ local Window = require(SLAB_PATH .. '.Internal.UI.Window')
 			GetMousePosition
 			GetMousePositionWindow
 			GetMouseDelta
+			SetCustomMouseCursor
+			ClearCustomMouseCursor
 
 		Control:
 			IsControlHovered
@@ -227,8 +230,8 @@ local Slab = {}
 
 -- Slab version numbers.
 local Version_Major = 0
-local Version_Minor = 7
-local Version_Revision = 2
+local Version_Minor = 8
+local Version_Revision = 0
 
 local FrameStatHandle = nil
 
@@ -237,8 +240,6 @@ local INIStatePath = love.filesystem.getSourceBaseDirectory() .. "/Slab.ini"
 local QuitFn = nil
 local Verbose = false
 local Initialized = false
-local DidUpdate = false
-local DidDraw = false
 
 local function LoadState()
 	if INIStatePath ~= nil then
@@ -367,11 +368,7 @@ end
 	Return: None.
 --]]
 function Slab.Update(dt)
-	if DidUpdate then
-		return
-	end
-
-	Stats.Reset()
+	Stats.Reset(false)
 	FrameStatHandle = Stats.Begin('Frame', 'Slab')
 	local StatHandle = Stats.Begin('Update', 'Slab')
 
@@ -390,9 +387,6 @@ function Slab.Update(dt)
 	end
 
 	Stats.End(StatHandle)
-
-	DidUpdate = true
-	DidDraw = false
 end
 
 --[[
@@ -405,10 +399,6 @@ end
 	Return: None.
 --]]
 function Slab.Draw()
-	if DidDraw then
-		return
-	end
-
 	local StatHandle = Stats.Begin('Draw', 'Slab')
 
 	Window.Validate()
@@ -426,7 +416,7 @@ function Slab.Draw()
 		MenuBar.Clear()
 	end
 
-	Mouse.UpdateCursor()
+	Mouse.Draw()
 
 	if Mouse.IsReleased(1) then
 		Button.ClearClicked()
@@ -438,10 +428,13 @@ function Slab.Draw()
 	love.graphics.pop()
 
 	Stats.End(StatHandle)
-	Stats.End(FrameStatHandle)
 
-	DidDraw = true
-	DidUpdate = false
+	-- Only call end if 'Update' was called and a valid handle was retrieved. This can happen for developers using a custom
+	-- run function with a fixed update.
+	if FrameStatHandle ~= nil then
+		Stats.End(FrameStatHandle)
+		FrameStatHandle = nil
+	end
 end
 
 --[[
@@ -542,6 +535,10 @@ end
 		ContentH: [Number] The starting height of the content contained within this window.
 		BgColor: [Table] The background color value for this window. Will use the default style WindowBackgroundColor if this is empty.
 		Title: [String] The title to display for this window. If emtpy, no title bar will be rendered and the window will not be movable.
+		TitleH: [Number] The height of the title bar. By default, this will be the height of the current font set in the style. If no title is
+			set, this is ignored.
+		TitleAlignX: [String] Horizontal alignment of the title. The available options are 'left', 'center', and 'right'. The default is 'center'.
+		TitleAlignY: [String] Vertical alignment of the title. The available options are 'top', 'center', and 'bottom'. The default is 'center'.
 		AllowMove: [Boolean] Controls whether the window is movable within the title bar area. The default value is true.
 		AllowResize: [Boolean] Controls whether the window is resizable. The default value is true. AutoSizeWindow must be false for this to work.
 		AllowFocus: [Boolean] Controls whether the window can be focused. The default value is true.
@@ -566,6 +563,7 @@ end
 		IsOpen: [Boolean] Determines if the window is open. If this value exists within the options, a close button will appear in
 			the corner of the window and is updated when this button is pressed to reflect the new open state of this window.
 		NoSavedSettings: [Boolean] Flag to disable saving this window's settings to the state INI file.
+		ConstrainPosition: [Boolean] Flag to constrain the position of the window to the bounds of the viewport.
 
 	Return: [Boolean] The open state of this window. Useful for simplifying API calls by storing the result in a flag instead of a table.
 		EndWindow must still be called regardless of the result for this value.
@@ -999,6 +997,7 @@ end
 		Id: [String] An optional Id that can be supplied by the user. By default, the Id will be the label.
 		Rounding: [Number] Amount of rounding to apply to the corners of the check box.
 		Size: [Number] The uniform size of the box. The default value is 16.
+		Disabled: [Boolean] Dictates whether this check box is enabled for interaction.
 
 	Return: [Boolean] Returns true if the user clicks within the check box.
 --]]
@@ -1337,6 +1336,10 @@ end
 		WrapY: [String] The vertical wrapping mode for this image. The available options are 'clamp', 'repeat', 
 			'mirroredrepeat', and 'clampzero'. For more information refer to the Love2D documentation on wrap modes at
 			https://love2d.org/wiki/WrapMode.
+		UseOutline: [Boolean] If set to true, a rectangle will be drawn around the given image. If 'SubW' or 'SubH' are specified, these
+			values will be used instead of the image's dimensions.
+		OutlineColor: [Table] The color used to draw the outline. Default color is black.
+		OutlineW: [Number] The width used for the outline. Default value is 1.
 
 	Return: None.
 --]]
@@ -1705,7 +1708,7 @@ end
 		Color: [Table] The color to modify. This should be in the format of 0-1 for each color component (RGBA).
 
 	Return: [Table] Returns the button and color the user has selected.
-		Button: [String] The button the user clicked. Will either be OK or Cancel.
+		Button: [Number] The button the user clicked. 1 - OK. 0 - No Interaction. -1 - Cancel.
 		Color: [Table] The new color the user has chosen. This will always be returned.
 --]]
 function Slab.ColorPicker(Options)
@@ -1809,6 +1812,30 @@ end
 --]]
 function Slab.GetMouseDelta()
 	return Mouse.GetDelta()
+end
+
+--[[
+	SetCustomMouseCursor
+
+	Overrides a system mouse cursor of the given type to render a custom image instead.
+
+	Type: [String] The system cursor type to replace. This can be one of the following values: 'arrow', 'sizewe', 'sizens', 'sizenesw', 'sizenwse', 'ibeam', 'hand'.
+	Image: [Table] An 'Image' object created from love.graphics.newImage. If this is nil, then an empty image is created and is drawn when the system cursor is activated.
+	Quad: [Table] A 'Quad' object created from love.graphics.newQuad. This allows support for setting UVs of an image to render.
+--]]
+function Slab.SetCustomMouseCursor(Type, Image, Quad)
+	Mouse.SetCustomCursor(Type, Image, Quad)
+end
+
+--[[
+	ClearCustomMouseCursor
+
+	Removes any override of a system mouse cursor with the given type and defaults to the OS specific mouse cursor.
+
+	Type: [String] The system cursor type to remove. This can be one of the following values: 'arrow', 'sizewe', 'sizens', 'sizenesw', 'sizenwse', 'ibeam', 'hand'.
+--]]
+function Slab.ClearCustomMouseCursor(Type)
+	Mouse.ClearCustomCursor(Type)
 end
 
 --[[

@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local AssetManager = require 'engine.utils.asset_manager'
-local PaletteBank = require 'engine.utils_palette_bank'
+local PaletteBank = require 'engine.utils.palette_bank'
 
 -- Acts as a sprite.
 -- Will override the current palette shader.
@@ -77,6 +77,10 @@ function ColorSprite:draw(x, y, alpha)
   if shouldSwapBack then
     love.graphics.setShader(currentShader)
   end
+end
+
+function ColorSprite:release()
+  self.sprite:release()
 end
 
 return ColorSprite

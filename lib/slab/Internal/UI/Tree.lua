@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2020 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -133,7 +133,7 @@ function Tree.Begin(Id, Options)
 			ControlH = Instance.TreeB - Instance.Y
 		end
 
-		LayoutManager.AddControl(ControlW, ControlH)
+		LayoutManager.AddControl(ControlW, ControlH, 'Tree')
 
 		Instance.TreeR = 0
 		Instance.TreeB = 0

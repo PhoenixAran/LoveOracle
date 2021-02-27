@@ -84,4 +84,15 @@ function SpriteAnimation:hasSubstrips()
   return self.substrips
 end
 
+function SpriteAnimation:release()
+  self.timedActions = nil
+  if self:hasSubstrips() then
+    for i, frames in pairs(self.spriteFrames) do
+      for j, frame in pairs(frames) do
+        frame:release()
+      end
+    end
+  end
+end
+
 return SpriteAnimation

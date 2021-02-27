@@ -4,12 +4,13 @@ local SpriteBank = require 'engine.utils.sprite_bank'
 local PaletteBank = require 'engine.utils.palette_bank'
 local TileData = require 'engine.tiles.tile_data'
 
+local DEFAULT_TILE_SIZE = 16
+
 local Tileset = Class {
   init = function(self, name, sizeX, sizeY, tileSize)
-    
-    self.tileSize = tileSize or 16
-    self.tileId = 1
+    self.tileSize = tileSize or DEFAULT_TILE_SIZE
     self.name = name
+    self.aliasName = nil
     -- holds TileData instances, don't confuse this with the Tile class
     self.tiles = { }
     self.size = sizeX * sizeY
@@ -23,6 +24,24 @@ local Tileset = Class {
 
 function Tileset:getName()
   return self.name
+end
+
+--[[ 
+  NB: Tileset alias names are NOT unique
+  Alias names are used in tilesets
+  Use Case: Autumn theme and Winter Theme will both have a Cave tileset. 
+  You can make two tilesets 'cave_autumn' and 'cave_winter'
+  These tilesets will then have the alias name 'cave'
+]]
+function Tileset:setAliasName(aliasName)
+  self.aliasName = aliasName
+end
+
+function Tileset:getAliasName()
+  if self.aliasName then
+    return self.aliasName
+  end
+  return self:getName()
 end
 
 function Tileset:getType()
@@ -49,19 +68,20 @@ end
 
 function Tileset:setTile(tileData, x, y)
   tileData.id = self.tileId
-  self.tileId = self.tileId + 1
   if y == nil then
     assert(x <= self.size, 'x is out of bounds')
     self.tiles[x] = tileData
+    tileData.id = x
   else
     local idx = (x - 1) * self.sizeY + y
     assert(idx <= self.size, '( ' .. tostring(x) .. ', ' .. tostring(y) .. ') is out of bounds')
     self.tiles[idx] = tileData
+    tileData.id = idx
   end
 end
 
-function Tileset:count()
-  return lume.count(self.tiles)
+function Tileset:getSize()
+  return self.size
 end
 
 function Tileset:createTileData(template)
@@ -70,7 +90,5 @@ function Tileset:createTileData(template)
   end
   return TileData()
 end
-
-
 
 return Tileset

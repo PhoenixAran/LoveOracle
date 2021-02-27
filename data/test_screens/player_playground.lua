@@ -6,6 +6,7 @@ local Sword = require 'engine.items.weapons.item_sword'
 
 local PlayerPlayground = Class { __includes = BaseScreen,
   init = function(self)
+    BaseScreen.init(self)
     self.player = nil
   end
 }

@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2020 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -139,23 +139,19 @@ end
 
 local function Contains(Instance, X, Y)
 	if Instance ~= nil then
-		local OffsetY = 0.0
-		if Instance.Title ~= "" then
-			OffsetY = Style.Font:getHeight()
-		end
-		return Instance.X <= X and X <= Instance.X + Instance.W and Instance.Y - OffsetY <= Y and Y <= Instance.Y + Instance.H
+		return Instance.X <= X and X <= Instance.X + Instance.W and Instance.Y - Instance.TitleH <= Y and Y <= Instance.Y + Instance.H
 	end
 	return false
 end
 
-local function UpdateTitleBar(Instance, IsObstructed, AllowMove)
+local function UpdateTitleBar(Instance, IsObstructed, AllowMove, Constrain)
 	if IsObstructed then
 		return
 	end
 
 	if Instance ~= nil and Instance.Title ~= "" and Instance.SizerType == SizerType.None then
 		local W = Instance.W
-		local H = Style.Font:getHeight()
+		local H = Instance.TitleH
 		local X = Instance.X
 		local Y = Instance.Y - H
 		local IsTethered = Dock.IsTethered(Instance.Id)
@@ -182,8 +178,18 @@ local function UpdateTitleBar(Instance, IsObstructed, AllowMove)
 
 		if Instance.IsMoving then
 			local DeltaX, DeltaY = Mouse.GetDelta()
+			local TitleDeltaX, TitleDeltaY = Instance.TitleDeltaX, Instance.TitleDeltaY
 			Instance.TitleDeltaX = Instance.TitleDeltaX + DeltaX
 			Instance.TitleDeltaY = Instance.TitleDeltaY + DeltaY
+
+			if Constrain then
+				-- Constrain the position of the window to the viewport. The position at this point in the code has the delta already applied. This delta will need to be
+				-- removed to retrieve the original position, and clamp the delta based off of that posiiton.
+				local OriginX = Instance.X - TitleDeltaX
+				local OriginY = Instance.Y - TitleDeltaY - Instance.TitleH
+				Instance.TitleDeltaX = Utility.Clamp(Instance.TitleDeltaX, -OriginX, love.graphics.getWidth() - (OriginX + Instance.W))
+				Instance.TitleDeltaY = Utility.Clamp(Instance.TitleDeltaY, -OriginY + MenuState.MainMenuBarH, love.graphics.getHeight() - (OriginY + Instance.H + Instance.TitleH))
+			end
 		elseif IsTethered then
 			Dock.UpdateTear(Instance.Id, MouseX, MouseY)
 
@@ -239,7 +245,7 @@ local function UpdateSize(Instance, IsObstructed)
 		local H = Instance.H
 
 		if Instance.Title ~= "" then
-			local Offset = Style.Font:getHeight()
+			local Offset = Instance.TitleH
 			Y = Y - Offset
 			H = H + Offset
 		end
@@ -460,6 +466,9 @@ function Window.Begin(Id, Options)
 	Options.ContentH = Options.ContentH == nil and 0.0 or Options.ContentH
 	Options.BgColor = Options.BgColor == nil and Style.WindowBackgroundColor or Options.BgColor
 	Options.Title = Options.Title == nil and "" or Options.Title
+	Options.TitleAlignX = Options.TitleAlignX == nil and 'center' or Options.TitleAlignX
+	Options.TitleAlignY = Options.TitleAlignY == nil and 'center' or Options.TitleAlignY
+	Options.TitleH = Options.TitleH == nil and ((Options.Title ~= nil and Options.Title ~= "") and Style.Font:getHeight() or 0) or Options.TitleH
 	Options.AllowMove = Options.AllowMove == nil and true or Options.AllowMove
 	Options.AllowResize = Options.AllowResize == nil and true or Options.AllowResize
 	Options.AllowFocus = Options.AllowFocus == nil and true or Options.AllowFocus
@@ -479,6 +488,7 @@ function Window.Begin(Id, Options)
 	Options.CanObstruct = Options.CanObstruct == nil and true or Options.CanObstruct
 	Options.Rounding = Options.Rounding == nil and Style.WindowRounding or Options.Rounding
 	Options.NoSavedSettings = Options.NoSavedSettings == nil and false or Options.NoSavedSettings
+	Options.ConstrainPosition = Options.ConstrainPosition or false
 
 	Dock.AlterOptions(Id, Options)
 
@@ -529,6 +539,7 @@ function Window.Begin(Id, Options)
 	ActiveInstance.ContentH = Options.ContentH
 	ActiveInstance.BackgroundColor = Options.BgColor
 	ActiveInstance.Title = Options.Title
+	ActiveInstance.TitleH = Options.TitleH
 	ActiveInstance.AllowResize = Options.AllowResize and not Options.AutoSizeWindow
 	ActiveInstance.AllowFocus = Options.AllowFocus
 	ActiveInstance.Border = Options.Border
@@ -567,9 +578,8 @@ function Window.Begin(Id, Options)
 		ActiveInstance.ContentH = max(Options.ContentH, ActiveInstance.DeltaContentH)
 	end
 
-	local OffsetY = 0.0
+	local OffsetY = ActiveInstance.TitleH
 	if ActiveInstance.Title ~= "" then
-		OffsetY = Style.Font:getHeight()
 		ActiveInstance.Y = ActiveInstance.Y + OffsetY
 
 		if Options.AutoSizeWindow then
@@ -590,13 +600,34 @@ function Window.Begin(Id, Options)
 	Cursor.SetAnchor(ActiveInstance.X + ActiveInstance.Border, ActiveInstance.Y + ActiveInstance.Border)
 
 	UpdateSize(ActiveInstance, IsObstructed)
-	UpdateTitleBar(ActiveInstance, IsObstructed, Options.AllowMove)
+	UpdateTitleBar(ActiveInstance, IsObstructed, Options.AllowMove, Options.ConstrainPosition)
 
 	DrawCommands.SetLayer(ActiveInstance.Layer)
 
 	DrawCommands.Begin({Channel = ActiveInstance.StackIndex})
 	if ActiveInstance.Title ~= "" then
+		local CloseBgRadius = OffsetY * 0.4
 		local TitleX = floor(ActiveInstance.X + (ActiveInstance.W * 0.5) - (Style.Font:getWidth(ActiveInstance.Title) * 0.5))
+		local TitleY = floor(ActiveInstance.Y - OffsetY * 0.5 - Style.Font:getHeight() * 0.5)
+
+		-- Check for horizontal alignment.
+		if Options.TitleAlignX == 'left' then
+			TitleX = floor(ActiveInstance.X + ActiveInstance.Border)
+		elseif Options.TitleAlignX == 'right' then
+			TitleX = floor(ActiveInstance.X + ActiveInstance.W - Style.Font:getWidth(ActiveInstance.Title) - ActiveInstance.Border)
+
+			if ShowClose then
+				TitleX = floor(TitleX - CloseBgRadius * 2.0)
+			end
+		end
+
+		-- Check for vertical alignment
+		if Options.TitleAlignY == 'top' then
+			TitleY = floor(ActiveInstance.Y - OffsetY)
+		elseif Options.TitleAlignY == 'bottom' then
+			TitleY = floor(ActiveInstance.Y - Style.Font:getHeight())
+		end
+
 		local TitleColor = ActiveInstance.BackgroundColor
 		if ActiveInstance == Stack[1] then
 			TitleColor = Style.WindowTitleFocusedColor
@@ -617,10 +648,9 @@ function Window.Begin(Id, Options)
 			MouseY = MouseY,
 			IsObstructed = IsObstructed
 		})
-		DrawCommands.Print(ActiveInstance.Title, TitleX, floor(ActiveInstance.Y - OffsetY), Style.TextColor, Style.Font)
+		DrawCommands.Print(ActiveInstance.Title, TitleX, TitleY, Style.TextColor, Style.Font)
 
 		if ShowClose then
-			local CloseBgRadius = OffsetY * 0.4
 			local CloseSize = CloseBgRadius * 0.5
 			local CloseX = ActiveInstance.X + ActiveInstance.W - ActiveInstance.Border - CloseBgRadius
 			local CloseY = ActiveInstance.Y - OffsetY * 0.5
@@ -678,7 +708,7 @@ function Window.Begin(Id, Options)
 		NoOutline = Options.NoOutline
 	})
 
-	if Options.ResetSize then
+	if Options.ResetSize or Options.ResetLayout then
 		ActiveInstance.SizeDeltaX = 0.0
 		ActiveInstance.SizeDeltaY = 0.0
 	end
@@ -743,7 +773,7 @@ end
 function Window.GetBounds(IgnoreTitleBar)
 	if ActiveInstance ~= nil then
 		IgnoreTitleBar = IgnoreTitleBar == nil and false or IgnoreTitleBar
-		local OffsetY = (ActiveInstance.Title ~= "" and not IgnoreTitleBar) and Style.Font:getHeight() or 0.0
+		local OffsetY = (ActiveInstance.Title ~= "" and not IgnoreTitleBar) and ActiveInstance.TitleH or 0.0
 		return ActiveInstance.X, ActiveInstance.Y - OffsetY, ActiveInstance.W, ActiveInstance.H + OffsetY
 	end
 	return 0.0, 0.0, 0.0, 0.0
@@ -751,11 +781,7 @@ end
 
 function Window.GetPosition()
 	if ActiveInstance ~= nil then
-		local X, Y = ActiveInstance.X, ActiveInstance.Y
-		if ActiveInstance.Title ~= "" then
-			Y = Y - Style.Font:getHeight()
-		end
-		return X, Y
+		return ActiveInstance.X, ActiveInstance.Y - ActiveInstance.TitleH
 	end
 	return 0.0, 0.0
 end
@@ -1000,12 +1026,15 @@ function Window.GetInstanceInfo(Id)
 
 	if Instance ~= nil then
 		insert(Result, "Title: " .. Instance.Title)
+		insert(Result, "TitleH: " .. Instance.TitleH)
 		insert(Result, "X: " .. Instance.X)
 		insert(Result, "Y: " .. Instance.Y)
 		insert(Result, "W: " .. Instance.W)
 		insert(Result, "H: " .. Instance.H)
 		insert(Result, "ContentW: " .. Instance.ContentW)
 		insert(Result, "ContentH: " .. Instance.ContentH)
+		insert(Result, "TitleDeltaX: " .. Instance.TitleDeltaX)
+		insert(Result, "TitleDeltaY: " .. Instance.TitleDeltaY)
 		insert(Result, "SizeDeltaX: " .. Instance.SizeDeltaX)
 		insert(Result, "SizeDeltaY: " .. Instance.SizeDeltaY)
 		insert(Result, "DeltaContentW: " .. Instance.DeltaContentW)

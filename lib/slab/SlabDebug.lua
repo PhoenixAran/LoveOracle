@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2020 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ SOFTWARE.
 local Slab = require(SLAB_PATH .. '.Slab')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
 local Input = require(SLAB_PATH .. '.Internal.UI.Input')
+local LayoutManager = require(SLAB_PATH .. '.Internal.UI.LayoutManager')
 local Mouse = require(SLAB_PATH .. '.Internal.Input.Mouse')
 local Region = require(SLAB_PATH .. '.Internal.UI.Region')
 local Stats = require(SLAB_PATH .. '.Internal.Core.Stats')
@@ -50,6 +51,7 @@ local SlabDebug_MultiLine_FileDialog = false
 local SlabDebug_MultiLine_FileName = ""
 local SlabDebug_MultiLine_Contents = ""
 local SlabDebug_Tree = {Title = "Tree", IsOpen = false, AutoSizeWindow = false, AllowResize = true}
+local SlabDebug_LayoutManager = {Title = "Layout Manager", IsOpen = false, AutoSizeWindow = false, AllowResize = true}
 
 local SlabDebug_Windows_Categories = {"Inspector", "Stack"}
 local SlabDebug_Windows_Category = "Inspector"
@@ -297,12 +299,12 @@ local function DrawStyleEditor()
 		Style_EditingColor[3] = Result.Color[3]
 		Style_EditingColor[4] = Result.Color[4]
 
-		if Result.Button ~= "" then
-			if Result.Button == "OK" then
+		if Result.Button ~= 0 then
+			if Result.Button == 1 then
 				Style.API.StoreCurrentStyle()
 			end
 
-			if Result.Button == "Cancel" then
+			if Result.Button == -1 then
 				RestoreEditColor()
 			end
 
@@ -582,6 +584,40 @@ function SlabDebug.Tree()
 	Slab.EndWindow()
 end
 
+local SlabDebug_LayoutManager_Selected = nil
+
+function SlabDebug.LayoutManager()
+	local Info = LayoutManager.GetDebugInfo()
+
+	Slab.BeginWindow('LayoutManager', SlabDebug_LayoutManager)
+
+	Slab.BeginLayout('LayoutManager_Layout', {ExpandW = true})
+	if Slab.BeginComboBox('LayoutManager_ID', {Selected = SlabDebug_LayoutManager_Selected}) then
+		for K, V in pairs(Info) do
+			if SlabDebug_LayoutManager_Selected == nil then
+				SlabDebug_LayoutManager_Selected = K
+			end
+		
+			if Slab.TextSelectable(K) then
+				SlabDebug_LayoutManager_Selected = K
+			end
+		end
+
+		Slab.EndComboBox()
+	end
+	Slab.EndLayout()
+
+	if SlabDebug_LayoutManager_Selected ~= nil then
+		local Items = Info[SlabDebug_LayoutManager_Selected]
+
+		for I, V in ipairs(Items) do
+			Slab.Text(V)
+		end
+	end
+
+	Slab.EndWindow()
+end
+
 local function MenuItemWindow(Options)
 	if Slab.MenuItemChecked(Options.Title, Options.IsOpen) then
 		Options.IsOpen = not Options.IsOpen
@@ -604,6 +640,7 @@ function SlabDebug.Menu()
 		MenuItemWindow(SlabDebug_Input)
 		MenuItemWindow(SlabDebug_MultiLine)
 		MenuItemWindow(SlabDebug_Tree)
+		MenuItemWindow(SlabDebug_LayoutManager)
 
 		Stats.SetEnabled(SlabDebug_Performance.IsOpen)
 
@@ -623,6 +660,7 @@ function SlabDebug.Begin()
 	SlabDebug.Input()
 	SlabDebug.MultiLine()
 	SlabDebug.Tree()
+	SlabDebug.LayoutManager()
 end
 
 return SlabDebug

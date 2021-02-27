@@ -19,7 +19,7 @@ local Movement = Class { __includes = Component,
     self.deceleration = 1
     
     self.slippery = false -- if true, this component will actually use acceleration and deceleration
-    self.gravity = .125
+    self.gravity = 9.8
     self.maxFallSpeed = 4
     self.zVelocity = 0
     
@@ -101,8 +101,8 @@ function Movement:getLinearVelocity(dt)
     if self.slippery then
       local length = vector.len(self.motionX, self.motionY)
       local minLength = 0
-      if self.minSpeed > .1 then
-        minLength = vector.mul(dt * self.minSpeed, self.motionX, self.motionY)
+      if self.minSpeed > .01 then
+        minLength = self.minSpeed
       end
       if length < minLength then
         self.motionX, self.motionY = 0, 0
@@ -147,7 +147,7 @@ end
 -- update z position
 function Movement:update(dt)
   if self.entity:getZPosition() > 0 or self.zVelocity ~= 0 then
-    self.zVelocity = self.zVelocity - self.gravity
+    self.zVelocity = self.zVelocity - (self.gravity * dt)
     if self.maxFallSpeed >= 0 and self.zVelocity < -self.maxFallSpeed then
       self.zVelocity = -self.maxFallSpeed
     end

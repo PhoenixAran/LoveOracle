@@ -1,7 +1,7 @@
 -- prototype_tileset.lua
-return function(tilesetBank)
+function moduleFunction(tilesetBank)
   -- TILESET PROTOTYPE1
-  local tileset = tilesetBank.createTileset('prototype', 2, 2)
+  local tileset = tilesetBank.createTileset('prototype_a', 2, 2)
   -- ground
   local tileData = tileset.createTileData('normal')
   tileData:setName('prototype_ground')
@@ -26,11 +26,10 @@ return function(tilesetBank)
   tileData:setSprite('prototype_water_tile')
   tileset:setTile(tileData, 2, 2)
   
-  tilesetBank.register(tileset)
+  tilesetBank.registerTileset(tileset)
   
   -- TILESET PROTOTYPE2
-  tileset = tilesetBank.createTileset('prototype2', 2, 2)
-  
+  tileset = tilesetBank.createTileset('prototype_b', 2, 2)
   -- water
   tileData = tileset.createTileData('water')
   tileData:setName('prototype_water')
@@ -54,6 +53,7 @@ return function(tilesetBank)
   tileData:setName('prototype_ground')
   tileData:setSprite('prototype_ground_tile')
   tileset:setTile(tileData, 2, 2)
-
-  tilesetBank.register(tileset)
+  tilesetBank.registerTileset(tileset)
 end
+
+return makeModuleFunction(moduleFunction)

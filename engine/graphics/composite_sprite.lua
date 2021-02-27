@@ -128,4 +128,10 @@ function CompositeSprite:draw(x, y, alpha)
   end
 end
 
+function CompositeSprite:release()
+  for _, sprite in ipairs(self.sprites) do
+    sprite:release()
+  end
+end
+
 return CompositeSprite

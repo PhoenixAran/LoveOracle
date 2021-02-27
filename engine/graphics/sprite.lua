@@ -63,4 +63,8 @@ function Sprite:draw(x, y, alpha)
   love.graphics.setColor(1, 1, 1)
 end
 
+function Sprite:release()
+  self.subtexture:release()
+end
+
 return Sprite

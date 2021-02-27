@@ -36,6 +36,7 @@ function SpriteBuilder:buildSprite(x, y, offsetX, offsetY)
   if offsetY == nil then offsetY = 0 end
   local subtexture = self.spriteSheet:getTexture(x, y)
   local sprite = Sprite(subtexture, offsetX, offsetY)
+  return sprite
 end
 
 function SpriteBuilder:addCompositeSprite(sprite)

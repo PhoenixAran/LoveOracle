@@ -5,7 +5,7 @@ local Movement = require 'engine.components.movement'
 
 -- some class constants
 local JUMP_Z_VELOCITY = 2
-local JUMP_GRAVITY = .125
+local JUMP_GRAVITY = 8
 
 local PlayerMovementController = Class {
   init = function(self, player, movement)
@@ -14,10 +14,6 @@ local PlayerMovementController = Class {
     
     self.allowMovementControl = true
     self.strokeSpeedScale = 1.0
-    
-    --self.moveAxesX, self.moveAxesY = false, false
-    --self.motionX, self.motionY = 0, 0
-    
     self.directionX, self.directionY = 0, 0
     self.moving = false
     self.stroking = false
@@ -141,6 +137,8 @@ end
 function PlayerMovementController:updateMoveControls()
   if self.player:isInAir() then
     if not self.player:getStateParameters().canControlInAir then
+      self.allowMovementControl = false
+    elseif self.player.movement:getZVelocity() >= .1 then
       self.allowMovementControl = false
     else
       self.allowMovementControl = true

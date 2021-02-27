@@ -16,4 +16,10 @@ function Subtexture:getDimensions()
   return w, h
 end
 
+function Subtexture:release()
+  if self.quad then
+    self.quad:release()
+  end
+end
+
 return Subtexture

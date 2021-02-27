@@ -4,6 +4,7 @@ local bit = require 'bit'
 local TileType = require 'engine.tiles.tile_type'
 local BitTag = require 'engine.utils.bit_tag'
 local SpriteBank = require 'engine.utils.sprite_bank'
+local TileSpriteRenderer = require 'engine.tiles.tile_sprite_renderer'
 
 -- used to validate tile types provided by data scripter
 local TileTypeInverse = lume.invert(TileType)
@@ -19,8 +20,10 @@ local TileData = Class {
     self.hitbox = false
     
     self.collisionRect = { x = 0, y = 0, w = 16, y = 16 }
+    self.collisionRectZRange = { min = 0, max = 1  }
     self.hitRect = { x = 0, y = 0, w = 16, y = 16 }
-
+    self.hitRectZRange = { min = 0, max = 1 }
+    
     self.physicsLayer = 0
     self.collidesWithLayer = 0
     
@@ -95,6 +98,32 @@ end
 
 function TileData:getCollisionDimensions(x, y, w, h)
   return self.collisionRect.x, self.collisionRect.y, self.collisionRect.w, self.collisionRect.h
+end
+
+function TileData:getCollisionZRange()
+  return self.collisionRectZRange.min, self.collisionRectZRange.max
+end
+
+function TileData:setCollisionZRange(min, max)
+  if type(min) == 'table' then
+    self.collisionRectZRange = min
+  else
+    self.collisionRectZRange.min = min
+    self.collisionRectZRange.max = max
+  end
+end
+
+function TileData:getHurtboxZRange()
+  return self.hurtRectZRange.min, self.hurtRectZRange.max
+end
+
+function TileData:setHurtboxZRange(min, max)
+  if type(min) == 'table' then
+    self.hurtRectZRange = min
+  else
+    self.hurtRectZRange.min = min
+    self.hurtRectZRange.max = max
+  end
 end
 
 function TileData:setCollisionDimension(x, y, w, h)
@@ -230,7 +259,7 @@ function TileData:unsetHitBoxPhysicsLayer(layer)
 end
 
 -- Templates
-function TileData.addTemplate(name, tileData)
+function TileData.registerTemplate(name, tileData)
   assert(not Templates[name], 'Tile Template with name ' .. name .. ' already exists')
   Templates[name] = tileData
 end
@@ -243,6 +272,10 @@ end
 function TileData.initializeTemplates(path)
   path = path or 'data.tile_templates'
   require(path)(TileData)
+end
+
+function TileData.clearTemplates()
+  Templates = { }
 end
 
 return TileData

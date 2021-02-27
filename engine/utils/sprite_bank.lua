@@ -1,8 +1,10 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
+local SpriteBuilder = require 'engine.utils.sprite_builder'
 local SpriteRendererBuilder = require 'engine.utils.sprite_renderer_builder'
 local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
+local Spriteset = require 'engine.graphics.spriteset'
 
 
 local SpriteRenderer = require 'engine.components.animated_sprite_renderer'
@@ -10,14 +12,16 @@ local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_render
 local fh = require 'engine.utils.file_helper'
 
 -- export type
-local SpriteBank = { 
+local SpriteBank = {
   -- holds singular sprite instances
   sprites = { },
   -- holds individual sprite animations
   -- useful for shared animation such as death effects or breaking animations
   animations = { },
   -- holds AnimatedSpriteBuilder instances
-  builders = { }
+  builders = { },
+  -- holds SpriteSet instances
+  spritesets = { },
 }
 
 -- getters and setters for caches
@@ -51,6 +55,17 @@ function SpriteBank.build(key, entity)
   return SpriteBank.builders[key]:build(entity)
 end
 
+function SpriteBank.registerSpriteset(spriteset)
+  assert(spriteset:getName(), 'SpriteBank cannot register spriteset without a name')
+  assert(not SpriteBank.spritesets[spriteset:getName()], 'SpriteBank already has spriteset with key ' .. spriteset:getName())
+  SpriteBank.spritesets[spriteset:getName()] = spriteset
+end
+
+function SpriteBank.getSpriteset(key)
+  assert(SpriteBanks.spritesets[spriteset:getName()], 'SpriteBank does not have a Spriteset with key ' .. key)
+  return SpriteBank.spritesets[key]
+end
+
 function SpriteBank.createSpriteRendererBuilder()
   return SpriteRendererBuilder()
 end
@@ -59,11 +74,36 @@ function SpriteBank.createSpriteAnimationBuilder()
   return SpriteAnimationBuilder()
 end
 
--- TODO function SpriteBank.createSpriteBuilder()
+function SpriteBank.createSpriteBuilder()
+  return SpriteBuilder()
+end
+
+function SpriteBank.createSpriteset(spritesetName, sizeX, sizeY)
+  return Spriteset(spritesetName, sizeX, sizeY)
+end
 
 function SpriteBank.initialize(path)
   path = path or 'data.sprites'
   require(path)(SpriteBank)
+end
+
+function SpriteBank.unload()
+  SpriteBank.builders = { }
+  
+  for _, spriteset in pairs(SpriteBank.spritesets) do
+    spriteset:release()
+  end
+  SpriteBank.spritesets = { }
+  
+  for _, animation in ipairs(SpriteBank.animations) do
+    animation:release()
+  end
+  
+  for _, sprite in pairs(SpriteBank.sprites) do
+    sprite:release()
+  end
+  
+  SpriteBank.sprites = { }
 end
 
 return SpriteBank

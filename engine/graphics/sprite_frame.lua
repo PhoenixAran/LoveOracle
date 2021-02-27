@@ -20,5 +20,9 @@ function SpriteFrame:getSprite()
   return self.sprite
 end
 
+function SpriteFrame:release()
+  self.sprite:release()
+end
+
 
 return SpriteFrame

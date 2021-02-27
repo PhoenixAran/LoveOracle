@@ -14,9 +14,9 @@ local PlayerJumpEnvironmentState = Class { __includes = PlayerEnvironmentState,
     
     -- value modifiers for Movement component
     self.motionSettings.speed = 60
-    self.motionSettings.acceleration = .046
+    self.motionSettings.acceleration = .33
     self.motionSettings.deceleration = 0
-    self.motionSettings.minSpeed = .5 -- TODO: implement minSpeed in Movement
+    self.motionSettings.minSpeed = 0.05
     
     -- used for man handling movement in player
     self.motionSettings.slippery = true

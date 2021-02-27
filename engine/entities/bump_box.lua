@@ -15,8 +15,8 @@ local BumpBox = Class {
         max = 100
       }
     else
-      if zRange.min == nil then range.min = -100 end
-      if zRange.max == nil then range.max = 100 end
+      if zRange.min == nil then zRange.min = -100 end
+      if zRange.max == nil then zRange.max = 100 end
     end    
     
     assert(zRange.min <= zRange.max)
