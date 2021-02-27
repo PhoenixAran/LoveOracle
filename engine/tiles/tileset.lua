@@ -59,12 +59,10 @@ end
 function Tileset:getTile(x, y)
   if y == nil then
     assert(x <= self.size, 'x is out of bounds')
-    assert(self.tiles[x].id == x, 'miscalculated tile id')
     return self.tiles[x]
   end
   local idx = (x - 1) * self.sizeY + y
   assert(idx <= self.size, '( ' .. tostring(x) .. ', ' .. tostring(y) .. ') is out of bounds')
-  assert(idx == self.tiles[idx].id, 'miscalculated tile id')
   return self.tiles[idx]
 end
 

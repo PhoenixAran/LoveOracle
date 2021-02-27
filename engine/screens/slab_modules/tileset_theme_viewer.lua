@@ -20,13 +20,14 @@ local TilesetThemeViewer = Class {
     
     self.tileset = nil
     self.tilesetList = { }
-    self.tilesetCanvas = love.graphics.newCanvas(1, 1)
+    self.tilesetCanvas = nil
+    self.maxW = nil
+    self.maxH = nil
+    self.subW = nil
+    self.subH = nil
     
     self.zoomLevels = { 1, 2, 4, 6, 8 , 12}
     self.zoom = 1
-    self.canvasCache = {
-        ['1x1'] = self.tilesetCanvas
-    }
     self.hoverTileIndexX = nil
     self.hoverTileIndexY = nil
   end
@@ -36,7 +37,29 @@ function TilesetThemeViewer:initialize()
   self.tilesetThemeList = { }
   self.tilesetTheme = nil
   
+  -- find the canvas width and height of largest tileset size
+  local maxW = 0
+  local maxH = 0
+  for _, tileset in pairs(TilesetBank.tilesets) do
+    local w = (tileset.tileSize * tileset.sizeX) + ((tileset.sizeX - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
+    local h = (tileset.tileSize * tileset.sizeY) + ((tileset.sizeY - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
+    maxW = math.max(maxW, w)
+    maxH = math.max(maxH, h)
+  end
+  if not self.tilesetCanvas then
+    self.maxW = maxW
+    self.maxH = maxH
+    -- if this is first call to self:initialize, we need to create the canvas to draw the tileset on
+    self.tilesetCanvas = love.graphics.newCanvas(maxW, maxH)
+    self.tilesetCanvas:setFilter('nearest', 'nearest')
+  elseif self.maxW ~= maxW or self.maxH ~= maxH then
+    -- not allowed to resize the largest tileset size on hot reloads
+    -- since the canvas used to draw the tilesets cannot be released or resized 
+    error('Tileset Theme Viewer requires game reboot if the largest tileset size changes in any way')
+  end
+  
   for k, _ in pairs(TilesetBank.tilesetThemes) do
+    -- push keys for the list box
     lume.push(self.tilesetThemeList, k)
   end
   
@@ -68,17 +91,12 @@ function TilesetThemeViewer:updateTileset(tilesetThemeName, tilesetName, forceUp
   if tilesetName == '' then
     return
   end
+  
+  -- get the width and height of tileset since canvas will most likely be larger than the
+  -- what is needed for tileset size 
   self.tileset = self.tilesetTheme:getTileset(tilesetName)
-  -- make sure you don't use alias name to cache tileset canvases!
-  -- alias names are NOT unique
-  if not self.canvasCache[self.tileset:getName()] then
-    local canvasW = (self.tileset.tileSize * self.tileset.sizeX) + ((self.tileset.sizeX - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
-    local canvasH = (self.tileset.tileSize * self.tileset.sizeY) + ((self.tileset.sizeY - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
-    local canvas = love.graphics.newCanvas(canvasW, canvasH)
-    canvas:setFilter('nearest', 'nearest')
-    self.canvasCache[self.tileset:getName()] = canvas
-  end
-  self.tilesetCanvas = self.canvasCache[self.tileset:getName()]
+  self.subW = (self.tileset.tileSize * self.tileset.sizeX) + ((self.tileset.sizeX - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
+  self.subH = (self.tileset.tileSize * self.tileset.sizeY) + ((self.tileset.sizeY - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
   
   self.tilesetName = tilesetName
   self.tilesetThemeName = tilesetThemeName
@@ -107,10 +125,12 @@ function TilesetThemeViewer:drawTilesetOnTilesetCanvas()
     for x = 1, self.tileset.sizeX, 1 do
       for y = 1, self.tileset.sizeY, 1 do
         local tilesetData = self.tileset:getTile(x, y)
-        local sprite = tilesetData:getSprite()
-        local posX = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
-        local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
-        sprite:draw(posX + tileSize / 2 , posY + tileSize / 2)
+        if tilesetData then
+          local sprite = tilesetData:getSprite()
+          local posX = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
+          local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
+          sprite:draw(posX + tileSize / 2 , posY + tileSize / 2)
+        end
       end
     end
     
@@ -167,7 +187,7 @@ function TilesetThemeViewer:update(dt)
     local wx, wy = Slab.GetWindowPosition()
     local tilesetImagePosX, tilesetImagePosY = Slab.GetCursorPos({Absolute = true})
     tilesetImagePosX, tilesetImagePosY = vector.sub(tilesetImagePosX, tilesetImagePosY, wx, wy)
-    Slab.Image('tileset-canvas-' .. self.tilesetThemeName .. '-' .. self.tilesetName, { Image = self.tilesetCanvas, WrapH = 'clampzero', WrapV = 'clampzero', ScaleX = self.zoom, ScaleY = self.zoom })
+    Slab.Image('tileset-canvas-' .. self.tilesetThemeName .. '-' .. self.tilesetName, { Image = self.tilesetCanvas, WrapH = 'clampzero', WrapV = 'clampzero', ScaleX = self.zoom, ScaleY = self.zoom , SubX = 0, SubY = 0, SubW = self.subW, SubH = self.subH})
     local mx, my = Slab.GetMousePosition()
     local windowHoverX, windowHoverY = vector.sub(mx, my, wx, wy)
     local relHoverX, relHoverY = vector.div(self.zoom, vector.sub(windowHoverX, windowHoverY, tilesetImagePosX, tilesetImagePosY))
@@ -190,8 +210,10 @@ function TilesetThemeViewer:update(dt)
     if self.hoverTileIndexX == nil then
       Slab.Text('')
     else
-      local tilesetName = self.tileset:getTile(self.hoverTileIndexX, self.hoverTileIndexY):getName()
-      Slab.Text(tilesetName)
+      local tileData = self.tileset:getTile(self.hoverTileIndexX, self.hoverTileIndexY)
+      if tileData then
+        Slab.Text(tileData:getName())
+      end
     end
   end
   Slab.EndWindow()
