@@ -59,10 +59,14 @@ function ContentViewer:update(dt)
       Slab.EndMenu()
     end
     if Slab.Button('Reload Content') then
+      print('Reloading content...')
+      local startTime = love.timer.getTime()
       self:reloadContent()
       self.spriteViewer:initialize()
       self.tilesetViewer:initialize()
       self.tilesetThemeViewer:initialize()
+      local endTime = love.timer.getTime()
+      print('Reload complete. Elapsed time: ', (endTime - startTime) * 1000, ' ms')
     end
     Slab.EndMainMenuBar()
   end
