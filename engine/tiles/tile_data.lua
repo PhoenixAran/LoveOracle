@@ -23,7 +23,7 @@ local TileData = Class {
     self.collisionRectZRange = { min = 0, max = 1  }
     self.hitRect = { x = 0, y = 0, w = 16, y = 16 }
     self.hitRectZRange = { min = 0, max = 1 }
-  
+    
     self.physicsLayer = 0
     self.collidesWithLayer = 0
     

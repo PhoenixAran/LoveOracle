@@ -16,5 +16,3 @@ function moduleFunction(TileData)
   waterTile:setTileType('water')
   TileData.registerTemplate('water', waterTile)
 end
-
-return makeModuleFunction(moduleFunction)

@@ -3,6 +3,7 @@ local lume = require 'lib.lume'
 local gameConfig = require 'game_config'
 local ContentControl = require 'engine.control.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
+local Slab = require 'lib.slab'
 
 --[[ 
      Defining helper function used in data scripting
@@ -17,7 +18,6 @@ function makeModuleFunction(func)
   end
   return setmetatable({}, {__call = dropSelfArg(func)})
 end
-
 
 function love.load(arg)
   -- enable zerobrane studio debugging
@@ -45,7 +45,6 @@ function love.load(arg)
   local Slab = require 'lib.slab'
   Slab.SetINIStatePath(nil)
   Slab.Initialize()
-
 end
 
 function love.update(dt)
