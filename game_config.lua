@@ -14,6 +14,9 @@ local controls = {
     y = {'key:h', 'button:x'},
     leftClick = { 'mouse:1' }
   },
+  pairs = {
+    move = { 'left', 'right', 'up', 'down'}
+  },
   joystick = love.joystick.getJoysticks()[1]
 }
 
@@ -49,8 +52,8 @@ local tilesetThemeRequirements = {
   'prototype_b',
 }
 
-local startupScreen = 'engine.screens.content_viewer'
---local startupScreen = 'data.test_screens.player_playground'
+--local startupScreen = 'engine.screens.content_viewer'
+local startupScreen = 'data.test_screens.player_playground'
 
 return {
  zbStudioDebug = zbStudioDebug,

@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local vector = require 'lib.vector'
 local Pool = require 'engine.utils.pool'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local MapEntity = require 'engine.entities.map_entity'
@@ -78,7 +79,13 @@ function Player:getType()
   return 'player'
 end
 
+--[[
 function Player:matchAnimationDirection(inputX, inputY)
+  local DIRECTION_SNAP = 4  -- theres only 4 animation directions
+
+  -- clamp input vectors to pi/2, pi, 3pi/2, 2pi 
+  inputX, inputY = vector.snapDirectionByCount(inputX, inputY, DIRECTION_SNAP)
+  
   local direction = self.animationDirection
   if inputX == -1 and inputY == -1 and direction ~= 'up' and direction ~= 'left' then
     direction = 'up'
@@ -96,6 +103,44 @@ function Player:matchAnimationDirection(inputX, inputY)
     direction = 'left'
   elseif inputX == 1 and inputY == 0 and direction ~= 'right' then
     direction = 'right'
+  else
+    print(inputX, inputY)
+  end
+  self:setAnimationDirection(direction)
+end
+]]
+
+function Player:matchAnimationDirection(inputX, inputY)
+  if inputX == 0 and inputY == 0 then
+    return
+  end
+  local direction = self.animationDirection
+  local theta = math.atan2(inputY, inputX)
+  if theta < 0 then
+    theta = theta + math.pi * 2
+  end
+  local angleInterval = (math.pi * 2) / 8
+  --[[ 
+    we split the unit circle into 8 slices
+  ]]
+  local angleIndex = math.floor((theta / angleInterval) + 0.5)
+  print(inputX, inputY, angleIndex)
+  if angleIndex == 0 and direction ~= 'right' then
+    direction = 'right'
+  elseif angleIndex == 7 and direction ~= 'right' and direction ~= 'up' then
+    direction = 'up'
+  elseif angleIndex == 6 and direction ~= 'up' then
+    direction = 'up'
+  elseif angleIndex == 5 and direction ~= 'left' and direction ~= 'up' then
+    direction = 'up'
+  elseif angleIndex == 4 and direction ~= 'left' then
+    direction = 'left'
+  elseif angleIndex == 3 and direction ~= 'left' and direction ~= 'down' then
+    direction = 'down'
+  elseif angleIndex == 2 and direction ~= 'down' then
+    direction = 'down'
+  elseif angleIndex == 1 and direction ~= 'down' and direction ~= 'right' then
+    direction = 'down'
   end
   self:setAnimationDirection(direction)
 end

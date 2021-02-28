@@ -147,6 +147,22 @@ local function angleTo(x,y, u,v)
 	return atan2(y, x)
 end
 
+-- Additions by PhoenixAran
+local FULL_ANGLE = math.pi * 2
+local function snapDirection(x, y, angleSnapInterval)
+	local theta = atan2(y, x)
+	if theta < 0 then
+		theta = theta + FULL_ANGLE
+	end
+  local angleIndex = math.floor( ( (theta / angleSnapInterval) ) +  0.5 )	-- round to nearest interval
+	local length = len(x, y)
+	return fromPolar(angleIndex * angleSnapInterval, length)
+end
+
+local function snapDirectionByCount(x, y, intervalCount)
+	return snapDirection(x, y, FULL_ANGLE / math.floor(intervalCount))
+end
+
 -- the module
 return {
 	str = str,
@@ -183,4 +199,8 @@ return {
 	mirror        = mirror,
 	trim          = trim,
 	angleTo       = angleTo,
+
+	-- additional operations by PhoenixAran
+	snapDirection = snapDirection,
+	snapDirectionByCount = snapDirectionByCount
 }

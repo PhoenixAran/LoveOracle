@@ -6,6 +6,8 @@ local Movement = require 'engine.components.movement'
 -- some class constants
 local JUMP_Z_VELOCITY = 2
 local JUMP_GRAVITY = 8
+-- how many times to 'split the pie' when clamping joystick vector to certian radian values
+local DIRECTION_SNAP = 32
 
 local PlayerMovementController = Class {
   init = function(self, player, movement)
@@ -25,6 +27,7 @@ local PlayerMovementController = Class {
     self.holeSlipVelocityX, self.holeSlipVelocityY = 0, 0
     self.fallingInHole = false
     
+
     self.moveNormalMode = PlayerMotionType()
     self.mode = self.moveNormalMode
   end
@@ -72,7 +75,10 @@ function PlayerMovementController:pollMovementControls(allowMovementControl)
   local x, y = 0, 0
   self.moving = false
   if allowMovementControl then 
-  -- check movement keys
+    x, y = input:get('move')
+    x, y = vector.snapDirectionByCount(x, y, DIRECTION_SNAP)
+    -- check movement keys
+    --[[
     if input:down('up') then
       y = y - 1
     end
@@ -85,6 +91,7 @@ function PlayerMovementController:pollMovementControls(allowMovementControl)
     if input:down('right') then
       x = x + 1
     end
+    ]]
     
     self.directionX, self.directionY = x, y
     if x ~= 0 or y ~= 0 then 
