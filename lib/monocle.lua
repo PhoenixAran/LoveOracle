@@ -1,13 +1,6 @@
 local Monocle = { 
   mouse = { }
 }
-Monocle.__index = Monocle
-
-
-function Monocle.new()
-  local self = setmetatable({}, Monocle)
-  return self
-end
 
 function Monocle.setup(monocle, monocleConfig, windowConfig)
   if monocleConfig == nil then
@@ -86,10 +79,16 @@ function Monocle.resize(monocle, w, h)
   monocle.updateView(monocle)
 end
 
-function Monocle.dispose(monocle)
+function Monocle.release(monocle)
   if monocle.canvas ~= nil then
     monocle.canvas:release()
   end
+end
+
+Monocle.__index = Monocle
+function Monocle.new()
+  local self = setmetatable({}, Monocle)
+  return self
 end
 
 return Monocle

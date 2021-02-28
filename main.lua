@@ -5,6 +5,11 @@ local ContentControl = require 'engine.control.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
 local Slab = require 'lib.slab'
 
+print('Oracle Engine ' .. gameConfig.version)
+print("Operating System: " .. love.system.getOS())
+print(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
+print('Save Directory: ' .. love.filesystem.getSaveDirectory())
+
 --[[ 
      Defining helper function used in data scripting
      Hot reloading can't modify existing functions, but it works with tables.
@@ -19,7 +24,7 @@ function makeModuleFunction(func)
   return setmetatable({}, {__call = dropSelfArg(func)})
 end
 
-function love.load(arg)
+function love.load(arg)  
   -- enable zerobrane studio debugging
   if gameConfig.zbStudioDebug then
     if arg[#arg] == '-debug' then require('mobdebug').start() end
