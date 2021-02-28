@@ -25,11 +25,11 @@ local TilesetThemeViewer = Class {
     self.maxH = nil
     self.subW = nil
     self.subH = nil
+    self.hoverTileIndexX = nil
+    self.hoverTileIndexY = nil
     
     self.zoomLevels = { 1, 2, 4, 6, 8 , 12}
     self.zoom = 1
-    self.hoverTileIndexX = nil
-    self.hoverTileIndexY = nil
   end
 }
 
@@ -38,8 +38,8 @@ function TilesetThemeViewer:initialize()
   self.tilesetTheme = nil
   
   -- find the canvas width and height of largest tileset size
-  local maxW = 0
-  local maxH = 0
+  local maxW = 1
+  local maxH = 1
   for _, tileset in pairs(TilesetBank.tilesets) do
     local w = (tileset.tileSize * tileset.sizeX) + ((tileset.sizeX - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
     local h = (tileset.tileSize * tileset.sizeY) + ((tileset.sizeY - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
@@ -98,6 +98,7 @@ function TilesetThemeViewer:updateTileset(tilesetThemeName, tilesetName, forceUp
   self.subW = (self.tileset.tileSize * self.tileset.sizeX) + ((self.tileset.sizeX - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
   self.subH = (self.tileset.tileSize * self.tileset.sizeY) + ((self.tileset.sizeY - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
   
+  -- update
   self.tilesetName = tilesetName
   self.tilesetThemeName = tilesetThemeName
 end
@@ -138,8 +139,8 @@ function TilesetThemeViewer:drawTilesetOnTilesetCanvas()
       love.graphics.setLineWidth(1)
       love.graphics.setColor(1, 0, 0)
       love.graphics.rectangle('line',
-        ((self.hoverTileIndexX - 1) * tileSize) + ((self.hoverTileIndexX - 1) * TILE_PADDING) + TILE_MARGIN,
-        ((self.hoverTileIndexY - 1) * tileSize) + ((self.hoverTileIndexY - 1) * TILE_PADDING) + TILE_MARGIN,
+        ((self.hoverTileIndexX - 1) * tileSize) + ((self.hoverTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
+        ((self.hoverTileIndexY - 1) * tileSize) + ((self.hoverTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
         tileSize,
         tileSize)
     end

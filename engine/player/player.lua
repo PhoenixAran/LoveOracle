@@ -124,7 +124,6 @@ function Player:matchAnimationDirection(inputX, inputY)
     we split the unit circle into 8 slices
   ]]
   local angleIndex = math.floor((theta / angleInterval) + 0.5)
-  print(inputX, inputY, angleIndex)
   if angleIndex == 0 and direction ~= 'right' then
     direction = 'right'
   elseif angleIndex == 7 and direction ~= 'right' and direction ~= 'up' then
