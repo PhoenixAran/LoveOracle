@@ -10,7 +10,7 @@ local lume = require 'lib.lume'
   Module that will take care of loading in assets, setting
   up the banks (palette banks, sprite banks, tileset banks),
   and setting up the BitTag module.
-  You can also use this module to unload assets and reload them. 
+  You can also use this module to unload assets and reload them.
   Useful for Content Viewing / debugging
 ]]
 local ContentControl = { }
@@ -37,7 +37,7 @@ local function loadSpriteSheets(directory)
   local spritesheetFiles = love.filesystem.getDirectoryItems(directory)
   for _, file in ipairs(spritesheetFiles) do
     local path = directory .. '/' .. file
-    -- assetManager combines base asset path for us so we need to manually combine path to get correct 
+    -- assetManager combines base asset path for us so we need to manually combine path to get correct
     -- path for love.filesystem.getinfo
     if love.filesystem.getInfo(path).type == 'directory' then
       loadSpriteSheets(path)
@@ -55,7 +55,7 @@ end
 
 function ContentControl.buildContent()
   initBitTags()
-  loadFonts() 
+  loadFonts()
   loadImages('data/assets/images')
   loadSpriteSheets('data/assets/spritesheets')
   PaletteBank.initialize('data.palettes')

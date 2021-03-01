@@ -25,11 +25,11 @@ local MapEditor = Class { __include = BaseScreen,
   init = function(self)
     --[[
       Tileset Theme
-    ]] 
+    ]]
     self.tilesetThemeList = { }
     self.tilesetThemeName = ''
     self.tilesetTheme = nil
-    
+
     --[[
       Tileset
     ]]
@@ -40,9 +40,12 @@ local MapEditor = Class { __include = BaseScreen,
     self.maxH = nil
     self.subW = nil
     self.subH = nil
+    self.selectedTileIndexX = nil
+    self.selectedTileIndexY = nil
     self.hoverTileIndexX = nil
     self.hoverTileIndexY = nil
-    
+    self.selectedTileData = nil
+
     --[[
       Zoom
     ]]
@@ -79,10 +82,30 @@ end
 
 function MapEditor:updateHoverTileIndex(x, y)
 
+  if x == nil or y == nil then
+    self.hoverTileIndex = nil
+    self.hoverTileIndexY = nil
+  elseif 1 <= x and x <= self.tileset.sizeX and 1 <= y and y <= self.tileset.sizeY then
+    self.hoverTileIndexX = x
+    self.hoverTileIndexY = y
+  else
+    self.hoverTileIndexX = nil
+    self.hoverTileIndexY = nil
+  end
 end
 
 function MapEditor:updateSelectedTileIndex(x, y)
-
+  self.selectedTileIndexX = x
+  self.selectedTileIndexY = y
+  if x ~= nil and y ~= nil and 1 <= x and x <= self.tileset.sizeX and 1 <= y and y <= self.tileset.sizeY then
+    local newTilesetData = self.tileset:getTile(x, y)
+    if self.selectedTiletData == newTilesetData then
+      -- deselect tile if we're clicking it while its selected
+      self.selectedTileData = nil
+    else
+      self.selectedTileData = newTilesetData
+    end
+  end
 end
 
 -- roomy screen hooks
@@ -146,7 +169,7 @@ function MapEditor:update(dt)
     end
     Slab.EndComboBox()
   end
-  
+
   Slab.Text('Tileset')
   local selectedTilesetName = self.tilesetName
   if Slab.BeginComboBox('map-editor-tileset-comboxbox', {Selected = selectedTilesetName}) then
@@ -176,11 +199,11 @@ function MapEditor:update(dt)
     local wx, wy = Slab.GetWindowPosition()
     local tilesetImagePosX, tilesetImagePosY = Slab.GetCursorPos({Absolute = true})
     tilesetImagePosX, tilesetImagePosY = vector.sub(tilesetImagePosX, tilesetImagePosY, wx, wy)
-    Slab.Image('map-editor-tileset-canvas', 
-              { 
-                Image = self.tilesetCanvas, 
-                WrapH = 'clampzero', WrapV = 'clampzero', 
-                ScaleX = self.zoom, ScaleY = self.zoom , 
+    Slab.Image('map-editor-tileset-canvas',
+              {
+                Image = self.tilesetCanvas,
+                WrapH = 'clampzero', WrapV = 'clampzero',
+                ScaleX = self.zoom, ScaleY = self.zoom ,
                 SubX = 0, SubY = 0, SubW = self.subW, SubH = self.subH
               })
     local mx, my = Slab.GetMousePosition()
@@ -188,7 +211,7 @@ function MapEditor:update(dt)
     local relx, rely = vector.div(self.zoom, vector.sub(mx, my, tilesetImagePosX, tilesetImagePosY))
     relx, rely = math.floor(relx), math.floor(rely)
     -- don't update if the mouse is inbetween the tiles (tile padding or tile margin)
-    if relx == TILE_MARGIN or relx % (self.tileset.tileSize + TILE_PADDING) == 0 
+    if relx == TILE_MARGIN or relx % (self.tileset.tileSize + TILE_PADDING) == 0
        or relx == self.tilesetCanvas:getWidth() then
        relx = -100
     end
@@ -196,12 +219,13 @@ function MapEditor:update(dt)
       or rely == self.tilesetCanvas:getHeight() then
       rely = -100
     end
+    local tileIndexX = math.floor(relx / (self.tileset.tileSize + TILE_PADDING)) + 1
+    local tileIndexY = math.floor(rely / (self.tileset.tileSize + TILE_PADDING)) + 1
     if Slab.IsMouseClicked(1) and not Slab.IsVoidClicked(1) then
-      self:updateSelectedTileIndex(relx, rely)
-      self:updateHoverTileIndex()
-    else
-      self:updateHoverTileIndex(relx, rely)
+      -- if we select one, display the tile data info
+      self:updateSelectedTileIndex(tileIndexX, tileIndexY)
     end
+    self:updateHoverTileIndex(tileIndexX, tileIndexY)
   end
   Slab.EndWindow()
 end
@@ -209,32 +233,40 @@ end
 function MapEditor:draw()
   Slab.Draw()
   -- draw tileset on tileset canvas
-  if self.tilesetCanvas then
-    love.graphics.setCanvas(self.tilesetCanvas)
-    love.graphics.clear()
-    local tileSize = self.tileset.tileSize
-    for x = 1, self.tileset.sizeX, 1 do
-      for y = 1, self.tileset.sizeY, 1 do
-        local tilesetData = self.tileset:getTile(x, y)
-        if tilesetData then
-          local sprite = tilesetData:getSprite()
-          local posX = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
-          local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
-          sprite:draw(posX + tileSize / 2, posY + tileSize / 2)
-        end
+  love.graphics.setCanvas(self.tilesetCanvas)
+  love.graphics.clear()
+  local tileSize = self.tileset.tileSize
+  for x = 1, self.tileset.sizeX, 1 do
+    for y = 1, self.tileset.sizeY, 1 do
+      local tilesetData = self.tileset:getTile(x, y)
+      if tilesetData then
+        local sprite = tilesetData:getSprite()
+        local posX = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
+        local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
+        sprite:draw(posX + tileSize / 2, posY + tileSize / 2)
       end
     end
-    if self.hoverTileIndex ~= nil and self.hoverTileIndexY ~= nil then
-      love.graphics.setLineWidth(1)
-      love.graphics.setColor(1, 0, 0)
-      love.graphics.rectangle('line',
-        ((self.hoverTileIndexX - 1) * tileSize) + ((self.hoverTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
-        ((self.hoverTileIndexY - 1) * tileSize) + ((self.hoverTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
-        tileSize,
-        tileSize)
-    end
-    love.graphics.setCanvas()
   end
+  if self.hoverTileIndexX ~= nil and self.hoverTileIndexY ~= nil then
+    love.graphics.setLineWidth(1)
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle('line',
+      ((self.hoverTileIndexX - 1) * tileSize) + ((self.hoverTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
+      ((self.hoverTileIndexY - 1) * tileSize) + ((self.hoverTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
+      tileSize,
+      tileSize)
+  end
+  if self.selectedTileData then
+    love.graphics.setLineWidth(1)
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle('line',
+      ((self.selectedTileIndexX - 1) * tileSize) + ((self.selectedTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
+      ((self.selectedTileIndexY - 1) * tileSize) + ((self.selectedTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
+      tileSize,
+      tileSize)
+  end
+  love.graphics.setCanvas()
+
 
 end
 
