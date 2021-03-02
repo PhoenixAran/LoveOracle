@@ -81,11 +81,10 @@ function MapEditor:updateTileset(tilesetThemeName, tilesetName, forceUpdate)
 end
 
 function MapEditor:updateHoverTileIndex(x, y)
-
   if x == nil or y == nil then
     self.hoverTileIndex = nil
     self.hoverTileIndexY = nil
-  elseif 1 <= x and x <= self.tileset.sizeX and 1 <= y and y <= self.tileset.sizeY then
+  elseif 1 <= x and x <= self.tileset.sizeX and 1 <= y and y <= self.tileset.sizeY and self.tileset:getTile(x, y) then
     self.hoverTileIndexX = x
     self.hoverTileIndexY = y
   else
@@ -95,15 +94,18 @@ function MapEditor:updateHoverTileIndex(x, y)
 end
 
 function MapEditor:updateSelectedTileIndex(x, y)
-  self.selectedTileIndexX = x
-  self.selectedTileIndexY = y
+  print(x, y)
   if x ~= nil and y ~= nil and 1 <= x and x <= self.tileset.sizeX and 1 <= y and y <= self.tileset.sizeY then
     local newTilesetData = self.tileset:getTile(x, y)
-    if self.selectedTiletData == newTilesetData then
+    if self.selectedTileData == newTilesetData then
       -- deselect tile if we're clicking it while its selected
       self.selectedTileData = nil
+      self.selectedTileIndexX = nil
+      self.selectedTileIndexY = nil
     else
       self.selectedTileData = newTilesetData
+      self.selectedTileIndexX = x
+      self.selectedTileIndexY = y
     end
   end
 end
@@ -266,8 +268,6 @@ function MapEditor:draw()
       tileSize)
   end
   love.graphics.setCanvas()
-
-
 end
 
 return MapEditor
