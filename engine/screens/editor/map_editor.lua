@@ -12,6 +12,8 @@ local PaletteBank = require 'engine.utils.palette_bank'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local TilesetBank = require 'engine.utils.tileset_bank'
 
+local Camera = require 'lib.camera'
+
 local TILE_MARGIN = 1
 local TILE_PADDING = 1
 
@@ -23,6 +25,12 @@ local MapEditorState = {
 -- NB: Do not allow hot reloading when in map editor screen
 local MapEditor = Class { __include = BaseScreen,
   init = function(self)
+    --[[
+      Camera
+    ]]
+    self.camera = Camera()
+    self.cameraZoom = 1
+
     --[[
       Tileset Theme
     ]]
@@ -47,10 +55,22 @@ local MapEditor = Class { __include = BaseScreen,
     self.selectedTileData = nil
 
     --[[
-      Zoom
+      Tileset Zoom
     ]]
     self.zoomLevels = { 1, 2, 4, 7, 8, 12}
     self.zoom = 1
+
+
+    --[[
+      File Dialog
+    ]]
+    self.fileDialog = ''
+    self.fileDialogResult = ""
+
+    --[[
+      Map Data
+    ]]
+    self.mapData = nil
   end
 }
 
@@ -94,7 +114,6 @@ function MapEditor:updateHoverTileIndex(x, y)
 end
 
 function MapEditor:updateSelectedTileIndex(x, y)
-  print(x, y)
   if x ~= nil and y ~= nil and 1 <= x and x <= self.tileset.sizeX and 1 <= y and y <= self.tileset.sizeY then
     local newTilesetData = self.tileset:getTile(x, y)
     if self.selectedTileData == newTilesetData then
@@ -110,7 +129,7 @@ function MapEditor:updateSelectedTileIndex(x, y)
   end
 end
 
--- roomy screen hooks
+-- Roomy callbacks
 function MapEditor:enter(prev, ...)
   self.tilesetThemeList = { }
   self.tilesetTheme = nil
@@ -145,14 +164,24 @@ function MapEditor:update(dt)
   if Slab.BeginMainMenuBar() then
     if Slab.BeginMenu("File") then
       --TODO: File Explorer
-      if Slab.MenuItemChecked('TODO') then
-
+      if Slab.MenuItemChecked('New Map') then
+        print('TODO New Map')
+      end
+      Slab.Separator()
+      if Slab.MenuItemChecked('Open Map...') then
+        print('TODO Open Map')
+      end
+      Slab.Separator()
+      if Slab.MenuItemChecked('Save') then
+        print('TODO Save Map')
+      end
+      if Slab.MenuItemChecked('Save As') then
+        print('TODO Save As')
       end
       Slab.EndMenu()
     end
     if Slab.Button('Play') then
       print('TODO play test map')
-      --TODO play test map
     end
     Slab.EndMainMenuBar()
   end
@@ -230,14 +259,48 @@ function MapEditor:update(dt)
     self:updateHoverTileIndex(tileIndexX, tileIndexY)
   end
   Slab.EndWindow()
+
+  -- Update Non Slab Stuff
+  if self.mapData then
+
+  else
+    camera:follow(-love.graphics.getWidth() / 2, -love.graphics.getHeight() / 2)
+  end
 end
 
 function MapEditor:draw()
+  local tileSize = self.tileset.tileSize
+  --[[
+    Draw Tilemap (if we're currently editing one)
+  ]]
+  if self.mapData then
+    self.camera:attach()
+    love.graphics.setLineWidth(1)
+    -- draw grid
+    for i = 0, math.ceil( (camera.x - camera.w / 2) / tileSize ) do
+      for j = 0, math.ceil( (camera.y - camera.h / 2) / tileSize ) do
+        love.graphics.line()
+      end
+    end
+    --[[
+    for i = 0, math.ceil(love.graphics.getWidth() / tileSize) do
+      for j = 0, math.ceil(love.graphics.getHeight() / tileSize) do
+        love.graphics.rectangle('line', i * tileSize, j * tileSize, tileSize, tileSize)
+      end
+    end
+    --]]
+    self.camera:detach()
+  else
+
+  end
+  --[[
+    Draw UI
+  ]]
   Slab.Draw()
   -- draw tileset on tileset canvas
   love.graphics.setCanvas(self.tilesetCanvas)
   love.graphics.clear()
-  local tileSize = self.tileset.tileSize
+
   for x = 1, self.tileset.sizeX, 1 do
     for y = 1, self.tileset.sizeY, 1 do
       local tilesetData = self.tileset:getTile(x, y)
@@ -258,15 +321,7 @@ function MapEditor:draw()
       tileSize,
       tileSize)
   end
-  if self.selectedTileData then
-    love.graphics.setLineWidth(1)
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle('line',
-      ((self.selectedTileIndexX - 1) * tileSize) + ((self.selectedTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
-      ((self.selectedTileIndexY - 1) * tileSize) + ((self.selectedTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
-      tileSize,
-      tileSize)
-  end
+  love.graphics.setColor(1, 1, 1)
   love.graphics.setCanvas()
 end
 
