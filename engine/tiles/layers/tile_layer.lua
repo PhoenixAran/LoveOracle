@@ -8,6 +8,7 @@ local TileLayer = Class {
     self.sizeX = data.sizeX
     self.sizeY = data.sizeY
     self.tiles = data.tiles or { }
+    self.layerType = 'tile_layer'
   end
 }
 
@@ -16,6 +17,7 @@ function TileLayer:getType()
 end
 
 function TileLayer:setTile(tileData, x, y)
+  print(x, y)
   if y == nil then
     self.tiles[x] = tileData
   else

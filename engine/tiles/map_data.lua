@@ -21,12 +21,15 @@ local MapData = Class {
       Thinking that the default should be this:
       layer 1: tiles
       layer 2: tiles 
-      layer 3: entities / objects
+      layer 3: entities / objects (TODO!)
     ]]
-    self.layerCount = data.layerCount or 3
     
     -- deserialize layers
-    local layers = data.layers or { }
+    local layers = data.layers or {
+      TileLayer({sizeX = self.sizeX, sizeY = self.sizeY}),
+      TileLayer({sizeX = self.sizeX, sizeY = self.sizeY}),
+    }
+    self.layerCount = lume.count(layers)
     lume.each(layers, function(layerData)
       local layerType = layerData.layerType
       if layerType == 'tile_layer' then
@@ -95,13 +98,16 @@ function MapData:resize(x, y)
 end
 
 function MapData:setTile(layerIndex, tileData, x, y)
+  assert(1 <= layerIndex and layerIndex <= self.layerCount)
+  local layer = self.layers[layerIndex]
+  assert(layer:getType() == 'tile_layer', 'Can only place tiles in layers with type "tile_layer"')
   if y == nil then
     assert(x <= self.sizeX, 'x is out of bounds')
-    self.tiles[x] = tileData
+    layer:setTile(tileData, x)
   else
     local index = (x - 1) * self.sizeY + y
-    assert(index <= self.size, '(' .. tostring(x) .. ', ' + tostring(y) .. ' is out of bounds')
-    self.tiles[(x - 1) * self.sizeY + y] = tileData 
+    assert(index <= self.size, '(' .. tostring(x) .. ', ' .. tostring(y) .. ' is out of bounds')
+    layer:setTile(tileData,index)
   end
 end
 

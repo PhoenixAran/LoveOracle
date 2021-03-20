@@ -32,7 +32,7 @@ local MapEditor = Class { __include = BaseScreen,
       Camera
     ]]
     self.camera = Camera()
-    self.cameraZoomLevels = { 0.4, 0.6, 0.8, 1, 2, 3, 4, 5, 6, 7, 8 }
+    self.cameraZoomLevels = { 0.8, 1, 2, 3, 4, 5, 6, 7, 8 }
     self.cameraZoomIndex = 1
     self.camera.scale = 0.8
     -- mouse position, used to drag camera
@@ -40,7 +40,6 @@ local MapEditor = Class { __include = BaseScreen,
     self.previousMousePositionY = 0
     self.currentMousePositionX = 0
     self.currentMousePositionY = 0
-
 
     --[[
       Tileset Theme
@@ -87,6 +86,7 @@ local MapEditor = Class { __include = BaseScreen,
       sizeX = 48,
       sizeY = 48
     })
+    self.selectedLayerIndex = 1
   end
 }
 
@@ -151,7 +151,56 @@ function MapEditor:resetCamera()
   self.camera.scale = .8
 end
 
--- Roomy callbacks
+function MapEditor:getMouseToMapCoords()
+  assert(self.mapData, 'Attempted to call MapEditor:getMouseToMapCoords but current map data instance is null')
+  local mouseX, mouseY = self.camera:toWorldCoords(self.currentMousePositionX, self.currentMousePositionY)
+  local tx = math.floor(mouseX / MapData.GRID_SIZE) + 1
+  local ty = math.floor(mouseY / MapData.GRID_SIZE) + 1
+  return tx, ty
+end
+
+function MapEditor:drawMapLayer(mapLayer)
+  if mapLayer:getType() == 'tile_layer' then
+    for i = 1, mapLayer.sizeX do
+      for j = 1, mapLayer.sizeY do
+        local layerTile = mapLayer:getTile(i, j)
+        if layerTile then
+          local tileSprite = layerTile:getSprite()
+          local sx = (i - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
+          local sy = (j - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
+          tileSprite:draw(sx, sy)
+        end
+      end
+    end
+  end
+  -- TODO: Object Layer
+end
+
+--[[
+  Map Edit Actions
+  TODO: Each function that resides in this section
+  should push an action object to the stack so user can undo and redo
+]]
+function MapEditor:action_placeTile()
+  assert(self.selectedTileData, 'Attempted to call MapEditor:action_placeTile but no tile data is selected')
+  local tx, ty = self:getMouseToMapCoords()
+  if 1 <= tx and tx <= self.mapData:getSizeX() and
+    1 <= ty and ty <= self.mapData:getSizeY() then
+    self.mapData:setTile(self.selectedLayerIndex, self.selectedTileData, tx, ty)
+  end
+end
+
+function MapEditor:action_removeTile()
+  local tx, ty = self:getMouseToMapCoords()
+  if 1 <= tx and tx <= self.mapData:getSizeX() and
+    1 <= ty and ty <= self.mapData:getSizeY() then
+    self.mapData:setTile(self.selectedLayerIndex, nil, tx, ty)
+  end
+end
+
+--[[ 
+  Roomy callbacks
+]]
 function MapEditor:enter(prev, ...)
   self.tilesetThemeList = { }
   self.tilesetTheme = nil
@@ -294,11 +343,17 @@ function MapEditor:update(dt)
 
   -- update controls
   if self.mapData then
-    -- move camera
-    if love.mouse.isDown(3) or love.keyboard.isDown('m') then
+    if (love.mouse.isDown(3) or love.keyboard.isDown('m')) and Slab.IsVoidHovered() then
+      -- move camera
       local dx = self.previousMousePositionX - self.currentMousePositionX
       local dy = self.previousMousePositionY - self.currentMousePositionY
       self.camera:move(dx, dy)
+    elseif love.mouse.isDown(1) and self.selectedTileData and Slab.IsVoidHovered() then
+      -- place tile
+      self:action_placeTile()
+    elseif love.mouse.isDown(2) and Slab.IsVoidHovered() then
+      self:action_removeTile()
+      -- remove tile
     end
   else
     self.camera.x = -love.graphics.getWidth() / 2
@@ -306,6 +361,7 @@ function MapEditor:update(dt)
   end
   -- set previous mouse position
   self.previousMousePositionX, self.previousMousePositionY = self.currentMousePositionX, self.currentMousePositionY
+  
 end
 
 function MapEditor:draw()
@@ -315,6 +371,11 @@ function MapEditor:draw()
   if self.mapData then
     self.camera:attach()
     love.graphics.setLineWidth(1)
+    -- draw map layers
+    for i, layer in ipairs(self.mapData:getLayers()) do
+      self:drawMapLayer(layer)
+    end
+
     -- draw grid
     -- horizontal lines
     for i = 0, self.mapData.sizeX do
@@ -332,10 +393,27 @@ function MapEditor:draw()
       local y2 = self.mapData.sizeY * GRID_SIZE
       love.graphics.line(x1, y1, x2, y2)
     end
+    
+    -- if we have a selected tile, draw a partially transparent version if mouse over grid
+    if Slab.IsVoidHovered() and self.selectedTileData then
+      local tx, ty = self:getMouseToMapCoords()
+      if 1 <= tx and tx <= self.mapData:getSizeX() and
+        1 <= ty and ty <= self.mapData:getSizeY() then
+          local tileSprite = self.selectedTileData:getSprite()
+          if tileSprite then
+            local sw = tileSprite:getWidth()
+            local sh = tileSprite:getHeight()
+            local sx = ((tx - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
+            local sy = ((ty - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
+            tileSprite:draw(sx, sy, 0.5)
+          end
+      end
+    end
     self.camera:detach()
   else
     -- no map data file opened
   end
+
   --[[
     Draw UI
   ]]
@@ -375,7 +453,6 @@ function MapEditor:draw()
   end
   love.graphics.setColor(1, 1, 1)
   love.graphics.setCanvas()
-  self.camera:draw()
 end
 
 -- mouse wheel input
