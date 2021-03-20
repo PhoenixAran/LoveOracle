@@ -12,6 +12,8 @@ local PaletteBank = require 'engine.utils.palette_bank'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local TilesetBank = require 'engine.utils.tileset_bank'
 
+local MapData = require 'engine.tiles.map_data'
+
 local Camera = require 'lib.camera'
 
 local TILE_MARGIN = 1
@@ -70,7 +72,13 @@ local MapEditor = Class { __include = BaseScreen,
     --[[
       Map Data
     ]]
-    self.mapData = nil
+    -- TODO retrieve map data from disk via deserialization
+    self.mapData = MapData({
+      name = 'test-map',
+      sizeX = 24,
+      sizeY = 24
+    })
+
   end
 }
 
@@ -277,18 +285,22 @@ function MapEditor:draw()
     self.camera:attach()
     love.graphics.setLineWidth(1)
     -- draw grid
-    for i = 0, math.ceil( (camera.x - camera.w / 2) / tileSize ) do
-      for j = 0, math.ceil( (camera.y - camera.h / 2) / tileSize ) do
-        love.graphics.line()
-      end
+    -- horizontal lines
+    for i = 0, self.mapData.sizeX do
+      local x1 = 0
+      local y1 = i * tileSize
+      local x2 = self.mapData.sizeY * tileSize
+      local y2 = y1
+      love.graphics.line(x1, y1, x2, y2)
     end
-    --[[
-    for i = 0, math.ceil(love.graphics.getWidth() / tileSize) do
-      for j = 0, math.ceil(love.graphics.getHeight() / tileSize) do
-        love.graphics.rectangle('line', i * tileSize, j * tileSize, tileSize, tileSize)
-      end
+    -- vertical lines
+    for i = 0, self.mapData.sizeX do
+      local x1 = i * tileSize
+      local y1 = 0
+      local x2 = x1
+      local y2 = self.mapData.sizeY * tileSize
+      love.graphics.line(x1, y1, x2, y2)
     end
-    --]]
     self.camera:detach()
   else
 
@@ -318,6 +330,15 @@ function MapEditor:draw()
     love.graphics.rectangle('line',
       ((self.hoverTileIndexX - 1) * tileSize) + ((self.hoverTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
       ((self.hoverTileIndexY - 1) * tileSize) + ((self.hoverTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
+      tileSize,
+      tileSize)
+  end
+  if self.selectedTileData then
+    love.graphics.setLineWidth(1)
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle('line',
+      ((self.selectedTileIndexX - 1) * tileSize) + ((self.selectedTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
+      ((self.selectedTileIndexY - 1) * tileSize) + ((self.selectedTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
       tileSize,
       tileSize)
   end

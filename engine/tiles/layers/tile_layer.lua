@@ -1,3 +1,5 @@
+local Class = require 'lib.class'
+
 local NIL_TABLE = { }
 
 -- Layers

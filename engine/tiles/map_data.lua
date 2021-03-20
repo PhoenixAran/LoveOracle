@@ -26,7 +26,7 @@ local MapData = Class {
     
     -- deserialize layers
     local layers = data.layers or { }
-    lume.each(data.layers, function(layerData)
+    lume.each(layers, function(layerData)
       local layerType = layerData.layerType
       if layerType == 'tile_layer' then
         local tileLayer = TileLayer(layerData)
