@@ -4,6 +4,7 @@ local RoomData = require 'engine.tiles.room_data'
 local TileLayer = require 'engine.tiles.layers.tile_layer'
 
 local NIL_TABLE = { }
+local GRID_SIZE = 16
 
 -- TODO: ObjectLayer
 -- Export Type Map Data
@@ -145,5 +146,7 @@ function MapData:getSerializableTable()
     sizeY = self:getSizeY()
   }
 end
+
+MapData.GRID_SIZE = GRID_SIZE
 
 return MapData

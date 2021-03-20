@@ -18,6 +18,7 @@ local Camera = require 'lib.camera'
 
 local TILE_MARGIN = 1
 local TILE_PADDING = 1
+local GRID_SIZE = MapData.GRID_SIZE
 
 local MapEditorState = {
   Edit = 1,
@@ -31,7 +32,15 @@ local MapEditor = Class { __include = BaseScreen,
       Camera
     ]]
     self.camera = Camera()
-    self.cameraZoom = 1
+    self.cameraZoomLevels = { 0.4, 0.6, 0.8, 1, 2, 3, 4, 5, 6, 7, 8 }
+    self.cameraZoomIndex = 1
+    self.camera.scale = 0.8
+    -- mouse position, used to drag camera
+    self.previousMousePositionX = 0
+    self.previousMousePositionY = 0
+    self.currentMousePositionX = 0
+    self.currentMousePositionY = 0
+
 
     --[[
       Tileset Theme
@@ -59,7 +68,7 @@ local MapEditor = Class { __include = BaseScreen,
     --[[
       Tileset Zoom
     ]]
-    self.zoomLevels = { 1, 2, 4, 7, 8, 12}
+    self.zoomLevels = { 1, 2, 4, 6, 8, 12}
     self.zoom = 1
 
 
@@ -75,10 +84,9 @@ local MapEditor = Class { __include = BaseScreen,
     -- TODO retrieve map data from disk via deserialization
     self.mapData = MapData({
       name = 'test-map',
-      sizeX = 24,
-      sizeY = 24
+      sizeX = 48,
+      sizeY = 48
     })
-
   end
 }
 
@@ -137,6 +145,12 @@ function MapEditor:updateSelectedTileIndex(x, y)
   end
 end
 
+function MapEditor:resetCamera()
+  self.camera.x = love.graphics.getWidth() / 2
+  self.camera.y = love.graphics.getHeight() / 2
+  self.camera.scale = .8
+end
+
 -- Roomy callbacks
 function MapEditor:enter(prev, ...)
   self.tilesetThemeList = { }
@@ -170,7 +184,7 @@ function MapEditor:update(dt)
     MAIN MENU BAR
   ]]
   if Slab.BeginMainMenuBar() then
-    if Slab.BeginMenu("File") then
+    if Slab.BeginMenu('File') then
       --TODO: File Explorer
       if Slab.MenuItemChecked('New Map') then
         print('TODO New Map')
@@ -188,8 +202,11 @@ function MapEditor:update(dt)
       end
       Slab.EndMenu()
     end
-    if Slab.Button('Play') then
-      print('TODO play test map')
+    if Slab.BeginMenu('View') then
+      if Slab.MenuItemChecked('Reset Camera') then
+        self:resetCamera()
+      end
+      Slab.EndMenu()
     end
     Slab.EndMainMenuBar()
   end
@@ -268,16 +285,30 @@ function MapEditor:update(dt)
   end
   Slab.EndWindow()
 
-  -- Update Non Slab Stuff
-  if self.mapData then
+  --[[ 
+    Update non Slab stuff
+  ]]
 
+  -- update mouse position
+  self.currentMousePositionX, self.currentMousePositionY = love.mouse.getPosition()
+
+  -- update controls
+  if self.mapData then
+    -- move camera
+    if love.mouse.isDown(3) or love.keyboard.isDown('m') then
+      local dx = self.previousMousePositionX - self.currentMousePositionX
+      local dy = self.previousMousePositionY - self.currentMousePositionY
+      self.camera:move(dx, dy)
+    end
   else
-    camera:follow(-love.graphics.getWidth() / 2, -love.graphics.getHeight() / 2)
+    self.camera.x = -love.graphics.getWidth() / 2
+    self.camera.y = -love.graphics.getHeight() / 2
   end
+  -- set previous mouse position
+  self.previousMousePositionX, self.previousMousePositionY = self.currentMousePositionX, self.currentMousePositionY
 end
 
 function MapEditor:draw()
-  local tileSize = self.tileset.tileSize
   --[[
     Draw Tilemap (if we're currently editing one)
   ]]
@@ -288,22 +319,22 @@ function MapEditor:draw()
     -- horizontal lines
     for i = 0, self.mapData.sizeX do
       local x1 = 0
-      local y1 = i * tileSize
-      local x2 = self.mapData.sizeY * tileSize
+      local y1 = i * GRID_SIZE
+      local x2 = self.mapData.sizeY * GRID_SIZE
       local y2 = y1
       love.graphics.line(x1, y1, x2, y2)
     end
     -- vertical lines
     for i = 0, self.mapData.sizeX do
-      local x1 = i * tileSize
+      local x1 = i * GRID_SIZE
       local y1 = 0
       local x2 = x1
-      local y2 = self.mapData.sizeY * tileSize
+      local y2 = self.mapData.sizeY * GRID_SIZE
       love.graphics.line(x1, y1, x2, y2)
     end
     self.camera:detach()
   else
-
+    -- no map data file opened
   end
   --[[
     Draw UI
@@ -312,7 +343,7 @@ function MapEditor:draw()
   -- draw tileset on tileset canvas
   love.graphics.setCanvas(self.tilesetCanvas)
   love.graphics.clear()
-
+  local tileSize = self.tileset.tileSize
   for x = 1, self.tileset.sizeX, 1 do
     for y = 1, self.tileset.sizeY, 1 do
       local tilesetData = self.tileset:getTile(x, y)
@@ -344,6 +375,19 @@ function MapEditor:draw()
   end
   love.graphics.setColor(1, 1, 1)
   love.graphics.setCanvas()
+  self.camera:draw()
+end
+
+-- mouse wheel input
+function MapEditor:wheelmoved(x, y)
+  if y > 0 then
+    -- wheel moved up
+    self.cameraZoomIndex = lume.clamp( self.cameraZoomIndex + 1, 1, lume.count(self.cameraZoomLevels))
+  elseif y < 0 then 
+    -- wheel moved down
+    self.cameraZoomIndex = lume.clamp( self.cameraZoomIndex - 1, 1, lume.count(self.cameraZoomLevels))
+  end
+  self.camera.scale = self.cameraZoomLevels[self.cameraZoomIndex]
 end
 
 return MapEditor
