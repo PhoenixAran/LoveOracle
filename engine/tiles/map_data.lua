@@ -125,17 +125,17 @@ function MapData:getTile(layerIndex, x, y)
 end
 
 --TODO: Add/Remove Room Data methods
-function MapData:addRoom(room)
-  local tlx, tly = room:getTopLeftPosition()
-  local brx, bry = room:getBottomRightPosition()
+function MapData:addRoom(roomData)
+  local tlx, tly = roomData:getTopLeftPosition()
+  local brx, bry = roomData:getBottomRightPosition()
   assert(1 <= tlx and tlx <= self.sizeX, 'room out of bounds')
   assert(1 <= tly and tly <= self.sizeY, 'room out of bounds')
   assert(1 <= brx and brx <= self.sizeX, 'room out of bounds')
   assert(1 <= brx and brx <= self.sizeY, 'room out of bounds')
 end
 
-function MapData:removeRoom(room)
-  lume.remove(self.rooms, room)
+function MapData:removeRoom(roomData)
+  lume.remove(self.rooms, roomData)
 end
 
 function MapData:getSerializableTable()

@@ -13,6 +13,7 @@ local SpriteBank = require 'engine.utils.sprite_bank'
 local TilesetBank = require 'engine.utils.tileset_bank'
 
 local MapData = require 'engine.tiles.map_data'
+local RoomData = require 'engine.tiles.room_data'
 
 local Camera = require 'lib.camera'
 
@@ -252,10 +253,17 @@ end
 
 function MapEditor:drawMapLayer(mapLayer)
   if mapLayer:getType() == 'tile_layer' then
+    local defaultTilesetTheme = TilesetBank.getDefaultTilesetTheme()
     for i = 1, mapLayer.sizeX do
       for j = 1, mapLayer.sizeY do
         local layerTile = mapLayer:getTile(i, j)
-        if layerTile then
+        if layerTile ~= nil then
+          local tilesetTheme = defaultTilesetTheme
+          -- find if this tile is defined within a room so we can use the correct tileset theme
+          for _, roomData in ipairs(mapData.rooms) do
+            local rx1, ry1 = roomData:getTopLeftPosition()
+            local rx2, ry2 = rx1 + roomData:getSizeX(), ry1 + roomData:getSizeY()
+          end
           local tileSprite = layerTile:getSprite()
           local sx = (i - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
           local sy = (j - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
@@ -289,7 +297,32 @@ function MapEditor:action_removeTile()
   end
 end
 
-
+function MapEditor:action_addRoom()
+  local tx1, ty1 = 0, 0
+  local tx2, ty2 = 0, 0
+  if self.roomStartX <= self.roomEndX then
+    tx1 = self.roomStartX
+    tx2 = self.roomEndX
+  else
+    tx1 = self.roomEndX
+    tx2 = self.roomStartX
+  end
+  if self.roomStartY <= self.roomEndY then
+    ty1 = self.roomStartY
+    ty2 = self.roomEndY
+  else
+    ty1 = self.roomEndY
+    ty2 = self.roomStartY
+  end
+  local room = RoomData({
+    name = string.format('room_%d-%d_%d-%d', tx1, ty1, tx2, ty2),
+    theme = self.tilesetThemeName,
+    topLeftPosX = tx1,
+    topLeftPosY = ty1,
+    width = tx2 - tx1,
+    height = ty2 - tx2
+  })
+end
 
 --[[ 
   Roomy callbacks
@@ -312,8 +345,8 @@ function MapEditor:enter(prev, ...)
     -- push keys for the list box
     lume.push(self.tilesetThemeList, k)
   end
-
-  self.tilesetThemeName = self.tilesetThemeList[1] or ''
+  assert(lume.invert(self.tilesetThemeList)['default'], 'No tileset theme with name "default" found')
+  self.tilesetThemeName = 'default'
   self.tilesetList = TilesetTheme.getRequiredTilesets()
   self.tileset = nil
   self.tilesetName = self.tilesetList[1] or ''
@@ -499,7 +532,6 @@ function MapEditor:update(dt)
   end
   -- set previous mouse position
   self.previousMousePositionX, self.previousMousePositionY = self.currentMousePositionX, self.currentMousePositionY
-  
 end
 
 function MapEditor:draw()
@@ -567,11 +599,7 @@ function MapEditor:draw()
         ty1 = self.roomEndY
         ty2 = self.roomStartY
       end
-      
-      print('=====')
-      print(tx1, ty1)
-      print(tx2, ty2)
-      print('=====')
+    
       -- get draw posititions from tile indices
       --local x1, y1 = vector.mul(MapData.GRID_SIZE, tx1 - 1, ty1 - 1)
       --local x2, y2 = vector.mul(MapData.GRID_SIZE, tx2 - 1, ty2 - 1)
