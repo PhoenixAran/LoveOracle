@@ -20,11 +20,30 @@ local TILE_MARGIN = 1
 local TILE_PADDING = 1
 local GRID_SIZE = MapData.GRID_SIZE
 
+-- Enums
 local MapEditorState = {
   Edit = 1,
   Play = 2
 }
 
+local MapLayer = {
+  Background = 1,
+  Foreground = 2,
+  Object = 3
+}
+
+local ControlMode = {
+  -- place and erase tiles
+  Tile = 1,
+  Room = 2,
+}
+
+local RoomControlState = {
+  None = 1,
+  Creating = 2
+}
+
+-- Export Type
 -- NB: Do not allow hot reloading when in map editor screen
 local MapEditor = Class { __include = BaseScreen,
   init = function(self)
@@ -78,15 +97,48 @@ local MapEditor = Class { __include = BaseScreen,
     self.fileDialogResult = ""
 
     --[[
+      Dialog Boxes
+    ]]
+    self.showControlListDialog = false
+
+    --[[
       Map Data
     ]]
-    -- TODO retrieve map data from disk via deserialization
+    -- TODO retrieve map data from disk via deserialization instead of hard coded map data instance
     self.mapData = MapData({
       name = 'test-map',
       sizeX = 48,
       sizeY = 48
     })
+    
+    --[[
+      Editor Control
+    ]]
+    self.controlModeIndex = 1
+    self.controlModeValues = lume.invert(ControlMode)
+    self.controlMode = ControlMode.Tile
+
+    -- room stuff
+    self.roomControlState = RoomControlState.None
+    -- grid coordinates for when user starts to create a room
+    self.roomStartX = -1
+    self.roomStartY = -1
+    self.roomEndX = -1
+    self.roomEndY = -1
+
     self.selectedLayerIndex = 1
+    self.layerIndexValues = {
+      ['Background'] = 1,
+      ['Foreground'] = 2,
+      ['Object'] = 3
+    }
+    self.layerIndexValuesInverse = lume.invert(self.layerIndexValues)
+    self.showBackgroundLayer = false
+    self.showForegroundLayer = false
+    self.showObjectLayer = false
+    -- room stuff
+    self.showRoomBorders = false
+    self.showRoomRects = false
   end
 }
 
@@ -145,6 +197,45 @@ function MapEditor:updateSelectedTileIndex(x, y)
   end
 end
 
+function MapEditor:updateRoomControl()
+  assert(self.mapData, 'Attempted to call MapEditor:updateRoomControl but current map data instance is null')
+  if love.mouse.isDown(1) and Slab.IsVoidHovered() then
+    if self.roomControlState == RoomControlState.None then
+      local tx, ty = self:getMouseToMapCoords()
+      local inMapBounds = false
+      if 1 <= tx and tx <= self.mapData:getSizeX() and
+        1 <= ty and ty <= self.mapData:getSizeY() then
+          inMapBounds = true
+      end
+      if not inMapBounds then
+        return
+      end
+      -- init room drag rectangle
+      self.roomStartX = tx
+      self.roomStartY = ty
+      self.roomEndX = tx
+      self.roomEndY = ty
+      self.roomControlState = RoomControlState.Create
+    elseif self.roomControlState == RoomControlState.Create then
+      local tx, ty = self:getMouseToMapCoords()
+      local inMapBounds = false
+      if 1 <= tx and tx <= self.mapData:getSizeX() and
+        1 <= ty and ty <= self.mapData:getSizeY() then
+          inMapBounds = true
+      end
+      if inMapBounds then
+        self.roomEndX = tx
+        self.roomEndY = ty
+      end
+    end
+  else
+    if self.roomControlState == RoomControlState.Create then
+      -- try to create room if user was previously dragging a room rectangle
+      self.roomControlState = RoomControlState.None
+    end
+  end
+end
+
 function MapEditor:resetCamera()
   self.camera.x = love.graphics.getWidth() / 2
   self.camera.y = love.graphics.getHeight() / 2
@@ -197,6 +288,8 @@ function MapEditor:action_removeTile()
     self.mapData:setTile(self.selectedLayerIndex, nil, tx, ty)
   end
 end
+
+
 
 --[[ 
   Roomy callbacks
@@ -251,13 +344,29 @@ function MapEditor:update(dt)
       end
       Slab.EndMenu()
     end
-    if Slab.BeginMenu('View') then
+    if Slab.BeginMenu('Camera') then
       if Slab.MenuItemChecked('Reset Camera') then
         self:resetCamera()
       end
       Slab.EndMenu()
     end
+    if Slab.BeginMenu('Help') then
+      if Slab.MenuItemChecked('List Controls') then
+        self.showControlListDialog = true
+      end
+      Slab.EndMenu()
+    end
     Slab.EndMainMenuBar()
+  end
+  if self.showControlListDialog then
+    local result = Slab.MessageBox("Control List", [[
+      Mouse 1 : Places Tile
+      Mouse 2 : Removes Tile
+      Mouse 3 or M + Mouse Drag : Move Camera
+    ]])
+    if result ~= "" then
+      self.showControlListDialog = false
+    end
   end
 
   --[[
@@ -334,6 +443,30 @@ function MapEditor:update(dt)
   end
   Slab.EndWindow()
 
+
+  -- Map Editor Control Window stuff
+  Slab.BeginWindow('map-editor-control-window', { Title = 'Controls' })
+  Slab.Text('Tile Layer')
+
+  if Slab.BeginComboBox('map-layer', { Selected = self.layerIndexValuesInverse[self.selectedLayerIndex] }) then
+    for k, v in ipairs(self.layerIndexValuesInverse) do
+      if Slab.TextSelectable(v) then
+        self.selectedLayerIndex = self.layerIndexValues[v]
+      end
+    end
+    Slab.EndComboBox()
+  end
+  Slab.Separator()
+  Slab.Text('Controls')
+  for k, v in ipairs(self.controlModeValues) do
+    if Slab.RadioButton(v, {Index = k, SelectedIndex = self.controlModeIndex}) then
+      self.controlModeIndex = k
+    end
+  end
+  self.controlMode = self.controlModeIndex
+  Slab.EndWindow()
+
+
   --[[ 
     Update non Slab stuff
   ]]
@@ -342,18 +475,23 @@ function MapEditor:update(dt)
   self.currentMousePositionX, self.currentMousePositionY = love.mouse.getPosition()
 
   -- update controls
+  -- TODO: Turn into a state machine?
   if self.mapData then
     if (love.mouse.isDown(3) or love.keyboard.isDown('m')) and Slab.IsVoidHovered() then
       -- move camera
       local dx = self.previousMousePositionX - self.currentMousePositionX
       local dy = self.previousMousePositionY - self.currentMousePositionY
       self.camera:move(dx, dy)
-    elseif love.mouse.isDown(1) and self.selectedTileData and Slab.IsVoidHovered() then
-      -- place tile
-      self:action_placeTile()
-    elseif love.mouse.isDown(2) and Slab.IsVoidHovered() then
-      self:action_removeTile()
-      -- remove tile
+    elseif self.controlMode == ControlMode.Tile then
+      if love.mouse.isDown(1) and self.selectedTileData and Slab.IsVoidHovered() then
+        -- place tile
+        self:action_placeTile()
+      elseif love.mouse.isDown(2) and Slab.IsVoidHovered() then
+        -- remove tile
+        self:action_removeTile()
+      end
+    elseif self.controlMode == ControlMode.Room then
+      self:updateRoomControl()
     end
   else
     self.camera.x = -love.graphics.getWidth() / 2
@@ -395,7 +533,7 @@ function MapEditor:draw()
     end
     
     -- if we have a selected tile, draw a partially transparent version if mouse over grid
-    if Slab.IsVoidHovered() and self.selectedTileData then
+    if self.controlMode == ControlMode.Tile and Slab.IsVoidHovered() and self.selectedTileData then
       local tx, ty = self:getMouseToMapCoords()
       if 1 <= tx and tx <= self.mapData:getSizeX() and
         1 <= ty and ty <= self.mapData:getSizeY() then
@@ -408,6 +546,44 @@ function MapEditor:draw()
             tileSprite:draw(sx, sy, 0.5)
           end
       end
+    end
+
+    -- draw room creation rectangle
+    if self.controlMode == ControlMode.Room and self.roomControlState == RoomControlState.Create then
+      -- tile indices for rectangle
+      local tx1, ty1 = 0, 0
+      local tx2, ty2 = 0, 0
+      if self.roomStartX <= self.roomEndX then
+        tx1 = self.roomStartX
+        tx2 = self.roomEndX
+      else
+        tx1 = self.roomEndX
+        tx2 = self.roomStartX
+      end
+      if self.roomStartY <= self.roomEndY then
+        ty1 = self.roomStartY
+        ty2 = self.roomEndY
+      else
+        ty1 = self.roomEndY
+        ty2 = self.roomStartY
+      end
+      
+      print('=====')
+      print(tx1, ty1)
+      print(tx2, ty2)
+      print('=====')
+      -- get draw posititions from tile indices
+      --local x1, y1 = vector.mul(MapData.GRID_SIZE, tx1 - 1, ty1 - 1)
+      --local x2, y2 = vector.mul(MapData.GRID_SIZE, tx2 - 1, ty2 - 1)
+      local x1 = MapData.GRID_SIZE * (tx1 - 1)
+      local y1 = MapData.GRID_SIZE * (ty1 - 1)
+      local x2 = MapData.GRID_SIZE * (tx2 - 1)
+      local y2 = MapData.GRID_SIZE * (ty2 - 1)
+      x2 = x2 + self.mapData.GRID_SIZE
+      y2 = y2 + self.mapData.GRID_SIZE
+      love.graphics.setColor(0, 1, 0, .25)
+      love.graphics.rectangle('fill', x1, y1, math.max(x2 - x1, MapData.GRID_SIZE), math.max(y2 - y1, MapData.GRID_SIZE))
+      love.graphics.setColor(1, 1, 1)
     end
     self.camera:detach()
   else
