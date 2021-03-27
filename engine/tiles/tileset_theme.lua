@@ -34,7 +34,11 @@ function TilesetTheme:addTileset(tileset)
   
   lume.push(self.tilesets, tileset)
   self.tilesetsByName[tilesetName] = tileset
-  self.tilesetIdOffsets[tilesetName] = tileset:getSize()
+  local offset = 0
+  if self.tilesets[lume.count(self.tilesets) - 1] then
+    offset = self.tilesets[lume.count(self.tilesets) - 1]:getSize()
+  end
+  self.tilesetIdOffsets[tilesetName] = offset
 end
 
 function TilesetTheme:getTileset(index)
@@ -47,15 +51,46 @@ end
 
 function TilesetTheme:getTile(id)
   -- find theme with tile id offset less than id
-  local idModifier = 0
+  if lume.count(self.tilesets) == 1 then
+    local tileset = self.tilesets[1]
+    local tilesetName = tileset:getAliasName()
+    local offset = self.tilesetIdOffsets[tilesetName]
+    return tileset:getTile(id)
+  else
+    for i = 1, lume.count(self.tilesets) - 1 do
+      local tilesetLower = self.tilesets[i]
+      local offsetLower = self.tilesetIdOffsets[tilesetLower:getAliasName()]    
+      local tilesetUpper = self.tilesets[i + 1]
+      local offsetUpper = self.tilesetIdOffsets[tilesetUpper:getAliasName()]
+      if offsetLower <= id and id <= offsetUpper then
+        print(id, offsetLower)
+        return tilesetLower:getTile(id - offsetLower)
+      end
+    end
+    local tileset = lume.last(self.tilesets)
+    local tilesetName = tileset:getAliasName()
+    local offset = self.tilesetIdOffsets[tilesetName]
+    return tileset:getTile(id - offset)
+  end
+end
+
+function TilesetTheme:getTilesetForTileId(id)
   for i = 1, lume.count(self.tilesets) do
     local tileset = self.tilesets[i]
     local tilesetName = tileset:getAliasName()
-    local offset = self.tilesetIdOffsets[tilesetName]
-    if offset >= id then
-      return tileset:getTile(id - offset)
+    if self.tilesetIdOffsets[tilesetName] >= id then
+      return tileset, self.tilesetIdOffsets[tilesetName]
     end
   end
+  error('Could not find tileset theme for tile with id', id)
+end
+
+function TilesetTheme:getAbsoluteTileId(tileset, tileId)
+  if type(tileset) == 'table' then
+    tileset = tileset:getAliasName()
+  end
+  assert(self.tilesetIdOffsets[tileset], 'Cannot find offset for tileset ' .. tileset .. 'for tileset theme ' .. self:getName())
+  return self.tilesetIdOffsets[tileset] + tileId
 end
 
 function TilesetTheme:getType()

@@ -9,7 +9,6 @@ print('Oracle Engine ' .. gameConfig.version)
 print("OS: " .. love.system.getOS())
 print(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
 print('Save Directory: ' .. love.filesystem.getSaveDirectory())
-
 --[[ 
      Defining helper function used in data scripting
      Hot reloading can't modify existing functions, but it works with tables.

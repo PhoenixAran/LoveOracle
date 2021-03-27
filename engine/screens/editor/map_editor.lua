@@ -253,18 +253,14 @@ end
 
 function MapEditor:drawMapLayer(mapLayer)
   if mapLayer:getType() == 'tile_layer' then
-    local defaultTilesetTheme = TilesetBank.getDefaultTilesetTheme()
+    -- TODO: use room tileset theme if tile is inside defined room
+    local tilesetTheme = TilesetBank.getDefaultTilesetTheme()
     for i = 1, mapLayer.sizeX do
       for j = 1, mapLayer.sizeY do
         local layerTile = mapLayer:getTile(i, j)
-        if layerTile ~= nil then
-          local tilesetTheme = defaultTilesetTheme
-          -- find if this tile is defined within a room so we can use the correct tileset theme
-          for _, roomData in ipairs(mapData.rooms) do
-            local rx1, ry1 = roomData:getTopLeftPosition()
-            local rx2, ry2 = rx1 + roomData:getSizeX(), ry1 + roomData:getSizeY()
-          end
-          local tileSprite = layerTile:getSprite()
+        if layerTile ~= nil then       
+          local tileData = tilesetTheme:getTile(layerTile)
+          local tileSprite = tileData:getSprite()
           local sx = (i - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
           local sy = (j - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
           tileSprite:draw(sx, sy)
@@ -285,7 +281,9 @@ function MapEditor:action_placeTile()
   local tx, ty = self:getMouseToMapCoords()
   if 1 <= tx and tx <= self.mapData:getSizeX() and
     1 <= ty and ty <= self.mapData:getSizeY() then
-    self.mapData:setTile(self.selectedLayerIndex, self.selectedTileData, tx, ty)
+    local id = self.tilesetTheme:getAbsoluteTileId(self.tileset, self.selectedTileData.id)
+    print(id)
+    self.mapData:setTile(self.selectedLayerIndex, id, tx, ty)
   end
 end
 
