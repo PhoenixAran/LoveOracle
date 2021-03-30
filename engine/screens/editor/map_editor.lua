@@ -265,6 +265,8 @@ function MapEditor:drawMapLayer(mapLayer)
           local sx = (i - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
           local sy = (j - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
           tileSprite:draw(sx, sy)
+        else
+          
         end
       end
     end
