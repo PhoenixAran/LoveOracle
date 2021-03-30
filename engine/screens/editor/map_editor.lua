@@ -265,8 +265,6 @@ function MapEditor:drawMapLayer(mapLayer)
           local sx = (i - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
           local sy = (j - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
           tileSprite:draw(sx, sy)
-        else
-          
         end
       end
     end
@@ -453,7 +451,8 @@ function MapEditor:update(dt)
                 ScaleX = self.zoom, ScaleY = self.zoom ,
                 SubX = 0, SubY = 0, SubW = self.subW, SubH = self.subH
               })
-    local mx, my = Slab.GetMousePosition()
+    
+    local mx, my = Slab.GetMousePositionWindow()
     mx, my = vector.sub(mx, my, wx, wy)
     local relx, rely = vector.div(self.zoom, vector.sub(mx, my, tilesetImagePosX, tilesetImagePosY))
     relx, rely = math.floor(relx), math.floor(rely)
@@ -506,7 +505,6 @@ function MapEditor:update(dt)
 
   -- update mouse position
   self.currentMousePositionX, self.currentMousePositionY = love.mouse.getPosition()
-
   -- update controls
   -- TODO: Turn into a state machine?
   if self.mapData then
