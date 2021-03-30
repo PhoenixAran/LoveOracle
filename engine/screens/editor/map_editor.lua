@@ -465,8 +465,10 @@ function MapEditor:update(dt)
       or rely == self.tilesetCanvas:getHeight() then
       rely = -100
     end
-    local tileIndexX = math.floor(relx / (self.tileset.tileSize + TILE_PADDING)) + 1
-    local tileIndexY = math.floor(rely / (self.tileset.tileSize + TILE_PADDING)) + 1
+    -- the bottom two statements are not a mistake
+    -- because we draw a row of tiles alongside the x axis
+    local tileIndexY = math.floor(relx / (self.tileset.tileSize + TILE_PADDING)) + 1
+    local tileIndexX = math.floor(rely / (self.tileset.tileSize + TILE_PADDING)) + 1
     if Slab.IsMouseClicked(1) and not Slab.IsVoidClicked(1) then
       -- if we select one, display the tile data info
       self:updateSelectedTileIndex(tileIndexX, tileIndexY)
@@ -629,8 +631,10 @@ function MapEditor:draw()
       local tilesetData = self.tileset:getTile(x, y)
       if tilesetData then
         local sprite = tilesetData:getSprite()
-        local posX = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
-        local posY = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
+        -- The bottom two statements are not a mistake, since it
+        -- draws the rows along the x axis instead of the y axis
+        local posY = ((x - 1) * tileSize) + ((x - 1) * TILE_PADDING) + (TILE_MARGIN)
+        local posX = ((y - 1) * tileSize) + ((y - 1) * TILE_PADDING) + (TILE_MARGIN)
         sprite:draw(posX + tileSize / 2, posY + tileSize / 2)
       end
     end
@@ -639,8 +643,8 @@ function MapEditor:draw()
     love.graphics.setLineWidth(1)
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle('line',
-      ((self.hoverTileIndexX - 1) * tileSize) + ((self.hoverTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
       ((self.hoverTileIndexY - 1) * tileSize) + ((self.hoverTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
+      ((self.hoverTileIndexX - 1) * tileSize) + ((self.hoverTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
       tileSize,
       tileSize)
   end
@@ -648,8 +652,8 @@ function MapEditor:draw()
     love.graphics.setLineWidth(1)
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle('line',
-      ((self.selectedTileIndexX - 1) * tileSize) + ((self.selectedTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
       ((self.selectedTileIndexY - 1) * tileSize) + ((self.selectedTileIndexY - 1) * TILE_PADDING) + (TILE_MARGIN),
+      ((self.selectedTileIndexX - 1) * tileSize) + ((self.selectedTileIndexX - 1) * TILE_PADDING) + (TILE_MARGIN),
       tileSize,
       tileSize)
   end
@@ -660,6 +664,9 @@ end
 
 -- mouse wheel input
 function MapEditor:wheelmoved(x, y)
+  if not Slab.IsVoidHovered() then
+    return
+  end
   if y > 0 then
     -- wheel moved up
     self.cameraZoomIndex = lume.clamp( self.cameraZoomIndex + 1, 1, lume.count(self.cameraZoomLevels))
