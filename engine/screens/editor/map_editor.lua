@@ -48,6 +48,7 @@ local RoomControlState = {
 -- NB: Do not allow hot reloading when in map editor screen
 local MapEditor = Class { __include = BaseScreen,
   init = function(self)
+    BaseScreen.init(self)
     --[[
       Camera
     ]]
@@ -252,13 +253,13 @@ function MapEditor:getMouseToMapCoords()
 end
 
 function MapEditor:drawMapLayer(mapLayer)
+  -- TODO: Select tileset theme based off if tile is inside room or not
   if mapLayer:getType() == 'tile_layer' then
-    -- TODO: use room tileset theme if tile is inside defined room
     local tilesetTheme = TilesetBank.getDefaultTilesetTheme()
     for i = 1, mapLayer.sizeX do
       for j = 1, mapLayer.sizeY do
         local layerTile = mapLayer:getTile(i, j)
-        if layerTile ~= nil then       
+        if layerTile ~= nil then
           local tileData = tilesetTheme:getTile(layerTile)
           local tileSprite = tileData:getSprite()
           local sx = (i - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
@@ -281,9 +282,8 @@ function MapEditor:action_placeTile()
   local tx, ty = self:getMouseToMapCoords()
   if 1 <= tx and tx <= self.mapData:getSizeX() and
     1 <= ty and ty <= self.mapData:getSizeY() then
-    local id = self.tilesetTheme:getAbsoluteTileId(self.tileset, self.selectedTileData.id)
-    print(id)
-    self.mapData:setTile(self.selectedLayerIndex, id, tx, ty)
+    local gid = self.tilesetTheme:getTileGid(self.tileset, self.selectedTileData.id)
+    self.mapData:setTile(self.selectedLayerIndex, gid, tx, ty)
   end
 end
 
@@ -655,6 +655,7 @@ function MapEditor:draw()
   end
   love.graphics.setColor(1, 1, 1)
   love.graphics.setCanvas()
+  BaseScreen.drawFPS(self)
 end
 
 -- mouse wheel input

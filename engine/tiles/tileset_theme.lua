@@ -16,6 +16,7 @@ local TilesetTheme = Class {
     self.tilesets = { }
     self.tilesetsByName = { }
     self.tilesetIdOffsets = { }
+    self.tiles = { }
   end
 }
 
@@ -39,6 +40,9 @@ function TilesetTheme:addTileset(tileset)
     offset = self.tilesets[lume.count(self.tilesets) - 1]:getSize()
   end
   self.tilesetIdOffsets[tilesetName] = offset
+  for i, tileData in ipairs(tileset.tiles) do
+    self.tiles[i + offset] = tileData
+  end
 end
 
 function TilesetTheme:getTileset(index)
@@ -49,29 +53,8 @@ function TilesetTheme:getTileset(index)
   end
 end
 
-function TilesetTheme:getTile(id)
-  -- find theme with tile id offset less than id
-  if lume.count(self.tilesets) == 1 then
-    local tileset = self.tilesets[1]
-    local tilesetName = tileset:getAliasName()
-    local offset = self.tilesetIdOffsets[tilesetName]
-    return tileset:getTile(id)
-  else
-    for i = 1, lume.count(self.tilesets) - 1 do
-      local tilesetLower = self.tilesets[i]
-      local offsetLower = self.tilesetIdOffsets[tilesetLower:getAliasName()]    
-      local tilesetUpper = self.tilesets[i + 1]
-      local offsetUpper = self.tilesetIdOffsets[tilesetUpper:getAliasName()]
-      if offsetLower <= id and id <= offsetUpper then
-        print(id, offsetLower)
-        return tilesetLower:getTile(id - offsetLower)
-      end
-    end
-    local tileset = lume.last(self.tilesets)
-    local tilesetName = tileset:getAliasName()
-    local offset = self.tilesetIdOffsets[tilesetName]
-    return tileset:getTile(id - offset)
-  end
+function TilesetTheme:getTile(gid)
+  return self.tiles[gid]
 end
 
 function TilesetTheme:getTilesetForTileId(id)
@@ -85,7 +68,8 @@ function TilesetTheme:getTilesetForTileId(id)
   error('Could not find tileset theme for tile with id', id)
 end
 
-function TilesetTheme:getAbsoluteTileId(tileset, tileId)
+-- gets Gid for tile given a TileId, and the tileset it belongs too
+function TilesetTheme:getTileGid(tileset, tileId)
   if type(tileset) == 'table' then
     tileset = tileset:getAliasName()
   end
