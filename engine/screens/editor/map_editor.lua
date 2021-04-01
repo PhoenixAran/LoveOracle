@@ -44,6 +44,14 @@ local RoomControlState = {
   Creating = 2
 }
 
+local LayerViewMode = { 
+  Normal = 1,
+  FadeOthers = 2,
+  HideOthers = 3
+}
+
+local LayerViewModeValues =  {"Normal", "Fade Others", 'Hide Others'}
+
 -- Export Type
 -- NB: Do not allow hot reloading when in map editor screen
 local MapEditor = Class { __include = BaseScreen,
@@ -119,6 +127,10 @@ local MapEditor = Class { __include = BaseScreen,
     self.controlModeIndex = 1
     self.controlModeValues = lume.invert(ControlMode)
     self.controlMode = ControlMode.Tile
+
+    -- view stuff
+    self.showGrid = true
+    self.layerViewMode = LayerViewMode.Normal
 
     -- room stuff
     self.roomControlState = RoomControlState.None
@@ -252,8 +264,16 @@ function MapEditor:getMouseToMapCoords()
   return tx, ty
 end
 
-function MapEditor:drawMapLayer(mapLayer)
+function MapEditor:drawMapLayer(mapLayer, mapLayerIndex)
+
   -- TODO: Select tileset theme based off if tile is inside room or not
+  local alpha = 1
+  if self.layerViewMode == LayerViewMode.HideOthers and self.selectedLayerIndex ~= mapLayerIndex then
+    return
+  end
+  if self.layerViewMode == LayerViewMode.FadeOthers and self.selectedLayerIndex ~= mapLayerIndex then
+    alpha = .60
+  end
   if mapLayer:getType() == 'tile_layer' then
     local tilesetTheme = TilesetBank.getDefaultTilesetTheme()
     for i = 1, mapLayer.sizeX do
@@ -264,7 +284,7 @@ function MapEditor:drawMapLayer(mapLayer)
           local tileSprite = tileData:getSprite()
           local sx = (i - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
           local sy = (j - 1) * MapData.GRID_SIZE + (MapData.GRID_SIZE / 2)
-          tileSprite:draw(sx, sy)
+          tileSprite:draw(sx, sy, alpha)
         end
       end
     end
@@ -497,6 +517,18 @@ function MapEditor:update(dt)
       self.controlModeIndex = k
     end
   end
+  Slab.Separator()
+  Slab.Text('Grid')
+  if Slab.CheckBox(self.showGrid, "Show Grid") then
+    self.showGrid = not self.showGrid
+  end
+  Slab.Separator()
+  Slab.Text('Layer View')
+  for k, v in ipairs(LayerViewModeValues) do
+    if Slab.RadioButton(v, {Index = k, SelectedIndex = self.layerViewMode}) then
+      self.layerViewMode = k
+    end
+  end
   self.controlMode = self.controlModeIndex
   Slab.EndWindow()
 
@@ -541,27 +573,32 @@ function MapEditor:draw()
   if self.mapData then
     self.camera:attach()
     love.graphics.setLineWidth(1)
+    -- draw clear color for tilemap edit area
+    love.graphics.setColor(77 / 255, 77 / 255, 77 / 255)
+    love.graphics.rectangle('fill', 0, 0, self.mapData.sizeX * GRID_SIZE, self.mapData.sizeY * GRID_SIZE )
+    love.graphics.setColor(1, 1, 1)
     -- draw map layers
     for i, layer in ipairs(self.mapData:getLayers()) do
-      self:drawMapLayer(layer)
+      self:drawMapLayer(layer, i)
     end
-
-    -- draw grid
-    -- horizontal lines
-    for i = 0, self.mapData.sizeX do
-      local x1 = 0
-      local y1 = i * GRID_SIZE
-      local x2 = self.mapData.sizeY * GRID_SIZE
-      local y2 = y1
-      love.graphics.line(x1, y1, x2, y2)
-    end
-    -- vertical lines
-    for i = 0, self.mapData.sizeX do
-      local x1 = i * GRID_SIZE
-      local y1 = 0
-      local x2 = x1
-      local y2 = self.mapData.sizeY * GRID_SIZE
-      love.graphics.line(x1, y1, x2, y2)
+    if self.showGrid then
+      -- draw grid
+      -- horizontal lines
+      for i = 0, self.mapData.sizeX do
+        local x1 = 0
+        local y1 = i * GRID_SIZE
+        local x2 = self.mapData.sizeY * GRID_SIZE
+        local y2 = y1
+        love.graphics.line(x1, y1, x2, y2)
+      end
+      -- vertical lines
+      for i = 0, self.mapData.sizeX do
+        local x1 = i * GRID_SIZE
+        local y1 = 0
+        local x2 = x1
+        local y2 = self.mapData.sizeY * GRID_SIZE
+        love.graphics.line(x1, y1, x2, y2)
+      end
     end
     
     -- if we have a selected tile, draw a partially transparent version if mouse over grid
@@ -629,7 +666,7 @@ function MapEditor:draw()
   for x = 1, self.tileset.sizeX, 1 do
     for y = 1, self.tileset.sizeY, 1 do
       local tilesetData = self.tileset:getTile(x, y)
-      if tilesetData then
+      if tilesetData then 
         local sprite = tilesetData:getSprite()
         -- The bottom two statements are not a mistake, since it
         -- draws the rows along the x axis instead of the y axis
@@ -659,7 +696,6 @@ function MapEditor:draw()
   end
   love.graphics.setColor(1, 1, 1)
   love.graphics.setCanvas()
-  BaseScreen.drawFPS(self)
 end
 
 -- mouse wheel input
