@@ -152,7 +152,7 @@ local MapEditor = Class { __include = BaseScreen,
     self.showObjectLayer = false
     -- room stuff
     self.showRoomBorders = false
-    self.showRoomRects = false
+    self.showRoomAreas = false
   end
 }
 
@@ -245,7 +245,13 @@ function MapEditor:updateRoomControl()
   else
     if self.roomControlState == RoomControlState.Create then
       -- try to create room if user was previously dragging a room rectangle
+      self:action_addRoom()
+      self.roomStartX = -1
+      self.roomStartY = -1
+      self.roomEndX = -1
+      self.roomEndY = -1
       self.roomControlState = RoomControlState.None
+
     end
   end
 end
@@ -337,9 +343,11 @@ function MapEditor:action_addRoom()
     theme = self.tilesetThemeName,
     topLeftPosX = tx1,
     topLeftPosY = ty1,
-    width = tx2 - tx1,
-    height = ty2 - tx2
+    sizeX = tx2 - (tx1 - 1),
+    sizeY = ty2 - (ty1 - 1)
   })
+  print(room)
+  self.mapData:addRoom(room)
 end
 
 --[[ 
@@ -530,6 +538,14 @@ function MapEditor:update(dt)
     end
   end
   self.controlMode = self.controlModeIndex
+  Slab.Separator()
+  Slab.Text('Room View')
+  if Slab.CheckBox(self.showRoomBorders, 'Show Room Borders') then
+    self.showRoomBorders = not self.showRoomBorders
+  end
+  if Slab.CheckBox(self.showRoomAreas, 'Show Room Areas') then
+    self.showRoomAreas = not self.showRoomAreas
+  end
   Slab.EndWindow()
 
 
@@ -617,6 +633,28 @@ function MapEditor:draw()
       end
     end
 
+    -- draw room borders
+    if self.showRoomBorders then
+      love.graphics.setColor(0, 0, 0)
+      for _, roomData in ipairs(self.mapData.rooms) do
+        local rx1, ry1 = roomData:getTopLeftPosition()
+        local width = roomData:getSizeX() * GRID_SIZE
+        local height = roomData:getSizeY() * GRID_SIZE
+        love.graphics.rectangle('line', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
+      end
+      love.graphics.setColor(1, 1, 1)
+    end 
+
+    if self.showRoomAreas then
+      love.graphics.setColor(1, 1, 204 / 255, 0.20)
+      for _, roomData in ipairs(self.mapData.rooms) do
+        local rx1, ry1 = roomData:getTopLeftPosition()
+        local width = roomData:getSizeX() * GRID_SIZE
+        local height = roomData:getSizeY() * GRID_SIZE
+        love.graphics.rectangle('fill', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
+      end
+      love.graphics.setColor(1, 1, 1, 0.20)
+    end
     -- draw room creation rectangle
     if self.controlMode == ControlMode.Room and self.roomControlState == RoomControlState.Create then
       -- tile indices for rectangle

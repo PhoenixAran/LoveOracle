@@ -3,13 +3,13 @@ local lume = require 'lib.lume'
 
 local NIL_TABLE = { }
 local RoomData = Class {
-  init = function(self, data)
+  init = function(self, roomData)
     self.name = roomData.name or nil
     self.theme = roomData.theme or 'default'
-    self.topLeftPosX = data.topLeftPosX or -1
-    self.topLeftPosY = data.topLeftPosY or -1
-    self.sizeX = data.sizeX or 16
-    self.sizeY = data.sizeY or 16
+    self.topLeftPosX = roomData.topLeftPosX or -1
+    self.topLeftPosY = roomData.topLeftPosY or -1
+    self.sizeX = roomData.sizeX or 16
+    self.sizeY = roomData.sizeY or 16
   end
 }
 
@@ -51,15 +51,15 @@ function RoomData:setTopLeftPositionY(y)
 end
 
 function RoomData:getBottomRightPositionX()
-  return self.topLeftPosX + self.width
+  return self.topLeftPosX + self.sizeX
 end
 
 function RoomData:getBottomRightPositionY()
-  return self.topLeftPosY + self.height
+  return self.topLeftPosY + self.sizeY
 end
 
 function RoomData:getBottomRightPosition()
-  return self.topLeftPosX + self.width, self.topLeftPosY + self.height
+  return self.topLeftPosX + self.sizeX, self.topLeftPosY + self.sizeY
 end
 
 function RoomData:getSizeX()

@@ -131,7 +131,8 @@ function MapData:addRoom(roomData)
   assert(1 <= tlx and tlx <= self.sizeX, 'room out of bounds')
   assert(1 <= tly and tly <= self.sizeY, 'room out of bounds')
   assert(1 <= brx and brx <= self.sizeX, 'room out of bounds')
-  assert(1 <= brx and brx <= self.sizeY, 'room out of bounds')
+  assert(1 <= bry and bry <= self.sizeY, 'room out of bounds')
+  lume.push(self.rooms, roomData)
 end
 
 function MapData:removeRoom(roomData)
