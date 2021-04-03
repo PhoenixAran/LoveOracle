@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local inspect = require 'lib.inspect'
 local Slab = require 'lib.slab'
-
+local rect = require 'engine.utils.rectangle'
 local AssetManager = require 'engine.utils.asset_manager'
 local BaseScreen = require 'engine.screens.base_screen'
 
@@ -251,7 +251,6 @@ function MapEditor:updateRoomControl()
       self.roomEndX = -1
       self.roomEndY = -1
       self.roomControlState = RoomControlState.None
-
     end
   end
 end
@@ -338,16 +337,28 @@ function MapEditor:action_addRoom()
     ty1 = self.roomEndY
     ty2 = self.roomStartY
   end
-  local room = RoomData({
-    name = string.format('room_%d-%d_%d-%d', tx1, ty1, tx2, ty2),
-    theme = self.tilesetThemeName,
-    topLeftPosX = tx1,
-    topLeftPosY = ty1,
-    sizeX = tx2 - (tx1 - 1),
-    sizeY = ty2 - (ty1 - 1)
-  })
-  print(room)
-  self.mapData:addRoom(room)
+  local overlapsOtherRoom = false
+  for _, roomData in ipairs(self.mapData.rooms) do
+    local rx1, ry1 = roomData:getTopLeftPosition()
+    rx1 = rx1 - 1 
+    ry1 = ry1 - 1
+    overlapsOtherRoom = rect.intersects(rx1, ry1, roomData:getSizeX(), roomData:getSizeY(),
+                                        (tx1 - 1), (ty1 - 1), tx2 - (tx1 - 1), ty2 - (ty1 - 1))
+    if overlapsOtherRoom then
+      break
+    end
+  end
+  if not overlapsOtherRoom then
+    local room = RoomData({
+      name = string.format('room_%d-%d_%d-%d', tx1, ty1, tx2, ty2),
+      theme = self.tilesetThemeName,
+      topLeftPosX = tx1,
+      topLeftPosY = ty1,
+      sizeX = tx2 - (tx1 - 1),
+      sizeY = ty2 - (ty1 - 1)
+    })
+    self.mapData:addRoom(room)
+  end
 end
 
 --[[ 
@@ -704,7 +715,7 @@ function MapEditor:draw()
   for x = 1, self.tileset.sizeX, 1 do
     for y = 1, self.tileset.sizeY, 1 do
       local tilesetData = self.tileset:getTile(x, y)
-      if tilesetData then 
+      if tilesetData then
         local sprite = tilesetData:getSprite()
         -- The bottom two statements are not a mistake, since it
         -- draws the rows along the x axis instead of the y axis

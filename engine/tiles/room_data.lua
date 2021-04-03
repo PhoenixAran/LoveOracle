@@ -51,15 +51,15 @@ function RoomData:setTopLeftPositionY(y)
 end
 
 function RoomData:getBottomRightPositionX()
-  return self.topLeftPosX + self.sizeX
+  return self.topLeftPosX + self.sizeX - 1
 end
 
 function RoomData:getBottomRightPositionY()
-  return self.topLeftPosY + self.sizeY
+  return self.topLeftPosY + self.sizeY - 1
 end
 
 function RoomData:getBottomRightPosition()
-  return self.topLeftPosX + self.sizeX, self.topLeftPosY + self.sizeY
+  return self.topLeftPosX + self.sizeX - 1, self.topLeftPosY + self.sizeY - 1
 end
 
 function RoomData:getSizeX()
