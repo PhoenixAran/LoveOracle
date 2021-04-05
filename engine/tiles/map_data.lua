@@ -93,6 +93,14 @@ function MapData:getSizeXY()
   return self.sizeX, self.sizeY
 end
 
+function MapData:getRoom(roomKey)
+  for k, v in ipairs(self.rooms) do
+    if k == roomKey then
+      return v
+    end
+  end
+end
+
 function MapData:resize(x, y)
   --TODO: figure out how to handle existing tile placement and entity placement when resizing map data
 end

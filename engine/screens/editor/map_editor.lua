@@ -21,6 +21,180 @@ local TILE_MARGIN = 1
 local TILE_PADDING = 1
 local GRID_SIZE = MapData.GRID_SIZE
 
+local RESIZER_MARGIN = 16
+-- Frient Type
+local RoomResizeSquare = Class {
+  init = function(self, roomData, direction, camera)
+    self.roomData = roomData
+    self.direction = direction
+    self.camera = camera
+    self.state = 'none'
+    self.x = 0
+    self.y = 0
+    self.cachedX = 0
+    self.cachedY =0 
+    self.minX = 0
+    self.minY = 0
+    self.maxX = 0
+    self.maxY = 0
+    self.size = 24
+    self.clickMousePosX = 0
+    self.clickMousePosY = 0
+    -- we want a draw position for the resize square
+    -- so we need to subtract 1 from the tilemap indices 
+    local rx1, ry1 = roomData:getTopLeftPosition()
+    rx1 = rx1 - 1
+    ry1 = ry1 - 1
+    local rx2, ry2 = roomData:getBottomRightPosition()
+    --rx2 = rx2 - 1
+    --ry2 = ry2 - 1
+    
+    rx1, ry1 = vector.mul(GRID_SIZE, rx1, ry1)
+    rx2, ry2 = vector.mul(GRID_SIZE, rx2, ry2)
+    local rw = roomData:getSizeX() * GRID_SIZE
+    local rh = roomData:getSizeY() * GRID_SIZE
+
+    
+    if self.direction == 'up' then
+      self.x = (rw / 2) + rx1
+      self.y = ry1 - RESIZER_MARGIN
+      self.maxY = ry2 - GRID_SIZE + RESIZER_MARGIN
+    elseif self.direction == 'down' then
+      self.x = (rw / 2) + rx1
+      self.y = ry2  + RESIZER_MARGIN
+      self.minY = ry1 + GRID_SIZE - RESIZER_MARGIN
+    elseif self.direction == 'left' then
+      self.x = rx1 - RESIZER_MARGIN
+      self.y = (rh / 2) + ry1
+      self.maxX = rx2 - GRID_SIZE + RESIZER_MARGIN
+    elseif self.direction == 'right' then
+      self.x = rx2 + RESIZER_MARGIN
+      self.y = (rh / 2) + ry1
+      self.minX = rx1 + GRID_SIZE - RESIZER_MARGIN
+    end
+
+  end
+}
+
+function RoomResizeSquare:draw()
+  if self.state == 'none' then
+    love.graphics.setColor(153 / 255, 50 / 255, 204 / 255)
+  else
+    love.graphics.setColor(100 / 255, 149 / 255, 237 / 255)
+  end
+  love.graphics.rectangle('fill', self.x - self.size / 2, self.y - self.size / 2, self.size, self.size)
+  love.graphics.setColor(1, 1, 1)
+end
+
+function RoomResizeSquare:update(dt)
+  if self.state == 'drag' then
+    if not love.mouse.isDown(1) then
+      self:resizeRoom()
+      self.state = 'none'
+      return
+    end
+    local mx, my = self.camera:getMousePosition()
+
+    if self.direction == 'up' then
+      self.y = math.min(self.maxY, self.cachedY - self.clickMousePosY + my)
+    elseif self.direction == 'down' then
+      self.y = math.max(self.minY, self.cachedY - self.clickMousePosY + my)
+    elseif self.direction == 'left' then
+      self.x = math.min(self.maxX, self.cachedX - self.clickMousePosX + mx)
+    elseif self.direction == 'right' then
+      self.x = math.max(self.minX, self.cachedX - self.clickMousePosX + mx)
+    end
+  else
+    local mx, my = self.camera:getMousePosition()
+    if love.mouse.isDown(1) and 
+    rect.containsPoint(self.x - self.size / 2, self.y - self.size / 2, self.size, self.size, mx, my) then
+      self.clickMousePosX = mx
+      self.clickMousePosY = my
+      self.cachedX = self.x
+      self.cachedY = self.y
+      self.state = 'drag'
+    end
+  end
+end
+
+function RoomResizeSquare:resizeRoom()
+  local x1, y1 = self.roomData:getTopLeftPosition()
+  local x2, y2 = self.roomData:getBottomRightPosition()
+  if self.direction == 'up' then
+    -- change y1
+  elseif self.direction == 'down' then
+    -- change y2
+  elseif self.direction == 'left' then
+    -- change x1
+  elseif self.direction == 'right' then
+    -- change x2
+  end
+  if self.onResize then
+    self.onResize(self.roomData, x1, y1, x2, y2)
+  end
+end
+
+-- Friend Type
+-- Holds RoomResizeSquare instances for each side of the room
+local RoomResizer = Class {
+  init = function(self, roomData, camera, onResize)
+    self.roomData = roomData
+    self.onResize = onResize
+    self.upR = RoomResizeSquare(roomData, 'up', camera, onResize)
+    self.downR = RoomResizeSquare(roomData, 'down', camera, onResize)
+    self.leftR = RoomResizeSquare(roomData, 'left', camera, onResize)
+    self.rightR = RoomResizeSquare(roomData, 'right', camera, onResize)
+    self.resizers = { self.upR, self.downR, self.leftR, self.rightR }
+  end
+}
+
+function RoomResizer:update(dt)
+  local updatedResizer = false
+  for _, r in ipairs(self.resizers) do
+    if r.state == 'drag' then
+      r:update(dt)
+      updatedResizer = true
+    end
+  end
+  if not updatedResizer then
+    lume.each(self.resizers, 'update', dt)
+  end
+end
+
+function RoomResizer:draw()
+  self.leftR:draw()
+  self.rightR:draw()
+  self.upR:draw()
+  self.downR:draw() 
+  love.graphics.setColor(1, 1, 204 / 255, 0.20)
+  
+  local x, y = self.roomData:getTopLeftPosition()
+  x = (x - 1) * GRID_SIZE
+  y = (y - 1) * GRID_SIZE
+  local w = self.roomData:getSizeX() * GRID_SIZE
+  local h = self.roomData:getSizeY() * GRID_SIZE
+  if self.upR.state == 'drag' then
+    y = self.upR.y + RESIZER_MARGIN
+    h = self.downR.y - y - RESIZER_MARGIN
+  elseif self.downR.state == 'drag' then
+    h = self.downR.y - y - RESIZER_MARGIN
+  elseif self.leftR.state == 'drag' then
+    x = self.leftR.x + RESIZER_MARGIN
+    w = self.rightR.x - x - RESIZER_MARGIN
+  elseif self.rightR.state == 'drag' then
+    w = self.rightR.x - x - RESIZER_MARGIN
+  end
+
+  love.graphics.setColor(1, 1, 204 / 255, 0.20)
+  love.graphics.rectangle('fill', x, y, w, h)
+  love.graphics.setColor(0, 0, 0)
+  love.graphics.setLineWidth(2)
+  love.graphics.rectangle('line', x, y, w, h)
+  --love.graphics.rectangle('fill', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
+  love.graphics.setLineWidth(1)
+  love.graphics.setColor(1, 1, 1)
+end
+
 -- Enums
 local MapEditorState = {
   Edit = 1,
@@ -37,6 +211,12 @@ local ControlMode = {
   -- place and erase tiles
   Tile = 1,
   Room = 2,
+  PickRoom = 3
+}
+local ControlModeValues = { 
+  'Tile',
+  'Room',
+  'Pick Room'
 }
 
 local RoomControlState = {
@@ -49,7 +229,6 @@ local LayerViewMode = {
   FadeOthers = 2,
   HideOthers = 3
 }
-
 local LayerViewModeValues =  {"Normal", "Fade Others", 'Hide Others'}
 
 -- Export Type
@@ -125,7 +304,6 @@ local MapEditor = Class { __include = BaseScreen,
       Editor Control
     ]]
     self.controlModeIndex = 1
-    self.controlModeValues = lume.invert(ControlMode)
     self.controlMode = ControlMode.Tile
 
     -- view stuff
@@ -139,6 +317,11 @@ local MapEditor = Class { __include = BaseScreen,
     self.roomStartY = -1
     self.roomEndX = -1
     self.roomEndY = -1
+    
+    -- room pick stuff
+    self.selectedRoom = nil -- string key
+    -- room resizer widget
+    self.roomResizer = nil
 
     self.selectedLayerIndex = 1
     self.layerIndexValues = {
@@ -150,8 +333,8 @@ local MapEditor = Class { __include = BaseScreen,
     self.showBackgroundLayer = false
     self.showForegroundLayer = false
     self.showObjectLayer = false
-    -- room stuff
-    self.showRoomBorders = false
+    -- room display stuff
+    self.showRoomBorders = true
     self.showRoomAreas = false
   end
 }
@@ -531,7 +714,7 @@ function MapEditor:update(dt)
   end
   Slab.Separator()
   Slab.Text('Controls')
-  for k, v in ipairs(self.controlModeValues) do
+  for k, v in ipairs(ControlModeValues) do
     if Slab.RadioButton(v, {Index = k, SelectedIndex = self.controlModeIndex}) then
       self.controlModeIndex = k
     end
@@ -584,6 +767,28 @@ function MapEditor:update(dt)
       end
     elseif self.controlMode == ControlMode.Room then
       self:updateRoomControl()
+    elseif self.controlMode == ControlMode.PickRoom then
+      if self.selectedRoom then
+        assert(self.roomResizer)
+        self.roomResizer:update(dt)
+      else
+        if love.mouse.isDown(1) then
+          local tx, ty = self:getMouseToMapCoords()
+          if 1 <= tx and tx <= self.mapData:getSizeX() and
+          1 <= ty and ty <= self.mapData:getSizeY() then
+            for _, roomData in ipairs(self.mapData.rooms) do
+              local rx1, ry1 = roomData:getTopLeftPosition()
+              local rx2, ry2 = roomData:getBottomRightPosition()
+              roomPicked = rx1 <= tx and tx <= rx2 and ry1 <= ty and ty <= ry2
+              if roomPicked then
+                self.selectedRoom = roomData:getName()
+                self.roomResizer = RoomResizer(roomData, self.camera)
+                break
+              end
+            end
+          end
+        end
+      end
     end
   else
     self.camera.x = -love.graphics.getWidth() / 2
@@ -644,28 +849,42 @@ function MapEditor:draw()
       end
     end
 
-    -- draw room borders
-    if self.showRoomBorders then
-      love.graphics.setColor(0, 0, 0)
-      for _, roomData in ipairs(self.mapData.rooms) do
-        local rx1, ry1 = roomData:getTopLeftPosition()
-        local width = roomData:getSizeX() * GRID_SIZE
-        local height = roomData:getSizeY() * GRID_SIZE
-        love.graphics.rectangle('line', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
-      end
-      love.graphics.setColor(1, 1, 1)
-    end 
-
-    if self.showRoomAreas then
+    -- draw room areas
+    if self.showRoomAreas or self.controlMode == ControlMode.PickRoom then
       love.graphics.setColor(1, 1, 204 / 255, 0.20)
       for _, roomData in ipairs(self.mapData.rooms) do
-        local rx1, ry1 = roomData:getTopLeftPosition()
-        local width = roomData:getSizeX() * GRID_SIZE
-        local height = roomData:getSizeY() * GRID_SIZE
-        love.graphics.rectangle('fill', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
+        if self.controlMode ~= ControlMode.PickRoom or self.selectedRoom ~= roomData:getName() then      
+          local rx1, ry1 = roomData:getTopLeftPosition()
+          local width = roomData:getSizeX() * GRID_SIZE
+          local height = roomData:getSizeY() * GRID_SIZE
+          love.graphics.rectangle('fill', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
+        end
       end
       love.graphics.setColor(1, 1, 1, 0.20)
     end
+
+    -- draw room borders
+    if self.showRoomBorders or self.controlMode == ControlMode.PickRoom then
+      love.graphics.setColor(0, 0, 0)
+      love.graphics.setLineWidth(2)
+      for _, roomData in ipairs(self.mapData.rooms) do
+        if self.controlMode ~= ControlMode.PickRoom or self.selectedRoom ~= roomData:getName() then  
+          local rx1, ry1 = roomData:getTopLeftPosition()
+          local width = roomData:getSizeX() * GRID_SIZE
+          local height = roomData:getSizeY() * GRID_SIZE
+          love.graphics.rectangle('line', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
+        end
+      end
+      love.graphics.setColor(1, 1, 1)
+      love.graphics.setLineWidth(1)
+    end 
+  
+    -- draw selected room
+    if self.controlMode == ControlMode.PickRoom and self.selectedRoom then
+      assert(self.roomResizer)
+      self.roomResizer:draw()
+    end
+
     -- draw room creation rectangle
     if self.controlMode == ControlMode.Room and self.roomControlState == RoomControlState.Create then
       -- tile indices for rectangle
