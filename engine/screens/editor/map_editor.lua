@@ -24,15 +24,16 @@ local GRID_SIZE = MapData.GRID_SIZE
 local RESIZER_MARGIN = 16
 -- Frient Type
 local RoomResizeSquare = Class {
-  init = function(self, roomData, direction, camera)
+  init = function(self, roomData, direction, camera, onResize)
     self.roomData = roomData
     self.direction = direction
     self.camera = camera
+    self.onResize = onResize
     self.state = 'none'
     self.x = 0
     self.y = 0
     self.cachedX = 0
-    self.cachedY =0 
+    self.cachedY = 0 
     self.minX = 0
     self.minY = 0
     self.maxX = 0
@@ -122,12 +123,16 @@ function RoomResizeSquare:resizeRoom()
   local x2, y2 = self.roomData:getBottomRightPosition()
   if self.direction == 'up' then
     -- change y1
+    y1 = math.floor((self.y + RESIZER_MARGIN) / GRID_SIZE) + 1
   elseif self.direction == 'down' then
     -- change y2
+    y2 = math.ceil((self.y - RESIZER_MARGIN) / GRID_SIZE)
   elseif self.direction == 'left' then
     -- change x1
+    x1 = math.floor((self.x + RESIZER_MARGIN) / GRID_SIZE) + 1
   elseif self.direction == 'right' then
     -- change x2
+    x2 = math.ceil((self.x - RESIZER_MARGIN) / GRID_SIZE)
   end
   if self.onResize then
     self.onResize(self.roomData, x1, y1, x2, y2)
@@ -544,6 +549,42 @@ function MapEditor:action_addRoom()
   end
 end
 
+function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
+  x1 = math.max(1, x1)
+  y1 = math.max(1, y1)
+  x2 = math.min(self.mapData.sizeX, x2)
+  y2 = math.min(self.mapData.sizeY, y2)
+  local overlapsOtherRoom = false
+  for _, rd in ipairs(self.mapData.rooms) do
+    if rd ~= roomData then
+      local rx1, ry1 = rd:getTopLeftPosition()
+      rx1 = rx1 - 1 
+      ry1 = ry1 - 1
+      overlapsOtherRoom = rect.intersects(rx1, ry1, rd:getSizeX(), rd:getSizeY(),
+                                          (x1 - 1), (y1 - 1), x2 - (x1 - 1), y2 - (y1 - 1))
+      if overlapsOtherRoom then
+        break
+      end
+    end
+  end
+  if not overlapsOtherRoom then
+    local newRoom = RoomData({
+      name = roomData.name,
+      theme = roomData.theme,
+      topLeftPosX = x1,
+      topLeftPosY = y1,
+      sizeX = x2 - (x1 - 1),
+      sizeY = y2 - (y1 - 1)
+    })
+    self.selectedRoom = newRoom.name
+    self.roomResizer = RoomResizer(newRoom, self.camera, function(a, b, c, d, e)
+      self:action_resizeRoom(a, b, c, d, e)
+    end)
+    self.mapData:removeRoom(roomData)
+    self.mapData:addRoom(newRoom)
+  end
+end
+
 --[[ 
   Roomy callbacks
 ]]
@@ -782,7 +823,10 @@ function MapEditor:update(dt)
               roomPicked = rx1 <= tx and tx <= rx2 and ry1 <= ty and ty <= ry2
               if roomPicked then
                 self.selectedRoom = roomData:getName()
-                self.roomResizer = RoomResizer(roomData, self.camera)
+                local resizeCallback = function(roomData, x1, y1, x2, y2)
+                  self:action_resizeRoom(roomData, x1, y1, x2, y2)
+                end
+                self.roomResizer = RoomResizer(roomData, self.camera, resizeCallback)
                 break
               end
             end
