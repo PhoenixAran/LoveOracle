@@ -59,19 +59,19 @@ local RoomResizeSquare = Class {
     if self.direction == 'up' then
       self.x = (rw / 2) + rx1
       self.y = ry1 - RESIZER_MARGIN
-      self.maxY = ry2 - GRID_SIZE + RESIZER_MARGIN
+      self.maxY = ry2 - (GRID_SIZE * 3) + RESIZER_MARGIN
     elseif self.direction == 'down' then
       self.x = (rw / 2) + rx1
       self.y = ry2  + RESIZER_MARGIN
-      self.minY = ry1 + GRID_SIZE - RESIZER_MARGIN
+      self.minY = ry1 + (GRID_SIZE * 3) - RESIZER_MARGIN
     elseif self.direction == 'left' then
       self.x = rx1 - RESIZER_MARGIN
       self.y = (rh / 2) + ry1
-      self.maxX = rx2 - GRID_SIZE + RESIZER_MARGIN
+      self.maxX = rx2 - (GRID_SIZE * 3) + RESIZER_MARGIN
     elseif self.direction == 'right' then
       self.x = rx2 + RESIZER_MARGIN
       self.y = (rh / 2) + ry1
-      self.minX = rx1 + GRID_SIZE - RESIZER_MARGIN
+      self.minX = rx1 + (GRID_SIZE * 3) - RESIZER_MARGIN
     end
 
   end
