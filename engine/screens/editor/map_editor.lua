@@ -336,7 +336,7 @@ local MapEditor = Class { __include = BaseScreen,
     self.roomEndY = -1
     
     -- room pick stuff
-    self.selectedRoom = nil -- string key
+    self.selectedRoom = nil -- room data instance
     -- room resizer widget
     self.roomResizer = nil
 
@@ -588,7 +588,7 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
       sizeX = x2 - (x1 - 1),
       sizeY = y2 - (y1 - 1)
     })
-    self.selectedRoom = newRoom.name
+    self.selectedRoom = newRoom
     self.roomResizer = RoomResizer(newRoom, self.camera, function(a, b, c, d, e)
       self:action_resizeRoom(a, b, c, d, e)
     end)
@@ -805,11 +805,6 @@ function MapEditor:update(dt)
   end
   Slab.EndWindow()
 
-
-  --[[ 
-    Update non Slab stuff
-  ]]
-
   -- update mouse position
   self.currentMousePositionX, self.currentMousePositionY = love.mouse.getPosition()
   -- update controls
@@ -847,7 +842,7 @@ function MapEditor:update(dt)
               local rx2, ry2 = roomData:getBottomRightPosition()
               roomPicked = rx1 <= tx and tx <= rx2 and ry1 <= ty and ty <= ry2
               if roomPicked then
-                self.selectedRoom = roomData:getName()
+                self.selectedRoom = roomData
                 local resizeCallback = function(roomData, x1, y1, x2, y2)
                   self:action_resizeRoom(roomData, x1, y1, x2, y2)
                 end
@@ -865,6 +860,29 @@ function MapEditor:update(dt)
     self.camera.x = -love.graphics.getWidth() / 2
     self.camera.y = -love.graphics.getHeight() / 2
   end
+
+  if self.selectedRoom then
+    -- make property window for room data
+    local slabId = self.selectedRoom:getName() .. '_edit'
+    Slab.BeginWindow('RoomInspector', { Title = "Room"})
+    Slab.Text('Name')
+    if Slab.Input(slabId, { Align = 'left', ReturnOnText = false, Text = self.selectedRoom:getName() }) then
+      local uniqueName = true
+      local newName = Slab.GetInputText()
+      for _, r in ipairs(self.mapData.rooms) do
+        if r ~= self.selectedRoom and r.name == newName then
+          uniqueName = false
+          break
+        end
+      end
+      if uniqueName then
+        self.selectedRoom.name = newName
+      end
+    end
+    Slab.Text('Theme')
+    
+    Slab.EndWindow()
+
   -- set previous mouse position
   self.previousMousePositionX, self.previousMousePositionY = self.currentMousePositionX, self.currentMousePositionY
 end
@@ -924,7 +942,7 @@ function MapEditor:draw()
     if self.showRoomAreas or self.controlMode == ControlMode.PickRoom then
       love.graphics.setColor(1, 1, 204 / 255, 0.20)
       for _, roomData in ipairs(self.mapData.rooms) do
-        if self.controlMode ~= ControlMode.PickRoom or self.selectedRoom ~= roomData:getName() then      
+        if self.controlMode ~= ControlMode.PickRoom or self.selectedRoom ~= roomData then      
           local rx1, ry1 = roomData:getTopLeftPosition()
           local width = roomData:getSizeX() * GRID_SIZE
           local height = roomData:getSizeY() * GRID_SIZE
@@ -939,7 +957,7 @@ function MapEditor:draw()
       love.graphics.setColor(0, 0, 0)
       love.graphics.setLineWidth(2)
       for _, roomData in ipairs(self.mapData.rooms) do
-        if self.controlMode ~= ControlMode.PickRoom or self.selectedRoom ~= roomData:getName() then  
+        if self.controlMode ~= ControlMode.PickRoom or self.selectedRoom ~= roomData then  
           local rx1, ry1 = roomData:getTopLeftPosition()
           local width = roomData:getSizeX() * GRID_SIZE
           local height = roomData:getSizeY() * GRID_SIZE
