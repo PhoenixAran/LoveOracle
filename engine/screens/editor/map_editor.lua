@@ -153,6 +153,18 @@ local RoomResizer = Class {
   end
 }
 
+-- if room is being resized this frame
+-- Called when we want to find out if we want to handle the delete key
+-- or pick another room
+function RoomResizer:isActive()
+  for _, r in ipairs(self.resizers) do
+    if r.state == 'drag' then
+      return true
+    end
+  end
+  return false
+end
+
 function RoomResizer:update(dt)
   local updatedResizer = false
   for _, r in ipairs(self.resizers) do
@@ -582,7 +594,17 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
     end)
     self.mapData:removeRoom(roomData)
     self.mapData:addRoom(newRoom)
+  else
+    self.roomResizer = RoomResizer(roomData, self.camera, function(a, b, c, d, e)
+      self:action_resizeRoom(a, b, c, d, e)
+    end)
   end
+end
+
+function MapEditor:action_removeRoom()
+  self.selectedRoom = nil
+  self.mapData:removeRoom(self.roomResizer.roomData)
+  self.roomResizer = nil
 end
 
 --[[ 
@@ -809,10 +831,13 @@ function MapEditor:update(dt)
     elseif self.controlMode == ControlMode.Room then
       self:updateRoomControl()
     elseif self.controlMode == ControlMode.PickRoom then
+      local roomResizerInputHandled = false
       if self.selectedRoom then
         assert(self.roomResizer)
         self.roomResizer:update(dt)
-      else
+        roomResizerInputHandled = self.roomResizer:isActive()
+      end
+      if not roomResizerInputHandled then
         if love.mouse.isDown(1) then
           local tx, ty = self:getMouseToMapCoords()
           if 1 <= tx and tx <= self.mapData:getSizeX() and
@@ -831,6 +856,8 @@ function MapEditor:update(dt)
               end
             end
           end
+        elseif love.keyboard.isDown('delete') and self.selectedRoom then
+          self:action_removeRoom()
         end
       end
     end
