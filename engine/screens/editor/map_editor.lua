@@ -882,7 +882,7 @@ function MapEditor:update(dt)
     Slab.Text('Theme')
     
     Slab.EndWindow()
-
+  end
   -- set previous mouse position
   self.previousMousePositionX, self.previousMousePositionY = self.currentMousePositionX, self.currentMousePositionY
 end
