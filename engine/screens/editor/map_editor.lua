@@ -22,7 +22,7 @@ local TILE_PADDING = 1
 local GRID_SIZE = MapData.GRID_SIZE
 
 local RESIZER_MARGIN = 16
--- Frient Type
+-- Friend Type
 local RoomResizeSquare = Class {
   init = function(self, roomData, direction, camera, onResize)
     self.roomData = roomData
@@ -139,12 +139,92 @@ function RoomResizeSquare:resizeRoom()
   end
 end
 
+local RoomMover = Class {
+  init = function(self, roomData, camera, onMove)
+    self.roomData = roomData
+    self.camera = camera
+    self.onMove = onMove
+    self.state = 'none'
+    self.x = 0
+    self.y = 0
+    self.size = 24
+    self.clickMousePosX = 0
+    self.clickMousePosY = 0
+    self.lastMousePosX = 0
+    self.lastMousePosY = 0
+
+    local rx, ry = roomData:getTopLeftPosition()
+    rx = (rx - 1) * GRID_SIZE
+    ry = (ry - 1) * GRID_SIZE
+    local rw = roomData:getSizeX() * GRID_SIZE
+    local rh = roomData:getSizeY() * GRID_SIZE
+
+    self.x = rx + (rw / 2)
+    self.y = ry + (rh / 2)
+  end
+}
+
+function RoomMover:moveRoom()
+  local rw = self.roomData:getSizeX() * GRID_SIZE
+  local rh = self.roomData:getSizeY() * GRID_SIZE
+
+  -- get top left coordinate from room mover's current position
+  local x1 = math.floor((self.x - (rw / 2)) / GRID_SIZE) + 1
+  local y1 = math.floor((self.y - (rh / 2)) / GRID_SIZE) + 1
+
+  -- get bottom right coordinate from room mover's current position
+  local x2 = math.floor((self.x + (rw / 2)) / GRID_SIZE)
+  local y2 = math.floor((self.y + (rh / 2)) / GRID_SIZE)
+  if self.onMove then
+    self.onMove(self.roomData, x1, y1, x2, y2)
+  end
+end
+
+function RoomMover:update(dt)
+  if self.state == 'drag' then
+    if not love.mouse.isDown(1) then
+      self:moveRoom()
+      self.state = 'none'
+    else
+      local mx, my = self.camera:getMousePosition()
+      local dx = self.cachedX -  self.clickMousePosX + mx
+      local dy = self.cachedY -  self.clickMousePosY + my
+
+      self.x = dx
+      self.y = dy
+    end
+  else
+    local mx, my = self.camera:getMousePosition()
+    if love.mouse.isDown(1) and 
+    rect.containsPoint(self.x - self.size / 2, self.y - self.size / 2, self.size, self.size, mx, my) then
+      self.clickMousePosX = mx
+      self.clickMousePosY = my
+      self.cachedX = self.x
+      self.cachedY = self.y
+      self.state = 'drag'
+    end
+  end
+end
+
+function RoomMover:draw()
+  if self.state == 'none' then
+    love.graphics.setColor(153 / 255, 50 / 255, 204 / 255)
+  else
+    love.graphics.setColor(100 / 255, 149 / 255, 237 / 255)
+  end
+  love.graphics.rectangle('fill', self.x - self.size / 2, self.y - self.size / 2, self.size, self.size)
+  love.graphics.setColor(1, 1, 1)
+end
+
 -- Friend Type
 -- Holds RoomResizeSquare instances for each side of the room
-local RoomResizer = Class {
-  init = function(self, roomData, camera, onResize)
+-- Also handles the room mover object
+local RoomTransformer = Class {
+  init = function(self, roomData, camera, onResize, onMove)
+    print(onMove)
     self.roomData = roomData
     self.onResize = onResize
+    self.roomMover = RoomMover(roomData, camera, onMove)
     self.upR = RoomResizeSquare(roomData, 'up', camera, onResize)
     self.downR = RoomResizeSquare(roomData, 'down', camera, onResize)
     self.leftR = RoomResizeSquare(roomData, 'left', camera, onResize)
@@ -156,17 +236,21 @@ local RoomResizer = Class {
 -- if room is being resized this frame
 -- Called when we want to find out if we want to handle the delete key
 -- or pick another room
-function RoomResizer:isActive()
+function RoomTransformer:isActive()
   for _, r in ipairs(self.resizers) do
     if r.state == 'drag' then
       return true
     end
   end
+  if self.roomMover.state == 'drag' then
+    return true
+  end
   return false
 end
 
-function RoomResizer:update(dt)
+function RoomTransformer:update(dt)
   local updatedResizer = false
+  local updatedMover = false
   for _, r in ipairs(self.resizers) do
     if r.state == 'drag' then
       r:update(dt)
@@ -174,15 +258,34 @@ function RoomResizer:update(dt)
     end
   end
   if not updatedResizer then
+    if self.roomMover.state == 'drag' then
+      self.roomMover:update(dt)
+      updatedMover = true
+    end
+  end
+  if not updatedResizer and not updatedMover then
     lume.each(self.resizers, 'update', dt)
+    self.roomMover:update(dt)
   end
 end
 
-function RoomResizer:draw()
-  self.leftR:draw()
-  self.rightR:draw()
-  self.upR:draw()
-  self.downR:draw() 
+function RoomTransformer:draw()
+  if self.roomMover.state == 'drag' then
+    self.roomMover:draw()
+  elseif self.leftR.state == 'drag' or self.rightR.state == 'drag' or self.upR.state == 'drag'
+  or self.downR.state == 'drag' then
+    self.leftR:draw()
+    self.rightR:draw()
+    self.upR:draw()
+    self.downR:draw() 
+  else
+    self.roomMover:draw()
+    self.leftR:draw()
+    self.rightR:draw()
+    self.upR:draw()
+    self.downR:draw() 
+  end
+
   love.graphics.setColor(1, 1, 204 / 255, 0.20)
   
   local x, y = self.roomData:getTopLeftPosition()
@@ -200,6 +303,9 @@ function RoomResizer:draw()
     w = self.rightR.x - x - RESIZER_MARGIN
   elseif self.rightR.state == 'drag' then
     w = self.rightR.x - x - RESIZER_MARGIN
+  elseif self.roomMover.state == 'drag' then
+    x = math.floor((self.roomMover.x - w / 2) / GRID_SIZE) * GRID_SIZE
+    y = math.floor((self.roomMover.y - h / 2) / GRID_SIZE) * GRID_SIZE
   end
 
   love.graphics.setColor(1, 1, 204 / 255, 0.20)
@@ -338,7 +444,7 @@ local MapEditor = Class { __include = BaseScreen,
     -- room pick stuff
     self.selectedRoom = nil -- room data instance
     -- room resizer widget
-    self.roomResizer = nil
+    self.roomTransformer = nil
 
     self.selectedLayerIndex = 1
     self.layerIndexValues = {
@@ -580,31 +686,58 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
     end
   end
   if not overlapsOtherRoom then
-    local newRoom = RoomData({
-      name = roomData.name,
-      theme = roomData.theme,
-      topLeftPosX = x1,
-      topLeftPosY = y1,
-      sizeX = x2 - (x1 - 1),
-      sizeY = y2 - (y1 - 1)
-    })
-    self.selectedRoom = newRoom
-    self.roomResizer = RoomResizer(newRoom, self.camera, function(a, b, c, d, e)
-      self:action_resizeRoom(a, b, c, d, e)
-    end)
     self.mapData:removeRoom(roomData)
-    self.mapData:addRoom(newRoom)
-  else
-    self.roomResizer = RoomResizer(roomData, self.camera, function(a, b, c, d, e)
-      self:action_resizeRoom(a, b, c, d, e)
-    end)
+    roomData.topLeftPosX = x1
+    roomData.topLeftPosY = y1
+    roomData.sizeX = x2 - (x1 - 1)
+    roomData.sizeY = y2 - (y1 - 1)
+    self.mapData:addRoom(roomData)
   end
+  self.roomTransformer = RoomTransformer(roomData, self.camera, function(a, b, c, d, e)
+    self:action_resizeRoom(a, b, c, d, e)
+  end, function(a, b, c, d, e) 
+    self:action_moveRoom(a, b, c, d, e)
+  end)
 end
 
 function MapEditor:action_removeRoom()
   self.selectedRoom = nil
-  self.mapData:removeRoom(self.roomResizer.roomData)
-  self.roomResizer = nil
+  self.mapData:removeRoom(self.RoomTransformer.roomData)
+  self.roomTransformer = nil
+end
+
+function MapEditor:action_moveRoom(roomData, x1, y1, x2, y2)
+  local roomMoved = false
+  if 1 <= x1 and x1 <= self.mapData.sizeX and 1 <= y1 and y1 <= self.mapData.sizeY 
+  and 1 <= x2 and x2 <= self.mapData.sizeX and 1 <= y2 and y2 <= self.mapData.sizeY  then
+    local overlapsOtherRoom = false
+    for _, rd in ipairs(self.mapData.rooms) do
+      if rd ~= roomData then
+        local rx1, ry1 = rd:getTopLeftPosition()
+        rx1 = rx1 - 1 
+        ry1 = ry1 - 1
+        overlapsOtherRoom = rect.intersects(rx1, ry1, rd:getSizeX(), rd:getSizeY(),
+                                            (x1 - 1), (y1 - 1), x2 - (x1 - 1), y2 - (y1 - 1))
+        if overlapsOtherRoom then
+          break
+        end
+      end
+    end
+    if not overlapsOtherRoom then
+      self.mapData:removeRoom(roomData)
+      roomData.topLeftPosX = x1
+      roomData.topLeftPosY = y1
+      roomData.sizeX = x2 - (x1 - 1)
+      roomData.sizeY = y2 - (y1 - 1)
+      self.mapData:addRoom(roomData)
+    end
+  end
+
+  self.roomTransformer = RoomTransformer(roomData, self.camera, function(a, b, c, d, e)
+    self:action_resizeRoom(a, b, c, d, e)
+  end, function(a, b, c, d, e) 
+    self:action_moveRoom(a, b, c, d, e)
+  end)
 end
 
 --[[ 
@@ -826,13 +959,13 @@ function MapEditor:update(dt)
     elseif self.controlMode == ControlMode.Room then
       self:updateRoomControl()
     elseif self.controlMode == ControlMode.PickRoom then
-      local roomResizerInputHandled = false
+      local RoomTransformerInputHandled = false
       if self.selectedRoom then
-        assert(self.roomResizer)
-        self.roomResizer:update(dt)
-        roomResizerInputHandled = self.roomResizer:isActive()
+        assert(self.roomTransformer)
+        self.roomTransformer:update(dt)
+        RoomTransformerInputHandled = self.roomTransformer:isActive()
       end
-      if not roomResizerInputHandled then
+      if not RoomTransformerInputHandled then
         if love.mouse.isDown(1) then
           local tx, ty = self:getMouseToMapCoords()
           if 1 <= tx and tx <= self.mapData:getSizeX() and
@@ -846,7 +979,10 @@ function MapEditor:update(dt)
                 local resizeCallback = function(roomData, x1, y1, x2, y2)
                   self:action_resizeRoom(roomData, x1, y1, x2, y2)
                 end
-                self.roomResizer = RoomResizer(roomData, self.camera, resizeCallback)
+                local roomMoveCallback = function(roomData, x1, y1, x2, y2)
+                  self:action_moveRoom(roomData, x1, y1, x2, y2)
+                end
+                self.roomTransformer = RoomTransformer(roomData, self.camera, resizeCallback, roomMoveCallback)
                 break
               end
             end
@@ -970,8 +1106,8 @@ function MapEditor:draw()
   
     -- draw selected room
     if self.controlMode == ControlMode.PickRoom and self.selectedRoom then
-      assert(self.roomResizer)
-      self.roomResizer:draw()
+      assert(self.roomTransformer)
+      self.roomTransformer:draw()
     end
 
     -- draw room creation rectangle
