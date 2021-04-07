@@ -221,7 +221,6 @@ end
 -- Also handles the room mover object
 local RoomTransformer = Class {
   init = function(self, roomData, camera, onResize, onMove)
-    print(onMove)
     self.roomData = roomData
     self.onResize = onResize
     self.roomMover = RoomMover(roomData, camera, onMove)
@@ -702,7 +701,7 @@ end
 
 function MapEditor:action_removeRoom()
   self.selectedRoom = nil
-  self.mapData:removeRoom(self.RoomTransformer.roomData)
+  self.mapData:removeRoom(self.roomTransformer.roomData)
   self.roomTransformer = nil
 end
 
