@@ -312,7 +312,6 @@ function RoomTransformer:draw()
   love.graphics.setColor(0, 0, 0)
   love.graphics.setLineWidth(2)
   love.graphics.rectangle('line', x, y, w, h)
-  --love.graphics.rectangle('fill', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
   love.graphics.setLineWidth(1)
   love.graphics.setColor(1, 1, 1)
 end
@@ -655,7 +654,7 @@ function MapEditor:action_addRoom()
   end
   if not overlapsOtherRoom then
     local room = RoomData({
-      name = string.format('room_%d-%d_%d-%d', tx1, ty1, tx2, ty2),
+      name = self.mapData:generateRoomId(),
       theme = self.tilesetThemeName,
       topLeftPosX = tx1,
       topLeftPosY = ty1,
@@ -996,12 +995,12 @@ function MapEditor:update(dt)
     self.camera.y = -love.graphics.getHeight() / 2
   end
 
+  -- This will be used to edit Room OR Object properties
+  Slab.BeginWindow('Property Window', { Title = "Property Window"})
   if self.selectedRoom then
     -- make property window for room data
-    local slabId = self.selectedRoom:getName() .. '_edit'
-    Slab.BeginWindow('RoomInspector', { Title = "Room"})
     Slab.Text('Name')
-    if Slab.Input(slabId, { Align = 'left', ReturnOnText = false, Text = self.selectedRoom:getName() }) then
+    if Slab.Input('room-name', { Align = 'left', ReturnOnText = false, Text = self.selectedRoom:getName() }) then
       local uniqueName = true
       local newName = Slab.GetInputText()
       for _, r in ipairs(self.mapData.rooms) do
@@ -1014,10 +1013,19 @@ function MapEditor:update(dt)
         self.selectedRoom.name = newName
       end
     end
-    Slab.Text('Theme')
-    
-    Slab.EndWindow()
+    Slab.Text('Tileset Theme')
+    if Slab.BeginComboBox('room-tileset-theme', {Selected = self.selectedRoom.theme}) then
+      for _, v in ipairs(self.tilesetThemeList) do
+        if Slab.TextSelectable(v) then
+          self.selectedRoom.theme = v
+        end
+      end
+      Slab.EndComboBox()
+    end
+  else
+    Slab.Text('No room or object currently selected')
   end
+  Slab.EndWindow()
   -- set previous mouse position
   self.previousMousePositionX, self.previousMousePositionY = self.currentMousePositionX, self.currentMousePositionY
 end

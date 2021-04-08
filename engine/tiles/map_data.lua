@@ -50,6 +50,7 @@ local MapData = Class {
       lume.push(RoomData(roomData))
     end)
     self.rooms = rooms
+    self.idCounter = data.idCounter or 0
   end
 }
 
@@ -147,6 +148,11 @@ function MapData:removeRoom(roomData)
   lume.remove(self.rooms, roomData)
 end
 
+function MapData:generateRoomId()
+  self.idCounter = self.idCounter + 1
+  return 'room' .. self.idCounter
+end
+
 function MapData:getSerializableTable()
   serializableLayers = { }
   for _, layer in ipairs(self.layers) do
@@ -158,7 +164,8 @@ function MapData:getSerializableTable()
     layerCount = self.layerCount,
     layers = serializableLayers,
     sizeX = self:getSizeX(),
-    sizeY = self:getSizeY()
+    sizeY = self:getSizeY(),
+    idCounter = self.idCounter
   }
 end
 
