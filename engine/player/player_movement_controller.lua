@@ -150,7 +150,7 @@ function PlayerMovementController:updateMoveControls()
   elseif self.player:getStateParameters().alwaysFaceDown then
     canUpdateDirection = inputX == 0 and inputY == 1
   else
-    canUpdateDirection = self.player:getStateParameters().canStrafe
+    canUpdateDirection = not self.player:getStateParameters().canStrafe
   end
   
   if canUpdateDirection and self.allowMovementControl and self.moving then

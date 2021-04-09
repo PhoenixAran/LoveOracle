@@ -346,6 +346,7 @@ function Player:integrateStateParameters()
 end
 
 function Player:updateStates(dt)
+  self:integrateStateParameters()
   -- update weapon state
   self.weaponStateMachine:update(dt)
   -- update environment state  
@@ -363,6 +364,8 @@ function Player:updateStates(dt)
     end
   end
   
+  self:integrateStateParameters()
+
   -- play the move animation
   if self:isOnGround() and self.stateParameters.canControlOnGround then
     if self.playerMovementController:isMoving() and self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().move then
