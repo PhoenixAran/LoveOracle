@@ -574,17 +574,15 @@ function MapEditor:getMouseToMapCoords()
 end
 
 function MapEditor:drawMapLayer(mapLayer, mapLayerIndex)
-
-  -- TODO: Select tileset theme based off if tile is inside room or not
+  local tilesetTheme = TilesetBank.getDefaultTilesetTheme()
   local alpha = 1
   if self.layerViewMode == LayerViewMode.HideOthers and self.selectedLayerIndex ~= mapLayerIndex then
     return
   end
   if self.layerViewMode == LayerViewMode.FadeOthers and self.selectedLayerIndex ~= mapLayerIndex then
-    alpha = .60
+    alpha = 0.60
   end
   if mapLayer:getType() == 'tile_layer' then
-    local tilesetTheme = TilesetBank.getDefaultTilesetTheme()
     for i = 1, mapLayer.sizeX do
       for j = 1, mapLayer.sizeY do
         local layerTile = mapLayer:getTile(i, j)
@@ -599,6 +597,43 @@ function MapEditor:drawMapLayer(mapLayer, mapLayerIndex)
     end
   end
   -- TODO: Object Layer
+end
+
+function MapEditor:drawRoomTiles(room)
+  if room.theme == 'default' then
+    return
+  end
+    -- draw clear color over default theme tiles that were previously drawn
+    love.graphics.setColor(77 / 255, 77 / 255, 77 / 255)
+    love.graphics.rectangle('fill', (room.topLeftPosX - 1) * GRID_SIZE, (room.topLeftPosY - 1) * GRID_SIZE, room.sizeX * GRID_SIZE, room.sizeY * GRID_SIZE )
+    love.graphics.setColor(1, 1, 1)
+  for k, mapLayer in ipairs(self.mapData.layers) do
+    local alpha = 1
+    local shouldDrawTiles = true
+    if self.layerViewMode == LayerViewMode.HideOthers and self.selectedLayerIndex ~= k then
+      shouldDrawTiles = false
+    end
+    if self.layerViewMode == LayerViewMode.FadeOthers and self.selectedLayerIndex ~= k then
+      alpha = 0.60
+    end
+    if shouldDrawTiles then
+      if mapLayer:getType() == 'tile_layer' then
+        local tilesetTheme = TilesetBank.getTilesetTheme(room.theme)
+        for i = room.topLeftPosX, room:getBottomRightPositionX() do
+          for j = room.topLeftPosY, room:getBottomRightPositionY() do
+            local layerTile = mapLayer:getTile(i, j)
+            if layerTile ~= nil then
+              local tileData = tilesetTheme:getTile(layerTile)
+              local tileSprite = tileData:getSprite()
+              local sx = (i - 1) * GRID_SIZE + (GRID_SIZE / 2)
+              local sy = (j - 1) * GRID_SIZE + (GRID_SIZE / 2)
+              tileSprite:draw(sx, sy, alpha)
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
 --[[
@@ -1045,6 +1080,12 @@ function MapEditor:draw()
     for i, layer in ipairs(self.mapData:getLayers()) do
       self:drawMapLayer(layer, i)
     end
+
+    -- redraw tiles for rooms if they have a tileset other than default
+    for i, room in ipairs(self.mapData.rooms) do
+      self:drawRoomTiles(room)
+    end
+
     if self.showGrid then
       -- draw grid
       -- horizontal lines
@@ -1091,7 +1132,7 @@ function MapEditor:draw()
           local height = roomData:getSizeY() * GRID_SIZE
           love.graphics.rectangle('fill', (rx1 - 1) * GRID_SIZE, (ry1 - 1) * GRID_SIZE, width, height)
         end
-      end
+      end 
       love.graphics.setColor(1, 1, 1, 0.20)
     end
 
@@ -1137,7 +1178,7 @@ function MapEditor:draw()
         ty2 = self.roomStartY
       end
     
-      -- get draw posititions from tile indices
+      -- get draw positions from tile indices
       --local x1, y1 = vector.mul(MapData.GRID_SIZE, tx1 - 1, ty1 - 1)
       --local x2, y2 = vector.mul(MapData.GRID_SIZE, tx2 - 1, ty2 - 1)
       local x1 = MapData.GRID_SIZE * (tx1 - 1)

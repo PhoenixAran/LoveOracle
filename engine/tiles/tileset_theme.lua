@@ -88,10 +88,10 @@ end
 function TilesetTheme.validateTheme(tilesetTheme)
   assert(lume.count(tilesetTheme.tilesets) == lume.count(REQUIRED_TILESETS), 'Tileset Theme "' .. tilesetTheme:getName() .. '" does not have enough tilesets.')
   for k, tileset in ipairs(tilesetTheme.tilesets) do
-    local name = tileset:getName()
+    local name = tileset:getAliasName()
     local expectedName =  REQUIRED_TILESETS[k]
     if name ~= expectedName then
-      error('Expected tileset "' .. expectedName .. '", but got tileset "' ..  name .. '" in tileset theme ' .. tilesetTheme:getName())
+      error('Expected tileset "' .. expectedName .. '", but got tileset "' ..  name .. '" in tileset theme ' .. tilesetTheme:getAliasName())
     end
   end
 end
