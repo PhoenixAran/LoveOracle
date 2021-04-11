@@ -17,6 +17,9 @@ local RoomData = require 'engine.tiles.room_data'
 
 local Camera = require 'lib.camera'
 
+local PlaceTileAction = require 'engine.screens.editor.actions.place_tile_action'
+local RemoveTileAction = require 'engine.screens.editor.actions.remove_tile_action'
+
 local TILE_MARGIN = 1
 local TILE_PADDING = 1
 local GRID_SIZE = MapData.GRID_SIZE
@@ -423,6 +426,7 @@ local MapEditor = Class { __include = BaseScreen,
     self.hoverTileIndexX = nil
     self.hoverTileIndexY = nil
     self.selectedTileData = nil
+    self.queuedTileAction = nil
 
     --[[
       Tileset Zoom
@@ -689,19 +693,32 @@ end
 ]]
 function MapEditor:action_placeTile()
   assert(self.selectedTileData, 'Attempted to call MapEditor:action_placeTile but no tile data is selected')
+  local gid = self.tilesetTheme:getTileGid(self.tileset, self.selectedTileData.id)
+  if not self.queuedTileAction then
+    self.queuedTileAction = PlaceTileAction(self.mapData, self.selectedLayerIndex, gid)
+  end
   local tx, ty = self:getMouseToMapCoords()
   if 1 <= tx and tx <= self.mapData:getSizeX() and
     1 <= ty and ty <= self.mapData:getSizeY() then
-    local gid = self.tilesetTheme:getTileGid(self.tileset, self.selectedTileData.id)
-    self.mapData:setTile(self.selectedLayerIndex, gid, tx, ty)
+    local oldTileId = self.mapData:getTile(self.selectedLayerIndex, tx, ty)
+    if oldTileId ~= gid then
+      self.queuedTileAction:recordOldTile(tx, ty, self.mapData:getTile(self.selectedLayerIndex, tx, ty))
+      self.mapData:setTile(self.selectedLayerIndex, gid, tx, ty)
+    end
   end
 end
 
 function MapEditor:action_removeTile()
+  if not self.queuedTileAction then
+    self.queuedTileAction = RemoveTileAction(self.mapData, self.selectedLayerIndex)
+  end
   local tx, ty = self:getMouseToMapCoords()
   if 1 <= tx and tx <= self.mapData:getSizeX() and
     1 <= ty and ty <= self.mapData:getSizeY() then
-    self.mapData:setTile(self.selectedLayerIndex, nil, tx, ty)
+    local oldTileId = self.mapData:getTile(self.selectedLayerIndex, tx, ty)
+    if oldTileId ~= nil then
+      self.mapData:setTile(self.selectedLayerIndex, nil, tx, ty)
+    end
   end
 end
 
@@ -1029,14 +1046,20 @@ function MapEditor:update(dt)
       -- move camera
       local dx = self.previousMousePositionX - self.currentMousePositionX
       local dy = self.previousMousePositionY - self.currentMousePositionY
-      self.camera:move(dx, dy)
+      self.camera:move(dx, dy) 
     elseif self.controlMode == ControlMode.Tile then
       if self:isVoidMouseDown(1) and self.selectedTileData and Slab.IsVoidHovered() then
         -- place tile
         self:action_placeTile()
-      elseif self:isVoidMouseDown(2) and Slab.IsVoidHovered() then
+      elseif self.queuedTileAction and self.queuedTileAction:getType() == 'place_tile_action' then
+        print('place place_tile_action in queue')
+      end
+
+      if not self:isVoidMouseDown(1) and self:isVoidMouseDown(2) and Slab.IsVoidHovered() then
         -- remove tile
         self:action_removeTile()
+      elseif self.queuedTileAction and self.queuedTileAction:getType() == 'remove_tile_action' then
+        print('place remove_tile_action in queue')
       end
     elseif self.controlMode == ControlMode.Room then
       self:updateRoomControl()

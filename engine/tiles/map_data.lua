@@ -106,22 +106,22 @@ function MapData:resize(x, y)
   --TODO: figure out how to handle existing tile placement and entity placement when resizing map data
 end
 
-function MapData:setTile(layerIndex, tileData, x, y)
+function MapData:setTile(layerIndex, tileIndex, x, y)
   assert(1 <= layerIndex and layerIndex <= self.layerCount)
   local layer = self.layers[layerIndex]
   assert(layer:getType() == 'tile_layer', 'Can only place tiles in layers with type "tile_layer"')
   if y == nil then
     assert(x <= self.sizeX, 'x is out of bounds')
-    layer:setTile(tileData, x)
+    layer:setTile(tileIndex, x)
   else
     local index = (x - 1) * self.sizeY + y
     assert(index <= self.size, '(' .. tostring(x) .. ', ' .. tostring(y) .. ' is out of bounds')
-    layer:setTile(tileData,index)
+    layer:setTile(tileIndex,index)
   end
 end
 
 function MapData:getTile(layerIndex, x, y)
-  assert(1 <= layer and layer <= self.layerCount)
+  assert(1 <= layerIndex and layerIndex <= self.layerCount)
   local tileLayer = self.layers[layerIndex]
   assert(tileLayer:getType() == 'tile_layer', 'layer at index '.. tostring(layerIndex) .. ' is not a tile_layer')
   if y == nil then
