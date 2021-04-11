@@ -12,7 +12,7 @@ local PlaceTileAction = Class {
 }
 
 function PlaceTileAction:recordOldTile(mapIndexX, mapIndexY, oldTileId)
-  self.oldPairs = lume.push({
+  lume.push(self.oldPairs, {
     ['mapIndexX'] = mapIndexX,
     ['mapIndexY'] = mapIndexY,
     ['tileId'] = oldTileId
@@ -28,13 +28,13 @@ end
 ]]
 function PlaceTileAction:undo()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData:setTile(v.layerIndex, v.tileId, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(self.layerIndex, v.tileId, v.mapIndexX, v.mapIndexY)
   end
 end
 
 function PlaceTileAction:redo()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData.setTile(v.layerIndex, self.newTileId, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(v.layerIndex, self.newTileId, v.mapIndexX, v.mapIndexY)
   end
 end
 

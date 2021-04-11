@@ -27,13 +27,13 @@ end
 ]]
 function RemoveTileAction:undo()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData:setTile(v.layerIndex, v.tileId, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(self.layerIndex, v.tileId, v.mapIndexX, v.mapIndexY)
   end
 end
 
 function RemoveTileAction:redo()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData.setTile(v.layerIndex, nil, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(self.layerIndex, nil, v.mapIndexX, v.mapIndexY)
   end
 end
 

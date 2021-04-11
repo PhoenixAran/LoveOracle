@@ -17,6 +17,7 @@ local RoomData = require 'engine.tiles.room_data'
 
 local Camera = require 'lib.camera'
 
+local MapEditorActionQueue = require 'engine.screens.editor.actions.map_editor_action_queue'
 local PlaceTileAction = require 'engine.screens.editor.actions.place_tile_action'
 local RemoveTileAction = require 'engine.screens.editor.actions.remove_tile_action'
 
@@ -379,6 +380,8 @@ local LayerViewModeValues =  {"Normal", "Fade Others", 'Hide Others'}
 local MapEditor = Class { __include = BaseScreen,
   init = function(self)
     BaseScreen.init(self)
+    self.actionQueue = MapEditorActionQueue(self.mapData)
+
     --[[
       Mouse
     ]]
@@ -454,7 +457,7 @@ local MapEditor = Class { __include = BaseScreen,
       name = 'test-map',
       sizeX = 48,
       sizeY = 48
-    })
+    })    
     
     --[[
       Editor Control
@@ -1042,6 +1045,7 @@ function MapEditor:update(dt)
   -- update controls
   -- TODO: Turn into a state machine?
   if self.mapData then
+    
     if (self:isVoidMouseDown(3) or love.keyboard.isDown('m')) and Slab.IsVoidHovered() then
       -- move camera
       local dx = self.previousMousePositionX - self.currentMousePositionX
@@ -1052,14 +1056,16 @@ function MapEditor:update(dt)
         -- place tile
         self:action_placeTile()
       elseif self.queuedTileAction and self.queuedTileAction:getType() == 'place_tile_action' then
-        print('place place_tile_action in queue')
+        self.actionQueue:addAction(self.queuedTileAction)
+        self.queuedTileAction = nil
       end
 
       if not self:isVoidMouseDown(1) and self:isVoidMouseDown(2) and Slab.IsVoidHovered() then
         -- remove tile
         self:action_removeTile()
       elseif self.queuedTileAction and self.queuedTileAction:getType() == 'remove_tile_action' then
-        print('place remove_tile_action in queue')
+        self.actionQueue:addAction(self.queuedTileAction)
+        self.queuedTileAction = nil
       end
     elseif self.controlMode == ControlMode.Room then
       self:updateRoomControl()
@@ -1095,6 +1101,13 @@ function MapEditor:update(dt)
         elseif love.keyboard.isDown('delete') and self.selectedRoom then
           self:action_removeRoom()
         end
+      end
+    end
+    if love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl') then
+      if Slab.IsKeyPressed('z') then
+        self.actionQueue:undo()
+      elseif Slab.IsKeyPressed 'y' then
+        self.actionQueue:redo()
       end
     end
   else
