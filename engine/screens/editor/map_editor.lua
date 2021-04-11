@@ -41,6 +41,11 @@ local RoomResizeSquare = Class {
     self.size = 24
     self.clickMousePosX = 0
     self.clickMousePosY = 0
+
+    self.mouseState = { 
+      isDown = false,
+      canUpdate = true
+    }
     -- we want a draw position for the resize square
     -- so we need to subtract 1 from the tilemap indices 
     local rx1, ry1 = roomData:getTopLeftPosition()
@@ -88,8 +93,12 @@ function RoomResizeSquare:draw()
 end
 
 function RoomResizeSquare:update(dt)
+  if Slab.IsMouseClicked(i) then
+    self.mouseState.canUpdate = Slab.IsVoidHovered()
+  end
+  self.mouseState.isDown = self.mouseState.canUpdate and Slab.IsMouseDown(i) and Slab.IsVoidHovered()
   if self.state == 'drag' then
-    if not love.mouse.isDown(1) then
+    if not self.mouseState.isDown then
       self:resizeRoom()
       self.state = 'none'
       return
@@ -107,7 +116,7 @@ function RoomResizeSquare:update(dt)
     end
   else
     local mx, my = self.camera:getMousePosition()
-    if love.mouse.isDown(1) and 
+    if self.mouseState.isDown and Slab.IsVoidHovered() and
     rect.containsPoint(self.x - self.size / 2, self.y - self.size / 2, self.size, self.size, mx, my) then
       self.clickMousePosX = mx
       self.clickMousePosY = my
@@ -153,6 +162,11 @@ local RoomMover = Class {
     self.lastMousePosX = 0
     self.lastMousePosY = 0
 
+    self.mouseState = {
+      canUpdate = true,
+      isDown = false
+    }
+
     local rx, ry = roomData:getTopLeftPosition()
     rx = (rx - 1) * GRID_SIZE
     ry = (ry - 1) * GRID_SIZE
@@ -181,8 +195,13 @@ function RoomMover:moveRoom()
 end
 
 function RoomMover:update(dt)
+  if Slab.IsMouseClicked(i) then
+    self.mouseState.canUpdate = Slab.IsVoidHovered()
+  end
+  self.mouseState.isDown = self.mouseState.canUpdate and Slab.IsMouseDown(i) and Slab.IsVoidHovered()
+
   if self.state == 'drag' then
-    if not love.mouse.isDown(1) then
+    if not self.mouseState.isDown then
       self:moveRoom()
       self.state = 'none'
     else
@@ -195,7 +214,7 @@ function RoomMover:update(dt)
     end
   else
     local mx, my = self.camera:getMousePosition()
-    if love.mouse.isDown(1) and 
+    if self.mouseState.isDown and 
     rect.containsPoint(self.x - self.size / 2, self.y - self.size / 2, self.size, self.size, mx, my) then
       self.clickMousePosX = mx
       self.clickMousePosY = my
@@ -358,6 +377,18 @@ local MapEditor = Class { __include = BaseScreen,
   init = function(self)
     BaseScreen.init(self)
     --[[
+      Mouse
+    ]]
+    self.mouseStates = { }
+    for i = 1, 3 do
+      lume.push(self.mouseStates, {
+        canUpdate = true,
+        isDown = false
+      })
+    end
+
+
+    --[[
       Camera
     ]]
     self.camera = Camera()
@@ -517,7 +548,7 @@ end
 
 function MapEditor:updateRoomControl()
   assert(self.mapData, 'Attempted to call MapEditor:updateRoomControl but current map data instance is null')
-  if love.mouse.isDown(1) and Slab.IsVoidHovered() then
+  if self:isVoidMouseDown(1) and Slab.IsVoidHovered() then
     if self.roomControlState == RoomControlState.None then
       local tx, ty = self:getMouseToMapCoords()
       local inMapBounds = false
@@ -634,6 +665,21 @@ function MapEditor:drawRoomTiles(room)
       end
     end
   end
+end
+
+function MapEditor:updateMouseInput()
+  local voidHovered = Slab.IsVoidHovered()
+  for i = 1, 3 do
+    local mouseState = self.mouseStates[i]
+    if Slab.IsMouseClicked(i) then
+      mouseState.canUpdate = Slab.IsVoidHovered()
+    end
+    mouseState.isDown = mouseState.canUpdate and Slab.IsMouseDown(i) and Slab.IsVoidHovered()
+  end
+end
+
+function MapEditor:isVoidMouseDown(index)
+  return self.mouseStates[index] and self.mouseStates[index].isDown
 end
 
 --[[
@@ -804,6 +850,9 @@ end
 
 function MapEditor:update(dt)
   Slab.Update(dt)
+
+  self:updateMouseInput()
+  
   --[[
     MAIN MENU BAR
   ]]
@@ -976,16 +1025,16 @@ function MapEditor:update(dt)
   -- update controls
   -- TODO: Turn into a state machine?
   if self.mapData then
-    if (love.mouse.isDown(3) or love.keyboard.isDown('m')) and Slab.IsVoidHovered() then
+    if (self:isVoidMouseDown(3) or love.keyboard.isDown('m')) and Slab.IsVoidHovered() then
       -- move camera
       local dx = self.previousMousePositionX - self.currentMousePositionX
       local dy = self.previousMousePositionY - self.currentMousePositionY
       self.camera:move(dx, dy)
     elseif self.controlMode == ControlMode.Tile then
-      if love.mouse.isDown(1) and self.selectedTileData and Slab.IsVoidHovered() then
+      if self:isVoidMouseDown(1) and self.selectedTileData and Slab.IsVoidHovered() then
         -- place tile
         self:action_placeTile()
-      elseif love.mouse.isDown(2) and Slab.IsVoidHovered() then
+      elseif self:isVoidMouseDown(2) and Slab.IsVoidHovered() then
         -- remove tile
         self:action_removeTile()
       end
@@ -999,7 +1048,7 @@ function MapEditor:update(dt)
         RoomTransformerInputHandled = self.roomTransformer:isActive()
       end
       if not RoomTransformerInputHandled then
-        if love.mouse.isDown(1) then
+        if self:isVoidMouseDown(1) then
           local tx, ty = self:getMouseToMapCoords()
           if 1 <= tx and tx <= self.mapData:getSizeX() and
           1 <= ty and ty <= self.mapData:getSizeY() then
