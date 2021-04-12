@@ -34,7 +34,7 @@ end
 
 function PlaceTileAction:redo()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData:setTile(v.layerIndex, self.newTileId, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(self.layerIndex, self.newTileId, v.mapIndexX, v.mapIndexY)
   end
 end
 

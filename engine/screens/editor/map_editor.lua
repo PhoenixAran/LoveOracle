@@ -20,6 +20,7 @@ local Camera = require 'lib.camera'
 local MapEditorActionQueue = require 'engine.screens.editor.actions.map_editor_action_queue'
 local PlaceTileAction = require 'engine.screens.editor.actions.place_tile_action'
 local RemoveTileAction = require 'engine.screens.editor.actions.remove_tile_action'
+local ResizeRoomAction = require 'engine.screens.editor.actions.resize_room_action'
 
 local TILE_MARGIN = 1
 local TILE_PADDING = 1
@@ -786,11 +787,25 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
   end
   if not overlapsOtherRoom then
     self.mapData:removeRoom(roomData)
-    roomData.topLeftPosX = x1
-    roomData.topLeftPosY = y1
-    roomData.sizeX = x2 - (x1 - 1)
-    roomData.sizeY = y2 - (y1 - 1)
+    local oldCoords = {
+      topLeftPosX = roomData.topLeftPosX,
+      topLeftPosY = roomData.topLeftPosY,
+      sizeX = roomData.sizeX,
+      sizeY = roomData.sizeY
+    }
+    local newCoords = {
+      topLeftPosX = x1,
+      topLeftPosY = y1,
+      sizeX = x2 - (x1 - 1),
+      sizeY = y2 - (y1 - 1)
+    }
+    roomData.topLeftPosX = newCoords.topLeftPosX
+    roomData.topLeftPosY = newCoords.topLeftPosY
+    roomData.sizeX = newCoords.sizeX
+    roomData.sizeY = newCoords.sizeY
     self.mapData:addRoom(roomData)
+    local action = ResizeRoomAction(self.mapData, self.selectedLayerIndex, roomData, oldCoords, newCoords)
+    self.actionQueue:addAction(action)
   end
   self.roomTransformer = RoomTransformer(roomData, self.camera, function(a, b, c, d, e)
     self:action_resizeRoom(a, b, c, d, e)
