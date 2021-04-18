@@ -14,23 +14,16 @@ end
 
 function MapEditorActionStack:addAction(action)
   if action:isValid() then
-    local oldCount = lume.count(self.actions)
-    lume.push(self.actions, action)
-    local newCount = lume.count(self.actions)
-    if self.index == oldCount then
-      self.index = newCount
-    else
-      self.index = self.index + 1
-      for i = self.index, newCount do
-        self.actions[i] = nil
-      end
+    local count = lume.count(self.actions)
+    self.actions[self.index + 1] = action
+    for i = self.index + 1, count do
+      self.actions[i] = nil
     end
   end
 end
 
 function MapEditorActionStack:redo()
   local count = lume.count(self.actions)
-  print(self.index)
   if 0 < count and self.index <= count then
     self.actions[self.index]:redo()
     self.index = math.min(self.index + 1, count)
@@ -39,7 +32,6 @@ end
 
 function MapEditorActionStack:undo()
   local count = lume.count(self.actions)
-  print(self.index)
   if 0 < count then
     local action = self.actions[self.index]
     action:undo()

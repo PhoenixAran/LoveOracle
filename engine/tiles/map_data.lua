@@ -153,6 +153,10 @@ function MapData:generateRoomId()
   return 'room' .. self.idCounter
 end
 
+function MapData:indexInBounds(x, y)
+  return 1 <= x and x <= self:getSizeX() and 1 <= y and y <= self:getSizeY()
+end
+
 function MapData:getSerializableTable()
   serializableLayers = { }
   for _, layer in ipairs(self.layers) do

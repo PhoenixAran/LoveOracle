@@ -24,6 +24,7 @@ local MapEditorActionQueue = require 'engine.screens.editor.actions.map_editor_a
 local PlaceTileAction = require 'engine.screens.editor.actions.place_tile_action'
 local RemoveTileAction = require 'engine.screens.editor.actions.remove_tile_action'
 local ResizeRoomAction = require 'engine.screens.editor.actions.resize_room_action'
+local MoveRoomAction = require 'engine.screens.editor.actions.move_room_action'
 
 local TILE_MARGIN = 1
 local TILE_PADDING = 1
@@ -208,8 +209,7 @@ function MapEditor:updateTileset(tilesetThemeName, tilesetName, forceUpdate)
     return
   end
 
-  -- get the width and height of tileset since canvas will most likely be larter
-  -- than what is needed for tileset size
+  -- get the width and height of tileset since canvas will be larger than what is needed for tileset size
   self.tileset = self.tilesetTheme:getTileset(tilesetName)
   self.subW = (self.tileset.tileSize * self.tileset.sizeX) + ((self.tileset.sizeX - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
   self.subH = (self.tileset.tileSize * self.tileset.sizeY) + ((self.tileset.sizeY - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
@@ -253,28 +253,17 @@ function MapEditor:updateRoomControl()
   if self:isVoidMouseDown(1) and Slab.IsVoidHovered() then
     if self.roomControlState == RoomControlState.None then
       local tx, ty = self:getMouseToMapCoords()
-      local inMapBounds = false
-      if 1 <= tx and tx <= self.mapData:getSizeX() and
-        1 <= ty and ty <= self.mapData:getSizeY() then
-          inMapBounds = true
+      if self.mapData:indexInBounds(tx, ty) then
+        -- init room drag rectangle
+        self.roomStartX = tx
+        self.roomStartY = ty
+        self.roomEndX = tx
+        self.roomEndY = ty
+        self.roomControlState = RoomControlState.Create
       end
-      if not inMapBounds then
-        return
-      end
-      -- init room drag rectangle
-      self.roomStartX = tx
-      self.roomStartY = ty
-      self.roomEndX = tx
-      self.roomEndY = ty
-      self.roomControlState = RoomControlState.Create
     elseif self.roomControlState == RoomControlState.Create then
       local tx, ty = self:getMouseToMapCoords()
-      local inMapBounds = false
-      if 1 <= tx and tx <= self.mapData:getSizeX() and
-        1 <= ty and ty <= self.mapData:getSizeY() then
-          inMapBounds = true
-      end
-      if inMapBounds then
+      if self.mapData:indexInBounds(tx, ty) then
         self.roomEndX = tx
         self.roomEndY = ty
       end
@@ -336,10 +325,10 @@ function MapEditor:drawRoomTiles(room)
   if room.theme == 'default' then
     return
   end
-    -- draw clear color over default theme tiles that were previously drawn
-    love.graphics.setColor(77 / 255, 77 / 255, 77 / 255)
-    love.graphics.rectangle('fill', (room.topLeftPosX - 1) * GRID_SIZE, (room.topLeftPosY - 1) * GRID_SIZE, room.sizeX * GRID_SIZE, room.sizeY * GRID_SIZE )
-    love.graphics.setColor(1, 1, 1)
+  -- draw clear color over default theme tiles that were previously drawn
+  love.graphics.setColor(77 / 255, 77 / 255, 77 / 255)
+  love.graphics.rectangle('fill', (room.topLeftPosX - 1) * GRID_SIZE, (room.topLeftPosY - 1) * GRID_SIZE, room.sizeX * GRID_SIZE, room.sizeY * GRID_SIZE )
+  love.graphics.setColor(1, 1, 1)
   for k, mapLayer in ipairs(self.mapData.layers) do
     local alpha = 1
     local shouldDrawTiles = true
@@ -396,8 +385,7 @@ function MapEditor:action_placeTile()
     self.queuedTileAction = PlaceTileAction(self.mapData, self.selectedLayerIndex, gid)
   end
   local tx, ty = self:getMouseToMapCoords()
-  if 1 <= tx and tx <= self.mapData:getSizeX() and
-    1 <= ty and ty <= self.mapData:getSizeY() then
+  if self.mapData:indexInBounds(tx, ty) then
     local oldTileId = self.mapData:getTile(self.selectedLayerIndex, tx, ty)
     if oldTileId ~= gid then
       self.queuedTileAction:recordOldTile(tx, ty, self.mapData:getTile(self.selectedLayerIndex, tx, ty))
@@ -411,8 +399,7 @@ function MapEditor:action_removeTile()
     self.queuedTileAction = RemoveTileAction(self.mapData, self.selectedLayerIndex)
   end
   local tx, ty = self:getMouseToMapCoords()
-  if 1 <= tx and tx <= self.mapData:getSizeX() and
-    1 <= ty and ty <= self.mapData:getSizeY() then
+  if self.mapData:indexInBounds(tx, ty) then
     local oldTileId = self.mapData:getTile(self.selectedLayerIndex, tx, ty)
     if oldTileId ~= nil then
       self.mapData:setTile(self.selectedLayerIndex, nil, tx, ty)
@@ -498,7 +485,7 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
     roomData.sizeX = newCoords.sizeX
     roomData.sizeY = newCoords.sizeY
     self.mapData:addRoom(roomData)
-    local action = ResizeRoomAction(self.mapData, self.selectedLayerIndex, roomData, oldCoords, newCoords)
+    local action = ResizeRoomAction(self.mapData, roomData, oldCoords, newCoords)
     self.actionQueue:addAction(action)
   end
 end
@@ -511,8 +498,7 @@ end
 
 function MapEditor:action_moveRoom(roomData, x1, y1, x2, y2)
   local roomMoved = false
-  if 1 <= x1 and x1 <= self.mapData.sizeX and 1 <= y1 and y1 <= self.mapData.sizeY 
-  and 1 <= x2 and x2 <= self.mapData.sizeX and 1 <= y2 and y2 <= self.mapData.sizeY  then
+  if self.mapData:indexInBounds(x1, y1) and self.mapData:indexInBounds(x2, y2) then
     local overlapsOtherRoom = false
     for _, rd in ipairs(self.mapData.rooms) do
       if rd ~= roomData then
@@ -528,11 +514,21 @@ function MapEditor:action_moveRoom(roomData, x1, y1, x2, y2)
     end
     if not overlapsOtherRoom then
       self.mapData:removeRoom(roomData)
+      local oldCoords = {
+        topLeftPosX = roomData.topLeftPosX,
+        topLeftPosY = roomData.topLeftPosY
+      }
+      local newCoords = {
+        topLeftPosX = x1,
+        topLeftPosY = y1,
+      }
       roomData.topLeftPosX = x1
       roomData.topLeftPosY = y1
       roomData.sizeX = x2 - (x1 - 1)
       roomData.sizeY = y2 - (y1 - 1)
       self.mapData:addRoom(roomData)
+      local action = MoveRoomAction(self.mapData, roomData, oldCoords, newCoords)
+      self.actionQueue:addAction(action)
     end
   end
 end
@@ -775,8 +771,7 @@ function MapEditor:update(dt)
       if not RoomTransformerInputHandled then
         if self:isVoidMouseDown(1) then
           local tx, ty = self:getMouseToMapCoords()
-          if 1 <= tx and tx <= self.mapData:getSizeX() and
-          1 <= ty and ty <= self.mapData:getSizeY() then
+          if self.mapData:indexInBounds(tx, ty) then
             for _, roomData in ipairs(self.mapData.rooms) do
               local rx1, ry1 = roomData:getTopLeftPosition()
               local rx2, ry2 = roomData:getBottomRightPosition()
@@ -784,7 +779,6 @@ function MapEditor:update(dt)
               if roomPicked then
                 self.selectedRoom = roomData
                 self.roomTransformer:setRoomData(roomData)
-
                 break
               end
             end
@@ -885,16 +879,15 @@ function MapEditor:draw()
     -- if we have a selected tile, draw a partially transparent version if mouse over grid
     if self.controlMode == ControlMode.Tile and Slab.IsVoidHovered() and self.selectedTileData then
       local tx, ty = self:getMouseToMapCoords()
-      if 1 <= tx and tx <= self.mapData:getSizeX() and
-        1 <= ty and ty <= self.mapData:getSizeY() then
-          local tileSprite = self.selectedTileData:getSprite()
-          if tileSprite then
-            local sw = tileSprite:getWidth()
-            local sh = tileSprite:getHeight()
-            local sx = ((tx - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
-            local sy = ((ty - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
-            tileSprite:draw(sx, sy, 0.5)
-          end
+      if self.mapData:indexInBounds(tx, ty) then
+        local tileSprite = self.selectedTileData:getSprite()
+        if tileSprite then
+          local sw = tileSprite:getWidth()
+          local sh = tileSprite:getHeight()
+          local sx = ((tx - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
+          local sy = ((ty - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
+          tileSprite:draw(sx, sy, 0.5)
+        end
       end
     end
 
@@ -955,8 +948,6 @@ function MapEditor:draw()
       end
     
       -- get draw positions from tile indices
-      --local x1, y1 = vector.mul(MapData.GRID_SIZE, tx1 - 1, ty1 - 1)
-      --local x2, y2 = vector.mul(MapData.GRID_SIZE, tx2 - 1, ty2 - 1)
       local x1 = MapData.GRID_SIZE * (tx1 - 1)
       local y1 = MapData.GRID_SIZE * (ty1 - 1)
       local x2 = MapData.GRID_SIZE * (tx2 - 1)
