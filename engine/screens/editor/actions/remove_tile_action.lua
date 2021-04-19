@@ -25,15 +25,15 @@ end
 --[[
   Common Action method implementation
 ]]
-function RemoveTileAction:undo()
+function RemoveTileAction:execute()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData:setTile(self.layerIndex, v.tileId, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(self.layerIndex, nil, v.mapIndexX, v.mapIndexY)
   end
 end
 
-function RemoveTileAction:redo()
+function RemoveTileAction:undo()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData:setTile(self.layerIndex, nil, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(self.layerIndex, v.tileId, v.mapIndexX, v.mapIndexY)
   end
 end
 

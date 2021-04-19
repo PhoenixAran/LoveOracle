@@ -26,15 +26,16 @@ end
 --[[
   Common Action method implementation
 ]]
-function PlaceTileAction:undo()
+function PlaceTileAction:execute()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData:setTile(self.layerIndex, v.tileId, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(self.layerIndex, self.newTileId, v.mapIndexX, v.mapIndexY)
   end
 end
 
-function PlaceTileAction:redo()
+
+function PlaceTileAction:undo()
   for i, v in ipairs(self.oldPairs) do
-    self.mapData:setTile(self.layerIndex, self.newTileId, v.mapIndexX, v.mapIndexY)
+    self.mapData:setTile(self.layerIndex, v.tileId, v.mapIndexX, v.mapIndexY)
   end
 end
 

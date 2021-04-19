@@ -17,6 +17,14 @@ end
 --[[
   Common Action method implementation
 ]]
+function ResizeRoomAction:execute()
+  self.mapData:removeRoom(self.roomData)
+  self.roomData.topLeftPosX = self.newCoords.topLeftPosX
+  self.roomData.topLeftPosY = self.newCoords.topLeftPosY
+  self.roomData.sizeX = self.newCoords.sizeX
+  self.roomData.sizeY = self.newCoords.sizeY
+  self.mapData:addRoom(self.roomData)
+end
 
 function ResizeRoomAction:undo()
   self.mapData:removeRoom(self.roomData)
@@ -24,15 +32,6 @@ function ResizeRoomAction:undo()
   self.roomData.topLeftPosY = self.oldCoords.topLeftPosY
   self.roomData.sizeX = self.oldCoords.sizeX
   self.roomData.sizeY = self.oldCoords.sizeY
-  self.mapData:addRoom(self.roomData)
-end
-
-function ResizeRoomAction:redo()
-  self.mapData:removeRoom(self.roomData)
-  self.roomData.topLeftPosX = self.newCoords.topLeftPosX
-  self.roomData.topLeftPosY = self.newCoords.topLeftPosY
-  self.roomData.sizeX = self.newCoords.sizeX
-  self.roomData.sizeY = self.newCoords.sizeY
   self.mapData:addRoom(self.roomData)
 end
 

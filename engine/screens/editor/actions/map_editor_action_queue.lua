@@ -26,7 +26,7 @@ function MapEditorActionStack:redo()
   local count = lume.count(self.actions)
   if 0 < count and self.index < count then
     self.index = math.min(self.index + 1, count)
-    self.actions[self.index]:redo()
+    self.actions[self.index]:execute()
   end
 end
 

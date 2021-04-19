@@ -20,11 +20,14 @@ local Camera = require 'lib.camera'
 
 local RoomTransformer = require 'engine.screens.editor.widgets.room_transformer'
 
+-- TODO: Stuff these classes into an init.lua module file
 local MapEditorActionQueue = require 'engine.screens.editor.actions.map_editor_action_queue'
 local PlaceTileAction = require 'engine.screens.editor.actions.place_tile_action'
 local RemoveTileAction = require 'engine.screens.editor.actions.remove_tile_action'
 local ResizeRoomAction = require 'engine.screens.editor.actions.resize_room_action'
 local MoveRoomAction = require 'engine.screens.editor.actions.move_room_action'
+local AddRoomAction = require 'engine.screens.editor.actions.add_room_action'
+local RemoveRoomAction = require 'engine.screens.editor.actions.remove_room_action'
 
 local TILE_MARGIN = 1
 local TILE_PADDING = 1
@@ -375,8 +378,15 @@ end
 
 --[[
   Map Edit Actions
-  TODO: Each function that resides in this section
+  TODO: Most functions that resides in this section
   should push an action object to the stack so user can undo and redo
+]]
+
+--[[
+  action_PlaceTile and action_RemoveTile actions will NOT push a command on the action stack
+  each time it is called because we want to let user undo and redo multiple tiles if the mouse 
+  was held down. Thus, pushing the action on the command stack will be done in the update method.
+  We also paint/erase the tile if we can, and then batch the actions into one command object for ease of use
 ]]
 function MapEditor:action_placeTile()
   assert(self.selectedTileData, 'Attempted to call MapEditor:action_placeTile but no tile data is selected')
@@ -444,7 +454,9 @@ function MapEditor:action_addRoom()
       sizeX = tx2 - (tx1 - 1),
       sizeY = ty2 - (ty1 - 1)
     })
-    self.mapData:addRoom(room)
+    local action = AddRoomAction(self.mapData, room)
+    action:execute()
+    self.actionQueue:addAction(action)
   end
 end
 
@@ -467,7 +479,6 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
     end
   end
   if not overlapsOtherRoom then
-    self.mapData:removeRoom(roomData)
     local oldCoords = {
       topLeftPosX = roomData.topLeftPosX,
       topLeftPosY = roomData.topLeftPosY,
@@ -480,20 +491,18 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
       sizeX = x2 - (x1 - 1),
       sizeY = y2 - (y1 - 1)
     }
-    roomData.topLeftPosX = newCoords.topLeftPosX
-    roomData.topLeftPosY = newCoords.topLeftPosY
-    roomData.sizeX = newCoords.sizeX
-    roomData.sizeY = newCoords.sizeY
-    self.mapData:addRoom(roomData)
     local action = ResizeRoomAction(self.mapData, roomData, oldCoords, newCoords)
+    action:execute()
     self.actionQueue:addAction(action)
+  else
+    self.roomTransformer:initializeWidgets()
   end
 end
 
 function MapEditor:action_removeRoom()
   self.selectedRoom = nil
   self.mapData:removeRoom(self.roomTransformer.roomData)
-  self.roomTransformer = nil
+  self.roomTransformer:disable()
 end
 
 function MapEditor:action_moveRoom(roomData, x1, y1, x2, y2)
@@ -513,7 +522,6 @@ function MapEditor:action_moveRoom(roomData, x1, y1, x2, y2)
       end
     end
     if not overlapsOtherRoom then
-      self.mapData:removeRoom(roomData)
       local oldCoords = {
         topLeftPosX = roomData.topLeftPosX,
         topLeftPosY = roomData.topLeftPosY
@@ -522,14 +530,14 @@ function MapEditor:action_moveRoom(roomData, x1, y1, x2, y2)
         topLeftPosX = x1,
         topLeftPosY = y1,
       }
-      roomData.topLeftPosX = x1
-      roomData.topLeftPosY = y1
-      roomData.sizeX = x2 - (x1 - 1)
-      roomData.sizeY = y2 - (y1 - 1)
-      self.mapData:addRoom(roomData)
       local action = MoveRoomAction(self.mapData, roomData, oldCoords, newCoords)
+      action:execute()
       self.actionQueue:addAction(action)
+      roomMoved = true
     end
+  end
+  if not roomMoved then
+    self.roomTransformer:initializeWidgets()
   end
 end
 
@@ -923,7 +931,7 @@ function MapEditor:draw()
   
     -- draw selected room
     if self.controlMode == ControlMode.PickRoom and self.selectedRoom then
-      assert(self.roomTransformer)
+      assert(self.roomTransformer.initialized)
       self.roomTransformer:draw()
     end
 

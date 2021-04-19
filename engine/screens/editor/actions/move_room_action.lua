@@ -17,17 +17,17 @@ end
 --[[
   Common Action method implementation
 ]]
+function MoveRoomAction:execute()
+  self.mapData:removeRoom(self.roomData)
+  self.roomData.topLeftPosX = self.newCoords.topLeftPosX
+  self.roomData.topLeftPosY = self.newCoords.topLeftPosY
+  self.mapData:addRoom(self.roomData)
+end
+
 function MoveRoomAction:undo()
   self.mapData:removeRoom(self.roomData)
   self.roomData.topLeftPosX = self.oldCoords.topLeftPosX
   self.roomData.topLeftPosY = self.oldCoords.topLeftPosY
-  self.mapData:addRoom(self.roomData)
-end
-
-function MoveRoomAction:redo()
-  self.mapData:removeRoom(self.roomData)
-  self.roomData.topLeftPosX = self.newCoords.topLeftPosX
-  self.roomData.topLeftPosY = self.newCoords.topLeftPosY
   self.mapData:addRoom(self.roomData)
 end
 

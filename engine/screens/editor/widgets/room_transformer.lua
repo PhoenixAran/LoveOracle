@@ -226,6 +226,7 @@ function RoomMover:draw()
   love.graphics.setColor(1, 1, 1)
 end
 
+-- Export Types
 -- Holds RoomResizeSquare instances for each side of the room
 -- Also handles the room mover object
 local RoomTransformer = Class { __includes = SignalObject,
@@ -251,7 +252,6 @@ function RoomTransformer:initializeWidgets()
     sizeX = self.roomData.sizeX,
     sizeY = self.roomData.sizeY
   }
-
   self.roomMover = RoomMover(self.roomData, self.camera)
   self.upR = RoomResizeSquare(self.roomData, 'up', self.camera)
   self.downR = RoomResizeSquare(self.roomData, 'down', self.camera)
@@ -290,6 +290,11 @@ function RoomTransformer:isActive()
     return true
   end
   return false
+end
+
+function RoomTransformer:disable()
+  self.initialized = false
+  self.roomData = nil
 end
 
 function RoomTransformer:setRoomData(roomData)
