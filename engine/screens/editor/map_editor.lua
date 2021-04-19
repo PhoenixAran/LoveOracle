@@ -412,6 +412,7 @@ function MapEditor:action_removeTile()
   if self.mapData:indexInBounds(tx, ty) then
     local oldTileId = self.mapData:getTile(self.selectedLayerIndex, tx, ty)
     if oldTileId ~= nil then
+      self.queuedTileAction:recordOldTile(tx, ty, self.mapData:getTile(self.selectedLayerIndex, tx, ty))
       self.mapData:setTile(self.selectedLayerIndex, nil, tx, ty)
     end
   end
@@ -760,7 +761,7 @@ function MapEditor:update(dt)
         self.actionQueue:addAction(self.queuedTileAction)
         self.queuedTileAction = nil
       end
-      if not self:isVoidMouseDown(1) and self:isVoidMouseDown(2) and Slab.IsVoidHovered() then
+      if (not self:isVoidMouseDown(1)) and self:isVoidMouseDown(2) and Slab.IsVoidHovered() then
         -- remove tile
         self:action_removeTile()
       elseif self.queuedTileAction and self.queuedTileAction:getType() == 'remove_tile_action' then
@@ -772,7 +773,6 @@ function MapEditor:update(dt)
     elseif self.controlMode == ControlMode.PickRoom then
       local RoomTransformerInputHandled = false
       if self.selectedRoom then
-        assert(self.roomTransformer)
         self.roomTransformer:update(dt)
         RoomTransformerInputHandled = self.roomTransformer:isActive()
       end

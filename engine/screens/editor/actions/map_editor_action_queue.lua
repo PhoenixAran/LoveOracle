@@ -33,7 +33,6 @@ end
 function MapEditorActionStack:undo()
   local count = lume.count(self.actions)
   if 1 <= self.index then
-    print(count, self.index)
     self.actions[self.index]:undo()
     self.index = math.max(0, self.index - 1)
   end

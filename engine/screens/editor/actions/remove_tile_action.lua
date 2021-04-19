@@ -11,7 +11,7 @@ local RemoveTileAction = Class {
 }
 
 function RemoveTileAction:recordOldTile(mapIndexX, mapIndexY, oldTileId)
-  self.oldPairs = lume.push({
+  lume.push(self.oldPairs, {
     ['mapIndexX'] = mapIndexX,
     ['mapIndexY'] = mapIndexY,
     ['tileId'] = oldTileId
@@ -19,7 +19,7 @@ function RemoveTileAction:recordOldTile(mapIndexX, mapIndexY, oldTileId)
 end
 
 function RemoveTileAction:getType()
-  return 'place_tile_action'
+  return 'remove_tile_action'
 end
 
 --[[
