@@ -42,7 +42,7 @@ function TileLayer:getSerializableTable()
     layerType = self:getType(),
     sizeX = self.sizeX,
     sizeY = self.sizeY,
-    tiles = tiles
+    tiles = self.tiles
   }
 end
 

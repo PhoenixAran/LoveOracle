@@ -7,6 +7,8 @@ local SignalObject = require 'engine.signal_object'
 local rect = require 'engine.utils.rectangle'
 local AssetManager = require 'engine.utils.asset_manager'
 local BaseScreen = require 'engine.screens.base_screen'
+local FileSystem = require('lib.slab.Internal.Core.FileSystem')
+local Serialize = require 'lib.serialize'
 
 local TilesetTheme = require 'engine.tiles.tileset_theme'
 local PaletteBank = require 'engine.utils.palette_bank'
@@ -138,13 +140,17 @@ local MapEditor = Class { __include = {BaseScreen, SignalObject},
     --[[
       File Dialog
     ]]
-    self.fileDialog = ''
-    self.fileDialogResult = ""
+    --self.fileDialog = ''
+    --self.fileDialogResult = ""
 
     --[[
       Dialog Boxes
     ]]
     self.showControlListDialog = false
+    self.showSaveAsFileDialog = false
+    self.showOpenFileDialog = false
+    -- this lets user click save or ctrl + s to save map without designating location
+    self.cachedSaveLocation = nil
 
     --[[
       Map Data
@@ -587,14 +593,16 @@ function MapEditor:update(dt)
       end
       Slab.Separator()
       if Slab.MenuItemChecked('Open Map...') then
-        print('TODO Open Map')
+        self.showOpenFileDialog = true
       end
       Slab.Separator()
-      if Slab.MenuItemChecked('Save') then
-        print('TODO Save Map')
+      if self.cachedSaveLocation ~= nil then
+        if Slab.MenuItemChecked('Save') then
+          print('TODO Save Map')
+        end
       end
       if Slab.MenuItemChecked('Save As') then
-        print('TODO Save As')
+        self.showSaveAsFileDialog = true
       end
       Slab.EndMenu()
     end
@@ -612,6 +620,10 @@ function MapEditor:update(dt)
     end
     Slab.EndMainMenuBar()
   end
+
+  --[[
+    Dialogs
+  ]]
   if self.showControlListDialog then
     local result = Slab.MessageBox("Control List", [[
       Mouse 1 : Places Tile
@@ -620,6 +632,26 @@ function MapEditor:update(dt)
     ]])
     if result ~= "" then
       self.showControlListDialog = false
+    end
+  end
+  if self.showOpenFileDialog then
+    local result = Slab.FileDialog({Type = 'openfile', AllowMultiSelect = false})
+    if result.Button ~= '' then
+      self.showOpenFileDialog = false
+      if result.botton == 'OK' then
+        -- TODO open file
+      end
+    end
+  end
+  if self.showSaveAsFileDialog then
+    local result = Slab.FileDialog({Type = 'savefile', AllowMultiSelect = false})
+    if result.Button ~= '' then
+      self.showSaveAsFileDialog = false
+      if result.Button == 'OK' then
+        self.cachedSaveLocation = result.Files[1]
+        local sTable = self.mapData:getSerializableTable()
+        FileSystem.SaveContents(self.cachedSaveLocation, lume.serialize(sTable))
+      end
     end
   end
 
