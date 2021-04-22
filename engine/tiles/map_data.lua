@@ -25,29 +25,31 @@ local MapData = Class {
     ]]
     
     -- deserialize layers
-    local layers = data.layers or {
-      TileLayer({sizeX = self.sizeX, sizeY = self.sizeY}),
-      TileLayer({sizeX = self.sizeX, sizeY = self.sizeY}),
+    local dataLayers = data.layers or {
+      {layerType = 'tile_layer'},
+      {layerType = 'tile_layer'}
     }
-    self.layerCount = lume.count(layers)
-    lume.each(layers, function(layerData)
-      local layerType = layerData.layerType
-      if layerType == 'tile_layer' then
+    local layers = { }
+    self.layerCount = lume.count(dataLayers)
+    for _, layerData in ipairs(dataLayers) do
+      if layerData.layerType == 'tile_layer' then
         local tileLayer = TileLayer(layerData)
         -- update size just in case
         tileLayer.sizeX = self.sizeX
         tileLayer.sizeY = self.sizeY
+        lume.push(layers, tileLayer)
       else
         error('Unsupported map layer type: ' .. layerType)
       end
-    end)
+    end
+
     self.layers = layers
     
     -- deserialize rooms
     data.rooms = data.rooms or { }
     local rooms = { }
     lume.each(data.rooms, function(roomData)
-      lume.push(RoomData(roomData))
+      lume.push(rooms, RoomData(roomData))
     end)
     self.rooms = rooms
     self.idCounter = data.idCounter or 0
@@ -162,14 +164,18 @@ function MapData:getSerializableTable()
   for _, layer in ipairs(self.layers) do
     lume.push(serializableLayers, layer:getSerializableTable())
   end
-  -- TODO: Serialize Rooms
+  local sRooms = { }
+  for _, room in ipairs(self.rooms) do
+    lume.push(sRooms, room:getSerializableTable())
+  end
   return {
     name = self:getName(),
+    rooms = sRooms,
     layerCount = self.layerCount,
     layers = serializableLayers,
     sizeX = self:getSizeX(),
     sizeY = self:getSizeY(),
-    idCounter = self.idCounter
+    idCounter = self.idCounter,
   }
 end
 

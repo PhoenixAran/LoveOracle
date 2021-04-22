@@ -635,22 +635,34 @@ function MapEditor:update(dt)
     end
   end
   if self.showOpenFileDialog then
-    local result = Slab.FileDialog({Type = 'openfile', AllowMultiSelect = false})
+    local result = Slab.FileDialog({Type = 'openfile', 
+                                    AllowMultiSelect = false, 
+                                    Filters = { '.dat', 'Map Data Files' },
+                                    Directory = love.filesystem.getSource() .. '/data/maps' })
     if result.Button ~= '' then
       self.showOpenFileDialog = false
-      if result.botton == 'OK' then
-        -- TODO open file
+      if result.Button == 'OK' then
+        self.roomTransformer:disable()
+        self.selectedRoom = nil
+        local sData = FileSystem.ReadContents(result.Files[1])
+        self.mapData = MapData(lume.deserialize(sData))
       end
     end
   end
   if self.showSaveAsFileDialog then
-    local result = Slab.FileDialog({Type = 'savefile', AllowMultiSelect = false})
+    local result = Slab.FileDialog({Type = 'savefile', 
+                                    AllowMultiSelect = false, 
+                                    Filters = { '.dat', 'Map Data Files' }, 
+                                    Directory = love.filesystem.getSource() .. '/data/maps' })
     if result.Button ~= '' then
       self.showSaveAsFileDialog = false
       if result.Button == 'OK' then
         self.cachedSaveLocation = result.Files[1]
-        local sTable = self.mapData:getSerializableTable()
-        FileSystem.SaveContents(self.cachedSaveLocation, lume.serialize(sTable))
+        --local luaCode =       'function f()\n'
+        --luaCode = luaCode ..  '  return ' .. lume.serialize(self.mapData:getSerializableTable()) .. '\n'
+        --luaCode = luaCode ..  'end\n'
+        --luaCode = luaCode ..  'return makeModuleFunction(f)'
+        FileSystem.SaveContents(self.cachedSaveLocation, lume.serialize(self.mapData:getSerializableTable()))
       end
     end
   end
