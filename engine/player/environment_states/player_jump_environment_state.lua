@@ -7,7 +7,7 @@ local PlayerJumpEnvironmentState = Class { __includes = PlayerEnvironmentState,
   init = function(self)
     PlayerEnvironmentState.init(self)
     
-    self.stateParameters.canStrafe = false
+    self.stateParameters.canStrafe = true
     self.stateParameters.canPush = false
     self.stateParameters.canLedgeJump = false
     self.stateParameters.canRoomTransition = false

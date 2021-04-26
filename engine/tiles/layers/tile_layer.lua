@@ -1,3 +1,7 @@
+local Class = require 'lib.class'
+local TilesetBank = require 'engine.utils.tileset_bank'
+
+
 local NIL_TABLE = { }
 
 -- Layers
@@ -6,6 +10,7 @@ local TileLayer = Class {
     self.sizeX = data.sizeX
     self.sizeY = data.sizeY
     self.tiles = data.tiles or { }
+    self.layerType = 'tile_layer'
   end
 }
 
@@ -14,6 +19,9 @@ function TileLayer:getType()
 end
 
 function TileLayer:setTile(tileData, x, y)
+  if type(tileData) == 'table' then
+    tileData = tileData.id
+  end
   if y == nil then
     self.tiles[x] = tileData
   else

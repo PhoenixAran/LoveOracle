@@ -76,23 +76,7 @@ function PlayerMovementController:pollMovementControls(allowMovementControl)
   self.moving = false
   if allowMovementControl then 
     x, y = input:get('move')
-    x, y = vector.snapDirectionByCount(x, y, DIRECTION_SNAP)
-    -- check movement keys
-    --[[
-    if input:down('up') then
-      y = y - 1
-    end
-    if input:down('down') then
-      y = y + 1
-    end
-    if input:down('left') then
-      x = x - 1
-    end
-    if input:down('right') then
-      x = x + 1
-    end
-    ]]
-    
+    x, y = vector.snapDirectionByCount(x, y, DIRECTION_SNAP)    
     self.directionX, self.directionY = x, y
     if x ~= 0 or y ~= 0 then 
       self.moving = true
@@ -166,7 +150,7 @@ function PlayerMovementController:updateMoveControls()
   elseif self.player:getStateParameters().alwaysFaceDown then
     canUpdateDirection = inputX == 0 and inputY == 1
   else
-    canUpdateDirection = self.player:getStateParameters().canStrafe
+    canUpdateDirection = not self.player:getStateParameters().canStrafe
   end
   
   if canUpdateDirection and self.allowMovementControl and self.moving then

@@ -7,7 +7,8 @@ local GameConfig = require 'game_config'
 
 local TilesetBank = {
   tilesets = { },
-  tilesetThemes = { }
+  tilesetThemes = { },
+  defaultTilesetTheme = nil
 }
 
 function TilesetBank.createTileset(name, sizeX, sizeY)
@@ -40,11 +41,18 @@ function TilesetBank.getTilesetTheme(name)
   return TilesetBank.tilesetThemes[name]
 end
 
+function TilesetBank.getDefaultTilesetTheme()
+  assert(TilesetBank.tilesetThemes['default'], 'TilesetBank does not have tileset theme with name "default." A default tileset theme is required')
+  return TilesetBank.tilesetThemes['default']
+end
+
 function TilesetBank.initialize()
   TilesetTheme.setRequiredTilesets(GameConfig.tilesetThemeRequirements)
   require('data.tile_templates')(TileData)
   require('data.tilesets')(TilesetBank)
   require('data.tileset_themes')(TilesetBank)
+  -- check if tileset theme named 'default' exists
+  TilesetBank:getDefaultTilesetTheme()
 end
 
 function TilesetBank.unload()

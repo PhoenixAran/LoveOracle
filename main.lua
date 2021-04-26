@@ -6,7 +6,7 @@ local AssetManager = require 'engine.utils.asset_manager'
 local Slab = require 'lib.slab'
 
 print('Oracle Engine ' .. gameConfig.version)
-print("Operating System: " .. love.system.getOS())
+print("OS: " .. love.system.getOS())
 print(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
 print('Save Directory: ' .. love.filesystem.getSaveDirectory())
 
@@ -45,6 +45,7 @@ function love.load(arg)
   love.window.setTitle(gameConfig.window.title)
   love.graphics.setFont(AssetManager.getFont('monogram'))
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
+  print(gameConfig.startupScreen)
   screenManager:enter( require(gameConfig.startupScreen) ())
   
   local Slab = require 'lib.slab'

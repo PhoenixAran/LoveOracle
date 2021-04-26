@@ -12,6 +12,7 @@ local Templates = { }
 
 local TileData = Class {
   init = function(self)
+    self.id = nil
     self.name = nil
     self.tileType = TileType.Normal
     
@@ -57,6 +58,10 @@ end
 
 function TileData:setName(name)
   self.name = name
+end
+
+function TileData:getId()
+
 end
 
 function TileData:setTileClassType(value)

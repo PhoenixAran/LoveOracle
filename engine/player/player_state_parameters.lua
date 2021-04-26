@@ -27,9 +27,9 @@ local PlayerStateParameters = Class {
     self.canPush = true
     self.canUseWeapons = true
     self.canRoomTransition = true
-    self.canStrafe = true
     self.defaultAnimationWhenNotStill = true
     
+    self.canStrafe = false
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false
@@ -61,15 +61,15 @@ function PlayerStateParameters:integrateParameters(other)
   self.canPush =  prioritizeFalse(self.canPush, other.canPush)
   self.canUseWeapons =  prioritizeFalse(self.canUseWeapons, other.canUseWeapons)
   self.canRoomTransition =  prioritizeFalse(self.canRoomTransition, other.canRoomTransition)
-  self.canStrafe =  prioritizeFalse(self.canStrafe, other.canStrafe)
   self.defaultAnimationWhenNotMoving =  prioritizeFalse(self.defaultAnimationWhenNotMoving, other.defaultAnimationWhenNotMoving)
   
-  -- you wanna prioritize true for this one
+  -- you wanna prioritize true for these ones
   self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp
   self.alwaysFaceDown = self.alwaysFaceDown or other.alwaysFaceDown
   self.alwaysFaceLeft = self.alwaysFaceLeft or other.alwaysFaceLeft
   self.alwaysFaceRight = self.alwaysFaceRight or other.alwaysFaceRight
-  
+  self.canStrafe = self.canStrafe or other.canStrafe
+
   -- prefer the other animations if they are non null
   for k, v in ipairs(self.animations) do
     self.animations[k] = other.animations[k] or self.animations[k]
@@ -88,9 +88,9 @@ function PlayerStateParameters:reset()
     self.canPush = true
     self.canUseWeapons = true
     self.canRoomTransition = true
-    self.canStrafe = true
     self.defaultAnimationWhenNotMoving = true
     
+    self.canStrafe = false
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false

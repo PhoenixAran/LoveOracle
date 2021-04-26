@@ -3,12 +3,9 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local inspect = require 'lib.inspect'
 local Slab = require 'lib.slab'
-local SignalObject = require 'engine.signal_object'
 local rect = require 'engine.utils.rectangle'
 local AssetManager = require 'engine.utils.asset_manager'
 local BaseScreen = require 'engine.screens.base_screen'
-local FileSystem = require('lib.slab.Internal.Core.FileSystem')
-local Serialize = require 'lib.serialize'
 
 local TilesetTheme = require 'engine.tiles.tileset_theme'
 local PaletteBank = require 'engine.utils.palette_bank'
@@ -20,21 +17,328 @@ local RoomData = require 'engine.tiles.room_data'
 
 local Camera = require 'lib.camera'
 
-local RoomTransformer = require 'engine.screens.editor.widgets.room_transformer'
-
--- TODO: Stuff these classes into an init.lua module file
 local MapEditorActionQueue = require 'engine.screens.editor.actions.map_editor_action_queue'
 local PlaceTileAction = require 'engine.screens.editor.actions.place_tile_action'
 local RemoveTileAction = require 'engine.screens.editor.actions.remove_tile_action'
 local ResizeRoomAction = require 'engine.screens.editor.actions.resize_room_action'
-local MoveRoomAction = require 'engine.screens.editor.actions.move_room_action'
-local AddRoomAction = require 'engine.screens.editor.actions.add_room_action'
-local RemoveRoomAction = require 'engine.screens.editor.actions.remove_room_action'
 
 local TILE_MARGIN = 1
 local TILE_PADDING = 1
 local GRID_SIZE = MapData.GRID_SIZE
 
+local RESIZER_MARGIN = 16
+-- Friend Type
+local RoomResizeSquare = Class {
+  init = function(self, roomData, direction, camera, onResize)
+    self.roomData = roomData
+    self.direction = direction
+    self.camera = camera
+    self.onResize = onResize
+    self.state = 'none'
+    self.x = 0
+    self.y = 0
+    self.cachedX = 0
+    self.cachedY = 0 
+    self.minX = 0
+    self.minY = 0
+    self.maxX = 0
+    self.maxY = 0
+    self.size = 24
+    self.clickMousePosX = 0
+    self.clickMousePosY = 0
+
+    self.mouseState = { 
+      isDown = false,
+      canUpdate = true
+    }
+    -- we want a draw position for the resize square
+    -- so we need to subtract 1 from the tilemap indices 
+    local rx1, ry1 = roomData:getTopLeftPosition()
+    rx1 = rx1 - 1
+    ry1 = ry1 - 1
+    local rx2, ry2 = roomData:getBottomRightPosition()
+    --rx2 = rx2 - 1
+    --ry2 = ry2 - 1
+    
+    rx1, ry1 = vector.mul(GRID_SIZE, rx1, ry1)
+    rx2, ry2 = vector.mul(GRID_SIZE, rx2, ry2)
+    local rw = roomData:getSizeX() * GRID_SIZE
+    local rh = roomData:getSizeY() * GRID_SIZE
+
+    
+    if self.direction == 'up' then
+      self.x = (rw / 2) + rx1
+      self.y = ry1 - RESIZER_MARGIN
+      self.maxY = ry2 - (GRID_SIZE * 3) + RESIZER_MARGIN
+    elseif self.direction == 'down' then
+      self.x = (rw / 2) + rx1
+      self.y = ry2  + RESIZER_MARGIN
+      self.minY = ry1 + (GRID_SIZE * 3) - RESIZER_MARGIN
+    elseif self.direction == 'left' then
+      self.x = rx1 - RESIZER_MARGIN
+      self.y = (rh / 2) + ry1
+      self.maxX = rx2 - (GRID_SIZE * 3) + RESIZER_MARGIN
+    elseif self.direction == 'right' then
+      self.x = rx2 + RESIZER_MARGIN
+      self.y = (rh / 2) + ry1
+      self.minX = rx1 + (GRID_SIZE * 3) - RESIZER_MARGIN
+    end
+
+  end
+}
+
+function RoomResizeSquare:draw()
+  if self.state == 'none' then
+    love.graphics.setColor(153 / 255, 50 / 255, 204 / 255)
+  else
+    love.graphics.setColor(100 / 255, 149 / 255, 237 / 255)
+  end
+  love.graphics.rectangle('fill', self.x - self.size / 2, self.y - self.size / 2, self.size, self.size)
+  love.graphics.setColor(1, 1, 1)
+end
+
+function RoomResizeSquare:update(dt)
+  if Slab.IsMouseClicked(i) then
+    self.mouseState.canUpdate = Slab.IsVoidHovered()
+  end
+  self.mouseState.isDown = self.mouseState.canUpdate and Slab.IsMouseDown(i) and Slab.IsVoidHovered()
+  if self.state == 'drag' then
+    if not self.mouseState.isDown then
+      self:resizeRoom()
+      self.state = 'none'
+      return
+    end
+    local mx, my = self.camera:getMousePosition()
+
+    if self.direction == 'up' then
+      self.y = math.min(self.maxY, self.cachedY - self.clickMousePosY + my)
+    elseif self.direction == 'down' then
+      self.y = math.max(self.minY, self.cachedY - self.clickMousePosY + my)
+    elseif self.direction == 'left' then
+      self.x = math.min(self.maxX, self.cachedX - self.clickMousePosX + mx)
+    elseif self.direction == 'right' then
+      self.x = math.max(self.minX, self.cachedX - self.clickMousePosX + mx)
+    end
+  else
+    local mx, my = self.camera:getMousePosition()
+    if self.mouseState.isDown and Slab.IsVoidHovered() and
+    rect.containsPoint(self.x - self.size / 2, self.y - self.size / 2, self.size, self.size, mx, my) then
+      self.clickMousePosX = mx
+      self.clickMousePosY = my
+      self.cachedX = self.x
+      self.cachedY = self.y
+      self.state = 'drag'
+    end
+  end
+end
+
+function RoomResizeSquare:resizeRoom()
+  local x1, y1 = self.roomData:getTopLeftPosition()
+  local x2, y2 = self.roomData:getBottomRightPosition()
+  if self.direction == 'up' then
+    -- change y1
+    y1 = math.floor((self.y + RESIZER_MARGIN) / GRID_SIZE) + 1
+  elseif self.direction == 'down' then
+    -- change y2
+    y2 = math.ceil((self.y - RESIZER_MARGIN) / GRID_SIZE)
+  elseif self.direction == 'left' then
+    -- change x1
+    x1 = math.floor((self.x + RESIZER_MARGIN) / GRID_SIZE) + 1
+  elseif self.direction == 'right' then
+    -- change x2
+    x2 = math.ceil((self.x - RESIZER_MARGIN) / GRID_SIZE)
+  end
+  if self.onResize then
+    self.onResize(self.roomData, x1, y1, x2, y2)
+  end
+end
+
+local RoomMover = Class {
+  init = function(self, roomData, camera, onMove)
+    self.roomData = roomData
+    self.camera = camera
+    self.onMove = onMove
+    self.state = 'none'
+    self.x = 0
+    self.y = 0
+    self.size = 24
+    self.clickMousePosX = 0
+    self.clickMousePosY = 0
+    self.lastMousePosX = 0
+    self.lastMousePosY = 0
+
+    self.mouseState = {
+      canUpdate = true,
+      isDown = false
+    }
+
+    local rx, ry = roomData:getTopLeftPosition()
+    rx = (rx - 1) * GRID_SIZE
+    ry = (ry - 1) * GRID_SIZE
+    local rw = roomData:getSizeX() * GRID_SIZE
+    local rh = roomData:getSizeY() * GRID_SIZE
+
+    self.x = rx + (rw / 2)
+    self.y = ry + (rh / 2)
+  end
+}
+
+function RoomMover:moveRoom()
+  local rw = self.roomData:getSizeX() * GRID_SIZE
+  local rh = self.roomData:getSizeY() * GRID_SIZE
+
+  -- get top left coordinate from room mover's current position
+  local x1 = math.floor((self.x - (rw / 2)) / GRID_SIZE) + 1
+  local y1 = math.floor((self.y - (rh / 2)) / GRID_SIZE) + 1
+
+  -- get bottom right coordinate from room mover's current position
+  local x2 = math.floor((self.x + (rw / 2)) / GRID_SIZE)
+  local y2 = math.floor((self.y + (rh / 2)) / GRID_SIZE)
+  if self.onMove then
+    self.onMove(self.roomData, x1, y1, x2, y2)
+  end
+end
+
+function RoomMover:update(dt)
+  if Slab.IsMouseClicked(i) then
+    self.mouseState.canUpdate = Slab.IsVoidHovered()
+  end
+  self.mouseState.isDown = self.mouseState.canUpdate and Slab.IsMouseDown(i) and Slab.IsVoidHovered()
+
+  if self.state == 'drag' then
+    if not self.mouseState.isDown then
+      self:moveRoom()
+      self.state = 'none'
+    else
+      local mx, my = self.camera:getMousePosition()
+      local dx = self.cachedX -  self.clickMousePosX + mx
+      local dy = self.cachedY -  self.clickMousePosY + my
+
+      self.x = dx
+      self.y = dy
+    end
+  else
+    local mx, my = self.camera:getMousePosition()
+    if self.mouseState.isDown and 
+    rect.containsPoint(self.x - self.size / 2, self.y - self.size / 2, self.size, self.size, mx, my) then
+      self.clickMousePosX = mx
+      self.clickMousePosY = my
+      self.cachedX = self.x
+      self.cachedY = self.y
+      self.state = 'drag'
+    end
+  end
+end
+
+function RoomMover:draw()
+  if self.state == 'none' then
+    love.graphics.setColor(153 / 255, 50 / 255, 204 / 255)
+  else
+    love.graphics.setColor(100 / 255, 149 / 255, 237 / 255)
+  end
+  love.graphics.rectangle('fill', self.x - self.size / 2, self.y - self.size / 2, self.size, self.size)
+  love.graphics.setColor(1, 1, 1)
+end
+
+-- Friend Type
+-- Holds RoomResizeSquare instances for each side of the room
+-- Also handles the room mover object
+local RoomTransformer = Class {
+  init = function(self, roomData, camera, onResize, onMove)
+    self.roomData = roomData
+    self.onResize = onResize
+    self.roomMover = RoomMover(roomData, camera, onMove)
+    self.upR = RoomResizeSquare(roomData, 'up', camera, onResize)
+    self.downR = RoomResizeSquare(roomData, 'down', camera, onResize)
+    self.leftR = RoomResizeSquare(roomData, 'left', camera, onResize)
+    self.rightR = RoomResizeSquare(roomData, 'right', camera, onResize)
+    self.resizers = { self.upR, self.downR, self.leftR, self.rightR }
+  end
+}
+
+-- if room is being resized this frame
+-- Called when we want to find out if we want to handle the delete key
+-- or pick another room
+function RoomTransformer:isActive()
+  for _, r in ipairs(self.resizers) do
+    if r.state == 'drag' then
+      return true
+    end
+  end
+  if self.roomMover.state == 'drag' then
+    return true
+  end
+  return false
+end
+
+function RoomTransformer:update(dt)
+  local updatedResizer = false
+  local updatedMover = false
+  for _, r in ipairs(self.resizers) do
+    if r.state == 'drag' then
+      r:update(dt)
+      updatedResizer = true
+    end
+  end
+  if not updatedResizer then
+    if self.roomMover.state == 'drag' then
+      self.roomMover:update(dt)
+      updatedMover = true
+    end
+  end
+  if not updatedResizer and not updatedMover then
+    lume.each(self.resizers, 'update', dt)
+    self.roomMover:update(dt)
+  end
+end
+
+function RoomTransformer:draw()
+  if self.roomMover.state == 'drag' then
+    self.roomMover:draw()
+  elseif self.leftR.state == 'drag' or self.rightR.state == 'drag' or self.upR.state == 'drag'
+  or self.downR.state == 'drag' then
+    self.leftR:draw()
+    self.rightR:draw()
+    self.upR:draw()
+    self.downR:draw() 
+  else
+    self.roomMover:draw()
+    self.leftR:draw()
+    self.rightR:draw()
+    self.upR:draw()
+    self.downR:draw() 
+  end
+
+  love.graphics.setColor(1, 1, 204 / 255, 0.20)
+  
+  local x, y = self.roomData:getTopLeftPosition()
+  x = (x - 1) * GRID_SIZE
+  y = (y - 1) * GRID_SIZE
+  local w = self.roomData:getSizeX() * GRID_SIZE
+  local h = self.roomData:getSizeY() * GRID_SIZE
+  if self.upR.state == 'drag' then
+    y = self.upR.y + RESIZER_MARGIN
+    h = self.downR.y - y - RESIZER_MARGIN
+  elseif self.downR.state == 'drag' then
+    h = self.downR.y - y - RESIZER_MARGIN
+  elseif self.leftR.state == 'drag' then
+    x = self.leftR.x + RESIZER_MARGIN
+    w = self.rightR.x - x - RESIZER_MARGIN
+  elseif self.rightR.state == 'drag' then
+    w = self.rightR.x - x - RESIZER_MARGIN
+  elseif self.roomMover.state == 'drag' then
+    x = math.floor((self.roomMover.x - w / 2) / GRID_SIZE) * GRID_SIZE
+    y = math.floor((self.roomMover.y - h / 2) / GRID_SIZE) * GRID_SIZE
+  end
+
+  love.graphics.setColor(1, 1, 204 / 255, 0.20)
+  love.graphics.rectangle('fill', x, y, w, h)
+  love.graphics.setColor(0, 0, 0)
+  love.graphics.setLineWidth(2)
+  love.graphics.rectangle('line', x, y, w, h)
+  love.graphics.setLineWidth(1)
+  love.graphics.setColor(1, 1, 1)
+end
 
 -- Enums
 local MapEditorState = {
@@ -74,11 +378,9 @@ local LayerViewModeValues =  {"Normal", "Fade Others", 'Hide Others'}
 
 -- Export Type
 -- NB: Do not allow hot reloading when in map editor screen
-local MapEditor = Class { __include = {BaseScreen, SignalObject},
+local MapEditor = Class { __include = BaseScreen,
   init = function(self)
-    SignalObject.init(self)
     BaseScreen.init(self)
-
     self.actionQueue = MapEditorActionQueue(self.mapData)
 
     --[[
@@ -140,17 +442,13 @@ local MapEditor = Class { __include = {BaseScreen, SignalObject},
     --[[
       File Dialog
     ]]
-    --self.fileDialog = ''
-    --self.fileDialogResult = ""
+    self.fileDialog = ''
+    self.fileDialogResult = ""
 
     --[[
       Dialog Boxes
     ]]
     self.showControlListDialog = false
-    self.showSaveAsFileDialog = false
-    self.showOpenFileDialog = false
-    -- this lets user click save or ctrl + s to save map without designating location
-    self.cachedSaveLocation = nil
 
     --[[
       Map Data
@@ -183,9 +481,7 @@ local MapEditor = Class { __include = {BaseScreen, SignalObject},
     -- room pick stuff
     self.selectedRoom = nil -- room data instance
     -- room resizer widget
-    self.roomTransformer = RoomTransformer(self.camera)
-    self.roomTransformer:connect('roomMove', self, 'action_moveRoom')
-    self.roomTransformer:connect('roomResize', self, 'action_resizeRoom')
+    self.roomTransformer = nil
 
     self.selectedLayerIndex = 1
     self.layerIndexValues = {
@@ -218,7 +514,8 @@ function MapEditor:updateTileset(tilesetThemeName, tilesetName, forceUpdate)
     return
   end
 
-  -- get the width and height of tileset since canvas will be larger than what is needed for tileset size
+  -- get the width and height of tileset since canvas will most likely be larter
+  -- than what is needed for tileset size
   self.tileset = self.tilesetTheme:getTileset(tilesetName)
   self.subW = (self.tileset.tileSize * self.tileset.sizeX) + ((self.tileset.sizeX - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
   self.subH = (self.tileset.tileSize * self.tileset.sizeY) + ((self.tileset.sizeY - 1) * TILE_PADDING) + (TILE_MARGIN * 2)
@@ -262,17 +559,28 @@ function MapEditor:updateRoomControl()
   if self:isVoidMouseDown(1) and Slab.IsVoidHovered() then
     if self.roomControlState == RoomControlState.None then
       local tx, ty = self:getMouseToMapCoords()
-      if self.mapData:indexInBounds(tx, ty) then
-        -- init room drag rectangle
-        self.roomStartX = tx
-        self.roomStartY = ty
-        self.roomEndX = tx
-        self.roomEndY = ty
-        self.roomControlState = RoomControlState.Create
+      local inMapBounds = false
+      if 1 <= tx and tx <= self.mapData:getSizeX() and
+        1 <= ty and ty <= self.mapData:getSizeY() then
+          inMapBounds = true
       end
+      if not inMapBounds then
+        return
+      end
+      -- init room drag rectangle
+      self.roomStartX = tx
+      self.roomStartY = ty
+      self.roomEndX = tx
+      self.roomEndY = ty
+      self.roomControlState = RoomControlState.Create
     elseif self.roomControlState == RoomControlState.Create then
       local tx, ty = self:getMouseToMapCoords()
-      if self.mapData:indexInBounds(tx, ty) then
+      local inMapBounds = false
+      if 1 <= tx and tx <= self.mapData:getSizeX() and
+        1 <= ty and ty <= self.mapData:getSizeY() then
+          inMapBounds = true
+      end
+      if inMapBounds then
         self.roomEndX = tx
         self.roomEndY = ty
       end
@@ -334,10 +642,10 @@ function MapEditor:drawRoomTiles(room)
   if room.theme == 'default' then
     return
   end
-  -- draw clear color over default theme tiles that were previously drawn
-  love.graphics.setColor(77 / 255, 77 / 255, 77 / 255)
-  love.graphics.rectangle('fill', (room.topLeftPosX - 1) * GRID_SIZE, (room.topLeftPosY - 1) * GRID_SIZE, room.sizeX * GRID_SIZE, room.sizeY * GRID_SIZE )
-  love.graphics.setColor(1, 1, 1)
+    -- draw clear color over default theme tiles that were previously drawn
+    love.graphics.setColor(77 / 255, 77 / 255, 77 / 255)
+    love.graphics.rectangle('fill', (room.topLeftPosX - 1) * GRID_SIZE, (room.topLeftPosY - 1) * GRID_SIZE, room.sizeX * GRID_SIZE, room.sizeY * GRID_SIZE )
+    love.graphics.setColor(1, 1, 1)
   for k, mapLayer in ipairs(self.mapData.layers) do
     local alpha = 1
     local shouldDrawTiles = true
@@ -384,15 +692,8 @@ end
 
 --[[
   Map Edit Actions
-  TODO: Most functions that resides in this section
+  TODO: Each function that resides in this section
   should push an action object to the stack so user can undo and redo
-]]
-
---[[
-  action_PlaceTile and action_RemoveTile actions will NOT push a command on the action stack
-  each time it is called because we want to let user undo and redo multiple tiles if the mouse 
-  was held down. Thus, pushing the action on the command stack will be done in the update method.
-  We also paint/erase the tile if we can, and then batch the actions into one command object for ease of use
 ]]
 function MapEditor:action_placeTile()
   assert(self.selectedTileData, 'Attempted to call MapEditor:action_placeTile but no tile data is selected')
@@ -401,7 +702,8 @@ function MapEditor:action_placeTile()
     self.queuedTileAction = PlaceTileAction(self.mapData, self.selectedLayerIndex, gid)
   end
   local tx, ty = self:getMouseToMapCoords()
-  if self.mapData:indexInBounds(tx, ty) then
+  if 1 <= tx and tx <= self.mapData:getSizeX() and
+    1 <= ty and ty <= self.mapData:getSizeY() then
     local oldTileId = self.mapData:getTile(self.selectedLayerIndex, tx, ty)
     if oldTileId ~= gid then
       self.queuedTileAction:recordOldTile(tx, ty, self.mapData:getTile(self.selectedLayerIndex, tx, ty))
@@ -415,10 +717,10 @@ function MapEditor:action_removeTile()
     self.queuedTileAction = RemoveTileAction(self.mapData, self.selectedLayerIndex)
   end
   local tx, ty = self:getMouseToMapCoords()
-  if self.mapData:indexInBounds(tx, ty) then
+  if 1 <= tx and tx <= self.mapData:getSizeX() and
+    1 <= ty and ty <= self.mapData:getSizeY() then
     local oldTileId = self.mapData:getTile(self.selectedLayerIndex, tx, ty)
     if oldTileId ~= nil then
-      self.queuedTileAction:recordOldTile(tx, ty, self.mapData:getTile(self.selectedLayerIndex, tx, ty))
       self.mapData:setTile(self.selectedLayerIndex, nil, tx, ty)
     end
   end
@@ -461,9 +763,7 @@ function MapEditor:action_addRoom()
       sizeX = tx2 - (tx1 - 1),
       sizeY = ty2 - (ty1 - 1)
     })
-    local action = AddRoomAction(self.mapData, room)
-    action:execute()
-    self.actionQueue:addAction(action)
+    self.mapData:addRoom(room)
   end
 end
 
@@ -486,6 +786,7 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
     end
   end
   if not overlapsOtherRoom then
+    self.mapData:removeRoom(roomData)
     local oldCoords = {
       topLeftPosX = roomData.topLeftPosX,
       topLeftPosY = roomData.topLeftPosY,
@@ -498,23 +799,31 @@ function MapEditor:action_resizeRoom(roomData, x1, y1, x2, y2)
       sizeX = x2 - (x1 - 1),
       sizeY = y2 - (y1 - 1)
     }
-    local action = ResizeRoomAction(self.mapData, roomData, oldCoords, newCoords)
-    action:execute()
+    roomData.topLeftPosX = newCoords.topLeftPosX
+    roomData.topLeftPosY = newCoords.topLeftPosY
+    roomData.sizeX = newCoords.sizeX
+    roomData.sizeY = newCoords.sizeY
+    self.mapData:addRoom(roomData)
+    local action = ResizeRoomAction(self.mapData, self.selectedLayerIndex, roomData, oldCoords, newCoords)
     self.actionQueue:addAction(action)
-  else
-    self.roomTransformer:initializeWidgets()
   end
+  self.roomTransformer = RoomTransformer(roomData, self.camera, function(a, b, c, d, e)
+    self:action_resizeRoom(a, b, c, d, e)
+  end, function(a, b, c, d, e) 
+    self:action_moveRoom(a, b, c, d, e)
+  end)
 end
 
 function MapEditor:action_removeRoom()
   self.selectedRoom = nil
   self.mapData:removeRoom(self.roomTransformer.roomData)
-  self.roomTransformer:disable()
+  self.roomTransformer = nil
 end
 
 function MapEditor:action_moveRoom(roomData, x1, y1, x2, y2)
   local roomMoved = false
-  if self.mapData:indexInBounds(x1, y1) and self.mapData:indexInBounds(x2, y2) then
+  if 1 <= x1 and x1 <= self.mapData.sizeX and 1 <= y1 and y1 <= self.mapData.sizeY 
+  and 1 <= x2 and x2 <= self.mapData.sizeX and 1 <= y2 and y2 <= self.mapData.sizeY  then
     local overlapsOtherRoom = false
     for _, rd in ipairs(self.mapData.rooms) do
       if rd ~= roomData then
@@ -529,23 +838,20 @@ function MapEditor:action_moveRoom(roomData, x1, y1, x2, y2)
       end
     end
     if not overlapsOtherRoom then
-      local oldCoords = {
-        topLeftPosX = roomData.topLeftPosX,
-        topLeftPosY = roomData.topLeftPosY
-      }
-      local newCoords = {
-        topLeftPosX = x1,
-        topLeftPosY = y1,
-      }
-      local action = MoveRoomAction(self.mapData, roomData, oldCoords, newCoords)
-      action:execute()
-      self.actionQueue:addAction(action)
-      roomMoved = true
+      self.mapData:removeRoom(roomData)
+      roomData.topLeftPosX = x1
+      roomData.topLeftPosY = y1
+      roomData.sizeX = x2 - (x1 - 1)
+      roomData.sizeY = y2 - (y1 - 1)
+      self.mapData:addRoom(roomData)
     end
   end
-  if not roomMoved then
-    self.roomTransformer:initializeWidgets()
-  end
+
+  self.roomTransformer = RoomTransformer(roomData, self.camera, function(a, b, c, d, e)
+    self:action_resizeRoom(a, b, c, d, e)
+  end, function(a, b, c, d, e) 
+    self:action_moveRoom(a, b, c, d, e)
+  end)
 end
 
 --[[ 
@@ -593,16 +899,14 @@ function MapEditor:update(dt)
       end
       Slab.Separator()
       if Slab.MenuItemChecked('Open Map...') then
-        self.showOpenFileDialog = true
+        print('TODO Open Map')
       end
       Slab.Separator()
-      if self.cachedSaveLocation ~= nil then
-        if Slab.MenuItemChecked('Save') then
-          print('TODO Save Map')
-        end
+      if Slab.MenuItemChecked('Save') then
+        print('TODO Save Map')
       end
       if Slab.MenuItemChecked('Save As') then
-        self.showSaveAsFileDialog = true
+        print('TODO Save As')
       end
       Slab.EndMenu()
     end
@@ -620,10 +924,6 @@ function MapEditor:update(dt)
     end
     Slab.EndMainMenuBar()
   end
-
-  --[[
-    Dialogs
-  ]]
   if self.showControlListDialog then
     local result = Slab.MessageBox("Control List", [[
       Mouse 1 : Places Tile
@@ -632,38 +932,6 @@ function MapEditor:update(dt)
     ]])
     if result ~= "" then
       self.showControlListDialog = false
-    end
-  end
-  if self.showOpenFileDialog then
-    local result = Slab.FileDialog({Type = 'openfile', 
-                                    AllowMultiSelect = false, 
-                                    Filters = { '.dat', 'Map Data Files' },
-                                    Directory = love.filesystem.getSource() .. '/data/maps' })
-    if result.Button ~= '' then
-      self.showOpenFileDialog = false
-      if result.Button == 'OK' then
-        self.roomTransformer:disable()
-        self.selectedRoom = nil
-        local sData = FileSystem.ReadContents(result.Files[1])
-        self.mapData = MapData(lume.deserialize(sData))
-      end
-    end
-  end
-  if self.showSaveAsFileDialog then
-    local result = Slab.FileDialog({Type = 'savefile', 
-                                    AllowMultiSelect = false, 
-                                    Filters = { '.dat', 'Map Data Files' }, 
-                                    Directory = love.filesystem.getSource() .. '/data/maps' })
-    if result.Button ~= '' then
-      self.showSaveAsFileDialog = false
-      if result.Button == 'OK' then
-        self.cachedSaveLocation = result.Files[1]
-        --local luaCode =       'function f()\n'
-        --luaCode = luaCode ..  '  return ' .. lume.serialize(self.mapData:getSerializableTable()) .. '\n'
-        --luaCode = luaCode ..  'end\n'
-        --luaCode = luaCode ..  'return makeModuleFunction(f)'
-        FileSystem.SaveContents(self.cachedSaveLocation, lume.serialize(self.mapData:getSerializableTable()))
-      end
     end
   end
 
@@ -791,7 +1059,8 @@ function MapEditor:update(dt)
   self.currentMousePositionX, self.currentMousePositionY = love.mouse.getPosition()
   -- update controls
   -- TODO: Turn into a state machine?
-  if self.mapData then 
+  if self.mapData then
+    
     if (self:isVoidMouseDown(3) or love.keyboard.isDown('m')) and Slab.IsVoidHovered() then
       -- move camera
       local dx = self.previousMousePositionX - self.currentMousePositionX
@@ -805,7 +1074,8 @@ function MapEditor:update(dt)
         self.actionQueue:addAction(self.queuedTileAction)
         self.queuedTileAction = nil
       end
-      if (not self:isVoidMouseDown(1)) and self:isVoidMouseDown(2) and Slab.IsVoidHovered() then
+
+      if not self:isVoidMouseDown(1) and self:isVoidMouseDown(2) and Slab.IsVoidHovered() then
         -- remove tile
         self:action_removeTile()
       elseif self.queuedTileAction and self.queuedTileAction:getType() == 'remove_tile_action' then
@@ -817,20 +1087,28 @@ function MapEditor:update(dt)
     elseif self.controlMode == ControlMode.PickRoom then
       local RoomTransformerInputHandled = false
       if self.selectedRoom then
+        assert(self.roomTransformer)
         self.roomTransformer:update(dt)
         RoomTransformerInputHandled = self.roomTransformer:isActive()
       end
       if not RoomTransformerInputHandled then
         if self:isVoidMouseDown(1) then
           local tx, ty = self:getMouseToMapCoords()
-          if self.mapData:indexInBounds(tx, ty) then
+          if 1 <= tx and tx <= self.mapData:getSizeX() and
+          1 <= ty and ty <= self.mapData:getSizeY() then
             for _, roomData in ipairs(self.mapData.rooms) do
               local rx1, ry1 = roomData:getTopLeftPosition()
               local rx2, ry2 = roomData:getBottomRightPosition()
               roomPicked = rx1 <= tx and tx <= rx2 and ry1 <= ty and ty <= ry2
               if roomPicked then
                 self.selectedRoom = roomData
-                self.roomTransformer:setRoomData(roomData)
+                local resizeCallback = function(roomData, x1, y1, x2, y2)
+                  self:action_resizeRoom(roomData, x1, y1, x2, y2)
+                end
+                local roomMoveCallback = function(roomData, x1, y1, x2, y2)
+                  self:action_moveRoom(roomData, x1, y1, x2, y2)
+                end
+                self.roomTransformer = RoomTransformer(roomData, self.camera, resizeCallback, roomMoveCallback)
                 break
               end
             end
@@ -843,15 +1121,8 @@ function MapEditor:update(dt)
     if love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl') then
       if Slab.IsKeyPressed('z') then
         self.actionQueue:undo()
-      elseif Slab.IsKeyPressed('y') then
+      elseif Slab.IsKeyPressed 'y' then
         self.actionQueue:redo()
-      elseif Slab.IsKeyPressed('s') then
-        if self.cachedSaveLocation then
-          FileSystem.SaveContents(self.cachedSaveLocation, lume.serialize(self.mapData:getSerializableTable()))
-        else
-          -- show save dialog next frame
-          self.showSaveAsFileDialog = true
-        end
       end
     end
   else
@@ -938,15 +1209,16 @@ function MapEditor:draw()
     -- if we have a selected tile, draw a partially transparent version if mouse over grid
     if self.controlMode == ControlMode.Tile and Slab.IsVoidHovered() and self.selectedTileData then
       local tx, ty = self:getMouseToMapCoords()
-      if self.mapData:indexInBounds(tx, ty) then
-        local tileSprite = self.selectedTileData:getSprite()
-        if tileSprite then
-          local sw = tileSprite:getWidth()
-          local sh = tileSprite:getHeight()
-          local sx = ((tx - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
-          local sy = ((ty - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
-          tileSprite:draw(sx, sy, 0.5)
-        end
+      if 1 <= tx and tx <= self.mapData:getSizeX() and
+        1 <= ty and ty <= self.mapData:getSizeY() then
+          local tileSprite = self.selectedTileData:getSprite()
+          if tileSprite then
+            local sw = tileSprite:getWidth()
+            local sh = tileSprite:getHeight()
+            local sx = ((tx - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
+            local sy = ((ty - 1) * MapData.GRID_SIZE) + MapData.GRID_SIZE / 2
+            tileSprite:draw(sx, sy, 0.5)
+          end
       end
     end
 
@@ -982,7 +1254,7 @@ function MapEditor:draw()
   
     -- draw selected room
     if self.controlMode == ControlMode.PickRoom and self.selectedRoom then
-      assert(self.roomTransformer.initialized)
+      assert(self.roomTransformer)
       self.roomTransformer:draw()
     end
 
@@ -1007,6 +1279,8 @@ function MapEditor:draw()
       end
     
       -- get draw positions from tile indices
+      --local x1, y1 = vector.mul(MapData.GRID_SIZE, tx1 - 1, ty1 - 1)
+      --local x2, y2 = vector.mul(MapData.GRID_SIZE, tx2 - 1, ty2 - 1)
       local x1 = MapData.GRID_SIZE * (tx1 - 1)
       local y1 = MapData.GRID_SIZE * (ty1 - 1)
       local x2 = MapData.GRID_SIZE * (tx2 - 1)

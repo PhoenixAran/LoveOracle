@@ -3,13 +3,13 @@ local lume = require 'lib.lume'
 
 local NIL_TABLE = { }
 local RoomData = Class {
-  init = function(self, data)
+  init = function(self, roomData)
     self.name = roomData.name or nil
-    self.theme = roomData.theme or nil
-    self.topLeftPosX = data.topLeftPosX or -1
-    self.topLeftPosY = data.topLeftPosY or -1
-    self.width = data.width or 16
-    self.height = data.height or 16
+    self.theme = roomData.theme or 'default'
+    self.topLeftPosX = roomData.topLeftPosX or -1
+    self.topLeftPosY = roomData.topLeftPosY or -1
+    self.sizeX = roomData.sizeX or 16
+    self.sizeY = roomData.sizeY or 16
   end
 }
 
@@ -37,6 +37,14 @@ function RoomData:getTopLeftPosition()
   return self.topLeftPosX, self.topLeftPosY
 end
 
+function RoomData:getTopLeftPositionX()
+  return self.topLeftPosX
+end
+
+function RoomData:getTopLeftPositionY()
+  return self.topLeftPosY
+end
+
 function RoomData:setTopLeftPosition(x, y)
   self.topLeftPosX = x
   self.topLeftPosY = y
@@ -51,31 +59,31 @@ function RoomData:setTopLeftPositionY(y)
 end
 
 function RoomData:getBottomRightPositionX()
-  return self.topLeftPosX + self.width
+  return self.topLeftPosX + self.sizeX - 1
 end
 
 function RoomData:getBottomRightPositionY()
-  return self.topLeftPosY + self.height
+  return self.topLeftPosY + self.sizeY - 1
 end
 
 function RoomData:getBottomRightPosition()
-  return self.topLeftPosX + self.width, self.topLeftPosY + self.height
+  return self.topLeftPosX + self.sizeX - 1, self.topLeftPosY + self.sizeY - 1
 end
 
-function RoomData:getWidth()
-  return self.width
+function RoomData:getSizeX()
+  return self.sizeX
 end
 
-function RoomData:setWidth(width)
-  self.width = width
+function RoomData:setSizeX(x)
+  self.sizeX = x
 end
 
-function RoomData:getHeight()
-  return self.height
+function RoomData:getSizeY()
+  return self.sizeY
 end
 
-function RoomData:setHeight(height)
-  self.height = height
+function RoomData:setHeight(y)
+  self.sizeY = y
 end
 
 function RoomData:getSerializableTable()
@@ -84,8 +92,8 @@ function RoomData:getSerializableTable()
     theme = self:getTheme(),
     topLeftPosX = self:getTopLeftPositionX(),
     topLeftPosY = self:getTopLeftPositionY(),
-    width = self:getWidth(),
-    height = self:getHeight()
+    sizeX = self:getSizeX(),
+    sizeY = self:getSizeY()
   }
 end
 
