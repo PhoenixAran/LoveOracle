@@ -7,6 +7,7 @@ local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local vector = require 'lib.vector'
 local Physics = require 'engine.physics'
+local TablePool = require 'engine.utils.table_pool'
 
 local MapEntity = Class { __includes = Entity,
   init = function(self, name, enabled, visible, rect, zRange)
@@ -107,6 +108,7 @@ function MapEntity:move(dt)
     end
   end
   self:setPosition(posX + velX, posY + velY)
+  TablePool.free(neighbors)
   Physics.update(self)
 end
 

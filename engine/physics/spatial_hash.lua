@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local rect = require 'engine.utils.rectangle'
+local TablePool = require 'engine.utils.table_pool'
 
 local SpatialHash = Class {
   init = function(self, cellSize)
@@ -10,7 +11,6 @@ local SpatialHash = Class {
     self.inverseCellSize = 1 / cellSize
     
     self.cellDict = { }
-    self.tempHashSet = { }
     
     self.gridBounds = { x = 0, y = 0, w = 0, h = 0 }
     self.overlapTestBox = { x = 0, y = 0, w = 0, h = 0 }
@@ -99,7 +99,7 @@ function SpatialHash:clear()
 end
 
 function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
-  lume.clear(self.tempHashSet)
+  local boxes = TablePool.obtain()
   local px1, py1 = self:cellCoords(boundsX, boundsY)
   local px2, py2 = self:cellCoords(boundsX + boundsW, boundsY + boundsH)  -- ( right, bottom )
   for x = px1, px2 do
@@ -111,13 +111,13 @@ function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
             and rect.intersects(boundsX, boundsY, boundsW, boundsH, otherBox.x, otherBox.y, otherBox.w, otherBox.h) 
             and box.zRange.max > otherBox.zRange.min and box.zRange.min < otherBox.zRange.max
             and box:additionalPhysicsFilter(otherBox) then
-            lume.push(self.tempHashSet, otherBox)
+            lume.push(boxes, otherBox)
           end
         end
       end
     end
   end
-  return self.tempHashSet
+  return boxes
 end
 
 return SpatialHash
