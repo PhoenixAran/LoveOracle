@@ -44,11 +44,11 @@ local MapEntity = Class { __includes = Entity,
 }
 
 function MapEntity:getType()
-  return 'game_entity'
+  return 'map_entity'
 end
 
 function MapEntity:getCollisionTag()
-  return 'game_entity'
+  return 'map_entity'
 end
 
 function MapEntity:isPersistant()
@@ -139,7 +139,14 @@ function MapEntity:inKnockback()
   return self.combat:inKnockback()
 end
 
--- other
+function MapEntity:resetCombatVariables()
+  self.combat:resetCombatVariables()
+end
+
+function MapEntity:hurt(damageInfo)
+  
+end
+
 function MapEntity:isInAir()
   if self.movement and self.movement:isEnabled() then
     return self.movement:isInAir()
