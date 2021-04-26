@@ -9,8 +9,10 @@ local PropertyType = {
   IntRange = 'int_range',
   FloatRange = 'float_range',
   Vector2 = 'vector2',
-  Vector2I = 'vectori',
-  Rect = 'rect'
+  Vector2I = 'vector2i',
+  Rect = 'rect',
+
+  Vector2iList = 'vector2i_list'
 }
 
 local PropertyMode = { 
@@ -199,13 +201,13 @@ function InspectorProperties:addReadOnlyVector2(label, getFunc, isObjectFuncs)
 end
 
 -- VECTOR2I
-function InspectorProperties:addVector2I(label, getFunc, setFunc, isObjectFuncs)
+function InspectorProperties:addVector2i(label, getFunc, setFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Vector2I)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
-function InspectorProperties:addReadOnlyVector2I(label, getFunc, isObjectFuncs)
+function InspectorProperties:addReadOnlyVector2i(label, getFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Vector2I, true)
   setReadOnlyAccessor(property, getFunc, isObjectFuncs)
   addProperty(self, property)
@@ -224,13 +226,11 @@ function InspectorProperties:addReadOnlyRect(label, getFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
-
 function InspectorProperties:count()
   return lume.count(self.properties)
 end
 
 -- export PropertyType enum
 InspectorProperties.PropertyType = PropertyType
-
 
 return InspectorProperties

@@ -843,8 +843,15 @@ function MapEditor:update(dt)
     if love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl') then
       if Slab.IsKeyPressed('z') then
         self.actionQueue:undo()
-      elseif Slab.IsKeyPressed 'y' then
+      elseif Slab.IsKeyPressed('y') then
         self.actionQueue:redo()
+      elseif Slab.IsKeyPressed('s') then
+        if self.cachedSaveLocation then
+          FileSystem.SaveContents(self.cachedSaveLocation, lume.serialize(self.mapData:getSerializableTable()))
+        else
+          -- show save dialog next frame
+          self.showSaveAsFileDialog = true
+        end
       end
     end
   else

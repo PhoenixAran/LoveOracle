@@ -45,6 +45,7 @@ function love.load(arg)
   love.window.setTitle(gameConfig.window.title)
   love.graphics.setFont(AssetManager.getFont('monogram'))
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
+  print(gameConfig.startupScreen)
   screenManager:enter( require(gameConfig.startupScreen) ())
   
   local Slab = require 'lib.slab'

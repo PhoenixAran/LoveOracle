@@ -79,37 +79,6 @@ function Player:getType()
   return 'player'
 end
 
---[[
-function Player:matchAnimationDirection(inputX, inputY)
-  local DIRECTION_SNAP = 4  -- theres only 4 animation directions
-
-  -- clamp input vectors to pi/2, pi, 3pi/2, 2pi 
-  inputX, inputY = vector.snapDirectionByCount(inputX, inputY, DIRECTION_SNAP)
-  
-  local direction = self.animationDirection
-  if inputX == -1 and inputY == -1 and direction ~= 'up' and direction ~= 'left' then
-    direction = 'up'
-  elseif inputX == 1 and inputY == 1 and direction ~= 'down' and direction ~= 'right' then
-    direction = 'down'
-  elseif inputX == 1 and inputY == -1 and direction ~= 'up' and direction ~= 'right' then
-    direction = 'up'
-  elseif inputX == -1 and inputY == 1 and direction ~= 'down' and direction ~= 'left' then
-    direction = 'left'
-  elseif inputX == 0 and inputY == -1 and direction ~= 'up' then
-    direction = 'up'
-  elseif inputX == 0 and inputY == 1 and direction ~= 'down' then 
-    direction = 'down'
-  elseif inputX == -1 and inputY == 0 and direction ~= 'left' then
-    direction = 'left'
-  elseif inputX == 1 and inputY == 0 and direction ~= 'right' then
-    direction = 'right'
-  else
-    print(inputX, inputY)
-  end
-  self:setAnimationDirection(direction)
-end
-]]
-
 function Player:matchAnimationDirection(inputX, inputY)
   if inputX == 0 and inputY == 0 then
     return

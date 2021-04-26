@@ -55,6 +55,7 @@ local tilesetThemeRequirements = {
 local startupScreen = 'engine.screens.editor.map_editor'
 --local startupScreen = 'engine.screens.content_viewer'
 --local startupScreen = 'data.test_screens.player_playground'
+--local startupScreen = 'engine.test_screens.entity_inspector_test'
 
 return {
  zbStudioDebug = zbStudioDebug,

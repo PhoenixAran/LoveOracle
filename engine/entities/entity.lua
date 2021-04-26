@@ -161,7 +161,7 @@ function Entity:getInspectorProperties()
   local props = InspectorProperties(self)
   props:addReadOnlyString('Name', 'name')
   props:addVector2('Position', self.getPosition, self.setPosition)
-  props:addVector2I('Size', self.getSize, self.resize)
+  props:addVector2i('Size', self.getSize, self.resize)
   return props
 end
 
