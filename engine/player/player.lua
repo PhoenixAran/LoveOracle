@@ -393,7 +393,7 @@ function Player:update(dt)
   self:updateStates()
   self:move(dt)
   self:updateEquippedItems(dt)
-  self:updateEntitySpriteEffects(dt)
+  self:updateEntityEffectSprite(dt)
 
   self.sprite:update(dt)
   self.combat:update(dt)

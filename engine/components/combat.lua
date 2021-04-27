@@ -43,6 +43,21 @@ function Combat:resetCombatVariables()
   self.currentKnockbackSpeed = 0
 end
 
+function Combat:setIntangibility(value)
+  self.intangibilityTime = value
+  self.currentIntangibilityTime = 0
+end
+
+function Combat:setHitstun(value)
+  self.currentHitstunTime = 0
+  self.hitstunTime = value
+end
+
+function Combat:setKnockback(value)
+  self.currentKnockbackTime = 0
+  self.knockbackTime = value
+end
+
 function Combat:isIntangible()
   return self.currentKnockbackTime > 0 and self.currentIntangibilityTime < self.intangibilityTime
 end

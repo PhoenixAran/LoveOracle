@@ -136,7 +136,7 @@ function Entity:awake()
 end
 
 function Entity:update(dt)
-
+  
 end
 
 function Entity:draw()

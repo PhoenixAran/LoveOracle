@@ -19,7 +19,6 @@ local SpriteRenderer = Class { __includes = Component,
     self.alpha = 1
     self.color = { }
     self:setSprite(self.sprite)
-    
   end
 }
 
@@ -46,6 +45,10 @@ end
 function SpriteRenderer:setOffset(x, y)
   self.offsetX = x
   self.offsetY = y
+end
+
+function SpriteRenderer:setAlpha(value)
+  self.alpha = value
 end
 
 function SpriteRenderer:getBounds()
@@ -83,11 +86,11 @@ function SpriteRenderer:draw()
   if self.followZ then
     y = y - z
   end
-  local currentShader = love.graphics.getShader()
   local shouldSwapBack = false
+  local currentShader = love.graphics.getShader()
   if self.palette then
     if currentShader ~= self.palette:getShader() then
-      love.graphics.setShader(self.palette:setShader())
+      love.graphics.setShader(self.palette:getShader())
       shouldSwapBack = true
     end
   end
