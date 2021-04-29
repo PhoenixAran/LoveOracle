@@ -122,6 +122,7 @@ end
 function MapEntity:move(dt) 
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
+  velX, velY = vector.add(velX, velY, self:getKnockbackVelocity(dt))
   local bx = self.x + velX
   local by = self.y + velY
   local bw = self.w
@@ -168,6 +169,26 @@ end
 
 function MapEntity:resetCombatVariables()
   self.combat:resetCombatVariables()
+end
+
+function MapEntity:getKnockbackDirection(x, y)
+  return self.combat:getKnockbackDirection()
+end
+
+function MapEntity:setKnockbackDirection(x, y)
+  self.combat:setKnockbackDirection(x, y)
+end
+
+function MapEntity:setKnockbackSpeed(speed)
+  self.combat:setKnockbackSpeed(speed)
+end
+
+function MapEntity:getKnockbackSpeed()
+  return self.combat:getKnockbackSpeed()
+end
+
+function MapEntity:getKnockbackVelocity(dt)
+  return self.combat:getKnockbackVelocity(dt)
 end
 
 function MapEntity:hurt(damageInfo)

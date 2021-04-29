@@ -25,6 +25,8 @@ local Movement = Class { __includes = Component,
     
     -- useful for calculating acceleration and knowing when to stop accelerating movement
     self.motionX, self.motionY = 0, 0
+    -- useful for recalculating linear velocity
+    self.prevMotionX, self.prevMotionY = 0, 0
   end
 }
 
