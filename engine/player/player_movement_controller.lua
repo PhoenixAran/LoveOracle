@@ -49,7 +49,7 @@ function PlayerMovementController:setMode(mode)
 end
 
 function PlayerMovementController:jump()
-  if self.player:isOnGround() then
+  if self.player:isOnGround() and self.player:getStateParameters().canJump then
     if self.player:getStateParameters().canControlOnGround then
       local x, y = self:pollMovementControls(true)
       if self:isMoving() then

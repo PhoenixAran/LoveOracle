@@ -51,7 +51,7 @@ end
 
 function SpriteFlasher:update(dt)
   if self.isActive then
-    if self.tick <= duration then
+    if self.tick <= self.duration then
       self.tick = self.tick + 1
     else
       self.isActive = false

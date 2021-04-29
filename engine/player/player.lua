@@ -25,6 +25,7 @@ local Player = Class { __includes = MapEntity,
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
+    self.spriteFlasher:addSprite(self.sprite)
     
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
@@ -62,6 +63,19 @@ local Player = Class { __includes = MapEntity,
     end)
     self:addPressInteraction('b', function(player)
       self:actionUseWeapon('b')
+    end)
+    self:addPressInteraction('y', function(player)
+      local damageInfo = require('engine.entities.damage_info')()
+      damageInfo.damage = 3
+      damageInfo.hitstunTime = 8
+      damageInfo.knockbackTime = 8
+      damageInfo.knockbackSpeed = 80
+      damageInfo.sourceX, damageInfo.sourceY = player:getPosition()
+      local rx = lume.random(-20, 20)
+      local ry = lume.random(-20, 20)
+      damageInfo.sourceX = damageInfo.sourceX + rx
+      damageInfo.sourceY = damageInfo.sourceY + ry
+      player:hurt(damageInfo)
     end)
   
     self.items = { 
@@ -200,7 +214,7 @@ function Player:getPlayerAnimations()
 end
 
 function Player:beginConditionState(state)
-  local count = lume.count(self.conditionStatesMachines)
+  local count = lume.count(self.conditionStateMachines)
   for i = count, 1, -1 do
     if not self.conditionStateMachines[i]:isActive() then
       local conditionStateMachine = self.conditionStateMachines[i]
@@ -328,8 +342,8 @@ function Player:updateStates(dt)
   -- update condition states
   for i = lume.count(self.conditionStateMachines), 1, -1 do
     self.conditionStateMachines[i]:update(dt)
-    if not self.conditionStates[i]:isActive() then
-      table.remove(self.conditionStates, i)
+    if not self.conditionStateMachines[i]:isActive() then
+      table.remove(self.conditionStateMachines, i)
     end
   end
   
@@ -342,6 +356,14 @@ function Player:updateStates(dt)
     elseif not self.playerMovementController:isMoving() and self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().default then
       self.sprite:play(self:getPlayerAnimations().default)
     end
+  end
+end
+
+function Player:equipItem(item)
+  self:addChild(item)
+  item:setPlayer(self)
+  for i, v in ipairs(item.useButtons) do
+    self.items[v] = item
   end
 end
 
@@ -362,6 +384,17 @@ function Player:actionUseWeapon(button)
     return item:onButtonPress()
   end
   return false
+end
+
+function Player:interruptWeapons()
+  for k, item in pairs(self.items) do
+    item:interrupt()
+  end
+end
+
+function Player:onHurt(damageInfo)
+  local h = require 'engine.player.condition_states.player_hitstun_state'
+  self:beginConditionState(h())
 end
 
 function Player:update(dt)
@@ -395,6 +428,7 @@ function Player:update(dt)
   self:updateEquippedItems(dt)
   self:updateEntityEffectSprite(dt)
 
+  self.spriteFlasher:update(dt)
   self.sprite:update(dt)
   self.combat:update(dt)
   self.movement:update(dt)
@@ -416,14 +450,6 @@ function Player:draw()
     if item.drawAbove then
       item:drawAbove()
     end
-  end
-end
-
-function Player:equipItem(item)
-  self:addChild(item)
-  item:setPlayer(self)
-  for i, v in ipairs(item.useButtons) do
-    self.items[v] = item
   end
 end
 

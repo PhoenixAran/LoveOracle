@@ -122,7 +122,8 @@ end
 function MapEntity:move(dt) 
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
-  velX, velY = vector.add(velX, velY, self:getKnockbackVelocity(dt))
+  local kx, ky = self:getKnockbackVelocity(dt)
+  velX, velY = vector.add(velX, velY, kx, ky)
   local bx = self.x + velX
   local by = self.y + velY
   local bw = self.w
@@ -199,20 +200,29 @@ function MapEntity:hurt(damageInfo)
   end
   self:resetCombatVariables()
   if damageInfo:applyHitstun() then
-    self:setHitstun(damageInfo.hitstun)
+    self:setHitstun(damageInfo.hitstunTime)
+    self:setIntangibility(damageInfo.hitstunTime)
+    self:flashSprite(damageInfo.hitstunTime)
   end
   if damageInfo:applyKnockback() then
-    self:setKnockback(damageInfo.knockback)
-    self:setSpeed(damageInfo.knockbackSpeed)
-    self:setVectorAwayFrom(damageInfo.sourceX, damageInfo.sourceY)
+    self:setKnockback(damageInfo.knockbackTime)
+    self:setKnockbackSpeed(damageInfo.knockbackSpeed)
+    local ex, ey = self:getPosition()
+    self:setKnockbackDirection(vector.sub(ex, ey,damageInfo.sourceX, damageInfo.sourceY))
   end
 
   -- TODO take damage
+  if self.onHurt then
+    self:onHurt(damageInfo)
+  end
   self:signal('entityHit')
 end
 
 function MapEntity:bump(sourcePositionX, sourcePositionY, duration, speed)
   -- TODO bump entity
+  if self.onBump then
+    self:onBump(sourcePositionX, sourcePositionY, duration, speed)
+  end
   self:signal('entityBumped')
 end
 

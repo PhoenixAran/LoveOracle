@@ -54,7 +54,7 @@ local function prioritizeFalse(a, b)
 end
 
 function PlayerStateParameters:integrateParameters(other)
-  self.canJump = prioritizeFalse(other.canJump, other.canJump)
+  self.canJump = prioritizeFalse(self.canJump, other.canJump)
   self.canWarp =  prioritizeFalse(self.canWarp, other.canWarp)
   self.canLedgeJump =  prioritizeFalse(self.canLedgeJump, other.canLedgeJump)
   self.canControlOnGround =  prioritizeFalse(self.canControlOnGround, other.canControlOnGround)
