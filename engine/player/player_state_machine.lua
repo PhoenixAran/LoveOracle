@@ -93,10 +93,6 @@ function PlayerStateMachine:isActive()
   return self.currentState ~= nil and self.currentState:isActive()
 end
 
-function PlayerStateMachine:getState()
-  return self.currentState
-end
-
 function PlayerStateMachine:reset()
   self.player = nil
   self.previousState = nil

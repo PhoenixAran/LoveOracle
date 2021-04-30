@@ -59,10 +59,10 @@ local Player = Class { __includes = MapEntity,
       self.playerMovementController:jump()
     end)
     self:addPressInteraction('a', function(player)
-      self:actionUseWeapon('a')
+      self:actionUseItem('a')
     end)
     self:addPressInteraction('b', function(player)
-      self:actionUseWeapon('b')
+      self:actionUseItem('b')
     end)
     self:addPressInteraction('y', function(player)
       local damageInfo = require('engine.entities.damage_info')()
@@ -378,7 +378,7 @@ function Player:updateEquippedItems(dt)
   end
 end
 
-function Player:actionUseWeapon(button)
+function Player:actionUseItem(button)
   local item = self.items[button]
   if item ~= nil and item:isUsable() then
     return item:onButtonPress()
@@ -386,10 +386,28 @@ function Player:actionUseWeapon(button)
   return false
 end
 
-function Player:interruptWeapons()
+function Player:interruptItems()
   for k, item in pairs(self.items) do
     item:interrupt()
   end
+  if self.controlStateMachine:isActive() then
+    self.controlStateMachine:getCurrentState():onInterruptItems()
+  end
+  if self.weaponStateMachine:isActive() then
+    self.weaponStateMachine:getCurrentState():onInterruptItems()
+  end
+  if self.environmentStateMachine:isActive() then
+    self.environmentStateMachine:getCurrentState():onInterruptItems()
+  end
+  for _, stateMachine in ipairs(self.conditionStateMachines) do
+    if stateMachine:isActive() then
+      stateMachine:getCurrentState():onInterruptItems()
+    end
+  end
+  if self.weaponStateMachine:isActive() then
+    self.weaponStateMachine:getCurrentState():endState()
+  end
+  self:integrateStateParameters()
 end
 
 function Player:onHurt(damageInfo)

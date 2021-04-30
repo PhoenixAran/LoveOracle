@@ -119,7 +119,7 @@ end
 
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
-    self:setMode(self.player.environmentStateMachine:getState().motionSettings)
+    self:setMode(self.player.environmentStateMachine:getCurrentState().motionSettings)
   else
     self:setMode(self.moveNormalMode)
   end

@@ -25,7 +25,7 @@ end
 
 function PlayerHitstunState:onBegin(previousState)
   self.combat = self.player.combat
-  self.player:interruptWeapons()
+  self.player:interruptItems()
   self.player.sprite:play('idle')
   assert(self.combat, 'Player does not have combat component')
 end

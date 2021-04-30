@@ -29,7 +29,7 @@ function PlayerState:onLeaveRoom() end
 
 function PlayerState:onHurt() end
 
-function PlayerState:onInterruptWeapons() end
+function PlayerState:onInterruptItems() end
 
 function PlayerState:update(dt) end
 
