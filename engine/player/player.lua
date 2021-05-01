@@ -14,6 +14,7 @@ local PlayerMovementController = require 'engine.player.player_movement_controll
 -- ### STATES ###
 -- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
+local PlayerHitstunState = require 'engine.player.condition_states.player_hitstun_state'
 -- environment states
 local PlayerJumpEnvironmentState = require 'engine.player.environment_states.player_jump_environment_state'
 -- weapon states
@@ -411,8 +412,7 @@ function Player:interruptItems()
 end
 
 function Player:onHurt(damageInfo)
-  local h = require 'engine.player.condition_states.player_hitstun_state'
-  self:beginConditionState(h())
+  self:beginConditionState(PlayerHitstunState())
 end
 
 function Player:update(dt)

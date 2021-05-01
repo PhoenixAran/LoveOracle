@@ -40,5 +40,4 @@ function PlayerHitstunState:onEnd(newState)
   self.combat = nil
 end
 
-
 return PlayerHitstunState
