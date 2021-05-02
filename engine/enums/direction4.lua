@@ -1,5 +1,6 @@
 local vector = require 'lib.vector'
 
+-- values determined by angleindex + 1
 local Direction4 = {
   none = 0,
   right = 1,
@@ -27,6 +28,13 @@ function Direction4.getDirection(x, y)
     local angleIndex = math.floor((theta / angleInterval) + 0.5)
     return angleIndex + 1
   end
+end
+
+function Direction4.getOpposite(direction)
+  if direction == Direction4.none then
+    return Direction4.none
+  end 
+  return (((direction - 1) + 2) % 4) + 1
 end
 
 return Direction4

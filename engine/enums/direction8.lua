@@ -1,5 +1,6 @@
 local vector = require 'lib.vector'
 
+-- values determined by angleindex + 1
 local Direction8 = {
   none = 0,
   right = 1,

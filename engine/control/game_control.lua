@@ -44,7 +44,7 @@ function GameControl:setCamera(camera)
 end
 
 function GameControl:update(dt)
-  self.entitites:update()
+  self.entitites:update(dt)
 end
 
 function GameControl:draw()

@@ -98,6 +98,10 @@ function Player:getType()
   return 'player'
 end
 
+function Player:getCollisionTag()
+  return 'player'
+end
+
 function Player:matchAnimationDirection(inputX, inputY)
   if inputX == 0 and inputY == 0 then
     return
@@ -417,6 +421,18 @@ function Player:onHurt(damageInfo)
   self:beginConditionState(PlayerHitstunState())
 end
 
+function Player:checkRoomTransitions()
+  if self:getStateParameters().canRoomTransition then
+    for _, other in ipairs(self.moveCollisions) do
+      if other.canRoomTransition then
+        if other:canRoomTransition(self:getDirection4()) then
+          other:requestRoomTransition()
+        end
+      end
+    end
+  end
+end
+
 function Player:update(dt)
   -- pre-state update
   self:requestNaturalState()
@@ -452,6 +468,8 @@ function Player:update(dt)
   self.sprite:update(dt)
   self.combat:update(dt)
   self.movement:update(dt)
+
+  self:checkRoomTransitions()
 end
 
 function Player:draw()

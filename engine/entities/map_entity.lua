@@ -34,6 +34,9 @@ local MapEntity = Class { __includes = Entity,
     self.spriteFlasher = SpriteFlasher(self)
     self.sprite = nil   -- declare this yourself
     
+    -- table to store collisions that occur when MapEntity:move() is called
+    self.moveCollisions = { }
+
     -- declarations
     self.persistant = false
     self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
@@ -55,6 +58,11 @@ end
 
 function MapEntity:getCollisionTag()
   return 'map_entity'
+end
+
+function MapEntity:release()
+  self.moveCollisions = nil
+  Entity.release(self)
 end
 
 function MapEntity:isPersistant()
@@ -93,6 +101,14 @@ function MapEntity:setVector(x, y)
   return self.movement:setVector(x, y)
 end
 
+function MapEntity:getDirection4()
+  return self.movement:getDirection4()
+end
+
+function MapEntity:getDirection8()
+  return self.movement:getDirection8()
+end
+
 function MapEntity:setVectorAwayFrom(x, y)
   local mx, my = self.movement:getVector()
   return self.movement:setVector(vector.sub(mx, my, x, y))
@@ -121,7 +137,8 @@ function MapEntity:isOnGround()
   return not self:isInAir()
 end
 
-function MapEntity:move(dt) 
+function MapEntity:move(dt)
+  lume.clear(self.moveCollisions)
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
   local kx, ky = self:getKnockbackVelocity(dt)
@@ -137,6 +154,8 @@ function MapEntity:move(dt)
       if collided then
         -- hit, back off our motion
         velX, velY = vector.sub(velX, velY, mtvX, mtvY)
+        -- add other box to moveCollisions table
+        lume.push(self.moveCollisions, neighbor)
       end
     end
   end
