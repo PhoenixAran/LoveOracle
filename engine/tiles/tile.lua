@@ -26,6 +26,10 @@ function Tile:getType()
   return 'tile'
 end
 
+function Tile:isTile()
+  return true
+end
+
 function Tile:getTileData()
   return self.data
 end

@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local PlayerState = require 'engine.player.player_state'
+local Direction4 = require 'engine.enums.direction4'
 
 local PlayerSwingState = Class { __includes = PlayerState,
   init = function(self, player)
@@ -13,7 +14,7 @@ local PlayerSwingState = Class { __includes = PlayerState,
     -- Used to set animation direction when swing ends incase player switches direction mid spam swings.
     -- If they do switch directions, we need to set animation direction when the state end or else
     -- they will turn around to their original direction if player swings again without moving the dpad
-    self.cachedDirection = nil
+    self.cachedDirection4 = nil
   end
 }
 
@@ -21,7 +22,7 @@ function PlayerSwingState:getType()
   return 'player_swing_state'
 end
 
-function PlayerSwingState:getPlayerSwingAnimation(lunge)
+function PlayerSwingState:getPlayerSwingAnimation(lunge)  
   if lunge then 
     return self.player:getPlayerAnimations().swing 
   end
@@ -29,15 +30,15 @@ function PlayerSwingState:getPlayerSwingAnimation(lunge)
 end
 
 function PlayerSwingState:swing()
-  local direction = self.player:getUseDirection()
-  if direction == 'none' then
-    direction = self.cachedDirection or self.player:getAnimationDirection()
+  local direction4 = self.player:getUseDirection4()
+  if direction4 == Direction4.none then
+    direction4 = self.cachedDirection4 or self.player:getAnimationDirection4()
   end
-  self.weapon:swing(direction)
+  self.weapon:swing(direction4)
   local playerAnimation = self:getPlayerSwingAnimation(self.lunge)
-  self.player.sprite:play(playerAnimation, direction, true)
-  self.player:setAnimationDirection(direction)
-  self.cachedDirection = direction
+  self.player.sprite:play(playerAnimation, direction4, true)
+  self.player:setAnimationDirection4(direction4)
+  self.cachedDirection4 = direction4
 end
 
 function PlayerSwingState:onBegin(previousState)
@@ -56,8 +57,8 @@ end
 
 function PlayerSwingState:onEnd()
   self.isReswingable = true
-  self.player:setAnimationDirection(self.cachedDirection)
-  self.cachedDirection = nil
+  self.player:setAnimationDirection4(self.cachedDirection4)
+  self.cachedDirection4 = nil
   self.weapon:setVisible(false)
 end
 

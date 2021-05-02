@@ -30,8 +30,8 @@ function ItemSword:draw()
   self.sprite:draw()
 end
 
-function ItemSword:swing(direction)
-  self.sprite:play('swing', direction, true)
+function ItemSword:swing(direction4)
+  self.sprite:play('swing', direction4, true)
 end
 
 return ItemSword

@@ -48,6 +48,10 @@ function Entity:getType()
   return 'entity'
 end
 
+function Entity:isTile()
+  return false
+end
+
 function Entity:getCollisionTag()
   return 'entity'
 end

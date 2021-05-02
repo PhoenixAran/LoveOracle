@@ -7,6 +7,8 @@ local Combat = require 'engine.components.combat'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local SpriteFlasher = require 'engine.components.sprite_flasher'
+local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
 
 local Physics = require 'engine.physics'
 local TablePool = require 'engine.utils.table_pool'
@@ -35,7 +37,7 @@ local MapEntity = Class { __includes = Entity,
     -- declarations
     self.persistant = false
     self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
-    self.animationDirection = nil -- will be used as substrip key if syncDirectionWithAnimation is true
+    self.animationDirection4 = Direction4.none -- will be used as substrip key if syncDirectionWithAnimation is true
     -- shadow, ripple, and grass effects
     -- TODO finish ripple and grass effects
     self.shadowVisible = true   
@@ -68,8 +70,8 @@ function MapEntity:doesSyncDirectionWithAnimation()
   return self.syncDirectionWithAnimation
 end
 
-function MapEntity:setAnimationDirection(value)
-  self.animationDirection = value
+function MapEntity:setAnimationDirection4(value)
+  self.animationDirection4 = value
   if self:doesSyncDirectionWithAnimation() and self.sprite ~= nil then
     assert(self.sprite:getType() == 'animated_sprite_renderer')
     if self.sprite:getSubstripKey() ~= value then
@@ -78,8 +80,8 @@ function MapEntity:setAnimationDirection(value)
   end
 end
 
-function MapEntity:getAnimationDirection()
-  return self.animationDirection
+function MapEntity:getAnimationDirection4()
+  return self.animationDirection4
 end
 
 -- movement component pass throughs

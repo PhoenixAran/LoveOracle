@@ -10,7 +10,8 @@ local SpriteRenderer = require 'engine.components.sprite_renderer'
 local PlayerStateMachine = require 'engine.player.player_state_machine'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
 local PlayerMovementController = require 'engine.player.player_movement_controller'
-
+local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
 -- ### STATES ###
 -- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
@@ -46,7 +47,10 @@ local Player = Class { __includes = MapEntity,
     -- is holding dpad when they are not allowed to move (like during a sword swing)
     -- if the player can move, it will match the direction they are moving in
     self.useDirectionX, self.useDirectionY = 0
-    self.useDirection = 'none'
+    -- I don't see a usecase for Direction8 version for Use Direction
+    -- If they need that much control they already have the vector values for direction,
+    -- and if they need an animation Direction4 should be enough
+    self.useDirection4 = Direction4.none
 
     self.pressedActionButtons = { }
     self.buttonCallbacks = { }
@@ -98,48 +102,42 @@ function Player:matchAnimationDirection(inputX, inputY)
   if inputX == 0 and inputY == 0 then
     return
   end
-  local direction = self.animationDirection
-  local theta = math.atan2(inputY, inputX)
-  if theta < 0 then
-    theta = theta + math.pi * 2
+  local animDir4 = self.animationDirection4
+  -- we want to use Direction8 because of 8-way direction
+  -- then man handle how to convert Direction8 to Direction4
+  local dir8 = Direction8.getDirection(inputX, inputY)
+  if dir8 == Direction8.right and animDir4 ~= Direction4.right then
+    animDir4 = Direction4.right
+  elseif dir8 == Direction8.upRight and animDir4 ~= Direction4.right and animDir4 ~= Direction4.up then
+    animDir4 = Direction4.up
+  elseif dir8 == Direction8.up and animDir4 ~= Direction4.up then
+    animDir4 = Direction4.up
+  elseif dir8 == Direction8.upLeft and animDir4 ~= Direction4.left and animDir4 ~= Direction4.up then
+    animDir4 = Direction4.up
+  elseif dir8 == Direction8.left and animDir4 ~= Direction4.left then
+    animDir4 = Direction4.left
+  elseif dir8 == Direction8.downLeft and animDir4 ~= Direction4.left and animDir4 ~= Direction4.down then
+    animDir4 = Direction4.down
+  elseif dir8 == Direction8.down and animDir4 ~= Direction4.down then
+    animDir4 = Direction4.down
+  elseif dir8 == Direction8.downRight and animDir4 ~= Direction4.down and animDir4 ~= Direction4.right then
+    animDir4 = Direction4.down
   end
-  local angleInterval = (math.pi * 2) / 8
-  --[[ 
-    we split the unit circle into 8 slices
-  ]]
-  local angleIndex = math.floor((theta / angleInterval) + 0.5)
-  if angleIndex == 0 and direction ~= 'right' then
-    direction = 'right'
-  elseif angleIndex == 7 and direction ~= 'right' and direction ~= 'up' then
-    direction = 'up'
-  elseif angleIndex == 6 and direction ~= 'up' then
-    direction = 'up'
-  elseif angleIndex == 5 and direction ~= 'left' and direction ~= 'up' then
-    direction = 'up'
-  elseif angleIndex == 4 and direction ~= 'left' then
-    direction = 'left'
-  elseif angleIndex == 3 and direction ~= 'left' and direction ~= 'down' then
-    direction = 'down'
-  elseif angleIndex == 2 and direction ~= 'down' then
-    direction = 'down'
-  elseif angleIndex == 1 and direction ~= 'down' and direction ~= 'right' then
-    direction = 'down'
-  end
-  self:setAnimationDirection(direction)
+  self:setAnimationDirection4(animDir4)
 end
 
 function Player:updateUseDirections()
-  local direction = 'none'
+  local direction4 = Direction4.none
   local x, y = 0, 0
-  -- find control direction
+  -- find Direction4
   if input:down('up') then
-    direction = 'up'
+    direction4 = Direction4.up
   elseif input:down('down') then
-    direction = 'down'
+    direction4 = Direction4.down
   elseif input:down('left') then
-    direction = 'left'
+    direction4 = Direction4.left
   elseif input:down('right') then
-    direction = 'right'
+    direction4 = Direction4.right
   end
   
   --- now get actual x y values
@@ -159,19 +157,23 @@ function Player:updateUseDirections()
   if self.playerMovementController:isMoving() and self:getStateParameters().canStrafe then
     self.useDirectionX = self.playerMovementController.directionX
     self.useDirectionY = self.playerMovementController.directionY
-    -- movement controller sets self.animationDirection according to playerMovementController.directionX
+    -- movement controller sets self.animationDirection4 via self:setAnimationDirection4 according to playerMovementController.directionX
     -- and playerMovementController.directionY
-    -- so we use self.animationDirection
-    self.useDirection = self.animationDirection
+    -- so we use self.animationDirection4
+    self.useDirection4 = self.animationDirection4
   else
     self.useDirectionX = x
     self.useDirectionY = y
-    self.useDirection = direction
+    self.useDirection4 = direction4
   end
 end
 
-function Player:getUseDirection()
-  return self.useDirection
+function Player:getUseDirection4()
+  return self.useDirection4
+end
+
+function Player:getUserDirection8()
+  return self.useDirection8
 end
 
 function Player:getUseDirectionXY()
