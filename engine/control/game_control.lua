@@ -1,9 +1,10 @@
 local Class = require 'lib.class'
+local lume = require 'lib.lume'
+local vector = require 'lib.vector'
 local SignalObject = require 'engine.signal_object'
 local Entities = require 'engine.entities.entities'
 local Inventory = require 'engine.control.inventory'
-local lume = require 'lib.lume'
-local vector = require 'lib.vector'
+local GameStateStack = require 'engine.control.game_state_stack'
 
 local GameControl = Class { __includes = SignalObject,
   init = function(self)
@@ -15,7 +16,7 @@ local GameControl = Class { __includes = SignalObject,
     
     self.map = nil
     self.currentRoom = nil
-
+    self.gameStateStack = GameStateStack(self)
   end
 }
 
@@ -49,6 +50,10 @@ end
 
 function GameControl:draw()
   self.entities:draw()
+end
+
+function GameControl:release()
+  SignalObject.release(self)
 end
 
 return GameControl

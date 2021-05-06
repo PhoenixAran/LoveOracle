@@ -162,12 +162,6 @@ function Movement:recalculateLinearVelocity(dt, newX, newY)
   -- want to find a way to "autododge" without recalculating linear velocity
 end
 
--- gets motionX and motionY that was calculated from
--- Movement:getLinearVelocity() or Movement:recalculateLinearVelocity()
-function Movement:getCalculatedMotion()
-  return self.motionX, self.motionY
-end
-
 -- update z position
 function Movement:update(dt)
   if self.entity:getZPosition() > 0 or self.zVelocity ~= 0 then
