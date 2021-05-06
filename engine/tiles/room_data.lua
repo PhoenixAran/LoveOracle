@@ -97,4 +97,8 @@ function RoomData:getSerializableTable()
   }
 end
 
+function RoomData:clone()
+  return RoomData(self:getSerializablTable())
+end
+
 return RoomData
