@@ -3,7 +3,6 @@ local BaseScreen = require 'engine.screens.base_screen'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
 
-
 local PlayerPlayground = Class { __includes = BaseScreen,
   init = function(self)
     BaseScreen.init(self)

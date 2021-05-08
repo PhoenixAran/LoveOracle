@@ -35,7 +35,7 @@ end
 function EntityInspectorTest:draw()
   monocle:begin()
   self.player:draw()
-  self.player:debugDraw()
+  --self.player:debugDraw()
   if self.sword:isVisible() then 
     self.sword:draw()
   end

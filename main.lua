@@ -1,9 +1,11 @@
 local Monocle = require 'lib.monocle'
 local lume = require 'lib.lume'
 local gameConfig = require 'game_config'
-local ContentControl = require 'engine.control.content_control'
+local ContentControl = require 'engine.utils.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
 local Slab = require 'lib.slab'
+
+math.randomseed(os.time())
 
 print('Oracle Engine ' .. gameConfig.version)
 print("OS: " .. love.system.getOS())

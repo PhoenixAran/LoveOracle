@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'lib.vector'
 local Movement = require 'engine.components.movement'
+local Direction4 = require 'engine.enums.direction4'
 
 -- some class constants
 local JUMP_Z_VELOCITY = 2
@@ -49,7 +50,7 @@ function PlayerMovementController:setMode(mode)
 end
 
 function PlayerMovementController:jump()
-  if self.player:isOnGround() then
+  if self.player:isOnGround() and self.player:getStateParameters().canJump then
     if self.player:getStateParameters().canControlOnGround then
       local x, y = self:pollMovementControls(true)
       if self:isMoving() then
@@ -119,7 +120,7 @@ end
 
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
-    self:setMode(self.player.environmentStateMachine:getState().motionSettings)
+    self:setMode(self.player.environmentStateMachine:getCurrentState().motionSettings)
   else
     self:setMode(self.moveNormalMode)
   end
@@ -168,20 +169,20 @@ function PlayerMovementController:update(dt)
 
   if self.allowMovementControl  then
     if self.player:getStateParameters().alwaysFaceUp then
-      if self.player.direction ~= 'up' then
-        self.player:setDirection('up')
+      if self.player.direction ~= Direction4.up then
+        self.player:setAnimationDirection4(Direction4.up)
       end
     elseif self.player:getStateParameters().alwaysFaceLeft then
-      if self.player.direction ~= 'left' then
-        self.player:setDirection('left')
+      if self.player.direction ~= Direction4.left then
+        self.player:setAnimationDirection4(Direction4.left)
       end
     elseif self.player:getStateParameters().alwaysFaceRight  then
-      if self.player.direction ~= 'right' then
-        self.player:setDirection('right')
+      if self.player.direction ~= Direction4.right then
+        self.player:setAnimationDirection4(Direction4.right)
       end
     elseif self.player:getStateParameters().alwaysFaceDown then
-      if self.player.direction ~= 'down' then
-        self.player:setDirection('down')
+      if self.player.direction ~= Direction4.down then
+        self.player:setAnimationDirection4(Direction4.down)
       end
     end
   end

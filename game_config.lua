@@ -44,7 +44,8 @@ local physicsFlags = {
   'enemy',
   'npc',
   'platform',
-  'tile'
+  'tile',
+  'room_edge'
 }
 
 local tilesetThemeRequirements = {
@@ -55,7 +56,9 @@ local tilesetThemeRequirements = {
 --local startupScreen = 'engine.screens.editor.map_editor'
 --local startupScreen = 'engine.screens.content_viewer'
 --local startupScreen = 'data.test_screens.player_playground'
-local startupScreen = 'engine.test_screens.entity_inspector_test'
+--local startupScreen = 'engine.test_screens.entity_inspector_test'
+--local startupScreen = 'engine.test_screens.physics_test'
+local startupScreen = 'engine.test_screens.game_control_test'
 
 return {
  zbStudioDebug = zbStudioDebug,

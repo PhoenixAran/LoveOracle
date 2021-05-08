@@ -9,6 +9,7 @@ local TileSpriteRenderer = require 'engine.tiles.tile_sprite_renderer'
 -- used to validate tile types provided by data scripter
 local TileTypeInverse = lume.invert(TileType)
 local Templates = { }
+local TileEntityTypes = { }
 
 local TileData = Class {
   init = function(self)
@@ -52,6 +53,10 @@ function TileData:getTileClassType()
   return self.tileClassType
 end
 
+function TileData:createTileEntity(layer, tileIndexX, tileIndexY)
+  return TileEntityTypes[self:getTileClassType()](self, layer, tileIndexX, tileIndexY)
+end
+
 function TileData:getName()
   return self.name
 end
@@ -61,7 +66,7 @@ function TileData:setName(name)
 end
 
 function TileData:getId()
-
+  return self.id
 end
 
 function TileData:setTileClassType(value)
@@ -279,8 +284,15 @@ function TileData.initializeTemplates(path)
   require(path)(TileData)
 end
 
+-- registed tile entity type class
+-- used when creating actual tile entity from tile data instance
+function TileData.registerTileEntityType(class)
+  TileEntityTypes[class.getType()] = class
+end
+
 function TileData.clearTemplates()
   Templates = { }
 end
+
 
 return TileData

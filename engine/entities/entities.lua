@@ -9,12 +9,20 @@ local Entities = Class { __includes = SignalObject,
     self:signal('entityAdded')
     self:signal('entityRemoved')
     
+    self:signal('tileEntityAdded')
+    self:signal('tileEntityRemoved')
+
     self.camera = camera
     self.gameScreen = gameScreen
+
     self.player = player
     self.entities = { }
     self.entitiesHash = { }
     self.entitiesDraw = { }
+
+    self.mapSizeX = nil
+    self.mapSizeY = nil
+    self.tileEntities = { }
   end
 }
 
@@ -57,8 +65,42 @@ function Entities:removeEntity(entity)
   self:emit('entityRemoved', entity)
 end
 
+
+-- sets how large the map is in tile size
+-- this enables querying for tiles via x and y coordinate
+-- also up the tile entities collection
+-- note that this just discards the current tile Entities
+function Entities:setUpTileEntityCollection(sizeX, sizeY, layerAmount)
+  self.mapSizeX = sizeX
+  self.mapSizeY = sizeY
+  self.tileEntities = { } 
+  for i = 1, layerAmount do
+    self.tileEntities[i] = { }
+  end
+end
+
+function Entities:addTileEntity(tileEntity)
+  assert(tileEntity:isTile())
+  local tileIndex = (tileEntity.tileIndexX - 1) * self.mapSizeY + tileEntity.tileIndexY
+  self.tileEntities[tileEntity.layer][tileIndex] = tileEntity
+  lume.push(self.tileEntities[tileEntity.layer], tileEntity)
+  self:emit('tileEntityAdded', tileEntity)
+end
+
+function Entities:removeTileEntity(layer, x, y)
+  local tileIndex = (x - 1) * self.mapSizeY + y
+  local tileEntity = self.tileEntities[layer][tileIndex]
+  self.tileEntities[layer][mapCoords] = nil
+  self:emit('tileEntityRemoved', tileEntity)
+end
+
 function Entities:getByName(name)
   return self.entitiesHash[name]
+end
+
+function Entities:getTileEntity(layer, x, y)
+  local tileIndex = (x - 1) * self.mapSizeY + y
+  return self.tileEntities[layer][tileIndex]
 end
 
 function Entities:update(dt)
@@ -72,6 +114,9 @@ function Entities:update(dt)
 end
 
 function Entities:draw()
+  for i, layer in ipairs(self.tileEntities) do
+    lume.each(layer, 'draw')
+  end
   lume.sort(self.entitiesDraw, ySort)
   lume.each(self.entitiesDraw, 'draw')
 end

@@ -1,13 +1,18 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local vector = require 'lib.vector'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local Entity = require 'engine.entities.entity'
 local Combat = require 'engine.components.combat'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
-local vector = require 'lib.vector'
+local SpriteFlasher = require 'engine.components.sprite_flasher'
+local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
+
 local Physics = require 'engine.physics'
 local TablePool = require 'engine.utils.table_pool'
+local DamageInfo = require 'engine.entities.damage_info'
 
 local MapEntity = Class { __includes = Entity,
   init = function(self, name, enabled, visible, rect, zRange)
@@ -26,12 +31,16 @@ local MapEntity = Class { __includes = Entity,
     self.groundObserver = GroundObserver(self)
     self.combat = Combat(self)
     self.effectSprite = SpriteBank.build('entity_effects', self)
+    self.spriteFlasher = SpriteFlasher(self)
     self.sprite = nil   -- declare this yourself
     
+    -- table to store collisions that occur when MapEntity:move() is called
+    self.moveCollisions = { }
+
     -- declarations
     self.persistant = false
     self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
-    self.animationDirection = nil -- will be used as substrip key if syncDirectionWithAnimation is true
+    self.animationDirection4 = Direction4.none -- will be used as substrip key if syncDirectionWithAnimation is true
     -- shadow, ripple, and grass effects
     -- TODO finish ripple and grass effects
     self.shadowVisible = true   
@@ -44,17 +53,23 @@ local MapEntity = Class { __includes = Entity,
 }
 
 function MapEntity:getType()
-  return 'game_entity'
+  return 'map_entity'
 end
 
 function MapEntity:getCollisionTag()
-  return 'game_entity'
+  return 'map_entity'
+end
+
+function MapEntity:release()
+  self.moveCollisions = nil
+  Entity.release(self)
 end
 
 function MapEntity:isPersistant()
   return self.persistant
 end
 
+-- animation
 function MapEntity:setSyncDirectionWithAnimation(value)
   self.syncDirectionWithAnimation = true
 end
@@ -63,8 +78,8 @@ function MapEntity:doesSyncDirectionWithAnimation()
   return self.syncDirectionWithAnimation
 end
 
-function MapEntity:setAnimationDirection(value)
-  self.animationDirection = value
+function MapEntity:setAnimationDirection4(value)
+  self.animationDirection4 = value
   if self:doesSyncDirectionWithAnimation() and self.sprite ~= nil then
     assert(self.sprite:getType() == 'animated_sprite_renderer')
     if self.sprite:getSubstripKey() ~= value then
@@ -73,8 +88,8 @@ function MapEntity:setAnimationDirection(value)
   end
 end
 
-function MapEntity:getAnimationDirection()
-  return self.animationDirection
+function MapEntity:getAnimationDirection4()
+  return self.animationDirection4
 end
 
 -- movement component pass throughs
@@ -86,13 +101,48 @@ function MapEntity:setVector(x, y)
   return self.movement:setVector(x, y)
 end
 
+function MapEntity:getDirection4()
+  return self.movement:getDirection4()
+end
+
+function MapEntity:getDirection8()
+  return self.movement:getDirection8()
+end
+
+function MapEntity:setVectorAwayFrom(x, y)
+  local mx, my = self.movement:getVector()
+  return self.movement:setVector(vector.sub(mx, my, x, y))
+end
+
 function MapEntity:getLinearVelocity(x, y)
   return self.movement:getLinearVelocity(x, y)
 end
 
-function MapEntity:move(dt) 
+function MapEntity:getSpeed()
+  return self.movement:getSpeed()
+end
+
+function MapEntity:setSpeed(value)
+  self.movement:setSpeed(speed)
+end
+
+function MapEntity:isInAir()
+  if self.movement and self.movement:isEnabled() then
+    return self.movement:isInAir()
+  end
+  return self:getZPosition() > 0
+end
+
+function MapEntity:isOnGround()
+  return not self:isInAir()
+end
+
+function MapEntity:move(dt)
+  lume.clear(self.moveCollisions)
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
+  local kx, ky = self:getKnockbackVelocity(dt)
+  velX, velY = vector.add(velX, velY, kx, ky)
   local bx = self.x + velX
   local by = self.y + velY
   local bw = self.w
@@ -104,26 +154,14 @@ function MapEntity:move(dt)
       if collided then
         -- hit, back off our motion
         velX, velY = vector.sub(velX, velY, mtvX, mtvY)
+        -- add other box to moveCollisions table
+        lume.push(self.moveCollisions, neighbor)
       end
     end
   end
   self:setPosition(posX + velX, posY + velY)
   TablePool.free(neighbors)
   Physics.update(self)
-end
-
-function MapEntity:updateEntitySpriteEffects(dt)
-  if self.shadowVisible and self:isInAir() then
-    if self.effectSprite:getCurrentAnimationKey() ~= 'shadow' or not self.effectSprite:isVisible() then
-      self.effectSprite:play('shadow')
-      self.effectSprite:setVisible(true)
-      self.effectSprite.alpha = .5
-    end
-  elseif self.effectSprite:isVisible() then
-    self.effectSprite:stop()
-    self.effectSprite:setVisible(false)
-  end
-  self.effectSprite:update(dt)
 end
 
 -- combat component pass throughs
@@ -139,20 +177,98 @@ function MapEntity:inKnockback()
   return self.combat:inKnockback()
 end
 
--- other
-function MapEntity:isInAir()
-  if self.movement and self.movement:isEnabled() then
-    return self.movement:isInAir()
+function MapEntity:setIntangibility(value)
+  self.combat:setIntangibility(value)
+end
+
+function MapEntity:setHitstun(value)
+  self.combat:setHitstun(value)
+end
+
+function MapEntity:setKnockback(value)
+  self.combat:setKnockback(value)
+end
+
+function MapEntity:resetCombatVariables()
+  self.combat:resetCombatVariables()
+end
+
+function MapEntity:getKnockbackDirection(x, y)
+  return self.combat:getKnockbackDirection()
+end
+
+function MapEntity:setKnockbackDirection(x, y)
+  self.combat:setKnockbackDirection(x, y)
+end
+
+function MapEntity:setKnockbackSpeed(speed)
+  self.combat:setKnockbackSpeed(speed)
+end
+
+function MapEntity:getKnockbackSpeed()
+  return self.combat:getKnockbackSpeed()
+end
+
+function MapEntity:getKnockbackVelocity(dt)
+  return self.combat:getKnockbackVelocity(dt)
+end
+
+function MapEntity:hurt(damageInfo)
+  if type(damageInfo) == 'number' then
+    local damage = damageInfo
+    damageInfo = DamageInfo()
+    damageInfo.damage = damage
   end
-  return self:getZPosition() > 0
+  self:resetCombatVariables()
+  if damageInfo:applyHitstun() then
+    self:setHitstun(damageInfo.hitstunTime)
+    self:setIntangibility(damageInfo.hitstunTime)
+    self:flashSprite(damageInfo.hitstunTime)
+  end
+  if damageInfo:applyKnockback() then
+    self:setKnockback(damageInfo.knockbackTime)
+    self:setKnockbackSpeed(damageInfo.knockbackSpeed)
+    local ex, ey = self:getPosition()
+    self:setKnockbackDirection(vector.sub(ex, ey,damageInfo.sourceX, damageInfo.sourceY))
+  end
+
+  -- TODO take damage
+  if self.onHurt then
+    self:onHurt(damageInfo)
+  end
+  self:signal('entityHit')
 end
 
-function MapEntity:isOnGround()
-  return not self:isInAir()
+function MapEntity:bump(sourcePositionX, sourcePositionY, duration, speed)
+  -- TODO bump entity
+  if self.onBump then
+    self:onBump(sourcePositionX, sourcePositionY, duration, speed)
+  end
+  self:signal('entityBumped')
 end
 
-function MapEntity:isPersistant()
-  return self.persistant
+-- sprite flash
+function MapEntity:flashSprite(duration)
+  self.spriteFlasher:flash(duration)
+end
+
+function MapEntity:stopSpriteFlash()
+  self.spriteFlasher:stop()
+end
+
+-- entity effect sprite update
+function MapEntity:updateEntityEffectSprite(dt)
+  if self.shadowVisible and self:isInAir() then
+    if self.effectSprite:getCurrentAnimationKey() ~= 'shadow' or not self.effectSprite:isVisible() then
+      self.effectSprite:play('shadow')
+      self.effectSprite:setVisible(true)
+      self.effectSprite.alpha = .5
+    end
+  elseif self.effectSprite:isVisible() then
+    self.effectSprite:stop()
+    self.effectSprite:setVisible(false)
+  end
+  self.effectSprite:update(dt)
 end
 
 return MapEntity

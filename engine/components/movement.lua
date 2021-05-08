@@ -1,6 +1,8 @@
 local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
 local vector = require 'lib.vector'
+local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
 
 local Movement = Class { __includes = Component,
   init = function(self, entity, enabled, values)
@@ -23,8 +25,14 @@ local Movement = Class { __includes = Component,
     self.maxFallSpeed = 4
     self.zVelocity = 0
     
+    -- NB: Below values isnt how much the entity may actually move
+    -- This is just the motion the movement component wants to carry out if nothing is in the way
+    -- See MapEntity:move() function 
+
     -- useful for calculating acceleration and knowing when to stop accelerating movement
     self.motionX, self.motionY = 0, 0
+    -- useful for recalculating linear velocity
+    self.prevMotionX, self.prevMotionY = 0, 0
   end
 }
 
@@ -38,6 +46,14 @@ end
 
 function Movement:setVector(x, y)
   self.vectorX, self.vectorY = x, y
+end
+
+function Movement:getDirection4()
+  return Direction4.getDirection(self:getVector())
+end
+
+function Movement:getDirection8()
+  return Direction8.getDirection(self:getVector())
 end
 
 function Movement:getSpeed()
@@ -97,6 +113,8 @@ function Movement:setZVelocity(value)
 end
 
 function Movement:getLinearVelocity(dt)
+  self.prevMotionX = self.motionX
+  self.prevMotionY = self.motionY
   if self.vectorX == 0 and self.vectorY == 0 then
     if self.slippery then
       local length = vector.len(self.motionX, self.motionY)

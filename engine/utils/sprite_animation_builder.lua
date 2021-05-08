@@ -1,12 +1,16 @@
 local Class = require 'lib.class'
+local lume = require 'lib.lume'
+
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local Sprite = require 'engine.graphics.sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'
 local SpriteFrame = require 'engine.graphics.sprite_frame'
 local SpriteAnimation = require 'engine.graphics.sprite_animation'
-local lume = require 'lib.lume'
+local Direction4 = require 'engine.enums.direction4'
 
 local assetManager = require 'engine.utils.asset_manager'
+
+local DEFAULT_KEY = 'default'
 
 local SpriteAnimationBuilder = Class {
   init = function(self)
@@ -20,6 +24,8 @@ local SpriteAnimationBuilder = Class {
     self.hasSubstrips = false
     self.subFrames = { }
     self.subTimedActions = { }
+    -- easy access to Direction4 enums for data scripting
+    self.Direction4 = Direction4
   end
 }
 
@@ -104,13 +110,16 @@ function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
   if makeDefault == nil then
     makeDefault = false
   end
-  
+  if type(substripKey) == 'string' then
+    substripKey = Direction4[substripKey]
+  end
+  assert(substripKey ~= nil, 'Substrip key out of range')
   self.subFrames[substripKey] = self.frames
   self.subTimedActions[substripKey] = self.timedActions
   
   if makeDefault then
-    self.subFrames[1] = self.frames
-    self.subTimedActions[1] = self.timedActions
+    self.subFrames[DEFAULT_KEY] = self.frames
+    self.subTimedActions[DEFAULT_KEY] = self.timedActions
   end
   
   self.frames = { }
@@ -134,5 +143,6 @@ function SpriteAnimationBuilder:build()
   self.hasSubstrips = false
   return animation
 end
+
 
 return SpriteAnimationBuilder

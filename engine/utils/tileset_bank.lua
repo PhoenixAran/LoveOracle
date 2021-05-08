@@ -47,10 +47,26 @@ function TilesetBank.getDefaultTilesetTheme()
 end
 
 function TilesetBank.initialize()
+  -- require each tile entity type class
+  -- so that TileData's TileEntityTypes gets populated
+  function requireDirectory( dir )
+    dir = dir or ""
+    local entities = love.filesystem.getDirectoryItems(dir)
+ 
+    for k, ents in ipairs(entities) do
+       trim = string.gsub( ents, ".lua", "")
+       local path = dir .. "/" .. trim
+       print(path)
+       require(path)
+    end
+  end
+  require('engine.tiles.tile')
+  requireDirectory('engine/tiles/custom_tiles')
   TilesetTheme.setRequiredTilesets(GameConfig.tilesetThemeRequirements)
   require('data.tile_templates')(TileData)
   require('data.tilesets')(TilesetBank)
   require('data.tileset_themes')(TilesetBank)
+  
   -- check if tileset theme named 'default' exists
   TilesetBank:getDefaultTilesetTheme()
 end

@@ -82,9 +82,13 @@ function RoomData:getSizeY()
   return self.sizeY
 end
 
-function RoomData:setHeight(y)
+function RoomData:setSizeY(y)
   self.sizeY = y
 end
+
+-- function RoomData:setHeight(y)
+--   self.sizeY = y
+-- end
 
 function RoomData:getSerializableTable()
   return {
@@ -95,6 +99,10 @@ function RoomData:getSerializableTable()
     sizeX = self:getSizeX(),
     sizeY = self:getSizeY()
   }
+end
+
+function RoomData:clone()
+  return RoomData(self:getSerializablTable())
 end
 
 return RoomData

@@ -171,7 +171,7 @@ function MapData:getSerializableTable()
   return {
     name = self:getName(),
     rooms = sRooms,
-    layerCount = self.layerCount,
+    layerCount = self:getLayerCount(),
     layers = serializableLayers,
     sizeX = self:getSizeX(),
     sizeY = self:getSizeY(),

@@ -48,6 +48,10 @@ function Entity:getType()
   return 'entity'
 end
 
+function Entity:isTile()
+  return false
+end
+
 function Entity:getCollisionTag()
   return 'entity'
 end
@@ -71,6 +75,8 @@ end
 -- position and transform stuff
 function Entity:transformChanged()
   local ex, ey = self:getPosition()
+  -- need to manually calculate it because Entity:setPositionWithBumpCoords
+  -- will trigger transform:change which will cause in infinite loop
   self.x = ex - self.w / 2
   self.y = ey - self.h / 2
   if self.onTransformChanged then
@@ -134,7 +140,7 @@ function Entity:awake()
 end
 
 function Entity:update(dt)
-
+  
 end
 
 function Entity:draw()
