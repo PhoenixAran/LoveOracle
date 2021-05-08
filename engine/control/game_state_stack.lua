@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 
 local GameStateStack = Class {
   init = function(self, gameControl)
-    self.gameCntrol = gameControl
+    self.gameControl = gameControl
     self.states = { }
   end
 }
@@ -13,7 +13,7 @@ function GameStateStack:getCurrentState()
 end
 
 function GameStateStack:pushState(gameState)
-  gameState:onBegin()
+  gameState:begin(self.gameControl)
   lume.push(self.states, gameState)
 end
 

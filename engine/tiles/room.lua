@@ -63,11 +63,19 @@ function Room:getBottomRightPosition()
   return self.topLeftPosX + self.sizeX - 1, self.topLeftPosY + self.sizeY - 1
 end
 
-function RoomData:getSizeX()
+function Room:getBottomRightPositionX()
+  return self.topLeftPosX + self.sizeX - 1 
+end
+
+function Room:getBottomRightPositionY()
+  return self.topLeftPosY + self.sizeY - 1
+end
+
+function Room:getSizeX()
   return self.sizeX
 end
 
-function RoomData:getSizeY()
+function Room:getSizeY()
   return self.sizeY
 end
 
@@ -79,19 +87,20 @@ end
 function Room:load(entities)
   -- add tiles
   for layerIndex = BACKGROUND_LAYER, FOREGROUND_LAYER do
-    local tileLayer = Map:getLayer(layerIndex)
+    local tileLayer = self.map:getLayer(layerIndex)
     assert(tileLayer:getType() == 'tile_layer')
     for x = self:getTopLeftPositionX(), self:getBottomRightPositionX(), 1 do
       for y = self:getTopLeftPositionY(), self:getBottomRightPositionY(), 1 do
-        local tileData = tileLayer:getTile(x, y)
-        if tileData then
+        local tileGid = tileLayer:getTile(x, y)
+        if tileGid then
+          local tileData = self.theme:getTile(tileGid)
           entities:addTileEntity(tileData:createTileEntity(layerIndex, x, y))
         end
       end
     end
   end
-  -- add entities
-  -- TODO :)
+  -- TODO add entities
+  -- TODO add room edges
 end
 
 

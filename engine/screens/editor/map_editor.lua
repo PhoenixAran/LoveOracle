@@ -646,6 +646,7 @@ function MapEditor:update(dt)
         self.selectedRoom = nil
         local sData = FileSystem.ReadContents(result.Files[1])
         self.mapData = MapData(lume.deserialize(sData))
+        self.cachedSaveLocation = result.Files[1]
       end
     end
   end

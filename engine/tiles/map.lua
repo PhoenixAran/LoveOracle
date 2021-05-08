@@ -2,9 +2,15 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local SignalObject = require 'engine.signal_object'
 local Room = require 'engine.tiles.room'
+local MapData = require 'engine.tiles.map_data'
 
 local Map = Class { __includes = SignalObject,
   init = function(self, mapData)
+    if type(mapData) == 'string' then
+      local path = 'data/maps/' .. mapData .. '.dat'
+      local sdata, err = love.filesystem.read(path)
+      mapData = MapData(lume.deserialize(sdata))
+    end
     SignalObject.init(self)
     self.mapData = mapData
     self.name = mapData:getName()
@@ -13,7 +19,7 @@ local Map = Class { __includes = SignalObject,
     self.layerCount = mapData:getLayerCount()
     self.rooms = { }
     lume.each(mapData.rooms, function(roomData)
-      lume.push(self.rooms, Room(roomData))
+      lume.push(self.rooms, Room(self, roomData))
     end)
     self.layers = mapData.layers
   end
@@ -21,6 +27,10 @@ local Map = Class { __includes = SignalObject,
 
 function Map:getType()
   return 'map'
+end
+
+function Map:getMapData()
+  return self.mapData
 end
 
 function Map:getName()
@@ -35,23 +45,23 @@ function Map:getSizeX()
   return self.sizeX
 end
 
-function MapData:getSizeY()
+function Map:getSizeY()
   return self.sizeY
 end
 
-function MapData:getLayerCount()
+function Map:getLayerCount()
   return self.layerCount
 end
 
-function MapData:getRooms()
+function Map:getRooms()
   return self.rooms
 end
 
-function MapData:getLayers()
+function Map:getLayers()
   return self.layers
 end
 
-function MapData:getLayer(layerIndex)
+function Map:getLayer(layerIndex)
   return self.layers[layerIndex]
 end
 

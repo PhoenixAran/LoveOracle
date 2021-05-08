@@ -2,8 +2,8 @@ local Class = require 'lib.class'
 local GameState = require 'engine.control.game_state'
 
 local RoomNormalState = Class { __includes = GameState,
-  init = function(self, gameControl, room)
-    GameState.init(self, gameControl)
+  init = function(self, room)
+    GameState.init(self)
     self.room = room
   end
 }
@@ -26,9 +26,7 @@ function RoomNormalState:update(dt)
 end
 
 function RoomNormalState:draw()
-  self.gameControl:drawEntitites()
+  self.gameControl:drawEntities()
 end
-
-
 
 return RoomNormalState

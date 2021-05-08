@@ -287,11 +287,12 @@ end
 -- registed tile entity type class
 -- used when creating actual tile entity from tile data instance
 function TileData.registerTileEntityType(class)
-  TileEntityTypes[class] = class.getType()
+  TileEntityTypes[class.getType()] = class
 end
 
 function TileData.clearTemplates()
   Templates = { }
 end
+
 
 return TileData

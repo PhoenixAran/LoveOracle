@@ -73,8 +73,8 @@ end
 function Entities:setUpTileEntityCollection(sizeX, sizeY, layerAmount)
   self.mapSizeX = sizeX
   self.mapSizeY = sizeY
-  self.tileEntities { } 
-  for i = amount, 1 do
+  self.tileEntities = { } 
+  for i = 1, layerAmount do
     self.tileEntities[i] = { }
   end
 end
@@ -82,8 +82,8 @@ end
 function Entities:addTileEntity(tileEntity)
   assert(tileEntity:isTile())
   local tileIndex = (tileEntity.tileIndexX - 1) * self.mapSizeY + tileEntity.tileIndexY
-  self.tileEntities[layer][tileIndex.layer] = tileEntity
-  lume.push(self.tileEntities[layer], tileEntity)
+  self.tileEntities[tileEntity.layer][tileIndex] = tileEntity
+  lume.push(self.tileEntities[tileEntity.layer], tileEntity)
   self:emit('tileEntityAdded', tileEntity)
 end
 

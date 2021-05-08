@@ -35,6 +35,16 @@ end
 
 function GameControl:setPlayer(player)
   self.player = player
+  self.entities:setPlayer(player)
+end
+
+function GameControl:getMap()
+  return self.map
+end
+
+function GameControl:setMap(map)
+  self.map = map
+  self.entities:setUpTileEntityCollection(map.sizeX, map.sizeY, map.layerCount)
 end
 
 function GameControl:getCamera()
@@ -50,8 +60,8 @@ function GameControl:getEntities()
   return self.entities
 end
 
-function GameControl:updateEntitites(dt)
-  self.entitites:update(dt)
+function GameControl:updateEntities(dt)
+  self.entities:update(dt)
 end
 
 function GameControl:drawEntities()
@@ -71,10 +81,12 @@ function GameControl:update(dt)
 end
 
 function GameControl:draw()
+  monocle:begin()
   local gameState = self.gameStateStack:getCurrentState()
   if gameState then
     gameState:draw()
   end
+  monocle:finish()
 end
 
 function GameControl:onRoomTransitionRequest(room, transitionStyle, direction4)
