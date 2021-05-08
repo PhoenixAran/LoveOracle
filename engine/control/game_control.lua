@@ -45,6 +45,11 @@ function GameControl:setCamera(camera)
   self.camera = camera
 end
 
+-- return Entities object
+function GameControl:getEntities()
+  return self.entities
+end
+
 function GameControl:updateEntitites(dt)
   self.entitites:update(dt)
 end
@@ -72,10 +77,8 @@ function GameControl:draw()
   end
 end
 
-
 function GameControl:onRoomTransitionRequest(room, transitionStyle, direction4)
   -- TODO Push room transition state on the stack
-
 end
 
 function GameControl:onMapTransitionRequest()

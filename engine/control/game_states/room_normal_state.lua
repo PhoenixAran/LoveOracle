@@ -2,8 +2,9 @@ local Class = require 'lib.class'
 local GameState = require 'engine.control.game_state'
 
 local RoomNormalState = Class { __includes = GameState,
-  init = function(self, gameControl)
+  init = function(self, gameControl, room)
     GameState.init(self, gameControl)
+    self.room = room
   end
 }
 
@@ -12,7 +13,7 @@ function RoomNormalState:getType()
 end
 
 function RoomNormalState:onBegin()
-
+  self.room:load(self.gameControl:getEntities())
 end
 
 function RoomNormalState:onEnd()
