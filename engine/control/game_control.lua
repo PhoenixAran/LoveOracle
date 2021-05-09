@@ -5,15 +5,20 @@ local SignalObject = require 'engine.signal_object'
 local Entities = require 'engine.entities.entities'
 local Inventory = require 'engine.control.inventory'
 local GameStateStack = require 'engine.control.game_state_stack'
+local Camera = require 'lib.camera'
+local GameConfig = require 'game_config'
 
 local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()  
     self.player = nil
-    self.camera = nil
+    local w = GameConfig.window.monocleConfig.windowWidth
+    local h = GameConfig.window.monocleConfig.windowHeight
+    self.camera = Camera(w/2, h/2, w, h)
+    self.camera:setFollowStyle('NO_DEADZONE')
 
     self.entities = Entities()
-    
+    self.entities:setCamera(self.camera)
     self.map = nil
     self.previousRooms = { }
     self.currentRoom = nil
@@ -53,6 +58,7 @@ end
 
 function GameControl:setCamera(camera)
   self.camera = camera
+  self.entities:setCamera(camera)
 end
 
 -- return Entities object

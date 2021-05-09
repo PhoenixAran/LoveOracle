@@ -32,6 +32,14 @@ local function ySort(entityA, entityB)
   return ay - by
 end
 
+function Entities:setCamera(camera)
+  self.camera = camera
+end
+
+function Entities:getCamera()
+  return self.camera
+end
+
 function Entities:setPlayer(player)
   assert(not self.entitiesHash[player:getName()])
   self.player = player
@@ -110,15 +118,25 @@ function Entities:update(dt)
       entity:update(dt)
     end
   end
-  --self.camera:update(dt)
+  if self.camera then
+    self.camera:update(dt)
+    self.camera:follow(self.player:getPosition())
+  end
 end
 
 function Entities:draw()
+  if self.camera then
+    self.camera:attach()
+  end
+  -- TODO only draw if entity / tile is within the camera bounds
   for i, layer in ipairs(self.tileEntities) do
     lume.each(layer, 'draw')
   end
   lume.sort(self.entitiesDraw, ySort)
   lume.each(self.entitiesDraw, 'draw')
+  if self.camera then
+    self.camera:detach()
+  end
 end
 
 return Entities
