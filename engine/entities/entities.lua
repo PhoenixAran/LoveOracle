@@ -23,6 +23,7 @@ local Entities = Class { __includes = SignalObject,
     self.mapSizeX = nil
     self.mapSizeY = nil
     self.tileEntities = { }
+    
   end
 }
 

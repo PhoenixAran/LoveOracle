@@ -5,6 +5,8 @@ local RoomNormalState = Class { __includes = GameState,
   init = function(self, room)
     GameState.init(self)
     self.room = room
+    self.player = nil
+    self.camera = nil
   end
 }
 
@@ -14,17 +16,21 @@ end
 
 function RoomNormalState:onBegin()
   self.room:load(self.gameControl:getEntities())
+  self.player = self.gameControl:getPlayer()
+  self.camera = self.gameControl:getCamera()
 end
 
 function RoomNormalState:onEnd()
-
+  self.room = nil
+  self.player = nil
+  self.camera = nil
 end
 
 function RoomNormalState:update(dt)
   self.gameControl:updateTileAnimations()
   self.gameControl:updateEntities(dt)
-  self.gameControl:getCamera():update(dt)
-  self.gameControl:getCamera():follow(self.gameControl:getPlayer():getPosition())
+  self.camera:update(dt)
+  self.camera:follow(self.player:getPosition())
 end
 
 function RoomNormalState:draw()
