@@ -18,7 +18,6 @@ local GameControl = Class { __includes = SignalObject,
     self.camera:setFollowStyle('NO_DEADZONE')
 
     self.entities = Entities()
-    self.entities:setCamera(self.camera)
     self.map = nil
     self.previousRooms = { }
     self.currentRoom = nil
@@ -70,8 +69,12 @@ function GameControl:updateEntities(dt)
   self.entities:update(dt)
 end
 
+function GameControl:drawTileEntities(x, y, w, h)
+  self.entities:drawTileEntities(x, y, w, h)
+end
+
 function GameControl:drawEntities()
-  self.entities:draw()
+  self.entities:drawEntities()
 end
 
 -- update the tileset animations

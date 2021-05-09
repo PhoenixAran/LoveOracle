@@ -23,10 +23,16 @@ end
 function RoomNormalState:update(dt)
   self.gameControl:updateTileAnimations()
   self.gameControl:updateEntities(dt)
+  self.gameControl:getCamera():update(dt)
+  self.gameControl:getCamera():follow(self.gameControl:getPlayer():getPosition())
 end
 
 function RoomNormalState:draw()
+  local camera = self.gameControl:getCamera()
+  camera:attach()
+  self.gameControl:drawTileEntities(camera.x - camera.w / 2, camera.y - camera.h / 2, camera.w, camera.h)
   self.gameControl:drawEntities()
+  camera:detach()
 end
 
 return RoomNormalState
