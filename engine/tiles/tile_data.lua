@@ -21,7 +21,7 @@ local TileData = Class {
     self.animated = false
     self.hitbox = false
     
-    self.collisionRect = { x = 0, y = 0, w = 16, y = 16 }
+    self.collisionRect = { x = 0, y = 0, w = 16, h = 16 }
     self.collisionRectZRange = { min = 0, max = 1  }
     self.hitRect = { x = 0, y = 0, w = 16, y = 16 }
     self.hitRectZRange = { min = 0, max = 1 }

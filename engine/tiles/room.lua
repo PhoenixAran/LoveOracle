@@ -91,6 +91,7 @@ function Room:load(entities)
     assert(tileLayer:getType() == 'tile_layer')
     for x = self:getTopLeftPositionX(), self:getBottomRightPositionX(), 1 do
       for y = self:getTopLeftPositionY(), self:getBottomRightPositionY(), 1 do
+   
         local tileGid = tileLayer:getTile(x, y)
         if tileGid then
           local tileData = self.theme:getTile(tileGid)

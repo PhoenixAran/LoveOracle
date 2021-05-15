@@ -14,8 +14,8 @@ local GameControl = Class { __includes = SignalObject,
     self.player = nil
     local w = GameConfig.window.monocleConfig.windowWidth
     local h = GameConfig.window.monocleConfig.windowHeight
-    self.camera = Camera(w/2, h/2, w, h)
-    self.camera:setFollowStyle('NO_DEADZONE')
+    self.camera = Camera(w/2,h/2 , w, h)
+    self.camera:setFollowStyle('SCREEN_BY_SCREEN')
 
     self.entities = Entities()
     self.map = nil
