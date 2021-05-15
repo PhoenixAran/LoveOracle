@@ -30,7 +30,7 @@ local Entities = Class { __includes = SignalObject,
 local function ySort(entityA, entityB)
   local ax, ay = entityA:getPosition()
   local bx, by = entityB:getPosition()
-  return ay - by
+  return by < ay
 end
 
 function Entities:setPlayer(player)
@@ -50,6 +50,7 @@ function Entities:addEntity(entity, awakeEntity)
   if awakeEntity == nil then awakeEntity = true end
   lume.push(self.entities, entity)
   self.entitiesHash[entity] = entity
+  lume.push(self.entitiesDraw, entity)
   entity:added()
   if awakeEntity then
     entity:awake()

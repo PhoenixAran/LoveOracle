@@ -1,7 +1,12 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local rect = require 'engine.utils.rectangle'
 local SignalObject = require 'engine.signal_object'
 local TilesetBank = require 'engine.utils.tileset_bank'
+local RoomEdge = require 'engine.entities.room_edge'
+local Direction4 = require 'engine.enums.direction4'
+
+local GRID_SIZE = 16
 
 local BACKGROUND_LAYER = 1
 local FOREGROUND_LAYER = 2
@@ -101,7 +106,39 @@ function Room:load(entities)
     end
   end
   -- TODO add entities
-  -- TODO add room edges
+
+  -- add room edges
+  -- make left room edge
+  local roomAvailable = self.map:indexInRoom(self.topLeftPosX - 2, self.topLeftPosY - 1)
+  local roomRect = {
+    useBumpCoords = true,
+    x = (self.topLeftPosX - 2) * GRID_SIZE,
+    y = (self.topLeftPosY - 1) * GRID_SIZE,
+    w = GRID_SIZE, 
+    h = self.sizeY * GRID_SIZE
+  }
+  local roomEdge = RoomEdge('roomEdgeLeft', roomRect, Direction4.left, roomAvailable, 'slide')
+  entities:addEntity(roomEdge)
+  -- make right room edge
+  roomRect.x = (self:getBottomRightPositionX()) * GRID_SIZE
+  roomRect.y = (self.topLeftPosY - 1) * GRID_SIZE
+  roomAvailable = self.map:indexInRoom(self:getBottomRightPositionX(), self.topLeftPosY - 1)
+  roomEdge = RoomEdge('roomEdgeRight',roomRect, Direction4.right, roomAvailable, 'slide')
+  entities:addEntity(roomEdge)
+  -- make top room edge
+  roomAvailable = self.map:indexInRoom(self.topLeftPosX - 1, self.topLeftPosY - 2)
+  roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
+  roomRect.y = (self.topLeftPosY - 2) * GRID_SIZE
+  roomRect.w = self.sizeX * GRID_SIZE
+  roomRect.h = GRID_SIZE
+  roomEdge = RoomEdge('roomEdgeUp', roomRect, Direction4.up, roomAvailable, 'slide')
+  entities:addEntity(roomEdge)
+  -- make bottom room edge
+  roomAvailable = self.map:indexInRoom(self.topLeftPosX - 1, self:getBottomRightPositionY())
+  roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
+  roomRect.y = (self:getBottomRightPositionY()) * GRID_SIZE
+  roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, roomAvailable, 'slide')
+  entities:addEntity(roomEdge)
 end
 
 
@@ -118,6 +155,12 @@ end
 -- pass signal from MapLoadingZone to whoever is listening
 function Room:onMapTransitionRequested()
   self:emit('mapTransitionRequested')
+end
+
+function Room:indexInRoom(x, y)
+  local rx1, ry1 = self:getTopLeftPosition()
+  local rx2, ry2 = self:getBottomRightPosition()
+  return rx1 <= x and x <= rx2 and ry1 <= y and y <= ry2
 end
 
 function Room:getType()

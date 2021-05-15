@@ -26,7 +26,11 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
       if rect.w == nil then rect.w = 1 end
       if rect.h == nil then rect.h = 1 end
     end
-    BumpBox.init(self, rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h, zRange)
+    if rect.useBumpCoords then
+      BumpBox.init(self, rect.x, rect.y, rect.w, rect.h, zRange)
+    else
+      BumpBox.init(self, rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h, zRange)
+    end
     self.enabled = enabled
     self.visible = visible
     

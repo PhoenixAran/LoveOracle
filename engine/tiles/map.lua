@@ -65,4 +65,13 @@ function Map:getLayer(layerIndex)
   return self.layers[layerIndex]
 end
 
+function Map:indexInRoom(x, y)
+  for _, room in ipairs(self.rooms) do
+    if room:indexInRoom(x, y) then
+      return true
+    end
+  end
+  return false
+end
+
 return Map
