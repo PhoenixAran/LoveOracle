@@ -65,13 +65,24 @@ function Map:getLayer(layerIndex)
   return self.layers[layerIndex]
 end
 
+function Map:indexInMap(x, y)
+  return 1 <= x and x <= self:getSizeX() and 1 <= y and y <= self:getSizeY()
+end 
+
 function Map:indexInRoom(x, y)
+  return self:getRoomContainingIndex(x, y) ~= nil
+end
+
+function Map:getRoomContainingIndex(x, y)
+  if not self:indexInMap(x, y) then
+    return nil
+  end
   for _, room in ipairs(self.rooms) do
     if room:indexInRoom(x, y) then
-      return true
+      return room
     end
   end
-  return false
+  return nil
 end
 
 return Map

@@ -23,7 +23,6 @@ local Entities = Class { __includes = SignalObject,
     self.mapSizeX = nil
     self.mapSizeY = nil
     self.tileEntities = { }
-    
   end
 }
 
@@ -65,6 +64,7 @@ function Entities:removeEntity(entity)
   lume.remove(self.entitiesDraw, entity)
   entity:removed()
   self:emit('entityRemoved', entity)
+  entity:release()
 end
 
 
@@ -94,6 +94,7 @@ function Entities:removeTileEntity(layer, x, y)
   local tileEntity = self.tileEntities[layer][tileIndex]
   self.tileEntities[layer][mapCoords] = nil
   self:emit('tileEntityRemoved', tileEntity)
+  tileEntity:release()
 end
 
 function Entities:getByName(name)

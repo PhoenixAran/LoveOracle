@@ -8,6 +8,9 @@ local GameStateStack = require 'engine.control.game_state_stack'
 local Camera = require 'lib.camera'
 local GameConfig = require 'game_config'
 
+local RoomNormalState = require 'engine.control.game_states.room_normal_state'
+local GRID_SIZE = 16
+
 local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()  
@@ -15,7 +18,7 @@ local GameControl = Class { __includes = SignalObject,
     local w = GameConfig.window.monocleConfig.windowWidth
     local h = GameConfig.window.monocleConfig.windowHeight
     self.camera = Camera(w/2,h/2 , w, h)
-    self.camera:setFollowStyle('SCREEN_BY_SCREEN')
+    --self.camera:setFollowStyle('SCREEN_BY_SCREEN')
 
     self.entities = Entities()
     self.map = nil
@@ -49,6 +52,18 @@ end
 function GameControl:setMap(map)
   self.map = map
   self.entities:setUpTileEntityCollection(map.sizeX, map.sizeY, map.layerCount)
+end
+
+-- sets up the initial state so the user can actually start playing the game
+function GameControl:setupInitialRoomNormalState()
+  -- TODO declare initial room and spawn location in MAP
+  local map = self.map
+  local initialRoom = lume.first(map:getRooms())
+  local roomNormalState = RoomNormalState(initialRoom)
+  local spawnIndexX, spawnIndexY = 1, 1
+  self.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
+  initialRoom:load(self.entities)
+  self:pushState(RoomNormalState(initalRoom))
 end
 
 function GameControl:getCamera()
@@ -100,6 +115,7 @@ end
 
 function GameControl:onRoomTransitionRequest(room, transitionStyle, direction4)
   -- TODO Push room transition state on the stack
+  
 end
 
 function GameControl:onMapTransitionRequest()

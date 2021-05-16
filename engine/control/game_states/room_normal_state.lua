@@ -15,7 +15,6 @@ function RoomNormalState:getType()
 end
 
 function RoomNormalState:onBegin()
-  self.room:load(self.gameControl:getEntities())
   self.player = self.gameControl:getPlayer()
   self.camera = self.gameControl:getCamera()
 end

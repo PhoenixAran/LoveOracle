@@ -21,7 +21,7 @@ function Direction8.getDirection(x, y)
     end
     return direction
   else
-    if vecx == 0 and vecy == 0 then
+    if x == 0 and y == 0 then
       return Direction4.NONE
     end
     local theta = math.atan2(y, x)

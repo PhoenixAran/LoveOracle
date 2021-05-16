@@ -429,8 +429,8 @@ function Player:checkRoomTransitions()
   if self:getStateParameters().canRoomTransition then
     for _, other in ipairs(self.moveCollisions) do
       if other.canRoomTransition then
-        if other:canRoomTransition(self:getDirection4()) then
-          other:requestRoomTransition()
+        if other:canRoomTransition(self:getDirection8()) then
+          other:requestRoomTransition(self:getPosition())
         end
       end
     end

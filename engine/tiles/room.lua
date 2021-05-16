@@ -15,8 +15,8 @@ local OBJECT_LAYER = 3
 local Room = Class { __includes = SignalObject,
   init = function(self, map, roomData)
     SignalObject.init(self) 
-    self:signal('roomTransitionRequested')
-    self:signal('mapTransitionRequested')
+    self:signal('roomTransitionRequest')
+    self:signal('mapTransitionRequest')
     self.map = map
     self.name = roomData:getName()
     self.theme = TilesetBank.getTilesetTheme(roomData:getTheme())
@@ -24,6 +24,9 @@ local Room = Class { __includes = SignalObject,
     self.topLeftPosY = roomData:getTopLeftPositionY()
     self.sizeX = roomData:getSizeX()
     self.sizeY = roomData:getSizeY()
+
+    -- entities that were spawned
+    self.entities = { }
 
     -- ids of entities that were killed 
     self.destroyedEntities = { }
@@ -96,11 +99,11 @@ function Room:load(entities)
     assert(tileLayer:getType() == 'tile_layer')
     for x = self:getTopLeftPositionX(), self:getBottomRightPositionX(), 1 do
       for y = self:getTopLeftPositionY(), self:getBottomRightPositionY(), 1 do
-   
         local tileGid = tileLayer:getTile(x, y)
         if tileGid then
           local tileData = self.theme:getTile(tileGid)
-          entities:addTileEntity(tileData:createTileEntity(layerIndex, x, y))
+          local tileEntity = tileData:createTileEntity(layerIndex, x, y)
+          entities:addTileEntity(tileEntity)
         end
       end
     end
@@ -109,7 +112,7 @@ function Room:load(entities)
 
   -- add room edges
   -- make left room edge
-  local roomAvailable = self.map:indexInRoom(self.topLeftPosX - 2, self.topLeftPosY - 1)
+  local roomAvailable = self.map:indexInRoom(self.topLeftPosX - 1, self.topLeftPosY)
   local roomRect = {
     useBumpCoords = true,
     x = (self.topLeftPosX - 2) * GRID_SIZE,
@@ -117,50 +120,95 @@ function Room:load(entities)
     w = GRID_SIZE, 
     h = self.sizeY * GRID_SIZE
   }
-  local roomEdge = RoomEdge('roomEdgeLeft', roomRect, Direction4.left, roomAvailable, 'slide')
+  local roomEdge = RoomEdge('roomEdgeLeft', roomRect, Direction4.left, 'slide')
+  roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   -- make right room edge
   roomRect.x = (self:getBottomRightPositionX()) * GRID_SIZE
   roomRect.y = (self.topLeftPosY - 1) * GRID_SIZE
-  roomAvailable = self.map:indexInRoom(self:getBottomRightPositionX(), self.topLeftPosY - 1)
-  roomEdge = RoomEdge('roomEdgeRight',roomRect, Direction4.right, roomAvailable, 'slide')
+  roomEdge = RoomEdge('roomEdgeRight',roomRect, Direction4.right, 'slide')
+  roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   -- make top room edge
-  roomAvailable = self.map:indexInRoom(self.topLeftPosX - 1, self.topLeftPosY - 2)
   roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
   roomRect.y = (self.topLeftPosY - 2) * GRID_SIZE
   roomRect.w = self.sizeX * GRID_SIZE
   roomRect.h = GRID_SIZE
-  roomEdge = RoomEdge('roomEdgeUp', roomRect, Direction4.up, roomAvailable, 'slide')
+  roomEdge = RoomEdge('roomEdgeUp', roomRect, Direction4.up, 'slide')
+  roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   -- make bottom room edge
-  roomAvailable = self.map:indexInRoom(self.topLeftPosX - 1, self:getBottomRightPositionY())
   roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
   roomRect.y = (self:getBottomRightPositionY()) * GRID_SIZE
-  roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, roomAvailable, 'slide')
+  roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, 'slide')
+  roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
+end
+
+function Room:unload(entities)
+  lume.each(self.entities, function(entity)
+    entities:removeEntity(entity)
+  end)
+  self.entities = {}
+  for layerIndex = BACKGROUND_LAYER, FOREGROUND_LAYER do
+    local tileLayer = self.map:getLayer(layerIndex)
+    assert(tileLayer:getType() == 'tile_layer')
+    for x = self:getTopLeftPositionX(), self:getBottomRightPositionX(), 1 do
+      for y = self:getTopLeftPositionY(), self:getBottomRightPositionY(), 1 do
+        if tileLayer:getTile(x, y) then
+          entities:removeTileEntity(layerIndex, x, y)
+        end
+      end
+    end
+  end
 end
 
 
 -- this will only keep track of the entities declared in room data
-function Room:onEntityDestroyed()
+function Room:onEntityDestroyed(entity)
+  -- TODO function
   -- If it's a tile entity, record it to list of destroyed entitites
 end
 
 -- pass signal from RoomEdge to whoever is listening
-function Room:onRequestTransitionRequest()
-  self:emit('roomTransitionRequested')
+function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, playerY)
+  playerX = math.floor(playerX / GRID_SIZE) + 1
+  playerY = math.floor(playerY / GRID_SIZE) + 1
+  local newRoom = nil
+  -- check if there is a room player can transition to
+  if direction4 == Direction4.up or direction4 == Direction4.down then
+    local y = nil
+    if direction4 == Direction4.up then
+      y = self.topLeftPosY - 1
+    elseif direction4 == Direction4.down then
+      y = self:getBottomRightPositionY() + 1
+    end
+    newRoom = self.map:getRoomContainingIndex(playerX, y)
+  elseif direction4 == Direction4.left or direction4 == Direction4.right then
+    local x = nil
+    if direction4 == Direction4.left then
+      x = self.topLeftPosX - 1
+    elseif direction4 == Direction4.right then
+      x = self:getBottomRightPositionX() + 1
+    end
+    newRoom = self.map:getRoomContainingIndex(x, playerY)
+  else
+    error()
+  end
+  if newRoom then
+    print(newRoom)
+    self:emit('roomTransitionRequest', transitionStyle, direction4, newRoom)
+  end
 end
 
 -- pass signal from MapLoadingZone to whoever is listening
 function Room:onMapTransitionRequested()
-  self:emit('mapTransitionRequested')
+  self:emit('mapTransitionRequest')
 end
 
 function Room:indexInRoom(x, y)
-  local rx1, ry1 = self:getTopLeftPosition()
-  local rx2, ry2 = self:getBottomRightPosition()
-  return rx1 <= x and x <= rx2 and ry1 <= y and y <= ry2
+  return self:getTopLeftPositionX() <= x and x <= self:getBottomRightPositionX() 
+  and self:getTopLeftPositionY() <= y and y <= self:getBottomRightPositionY()
 end
 
 function Room:getType()
