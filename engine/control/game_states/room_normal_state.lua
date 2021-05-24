@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local GameState = require 'engine.control.game_state'
 
+
 local RoomNormalState = Class { __includes = GameState,
   init = function(self, room)
     GameState.init(self)
@@ -15,6 +16,7 @@ function RoomNormalState:getType()
 end
 
 function RoomNormalState:onBegin()
+  self:connectToRoomSignals(self.room)
   self.player = self.gameControl:getPlayer()
   self.camera = self.gameControl:getCamera()
 end
@@ -38,6 +40,18 @@ function RoomNormalState:draw()
   self.gameControl:drawTileEntities(camera.x - camera.w / 2, camera.y - camera.h / 2, camera.w, camera.h)
   self.gameControl:drawEntities()
   camera:detach()
+end
+
+function RoomNormalState:connectToRoomSignals(room)
+  room:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
+end
+
+function RoomNormalState:disconnectFromRoomSignals(room)
+  room:disconnect('roomTransitionRequest', self, 'onRoomTransitionRequest')
+end
+
+function RoomNormalState:onRoomTransitionRequest(newRoom, transitionStyle, direction4)
+  self.gameControl:transitionToRoom(newRoom, transitionStyle, direction4)
 end
 
 return RoomNormalState

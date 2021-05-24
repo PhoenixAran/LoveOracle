@@ -120,13 +120,13 @@ function Room:load(entities)
     w = GRID_SIZE, 
     h = self.sizeY * GRID_SIZE
   }
-  local roomEdge = RoomEdge('roomEdgeLeft', roomRect, Direction4.left, 'slide')
+  local roomEdge = RoomEdge('roomEdgeLeft', roomRect, Direction4.left, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   -- make right room edge
   roomRect.x = (self:getBottomRightPositionX()) * GRID_SIZE
   roomRect.y = (self.topLeftPosY - 1) * GRID_SIZE
-  roomEdge = RoomEdge('roomEdgeRight',roomRect, Direction4.right, 'slide')
+  roomEdge = RoomEdge('roomEdgeRight',roomRect, Direction4.right, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   -- make top room edge
@@ -134,13 +134,13 @@ function Room:load(entities)
   roomRect.y = (self.topLeftPosY - 2) * GRID_SIZE
   roomRect.w = self.sizeX * GRID_SIZE
   roomRect.h = GRID_SIZE
-  roomEdge = RoomEdge('roomEdgeUp', roomRect, Direction4.up, 'slide')
+  roomEdge = RoomEdge('roomEdgeUp', roomRect, Direction4.up, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   -- make bottom room edge
   roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
   roomRect.y = (self:getBottomRightPositionY()) * GRID_SIZE
-  roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, 'slide')
+  roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
 end
@@ -196,8 +196,7 @@ function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, play
     error()
   end
   if newRoom then
-    print(newRoom)
-    self:emit('roomTransitionRequest', transitionStyle, direction4, newRoom)
+    self:emit('roomTransitionRequest', newRoom, transitionStyle, direction4)
   end
 end
 

@@ -88,12 +88,12 @@ function Combat:inKnockback()
   return self.knockbackTime > 0 and self.currentKnockbackTime < self.knockbackTime
 end
 
-function Combat:setKnockbackDirection(x, y)
+function Combat:setKnockbackVector(x, y)
   self.knockbackDirectionX = x
   self.knockbackDirectionY = y
 end
 
-function Combat:getKnockbackDirection()
+function Combat:getKnockbackVector()
   return self.knockbackDirectionX, self.knockbackDirectionY
 end
 

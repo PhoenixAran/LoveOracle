@@ -4,13 +4,18 @@ local Direction4 = require 'engine.enums.direction4'
 local Tween = require 'lib.tween'
 
 local RoomTransitionState = Class { __includes = GameState,
-  init = function(self, currentRoom, newRoom, direction4)
+  init = function(self, roomState, currentRoom, newRoom, transitionStyle, direction4)
     GameState.init(self)
+    self.transitionStyle = transitionStyle
     self.currentRoom = currentRoom
     self.newRoom = newRoom
     self.direction4 = direction4
+    self.player = nil
+    self.camera = nil
     self.playerTween = nil
     self.cameraTween = nil
+    self.playerTweenCompleted = false
+    self.cameraTweenCompleted = false
   end
 }
 
@@ -19,7 +24,9 @@ function RoomTransitionState:getType()
 end
 
 function RoomTransitionState:onBegin()
-  
+  self.player = self.gameControl:getPlayer()
+  self.camera = self.gameControl:getCamera()
+
 end
 
 function RoomTransitionState:onEnd()
@@ -27,10 +34,12 @@ function RoomTransitionState:onEnd()
 end
 
 function RoomTransitionState:update(dt)
-
+  if self.playerTweenCompleted and self.cameraTweenCompleted then
+    self:endState()
+  end
 end
 
-function RoomNormalState:draw()
+function RoomTransitionState:draw()
 
 end
 

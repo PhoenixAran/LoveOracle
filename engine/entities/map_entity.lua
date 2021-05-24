@@ -193,12 +193,12 @@ function MapEntity:resetCombatVariables()
   self.combat:resetCombatVariables()
 end
 
-function MapEntity:getKnockbackDirection(x, y)
-  return self.combat:getKnockbackDirection()
+function MapEntity:getKnockbackVector(x, y)
+  return self.combat:getKnockbackVector()
 end
 
-function MapEntity:setKnockbackDirection(x, y)
-  self.combat:setKnockbackDirection(x, y)
+function MapEntity:setKnockbackVector(x, y)
+  self.combat:setKnockbackVector(x, y)
 end
 
 function MapEntity:setKnockbackSpeed(speed)
@@ -229,7 +229,7 @@ function MapEntity:hurt(damageInfo)
     self:setKnockback(damageInfo.knockbackTime)
     self:setKnockbackSpeed(damageInfo.knockbackSpeed)
     local ex, ey = self:getPosition()
-    self:setKnockbackDirection(vector.sub(ex, ey,damageInfo.sourceX, damageInfo.sourceY))
+    self:setKnockbackVector(vector.sub(ex, ey,damageInfo.sourceX, damageInfo.sourceY))
   end
 
   -- TODO take damage

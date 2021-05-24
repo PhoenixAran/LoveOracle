@@ -17,12 +17,12 @@ function Direction8.getDirection(x, y)
   if type(x) == 'string' then
     local direction = Direction8[x]
     if direction == nil then
-      error('Direction out of range for Direction4.getDirection: ' .. tostring(x))
+      error('Direction out of range for Direction8.getDirection: ' .. tostring(x))
     end
     return direction
   else
     if x == 0 and y == 0 then
-      return Direction4.NONE
+      return Direction8.none
     end
     local theta = math.atan2(y, x)
     if theta < 0 then

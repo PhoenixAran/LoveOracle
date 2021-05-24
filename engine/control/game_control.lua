@@ -9,6 +9,7 @@ local Camera = require 'lib.camera'
 local GameConfig = require 'game_config'
 
 local RoomNormalState = require 'engine.control.game_states.room_normal_state'
+local RoomTransitionState = require 'engine.control.game_states.room_transition_state'
 local GRID_SIZE = 16
 
 local GameControl = Class { __includes = SignalObject,
@@ -63,7 +64,7 @@ function GameControl:setupInitialRoomNormalState()
   local spawnIndexX, spawnIndexY = 1, 1
   self.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
   initialRoom:load(self.entities)
-  self:pushState(RoomNormalState(initalRoom))
+  self:pushState(roomNormalState)
 end
 
 function GameControl:getCamera()
@@ -113,21 +114,17 @@ function GameControl:draw()
   monocle:finish()
 end
 
-function GameControl:onRoomTransitionRequest(room, transitionStyle, direction4)
-  -- TODO Push room transition state on the stack
-  
-end
-
-function GameControl:onMapTransitionRequest()
-  -- TODO Push map transiton state on the stack
-end
-
 function GameControl:pushState(gameState)
   self.gameStateStack:pushState(gameState)
 end
 
 function GameControl:popState()
   return self.gameStateStack:popState()
+end
+
+function GameControl:transitionToRoom(newRoom, transitionStyle, direction4)
+  local roomTransitionState = RoomTransitionState(self.currentRoom, newRoom, transitionStyle, direction4)
+  --self:pushState(roomTransitionState)
 end
 
 function GameControl:release()

@@ -16,7 +16,7 @@ local RoomEdge = Class { __includes = Entity,
     -- you dont want to be able to transition if there is no room to transition to
     -- mainly used for rooms at the edge of the map
     self.canTransition = canTransition
-    self.transitionStyle = transitionStyle
+    self.transitionStyle = transitionStyle or 'push'
     self:signal('roomTransitionRequest')
 
     self:setPhysicsLayer('room_edge')

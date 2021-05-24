@@ -1,7 +1,9 @@
 local Class = require 'lib.class'
+local SignalObject = require 'engine.signal_object'
 
-local GameState = Class {
+local GameState = Class { _includes = SignalObject,
   init = function(self)
+    SignalObject.init(self)
     self.active = false
     self.visible = false
     self.gameControl = nil
@@ -36,7 +38,7 @@ function GameState:endState()
 end
 
 function GameState:update(dt)
-
+  
 end
 
 function GameState:draw()
