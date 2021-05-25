@@ -24,13 +24,9 @@ function RoomTransitionState:getType()
 end
 
 function RoomTransitionState:onBegin()
+  error('Obsolete')
   self.player = self.gameControl:getPlayer()
   self.camera = self.gameControl:getCamera()
-
-end
-
-function RoomTransitionState:onEnd()
-
 end
 
 function RoomTransitionState:update(dt)

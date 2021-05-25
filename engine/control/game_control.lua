@@ -8,8 +8,8 @@ local GameStateStack = require 'engine.control.game_state_stack'
 local Camera = require 'lib.camera'
 local GameConfig = require 'game_config'
 
-local RoomNormalState = require 'engine.control.game_states.room_normal_state'
-local RoomTransitionState = require 'engine.control.game_states.room_transition_state'
+local RoomControl = require 'engine.control.room_control'
+
 local GRID_SIZE = 16
 
 local GameControl = Class { __includes = SignalObject,
@@ -19,18 +19,19 @@ local GameControl = Class { __includes = SignalObject,
     local w = GameConfig.window.monocleConfig.windowWidth
     local h = GameConfig.window.monocleConfig.windowHeight
     self.camera = Camera(w/2,h/2 , w, h)
-    --self.camera:setFollowStyle('SCREEN_BY_SCREEN')
 
-    self.entities = Entities()
     self.map = nil
-    self.previousRooms = { }
-    self.currentRoom = nil
+    self.roomControl = nil
     self.gameStateStack = GameStateStack(self)
   end
 }
 
 function GameControl:getType()
   return 'game_control'
+end
+
+function GameControl:getRoomControl()
+  return self.roomControl
 end
 
 function GameControl:getInventory()
@@ -43,7 +44,6 @@ end
 
 function GameControl:setPlayer(player)
   self.player = player
-  self.entities:setPlayer(player)
 end
 
 function GameControl:getMap()
@@ -52,19 +52,19 @@ end
 
 function GameControl:setMap(map)
   self.map = map
-  self.entities:setUpTileEntityCollection(map.sizeX, map.sizeY, map.layerCount)
 end
 
--- sets up the initial state so the user can actually start playing the game
-function GameControl:setupInitialRoomNormalState()
-  -- TODO declare initial room and spawn location in MAP
-  local map = self.map
-  local initialRoom = lume.first(map:getRooms())
-  local roomNormalState = RoomNormalState(initialRoom)
-  local spawnIndexX, spawnIndexY = 1, 1
-  self.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
-  initialRoom:load(self.entities)
-  self:pushState(roomNormalState)
+-- creates the initial room control state
+-- called when game starts
+function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
+  self:getPlayer():setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
+  self.roomControl = RoomControl(self:getMap(), self:getPlayer(), self:getCamera())
+  -- man handle room control for initial startup
+  self.roomControl.currentRoom = room
+  self.roomControl.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
+  self.roomControl.currentRoom:load(self.roomControl.entities)
+  -- push room control state so user can actually start playing
+  self:pushState(self.roomControl)
 end
 
 function GameControl:getCamera()
@@ -73,29 +73,7 @@ end
 
 function GameControl:setCamera(camera)
   self.camera = camera
-  self.entities:setCamera(camera)
-end
-
--- return Entities object
-function GameControl:getEntities()
-  return self.entities
-end
-
-function GameControl:updateEntities(dt)
-  self.entities:update(dt)
-end
-
-function GameControl:drawTileEntities(x, y, w, h)
-  self.entities:drawTileEntities(x, y, w, h)
-end
-
-function GameControl:drawEntities()
-  self.entities:drawEntities()
-end
-
--- update the tileset animations
-function GameControl:updateTileAnimations(dt)
-  -- TODO Update tile animations
+  -- TODO set room control camera?
 end
 
 function GameControl:update(dt)
@@ -120,11 +98,6 @@ end
 
 function GameControl:popState()
   return self.gameStateStack:popState()
-end
-
-function GameControl:transitionToRoom(newRoom, transitionStyle, direction4)
-  local roomTransitionState = RoomTransitionState(self.currentRoom, newRoom, transitionStyle, direction4)
-  --self:pushState(roomTransitionState)
 end
 
 function GameControl:release()
