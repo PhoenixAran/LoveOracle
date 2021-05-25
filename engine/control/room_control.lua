@@ -7,6 +7,7 @@ local Entities = require 'engine.entities.entities'
 local GRID_SIZE = 16
 local RoomControl = Class { __includes = GameState,
   init = function(self, map, player, camera)
+    GameState.init(self)
     self.player = player
     self.camera = camera
     self.map = map
@@ -53,6 +54,10 @@ function RoomControl:connectToRoomSignals(room)
   room:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
 end
 
+function RoomControl:disconnectFromRoomSignals(room)
+  room:disconnect('roomTransitionRequest', self, 'onRoomTransitionRequest')
+end
+
 function RoomControl:onBegin()
   local map = self:getMap()
   self.entities:setPlayer(self.player)
@@ -82,7 +87,7 @@ function RoomControl:draw()
 end
 
 function RoomControl:onRoomTransitionRequest(newRoom, transitionStyle, direction4)
-
+  print('RoomControl:onRoomTransitionRequest', newRoom, transitionStyle, direction4)
 end
 
 return RoomControl

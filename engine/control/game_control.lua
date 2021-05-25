@@ -63,6 +63,7 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   self.roomControl.currentRoom = room
   self.roomControl.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
   self.roomControl.currentRoom:load(self.roomControl.entities)
+  self.roomControl:connectToRoomSignals(room)
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
 end
