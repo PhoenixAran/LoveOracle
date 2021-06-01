@@ -9,6 +9,7 @@ local Camera = require 'lib.camera'
 local GameConfig = require 'game_config'
 
 local RoomControl = require 'engine.control.room_control'
+local RoomNormalState = require 'engine.control.game_states.room_states.room_normal_state'
 
 local GRID_SIZE = 16
 
@@ -64,6 +65,7 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   self.roomControl.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
   self.roomControl.currentRoom:load(self.roomControl.entities)
   self.roomControl:connectToRoomSignals(room)
+  self.roomControl:pushState(RoomNormalState())
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
 end

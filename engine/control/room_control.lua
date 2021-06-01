@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local GameState = require 'engine.control.game_state'
+local RoomStateStack = require 'engine.control.room_state_stack'
 local Entities = require 'engine.entities.entities'
 
 local GRID_SIZE = 16
@@ -17,8 +18,8 @@ local RoomControl = Class { __includes = GameState,
 
     self.previousRooms = { }
     self.currentRoom = nil
-    self.roomEventStack = nil
     self.allowRoomTransition = true
+    self.roomStateStack = RoomStateStack(self)
   end
 }
 
@@ -50,6 +51,12 @@ function RoomControl:enableRoomTransition(enable)
   self.allowRoomTransition = enable
 end
 
+function RoomControl:pushState(roomState)
+  print(roomState)
+  print(roomState:getType())
+  self.roomStateStack:pushState(roomState)
+end
+
 function RoomControl:connectToRoomSignals(room)
   room:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
 end
@@ -69,25 +76,23 @@ function RoomControl:onEnd()
 end
 
 function RoomControl:update(dt)
-  -- TODO check for pause here
-  self.entities:update(dt)
-  self.camera:update(dt)
-  self.camera:follow(self.player:getPosition())
+  local roomState = self.roomStateStack:getCurrentState()
+  if roomState then
+    roomState:update(dt)
+  end
 end
 
 function RoomControl:draw()
-  self.camera:attach()
-  local x = self.camera.x - self.camera.w / 2
-  local y = self.camera.y - self.camera.h / 2
-  local w = self.camera.w
-  local h = self.camera.h
-  self.entities:drawTileEntities(x, y, w, h)
-  self.entities:drawEntities()
-  self.camera:detach()
+  local roomState = self.roomStateStack:getCurrentState()
+  if roomState then
+    roomState:draw()
+  end
 end
 
 function RoomControl:onRoomTransitionRequest(newRoom, transitionStyle, direction4)
-  print('RoomControl:onRoomTransitionRequest', newRoom, transitionStyle, direction4)
+  if self.canRoomTransition then
+    print(newRoom, transitionStyle, direction4)
+  end
 end
 
 return RoomControl
