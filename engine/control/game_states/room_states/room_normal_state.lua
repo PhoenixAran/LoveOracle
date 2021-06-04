@@ -16,8 +16,8 @@ function RoomNormalState:update(dt)
   local entities = self.roomControl.entities
   local player = self.roomControl.player
   entities:update(dt)
-  camera:update(dt)
   camera:follow(player:getPosition())
+  camera:update(dt)
 end
 
 function RoomNormalState:draw()

@@ -6,6 +6,8 @@ local RoomStateStack = require 'engine.control.room_state_stack'
 local Entities = require 'engine.entities.entities'
 
 local GRID_SIZE = 16
+local RoomTransitionState = require 'engine.control.game_states.room_states.room_transition_state'
+
 local RoomControl = Class { __includes = GameState,
   init = function(self, map, player, camera)
     GameState.init(self)
@@ -52,8 +54,6 @@ function RoomControl:enableRoomTransition(enable)
 end
 
 function RoomControl:pushState(roomState)
-  print(roomState)
-  print(roomState:getType())
   self.roomStateStack:pushState(roomState)
 end
 
@@ -91,7 +91,7 @@ end
 
 function RoomControl:onRoomTransitionRequest(newRoom, transitionStyle, direction4)
   if self.canRoomTransition then
-    print(newRoom, transitionStyle, direction4)
+    self:pushState(RoomTransitionState(self.currentRoom, newRoom, transitionStyle, direction4))
   end
 end
 

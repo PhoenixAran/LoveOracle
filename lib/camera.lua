@@ -337,7 +337,7 @@ function Camera:setBounds(x, y, w, h)
 end
 
 function Camera:getBounds()
-    return  self.w, self.h
+    return self.w, self.h
 end
 
 function Camera:setFollowStyle(follow_style)

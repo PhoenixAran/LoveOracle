@@ -20,6 +20,7 @@ local GameControl = Class { __includes = SignalObject,
     local w = GameConfig.window.monocleConfig.windowWidth
     local h = GameConfig.window.monocleConfig.windowHeight
     self.camera = Camera(w/2,h/2 , w, h)
+    self.camera:setFollowStyle('NO_DEADZONE')
 
     self.map = nil
     self.roomControl = nil
@@ -66,6 +67,15 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   self.roomControl.currentRoom:load(self.roomControl.entities)
   self.roomControl:connectToRoomSignals(room)
   self.roomControl:pushState(RoomNormalState())
+
+  local x1, y1 = room:getTopLeftPosition()
+  x1 = x1 - 1
+  y1 = y1 - 1
+  local x2, y2 = room:getBottomRightPosition()
+  x1, y1 = vector.mul(GRID_SIZE, x1, y1)
+  x2, y2 = vector.mul(GRID_SIZE, x2, y2)
+  self:getCamera():setBounds(x1, y1, x2 - x1, y2 - y1)  
+
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
 end
