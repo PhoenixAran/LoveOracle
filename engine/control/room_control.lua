@@ -57,6 +57,20 @@ function RoomControl:pushState(roomState)
   self.roomStateStack:pushState(roomState)
 end
 
+function RoomControl:popState()
+  self.roomStateStack:popState()
+end
+
+-- note that this wont handle room transtioning and loading
+-- This will only set the reference the variable currentRoom, and push 
+-- the old room in the old table
+function RoomControl:setCurrentRoom(room)
+  self:disconnectFromRoomSignals(self.currentRoom)
+  lume.push(self.previousRooms, self.currentRoom)
+  self.currentRoom = room
+  self:connectToRoomSignals(self.currentRoom)
+end
+
 function RoomControl:connectToRoomSignals(room)
   room:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
 end

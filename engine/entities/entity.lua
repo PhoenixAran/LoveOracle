@@ -152,7 +152,7 @@ function Entity:draw()
 end
 
 function Entity:removed(scene)
-  physics.remove(self)
+  Physics.remove(self)
   self.scene = nil
   if self.onRemoved then
     self:onRemoved(scene)

@@ -48,7 +48,7 @@ function Entities:addEntity(entity, awakeEntity)
   assert(entity:getName(), 'Entity requires name')
   if awakeEntity == nil then awakeEntity = true end
   lume.push(self.entities, entity)
-  self.entitiesHash[entity] = entity
+  self.entitiesHash[entity:getName()] = entity
   lume.push(self.entitiesDraw, entity)
   entity:added()
   if awakeEntity then
@@ -92,9 +92,11 @@ end
 function Entities:removeTileEntity(layer, x, y)
   local tileIndex = (x - 1) * self.mapSizeY + y
   local tileEntity = self.tileEntities[layer][tileIndex]
-  self.tileEntities[layer][mapCoords] = nil
-  self:emit('tileEntityRemoved', tileEntity)
-  tileEntity:release()
+  if tileEntity then
+    self.tileEntities[layer][tileIndex] = nil
+    self:emit('tileEntityRemoved', tileEntity)
+    tileEntity:release()
+  end
 end
 
 function Entities:getByName(name)

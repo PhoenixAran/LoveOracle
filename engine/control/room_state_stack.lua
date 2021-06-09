@@ -24,7 +24,7 @@ end
 function RoomStateStack:popState()
   local state = self:getCurrentState()
   assert(state)
-  lume.remove(state)
+  lume.remove(self.states, state)
   return state
 end
 
