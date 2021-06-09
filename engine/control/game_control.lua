@@ -17,6 +17,7 @@ local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()  
     self.player = nil
+
     local w = GameConfig.window.monocleConfig.windowWidth
     local h = GameConfig.window.monocleConfig.windowHeight
     self.camera = Camera(w/2,h/2 , w, h)
@@ -86,7 +87,6 @@ end
 
 function GameControl:setCamera(camera)
   self.camera = camera
-  -- TODO set room control camera?
 end
 
 function GameControl:update(dt)

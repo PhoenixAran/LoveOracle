@@ -496,7 +496,6 @@ function Player:draw()
       item:drawAbove()
     end
   end
-  self:debugDraw()
 end
 
 function Player:getInspectorProperties()

@@ -14,6 +14,7 @@ local Tile = Class { __includes = Entity,
     local collisionRectZRangeX, collisionRectZRangeY = tileData:getCollisionZRange()
     local collisionRectZRange = { min = collisionRectZRangeX, max = collisionRectZRangeY }
     Entity.init(self, name, true, true, tileData.collisionRect, collisionRectZRange)
+
     self:setPositionWithBumpCoords((tileIndexX - 1) * GRID_SIZE, (tileIndexY - 1) * GRID_SIZE)
     -- TODO: check if it has a hurtbox
     -- TODO: make hurtbox
