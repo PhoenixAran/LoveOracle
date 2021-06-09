@@ -124,8 +124,11 @@ end
 function Entities:removeTileEntity(layer, x, y)
   local tileIndex = (x - 1) * self.mapSizeY + y
   local tileEntity = self.tileEntities[layer][tileIndex]
-  self.tileEntities[layer][mapCoords] = nil
-  self:emit('tileEntityRemoved', tileEntity)
+  if tileEntity then
+    self.tileEntities[layer][tileIndex] = nil
+    self:emit('tileEntityRemoved', tileEntity)
+    tileEntity:release()
+  end
 end
 
 function Entities:getByName(name)
