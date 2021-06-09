@@ -8,6 +8,10 @@ local GameStateStack = Class {
   end
 }
 
+function GameStateStack:getType()
+  return 'game_state_stack'
+end
+
 function GameStateStack:getCurrentState()
   return lume.last(self.states)
 end
@@ -22,10 +26,6 @@ function GameStateStack:popState()
   assert(state)
   lume.remove(state)
   return state
-end
-
-function GameStateStack:getType()
-  return 'game_state_stack'
 end
 
 return GameStateStack

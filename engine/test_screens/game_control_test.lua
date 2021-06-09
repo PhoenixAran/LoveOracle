@@ -4,8 +4,6 @@ local GameControl = require 'engine.control.game_control'
 local Map = require 'engine.tiles.map'
 local BaseScreen = require 'engine.screens.base_screen'
 local Physics = require 'engine.physics'
-
-local RoomNormalState = require 'engine.control.game_states.room_normal_state'
 local Player = require 'engine.player.player'
 
 
@@ -22,10 +20,10 @@ end
 
 function GameControlTest:enter(prev, ...)
   self.gameControl = GameControl()
-  self.gameControl:setPlayer(Player('player', true, true, { x = 24, y = 24, w = 16, h = 16 }))
-  self.gameControl:setMap(Map('game_control_test'))
-  local initialRoom = lume.first(self.gameControl:getMap():getRooms())
-  self.gameControl:pushState(RoomNormalState(initialRoom))
+  self.gameControl:setPlayer(Player('player', true, true, { x = 0, y = 0, w = 16, h = 16 }))
+  local map = Map('game_control_test')
+  self.gameControl:setMap(map)
+  self.gameControl:setInitialRoomControlState(lume.first(map:getRooms()), 3, 3)
 end
 
 function GameControlTest:update(dt)

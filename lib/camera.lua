@@ -336,6 +336,10 @@ function Camera:setBounds(x, y, w, h)
     self.bounds_max_y = y + h
 end
 
+function Camera:getBounds()
+    return self.w, self.h
+end
+
 function Camera:setFollowStyle(follow_style)
     self.follow_style = follow_style
 end

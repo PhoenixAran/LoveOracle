@@ -22,11 +22,16 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 
 local Player = Class { __includes = MapEntity,
-  init = function(self, name, enabled, visible, rect)
-    MapEntity.init(self,name, enabled, visible, rect)    
+  init = function(self, name, enabled, visible, position)
+    MapEntity.init(self,name, enabled, visible, { x = position.x, y = position.y,  w = 8, h = 9 })  
+    -- collision
+    self:setCollidesWithLayer('room_edge')
+
+
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
+    self.sprite:setOffset(0, -3)
     self.spriteFlasher:addSprite(self.sprite)
     
     -- states
@@ -91,6 +96,7 @@ local Player = Class { __includes = MapEntity,
     -- entity sprite effect configuration
     self.effectSprite:setOffset(0, 6)
     self.shadowVisible = true
+    
   end
 }
 
@@ -425,8 +431,8 @@ function Player:checkRoomTransitions()
   if self:getStateParameters().canRoomTransition then
     for _, other in ipairs(self.moveCollisions) do
       if other.canRoomTransition then
-        if other:canRoomTransition(self:getDirection4()) then
-          other:requestRoomTransition()
+        if other:canRoomTransition(self:getDirection8()) then
+          other:requestRoomTransition(self:getPosition())
         end
       end
     end
@@ -473,6 +479,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
+  local oldScale = love.graphics.getScale
   for _, item in pairs(self.items) do
     if item.drawBelow then 
       item:drawBelow()

@@ -1,17 +1,17 @@
-local version = '0.0.15.0'
+local version = '0.0.15.1'
 local zbStudioDebug = true  -- enable breakpoint and step through with zbstudio
 
 -- Made for SNES controllers
 local controls = {
   controls = {
-    left = {'key:left', 'key:a', 'axis:leftx-', 'button:dpleft'},
-    right = {'key:right', 'key:d', 'axis:leftx+', 'button:dpright'},
-    up = {'key:up', 'key:w', 'axis:lefty-', 'button:dpup'},
-    down = {'key:down', 'key:s', 'axis:lefty+', 'button:dpdown'}, 
-    a = {'key:n', 'button:b'},
-    b = {'key:b', 'button:a'},
-    x = {'key:j', 'button:y' },
-    y = {'key:h', 'button:x'},
+    left = {'key:left', 'axis:leftx-', 'button:dpleft'},
+    right = {'key:right', 'axis:leftx+', 'button:dpright'},
+    up = {'key:up', 'axis:lefty-', 'button:dpup'},
+    down = {'key:down', 'axis:lefty+', 'button:dpdown'}, 
+    a = {'key:space', 'button:b'},
+    b = {'key:c', 'button:a'},
+    x = {'key:x', 'button:y' },
+    y = {'key:z', 'button:x'},
     leftClick = { 'mouse:1' }
   },
   pairs = {
