@@ -45,7 +45,7 @@ function RoomTransitionState:onBegin()
     ty = ty + 0.6
   elseif self.direction4 == Direction4.down then
     tx, ty = self.newRoom:getTopLeftPosition()
-    ty = ty + 0.4
+    ty = ty + 0.6
   elseif self.direction4 == Direction4.left then
     tx, ty = self.newRoom:getBottomRightPosition()
     tx = tx + 0.6
@@ -107,6 +107,9 @@ function RoomTransitionState:update(dt)
     -- update player position or else they have one frame where they are considered in the last position between room transitons
     -- which can cause them to hit a room edge loading zone
     Physics.update(self.player)
+    posX, posY = self.player:getPosition()
+    self.player.roomEdgeCollisionBox.x = (posX - self.player.roomEdgeCollisionBox.w / 2)
+    self.player.roomEdgeCollisionBox.y = (posY - self.player.roomEdgeCollisionBox.h / 2)
   end
 
   
