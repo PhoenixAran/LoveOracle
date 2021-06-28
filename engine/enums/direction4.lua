@@ -1,4 +1,5 @@
 local vector = require 'lib.vector'
+local lume = require 'lib.lume'
 
 -- values determined by angleindex + 1
 local Direction4 = {
@@ -26,7 +27,7 @@ function Direction4.getDirection(x, y)
     end
     local angleInterval =  (math.pi * 2) / 4
     local angleIndex = math.floor((theta / angleInterval) + 0.5)
-    return angleIndex + 1
+    return lume.clamp(angleIndex + 1, 1, 8)
   end
 end
 
