@@ -44,36 +44,36 @@ function Hitbox:getCollisionTag()
   return 'hitbox'
 end
 
-function Hitbox:transformChanged()
-  local ex, ey = self.entity:getBumpPosition()
-  self.x = ex
-  self.y = ey
+function Hitbox:onTransformChanged()
+  local ex, ey = self.entity:getPosition()
+  self.x = ex - self.w / 2
+  self.y = ey - self.h / 2
   Physics.update(self)
 end 
 
 function HitBox:entityAwake()
   assert(not self.registeredWithPhysics)
-  physics.add(self)
+  Physics.add(self)
   self.registeredWithPhysics = true
 end
 
 function HitBox:onRemoved()
   if self.registeredWithPhysics then
-    physics.remove(self)
+    Physics.remove(self)
     self.registeredWithPhysics = false
   end
 end
 
 function HitBox:onEnabled()
   if not self.registeredWithPhysics then
-    physics.add(self)
+    Physics.add(self)
     self.registeredWithPhysics = true
   end
 end
 
 function HitBox:onDisabled()
   if self.registeredWithPhysics then
-    physics.remove(self)
+    Physics.remove(self)
     self.registeredWithPhysics = false
   end 
 end

@@ -27,10 +27,10 @@ function RoomState:begin(roomControl)
 end
 
 function RoomState:endState()
-  if self.active  then
+  if self.active then
+    self:onEnd()
     self.active = false
     self.roomControl = nil
-    self:onEnd()
   end
 end
 

@@ -26,12 +26,14 @@ function Direction8.getDirection(x, y)
     end
     local theta = math.atan2(y, x)
     if theta < 0 then
-      theta = theta + math.pi * 2
+      theta = theta + (math.pi * 2)
     end
-    local angleInterval =  (math.pi * 2) / 8
+    local angleInterval = (math.pi * 2) / 8
     local angleIndex = math.floor((theta / angleInterval) + 0.5)
     return angleIndex + 1
   end
 end
 
+
+print(Direction8.getDirection(0.98078528040323,-0.19509032201613))
 return Direction8

@@ -147,7 +147,16 @@ function Entities:update(dt)
       entity:update(dt)
     end
   end
-end
+  if love.keyboard.isDown('u') then
+    local count = 0
+    for _, entity in ipairs(self.entities) do
+      if entity:getType() == 'room_edge' then
+        count = count + 1
+      end
+    end
+    print(count)
+  end
+end 
 
 -- draws tile entities
 -- if given a cull rect, will only draw tiles within the cull rectangle

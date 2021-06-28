@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'lib.vector'
+local Collider = require 'engine.components.collider'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local Entity = require 'engine.entities.entity'
 local Combat = require 'engine.components.combat'
@@ -38,8 +39,6 @@ local MapEntity = Class { __includes = Entity,
     -- if this is not null, it will only be used to collide with room edges if you want the room edge collider
     -- to be different
     self.roomEdgeCollisionBox = nil     
-    self.roomEdgeCollisionBoxOffsetX = 0
-    self.roomEdgeCollisionBoxOffsetY = 0
 
     -- table to store collisions that occur when MapEntity:move() is called
     self.moveCollisions = { }
@@ -65,6 +64,12 @@ end
 
 function MapEntity:getCollisionTag()
   return 'map_entity'
+end
+
+function MapEntity:onTransformChanged()
+  if self.roomEdgeCollisionBox then
+    self.roomEdgeCollisionBox:onTransformChanged()
+  end
 end
 
 function MapEntity:release()
@@ -196,9 +201,6 @@ function MapEntity:move(dt)
     TablePool.free(neighbors)
   end
   self:setPosition(posX + velX, posY + velY)
-  posX, posY = self:getPosition()
-  self.roomEdgeCollisionBox.x = (posX - self.roomEdgeCollisionBox.w / 2) + self.roomEdgeCollisionBoxOffsetX
-  self.roomEdgeCollisionBox.y = (posY - self.roomEdgeCollisionBox.h / 2) + self.roomEdgeCollisionBoxOffsetY
   Physics.update(self)
 end
 
