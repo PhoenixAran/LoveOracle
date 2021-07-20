@@ -29,7 +29,7 @@ function Collider:onTransformChanged()
   self.x = ex + self.offsetX - self.w / 2
   self.y = ey + self.offsetY - self.h / 2
   if self.detectOnly then
-    physics.update(self)
+    Physics.update(self)
   end
 end
 
