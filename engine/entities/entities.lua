@@ -97,8 +97,6 @@ function Entities:removeTileEntity(layer, x, y)
     self:emit('tileEntityRemoved', tileEntity)
     tileEntity:release()
   end
-<<<<<<< HEAD
-=======
 end
 
 
@@ -131,7 +129,6 @@ function Entities:removeTileEntity(layer, x, y)
     self:emit('tileEntityRemoved', tileEntity)
     tileEntity:release()
   end
->>>>>>> develop
 end
 
 function Entities:getByName(name)
