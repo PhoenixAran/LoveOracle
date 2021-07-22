@@ -24,12 +24,7 @@ local RoomTransitionState = Class { __includes = RoomState,
     self.playerTween = nil
     self.cameraTween = nil
     self.playerTweenCompleted = false
-<<<<<<< HEAD
-    self.cameraTweenCompleted = false   
-
-=======
     self.cameraTweenCompleted = false
->>>>>>> develop
   end
 }
 
@@ -38,10 +33,7 @@ function RoomTransitionState:getType()
 end
 
 function RoomTransitionState:onBegin()
-<<<<<<< HEAD
-=======
   self.roomControl.allowRoomTransition = false
->>>>>>> develop
   self.player = self.roomControl:getPlayer()
   self.camera = self.roomControl:getCamera()
 
@@ -53,11 +45,7 @@ function RoomTransitionState:onBegin()
     ty = ty + 0.6
   elseif self.direction4 == Direction4.down then
     tx, ty = self.newRoom:getTopLeftPosition()
-<<<<<<< HEAD
-    ty = ty + 0.4
-=======
     ty = ty + 0.6
->>>>>>> develop
   elseif self.direction4 == Direction4.left then
     tx, ty = self.newRoom:getBottomRightPosition()
     tx = tx + 0.6
@@ -115,20 +103,10 @@ function RoomTransitionState:update(dt)
     self.currentRoom:unload(self.roomControl:getEntities())
     self.roomControl:setCurrentRoom(self.newRoom)
     self.roomControl:popState()
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
     -- update player position or else they have one frame where they are considered in the last position between room transitons
     -- which can cause them to hit a room edge loading zone
     Physics.update(self.player)
   end
-<<<<<<< HEAD
-
-  
-end
-
-=======
 end
 
 function RoomTransitionState:onEnd()
@@ -136,7 +114,6 @@ function RoomTransitionState:onEnd()
 end
 
 
->>>>>>> develop
 function RoomTransitionState:draw()
   local camera = self.roomControl.camera
   local entities = self.roomControl.entities

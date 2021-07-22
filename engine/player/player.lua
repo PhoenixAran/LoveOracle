@@ -26,11 +26,6 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 local Player = Class { __includes = MapEntity,
   init = function(self, name, enabled, visible, position)
     MapEntity.init(self,name, enabled, visible, { x = position.x, y = position.y,  w = 8, h = 9 })  
-<<<<<<< HEAD
-    -- collision
-    self:setCollidesWithLayer('room_edge')
-
-=======
     -- room edge collision 
     --self.roomEdgeCollisionBox = BumpBox((position.x - 12 / 2), (position.y - 13 / 2), 12, 9)
     local ex, ey = self:getPosition()
@@ -43,7 +38,6 @@ local Player = Class { __includes = MapEntity,
       offsetY = -2,
     })
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
->>>>>>> develop
 
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
@@ -515,10 +509,6 @@ function Player:draw()
       item:drawAbove()
     end
   end
-  love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
-  love.graphics.rectangle('fill', self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y, 
-                          self.roomEdgeCollisionBox.w, self.roomEdgeCollisionBox.h)
-  love.graphics.setColor(1, 1, 1)
 end
 
 function Player:getInspectorProperties()
