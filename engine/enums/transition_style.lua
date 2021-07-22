@@ -1,5 +1,5 @@
 local TransitionStyle = {
-  slide = 'slide',
+  push = 'push',
   fade = 'fade',
   instant = 'instant'
 }

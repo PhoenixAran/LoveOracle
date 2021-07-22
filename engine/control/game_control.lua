@@ -86,7 +86,6 @@ end
 
 function GameControl:setCamera(camera)
   self.camera = camera
-  -- TODO set room control camera?
 end
 
 function GameControl:update(dt)

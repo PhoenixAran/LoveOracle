@@ -43,7 +43,7 @@ function BumpBox:getType()
 end
 
 function BumpBox:getCollisionTag()
-  return 'bump_box'
+  return self.collisionTag
 end
 
 function BumpBox:getZRange()

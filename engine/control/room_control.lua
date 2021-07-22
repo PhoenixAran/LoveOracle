@@ -104,7 +104,7 @@ function RoomControl:draw()
 end
 
 function RoomControl:onRoomTransitionRequest(newRoom, transitionStyle, direction4)
-  if self.canRoomTransition then
+  if self:canRoomTransition() then
     self:pushState(RoomTransitionState(self.currentRoom, newRoom, transitionStyle, direction4))
   end
 end

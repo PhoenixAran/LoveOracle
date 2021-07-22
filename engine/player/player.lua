@@ -1,10 +1,12 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'lib.vector'
+local BumpBox = require 'engine.entities.bump_box'
 local Pool = require 'engine.utils.pool'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local MapEntity = require 'engine.entities.map_entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
+local Collider = require 'engine.components.collider'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local PlayerStateMachine = require 'engine.player.player_state_machine'
@@ -24,9 +26,24 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 local Player = Class { __includes = MapEntity,
   init = function(self, name, enabled, visible, position)
     MapEntity.init(self,name, enabled, visible, { x = position.x, y = position.y,  w = 8, h = 9 })  
+<<<<<<< HEAD
     -- collision
     self:setCollidesWithLayer('room_edge')
 
+=======
+    -- room edge collision 
+    --self.roomEdgeCollisionBox = BumpBox((position.x - 12 / 2), (position.y - 13 / 2), 12, 9)
+    local ex, ey = self:getPosition()
+    self.roomEdgeCollisionBox = Collider(self, true, {
+      x = ex - 12/2,
+      y = ey - 13/2,
+      w = 12,
+      h = 12,
+      offsetX = 0,
+      offsetY = -2,
+    })
+    self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
+>>>>>>> develop
 
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
@@ -430,9 +447,11 @@ end
 function Player:checkRoomTransitions()
   if self:getStateParameters().canRoomTransition then
     for _, other in ipairs(self.moveCollisions) do
-      if other.canRoomTransition then
-        if other:canRoomTransition(self:getDirection8()) then
-          other:requestRoomTransition(self:getPosition())
+      if other:getType() == 'room_edge' then
+        if other.canRoomTransition then
+          if other:canRoomTransition(self:getDirection8()) then
+            other:requestRoomTransition(self:getPosition())
+          end
         end
       end
     end
@@ -496,7 +515,10 @@ function Player:draw()
       item:drawAbove()
     end
   end
-  self:debugDraw()
+  love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
+  love.graphics.rectangle('fill', self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y, 
+                          self.roomEdgeCollisionBox.w, self.roomEdgeCollisionBox.h)
+  love.graphics.setColor(1, 1, 1)
 end
 
 function Player:getInspectorProperties()

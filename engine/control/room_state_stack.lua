@@ -23,6 +23,7 @@ end
 
 function RoomStateStack:popState()
   local state = self:getCurrentState()
+  state:endState()
   assert(state)
   lume.remove(self.states, state)
   return state

@@ -15,8 +15,10 @@ local OBJECT_LAYER = 3
 local Room = Class { __includes = SignalObject,
   init = function(self, map, roomData)
     SignalObject.init(self) 
+
     self:signal('roomTransitionRequest')
     self:signal('mapTransitionRequest')
+    
     self.map = map
     self.name = roomData:getName()
     self.theme = TilesetBank.getTilesetTheme(roomData:getTheme())
@@ -27,7 +29,6 @@ local Room = Class { __includes = SignalObject,
 
     -- entities that were spawned
     self.entities = { }
-
     -- ids of entities that were killed 
     self.destroyedEntities = { }
     -- ids of tile entities that were destroyed
@@ -108,8 +109,7 @@ function Room:load(entities)
       end
     end
   end
-  -- TODO add entities
-
+  
   -- add room edges
   -- make left room edge
   local roomAvailable = self.map:indexInRoom(self.topLeftPosX - 1, self.topLeftPosY)

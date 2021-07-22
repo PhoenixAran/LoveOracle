@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'lib.vector'
+local Collider = require 'engine.components.collider'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local Entity = require 'engine.entities.entity'
 local Combat = require 'engine.components.combat'
@@ -33,7 +34,12 @@ local MapEntity = Class { __includes = Entity,
     self.effectSprite = SpriteBank.build('entity_effects', self)
     self.spriteFlasher = SpriteFlasher(self)
     self.sprite = nil   -- declare this yourself
-    
+
+    -- this collision box will NOT actually exist in the Physics system
+    -- if this is not null, it will only be used to collide with room edges if you want the room edge collider
+    -- to be different
+    self.roomEdgeCollisionBox = nil     
+
     -- table to store collisions that occur when MapEntity:move() is called
     self.moveCollisions = { }
 
@@ -58,6 +64,12 @@ end
 
 function MapEntity:getCollisionTag()
   return 'map_entity'
+end
+
+function MapEntity:onTransformChanged()
+  if self.roomEdgeCollisionBox then
+    self.roomEdgeCollisionBox:onTransformChanged()
+  end
 end
 
 function MapEntity:release()
@@ -159,8 +171,36 @@ function MapEntity:move(dt)
       end
     end
   end
-  self:setPosition(posX + velX, posY + velY)
   TablePool.free(neighbors)
+  if self.roomEdgeCollisionBox then
+    bx = self.roomEdgeCollisionBox.x + velX
+    by = self.roomEdgeCollisionBox.y + velY
+    bw = self.roomEdgeCollisionBox.w 
+    bh = self.roomEdgeCollisionBox.h
+    neighbors = Physics.boxcastBroadphase(self.roomEdgeCollisionBox, bx, by, bw, bh)
+    for i, neighbor in ipairs(neighbors) do
+      if self.roomEdgeCollisionBox:reportsCollisionsWith(neighbor) then
+        local collided, mtvX, mtvY, normX, normY = self.roomEdgeCollisionBox:boxCast(neighbor, velX, velY)
+        if collided then
+          -- hit from roomEdge, back off from motion
+          velX, velY = vector.sub(velX, velY, mtvX, mtvY)
+          -- add to moveCollisions table if it is not present
+          local shouldAddToMoveCollisions = true
+          for _, other in ipairs(self.moveCollisions) do
+            if other == neighbor or self == neighbor then
+              shouldAddToMoveCollisions = false
+              break
+            end
+          end
+          if shouldAddToMoveCollisions then
+            lume.push(self.moveCollisions, neighbor)
+          end
+        end
+      end
+    end
+    TablePool.free(neighbors)
+  end
+  self:setPosition(posX + velX, posY + velY)
   Physics.update(self)
 end
 

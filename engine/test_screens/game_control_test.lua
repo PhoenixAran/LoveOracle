@@ -20,7 +20,7 @@ end
 
 function GameControlTest:enter(prev, ...)
   self.gameControl = GameControl()
-  self.gameControl:setPlayer(Player('player', true, true, { x = 0, y = 0, w = 16, h = 16 }))
+  self.gameControl:setPlayer(Player('player', true, true, { x = 14, y = 14, w = 16, h = 16 }))
   local map = Map('game_control_test')
   self.gameControl:setMap(map)
   self.gameControl:setInitialRoomControlState(lume.first(map:getRooms()), 3, 3)

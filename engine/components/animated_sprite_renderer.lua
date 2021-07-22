@@ -99,7 +99,9 @@ function AnimatedSpriteRenderer:stop()
 end
 
 function AnimatedSpriteRenderer:update(dt)
-  if not self:isPlaying() then return end
+  if not self:isPlaying() then 
+    return
+  end
   local timedActions = self.currentAnimation:getTimedActions(self.substripKey)
   local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
   local timedAction = timedActions[self.currentTick]

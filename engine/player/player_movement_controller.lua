@@ -158,8 +158,6 @@ function PlayerMovementController:updateMoveControls()
     self.player:matchAnimationDirection(inputX, inputY)
   end
   self.player:setVector(inputX, inputY)
-  
-  
   self:chooseAnimation()
 end
 

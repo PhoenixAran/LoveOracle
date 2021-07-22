@@ -30,6 +30,10 @@ function RoomNormalState:draw()
   local h = camera.h
   entities:drawTileEntities(x, y, w, h)
   entities:drawEntities()
+<<<<<<< HEAD
+=======
+  self.roomControl.player:debugDraw()
+>>>>>>> develop
   camera:detach()
 end
 
