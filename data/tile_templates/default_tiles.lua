@@ -2,7 +2,7 @@ function moduleFunction(TileData)
   -- normal
   local normalTile = TileData()
   normalTile:setTileType('normal')
-  TileData.registerTemplate('normal_tile', normalTile)
+  TileData.registerTemplate('normal', normalTile)
   
   local holeTile = TileData()
   holeTile:setTileType('hole')

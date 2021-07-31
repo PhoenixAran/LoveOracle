@@ -88,6 +88,7 @@ function Tileset:createTileData(template)
   if template then
     return TileData.createFromTemplate(template)
   end
+  print("here")
   return TileData()
 end
 
