@@ -19,10 +19,10 @@ function ItemBank.getItem(itemId)
   return itemData
 end
 
-
 -- quick access to ItemData class for data scripting
-function ItemBank.createItemData(itemId, category)
-  return ItemData(itemId, category)
+function ItemBank.createItemData(itemId, category, name)
+  assert(itemId, 'Item ID cannot be nil')
+  return ItemData(itemId, category, name)
 end
 
 return ItemBank

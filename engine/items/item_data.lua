@@ -2,46 +2,68 @@ local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local lume = require 'lib.lume'
 
--- class shows which menu the item will show up in, and what sprite and level to display
--- item resources will create Item entities when Inventory equips the item
-local ItemData = Class { __includes = SignalObject,
-  init = function(self, itemId, category)
+-- Class that ItemSlot will utilise
+local ItemData = Class {
+  init = function(self, itemId, category, name)
     assert(itemId, 'Item ID cannot be null')
     SignalObject.init(self)
+    self.name = nil
     self.category = category
     self.itemId = itemId
-    self.level = -1
-    self.itemCreatorFunc = nil
+    self.maxLevel = 0
+    self.menuSprites = { }
+    self.itemTypes = { }
+    -- todo
+    -- descriptions
   end
 }
 
 function ItemData:getName()
-  return 'Default Menu Item Name'
+  return self.name
+end
+
+function ItemData:setName(name)
+  self.name = name
 end
 
 function ItemData:getType()
-  return 'menu_item'
+  return 'item_data'
 end
 
 function ItemData:getItemId()
   return self.itemId
 end
 
-function ItemData:hasLevel()
-  return self.level > 0
+function ItemData:isLeveled()
+  return self.maxLevel > 0
 end
 
-function ItemData:setLevel(level)
-  self.level = level
+function ItemData:setMaxLevel(level)
+  if level then
+    self.maxLevel = level
+  else
+    self.maxLevel = 0
+  end
 end
 
-function ItemData:setItemCreatorFunc(func)
-  self.itemCreatorFunc = func
+function ItemData:setMenuSprites(sprites)
+  if type(sprites) == 'table' then
+    lume.push(self.sprites, unpack(sprites))
+  else
+    lume.push(self.sprites, sprites)
+  end
 end
 
-function ItemData:createItem()
-  assert(func, 'MenuItem cannot create Item without Item Creation Function')
-  return self.func()
+function ItemData:getMenuSprites()
+  return self.sprites
+end
+
+function ItemData:setItemTypes(types)
+  if type(types) == 'table' then
+    lume.push(self.types, unpack(types))
+  else
+    lume.push(self.types, types)
+  end
 end
 
 return ItemData
