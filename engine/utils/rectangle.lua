@@ -84,4 +84,50 @@ function rectMethods.resizeAroundCenter(x, y, w, h, newWidth, newHeight)
   return x, y, w, h
 end
 
+function rectMethods.rayIntersects(x, y, w, h,  startX, startY, endX, endY)
+  local directionX, directionY = vector.sub(endX, endY, startX, startY)
+  local distance = 0.0
+  local maxValue = math.maxinteger
+  if math.abs(directionX) < DELTA then
+    if startX < x or startX > x + w then
+        return false, 0.0
+    end
+  else
+    local num11 = 1.0 / directionX
+    local num8 = (x - startX) * num11
+    local num7 = (x + width - startX) * num11
+    if num8 > num7 then
+      local num14 = num8
+      num8 = num7
+      num7 = num14
+    end
+    distance = math.max(num8, distance)
+    maxValue = math.min(num7, maxValue)
+    if distance > maxValue then
+      return false, 0.0
+    end
+  end
+  if math.abs(directionY) < DELTA then
+    if startY < y or startY > y + h then
+      return false, 0.0
+    end
+  else
+    local num10 = 1 / directionY
+    local num6 = (y - startY) * num10
+    local num5 = (y + h - startY) * num10
+    if num6 > num5 then
+      local num13 = num6
+      num6 = num5
+      num5 = num13
+    end
+
+    distance = math.max(num6, distance)
+    maxValue = math.min(num5, maxValue)
+    if distance > maxValue then
+      return false, 0
+    end
+  end
+  return true, distance
+end
+
 return rectMethods

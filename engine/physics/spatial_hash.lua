@@ -1,7 +1,9 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
 local TablePool = require 'engine.utils.table_pool'
+
 
 local SpatialHash = Class {
   init = function(self, cellSize)
@@ -39,7 +41,7 @@ function SpatialHash:cellAtPosition(x, y)
 end
 
 function SpatialHash:register(box)
-  local bx, by, bw, bh = box:getBounds()
+  local bx, by, bw, bh = box:getBounds()  
   box.registeredPhysicsBounds.x = bx
   box.registeredPhysicsBounds.y = by
   box.registeredPhysicsBounds.w = bw
@@ -119,5 +121,11 @@ function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
   end
   return boxes
 end
+
+function SpatialHash:linecast(startX, startY, endX, endY, layerMask)
+  directionX, directionY = vector.sub(endX, endY, startX, startY)
+  
+end
+
 
 return SpatialHash

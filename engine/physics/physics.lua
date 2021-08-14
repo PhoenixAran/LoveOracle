@@ -1,7 +1,7 @@
-local SpatialHash = require 'engine.physics.spatial_hash'
+local SpatialHash = require 'engine.Physics.spatial_hash'
 local lume = require 'lib.lume'
 
-local physics = { }
+local Physics = { }
 
 -- cell size when new spatial hash is created
 local spatialHashCellSize = 64
@@ -9,29 +9,30 @@ local spatialHashCellSize = 64
 -- spatial hash instance
 local spatialHash = SpatialHash(specialHashCellSize)
 
--- allocation avoidance for overlap checks and shape casts
-local colliderTable = { }
-
-function physics.reset()
+function Physics.reset()
   spatialHash = SpatialHash(spatialHashCellSize)
   lume.clear(colliderTable)
 end
 
-function physics.boxcastBroadphase(box, boundsX, boundsY, boundsW, boundsH)
+function Physics.boxcastBroadphase(box, boundsX, boundsY, boundsW, boundsH)
   return spatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
 end
 
-function physics.add(box)
+function Physics.add(box)
   spatialHash:register(box)
 end
 
-function physics.update(box)
+function Physics.update(box)
   spatialHash:remove(box)
   spatialHash:register(box)
 end
 
-function physics.remove(box)
+function Physics.remove(box)
   spatialHash:remove(box)
 end
 
-return physics
+function Physics.linecast(startX, startY, endX, endY, layerMask)
+  return spatialHash:linecast(startX, startY, endX, endY, layerMask)
+end
+
+return Physics
