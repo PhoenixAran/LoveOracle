@@ -3,7 +3,17 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
 local TablePool = require 'engine.utils.table_pool'
+local RaycastResultParser = require 'engine.physics.raycast_result_parser'
 
+local function sign(number)
+  if number > 0 then
+    return 1
+  elseif number < 0 then
+    return -1
+  else
+    return 0
+  end
+end
 
 local SpatialHash = Class {
   init = function(self, cellSize)
@@ -16,6 +26,8 @@ local SpatialHash = Class {
     
     self.gridBounds = { x = 0, y = 0, w = 0, h = 0 }
     self.overlapTestBox = { x = 0, y = 0, w = 0, h = 0 }
+
+    self.raycastResultParser = RaycastResultParser()
   end
 }
 
@@ -122,8 +134,15 @@ function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
   return boxes
 end
 
-function SpatialHash:linecast(startX, startY, endX, endY, layerMask)
+function SpatialHash:linecast(startX, startY, endX, endY, layerMask, zmin, zmax)
   directionX, directionY = vector.sub(endX, endY, startX, startY)
+  self.raycastResultParser:start(starX, startY, endX, endY, layerMask, zmin, zmax)
+
+  -- get our start/end position in the same space as our grid
+  local currentCell = self:cellCoords(startX, startY)
+  local lastCell = self:cellCoords(endX, endY)
+
+  -- what direction are we incrementing the cell checks?
   
 end
 
