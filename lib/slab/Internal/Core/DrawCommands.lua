@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -149,7 +149,7 @@ local function GetTriangleVertices(X, Y, Radius, Rotation)
 		X + PX2, Y + PY2,
 		X + PX3, Y + PY3
 	}
-	
+
 	return Result
 end
 

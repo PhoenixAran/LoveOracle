@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -385,7 +385,7 @@ function ColorPicker.Begin(Options)
 		local A = 1.0 - CurrentColor[4]
 		local AlphaY = A * AlphaH
 		DrawCommands.Line(X, Y + AlphaY, X + AlphaW, Y + AlphaY, 2.0, {A, A, A, 1.0})
-		
+
 		Y = Y + AlphaH + Cursor.PadY()
 	end
 

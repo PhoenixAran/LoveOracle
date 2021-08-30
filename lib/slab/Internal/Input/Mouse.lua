@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,12 @@ local Events = {}
 -- For more information, refer to the SetCustomCursor/ClearCustomCursor functions.
 local CustomCursors = {}
 
+local function TransformPoint(X,Y)
+	return X,Y
+end
+
 local function OnMouseMoved(X, Y, DX, DY, IsTouch)
+	X, Y = TransformPoint(X, Y)
 	State.X = X
 	State.Y = Y
 	State.AsyncDeltaX = State.AsyncDeltaX + DX
@@ -78,6 +83,7 @@ local function PushEvent(Type, X, Y, Button, IsTouch, Presses)
 end
 
 local function OnMousePressed(X, Y, Button, IsTouch, Presses)
+	X, Y = TransformPoint(X, Y)
 	PushEvent(Common.Event.Pressed, X, Y, Button, IsTouch, Presses)
 
 	if MousePressedFn ~= nil then
@@ -86,6 +92,7 @@ local function OnMousePressed(X, Y, Button, IsTouch, Presses)
 end
 
 local function OnMouseReleased(X, Y, Button, IsTouch, Presses)
+	X, Y = TransformPoint(X, Y)
 	PushEvent(Common.Event.Released, X, Y, Button, IsTouch, Presses)
 
 	if MouseReleasedFn ~= nil then
@@ -111,6 +118,8 @@ local function ProcessEvents()
 end
 
 function Mouse.Initialize(Args)
+	TransformPoint = Args.TransformPointToSlab or TransformPoint
+
 	MouseMovedFn = love.handlers['mousemoved']
 	MousePressedFn = love.handlers['mousepressed']
 	MouseReleasedFn = love.handlers['mousereleased']

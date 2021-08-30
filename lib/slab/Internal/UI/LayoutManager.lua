@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -514,6 +514,14 @@ function LayoutManager.GetActiveSize()
 
 	local WinX, WinY, WinW, WinH = GetWindowBounds()
 	return WinW, WinH
+end
+
+function LayoutManager.GetCurrentColumnIndex()
+	if Active ~= nil then
+		return Active.ColumnNo
+	end
+
+	return 0
 end
 
 function LayoutManager.Validate()

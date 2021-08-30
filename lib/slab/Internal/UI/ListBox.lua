@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -162,8 +162,8 @@ function ListBox.BeginItem(Id, Options)
 	Options.Selected = Options.Selected == nil and false or Options.Selected
 
 	assert(ActiveInstance ~= nil, "Trying to call BeginListBoxItem outside of BeginListBox.")
-	assert(ActiveInstance.ActiveItem == nil, 
-		"BeginListBoxItem was called for item '" .. (ActiveInstance.ActiveItem ~= nil and ActiveInstance.ActiveItem.Id or "nil") .. 
+	assert(ActiveInstance.ActiveItem == nil,
+		"BeginListBoxItem was called for item '" .. (ActiveInstance.ActiveItem ~= nil and ActiveInstance.ActiveItem.Id or "nil") ..
 			"' without a call to EndListBoxItem.")
 	local Item = GetItemInstance(ActiveInstance, Id)
 	Item.X = ActiveInstance.X

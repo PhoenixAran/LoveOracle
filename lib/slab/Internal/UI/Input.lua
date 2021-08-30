@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,7 @@ local find = string.find
 
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
+local FileSystem = require(SLAB_PATH .. '.Internal.Core.FileSystem')
 local Keyboard = require(SLAB_PATH .. '.Internal.Input.Keyboard')
 local LayoutManager = require(SLAB_PATH .. '.Internal.UI.LayoutManager')
 local Mouse = require(SLAB_PATH .. '.Internal.Input.Mouse')
@@ -200,7 +201,7 @@ local function MoveToEnd(Instance)
 				Count = Count + len(V)
 				if I == TextCursorPosLineNumber then
 					TextCursorPos = Count - 1
-					
+
 					if I == #Instance.Lines then
 						TextCursorPos = Count
 					end
@@ -756,7 +757,7 @@ local function UpdateTextObject(Instance, Width, Align, Highlight, BaseColor)
 							local FoundEnd = Found + len(K)
 							local Prev = sub(Instance.Text, Found - 1, Found - 1)
 							local Next = sub(Instance.Text, FoundEnd, FoundEnd)
-							
+
 							if Found == 1 then
 								Prev = nil
 							end
@@ -819,25 +820,32 @@ end
 
 local function UpdateSlider(Instance, Precision)
 	if Instance ~= nil then
-		local MouseX, MouseY = Mouse.Position()
-		local MinX = Cursor.GetPosition()
-		local MaxX = MinX + Instance.W
-		local Ratio = Utility.Clamp((MouseX - MinX) / (MaxX - MinX), 0.0, 1.0)
-		local Min = Instance.MinNumber == nil and -huge or Instance.MinNumber
-		local Max = Instance.MaxNumber == nil and huge or Instance.MaxNumber
-		local Value = (Max - Min) * Ratio + Min
-		if Precision > 0 then
-			Instance.Text = string.format("%." .. Precision .. "f", Value)
-		else
-			Instance.Text = string.format("%d", Value)
+		local Flag = true
+		if Instance.NeedDrag then
+			local DeltaX = Mouse.GetDelta()
+			Flag = DeltaX ~= 0.0
 		end
-		ValidateNumber(Instance);
+		if Flag then
+			local MouseX, MouseY = Mouse.Position()
+			local MinX = Cursor.GetPosition()
+			local MaxX = MinX + Instance.W
+			local Ratio = Utility.Clamp((MouseX - MinX) / (MaxX - MinX), 0.0, 1.0)
+			local Min = Instance.MinNumber == nil and -huge or Instance.MinNumber
+			local Max = Instance.MaxNumber == nil and huge or Instance.MaxNumber
+			local Value = (Max - Min) * Ratio + Min
+			if Precision > 0 then
+				Instance.Text = string.format("%." .. Precision .. "f", Value)
+			else
+				Instance.Text = string.format("%d", Value)
+			end
+			ValidateNumber(Instance);
+		end
 	end
 end
 
 local function UpdateDrag(Instance, Step)
 	if Instance ~= nil then
-		local DeltaX, DeltaY = Mouse.GetDelta()
+		local DeltaX = Mouse.GetDelta()
 		if DeltaX ~= 0.0 then
 			-- The drag threshold will be calculated dynamically. This is achieved by taking the active monitor
 			-- width and dividing by the allowable range. The DPI scale is taken into account as well. The
@@ -869,7 +877,7 @@ local function UpdateDrag(Instance, Step)
 	end
 end
 
-local function DrawSlider(Instance)
+local function DrawSlider(Instance, DrawSliderAsHandle)
 	if Instance ~= nil and Instance.NumbersOnly then
 		local Value = tonumber(Instance.Text)
 		if Value ~= nil then
@@ -880,7 +888,12 @@ local function DrawSlider(Instance)
 			local MinX, MinY = Cursor.GetPosition()
 			local MaxX, MaxY = MinX + Instance.W - SliderSize, MinY + Instance.H
 			local X = (MaxX - MinX) * Ratio + MinX
-			DrawCommands.Rectangle('fill', X, MinY + 1.0, SliderSize, Instance.H - 2.0, Style.InputSliderColor)
+			if DrawSliderAsHandle then
+				DrawCommands.Rectangle('fill', X, MinY + 1.0, SliderSize, Instance.H - 2.0, Style.InputSliderColor)
+			else
+				local Padding = 2
+				DrawCommands.Rectangle('fill', MinX+Padding, MinY+Padding, Padding + (Instance.W - Padding * 3) * Ratio, Instance.H - (Padding * 2), Style.InputSliderColor)
+			end
 		end
 	end
 end
@@ -913,28 +926,29 @@ function Input.Begin(Id, Options)
 
 	local StatHandle = Stats.Begin('Input', 'Slab')
 
-	Options = Options == nil and {} or Options
-	Options.Tooltip = Options.Tooltip == nil and "" or Options.Tooltip
+	Options = Options or {}
+	Options.Tooltip = Options.Tooltip or ""
 	Options.ReturnOnText = Options.ReturnOnText == nil and true or Options.ReturnOnText
-	Options.Text = Options.Text == nil and "" or tostring(Options.Text)
-	Options.TextColor = Options.TextColor == nil and nil or Options.TextColor
-	Options.BgColor = Options.BgColor == nil and Style.InputBgColor or Options.BgColor
-	Options.SelectColor = Options.SelectColor == nil and Style.InputSelectColor or Options.SelectColor
+	Options.Text = Options.Text and tostring(Options.Text) or ""
+	Options.TextColor = Options.TextColor
+	Options.BgColor = Options.BgColor or Style.InputBgColor
+	Options.SelectColor = Options.SelectColor or Style.InputSelectColor
 	Options.SelectOnFocus = Options.SelectOnFocus == nil and true or Options.SelectOnFocus
-	Options.W = Options.W == nil and nil or Options.W
-	Options.H = Options.H == nil and nil or Options.H
-	Options.ReadOnly = Options.ReadOnly == nil and false or Options.ReadOnly
-	Options.Align = Options.Align == nil and nil or Options.Align
-	Options.Rounding = Options.Rounding == nil and Style.InputBgRounding or Options.Rounding
-	Options.MinNumber = Options.MinNumber == nil and nil or Options.MinNumber
-	Options.MaxNumber = Options.MaxNumber == nil and nil or Options.MaxNumber
-	Options.MultiLine = Options.MultiLine == nil and false or Options.MultiLine
-	Options.MultiLineW = Options.MultiLineW == nil and huge or Options.MultiLineW
-	Options.Highlight = Options.Highlight == nil and nil or Options.Highlight
-	Options.Step = Options.Step == nil and 1.0 or Options.Step
-	Options.NoDrag = Options.NoDrag == nil and false or Options.NoDrag
-	Options.UseSlider = Options.UseSlider == nil and false or Options.UseSlider
-	Options.Precision = Options.Precision == nil and 3 or math.floor(Utility.Clamp(Options.Precision, 0, 5))
+	Options.W = Options.W
+	Options.H = Options.H
+	Options.ReadOnly = Options.ReadOnly or false
+	Options.Align = Options.Align
+	Options.Rounding = Options.Rounding or Style.InputBgRounding
+	Options.MinNumber = Options.MinNumber
+	Options.MaxNumber = Options.MaxNumber
+	Options.MultiLine = Options.MultiLine or false
+	Options.MultiLineW = Options.MultiLineW or huge
+	Options.Highlight = Options.Highlight
+	Options.Step = Options.Step or 1.0
+	Options.NoDrag = Options.NoDrag or false
+	Options.UseSlider = Options.UseSlider or false
+	Options.Precision = Options.Precision and math.floor(Utility.Clamp(Options.Precision, 0, 5)) or 3
+	Options.NeedDrag = Options.NeedDrag == nil and true or Options.NeedDrag
 
 	if type(Options.MinNumber) ~= "number" then
 		Options.MinNumber = nil
@@ -955,6 +969,7 @@ function Input.Begin(Id, Options)
 	Instance.MinNumber = Options.MinNumber
 	Instance.MaxNumber = Options.MaxNumber
 	Instance.MultiLine = Options.MultiLine
+	Instance.NeedDrag = Options.NeedDrag
 
 	if Instance.MultiLineW ~= Options.MultiLineW then
 		Instance.Lines = nil
@@ -984,7 +999,7 @@ function Input.Begin(Id, Options)
 	end
 
 	if Instance.MinNumber ~= nil and Instance.MaxNumber ~= nil then
-		assert(Instance.MinNumber <= Instance.MaxNumber, 
+		assert(Instance.MinNumber <= Instance.MaxNumber,
 			"Invalid MinNumber and MaxNumber passed to Input control '" .. Instance.Id .. "'. MinNumber: " .. Instance.MinNumber .. " MaxNumber: " .. Instance.MaxNumber)
 	end
 
@@ -1117,7 +1132,7 @@ function Input.Begin(Id, Options)
 			end
 
 			if Keyboard.IsPressed('v') then
-				local Text = love.system.getClipboardText()
+				local Text = FileSystem.GetClipboard()
 				Input.Text(Text)
 				TextCursorPos = min(TextCursorPos + #Text - 1, #Instance.Text)
 			end
@@ -1245,7 +1260,7 @@ function Input.Begin(Id, Options)
 
 		if IsSliding then
 			local Current = tonumber(Instance.Text)
-			
+
 			if Options.UseSlider then
 				UpdateSlider(Instance, Options.Precision)
 			else
@@ -1359,7 +1374,7 @@ function Input.Begin(Id, Options)
 
 	if Options.UseSlider then
 		if not IsEditing then
-			DrawSlider(Instance)
+			DrawSlider(Instance, Options.DrawSliderAsHandle)
 		end
 	end
 

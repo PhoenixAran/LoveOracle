@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -350,7 +350,7 @@ function Region.End()
 	DrawScrollBars(ActiveInstance)
 
 	if HotInstance == ActiveInstance
-		and WheelInstance == nil 
+		and WheelInstance == nil
 		and (WheelX ~= 0.0 or WheelY ~= 0.0)
 		and not ActiveInstance.IgnoreScroll then
 		WheelInstance = ActiveInstance
@@ -482,6 +482,13 @@ function Region.GetContentSize()
 		return ActiveInstance.ContentW, ActiveInstance.ContentH
 	end
 	return 0.0, 0.0
+end
+
+function Region.GetContentBounds()
+	if ActiveInstance ~= nil then
+		return ActiveInstance.X, ActiveInstance.Y, ActiveInstance.ContentW, ActiveInstance.ContentH
+	end
+	return 0.0, 0.0, 0.0, 0.0
 end
 
 function Region.Contains(X, Y)

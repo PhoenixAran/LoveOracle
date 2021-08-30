@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -140,6 +140,20 @@ function Dock.DrawOverlay()
 	end
 end
 
+function Dock.Override()
+	if Pending ~= nil and PendingWindow ~= nil then
+		local Instance = GetInstance(Pending)
+
+		if PendingWindow ~= nil then
+			Instance.Window = PendingWindow.Id
+			PendingWindow = nil
+			Instance.Reset = true
+		end
+
+		Pending = nil
+	end
+end
+
 function Dock.Commit()
 	if Pending ~= nil and PendingWindow ~= nil and Mouse.IsReleased(1) then
 		local Instance = GetInstance(Pending)
@@ -164,7 +178,7 @@ function Dock.GetDock(WinId)
 	return nil
 end
 
-function Dock.GetBounds(Type)
+function Dock.GetBounds(Type, Options)
 	local X, Y, W, H = 0, 0, 0, 0
 	local ViewW, ViewH = love.graphics.getWidth(), love.graphics.getHeight()
 	local MainMenuBarH = MenuState.MainMenuBarH
@@ -172,17 +186,17 @@ function Dock.GetBounds(Type)
 
 	if Type == 'Left' then
 		Y = MainMenuBarH
-		W = 150
+		W = Options.W or 150
 		H = ViewH - Y - TitleH
 	elseif Type == 'Right' then
 		X = ViewW - 150
 		Y = MainMenuBarH
-		W = 150
+		W = Options.W or 150
 		H = ViewH - Y - TitleH
 	elseif Type == 'Bottom' then
 		Y = ViewH - 150
 		W = ViewW
-		H = 150
+		H = Options.H or 150
 	end
 
 	return X, Y, W, H
@@ -227,7 +241,7 @@ function Dock.AlterOptions(WinId, Options)
 					Options.SizerFilter = {'N'}
 				end
 
-				local X, Y, W, H = Dock.GetBounds(Id)
+				local X, Y, W, H = Dock.GetBounds(Id, Options)
 				Options.X = X
 				Options.Y = Y
 				Options.W = W
@@ -246,8 +260,9 @@ function Dock.AlterOptions(WinId, Options)
 	end
 end
 
-function Dock.SetPendingWindow(Instance)
+function Dock.SetPendingWindow(Instance, Type)
 	PendingWindow = Instance
+	Pending = Type
 end
 
 function Dock.GetPendingWindow()

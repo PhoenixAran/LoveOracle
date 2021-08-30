@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -114,6 +114,14 @@ local function DrawButtons()
 
 	Slab.SameLine()
 	Slab.Button(DrawButtons_Enabled and "Enabled" or "Disabled", {Disabled = not DrawButtons_Enabled})
+
+	Slab.NewLine()
+	Slab.Separator()
+
+	Slab.Textf(
+		"Buttons can also display images instead of a text label. This can be down through the 'Image' option, which accepts a table " ..
+		"where the options are the same as those found in the 'Image' API function.")
+	Slab.Button("", {Image = {Path = SLAB_FILE_PATH .. "/Internal/Resources/Textures/avatar.png"}})
 end
 
 local DrawText_Width = 450.0
@@ -402,6 +410,7 @@ local DrawInput_Basic_Numbers_Clamped_Max = 1.0
 local DrawInput_Basic_Numbers_Clamped_Step = 0.01
 local DrawInput_Basic_Numbers_NoDrag = 50
 local DrawInput_Basic_Numbers_Slider = 50
+local DrawInput_Basic_Numbers_Slider_Handle = 50
 local DrawInput_Basic_Numbers_Slider_Min = 0
 local DrawInput_Basic_Numbers_Slider_Max = 100
 local DrawInput_MultiLine =
@@ -544,19 +553,25 @@ local function DrawInput()
 
 	Slab.Text("Min")
 	Slab.SameLine()
-	if Slab.InputNumberDrag('DrawInput_Basic_Numbers_Slider_Min', DrawInput_Basic_Numbers_Slider_Min, nil, DrawInput_Basic_Numbers_Slider_Max, {W = 50}) then
+	if Slab.InputNumberDrag('DrawInput_Basic_Numbers_Slider_Min', DrawInput_Basic_Numbers_Slider_Min, nil, DrawInput_Basic_Numbers_Slider_Max, nil, {W = 50}) then
 		DrawInput_Basic_Numbers_Slider_Min = Slab.GetInputNumber()
 	end
 
 	Slab.SameLine()
 	Slab.Text("Max")
 	Slab.SameLine()
-	if Slab.InputNumberDrag('DrawInput_Basic_Numbers_Slider_Max', DrawInput_Basic_Numbers_Slider_Max, DrawInput_Basic_Numbers_Slider_Min, nil, {W = 50}) then
+	if Slab.InputNumberDrag('DrawInput_Basic_Numbers_Slider_Max', DrawInput_Basic_Numbers_Slider_Max, DrawInput_Basic_Numbers_Slider_Min, nil, nil, {W = 50}) then
 		DrawInput_Basic_Numbers_Slider_Max = Slab.GetInputNumber()
 	end
 
 	if Slab.InputNumberSlider('DrawInput_Basic_Numbers_Slider', DrawInput_Basic_Numbers_Slider, DrawInput_Basic_Numbers_Slider_Min, DrawInput_Basic_Numbers_Slider_Max) then
 		DrawInput_Basic_Numbers_Slider = Slab.GetInputNumber()
+	end
+
+	Slab.NewLine()
+	Slab.Text("Sliders can also be drawn with a handle")
+	if Slab.InputNumberSlider('DrawInput_Basic_Numbers_Slider_Handle', DrawInput_Basic_Numbers_Slider_Handle, DrawInput_Basic_Numbers_Slider_Min, DrawInput_Basic_Numbers_Slider_Max, {DrawSliderAsHandle = true}) then
+		DrawInput_Basic_Numbers_Slider_Handle = Slab.GetInputNumber()
 	end
 
 	Slab.NewLine()
@@ -665,8 +680,8 @@ local function DrawInput()
 	end
 end
 
-local DrawImage_Path = SLAB_FILE_PATH .. "/Internal/Resources/Textures/power.png"
-local DrawImage_Path_Icons = SLAB_FILE_PATH .. "/Internal/Resources/Textures/gameicons.png"
+local DrawImage_Path = SLAB_FILE_PATH .. "/Internal/Resources/Textures/avatar.png"
+local DrawImage_Path_Icons = SLAB_FILE_PATH .. "/Internal/Resources/Textures/Icons.png"
 local DrawImage_Color = {1, 0, 0, 1}
 local DrawImage_Color_Edit = false
 local DrawImage_Scale = 1.0
@@ -1079,11 +1094,12 @@ local function DrawTree()
 
 	Slab.NewLine()
 
-	if Slab.BeginTree('DrawTree_Root_Icon', {Label = "Folder", IconPath = DrawTree_Icon_Path}) then
+	local Icon = {Path = DrawImage_Path_Icons, SubX = 0.0, SubY = 0.0, SubW = 50.0, SubH = 50.0}
+	if Slab.BeginTree('DrawTree_Root_Icon', {Label = "Folder", Icon = Icon}) then
 		Slab.BeginTree('DrawTree_Item_1', {Label = "Item 1", IsLeaf = true})
 		Slab.BeginTree('DrawTree_Item_2', {Label = "Item 2", IsLeaf = true})
 
-		if Slab.BeginTree('DrawTree_Child_1', {Label = "Folder", IconPath = DrawTree_Icon_Path}) then
+		if Slab.BeginTree('DrawTree_Child_1', {Label = "Folder", Icon = Icon}) then
 			Slab.BeginTree('DrawTree_Item_3', {Label = "Item 3", IsLeaf = true})
 			Slab.BeginTree('DrawTree_Item_4', {Label = "Item 4", IsLeaf = true})
 
@@ -1419,13 +1435,20 @@ local function DrawInteraction()
 	if DrawInteraction_MouseCustomCursors == nil then
 		DrawInteraction_MouseCustomCursors = {}
 		local Image = love.graphics.newImage(DrawImage_Path_Icons)
-		DrawInteraction_MouseCustomCursors['arrow'] = {Image = Image, Quad = love.graphics.newQuad(100, 0, 50, 50, Image:getWidth(), Image:getHeight())}
-		DrawInteraction_MouseCustomCursors['sizewe'] = {Image = Image, Quad = love.graphics.newQuad(50, 0, 50, 50, Image:getWidth(), Image:getHeight())}
-		DrawInteraction_MouseCustomCursors['sizens'] = {Image = Image, Quad = love.graphics.newQuad(100, 50, 50, 50, Image:getWidth(), Image:getHeight())}
-		DrawInteraction_MouseCustomCursors['sizenesw'] = {Image = Image, Quad = love.graphics.newQuad(150, 0, 50, 50, Image:getWidth(), Image:getHeight())}
-		DrawInteraction_MouseCustomCursors['sizenwse'] = {Image = Image, Quad = love.graphics.newQuad(200, 0, 50, 50, Image:getWidth(), Image:getHeight())}
-		DrawInteraction_MouseCustomCursors['ibeam'] = {Image = Image, Quad = love.graphics.newQuad(250, 0, 50, 50, Image:getWidth(), Image:getHeight())}
-		DrawInteraction_MouseCustomCursors['hand'] = {Image = Image, Quad = love.graphics.newQuad(300, 0, 50, 50, Image:getWidth(), Image:getHeight())}
+		local Corner = love.graphics.newQuad(150, 0, 50, 50, Image:getWidth(), Image:getHeight())
+		local Cursor = love.graphics.newQuad(200, 0, 50, 50, Image:getWidth(), Image:getHeight())
+		local WestEast = love.graphics.newQuad(50, 50, 50, 50, Image:getWidth(), Image:getHeight())
+		local NorthSouth = love.graphics.newQuad(100, 50, 50, 50, Image:getWidth(), Image:getHeight())
+		local Hand = love.graphics.newQuad(0, 50, 50, 50, Image:getWidth(), Image:getHeight())
+		local IBeam = love.graphics.newQuad(150, 50, 50, 50, Image:getWidth(), Image:getHeight())
+
+		DrawInteraction_MouseCustomCursors['arrow'] = {Image = Image, Quad = Cursor}
+		DrawInteraction_MouseCustomCursors['sizewe'] = {Image = Image, Quad = WestEast}
+		DrawInteraction_MouseCustomCursors['sizens'] = {Image = Image, Quad = NorthSouth}
+		DrawInteraction_MouseCustomCursors['sizenesw'] = {Image = Image, Quad = Corner}
+		DrawInteraction_MouseCustomCursors['sizenwse'] = {Image = Image, Quad = Corner}
+		DrawInteraction_MouseCustomCursors['ibeam'] = {Image = Image, Quad = IBeam}
+		DrawInteraction_MouseCustomCursors['hand'] = {Image = Image, Quad = Hand}
 	end
 
 	Slab.NewLine()
@@ -2032,7 +2055,6 @@ local DrawTooltip_CheckBox = false
 local DrawTooltip_Radio = 1
 local DrawTooltip_ComboBox_Items = {"Button", "Check Box", "Combo Box", "Image", "Input", "Text", "Tree"}
 local DrawTooltip_ComboBox_Selected = "Button"
-local DrawTooltip_Image = SLAB_FILE_PATH .. "/Internal/Resources/Textures/power.png"
 local DrawTooltip_Input = "This is an input box."
 
 local function DrawTooltip()
@@ -2072,7 +2094,7 @@ local function DrawTooltip()
 
 	Slab.NewLine()
 
-	Slab.Image('DrawTooltip_Image', {Path = DrawTooltip_Image, Tooltip = "This is an image."})
+	Slab.Image('DrawTooltip_Image', {Path = DrawImage_Path, Tooltip = "This is an image."})
 
 	Slab.NewLine()
 

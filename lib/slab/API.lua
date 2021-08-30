@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ SOFTWARE.
 --]]
 
 if SLAB_PATH == nil then
-	SLAB_PATH = (...):match("(.-)[^%.]+$") 
+	SLAB_PATH = (...):match("(.-)[^%.]+$")
 end
 
 SLAB_FILE_PATH = debug.getinfo(1, 'S').source:match("^@(.+)/")
@@ -97,6 +97,8 @@ local Window = require(SLAB_PATH .. '.Internal.UI.Window')
 			GetWindowContentSize
 			GetWindowActiveSize
 			IsWindowAppearing
+			PushID
+			PopID
 
 		Menu:
 			BeginMainMenuBar
@@ -641,6 +643,33 @@ function Slab.IsWindowAppearing()
 end
 
 --[[
+	PushID
+
+	Pushes a custom ID onto a stack. This allows developers to differentiate between similar controls such as
+	text controls.
+
+	ID: [String] The custom ID to add.
+
+	Return: None.
+--]]
+function Slab.PushID(ID)
+	assert(type(ID) == 'string', "'ID' parameter must be a string value.")
+
+	Window.PushID(ID)
+end
+
+--[[
+	PopID
+
+	Pops the last custom ID from the stack.
+
+	Return: None.
+--]]
+function Slab.PopID()
+	Window.PopID()
+end
+
+--[[
 	BeginMainMenuBar
 
 	This function begins the process for setting up the main menu bar. This should be called outside of any BeginWindow/EndWindow calls.
@@ -855,6 +884,16 @@ end
 		W: [Number] Override the width of the button.
 		H: [Number] Override the height of the button.
 		Disabled: [Boolean] If true, the button is not interactable by the user.
+		Image: [Table] A table of options used to draw an image instead of a text label. Refer to the 'Image' documentation for a list
+			of available options.
+		Color: [Table]: The background color of the button when idle. The default value is the ButtonColor property in the Style's table.
+		HoverColor: [Table]: The background color of the button when a mouse is hovering the control. The default value is the ButtonHoveredColor property
+			in the Style's table.
+		PressColor: [Table]: The background color of the button when the button is pressed but not released. The default value is the ButtonPressedColor
+			property in the Style's table.
+		PadX: [Number] Amount of additional horizontal space the background will expand to from the center. The default value is 20.
+		PadY: [Number] Amount of additional vertical space the background will expand to from the center. The default value is 5.
+		VLines: [Number] Number of lines in a multiline button text. The default value is 1.
 
 	Return: [Boolean] Returns true if the user clicks on this button.
 --]]
@@ -893,8 +932,8 @@ end
 		Pad: [Number] How far to pad the text from the left side of the current cursor position.
 		IsSelectable: [Boolean] Whether this text is selectable using the text's Y position and the window X and width as the
 			hot zone.
-		IsSelectableTextOnly: [Boolean] Only available if IsSelectable is true. Will use the text width instead of the
-			window width to determine the hot zone.
+		IsSelectableTextOnly: [Boolean] Will use the text width instead of the window width to determine the hot zone. Will set IsSelectable
+			to true if that option is missing.
 		IsSelected: [Boolean] Forces the hover background to be rendered.
 		SelectOnHover: [Boolean] Returns true if the user is hovering over the hot zone of this text.
 		HoverColor: [Table] The color to render the background if the IsSelected option is true.
@@ -1103,6 +1142,7 @@ end
 	Max: [Number] The maximum value that can be set for this number control. If nil, then this value will be set to math.huge.
 	Options: [Table] List of options for how this input control is displayed. See Slab.Input for all options.
 		Precision: [Number] An integer in the range [0..5]. This will set the size of the fractional component.
+		NeedDrag: [Boolean] This will determine if slider needs to be dragged before changing value, otherwise just clicking in the slider will adjust the value into the clicked value. Default is true.
 
 	Return: [Boolean] Returns true whenever this valued is modified.
 --]]
@@ -1240,9 +1280,7 @@ end
 		OpenWithHighlight: [Boolean] If this is true, the tree will be expanded/collapsed when the user hovers over the hot
 			zone of this tree item. If this is false, the user must click the expand/collapse icon to interact with this tree
 			item.
-		Icon: [Object] A user supplied image. This must be a valid Love image or the call will assert.
-		IconPath: [String] If the Icon option is nil, then a path can be specified. Slab will load and
-			manage the image resource.
+		Icon: [Table] List of options to use for drawing the icon. Refer to the 'Image' documentation for more information.
 		IsSelected: [Boolean] If true, will render a highlight rectangle around the tree item.
 		IsOpen: [Boolean] Will force the tree item to be expanded.
 		NoSavedSettings: [Boolean] Flag to disable saving this tree's settings to the state INI file.
@@ -1330,16 +1368,18 @@ end
 		SubY: [Number] The Y-coordinate used inside the given image.
 		SubW: [Number] The width used inside the given image.
 		SubH: [Number] The height used insided the given image.
-		WrapX: [String] The horizontal wrapping mode for this image. The available options are 'clamp', 'repeat', 
+		WrapX: [String] The horizontal wrapping mode for this image. The available options are 'clamp', 'repeat',
 			'mirroredrepeat', and 'clampzero'. For more information refer to the Love2D documentation on wrap modes at
 			https://love2d.org/wiki/WrapMode.
-		WrapY: [String] The vertical wrapping mode for this image. The available options are 'clamp', 'repeat', 
+		WrapY: [String] The vertical wrapping mode for this image. The available options are 'clamp', 'repeat',
 			'mirroredrepeat', and 'clampzero'. For more information refer to the Love2D documentation on wrap modes at
 			https://love2d.org/wiki/WrapMode.
 		UseOutline: [Boolean] If set to true, a rectangle will be drawn around the given image. If 'SubW' or 'SubH' are specified, these
 			values will be used instead of the image's dimensions.
 		OutlineColor: [Table] The color used to draw the outline. Default color is black.
 		OutlineW: [Number] The width used for the outline. Default value is 1.
+		W: [Number] The width the image should be resized to.
+		H: [Number] The height the image should be resized to.
 
 	Return: None.
 --]]
@@ -1485,31 +1525,33 @@ function Slab.Properties(Table, Options, Fallback)
 	Fallback = Fallback or {}
 
 	if Table ~= nil then
-		for K, V in pairs(Table) do
+		for I, T in ipairs(Table) do
+			local V = T.Value
 			local Type = type(V)
-			local ItemOptions = Options[K] or Fallback
+			local ID = T.ID
+			local ItemOptions = Options[ID] or Fallback
 			if Type == "boolean" then
-				if Slab.CheckBox(V, K, ItemOptions) then
-					Table[K] = not Table[K]
+				if Slab.CheckBox(V, ID, ItemOptions) then
+					T.Value = not T.Value
 				end
 			elseif Type == "number" then
-				Slab.Text(K .. ": ")
+				Slab.Text(ID .. ": ")
 				Slab.SameLine()
 				ItemOptions.Text = V
 				ItemOptions.NumbersOnly = true
 				ItemOptions.ReturnOnText = false
 				ItemOptions.UseSlider = ItemOptions.MinNumber and ItemOptions.MaxNumber
-				if Slab.Input(K, ItemOptions) then
-					Table[K] = Slab.GetInputNumber()
+				if Slab.Input(ID, ItemOptions) then
+					T.Value = Slab.GetInputNumber()
 				end
 			elseif Type == "string" then
-				Slab.Text(K .. ": ")
+				Slab.Text(ID .. ": ")
 				Slab.SameLine()
 				ItemOptions.Text = V
 				ItemOptions.NumbersOnly = false
 				ItemOptions.ReturnOnText = false
-				if Slab.Input(K, ItemOptions) then
-					Table[K] = Slab.GetInputText()
+				if Slab.Input(ID, ItemOptions) then
+					T.Value = Slab.GetInputText()
 				end
 			end
 		end
@@ -1794,7 +1836,7 @@ end
 --[[
 	GetMousePositionWindow
 
-	Retrieves the current mouse position within the current window. This position will include any transformations 
+	Retrieves the current mouse position within the current window. This position will include any transformations
 	added to the window such as scrolling.
 
 	Return: [Number], [Number] The X and Y coordinates of the mouse position within the window.
@@ -2200,7 +2242,7 @@ end
 
 	Id: [String] The Id of this layout.
 	Options: [Table] List of options that control how this layout behaves.
-		AlignX: [String] Defines how the controls should be positioned horizontally in the window. The available options are 
+		AlignX: [String] Defines how the controls should be positioned horizontally in the window. The available options are
 			'left', 'center', or 'right'. The default option is 'left'.
 		AlignY: [String] Defines how the controls should be positioned vertically in the window. The available options are
 			'top', 'center', or 'bottom'. The default option is 'top'. The top is determined by the current cursor position.
@@ -2256,6 +2298,17 @@ end
 --]]
 function Slab.GetLayoutSize()
 	return LayoutManager.GetActiveSize()
+end
+
+--[[
+	GetCurrentColumnIndex
+
+	Retrieves the current index of the active column.
+
+	Return: [Number] The current index of the active column of the active layout. 0 is returned if no layout or column is active.
+--]]
+function Slab.GetCurrentColumnIndex()
+	return LayoutManager.GetCurrentColumnIndex()
 end
 
 --[[
@@ -2342,6 +2395,17 @@ end
 --]]
 function Slab.SetDockOptions(Type, Options)
 	Dock.SetOptions(Type, Options)
+end
+
+--[[
+	WindowToDoc
+
+	Programatically set a window to dock.
+
+	Type: [String] The type of dock to set options for. This can be 'Left', 'Right', or 'Bottom'.
+--]]
+function Slab.WindowToDock(Type)
+	Window.ToDock(Type)
 end
 
 return Slab

@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,12 @@ local max = math.max
 local insert = table.insert
 local remove = table.remove
 
+local Button = require(SLAB_PATH .. '.Internal.UI.Button')
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
 local Image = require(SLAB_PATH .. '.Internal.UI.Image')
 local LayoutManager = require(SLAB_PATH .. '.Internal.UI.LayoutManager')
+local Messages = require(SLAB_PATH .. '.Internal.Core.Messages')
 local Mouse = require(SLAB_PATH .. '.Internal.Input.Mouse')
 local Region = require(SLAB_PATH .. '.Internal.UI.Region')
 local Stats = require(SLAB_PATH .. '.Internal.Core.Stats')
@@ -81,12 +83,15 @@ function Tree.Begin(Id, Options)
 	Options = Options == nil and {} or Options
 	Options.Label = Options.Label == nil and IdLabel or Options.Label
 	Options.Tooltip = Options.Tooltip == nil and "" or Options.Tooltip
-	Options.OpenWithHighlight = Options.OpenWithHighlight == nil and true or OpenWithHighlight
+	Options.OpenWithHighlight = Options.OpenWithHighlight == nil and true or Options.OpenWithHighlight
 	Options.Icon = Options.Icon == nil and nil or Options.Icon
-	Options.IconPath = Options.IconPath == nil and nil or Options.IconPath
 	Options.IsSelected = Options.IsSelected == nil and false or Options.IsSelected
 	Options.IsOpen = Options.IsOpen == nil and false or Options.IsOpen
 	Options.NoSavedSettings = Options.NoSavedSettings == nil and IsTableId or (Options.NoSavedSettings and not IsTableId)
+
+	if Options.IconPath ~= nil then
+		Messages.Broadcast('Tree.Options.IconPath', "'IconPath' option has been deprecated since v0.8.0. Please use the 'Icon' option.")
+	end
 
 	local Instance = nil
 	local WinItemId = Window.GetItemId(IdLabel)
@@ -108,20 +113,13 @@ function Tree.Begin(Id, Options)
 	local IsObstructed = Window.IsObstructedAtMouse() or Region.IsHoverScrollBar()
 	local W = Text.GetWidth(Options.Label)
 	local H = max(Style.Font:getHeight(), Instance.H)
-	local Diameter = Radius * 2.0
 
 	if not Options.IsLeaf then
-		W = W + Diameter + Radius
+		W = W + H + Radius
 	end
 
-	local Icon = Options.Icon
-	if Icon == nil then
-		Icon = Options.IconPath
-	end
-
-	local ImageW, ImageH = Image.GetSize(Icon)
-	W = W + ImageW
-	H = max(H, ImageH)
+	-- Account for icon if one is requested.
+	W = Options.Icon and W + H or W
 
 	WinX = WinX + Window.GetBorder()
 	WinY = WinY + Window.GetBorder()
@@ -146,7 +144,7 @@ function Tree.Begin(Id, Options)
 
 	local X, Y = Cursor.GetPosition()
 	if Root ~= Instance then
-		X = Root ~= Instance and (Root.X + Diameter * #Hierarchy)
+		X = Root ~= Instance and (Root.X + H * #Hierarchy)
 		Cursor.SetX(X)
 	end
 	local TriX, TriY = X + Radius, Y + H * 0.5
@@ -165,16 +163,31 @@ function Tree.Begin(Id, Options)
 
 	local IsExpanderClicked = false
 	if not Options.IsLeaf then
-		if not IsObstructed and X <= TMouseX and TMouseX <= X + Diameter and Y <= TMouseY and TMouseY <= Y + H then
-			if Mouse.IsClicked(1) and not Options.OpenWithHighlight then
-				Instance.IsOpen = not Instance.IsOpen
-				Window.SetHotItem(nil)
-				IsExpanderClicked = true
-			end
+		-- Render the triangle depending on if the tree item is open/closed.
+		local SubX = Instance.IsOpen and 0.0 or 200.0
+		local SubY = Instance.IsOpen and 100.0 or 50.0
+		local ExpandIconOptions =
+		{
+			Image = {Path = SLAB_FILE_PATH .. '/Internal/Resources/Textures/Icons.png', SubX = SubX, SubY = SubY, SubW = 50.0, SubH = 50.0},
+			W = H,
+			H = H,
+			PadX = 0.0,
+			PadY = 0.0,
+			Color = {0, 0, 0, 0},
+			HoverColor = {0, 0, 0, 0},
+			PressColor = {0, 0, 0, 0}
+		}
+
+		if Button.Begin(Instance.Id .. '_Expand', ExpandIconOptions) and not Options.OpenWithHighlight then
+			Instance.IsOpen = not Instance.IsOpen
+			Window.SetHotItem(nil)
+			IsExpanderClicked = true
 		end
 
-		local Dir = Instance.IsOpen and 180 or 90
-		DrawCommands.Triangle('fill', TriX, TriY, Radius, Dir, Style.TextColor)
+		Cursor.SameLine()
+	else
+		-- Advance the cursor for leaf nodes so text aligns with other items that are not leaf nodes.
+		Cursor.AdvanceX(H + Cursor.PadX())
 	end
 
 	if not Instance.IsOpen and Instance.WasOpen then
@@ -182,7 +195,6 @@ function Tree.Begin(Id, Options)
 		Region.ResetContentSize()
 	end
 
-	Cursor.AdvanceX(Diameter)
 	Instance.X = X
 	Instance.Y = Y
 	Instance.W = W
@@ -190,11 +202,11 @@ function Tree.Begin(Id, Options)
 
 	LayoutManager.Begin('Ignore', {Ignore = true})
 
-	if Options.Icon ~= nil or Options.IconPath ~= nil then
-		Image.Begin(Instance.Id .. '_Icon', {
-			Image = Options.Icon,
-			Path = Options.IconPath
-		})
+	if Options.Icon ~= nil then
+		-- Force the icon to be of the same size as the tree item.
+		Options.Icon.W = H
+		Options.Icon.H = H
+		Image.Begin(Instance.Id .. '_Icon', Options.Icon)
 
 		local ItemX, ItemY, ItemW, ItemH = Cursor.GetItemBounds()
 		Instance.H = max(Instance.H, ItemH)
@@ -211,10 +223,6 @@ function Tree.Begin(Id, Options)
 
 	Cursor.SetY(Instance.Y)
 	Cursor.AdvanceY(H)
-
-	if Options.IsOpen then
-		Instance.IsOpen = true
-	end
 
 	if Instance.IsOpen then
 		insert(Hierarchy, 1, Instance)
@@ -248,7 +256,7 @@ end
 function Tree.Save(Table)
 	if Table ~= nil then
 		local Settings = {}
-		for K, V in pairs(Instances) do
+		for K, V in ipairs(Instances) do
 			if not V.NoSavedSettings then
 				Settings[V.Id] = {
 					IsOpen = V.IsOpen

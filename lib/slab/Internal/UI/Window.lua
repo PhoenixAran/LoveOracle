@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,6 +47,7 @@ local StackLockId = nil
 local PendingStack = {}
 local ActiveInstance = nil
 local MovingInstance = nil
+local IDStack = {}
 
 local SizerType =
 {
@@ -127,7 +128,7 @@ local function GetInstance(Id)
 		return ActiveInstance
 	end
 
-	for K, V in pairs(Instances) do
+	for I, V in ipairs(Instances) do
 		if V.Id == Id then
 			return V
 		end
@@ -398,7 +399,7 @@ function Window.IsObstructed(X, Y, SkipScrollCheck)
 		-- Gather all potential windows that can obstruct the given position.
 		local List = {}
 		for I, V in ipairs(Stack) do
-			-- Stack locks prevents other windows to be considered. 
+			-- Stack locks prevents other windows to be considered.
 			if V.Id == StackLockId then
 				insert(List, V)
 				break
@@ -491,6 +492,7 @@ function Window.Begin(Id, Options)
 	Options.ConstrainPosition = Options.ConstrainPosition or false
 
 	Dock.AlterOptions(Id, Options)
+	-- print(Options.W)
 
 	local TitleRounding = {Options.Rounding, Options.Rounding, 0, 0}
 	local BodyRounding = {0, 0, Options.Rounding, Options.Rounding}
@@ -654,7 +656,7 @@ function Window.Begin(Id, Options)
 			local CloseSize = CloseBgRadius * 0.5
 			local CloseX = ActiveInstance.X + ActiveInstance.W - ActiveInstance.Border - CloseBgRadius
 			local CloseY = ActiveInstance.Y - OffsetY * 0.5
-			local IsCloseHovered = 
+			local IsCloseHovered =
 				CloseX - CloseBgRadius <= MouseX and MouseX <= CloseX + CloseBgRadius and
 				CloseY - OffsetY * 0.5 <= MouseY and MouseY <= CloseY + CloseBgRadius and
 				not IsObstructed
@@ -724,6 +726,10 @@ end
 function Window.End()
 	if ActiveInstance ~= nil then
 		local Handle = ActiveInstance.StatHandle
+
+		-- Clear the ID stack for use with other windows. This information can be kept transient
+		IDStack = {}
+
 		Region.End()
 		DrawCommands.End(not ActiveInstance.IsOpen)
 		remove(PendingStack, 1)
@@ -744,7 +750,7 @@ end
 function Window.GetMousePosition()
 	local X, Y = Mouse.Position()
 	if ActiveInstance ~= nil then
-		X, Y = Region.InverseTransform(ActiveInstance.Id, X, Y)
+		X, Y = Region.InverseTransform(nil, X, Y)
 	end
 	return X, Y
 end
@@ -929,7 +935,14 @@ function Window.GetItemId(Id)
 		if ActiveInstance.Items[Id] == nil then
 			ActiveInstance.Items[Id] = ActiveInstance.Id .. '.' .. Id
 		end
-		return ActiveInstance.Items[Id]
+
+		-- Apply any custom ID to the current item.
+		local Result = ActiveInstance.Items[Id]
+		if #IDStack > 0 then
+			Result = Result .. IDStack[#IDStack]
+		end
+
+		return Result
 	end
 	return nil
 end
@@ -1044,6 +1057,7 @@ function Window.GetInstanceInfo(Id)
 		insert(Result, "Stack Index: " .. Instance.StackIndex)
 		insert(Result, "AutoSizeWindow: " .. tostring(Instance.AutoSizeWindow))
 		insert(Result, "AutoSizeContent: " .. tostring(Instance.AutoSizeContent))
+		insert(Result, "Hot Item: " .. tostring(Instance.HotItem))
 	end
 
 	return Result
@@ -1105,6 +1119,30 @@ end
 
 function Window.GetMovingInstance()
 	return MovingInstance
+end
+
+--[[
+	Allow developers to push/pop a custom ID to the stack. This can help with differentiating between controls with identical IDs i.e. text fields.
+--]]
+function Window.PushID(ID)
+	if ActiveInstance ~= nil then
+		insert(IDStack, ID)
+	end
+end
+
+function Window.PopID()
+	if #IDStack > 0 then
+		return remove(IDStack)
+	end
+
+	return nil
+end
+
+function Window.ToDock(Type)
+	local ActiveInstance = GetInstance()
+	ActiveInstance.W = 720
+	Dock.SetPendingWindow(ActiveInstance, Type)
+	Dock.Override()
 end
 
 return Window

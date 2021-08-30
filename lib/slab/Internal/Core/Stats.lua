@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -141,7 +141,7 @@ function Stats.GetCallCount(Name, Category)
 	end
 
 	local Item = GetItem(Name, Category)
-	
+
 	return Item.CallCount > 0 and Item.CallCount or Item.LastCallCount
 end
 

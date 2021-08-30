@@ -5,6 +5,7 @@ local rect = require 'engine.utils.rectangle'
 local TablePool = require 'engine.utils.table_pool'
 local RaycastResultParser = require 'engine.physics.raycast_result_parser'
 
+-- helper math functions
 local function sign(number)
   if number > 0 then
     return 1
@@ -13,6 +14,13 @@ local function sign(number)
   else
     return 0
   end
+end
+
+local function approach(startVal, endVal, shift)
+  if startVal < endVal then
+    return math.min(startVal + shift, endVal)
+  end
+  return math.max(startVal - shift, endVal)
 end
 
 local SpatialHash = Class {
@@ -134,16 +142,94 @@ function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
   return boxes
 end
 
-function SpatialHash:linecast(startX, startY, endX, endY, layerMask, zmin, zmax)
+function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
   directionX, directionY = vector.sub(endX, endY, startX, startY)
-  self.raycastResultParser:start(starX, startY, endX, endY, layerMask, zmin, zmax)
+  self.raycastResultParser:start(starX, startY, endX, endY, hits, layerMask, zmin, zmax)
 
   -- get our start/end position in the same space as our grid
-  local currentCell = self:cellCoords(startX, startY)
-  local lastCell = self:cellCoords(endX, endY)
+  local currentCellX, currentCellY = self:cellCoords(startX, startY)
+  local lastCellX, lastCellY = self:cellCoords(endX, endY)
 
   -- what direction are we incrementing the cell checks?
-  
+  local stepX = sign(directionX)
+  local stepY = sign(directionY)
+
+  -- make sure that if we're on the same line or row we don't step in the unneeded direction
+  if currentCellX == lastCellX then
+    stepX = 0
+  end
+  if currentCellY == lastCellY then
+    stepY = 0
+  end
+
+  -- Calculate cell boundaries. When the step is positive, the next cell is after this one meaning we add 1
+  -- If negative, cell is before this one in which case we dont add to the boundary
+  local xStep = 0
+  local yStep = 0
+  if stepX >= 0 then
+    xStep = stepX
+  end
+  if stepY >= 0 then
+    yStep = stepY
+  end
+  local nextBoundaryX = (currentCellX + xStep) * self.cellSize
+  local nextBoundaryY = (currentCellY + yStep) * self.cellSize
+
+  -- determine the value of t at which the ray crosses the first vertical voxel boundary. same for y/horizontal
+  -- The minimum of these two values will indicate how much we can travel along the ray and still remain in the current voxel
+  -- may be infinite for near vertical/horizontal rays
+  local tMaxY = 0
+  local tMaxY = 0
+  if directionX == 0 then
+    tMaxX = math.maxinteger
+  else
+    tMaxX = (nextBoundaryX - startX) / directionX
+  end
+  if directionY == 0 then
+    tMaxY = math.maxinteger
+  else
+    tMaxY = (nextBoundaryY - startY) / directionY
+  end
+
+  -- how far do we have to walk before crossing a cell from a cell boundary, may be infinite for near vertical/horizontal rays
+  local tDeltaX = 0
+  local tDeltaY = 0
+  if directionX == 0 then
+    tDeltaX = math.maxinteger
+  else
+    tDeltaX = self.cellSize / (directionX * stepX)
+  end
+  if directionY == 0 then
+    tDeltaY = math.maxinteger
+  else
+    tDeltaY = self.cellSize / (directionY * stepY)
+  end
+
+  -- start walking and returning the intersecting cells
+  local cell = self:cellAtPosition(currentCellX, currentCellY)
+  if cell ~= nil and self.raycastResultParser:checkRayIntersection(currentCellX, currentCellY, cell) then
+    self.raycastResultParser:reset()
+    return self.raycastResultParser.hitCounter
+  end
+
+  while currentCellX ~= lastCellX and currentCellY ~= lastCellY do
+    if tMaxX < tMaxY then
+      -- HACK: ensures we never overshoot our values
+      currentCellX = approach(currentCellX, lastCellX, math.abs(stepX))
+      tMaxX = tMaxX + tDeltaX
+    else
+      tMaxY = tDeltaY + tDeltaY
+    end
+    cell = self:cellAtPosition(currentCellX, currentCellY)
+    if cell ~= nil and self.raycastResultParser(currentCellX, currentCellY, cell) then
+      self.raycastResultParser:reset()
+      return self.raycastResultParser.hitCounter
+    end
+  end
+
+  -- make sure we are reset
+  self.raycastResultParser:reset()
+  return self.raycastResultParser
 end
 
 

@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2019-2021 Mitchell Davis <coding.jackalope@gmail.com>
+Copyright (c) 2019-2021 Love2D Community <love2d.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,13 @@ SOFTWARE.
 
 local floor = math.floor
 local insert = table.insert
+local max = math.max
 
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
 local LayoutManager = require(SLAB_PATH .. '.Internal.UI.LayoutManager')
 local Mouse = require(SLAB_PATH .. '.Internal.Input.Mouse')
+local Region = require(SLAB_PATH .. '.Internal.UI.Region')
 local Stats = require(SLAB_PATH .. '.Internal.Core.Stats')
 local Style = require(SLAB_PATH .. '.Style')
 local Window = require(SLAB_PATH .. '.Internal.UI.Window')
@@ -43,8 +45,8 @@ function Text.Begin(Label, Options)
 	Options = Options == nil and {} or Options
 	Options.Color = Options.Color == nil and Style.TextColor or Options.Color
 	Options.Pad = Options.Pad == nil and 0.0 or Options.Pad
-	Options.IsSelectable = Options.IsSelectable == nil and false or Options.IsSelectable
 	Options.IsSelectableTextOnly = Options.IsSelectableTextOnly == nil and false or Options.IsSelectableTextOnly
+	Options.IsSelectable = Options.IsSelectable == nil and Options.IsSelectableTextOnly or Options.IsSelectable
 	Options.IsSelected = Options.IsSelected == nil and false or Options.IsSelected
 	Options.AddItem = Options.AddItem == nil and true or Options.AddItem
 	Options.HoverColor = Options.HoverColor == nil and Style.TextHoverBgColor or Options.HoverColor
@@ -73,9 +75,10 @@ function Text.Begin(Label, Options)
 		Window.SetHotItem(WinId)
 	end
 
-	local WinX, WinY, WinW, WinH = Window.GetBounds()
+	local WinX, WinY, WinW, WinH = Region.GetContentBounds()
 	local CheckX = Options.IsSelectableTextOnly and X or WinX
-	local CheckW = Options.IsSelectableTextOnly and W or WinW
+	-- The region's width may have been reset prior to the first control being added. Account for this discrepency.
+	local CheckW = Options.IsSelectableTextOnly and W or max(WinW, W)
 	local Hovered = not IsObstructed and CheckX <= MouseX and MouseX <= CheckX + CheckW + PadX and Y <= MouseY and MouseY <= Y + H
 
 	if Options.IsSelectable or Options.IsSelected then
