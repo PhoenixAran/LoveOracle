@@ -20,7 +20,6 @@ local PlayerMovementController = Class {
     self.directionX, self.directionY = 0, 0
     self.moving = false
     self.stroking = false
-    self.mode = PlayerMotionType()
     --self.moveAngle = 'south'  -- not sure if I need this
     self.capeDeployed = false
     self.holeTile = nil

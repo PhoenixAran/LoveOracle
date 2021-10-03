@@ -193,10 +193,6 @@ function Player:getUseDirection4()
   return self.useDirection4
 end
 
-function Player:getUserDirection8()
-  return self.useDirection8
-end
-
 function Player:getUseDirectionXY()
   return self.useDirectionX, self.useDirectionY
 end
