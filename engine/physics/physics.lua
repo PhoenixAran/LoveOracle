@@ -30,8 +30,8 @@ function Physics.remove(box)
   spatialHash:remove(box)
 end
 
-function Physics.linecast(startX, startY, endX, endY, layerMask)
-  return spatialHash:linecast(startX, startY, endX, endY, layerMask)
+function Physics.linecast(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
+  return spatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
 end
 
 return Physics

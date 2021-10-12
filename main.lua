@@ -5,13 +5,17 @@ local ContentControl = require 'engine.utils.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
 local Slab = require 'lib.slab'
 
+-- not really max, just an unrealistically high number
+math.maxinteger = 1000000000000000000000000000000000000000000000
+-- same as above but opposite
+math.mininteger = -math.maxinteger
 math.randomseed(os.time())
+
 
 print('Oracle Engine ' .. gameConfig.version)
 print("OS: " .. love.system.getOS())
 print(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
 print('Save Directory: ' .. love.filesystem.getSaveDirectory())
-
 --[[ 
      Defining helper function used in data scripting
      Hot reloading can't modify existing functions, but it works with tables.

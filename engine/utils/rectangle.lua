@@ -90,12 +90,12 @@ function rectMethods.rayIntersects(x, y, w, h,  startX, startY, endX, endY)
   local maxValue = math.maxinteger
   if math.abs(directionX) < DELTA then
     if startX < x or startX > x + w then
-        return false, 0.0
+      return false, 0.0
     end
   else
     local num11 = 1.0 / directionX
     local num8 = (x - startX) * num11
-    local num7 = (x + width - startX) * num11
+    local num7 = (x + w - startX) * num11
     if num8 > num7 then
       local num14 = num8
       num8 = num7
@@ -124,6 +124,8 @@ function rectMethods.rayIntersects(x, y, w, h,  startX, startY, endX, endY)
     distance = math.max(num6, distance)
     maxValue = math.min(num5, maxValue)
     if distance > maxValue then
+      print(distance, maxValue)
+      print('here')
       return false, 0
     end
   end

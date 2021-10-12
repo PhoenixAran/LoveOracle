@@ -13,7 +13,7 @@ local RaycastResultParser = Class {
     self.distances = { }
 
     self.checkedBoxes = { }
-    self.cellHits = { }
+    --self.cellHits = { }
     
     self.ray = {
       startX = 0,
@@ -30,6 +30,8 @@ local RaycastResultParser = Class {
 }
 
 function RaycastResultParser:start(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
+  self.hits = hits
+  self.layerMask = layerMask
   self.hitCounter = 1
   self.ray.startX = startX
   self.ray.startY = startY
@@ -51,26 +53,26 @@ end
 function RaycastResultParser:checkRayIntersection(cellX, cellY, cell)
   for i = 1, lume.count(cell) do
     local potential = cell[i]
-    if not lume.find(potential) then
+    if not lume.find(self.checkedBoxes, potential) ~= nil then
       lume.push(self.checkedBoxes, potential)
-      if bit.band(potential:getPhysicsLayer(), layerMask) ~= 0 then
+      if bit.band(potential:getPhysicsLayer(), self.layerMask) ~= 0 then
         local px, py, pw, ph = potential:getBounds()
         local zmin, zmax = potential:getZRange()
         if self.zmax > zmin and self.zmin < self.zmax then
-          local rayIntersects, fraction = rect.rayIntersects(self.ray.startX, self.ray.startY, self.ray.endX, self.ray.endY)
+          local rayIntersects, fraction = rect.rayIntersects(px, py, pw, ph,self.ray.startX, self.ray.startY, self.ray.endX, self.ray.endY)
           if rayIntersects and fraction <= 1.0 then
             lume.push(self.hits, potential)
-            lume.push(self.hits, vector.dist(x, y, self.ray.startX, self.ray.startY))
+            lume.push(self.distances, vector.dist(px, py, self.ray.startX, self.ray.startY))
           end
         end
       end
     end
   end
-  if lume.count(self.cellHits) > 0 then
+  if lume.count(self.hits) > 0 then
     self:sortHits()
-    for i = 1, lume.count(self.cellHits) do
-      self.hits[self.hitCounter] = self.cellHits[i]
-    end
+    --for i = 1, lume.count(self.cellHits) do
+    --  self.hits[self.hitCounter] = self.cellHits[i]
+    --end
     return true
   end
   return false
@@ -98,9 +100,10 @@ end
 function RaycastResultParser:reset()
   self.hits = nil
   lume.clear(self.checkedBoxes)
-  lume.clear(self.cellHits)
+  --lume.clear(self.cellHits)
   self.zmin = math.mininteger
   self.zmax = math.maxinteger
+  self.layerMask = -1
   self.hitCounter = 1
 end
 

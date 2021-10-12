@@ -144,7 +144,7 @@ end
 
 function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
   directionX, directionY = vector.sub(endX, endY, startX, startY)
-  self.raycastResultParser:start(starX, startY, endX, endY, hits, layerMask, zmin, zmax)
+  self.raycastResultParser:start(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
 
   -- get our start/end position in the same space as our grid
   local currentCellX, currentCellY = self:cellCoords(startX, startY)
@@ -221,7 +221,7 @@ function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin,
       tMaxY = tDeltaY + tDeltaY
     end
     cell = self:cellAtPosition(currentCellX, currentCellY)
-    if cell ~= nil and self.raycastResultParser(currentCellX, currentCellY, cell) then
+    if cell ~= nil and self.raycastResultParser:checkRayIntersection(currentCellX, currentCellY, cell) then
       self.raycastResultParser:reset()
       return self.raycastResultParser.hitCounter
     end
