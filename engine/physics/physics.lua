@@ -11,7 +11,6 @@ local spatialHash = SpatialHash(specialHashCellSize)
 
 function Physics.reset()
   spatialHash = SpatialHash(spatialHashCellSize)
-  lume.clear(colliderTable)
 end
 
 function Physics.boxcastBroadphase(box, boundsX, boundsY, boundsW, boundsH)

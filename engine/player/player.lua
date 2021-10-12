@@ -42,7 +42,6 @@ local Player = Class { __includes = MapEntity,
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
-    self.sprite:setOffset(0, -3)
     self.spriteFlasher:addSprite(self.sprite)
     
     -- states
@@ -66,7 +65,7 @@ local Player = Class { __includes = MapEntity,
     -- I don't see a usecase for Direction8 version for Use Direction
     -- If they need that much control they already have the vector values for direction,
     -- and if they need an animation Direction4 should be enough
-    self.useDirection4 = Direction4.none
+    self.useDirection4 = self.animationDirection4 or Direction4.none
 
     self.pressedActionButtons = { }
     self.buttonCallbacks = { }

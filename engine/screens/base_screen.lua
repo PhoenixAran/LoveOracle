@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local GameConfig = require 'game_config'
 local rect = require 'engine.utils.rectangle'
 local AssetManager = require 'engine.utils.asset_manager'
+local lume = require 'lib.lume'
 
 local BaseScreen = Class {
   init = function(self)
@@ -45,6 +46,19 @@ function BaseScreen:mouseClickInGame(x, y)
   local width = monocle.windowWidth * monocle.scale
   local height = monocle.windowHeight * monocle.scale
   return rect.containsPoint(mx, my, width, height, x, y)
+end
+
+function BaseScreen:getMousePositionInCanvas()
+  local x, y = love.mouse.getPosition()
+  local mx = monocle.x
+  local my = monocle.y
+  local width = monocle.windowWidth * monocle.scale
+  local height = monocle.windowHeight * monocle.scale 
+  x = x - mx
+  y = y - my 
+  x = x / monocle.scale
+  y = y / monocle.scale
+  return x, y
 end
 
 return BaseScreen
