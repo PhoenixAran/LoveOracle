@@ -13,7 +13,6 @@ local RaycastResultParser = Class {
     self.distances = { }
 
     self.checkedBoxes = { }
-    --self.cellHits = { }
     
     self.ray = {
       startX = 0,
@@ -32,7 +31,7 @@ local RaycastResultParser = Class {
 function RaycastResultParser:start(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
   self.hits = hits
   self.layerMask = layerMask
-  self.hitCounter = 1
+  self.hitCounter = 0
   self.ray.startX = startX
   self.ray.startY = startY
   self.ray.endX = endX
@@ -53,7 +52,7 @@ end
 function RaycastResultParser:checkRayIntersection(cellX, cellY, cell)
   for i = 1, lume.count(cell) do
     local potential = cell[i]
-    if not lume.find(self.checkedBoxes, potential) ~= nil then
+    if lume.find(self.checkedBoxes, potential) == nil then
       lume.push(self.checkedBoxes, potential)
       if bit.band(potential:getPhysicsLayer(), self.layerMask) ~= 0 then
         local px, py, pw, ph = potential:getBounds()
@@ -70,12 +69,7 @@ function RaycastResultParser:checkRayIntersection(cellX, cellY, cell)
   end
   if lume.count(self.hits) > 0 then
     self:sortHits()
-    --for i = 1, lume.count(self.cellHits) do
-    --  self.hits[self.hitCounter] = self.cellHits[i]
-    --end
-    return true
   end
-  return false
 end
 
 function RaycastResultParser:sortHits()
@@ -100,11 +94,11 @@ end
 function RaycastResultParser:reset()
   self.hits = nil
   lume.clear(self.checkedBoxes)
-  --lume.clear(self.cellHits)
+  lume.clear(self.distances)
   self.zmin = math.mininteger
   self.zmax = math.maxinteger
   self.layerMask = -1
-  self.hitCounter = 1
+  self.hitCounter = 0
 end
 
 function RaycastResultParser:getType()

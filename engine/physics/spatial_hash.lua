@@ -166,10 +166,10 @@ function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin,
   -- If negative, cell is before this one in which case we dont add to the boundary
   local xStep = 0
   local yStep = 0
-  if stepX >= 0 then
+  if stepX > 0 then
     xStep = stepX
   end
-  if stepY >= 0 then
+  if stepY > 0 then
     yStep = stepY
   end
   local nextBoundaryX = (currentCellX + xStep) * self.cellSize
@@ -204,32 +204,28 @@ function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin,
   else
     tDeltaY = self.cellSize / (directionY * stepY)
   end
-
+  
   -- start walking and returning the intersecting cells
   local cell = self:cellAtPosition(currentCellX, currentCellY)
-  if cell ~= nil and self.raycastResultParser:checkRayIntersection(currentCellX, currentCellY, cell) then
-    self.raycastResultParser:reset()
-    return self.raycastResultParser.hitCounter
+  if cell ~= nil  then
+    self.raycastResultParser:checkRayIntersection(currentCellX, currentCellY, cell)
   end
-
-  while currentCellX ~= lastCellX and currentCellY ~= lastCellY do
+  while currentCellX ~= lastCellX or currentCellY ~= lastCellY do
     if tMaxX < tMaxY then
       -- HACK: ensures we never overshoot our values
-      currentCellX = approach(currentCellX, lastCellX, math.abs(stepX))
+      currentCellX = math.floor(approach(currentCellX, lastCellX, math.abs(stepX)))
       tMaxX = tMaxX + tDeltaX
     else
-      tMaxY = tDeltaY + tDeltaY
+      currentCellY = math.floor(approach(currentCellY, lastCellY, math.abs(stepY)))
+      tMaxY = tMaxY + tDeltaY
     end
     cell = self:cellAtPosition(currentCellX, currentCellY)
-    if cell ~= nil and self.raycastResultParser:checkRayIntersection(currentCellX, currentCellY, cell) then
-      self.raycastResultParser:reset()
-      return self.raycastResultParser.hitCounter
+    if cell ~= nil then
+      self.raycastResultParser:checkRayIntersection(currentCellX, currentCellY, cell)
     end
   end
-
-  -- make sure we are reset
   self.raycastResultParser:reset()
-  return self.raycastResultParser
+  return self.raycastResultParser.hitCounter
 end
 
 

@@ -88,8 +88,8 @@ function rectMethods.rayIntersects(x, y, w, h,  startX, startY, endX, endY)
   local directionX, directionY = vector.sub(endX, endY, startX, startY)
   local distance = 0.0
   local maxValue = math.maxinteger
-  if math.abs(directionX) < DELTA then
-    if startX < x or startX > x + w then
+  if math.abs(directionX) < 1e-6  then
+    if (startX < x) or (startX > x + w) then
       return false, 0.0
     end
   else
@@ -107,8 +107,8 @@ function rectMethods.rayIntersects(x, y, w, h,  startX, startY, endX, endY)
       return false, 0.0
     end
   end
-  if math.abs(directionY) < DELTA then
-    if startY < y or startY > y + h then
+  if math.abs(directionY) < 1e-6 then
+    if (startY < y) or (startY > y + h) then
       return false, 0.0
     end
   else
@@ -124,8 +124,6 @@ function rectMethods.rayIntersects(x, y, w, h,  startX, startY, endX, endY)
     distance = math.max(num6, distance)
     maxValue = math.min(num5, maxValue)
     if distance > maxValue then
-      print(distance, maxValue)
-      print('here')
       return false, 0
     end
   end
