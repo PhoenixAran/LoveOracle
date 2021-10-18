@@ -2,7 +2,6 @@ local AssetManager = require 'engine.utils.asset_manager'
 local GameConfig = require 'game_config'
 local PaletteBank = require 'engine.utils.palette_bank'
 local SpriteBank = require 'engine.utils.sprite_bank'
-local TilesetBank = require 'engine.utils.tileset_bank'
 local BitTag = require 'engine.utils.bit_tag'
 local lume = require 'lib.lume'
 
@@ -60,12 +59,10 @@ function ContentControl.buildContent()
   loadSpriteSheets('data/assets/spritesheets')
   PaletteBank.initialize('data.palettes')
   SpriteBank.initialize('data.sprites')
-  TilesetBank.initialize('data.tilesets')
 end
 
 function ContentControl.unloadContent()
   BitTag.reset()
-  TilesetBank.unload()
   SpriteBank.unload()
   PaletteBank.unload()
   AssetManager.unload()

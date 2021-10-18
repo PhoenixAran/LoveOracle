@@ -7,7 +7,7 @@ local Entities = require 'engine.entities.entities'
 
 local GRID_SIZE = 16
 local RoomTransitionState = require 'engine.control.game_states.room_states.room_transition_state'
-
+error('Implement maps from tiled first')
 local RoomControl = Class { __includes = GameState,
   init = function(self, map, player, camera)
     GameState.init(self)

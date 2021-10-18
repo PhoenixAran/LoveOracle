@@ -5,7 +5,6 @@ local BitTag = require 'engine.utils.bit_tag'
 local Entity = require 'engine.entities.entity'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
-local TileData = require 'engine.tiles.tile_data'
 local GRID_SIZE = 16
 
 local Tile = Class { __includes = Entity,
