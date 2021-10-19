@@ -54,10 +54,4 @@ function Tile:draw()
   self.sprite:draw(x, y)
 end
 
-function Tile.registerTileEntityType(tileEntityClass)
-  TileData.registerTileEntityType(tileEntityClass)
-end
-
-Tile.registerTileEntityType(Tile)
-
 return Tile
