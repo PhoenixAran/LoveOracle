@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 
 local TiledObject = Class {
   init = function(self)
+    self.id = nil
     self.name = nil
     self.objectType = nil
     self.tiledType = nil
@@ -10,6 +11,7 @@ local TiledObject = Class {
     -- array of points {x, y}
     self.points = nil
     self.properties = { }
+    self.rotation = 0
   end
 }
 

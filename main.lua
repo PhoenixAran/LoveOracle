@@ -5,6 +5,9 @@ local ContentControl = require 'engine.utils.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
 local Slab = require 'lib.slab'
 
+-- Make sure we are using luaJIT
+assert(require('ffi'), 'LoveOracle requires luaJIT')
+
 -- not really max, just an unrealistically high number
 math.maxinteger = 1000000000000000000000000000000000000000000000
 -- same as above but opposite

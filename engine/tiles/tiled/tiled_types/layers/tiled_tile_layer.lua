@@ -9,7 +9,7 @@ local TiledTileLayer = Class {
     self.width = 0
     -- height in tiles
     self.height = 0
-    self.tiles = nil
+    self.tiles = { }
   end
 }
 
