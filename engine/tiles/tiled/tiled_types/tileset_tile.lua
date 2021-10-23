@@ -6,12 +6,13 @@ local lume = require 'lib.lume'
 local TilesetTile = Class {
   init = function(self)
     self.id = -1
-    self.type = nil
-    self.width = 0
-    self.height = 0
-
     self.subtexture = nil
-    self.animatedTextures = nil
+
+    -- table of subtextures if it is animated
+    self.animatedTextures = { }
+    -- how long each animated texture lasts. Indices will be mapped 1 to 1 with animated textures
+    self.durations = { }
+    self.properties = { }
   end
 
 }

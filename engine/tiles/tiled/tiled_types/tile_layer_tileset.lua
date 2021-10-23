@@ -1,6 +1,5 @@
 local Class = require 'lib.class'
 
-
 --[[ 
    Maps in Tiled can have more than one tileset. To account for duplicate tile IDs, each tileset loaded
    will have an attribute called "firstgid." (always defaults to 1) This firstgid is an id offset to keep tile ids unique.
@@ -8,7 +7,6 @@ local Class = require 'lib.class'
    Tile 1 will point to A[1 - A.firstgid]
    Tile 7 will point to B[7 - B.firstgid]
 ]]--
-
 -- Wrapper around Tileset. Do not reuse cache this class, as each MapData instance has unique TileLayerTilesets
 local TileLayerTileset = Class {
   init = function(self, firstGid, tileset)

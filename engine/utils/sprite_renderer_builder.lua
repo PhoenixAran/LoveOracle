@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local SpriteRenderer = require 'engine.components.animated_sprite_renderer'
+local SpriteRenderer = require 'engine.components.sprite_renderer'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 
 local SpriteRendererBuilder = Class {

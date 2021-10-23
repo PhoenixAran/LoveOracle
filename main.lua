@@ -11,7 +11,6 @@ math.maxinteger = 1000000000000000000000000000000000000000000000
 math.mininteger = -math.maxinteger
 math.randomseed(os.time())
 
-
 print('Oracle Engine ' .. gameConfig.version)
 print("OS: " .. love.system.getOS())
 print(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
