@@ -13,7 +13,7 @@ local TiledTileLayer = Class {
   end
 }
 
-function TiledTiledLayer:getType()
+function TiledTileLayer:getType()
   return 'tiled_tile_layer'
 end
 

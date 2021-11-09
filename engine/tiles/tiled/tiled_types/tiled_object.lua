@@ -12,6 +12,7 @@ local TiledObject = Class {
     self.points = nil
     self.properties = { }
     self.rotation = 0
+    self.jid = nil
   end
 }
 

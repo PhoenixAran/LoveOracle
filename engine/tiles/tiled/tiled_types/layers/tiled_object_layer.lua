@@ -1,4 +1,4 @@
-local class = require 'lib.class'
+local Class = require 'lib.class'
 
 local TiledObjectLayer = Class {
   init = function(self)

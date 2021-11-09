@@ -2,14 +2,15 @@ local lume = require 'lib.lume'
 local json = require 'lib.json'
 local ffi = require 'ffi'
 local FileHelper = require 'engine.utils.file_helper'
+local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local AssetManager = require 'engine.utils.asset_manager'
 local MapData = require 'engine.tiles.tiled.tiled_types.tiled_map'
 local TileLayerTileset = require 'engine.tiles.tiled.tiled_types.tile_layer_tileset'
 local Tileset = require 'engine.tiles.tiled.tiled_types.tileset'
 local TilesetTile = require 'engine.tiles.tiled.tiled_types.tileset_tile'
-local TiledObject = require 'engine.tiles.tiled_types.tiled_object'
+local TiledObject = require 'engine.tiles.tiled.tiled_types.tiled_object'
 local TiledTileLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_tile_layer'
-local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.object_tile_layer'
+local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_object_layer'
 
 local mapDataCache  = { }
 local tilesetCache = { }
@@ -28,7 +29,7 @@ local function parsePropertyDict(jProperties)
   return properties
 end
 
-local function parseObject(jObject)
+local function parseObject(jObject, mapData)
   local tiledObject = TiledObject()
   tiledObject.id = jObject.id
   tiledObject.name = jObject.name
@@ -41,7 +42,7 @@ local function parseObject(jObject)
   
   if jObject.gid ~= nil then
     -- I might change my mind on this
-    error('MapLoader does not support Tile object type. Consider using a MapLayer instead')
+    tiledObject.gid = jObject.gid
   end
   if jObject.text then
     error('MapLoader does not support text object type')
@@ -92,7 +93,7 @@ local function parseLayer(jLayer)
   return parser(jLayer)
 end
 
-function MapLoad.loadTileset(path)
+function MapLoader.loadTileset(path)
   -- tileset is indexed by name
   local key = FileHelper.getFileNameWithoutExtension(path)
   if tilesetCache[key] then
@@ -101,7 +102,13 @@ function MapLoad.loadTileset(path)
   local jTileset = json.decode(love.filesystem.read(path))
   local tileset = Tileset()
   tileset.name = key
-  tileset.spriteSheet = AssetManager.getSpriteSheet(FileHelper.getFileNameWithoutExtension(jTileset.image))
+  -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file
+  local spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
+  if not AssetManager.spriteSheetCache[spritesheetKey] then
+    local spriteSheet = SpriteSheet(AssetManager.getImage(spriteSheetKey), jTileset.tilewidth, jTileset.tileheight, jTileset.margin, jTileset.spacing)
+    AssetManager.spriteSheetCache[spriteSheetKey] = spriteSheet
+  end
+  tileset.spriteSheet = AssetManager.getSpriteSheet(spriteSheetKey)
   tileset.tileWidth = jTileset.tilewidth
   tileset.tileHeight = jTileset.tileheight
   tileset.properties = parsePropertyDict(jTileset.properties)
@@ -128,11 +135,12 @@ function MapLoad.loadTileset(path)
       tilesetTile.id = i
       -- add one because spritesheet uses lua indexing
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1) 
-      tilesetTile.properties = parsePropedtyDict(jTileset.properties)
+      tilesetTile.properties = parsePropertyDict(jTileset.properties)
       tileset.tiles[tilesetTile.id] = tilesetTile
     end
   end
-
+  tilesetCache[key] = tileset
+  return tileset
 end
 
 function MapLoader.loadMapData(path)
