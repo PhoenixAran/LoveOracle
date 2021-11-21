@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"Lua.runtime.version": "LuaJIT",
+		"Lua.workspace.library": [
+			"${3rd}/love2d/library"
+		],
+		"Lua.workspace.checkThirdParty": false,
+		"Lua.diagnostics.disable": [
+		],
+		"Lua.diagnostics.globals": [
+			"makeModuleFunction",
+			"screenManager",
+			"camera",
+			"input",
+			"monocle"
+		]
+	}
+}

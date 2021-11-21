@@ -14,7 +14,6 @@ local TiledMap = Class {
     self.properties = { }
     -- included tilesets
     self.tilesets = { }
-
     -- organized layers for ease of use
     self.tileLayers = { }
     self.objectLayers = { }

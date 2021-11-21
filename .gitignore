@@ -45,8 +45,10 @@ luac.out
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-*.code-workspace
 
 # VisualStudioCode Patch
 # Ignore all local history of files
 **/.history
+
+# Tiled Session
+!.tiled-session

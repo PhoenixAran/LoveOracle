@@ -1,5 +1,7 @@
+---@diagnostic disable: unused-function
 local FileHelper = { }
 
+---@diagnostic disable-next-line: unused-local
 local function split(str, inSplitPattern)
   local outResults = { }
   local theStart = 1

@@ -1,0 +1,34 @@
+{ "compressionlevel":-1,
+ "height":24,
+ "infinite":false,
+ "layers":[
+        {
+         "compression":"gzip",
+         "data":"H4sIAAAAAAAACmNjYGBgpxHmAGI+IFYEYiYqY2YgFoCazwnEXFTG3KPmj5pPR\/PZGDDzDjXNB6njR8ICQ8x8MSAWR8ISQyx+R80fNX+4mk9ts0FYGGo+NN8foAUGlSEA4RE48gAJAAA=",
+         "encoding":"base64",
+         "height":24,
+         "id":2,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":24,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":3,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.7.2",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"..\/tilesets\/proto_dungeon.json"
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.6",
+ "width":24
+}

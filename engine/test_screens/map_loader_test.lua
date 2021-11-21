@@ -16,6 +16,10 @@ function MapLoaderTest:enter(...)
   print(inspect(tileset, {
     depth = 2
   }))
+  local map = MapLoader.loadMapData('data/tiled/maps/test_map_1.json')
+  print(inspect(map, {
+    depth = 4
+  }))
 end
 
 function MapLoaderTest:draw()

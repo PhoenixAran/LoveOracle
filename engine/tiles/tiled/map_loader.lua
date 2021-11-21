@@ -77,7 +77,7 @@ local layerParsers = {
     if not jLayer.compression then
       tiledTileLayer.tiles = getDecompressedData(decodedString)
     else
-      assert(jLayer.compressesion == 'zlib' or jLayer.compressedion == 'gzip', 'Only zlib and gzip compression is supported')
+      assert(jLayer.compression == 'zlib' or jLayer.compression == 'gzip', 'Only zlib and gzip compression is supported')
       local data = love.data.decompress('string', jLayer.compression, decodedString)
       tiledTileLayer.tiles = getDecompressedData(data)
     end
@@ -107,7 +107,7 @@ function MapLoader.loadTileset(path)
   local jTileset = json.decode(love.filesystem.read(path))
   local tileset = Tileset()
   tileset.name = key
-  -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file
+  -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
   local spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
   if not AssetManager.spriteSheetCache[spriteSheetKey] then
     local spriteSheet = SpriteSheet(AssetManager.getImage(spriteSheetKey), jTileset.tilewidth, jTileset.tileheight, jTileset.margin, jTileset.spacing)
@@ -164,12 +164,12 @@ function MapLoader.loadMapData(path)
   mapData.tileWidth = jMap.tileWidth
   mapData.tileHeight = jMap.tileHeight
   mapData.properties = parsePropertyDict(jMap.properties)
-  for _, jTileLayerTileset in jMap.tilesets do
+  for _, jTileLayerTileset in ipairs(jMap.tilesets) do
     assert(jTileLayerTileset.source, 'Embedded tilesets are not supported')
     local tileLayerTileset = TileLayerTileset()
     tileLayerTileset.firstGid = jMap.firstgid
-    tileLayerTileset.tileset = MapLoader.loadTileset(path)
-    lume.push(mapData.tiles, tileLayerTileset)
+    tileLayerTileset.tileset = MapLoader.loadTileset(jTileLayerTileset.source)
+    lume.push(mapData.tilesets, tileLayerTileset)
   end
   for _, jLayer in ipairs(jMap.layers) do
     local mapLayer = parseLayer(jLayer)
