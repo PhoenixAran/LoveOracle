@@ -2,7 +2,7 @@ local Slab = require 'lib.slab'
 local PropertyType = require('engine.entities.inspector_properties').PropertyType
 
 -- assumes window has already been started
-function makePropertyFields(props, idPrefix)
+local function makePropertyFields(props, idPrefix)
   for _, property in ipairs(props.properties) do
     local propType = property:getPropertyType()
     local slabId = idPrefix .. property:getLabel()

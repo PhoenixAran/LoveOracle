@@ -2,8 +2,8 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local Slab = require 'lib.slab'
 
-local PropertyType = { 
-  Int = 'int', 
+local PropertyType = {
+  Int = 'int',
   Float = 'float',
   String = 'string',
   IntRange = 'int_range',
@@ -15,7 +15,7 @@ local PropertyType = {
   Vector2iList = 'vector2i_list'
 }
 
-local PropertyMode = { 
+local PropertyMode = {
   Func = 1,
   Direct = 2
 }
@@ -25,7 +25,7 @@ local Property = Class {
   init = function(self, source, label, propType, readOnly)
     self.propType = propType
     self.source = source
-    
+
     if readOnly == nil then readOnly = false end
     self.readOnly = readOnly
     self.label = label
@@ -34,7 +34,7 @@ local Property = Class {
     self.getFunc = nil
     self.setFunc = nil
     self.propName = nil
-    
+
     self.min = 0
     self.max = 0
     self.argumentHolder = { }
@@ -196,7 +196,7 @@ end
 
 function InspectorProperties:addReadOnlyVector2(label, getFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Vector2, true)
-  setAccessors(property, getFunc, setFunc, isObjectFuncs)
+  setAccessors(property, getFunc, isObjectFuncs)
   addProperty(self, property)
 end
 

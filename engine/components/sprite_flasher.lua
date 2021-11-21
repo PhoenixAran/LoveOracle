@@ -45,7 +45,7 @@ end
 function SpriteFlasher:stop()
   self.isActive = true
   self.tick = 0
-  self.duration = duration
+  self.duration = 0
   lume.each(self.sprites, 'setAlpha', 1)
 end
 

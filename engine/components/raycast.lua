@@ -3,6 +3,7 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local Component = require 'engine.entities.component'
 local Physics = require 'engine.physics'
+local BitTag = require 'engine.utils.bit_tag'
 
 local Raycast = Class { __includes = { Component },
   init = function(self, entity, enabled)
@@ -55,7 +56,7 @@ function Raycast:unsetCollidesWithLayer(layer)
       self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(v).value))
     end
   else
-    self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(v).value))
+    self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(layer).value))
   end
 end
 

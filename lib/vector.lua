@@ -174,7 +174,6 @@ return {
 	-- arithmetic
 	mul    = mul,
 	div    = div,
-	idiv   = idiv,
 	add    = add,
 	sub    = sub,
 	permul = permul,

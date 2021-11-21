@@ -5,18 +5,19 @@ local vector = require 'lib.vector'
 local lume = require 'lib.lume'
 local Physics = require 'engine.physics'
 local DamageInfo = require 'engine.entities.damage_info'
+local TablePool = require 'engine.utils.table_pool'
 
 local Hitbox = Class { __includes = { BumpBox, Component },
   init = function(self, entity, enabled, bumpBoxArgs, hitBoxArgs)
-    BumpBox.init(self, bumpBoxArgs.x, bumpBoxArgs.y, bumpBoxArgs.w, 
+    BumpBox.init(self, bumpBoxArgs.x, bumpBoxArgs.y, bumpBoxArgs.w,
                  bumpBoxArgs.h, bumpBoxArgs.zRange, bumpBoxArgs.collisionTag)
     Component.init(self, entity, enabled)
-    
+
     self:signal('hitboxEntered')
     self:signal('damagedOther')
     self:signal('resisted')
 
-    
+
     self.registeredWithPhysics = false
     self.detectOnly = hitBoxArgs.detectOnly or false
     self.canHitMultiple = hitBoxArgs.canHitMultiple or false
@@ -49,33 +50,33 @@ function Hitbox:onTransformChanged()
   self.x = ex - self.w / 2
   self.y = ey - self.h / 2
   Physics.update(self)
-end 
+end
 
-function HitBox:entityAwake()
+function Hitbox:entityAwake()
   assert(not self.registeredWithPhysics)
   Physics.add(self)
   self.registeredWithPhysics = true
 end
 
-function HitBox:onRemoved()
+function Hitbox:onRemoved()
   if self.registeredWithPhysics then
     Physics.remove(self)
     self.registeredWithPhysics = false
   end
 end
 
-function HitBox:onEnabled()
+function Hitbox:onEnabled()
   if not self.registeredWithPhysics then
     Physics.add(self)
     self.registeredWithPhysics = true
   end
 end
 
-function HitBox:onDisabled()
+function Hitbox:onDisabled()
   if self.registeredWithPhysics then
     Physics.remove(self)
     self.registeredWithPhysics = false
-  end 
+  end
 end
 
 function Hitbox:update(dt)

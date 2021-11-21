@@ -16,7 +16,7 @@ local Inventory = Class { __includes = SignalObject,
 
     self.gameControl = gameControl or nil
     self.piecesOfHeart = nil
-    self.player = player
+    self.player = nil
   end
 }
 

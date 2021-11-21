@@ -15,7 +15,7 @@ function TileLayerTile:getTile()
   if self.gid < 1 then
     return nil
   end
-  return self.tileLayerTileset:getTile(gid)
+  return self.tileLayerTileset:getTile(self.gid)
 end
 
 function TileLayerTile:getType()

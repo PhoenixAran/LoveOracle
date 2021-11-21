@@ -17,7 +17,7 @@ function TileLayer:getType()
   return 'tile_layer'
 end
 
-function GetTileWithGid(gid)
+function TileLayer:GetTileWithGid(gid)
   for k, v in ipairs(self.tiles) do
     if v and v.gid == gid then
       return v

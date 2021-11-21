@@ -62,7 +62,7 @@ function SpriteBank.registerSpriteset(spriteset)
 end
 
 function SpriteBank.getSpriteset(key)
-  assert(SpriteBanks.spritesets[spriteset:getName()], 'SpriteBank does not have a Spriteset with key ' .. key)
+  assert(SpriteBank.spritesets[key], 'SpriteBank does not have a Spriteset with key ' .. key)
   return SpriteBank.spritesets[key]
 end
 

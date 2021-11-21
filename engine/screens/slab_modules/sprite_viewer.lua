@@ -5,8 +5,8 @@ local SpriteBank = require 'engine.utils.sprite_bank'
 
 local SpriteViewer = Class {
   init = function(self, initialX, initialY)
-    self.initialX = x or 24
-    self.initialY = y or 24
+    self.initialX = initialX or 24
+    self.initialY = initialY or 24
     
     self.searchText = ''
     

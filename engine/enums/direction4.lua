@@ -18,7 +18,7 @@ function Direction4.getDirection(x, y)
     end
     return direction
   else
-    if vecx == 0 and vecy == 0 then
+    if x == 0 and y == 0 then
       return Direction4.NONE
     end
     local theta = math.atan2(y, x)
@@ -34,7 +34,7 @@ end
 function Direction4.getOpposite(direction)
   if direction == Direction4.none then
     return Direction4.none
-  end 
+  end
   return (((direction - 1) + 2) % 4) + 1
 end
 

@@ -24,7 +24,7 @@ end
 
 function SpriteTest:draw()
   monocle:begin()
-  self.testEntity['sr']:draw(dt)
+  self.testEntity['sr']:draw()
   self.testEntity:debugDraw()
   monocle:finish()
 end

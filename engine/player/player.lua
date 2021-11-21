@@ -61,7 +61,7 @@ local Player = Class { __includes = MapEntity,
     -- use direction variables are useful for finding what way player
     -- is holding dpad when they are not allowed to move (like during a sword swing)
     -- if the player can move, it will match the direction they are moving in
-    self.useDirectionX, self.useDirectionY = 0
+    self.useDirectionX, self.useDirectionY = 0, 0
     -- I don't see a usecase for Direction8 version for Use Direction
     -- If they need that much control they already have the vector values for direction,
     -- and if they need an animation Direction4 should be enough

@@ -12,9 +12,6 @@ function SlotContext:getType()
   return 'slot_item'
 end
 
-function SlotContext:draw()
-end
-
 function SlotContext:getName()
 end
 

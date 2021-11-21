@@ -25,7 +25,7 @@ function TilesetTile:isAnimated()
   if self.animatedTextures == nil then
     return false
   end
-  return lume.count(animatedTextures) > 0
+  return lume.count(self.animatedTextures) > 0
 end
 
 return TilesetTile

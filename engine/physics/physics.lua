@@ -7,7 +7,7 @@ local Physics = { }
 local spatialHashCellSize = 64
 
 -- spatial hash instance
-local spatialHash = SpatialHash(specialHashCellSize)
+local spatialHash = SpatialHash(spatialHashCellSize)
 
 function Physics.reset()
   spatialHash = SpatialHash(spatialHashCellSize)

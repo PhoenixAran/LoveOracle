@@ -3,7 +3,7 @@ local SignalObject = require 'engine.signal_object'
 local Direction4 = require 'engine.enums.direction4'
 
 local Slot = Class { __includes = SignalObject, 
-  init = function(self)
+  init = function(self, slotContext, x, y, width)
     SignalObject.init(self, slotContext, x, y, width)
     self:signal('slotSelected')
     -- menu index position
@@ -30,7 +30,7 @@ function Slot:getSlotContext()
   return self.slotContext
 end
 
-function Slot:setSlotContext(slotItem)
+function Slot:setSlotContext(slotContext)
   self.slotContext = slotContext
 end
 

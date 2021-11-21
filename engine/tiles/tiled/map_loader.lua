@@ -22,8 +22,8 @@ local function parsePropertyDict(jProperties)
   -- JSON converts quite nicely to lua, so we just select the key and value
   local properties = { }
   if jProperties then
-    for _, jProperty in ipairs(jProperty) do
-      propertyes[jProperty.name] = jProperty.value
+    for k, jProperty in ipairs(jProperties) do
+      properties[jProperty.name] = jProperty.value
     end
   end
   return properties
@@ -39,7 +39,7 @@ local function parseObject(jObject, mapData)
   tiledObject.height = jObject.height
   tiledObject.type = jObject.type
   tiledObject.rotation = jObject.rotation
-  
+
   if jObject.gid ~= nil then
     -- I might change my mind on this
     tiledObject.gid = jObject.gid
@@ -52,6 +52,16 @@ local function parseObject(jObject, mapData)
   end
   tiledObject.properties = parsePropertyDict(jObject.properties)
   return tiledObject
+end
+
+local function getDecompressedData(data)
+  local tileGids = { }
+  -- cast data as uint array
+  local ptr = ffi.cast('uint32_t*', data)
+  for i = 0, data:len() / ffi.sizeof('uint32_t') do
+    lume.push(tileGids, tonumber(ptr[i]))
+  end
+  return tileGids
 end
 
 -- layer parsing
@@ -69,12 +79,7 @@ local layerParsers = {
     else
       assert(jLayer.compressesion == 'zlib' or jLayer.compressedion == 'gzip', 'Only zlib and gzip compression is supported')
       local data = love.data.decompress('string', jLayer.compression, decodedString)
-      -- cast data as uint array
-      local ptr = ffi.cast('uint32_t*', data)
-      -- push integer values to tiles array
-      for i = 0, data:len() / ffi.sizeof('uint32_t') do
-        lume.push(tiledTileLayer.tiles, tonumber(ptr[i]))
-      end
+      tiledTileLayer.tiles = getDecompressedData(data)
     end
     return tiledTileLayer
   end,
@@ -104,7 +109,7 @@ function MapLoader.loadTileset(path)
   tileset.name = key
   -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file
   local spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
-  if not AssetManager.spriteSheetCache[spritesheetKey] then
+  if not AssetManager.spriteSheetCache[spriteSheetKey] then
     local spriteSheet = SpriteSheet(AssetManager.getImage(spriteSheetKey), jTileset.tilewidth, jTileset.tileheight, jTileset.margin, jTileset.spacing)
     AssetManager.spriteSheetCache[spriteSheetKey] = spriteSheet
   end
@@ -134,7 +139,7 @@ function MapLoader.loadTileset(path)
       local tilesetTile = TilesetTile()
       tilesetTile.id = i
       -- add one because spritesheet uses lua indexing
-      tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1) 
+      tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
       tilesetTile.properties = parsePropertyDict(jTileset.properties)
       tileset.tiles[tilesetTile.id] = tilesetTile
     end
@@ -145,7 +150,7 @@ end
 
 function MapLoader.loadMapData(path)
   -- map data is indexed by filepath
-  if mapDataCache[key] then
+  if mapDataCache[path] then
     return mapDataCache[path]
   end
 
@@ -153,22 +158,19 @@ function MapLoader.loadMapData(path)
 
   local jMap = json.decode(love.filesystem.read(path))
   assert(jMap.orientation == "orthogonal", 'Only orthogonal tiled maps are supported')
-  -- TODO get name from path
-  mapData.name = getFileNameWithoutExtension(path)
+  mapData.name = FileHelper.getFileNameWithoutExtension(path)
   mapData.width = jMap.width
   mapData.height = jMap.height
   mapData.tileWidth = jMap.tileWidth
   mapData.tileHeight = jMap.tileHeight
   mapData.properties = parsePropertyDict(jMap.properties)
-  
   for _, jTileLayerTileset in jMap.tilesets do
     assert(jTileLayerTileset.source, 'Embedded tilesets are not supported')
     local tileLayerTileset = TileLayerTileset()
     tileLayerTileset.firstGid = jMap.firstgid
     tileLayerTileset.tileset = MapLoader.loadTileset(path)
-    lume.push(mapData.tiles, tilesetLayerTileset)
+    lume.push(mapData.tiles, tileLayerTileset)
   end
-
   for _, jLayer in ipairs(jMap.layers) do
     local mapLayer = parseLayer(jLayer)
     lume.push(mapData.layers, mapLayer)
@@ -178,8 +180,7 @@ function MapLoader.loadMapData(path)
       lume.push(mapData.objectLayers, mapLayer)
     end
   end
-
-  mapDataCache[key] = mapData
+  mapDataCache[path] = mapData
   return mapData
 end
 return MapLoader

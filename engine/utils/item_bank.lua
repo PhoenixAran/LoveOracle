@@ -10,7 +10,7 @@ local ItemBank = {
 
 function ItemBank.registerItem(itemId, itemData)
   assert(not ItemBank.items[itemId], 'ItemBank already has ItemData with key ' .. itemId)
-  items[itemId] = itemData
+  ItemBank.items[itemId] = itemData
 end
 
 function ItemBank.getItem(itemId)

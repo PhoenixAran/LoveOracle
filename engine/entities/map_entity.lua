@@ -135,7 +135,7 @@ function MapEntity:getSpeed()
 end
 
 function MapEntity:setSpeed(value)
-  self.movement:setSpeed(speed)
+  self.movement:setSpeed(value)
 end
 
 function MapEntity:isInAir()

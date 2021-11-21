@@ -14,6 +14,10 @@ local DamageInfo = Class {
   end
 }
 
+function DamageInfo:getType()
+  return 'damage_info'
+end
+
 function DamageInfo:applyHitstun()
   return 0 < self.hitstunTime
 end

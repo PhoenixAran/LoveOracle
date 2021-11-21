@@ -18,10 +18,10 @@ print('Oracle Engine ' .. gameConfig.version)
 print("OS: " .. love.system.getOS())
 print(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
 print('Save Directory: ' .. love.filesystem.getSaveDirectory())
---[[ 
+--[[
      Defining helper function used in data scripting
      Hot reloading can't modify existing functions, but it works with tables.
-     To work around this, this function will create a metatable that is callable. 
+     To work around this, this function will create a metatable that is callable.
 ]]
 function makeModuleFunction(func)
   local function dropSelfArg(func)
@@ -32,14 +32,14 @@ function makeModuleFunction(func)
   return setmetatable({}, {__call = dropSelfArg(func)})
 end
 
-function love.load(arg)  
+function love.load(arg)
   -- enable zerobrane studio debugging
   if gameConfig.zbStudioDebug then
     if arg[#arg] == '-debug' then require('mobdebug').start() end
   end
-  
+
   ContentControl.buildContent()
-  
+
   --[[
     GLOBALS DECLARED HERE
   ]]
@@ -49,20 +49,20 @@ function love.load(arg)
   monocle = Monocle.new()
   monocle:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
 
-  
+
   love.window.setTitle(gameConfig.window.title)
   love.graphics.setFont(AssetManager.getFont('monogram'))
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   print(gameConfig.startupScreen)
   screenManager:enter( require(gameConfig.startupScreen) ())
-  
+
   local Slab = require 'lib.slab'
   Slab.SetINIStatePath(nil)
   Slab.Initialize()
 end
 
 function love.update(dt)
-  input:update(dt)
+  input:update()
   screenManager:emit('update', dt)
 end
 
@@ -84,6 +84,7 @@ local MAX_FRAME_SKIP = 25
 
 -- No configurable framerate cap currently, either max frames CPU can handle (up to 1000), or vsync'd if conf.lua
 function love.run()
+---@diagnostic disable-next-line: undefined-field, redundant-parameter
   if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
 
   -- We don't want the first frame's dt to include time taken by love.load.
@@ -102,13 +103,14 @@ function love.run()
               return a or 0
           end
         end
+---@diagnostic disable-next-line: undefined-field
         love.handlers[name](a,b,c,d,e,f)
       end
     end
 
     -- Cap number of Frames that can be skipped so lag doesn't accumulate
-    if love.timer then 
-      lag = math.min(lag + love.timer.step(), TICK_RATE * MAX_FRAME_SKIP) 
+    if love.timer then
+      lag = math.min(lag + love.timer.step(), TICK_RATE * MAX_FRAME_SKIP)
     end
 
     while lag >= TICK_RATE do
@@ -120,15 +122,15 @@ function love.run()
       love.graphics.origin()
       love.graphics.clear(love.graphics.getBackgroundColor())
 
-      if love.draw then 
-        love.draw() 
+      if love.draw then
+        love.draw()
       end
       love.graphics.present()
     end
 
     -- Even though we limit tick rate and not frame rate, we might want to cap framerate at 1000 frame rate as mentioned https://love2d.org/forums/viewtopic.php?f=4&t=76998&p=198629&hilit=love.timer.sleep#p160881
-    if love.timer then 
-      love.timer.sleep(0.001) 
+    if love.timer then
+      love.timer.sleep(0.001)
     end
   end
 end

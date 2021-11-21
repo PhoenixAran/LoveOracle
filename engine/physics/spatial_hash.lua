@@ -89,7 +89,7 @@ function SpatialHash:register(box)
   for x = px1, px2 do
     for y = py1, py2 do 
       -- we need to create the cell if there is none
-      local c = self:cellAtPosition(x, y, true)
+      local c = self:cellAtPosition(x, y)
       lume.push(c, box)
     end
   end
@@ -143,7 +143,7 @@ function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
 end
 
 function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
-  directionX, directionY = vector.sub(endX, endY, startX, startY)
+  local directionX, directionY = vector.sub(endX, endY, startX, startY)
   self.raycastResultParser:start(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
 
   -- get our start/end position in the same space as our grid
@@ -178,7 +178,7 @@ function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin,
   -- determine the value of t at which the ray crosses the first vertical voxel boundary. same for y/horizontal
   -- The minimum of these two values will indicate how much we can travel along the ray and still remain in the current voxel
   -- may be infinite for near vertical/horizontal rays
-  local tMaxY = 0
+  local tMaxX = 0
   local tMaxY = 0
   if directionX == 0 then
     tMaxX = math.maxinteger
