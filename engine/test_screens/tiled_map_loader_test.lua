@@ -15,6 +15,7 @@ function TiledMapLoaderTest:enter(...)
   local tileset = TiledMapLoader.loadTileset('data/tiled/tilesets/proto_dungeon.json')
   local map = TiledMapLoader.loadMapData('data/tiled/maps/test_map_1.json')
   print(inspect(map.layers[1].tiles))
+  print(#map.layers[1].tiles)
 end
 
 function TiledMapLoaderTest:draw()
