@@ -8,26 +8,26 @@ local Movement = Class { __includes = Component,
   init = function(self, entity, enabled, values)
     if enabled == nil then enabled = true end
     Component.init(self, entity, enabled)
-    
+
     self:signal('landed')
     self:signal('bounced')
-    
+
     -- think of this as the directional gamepad for this entity
     self.vectorX, self.vectorY = 0, 0
-    
+
     self.speed = 60
     self.minSpeed = 0
     self.acceleration = 1
     self.deceleration = 1
-    
+
     self.slippery = false -- if true, this component will actually use acceleration and deceleration
     self.gravity = 9.8
     self.maxFallSpeed = 4
     self.zVelocity = 0
-    
+
     -- NB: Below values isnt how much the entity may actually move
     -- This is just the motion the movement component wants to carry out if nothing is in the way
-    -- See MapEntity:move() function 
+    -- See MapEntity:move() function
 
     -- useful for calculating acceleration and knowing when to stop accelerating movement
     self.motionX, self.motionY = 0, 0
@@ -141,7 +141,7 @@ function Movement:getLinearVelocity(dt)
       -- get velocity without acceleration
       local velocityX, velocityY = vector.mul(dt * self.speed, vector.normalize(self:getVector()))
       local maxLength = vector.len(velocityX, velocityY)
-      
+
       -- add accelerated velocity to our cached motionX and motionY values
       self.motionX, self.motionY = vector.add(self.motionX, self.motionY, vector.mul(self.acceleration, velocityX, velocityY))
       -- if our motionX and motionY is too fast, just use our normal velocity

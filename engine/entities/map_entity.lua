@@ -18,7 +18,7 @@ local DamageInfo = require 'engine.entities.damage_info'
 local MapEntity = Class { __includes = Entity,
   init = function(self, name, enabled, visible, rect, zRange)
     Entity.init(self, name, enabled, visible, rect, zRange)
-    
+
     -- signals
     self:signal('entityDestroyed')
     self:signal('entityCreated')
@@ -26,9 +26,9 @@ local MapEntity = Class { __includes = Entity,
     self:signal('entityBumped')
     self:signal('entityImmobolized')
     self:signal('entityMarkedDead')
-    
-    
-    self.movement = Movement(self)    
+
+
+    self.movement = Movement(self)
     self.groundObserver = GroundObserver(self)
     self.combat = Combat(self)
     self.effectSprite = SpriteBank.build('entity_effects', self)
@@ -38,7 +38,7 @@ local MapEntity = Class { __includes = Entity,
     -- this collision box will NOT actually exist in the Physics system
     -- if this is not null, it will only be used to collide with room edges if you want the room edge collider
     -- to be different
-    self.roomEdgeCollisionBox = nil     
+    self.roomEdgeCollisionBox = nil
 
     -- table to store collisions that occur when MapEntity:move() is called
     self.moveCollisions = { }
@@ -49,13 +49,13 @@ local MapEntity = Class { __includes = Entity,
     self.animationDirection4 = Direction4.none -- will be used as substrip key if syncDirectionWithAnimation is true
     -- shadow, ripple, and grass effects
     -- TODO finish ripple and grass effects
-    self.shadowVisible = true   
+    self.shadowVisible = true
     --self.shadowOffsetX, self.shadowOffsetY = 0, 0
     self.rippleVisible = false
     --self.rippleOffsetX, self.rippleOffsetY = 0, 0
     self.grassVisible = false
     --self.grassOffsetX, self.grassOffsetY = 0, 0
-  end 
+  end
 }
 
 function MapEntity:getType()
@@ -175,7 +175,7 @@ function MapEntity:move(dt)
   if self.roomEdgeCollisionBox then
     bx = self.roomEdgeCollisionBox.x + velX
     by = self.roomEdgeCollisionBox.y + velY
-    bw = self.roomEdgeCollisionBox.w 
+    bw = self.roomEdgeCollisionBox.w
     bh = self.roomEdgeCollisionBox.h
     neighbors = Physics.boxcastBroadphase(self.roomEdgeCollisionBox, bx, by, bw, bh)
     for i, neighbor in ipairs(neighbors) do

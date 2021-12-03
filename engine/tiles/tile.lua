@@ -5,11 +5,16 @@ local BitTag = require 'engine.utils.bit_tag'
 local Entity = require 'engine.entities.entity'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
+local TileType = require 'engine.tiles.tile_type'
 local GRID_SIZE = 16
+
+local function makeTileEntityName(layer, tileIndexX, tileIndexY)
+  return tostring(layer) .. '_' .. tostring(tileIndexX) .. '_' .. tostring(tileIndexY)
+end
 
 local Tile = Class { __includes = Entity,
   init = function(self, tileData, layer, tileIndexX, tileIndexY)
-    local name = tostring(layer) .. '_' .. tostring(tileIndexX) .. '_' .. tostring(tileIndexY)
+    local name = makeTileEntityName(layer, tileIndexX, tileIndexY)
     local collisionRectZRangeX, collisionRectZRangeY = tileData:getCollisionZRange()
     local collisionRectZRange = { min = collisionRectZRangeX, max = collisionRectZRangeY }
     Entity.init(self, name, true, true, tileData.collisionRect, collisionRectZRange)
@@ -27,6 +32,10 @@ local Tile = Class { __includes = Entity,
 
 function Tile:getType()
   return 'tile'
+end
+
+function Tile:getTileType()
+  return self.tileData.tileType
 end
 
 function Tile:isTile()

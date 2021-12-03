@@ -55,8 +55,8 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 105,
-                "y": 393
+                "x": -113,
+                "y": 234.5
             }
         },
         "tilesets/proto_dungeon.json": {
@@ -75,12 +75,14 @@
     "map.lastUsedFormat": "json",
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "maps/test_map_1.json"
+        "maps/test_map_1.json",
+        "tilesets/proto_dungeon.json"
     ],
     "project": "love-oracle.tiled-project",
+    "property.type": "bool",
     "recentFiles": [
-        "maps/test_map_1.json",
         "tilesets/proto_dungeon.json",
+        "maps/test_map_1.json",
         "C:/Users/phoen/Downloads/test_tileset/test.json",
         "C:/Users/phoen/Downloads/desert_tsx.json",
         "C:/Users/phoen/Downloads/desert_map.json",

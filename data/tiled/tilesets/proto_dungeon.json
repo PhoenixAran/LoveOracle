@@ -10,6 +10,774 @@
  "tileheight":16,
  "tiles":[
         {
+         "id":0,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":1,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":2,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":3,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":4,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":5,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":6,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":7,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":8,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":9,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":10,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":11,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":12,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":13,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":14,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":15,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":16,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":17,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":18,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":19,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":20,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":21,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":22,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":23,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":24,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":25,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":26,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":27,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":28,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":29,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":30,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":31,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
          "animation":[
                 {
                  "duration":100,
@@ -47,7 +815,772 @@
                  "duration":100,
                  "tileid":19
                 }],
-         "id":32
+         "id":32,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":33,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":34,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":35,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":36,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":37,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":38,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":39,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":40,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":41,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":42,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":43,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":44,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":45,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":46,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":47,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":48,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":49,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":50,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":51,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":52,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":53,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":54,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":55,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":56,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":57,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":58,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":59,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":60,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":61,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":62,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
+        }, 
+        {
+         "id":63,
+         "properties":[
+                {
+                 "name":"bumpBox",
+                 "type":"string",
+                 "value":"0, 0, 16, 16"
+                }, 
+                {
+                 "name":"hurtBox",
+                 "type":"string",
+                 "value":"0, 0, 0, 0"
+                }, 
+                {
+                 "name":"tileType",
+                 "type":"string",
+                 "value":"normal"
+                }, 
+                {
+                 "name":"zRange",
+                 "type":"string",
+                 "value":"0, 1"
+                }]
         }],
  "tilewidth":16,
  "type":"tileset",

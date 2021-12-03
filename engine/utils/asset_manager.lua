@@ -1,6 +1,7 @@
 local lume = require 'lib.lume'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local fh = require 'engine.utils.file_helper'
+local ParseHelpers = require 'engine.utils.parse_helpers'
 
 local AssetManager = { 
   imageCache = { },
@@ -8,41 +9,6 @@ local AssetManager = {
   soundCache = { },
   spriteSheetCache = { }
 }
-
--- helper functions. mainly used to parse sprite sheet declarations
-local function split(str, inSplitPattern)
-  local outResults = { }
-  local theStart = 1
-  local theSplitStart, theSplitEnd = string.find( str, inSplitPattern, theStart )
-  while theSplitStart do
-    table.insert( outResults, string.sub( str, theStart, theSplitStart-1 ) )
-    theStart = theSplitEnd + 1
-    theSplitStart, theSplitEnd = string.find( str, inSplitPattern, theStart )
-  end
-  table.insert( outResults, string.sub( str, theStart ) )
-  return outResults
-end
-
-local function trim(str)
-  return (str:gsub("^%s*(.-)%s*$", "%1"))
-end
-
-local function argIsString(arg)
-  if arg == nil then return false end
-  arg = trim(arg)
-  return string.len(arg) >= 2 and arg:sub(1, 1) == '"' and arg:sub(-1) == '"'
-end
-
-local function parseStringArg(arg)
-  -- strip the quotation marks aroudn string
-  arg = trim(arg)
-  return string.sub(arg, 2, string.len(arg) - 1)
-end
-
-local function argIsNumber(arg)
-  if arg == nil then return false end
-  return tonumber(arg) ~= nil
-end
 
 -- image
 function AssetManager.loadImage(path)
@@ -98,7 +64,7 @@ function AssetManager.loadSpriteSheetFile(path)
   for line in love.filesystem.lines(path) do
     if line then line = line:gsub('%$s+', '') end
     if not (line == nil or line == '' or line:sub(1, 1) == '#') then
-      local args = split(line, ',')
+      local args = ParseHelpers.split(line, ',')
       assert(#args == 4 or #args == 5 or #args == 6, 'Not enough arguments in ' .. path .. ' on line ' .. tostring(lineCounter) )
       
       local key = args[1]
@@ -107,15 +73,15 @@ function AssetManager.loadSpriteSheetFile(path)
       local height = args[4]
       local padding = args[5]
       local margin = args[6]
-      assert(argIsString(key), 'Expected string in argument 1, but received :' .. tostring(key) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(argIsString(imageKey), 'Expected string in argument 2, but received :' .. tostring(imageKey) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(argIsNumber(width), 'Expected number in argument 3, but received :' .. tostring(width) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(argIsNumber(height), 'Expected number in argument 4, but received :' .. tostring(height) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(padding == nil or argIsNumber(padding), 'Expected nil or number in argument 5, but received :' .. tostring(padding) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(margin == nil or argIsNumber(margin), 'Expected nil or number in argument 6, but received :' .. tostring(margin) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(ParseHelpers.argIsString(key), 'Expected string in argument 1, but received :' .. tostring(key) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(ParseHelpers.argIsString(imageKey), 'Expected string in argument 2, but received :' .. tostring(imageKey) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(ParseHelpers.argIsNumber(width), 'Expected number in argument 3, but received :' .. tostring(width) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(ParseHelpers.argIsNumber(height), 'Expected number in argument 4, but received :' .. tostring(height) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(padding == nil or ParseHelpers.argIsNumber(padding), 'Expected nil or number in argument 5, but received :' .. tostring(padding) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(margin == nil or ParseHelpers.argIsNumber(margin), 'Expected nil or number in argument 6, but received :' .. tostring(margin) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
       
-      key = parseStringArg(key)
-      imageKey = parseStringArg(imageKey)
+      key = ParseHelpers.parseStringArg(key)
+      imageKey = ParseHelpers.parseStringArg(imageKey)
       
       assert(not AssetManager.spriteSheetCache[key], 'Sprite Sheet with key ' .. key .. ' already exists.')
       AssetManager.spriteSheetCache[key] = SpriteSheet(AssetManager.getImage(imageKey), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]), tonumber(args[6]))

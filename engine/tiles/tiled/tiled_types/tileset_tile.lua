@@ -28,4 +28,8 @@ function TilesetTile:isAnimated()
   return lume.count(self.animatedTextures) > 0
 end
 
+function TilesetTile:getProperties()
+  return self.properties
+end
+
 return TilesetTile

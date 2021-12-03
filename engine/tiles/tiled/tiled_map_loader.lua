@@ -16,7 +16,7 @@ local mapDataCache  = { }
 local tilesetCache = { }
 
 -- export type
-local MapLoader = { }
+local TiledMapLoader = { }
 
 local function parsePropertyDict(jProperties)
   -- JSON converts quite nicely to lua, so we just select the key and value
@@ -98,7 +98,7 @@ local function parseLayer(jLayer)
   return parser(jLayer)
 end
 
-function MapLoader.loadTileset(path)
+function TiledMapLoader.loadTileset(path)
   -- tileset is indexed by name
   local key = FileHelper.getFileNameWithoutExtension(path)
   if tilesetCache[key] then
@@ -148,7 +148,7 @@ function MapLoader.loadTileset(path)
   return tileset
 end
 
-function MapLoader.loadMapData(path)
+function TiledMapLoader.loadMapData(path)
   -- map data is indexed by filepath
   if mapDataCache[path] then
     return mapDataCache[path]
@@ -168,7 +168,7 @@ function MapLoader.loadMapData(path)
     assert(jTileLayerTileset.source, 'Embedded tilesets are not supported')
     local tileLayerTileset = TileLayerTileset()
     tileLayerTileset.firstGid = jMap.firstgid
-    tileLayerTileset.tileset = MapLoader.loadTileset(jTileLayerTileset.source)
+    tileLayerTileset.tileset = TiledMapLoader.loadTileset(jTileLayerTileset.source)
     lume.push(mapData.tilesets, tileLayerTileset)
   end
   for _, jLayer in ipairs(jMap.layers) do
@@ -183,4 +183,4 @@ function MapLoader.loadMapData(path)
   mapDataCache[path] = mapData
   return mapData
 end
-return MapLoader
+return TiledMapLoader
