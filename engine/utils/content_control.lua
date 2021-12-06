@@ -2,6 +2,7 @@ local AssetManager = require 'engine.utils.asset_manager'
 local GameConfig = require 'game_config'
 local PaletteBank = require 'engine.utils.palette_bank'
 local SpriteBank = require 'engine.utils.sprite_bank'
+local TiledMapLoader = require 'engine.tiles.tiled.tiled_map_loader'
 local BitTag = require 'engine.utils.bit_tag'
 local lume = require 'lib.lume'
 
@@ -36,8 +37,6 @@ local function loadSpriteSheets(directory)
   local spritesheetFiles = love.filesystem.getDirectoryItems(directory)
   for _, file in ipairs(spritesheetFiles) do
     local path = directory .. '/' .. file
-    -- assetManager combines base asset path for us so we need to manually combine path to get correct
-    -- path for love.filesystem.getinfo
     if love.filesystem.getInfo(path).type == 'directory' then
       loadSpriteSheets(path)
     else
@@ -59,6 +58,7 @@ function ContentControl.buildContent()
   loadSpriteSheets('data/assets/spritesheets')
   PaletteBank.initialize('data.palettes')
   SpriteBank.initialize('data.sprites')
+  TiledMapLoader.initializeTilesets()
 end
 
 function ContentControl.unloadContent()

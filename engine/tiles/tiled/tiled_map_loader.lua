@@ -4,7 +4,7 @@ local ffi = require 'ffi'
 local FileHelper = require 'engine.utils.file_helper'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local AssetManager = require 'engine.utils.asset_manager'
-local MapData = require 'engine.tiles.tiled.tiled_types.tiled_map'
+local TiledMapData = require 'engine.tiles.tiled.tiled_types.tiled_map_data'
 local TileLayerTileset = require 'engine.tiles.tiled.tiled_types.tile_layer_tileset'
 local Tileset = require 'engine.tiles.tiled.tiled_types.tileset'
 local TilesetTile = require 'engine.tiles.tiled.tiled_types.tileset_tile'
@@ -12,8 +12,10 @@ local TiledObject = require 'engine.tiles.tiled.tiled_types.tiled_object'
 local TiledTileLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_tile_layer'
 local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_object_layer'
 
-local mapDataCache  = { }
-local tilesetCache = { }
+local tiledTilesetCache = { }
+local tilesetCacheCreated = false
+
+local tiledMapDataCache  = { }
 
 -- export type
 local TiledMapLoader = { }
@@ -41,7 +43,6 @@ local function parseObject(jObject, mapData)
   tiledObject.rotation = jObject.rotation
 
   if jObject.gid ~= nil then
-    -- I might change my mind on this
     tiledObject.gid = jObject.gid
   end
   if jObject.text then
@@ -58,7 +59,7 @@ local function getDecompressedData(data)
   local tileGids = { }
   -- cast data as uint array
   local ptr = ffi.cast('uint32_t*', data)
-  for i = 0, data:len() / ffi.sizeof('uint32_t') do
+  for i = 0, (data:len() / ffi.sizeof('uint32_t')) - 1 do
     lume.push(tileGids, tonumber(ptr[i]))
   end
   return tileGids
@@ -98,11 +99,13 @@ local function parseLayer(jLayer)
   return parser(jLayer)
 end
 
-function TiledMapLoader.loadTileset(path)
+-- not exposed to public API.
+-- They will need to call TiledMapLoader.initTilesets() to load all the tilesets into memory
+local function loadTileset(path)
   -- tileset is indexed by name
   local key = FileHelper.getFileNameWithoutExtension(path)
-  if tilesetCache[key] then
-    return tilesetCache[key]
+  if tiledTilesetCache[key] then
+    return tiledTilesetCache[key]
   end
   local jTileset = json.decode(love.filesystem.read(path))
   local tileset = Tileset()
@@ -144,18 +147,21 @@ function TiledMapLoader.loadTileset(path)
       tileset.tiles[tilesetTile.id] = tilesetTile
     end
   end
-  tilesetCache[key] = tileset
+  tiledTilesetCache[key] = tileset
   return tileset
 end
 
+-- NB: path will be relative to data/tiled/maps
 function TiledMapLoader.loadMapData(path)
+  assert(tilesetCacheCreated, 'Call TiledMapLoader.initTilesets before you load maps')
+  local pathPrefix = 'data/tiled/maps/'
+  path = pathPrefix .. path
   -- map data is indexed by filepath
-  if mapDataCache[path] then
-    return mapDataCache[path]
+  if tiledMapDataCache[path] then
+    return tiledMapDataCache[path]
   end
 
-  local mapData = MapData()
-
+  local mapData = TiledMapData()
   local jMap = json.decode(love.filesystem.read(path))
   assert(jMap.orientation == "orthogonal", 'Only orthogonal tiled maps are supported')
   mapData.name = FileHelper.getFileNameWithoutExtension(path)
@@ -168,7 +174,7 @@ function TiledMapLoader.loadMapData(path)
     assert(jTileLayerTileset.source, 'Embedded tilesets are not supported')
     local tileLayerTileset = TileLayerTileset()
     tileLayerTileset.firstGid = jMap.firstgid
-    tileLayerTileset.tileset = TiledMapLoader.loadTileset(jTileLayerTileset.source)
+    tileLayerTileset.tileset = loadTileset(jTileLayerTileset.source)
     lume.push(mapData.tilesets, tileLayerTileset)
   end
   for _, jLayer in ipairs(jMap.layers) do
@@ -180,7 +186,36 @@ function TiledMapLoader.loadMapData(path)
       lume.push(mapData.objectLayers, mapLayer)
     end
   end
-  mapDataCache[path] = mapData
+  tiledMapDataCache[path] = mapData
   return mapData
 end
+
+function TiledMapLoader.getTileset(name)
+  assert(tiledTilesetCache[name], 'Tileset with name ' .. name .. ' does not exist')
+  return tiledTilesetCache[name]
+end
+
+-- called in ContentControl
+function TiledMapLoader.initializeTilesets(directory)
+  if directory == nil then
+    directory = 'data/tiled/tilesets'
+  end
+  local tilesetFiles = love.filesystem.getDirectoryItems(directory)
+  for _, file in ipairs(tilesetFiles) do
+    local path = directory .. '/' .. file
+    if love.filesystem.getInfo(path).type == 'directory' then
+      TiledMapLoader.initializeTilesets(path)
+    else
+      loadTileset(path)
+    end
+  end
+  tilesetCacheCreated = true
+end
+
+function TiledMapLoader.unload()
+  tiledMapDataCache = { }
+  tiledTilesetCache = { }
+  tilesetCacheCreated = false
+end
+
 return TiledMapLoader

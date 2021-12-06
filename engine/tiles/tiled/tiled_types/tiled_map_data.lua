@@ -1,27 +1,30 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
-local MapData = Class {
+local TiledMapData = Class {
   init = function(self)
-    self.width = 0
+    self.name = nil
+    -- number of tile rows
     self.height = 0
-    self.tileWidth = 0
-    self.tileHeight = 0
+    -- number of tile columns
+    self.width = 0
+    -- array of layers
     self.layers = { }
-    --NB: holds TileLayerTilesets, not source Tilesets
-    self.tilesets = { }
+    -- custom properties
     self.properties = { }
-    -- organized layers for easy access
+    -- included tilesets
+    self.tilesets = { }
+    -- organized layers for ease of use
     self.tileLayers = { }
     self.objectLayers = { }
   end
 }
 
-function MapData:getType()
-  return 'map_data'
+function TiledMapData:getType()
+  return 'tiled_map'
 end
 
-function MapData:getTilesetForTileLayerGid(gid)
+function TiledMapData:getTilesetForTileLayerGid(gid)
   local tilesetCount = lume.count(self.tilesets)
   assert(tilesetCount > 0)
   if tilesetCount == 1 then
@@ -37,4 +40,4 @@ function MapData:getTilesetForTileLayerGid(gid)
   return self.tilesets[tilesetCount]
 end
 
-return MapData
+return TiledMapData
