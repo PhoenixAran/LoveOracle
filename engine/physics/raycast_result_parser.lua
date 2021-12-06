@@ -73,21 +73,17 @@ function RaycastResultParser:checkRayIntersection(cellX, cellY, cell)
 end
 
 function RaycastResultParser:sortHits()
-  for i = 1, lume.count(self.hits) - 1 do
-    local ci = i 
-    while true do
-      local shouldSwap = false
-      if self.distances[ci] > self.distances[ci + 1] then
-        self.hits[ci], self.hits[ci + 1] = self.hits[ci + 1], self.hits[ci]
-        self.distances[ci], self.distances[ci + 1] = self.distances[ci + 1], self.distances[ci]
-        shouldSwap = true
-      end
-      if shouldSwap then
-        ci = ci - 1
-      else
-        break
-      end
+  for j = 2, lume.count(self.hits) do
+    local dist = self.distances[j]
+    local hit = self.hits[j]
+    local i = j - 1
+    while i >= 1 and dist < self.distances[j] do
+      self.distances[i + 1] = self.distance[i]
+      self.hits[i + 1] = self.hits[j]
+      i = i - 1
     end
+    self.distances[i + 1] = dist
+    self.hits[i + 1] = hit
   end
 end
 
