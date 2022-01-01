@@ -10,7 +10,7 @@ assert(require('ffi'), 'LoveOracle requires luaJIT')
 
 -- not really max, just an unrealistically high number
 math.maxinteger = 1000000000000000000000000000000000000000000000
--- same as above but opposite
+-- same as above but negative
 math.mininteger = -math.maxinteger
 math.randomseed(os.time())
 

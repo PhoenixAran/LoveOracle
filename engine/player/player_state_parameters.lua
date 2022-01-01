@@ -71,7 +71,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.canStrafe = self.canStrafe or other.canStrafe
 
   -- prefer the other animations if they are non null
-  for k, v in ipairs(self.animations) do
+  for k, v in pairs(self.animations) do
     self.animations[k] = other.animations[k] or self.animations[k]
   end  
 end
