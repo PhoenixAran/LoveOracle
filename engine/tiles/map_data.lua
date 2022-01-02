@@ -1,20 +1,21 @@
 local Class = require 'lib.class'
-local lume = require 'lib.lume'
-local SignalObject = require' engine.signal_object'
-
 
 local MapData = Class {
-  init = function(self, mapData)
-    self.mapData = mapData
-
+  init = function(self)
+    self.name = nil
+    self.height = -1
+    self.width = ''
+    -- array of layer tilesets
+    self.layerTilesets = { }
+    -- array of tile layers
+    self.tileLayers = { }
+    -- array of rooms
+    self.rooms = { }
   end
 }
 
 function MapData:getType()
   return 'map_data'
 end
-
-
-
 
 return MapData

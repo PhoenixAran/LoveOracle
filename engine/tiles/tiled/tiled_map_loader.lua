@@ -5,9 +5,9 @@ local FileHelper = require 'engine.utils.file_helper'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local AssetManager = require 'engine.utils.asset_manager'
 local TiledMapData = require 'engine.tiles.tiled.tiled_types.tiled_map_data'
-local TileLayerTileset = require 'engine.tiles.tiled.tiled_types.tile_layer_tileset'
-local Tileset = require 'engine.tiles.tiled.tiled_types.tileset'
-local TilesetTile = require 'engine.tiles.tiled.tiled_types.tileset_tile'
+local TileLayerTileset = require 'engine.tiles.tiled.tiled_types.tiled_tile_layer_tileset'
+local TiledTileset = require 'engine.tiles.tiled.tiled_types.tiled_tileset'
+local TiledTilesetTile = require 'engine.tiles.tiled.tiled_types.tiled_tileset_tile'
 local TiledObject = require 'engine.tiles.tiled.tiled_types.tiled_object'
 local TiledTileLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_tile_layer'
 local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_object_layer'
@@ -93,6 +93,7 @@ local layerParsers = {
     tiledObjLayer.properties = parsePropertyDict(jLayer.properties)
   end
 }
+
 local function parseLayer(jLayer)
   local parser = layerParsers[jLayer.type]
   assert(parser, 'No layer parser implemented for ' .. jLayer.type)
@@ -108,7 +109,7 @@ local function loadTileset(path)
     return tiledTilesetCache[key]
   end
   local jTileset = json.decode(love.filesystem.read(path))
-  local tileset = Tileset()
+  local tileset = TiledTileset()
   tileset.name = key
   -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
   local spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
@@ -122,13 +123,13 @@ local function loadTileset(path)
   tileset.properties = parsePropertyDict(jTileset.properties)
   -- load tiles with custom property definition
   for _, jTile in ipairs(jTileset.tiles) do
-    local tilesetTile = TilesetTile()
+    local tilesetTile = TiledTilesetTile()
     tilesetTile.id = jTile.id
     tilesetTile.texture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
     if jTile.animation then
       for _, jObj in ipairs(jTile.animation) do
         lume.push(tilesetTile.animatedTextures, tileset.spriteSheet:getTexture(jObj.tileid + 1))
-        lume.push(tilesetTile.durations, jObj.durations)
+        lume.push(tilesetTile.durations, jObj.duration)
       end
     end
     tilesetTile.properties = parsePropertyDict(jTile.properties)
@@ -139,7 +140,7 @@ local function loadTileset(path)
   for i = 0, tileset.spriteSheet:size() do
     if not tileset.tiles[i] then
       -- NB: basic tiles are never animated
-      local tilesetTile = TilesetTile()
+      local tilesetTile = TiledTilesetTile()
       tilesetTile.id = i
       -- add one because spritesheet uses lua indexing
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)

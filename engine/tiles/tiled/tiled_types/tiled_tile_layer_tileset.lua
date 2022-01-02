@@ -8,19 +8,19 @@ local Class = require 'lib.class'
    Tile 7 will point to B[7 - B.firstgid]
 ]]--
 -- Wrapper around Tileset. Do not reuse cache this class, as each MapData instance has unique TileLayerTilesets
-local TileLayerTileset = Class {
+local TiledTileLayerTileset = Class {
   init = function(self, firstGid, tileset)
     self.firstGid = firstGid
     self.tileset = tileset
   end
 }
 
-function TileLayerTileset:getType()
+function TiledTileLayerTileset:getType()
   return 'tile_layer_tileset'
 end
 
-function TileLayerTileset:getTile(index)
+function TiledTileLayerTileset:getTile(index)
   return self.tileset:getTile(index - self.firstGid)
 end
 
-return TileLayerTileset
+return TiledTileLayerTileset

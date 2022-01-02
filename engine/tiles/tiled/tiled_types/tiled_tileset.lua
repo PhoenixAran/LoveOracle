@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 
 -- raw tileset data directly translated from json file. This requires the wrapper class TileLayerTileset for
 -- tile id mappings. This class can be reused since it does not contain MapData specific values like 'firstGid'
-local Tileset = Class {
+local TiledTileset = Class {
   init = function(self)
     self.name = nil
     self.width = 0
@@ -18,12 +18,12 @@ local Tileset = Class {
   end
 }
 
-function Tileset:getType()
-  return 'tileset'
+function TiledTileset:getType()
+  return 'tiled_tileset'
 end
 
-function Tileset:getTile(gid)
+function TiledTileset:getTile(gid)
   return self.tiles[gid]
 end
 
-return Tileset
+return TiledTileset

@@ -21,7 +21,7 @@ local TiledMapData = Class {
 }
 
 function TiledMapData:getType()
-  return 'tiled_map'
+  return 'tiled_map_data'
 end
 
 function TiledMapData:getTilesetForTileLayerGid(gid)

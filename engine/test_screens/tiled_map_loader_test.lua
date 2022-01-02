@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 local BaseScreen = require 'engine.screens.base_screen'
 
 local TiledMapLoader = require 'engine.tiles.tiled.tiled_map_loader'
-
+local MapLoader = require 'engine.tiles.map_loader'
 local TiledMapLoaderTest = Class { __includes = BaseScreen,
   init = function(self)
 
@@ -12,9 +12,13 @@ local TiledMapLoaderTest = Class { __includes = BaseScreen,
 
 function TiledMapLoaderTest:enter(...)
   local inspect = require ('lib.inspect').inspect
-  local map = TiledMapLoader.loadMapData('test_map_1.json')
-  print(inspect(map.layers[1].tiles))
-  print(lume.count(map.layers[1].tiles))
+  local tiledMapData = TiledMapLoader.loadMapData('test_map_1.json')
+  print(inspect(tiledMapData.layers[1].tiles))
+  print(lume.count(tiledMapData.layers[1].tiles))
+  print('TileMapLoader success!')
+  local mapData = MapLoader.loadMapData('test_map_1.json')
+  print(inspect(mapData))
+  print('MapLoader success!')
 end
 
 function TiledMapLoaderTest:draw()
