@@ -20,7 +20,10 @@ function MapData:getType()
 end
 
 -- returns tile data for tile at the given position
-function MapData:getTile(layerIndex, x, y)
+function MapData:getTile(x, y, layerIndex)
+  if layerIndex == nil then
+    layerIndex = 1
+  end
   assert(1 <= layerIndex and layerIndex <= lume.count(self.tileLayers))
   local tileLayer = self.tileLayers[layerIndex]
   if y == nil then

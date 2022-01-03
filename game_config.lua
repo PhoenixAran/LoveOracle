@@ -36,6 +36,8 @@ local window = {
   }
 }
 
+local showSplash = false
+
 -- Do not exceed 32 flags!
 local physicsFlags = {
   'entity',
@@ -61,11 +63,12 @@ local startupScreen = 'engine.test_screens.tiled_map_loader_test'
 --local startupScreen = 'engine.test_screens.raycast_test'
 
 return {
- zbStudioDebug = zbStudioDebug,
- controls = controls,
- window = window,
- startupScreen = startupScreen,
- version = version,
- physicsFlags = physicsFlags,
- tilesetThemeRequirements = tilesetThemeRequirements
+  showSplash = showSplash,
+  zbStudioDebug = zbStudioDebug,
+  controls = controls,
+  window = window,
+  startupScreen = startupScreen,
+  version = version,
+  physicsFlags = physicsFlags,
+  tilesetThemeRequirements = tilesetThemeRequirements
 }

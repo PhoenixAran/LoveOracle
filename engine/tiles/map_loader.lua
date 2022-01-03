@@ -59,6 +59,4 @@ function MapLoader.loadMapData(path)
   return mapData
 end
 
-
-
 return MapLoader

@@ -3,7 +3,6 @@ local lume = require 'lib.lume'
 local gameConfig = require 'game_config'
 local ContentControl = require 'engine.utils.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
-local Slab = require 'lib.slab'
 
 -- Make sure we are using luaJIT
 assert(require('ffi'), 'LoveOracle requires luaJIT')
@@ -54,8 +53,11 @@ function love.load(arg)
   love.graphics.setFont(AssetManager.getFont('monogram'))
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   print(gameConfig.startupScreen)
-  screenManager:enter( require(gameConfig.startupScreen) ())
-
+  if gameConfig.showSplash then
+    screenManager:enter( require('engine.screens.splash_screen')(gameConfig.startupScreen))
+  else
+    screenManager:enter( require(gameConfig.startupScreen)())
+  end
   local Slab = require 'lib.slab'
   Slab.SetINIStatePath(nil)
   Slab.Initialize()
