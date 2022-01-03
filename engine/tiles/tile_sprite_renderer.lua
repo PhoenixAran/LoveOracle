@@ -16,10 +16,20 @@ function TileSpriteRenderer:getType()
   return 'tile_sprite_renderer'
 end
 
+function TileSpriteRenderer:isAnimated()
+  return self.animated
+end
+
+function TileSpriteRenderer:resetSpriteAnimation()
+  assert(self.animated)
+  self.currentTick = 1
+  self.currentFrameIndex = 1
+end
+
 -- This should only be called if this sprite is animated
 function TileSpriteRenderer:update(dt)
   if self.animated then
-    local currentFrame = self.sprite[self.currentFrameIndex]
+    local currentFrame = self.sprite[self.currentFrameIndex] 
     local spriteFrames = self.sprite:getSpriteFrames()
     if currentFrame:getDelay() < self.currentTick then
       self.currentTick = 1
@@ -32,9 +42,13 @@ function TileSpriteRenderer:update(dt)
   end
 end
 
-function TileSpriteRenderer:draw(x, y)
+function TileSpriteRenderer:draw(x, y, forceDrawFirstFrame)
   if self.animated then
-    local currentFrame = self.sprite[self.currentFrameIndex]
+    local index = self.currentFrameIndex
+    if forceDrawFirstFrame then
+      index = 1
+    end
+    local currentFrame = self.sprite[index]
     local sprite = currentFrame:getSprite()
     sprite:draw(x, y)
   else

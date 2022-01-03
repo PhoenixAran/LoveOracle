@@ -5,12 +5,16 @@ local Class = require 'lib.class'
 local LayerTileset = Class {
   init = function(self)
     self.tileset = nil
-    self.firstGid = -1
+    self.firstGid = 0
   end
 }
 
 function LayerTileset:getType()
   return 'layer_tileset'
+end
+
+function LayerTileset:getTileData(gid)
+  return self.tileset:getTileData(gid - self.firstGid)
 end
 
 return LayerTileset

@@ -21,7 +21,11 @@ function MapLoader.getTileset(name)
   local tileset = Tileset()
   tileset.name = tiledTileset.name
   for gid, tiledTilesetTile in ipairs(tiledTileset.tiles) do
-    tileset.tiles[gid] = TileData(tiledTilesetTile)
+    local tileData = TileData(tiledTilesetTile)
+    tileset.tiles[gid] = tileData
+    if tileData.sprite:isAnimated() then
+      lume.push(tileset.animatedTiles, tileData)
+    end
   end
   tilesetCache[name] = tileset
   return tileset
