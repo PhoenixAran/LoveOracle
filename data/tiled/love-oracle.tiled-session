@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/test_map_1.json",
+    "activeFile": "tilesets/proto_dungeon.json",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -52,16 +52,16 @@
             }
         },
         "maps/test_map_1.json": {
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 246,
-                "y": 75.33333333333334
+                "x": 571,
+                "y": 316
             }
         },
         "tilesets/proto_dungeon.json": {
             "scaleInDock": 1,
-            "scaleInEditor": 5.5
+            "scaleInEditor": 2
         }
     },
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
@@ -77,8 +77,8 @@
     "map.tileWidth": 16,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "maps/test_map_1.json",
-        "tilesets/proto_dungeon.json"
+        "tilesets/proto_dungeon.json",
+        "maps/test_map_1.json"
     ],
     "project": "love-oracle.tiled-project",
     "property.type": "bool",

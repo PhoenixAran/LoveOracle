@@ -84,7 +84,7 @@ function splashlib.new(init)
       batch:clear()
 
       if batch:getBufferSize() < batch_w * batch_h then
-        batch:setBufferSize(batch_w * batch_h)
+        --batch:setBufferSize(batch_w * batch_h)
       end
 
       for i = 0, batch_h - 1 do

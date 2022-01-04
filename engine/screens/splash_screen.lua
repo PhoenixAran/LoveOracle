@@ -9,7 +9,7 @@ local SplashScreen = Class {
 }
 
 function SplashScreen:enter(prev, ...)
-  self.splash = splashModule.new({background = {0, 0, 0}})
+  self.splash = splashModule.new()
   local nextScreen = self.nextScreen
   function self.splash:onDone()
     screenManager:push(require(nextScreen)())

@@ -1,4 +1,4 @@
-local SpatialHash = require 'engine.Physics.spatial_hash'
+local SpatialHash = require 'engine.physics.spatial_hash'
 local lume = require 'lib.lume'
 
 local Physics = { }
