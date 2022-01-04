@@ -13,10 +13,12 @@ local TiledMapLoaderTest = Class { __includes = BaseScreen,
 function TiledMapLoaderTest:enter(...)
   local inspect = require ('lib.inspect').inspect
   local tiledMapData = TiledMapLoader.loadMapData('test_map_1.json')
-  print(inspect(tiledMapData.layers[1].tiles))
-  print(lume.count(tiledMapData.layers[1].tiles))
-  print('TileMapLoader success!')
+  --print(inspect(tiledMapData.layers[1].tiles))
+  --print(lume.count(tiledMapData.layers[1].tiles))
+  --print('TileMapLoader success!')
   local mapData = MapLoader.loadMapData('test_map_1.json')
+  --print(inspect(TiledMapLoader.getTileset('proto_dungeon')))
+  --print(inspect(MapLoader.getTileset('proto_dungeon')))
   print(inspect(mapData))
   print('MapLoader success!')
 end

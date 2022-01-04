@@ -70,7 +70,7 @@ end
 local TileData = Class {
   init = function(self, tilesetTile)
     local properties = tilesetTile:getProperties()
-    self.tilesetId = tilesetTile.id
+    self.tilesetTileId = tilesetTile.id
     self.sprite = makeTileSprite(tilesetTile)
     self.tileType = parseTileType(properties.tileType)
     self.x, self.y, self.w, self.h = parseCollisionBox(properties.collisionBox)

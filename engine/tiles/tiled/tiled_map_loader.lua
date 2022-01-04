@@ -91,6 +91,7 @@ local layerParsers = {
       lume.push(tiledObjLayer.objects, parseObject(jObj))
     end
     tiledObjLayer.properties = parsePropertyDict(jLayer.properties)
+    return tiledObjLayer
   end
 }
 

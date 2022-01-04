@@ -5,7 +5,7 @@ local Tileset = require 'engine.tiles.tileset'
 local TileLayer = require 'engine.tiles.tile_layer'
 local MapData = require 'engine.tiles.map_data'
 local LayerTileset = require 'engine.tiles.layer_tileset'
-
+local RoomData = require 'engine.tiles.room_data'
 
 local tilesetCache = { }
 local mapCache = { }
@@ -20,7 +20,7 @@ function MapLoader.getTileset(name)
   local tiledTileset = TiledMapLoader.getTileset(name)
   local tileset = Tileset()
   tileset.name = tiledTileset.name
-  for gid, tiledTilesetTile in ipairs(tiledTileset.tiles) do
+  for gid, tiledTilesetTile in pairs(tiledTileset.tiles) do
     local tileData = TileData(tiledTilesetTile)
     tileset.tiles[gid] = tileData
     if tileData.sprite:isAnimated() then
@@ -53,6 +53,26 @@ function MapLoader.loadMapData(path)
         lume.push(tileLayer.tiles, gid)
       end
       lume.push(mapData.tileLayers, tileLayer)
+    elseif layer:getType() == 'tiled_object_layer' then
+      if layer.name:lower() == 'rooms' then
+        -- parse room data
+        for _, tiledObj in ipairs(layer.objects) do
+          local roomData = RoomData()
+          assert(tiledObj.x ~= nil and tiledObj.y ~= nil and tiledObj.width ~= nil
+                and tiledObj.height ~= nil)
+          roomData.topLeftPosX = tiledObj.x
+          roomData.topLeftPosY = tiledObj.y
+          roomData.width = tiledObj.width
+          roomData.height = tiledObj.height
+          lume.push(mapData.rooms, roomData)
+        end
+      elseif layer.name:lower() == 'entities' then
+        -- todo parse entities
+      else
+        error('Unsupported object layer name: ' .. layer.name:lower())
+      end
+    else
+      error('Unsupported layer type: ' .. layer:getType())
     end
   end
   mapCache[path] = mapData

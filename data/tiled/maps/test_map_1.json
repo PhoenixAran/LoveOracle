@@ -1,23 +1,56 @@
 { "compressionlevel":-1,
- "height":26,
+ "height":100,
  "infinite":false,
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3UMQqAMAxA0aBQo4IVBM3a+1\/SFDKEOnQwGZQMn255S5MEAJNTyJG8G5elwbCR2xtn5hbj1nBeOxSOu5PguYMejt7nLDM8neLsnNylIifnb\/8tnHC+4KByrI3aoZxae08sI+WQUdjJyul1A3fhkdiQCgAA",
+         "data":"H4sIAAAAAAAACu3ROwoCURBFwUbBL4gfUFP3v0nfZDOBIDLofVIFJ+uo76qq1p23qf9xaD1ai05bto6zf+V3hj22rV1I41+\/c78ve3xzF3v0lT2yskdW9sjKHlnZIyt7ZGWPrOyRlT2yskdW9sjKHp91HmWP14Y9TjX9V09d6r\/2uLZunXef\/SsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMPUEdLwLIECcAAA=",
          "encoding":"base64",
-         "height":26,
-         "id":2,
+         "height":100,
+         "id":1,
          "name":"Tile Layer 1",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
-         "width":26,
+         "width":100,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":2,
+         "name":"rooms",
+         "objects":[
+                {
+                 "height":304,
+                 "id":1,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":288,
+                 "x":0,
+                 "y":0
+                }, 
+                {
+                 "height":304,
+                 "id":2,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":512,
+                 "x":288,
+                 "y":0
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
          "x":0,
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":1,
+ "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",
@@ -30,5 +63,5 @@
  "tilewidth":16,
  "type":"map",
  "version":"1.6",
- "width":26
+ "width":100
 }
