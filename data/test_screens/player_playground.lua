@@ -28,6 +28,7 @@ function PlayerPlayground:draw()
   if self.sword:isVisible() then 
     self.sword:draw()
   end
+  self.player:debugDraw()
   self:drawFPS()
   self:drawMemory()
   self:drawVersion()

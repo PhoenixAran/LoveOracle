@@ -56,6 +56,7 @@ function Timer:after(delay, func)
 end
 
 function Timer:every(delay, func, count)
+---@diagnostic disable-next-line: unbalanced-assignments
 	local count, handle = count or math.huge -- exploit below: math.huge - 1 = math.huge
 
 	handle = self:after(delay, function(f)
