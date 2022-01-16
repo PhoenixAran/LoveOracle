@@ -23,6 +23,7 @@ function TiledMapLoaderTest:enter(...)
   --print(inspect(mapData))
   local map = Map('test_map_1.json')
   print(inspect(map))
+  love.filesystem.write('map.txt', inspect(map))
   print('MapLoader success!')
 end
 

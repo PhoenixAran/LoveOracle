@@ -9,6 +9,7 @@ local RoomData = require 'engine.tiles.room_data'
 
 local tilesetCache = { }
 local mapCache = { }
+local GRID_SIZE = 16
 
 -- export type
 local MapLoader = { }
@@ -43,6 +44,7 @@ function MapLoader.loadMapData(path)
     local layerTileset = LayerTileset()
     layerTileset.firstGid = tiledTileLayerTileset.firstGid
     layerTileset.tileset = tileset
+    lume.push(mapData.layerTilesets, layerTileset)
   end
   for _, layer in ipairs(tiledMapData.layers) do
     if layer:getType() == 'tiled_tile_layer' then
@@ -62,8 +64,8 @@ function MapLoader.loadMapData(path)
                 and tiledObj.height ~= nil)
           roomData.topLeftPosX = tiledObj.x
           roomData.topLeftPosY = tiledObj.y
-          roomData.width = tiledObj.width
-          roomData.height = tiledObj.height
+          roomData.width = tiledObj.width / GRID_SIZE
+          roomData.height = tiledObj.height / GRID_SIZE
           lume.push(mapData.rooms, roomData)
         end
       elseif layer.name:lower() == 'entities' then
