@@ -54,16 +54,16 @@ end
 
 local function parseZRange(zRange)
   if zRange == nil then
-    return 0, 1
+    return { min = 0, max = 1 }
   end
   zRange = ph.trim(zRange)
   if zRange == '' then
-    return 0, 1
+    return { min = 0, max = 1 }
   end
   local args = ph.split(zRange, ',')
   assert(lume.count(args) == 2)
   lume.each(args, ph.argIsNumber)
-  return tonumber(args[1]), tonumber(args[2])
+  return { min = tonumber(args[1]), max = tonumber(args[2]) }
 end
 
 
