@@ -16,7 +16,7 @@ local TiledTileLayerTileset = Class {
 }
 
 function TiledTileLayerTileset:getType()
-  return 'tile_layer_tileset'
+  return 'tiled_tile_layer_tileset'
 end
 
 function TiledTileLayerTileset:getTile(index)

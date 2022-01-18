@@ -10,7 +10,7 @@ local TileLayer = Class {
 }
 
 -- returns tile Gid
-function TileLayer:getTile(x, y)
+function TileLayer:getTileGid(x, y)
   if y == nil then
     return self.tiles[x]
   end

@@ -39,11 +39,14 @@ function MapLoader.loadMapData(path)
   end
   local tiledMapData = TiledMapLoader.loadMapData(path)
   local mapData = MapData()
+  mapData.width = tiledMapData.width
+  mapData.height = tiledMapData.height
   for _, tiledTileLayerTileset in ipairs(tiledMapData.tilesets) do
     local tileset = MapLoader.getTileset(tiledTileLayerTileset.tileset.name)
     local layerTileset = LayerTileset()
-    layerTileset.firstGid = tiledTileLayerTileset.firstGid
     layerTileset.tileset = tileset
+    print(tiledTileLayerTileset:getType())
+    layerTileset.firstGid = tiledTileLayerTileset.firstGid
     lume.push(mapData.layerTilesets, layerTileset)
   end
   for _, layer in ipairs(tiledMapData.layers) do

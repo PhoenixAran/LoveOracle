@@ -28,7 +28,7 @@ function Map:getType()
 end
 
 -- returns tile data for tile at the given position
-function Map:getTile(x, y, layerIndex)
+function Map:getTileData(x, y, layerIndex)
   if layerIndex == nil then
     layerIndex = 1
   end
@@ -38,7 +38,7 @@ function Map:getTile(x, y, layerIndex)
     return tileLayer:getTile(x)
   end
   local index = (x - 1) * self.height + y
-  local gid = tileLayer:getTile(index)
+  local gid = tileLayer:getTileGid(index)
   if lume.count(self.layerTilesets) == 1 then
     return self.layerTilesets[1]:getTileData(gid)
   end

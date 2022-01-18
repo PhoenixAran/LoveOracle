@@ -34,7 +34,7 @@ function TileSpriteRenderer:update(dt)
     if currentFrame:getDelay() < self.currentTick then
       self.currentTick = 1
       self.currentFrameIndex = self.currentFrameIndex + 1
-      if #spriteFrames < self.currentFrameIndex then
+      if lume.count(spriteFrames) < self.currentFrameIndex then
         -- treats every animation like a cycle animation
         self.currentFrameIndex = 1
       end

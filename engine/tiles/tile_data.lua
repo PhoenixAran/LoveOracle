@@ -3,6 +3,7 @@ local lume = require 'lib.lume'
 local TileType = require 'engine.enums.tile_type'
 local ph = require 'engine.utils.parse_helpers'
 
+local Sprite = require 'engine.graphics.sprite'
 local SpriteFrame = require 'engine.graphics.sprite_frame'
 local TileSpriteRenderer = require 'engine.tiles.tile_sprite_renderer'
 
@@ -15,11 +16,11 @@ local function makeTileSprite(tilesetTile)
     for i = 1, lume.count(tilesetTile.animatedTextures) do
       local subtexture = tilesetTile.animatedTextures[i]
       local delay = math.floor(tilesetTile.durations[i] / 60)
-      lume.push(spriteFrames, SpriteFrame(subtexture, delay))
+      lume.push(spriteFrames, SpriteFrame(Sprite(subtexture), delay))
       return TileSpriteRenderer(spriteFrames, true)
     end
   end
-  return TileSpriteRenderer(tilesetTile.subtexture, false)
+  return TileSpriteRenderer(Sprite(tilesetTile.subtexture), false)
 end
 
 local function parseTileType(tileType)

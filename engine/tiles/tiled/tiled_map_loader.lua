@@ -126,7 +126,7 @@ local function loadTileset(path)
   for _, jTile in ipairs(jTileset.tiles) do
     local tilesetTile = TiledTilesetTile()
     tilesetTile.id = jTile.id
-    tilesetTile.texture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
+    tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
     if jTile.animation then
       for _, jObj in ipairs(jTile.animation) do
         lume.push(tilesetTile.animatedTextures, tileset.spriteSheet:getTexture(jObj.tileid + 1))
@@ -138,7 +138,7 @@ local function loadTileset(path)
   end
 
   -- load the basic tiles (tiles without any property definitions dont get included in the jTile array)
-  for i = 0, tileset.spriteSheet:size() do
+  for i = 0, tileset.spriteSheet:size() - 1 do
     if not tileset.tiles[i] then
       -- NB: basic tiles are never animated
       local tilesetTile = TiledTilesetTile()
@@ -175,7 +175,7 @@ function TiledMapLoader.loadMapData(path)
   for _, jTileLayerTileset in ipairs(jMap.tilesets) do
     assert(jTileLayerTileset.source, 'Embedded tilesets are not supported')
     local tileLayerTileset = TileLayerTileset()
-    tileLayerTileset.firstGid = jMap.firstgid
+    tileLayerTileset.firstGid = jTileLayerTileset.firstgid
     tileLayerTileset.tileset = loadTileset(jTileLayerTileset.source)
     lume.push(mapData.tilesets, tileLayerTileset)
   end
