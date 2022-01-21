@@ -1,17 +1,19 @@
 # Zelda Oracle in Love2D
 
 Fan made Zelda game using Love2D  
-You will need [ZeroBrane Studio](https://studio.zerobrane.com/) to debug.
-![preview](https://thumbs.gfycat.com/FarImpassionedDeer-size_restricted.gif)  
-GIF recording software reduces FPS. Game runs at 60 fps at all times.
 
 ## Libraries
-- [Slab](https://github.com/coding-jackalope/Slab)
 - [Baton](https://github.com/tesselode/baton)
+- [STALKER-X](https://github.com/a327ex/STALKER-X)
+- [Inspect](http://github.com/kikito/inspect.lua)
+- [JSON](https://github.com/rxi/json.lua)
 - [HUMP](https://github.com/vrld/hump)
 - [Lume](https://github.com/rxi/lume/)
+- [Lurker](https://github.com/rxi/lurker)
 - [Roomy](https://github.com/tesselode/roomy)
+- [Profile](https://github.com/2dengine/profile.lua)
 - [Ripple](https://github.com/tesselode/ripple)
+- [Slab](https://github.com/flamendless/Slab)
 
 ## Acknowledgements  
 - [Zelda Oracle](https://github.com/trigger-segfault/ZeldaOracle)
