@@ -29,6 +29,7 @@ end
 
 -- returns tile data for tile at the given position
 function Map:getTileData(x, y, layerIndex)
+  -- tiled is column 
   if layerIndex == nil then
     layerIndex = 1
   end
@@ -37,7 +38,7 @@ function Map:getTileData(x, y, layerIndex)
   if y == nil then
     return tileLayer:getTile(x)
   end
-  local index = (x - 1) * self.height + y
+  local index = (y - 1) * self.width + x
   local gid = tileLayer:getTileGid(index)
   if lume.count(self.layerTilesets) == 1 then
     return self.layerTilesets[1]:getTileData(gid)

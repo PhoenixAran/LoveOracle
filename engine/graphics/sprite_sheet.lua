@@ -32,7 +32,7 @@ function SpriteSheet:getTexture(x, y)
   if y == nil then -- treat x as a one dimensional index
     return self.textures[x]
   end 
-  return self.textures[(x - 1) * self.colCount + y]
+  return self.textures[(y - 1) * self.colCount + x]
 end
 
 function SpriteSheet:size()

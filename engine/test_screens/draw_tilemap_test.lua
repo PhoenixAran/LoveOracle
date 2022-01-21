@@ -9,23 +9,33 @@ local GRID_SIZE = 16
 local DrawTilemapTest = Class {
   init = function(self)
     self.map = nil
+    self.lastX, self.lastY = 0, 0
+    self.x, self.y = 0, 0
+    self.camera = Camera()
   end
 }
 
 function DrawTilemapTest:enter(prev, ...)
   self.map = Map('test_map_1.json')
-  print(inspect(self.map, {depth = 1}))
+  print(inspect(self.map))
 end
 
 function DrawTilemapTest:update(dt)
-  -- TODO control camera with mouse
+  self.x, self.y = love.mouse.getPosition()
+  if love.mouse.isDown(1) then
+    local dx = self.lastX - self.x
+    local dy = self.lastY - self.y
+    self.camera:move(dx * .8, dy * .8)
+  end
+  self.lastX, self.lastY = self.x, self.y
 end
 
 function DrawTilemapTest:draw()
   monocle:begin()
+  self.camera:attach()
   for layerIndex, tileLayer in ipairs(self.map.tileLayers) do
-    for x = 1, self.map.width do
-      for y = 1, self.map.height do
+    for y = 1, self.map.height do
+        for x = 1, self.map.width do
         local tileData = self.map:getTileData(x, y, layerIndex)
         if tileData then
           local posX, posY = vector.mul(GRID_SIZE, x, y)
@@ -34,6 +44,7 @@ function DrawTilemapTest:draw()
       end
     end
   end
+  self.camera:detach()
   monocle:finish()
 end
 

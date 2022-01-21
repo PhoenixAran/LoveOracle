@@ -14,7 +14,7 @@ function TileLayer:getTileGid(x, y)
   if y == nil then
     return self.tiles[x]
   end
-  return self.tiles[(x - 1) * self.height + y]
+  return self.tiles[(y - 1) * self.height + x]
 end
 
 return TileLayer

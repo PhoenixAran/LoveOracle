@@ -42,7 +42,7 @@ function Spriteset:setSprite(name, sprite, x, y)
   end
   assert(1 <= x and x <= self.sizeX)
   assert(1 <= y and y <= self.sizeY)
-  self.sprites[(x - 1) * self.sizeY + y] = sprite
+  self.sprites[(y - 1) * self.sizeX + x] = sprite
 end
 
 function Spriteset:getSprite(x, y)
@@ -57,7 +57,7 @@ function Spriteset:getSprite(x, y)
   end
   assert(1 <= x and x <= self.sizeX)
   assert(1 <= y and y <= self.sizeY)
-  return self.sprites[(x - 1) * self.sizeY + y]
+  return self.sprites[(y - 1) * self.sizeX + x]
 end
 
 function Spriteset:release()
