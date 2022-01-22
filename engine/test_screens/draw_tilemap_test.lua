@@ -17,7 +17,6 @@ local DrawTilemapTest = Class {
 
 function DrawTilemapTest:enter(prev, ...)
   self.map = Map('test_map_1.json')
-  print(inspect(self.map))
 end
 
 function DrawTilemapTest:update(dt)

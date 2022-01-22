@@ -18,6 +18,7 @@
 			"camera",
 			"input",
 			"monocle"
-		]
+		],
+		"Lua.workspace.preloadFileSize": 150
 	}
 }
