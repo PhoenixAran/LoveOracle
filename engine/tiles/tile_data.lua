@@ -87,6 +87,14 @@ local TileData = Class {
   end
 }
 
+function TileData:getCollisionZRange()
+  return self.zRange.min, self.zRange.max
+end
+
+function TileData:getSprite()
+  return self.sprite
+end
+
 function TileData:getType()
   return 'tile_data'
 end

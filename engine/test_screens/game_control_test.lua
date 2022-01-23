@@ -21,8 +21,9 @@ end
 function GameControlTest:enter(prev, ...)
   self.gameControl = GameControl()
   self.gameControl:setPlayer(Player('player', true, true, { x = 14, y = 14, w = 16, h = 16 }))
-  local map = Map('game_control_test')
+  local map = Map('test_map_1.json')
   self.gameControl:setMap(map)
+  -- TODO implement designated player spawn from Tiled editor
   self.gameControl:setInitialRoomControlState(lume.first(map:getRooms()), 3, 3)
 end
 

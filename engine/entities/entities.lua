@@ -20,8 +20,8 @@ local Entities = Class { __includes = SignalObject,
     self.entitiesHash = { }
     self.entitiesDraw = { }
 
-    self.mapSizeX = nil
-    self.mapSizeY = nil
+    self.mapWidth = nil
+    self.mapHeight = nil
     self.tileEntities = { }
   end
 }
@@ -72,10 +72,10 @@ end
 -- this enables querying for tiles via x and y coordinate
 -- also up the tile entities collection
 -- note that this just discards the current tile Entities
-function Entities:setUpTileEntityCollection(sizeX, sizeY, layerAmount)
-  self.mapSizeX = sizeX
-  self.mapSizeY = sizeY
-  self.tileEntities = { } 
+function Entities:setUpTileEntityCollection(mapWidth, mapHeight, layerAmount)
+  self.mapWidth = mapWidth
+  self.mapHeight = mapHeight
+  self.tileEntities = { }
   for i = 1, layerAmount do
     self.tileEntities[i] = { }
   end
@@ -83,14 +83,14 @@ end
 
 function Entities:addTileEntity(tileEntity)
   assert(tileEntity:isTile())
-  local tileIndex = (tileEntity.tileIndexX - 1) * self.mapSizeY + tileEntity.tileIndexY
+  local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX
   self.tileEntities[tileEntity.layer][tileIndex] = tileEntity
   lume.push(self.tileEntities[tileEntity.layer], tileEntity)
   self:emit('tileEntityAdded', tileEntity)
 end
 
 function Entities:removeTileEntity(layer, x, y)
-  local tileIndex = (x - 1) * self.mapSizeY + y
+  local tileIndex = (y - 1) * self.mapWidth + x
   local tileEntity = self.tileEntities[layer][tileIndex]
   if tileEntity then
     self.tileEntities[layer][tileIndex] = nil
@@ -103,8 +103,8 @@ function Entities:getByName(name)
   return self.entitiesHash[name]
 end
 
-function Entities:getTileEntity(layer, x, y)
-  local tileIndex = (x - 1) * self.mapSizeY + y
+function Entities:getTileEntity(x, y, layer)
+  local tileIndex = (y - 1) * self.mapWidth + x
   return self.tileEntities[layer][tileIndex]
 end
 
@@ -132,7 +132,7 @@ function Entities:drawTileEntities(x, y, w, h)
     for i = x, x + w, 1 do
       for j = y, y + h, 1 do
         for layerIndex , layer in ipairs(self.tileEntities) do
-          local tileEntity = self:getTileEntity(layerIndex, i + 1, j + 1)
+          local tileEntity = self:getTileEntity(i + 1, j + 1, layerIndex)
           if tileEntity then
             tileEntity:draw()
           end

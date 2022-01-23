@@ -35,10 +35,12 @@ function Map:getTileData(x, y, layerIndex)
   end
   assert(1 <= layerIndex and layerIndex <= lume.count(self.tileLayers))
   local tileLayer = self.tileLayers[layerIndex]
+  local index = x
   if y == nil then
-    return tileLayer:getTile(x)
+    layerIndex = y
+  else
+    index = (y - 1) * self.width + x
   end
-  local index = (y - 1) * self.width + x
   local gid = tileLayer:getTileGid(index)
   if lume.count(self.layerTilesets) == 1 then
     return self.layerTilesets[1]:getTileData(gid)
@@ -52,5 +54,48 @@ function Map:getTileData(x, y, layerIndex)
   end
   return lume.last(self.layerTilesets):getTileData(gid)
 end
+
+-- width in tiles
+function Map:getWidth()
+  return self.width
+end
+
+-- width in height
+function Map:getHeight()
+  return self.height
+end
+
+function Map:getTileLayerCount()
+  return lume.count(self.tileLayers)
+end
+
+function Map:getTileLayers()
+  return self.tileLayers
+end
+
+function Map:getRooms()
+  return self.rooms
+end
+
+function Map:indexInMap(x, y)
+  return 1 <= x and x <= self:getWidth() and 1 <= y and y <= self:getHeight()
+end
+
+function Map:indexInRoom(x, y)
+  return self:getRoomContainingIndex(x, y) ~= nil
+end
+
+function Map:getRoomContainingIndex(x, y)
+  if not self:indexInMap(x, y) then
+    return nil
+  end
+  for _, room in ipairs(self.rooms) do
+    if room:indexInRoom(x, y) then
+      return room
+    end
+  end
+  return nil
+end
+
 
 return Map

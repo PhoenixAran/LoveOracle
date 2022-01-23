@@ -3,8 +3,8 @@
  "infinite":false,
  "layers":[
         {
-         "compression":"zlib",
-         "data":"eJzt1c0KgkAYhtGhoF8IK8i23f9NNu4UkjIUv9Fz4Nm5+l4GdymlfeEd0nJccq\/cptC2uWr0q8yn2eOYOwWpfetfvj+n5e9R9TTHLvb43Fy7rH2Pbze3x7SG7OF9TG\/I\/yPaFmvZo6TsESt7xMoesbJHrOwRK3vEyh6xssd\/3VrZo1+zxzV171VS97SsPR65uvCeo18FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALredwMoVQ==",
+         "compression":"gzip",
+         "data":"H4sIAAAAAAAACu3VzQqCQBiG0aGgXwgryLbd\/0027hSSMhS\/0XPg2bn6XgZ3KaV94R3Sclxyr9ym0La5avSrzKfZ45g7Bal961++P6fl71H1NMcu9vjcXLusfY9vN7fHtIbs4X1Mb8j\/I9oWa9mjpOwRK3vEyh6xskes7BEre8TKHrGyx3\/dWtmjX7PHNXXvVVL3tKw9Hrm68J6jXwUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAut7VN+4RQJwAAA==",
          "encoding":"base64",
          "height":100,
          "id":1,
