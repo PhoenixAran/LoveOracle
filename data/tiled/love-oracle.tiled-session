@@ -62,6 +62,10 @@
         "tilesets/proto_dungeon.json": {
             "scaleInDock": 1,
             "scaleInEditor": 2
+        },
+        "tilesets/proto_dungeon_2.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 8
         }
     },
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
@@ -83,6 +87,7 @@
     "project": "love-oracle.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "tilesets/proto_dungeon_2.json",
         "tilesets/proto_dungeon.json",
         "maps/test_map_1.json",
         "C:/Users/phoen/Downloads/test_tileset/test.json",
@@ -95,8 +100,8 @@
     "tileset.lastUsedExportFilter": "Lua files (*.lua)",
     "tileset.lastUsedFilter": "JSON tileset files (*.json)",
     "tileset.lastUsedFormat": "json",
-    "tileset.margin": 1,
-    "tileset.spacing": 1,
+    "tileset.margin": 2,
+    "tileset.spacing": 2,
     "tileset.tileSize": {
         "height": 16,
         "width": 16

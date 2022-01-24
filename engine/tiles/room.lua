@@ -16,7 +16,6 @@ local Room = Class { __includes = SignalObject,
     self.map = map
     self.topLeftPosX = roomData.topLeftPosX
     self.topLeftPosY = roomData.topLeftPosY
-    print(self.topLeftPosX, self.topLeftPosY)
     self.width = roomData.width
     self.height = roomData.height
     
@@ -83,17 +82,18 @@ function Room:load(entities)
   local roomAvailable = self.map:indexInRoom(self.topLeftPosX - 1, self.topLeftPosY)
   local roomRect = {
     useBumpCoords = true,
-    x = self.topLeftPosX * GRID_SIZE,
-    y = (self.topLeftPosY - 1) * GRID_SIZE,
+    x = (self.topLeftPosX - 1)* GRID_SIZE,
+    y = (self.topLeftPosY) * GRID_SIZE,
     w = GRID_SIZE,
     h = self.height * GRID_SIZE
   }
+  -- make the left room edge
   local roomEdge = RoomEdge('roomEdgeLeft', roomRect, Direction4.left, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
   -- make right room edge
-  roomRect.x = (self:getBottomRightPositionX()) * GRID_SIZE
+  roomRect.x = (self:getBottomRightPositionX() + 1) * GRID_SIZE
   roomRect.y = (self.topLeftPosY) * GRID_SIZE
   roomEdge = RoomEdge('roomEdgeRight',roomRect, Direction4.right, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
@@ -109,8 +109,8 @@ function Room:load(entities)
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
   -- make bottom room edge
-  roomRect.x = (self.topLeftPosX ) * GRID_SIZE
-  roomRect.y = (self:getBottomRightPositionY()) * GRID_SIZE
+  roomRect.x = (self.topLeftPosX) * GRID_SIZE
+  roomRect.y = (self:getBottomRightPositionY() + 1) * GRID_SIZE
   roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
@@ -130,6 +130,36 @@ end
 function Room:indexInRoom(x, y)
   return self:getTopLeftPositionX() <= x and x <= self:getBottomRightPositionX()
   and self:getTopLeftPositionY() <= y and y <= self:getBottomRightPositionY()
+end
+
+function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, playerY)
+  playerX = math.floor(playerX / GRID_SIZE)
+  playerY = math.floor(playerY / GRID_SIZE)
+  local newRoom = nil
+  -- check if there is a room player can transition to
+  -- check if there is a room player can transition to
+  if direction4 == Direction4.up or direction4 == Direction4.down then
+    local y = nil
+    if direction4 == Direction4.up then
+      y = self.topLeftPosY - 1
+    elseif direction4 == Direction4.down then
+      y = self:getBottomRightPositionY() + 1
+    end
+    newRoom = self.map:getRoomContainingIndex(playerX, y)
+  elseif direction4 == Direction4.left or direction4 == Direction4.right then
+    local x = nil
+    if direction4 == Direction4.left then
+      x = self.topLeftPosX - 1
+    elseif direction4 == Direction4.right then
+      x = self:getBottomRightPositionX() + 1
+    end
+    newRoom = self.map:getRoomContainingIndex(x, playerY)
+  else
+    error()
+  end
+  if newRoom then
+    self:emit('roomTransitionRequest', newRoom, transitionStyle, direction4)
+  end
 end
 
 return Room

@@ -16,6 +16,7 @@ function AssetManager.loadImage(path)
   assert(not AssetManager.imageCache[key], 'Image with key ' .. key .. ' already exists. Are you loading it twice?')
   local image = love.graphics.newImage(path)
   image:setFilter('nearest', 'nearest')
+  image:setWrap('clampzero', 'clampzero')
   AssetManager.imageCache[key] = image
   return image
 end

@@ -45,7 +45,6 @@ function MapLoader.loadMapData(path)
     local tileset = MapLoader.getTileset(tiledTileLayerTileset.tileset.name)
     local layerTileset = LayerTileset()
     layerTileset.tileset = tileset
-    print(tiledTileLayerTileset:getType())
     layerTileset.firstGid = tiledTileLayerTileset.firstGid
     lume.push(mapData.layerTilesets, layerTileset)
   end

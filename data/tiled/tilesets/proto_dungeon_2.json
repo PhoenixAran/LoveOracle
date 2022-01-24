@@ -1,0 +1,14 @@
+{ "columns":8,
+ "image":"..\/..\/assets\/images\/tiles\/proto_dungeon_2.png",
+ "imageheight":153,
+ "imagewidth":153,
+ "margin":2,
+ "name":"proto_dungeon_2",
+ "spacing":2,
+ "tilecount":64,
+ "tiledversion":"1.7.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.6"
+}

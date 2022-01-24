@@ -47,7 +47,7 @@ function love.load(arg)
   input = require('lib.baton').new(gameConfig.controls)
   monocle = Monocle.new()
   monocle:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
-
+  love.graphics.setDefaultFilter('nearest', 'nearest')
 
   love.window.setTitle(gameConfig.window.title)
   love.graphics.setFont(AssetManager.getFont('monogram'))
