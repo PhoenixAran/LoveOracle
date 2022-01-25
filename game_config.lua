@@ -54,6 +54,7 @@ local tilesetThemeRequirements = {
   'prototype_b',
 }
 
+--local startupScreen = 'engine.test_screens.sprite_sheet_test'
 --local startupScreen = 'engine.test_screens.draw_tilemap_test'
 --local startupScreen = 'engine.test_screens.tiled_map_loader_test'
 --local startupScreen = 'engine.screens.content_viewer'

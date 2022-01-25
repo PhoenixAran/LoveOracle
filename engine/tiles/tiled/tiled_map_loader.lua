@@ -123,20 +123,21 @@ local function loadTileset(path)
   tileset.tileHeight = jTileset.tileheight
   tileset.properties = parsePropertyDict(jTileset.properties)
   -- load tiles with custom property definition
-  for _, jTile in ipairs(jTileset.tiles) do
-    local tilesetTile = TiledTilesetTile()
-    tilesetTile.id = jTile.id
-    tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
-    if jTile.animation then
-      for _, jObj in ipairs(jTile.animation) do
-        lume.push(tilesetTile.animatedTextures, tileset.spriteSheet:getTexture(jObj.tileid + 1))
-        lume.push(tilesetTile.durations, jObj.duration)
+  if jTileset.tiles then
+    for _, jTile in ipairs(jTileset.tiles) do
+      local tilesetTile = TiledTilesetTile()
+      tilesetTile.id = jTile.id
+      tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
+      if jTile.animation then
+        for _, jObj in ipairs(jTile.animation) do
+          lume.push(tilesetTile.animatedTextures, tileset.spriteSheet:getTexture(jObj.tileid + 1))
+          lume.push(tilesetTile.durations, jObj.duration)
+        end
       end
+      tilesetTile.properties = parsePropertyDict(jTile.properties)
+      tileset.tiles[tilesetTile.id] = tilesetTile
     end
-    tilesetTile.properties = parsePropertyDict(jTile.properties)
-    tileset.tiles[tilesetTile.id] = tilesetTile
   end
-
   -- load the basic tiles (tiles without any property definitions dont get included in the jTile array)
   for i = 0, tileset.spriteSheet:size() - 1 do
     if not tileset.tiles[i] then

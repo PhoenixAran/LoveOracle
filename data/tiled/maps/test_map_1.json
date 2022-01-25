@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3VzQqCQBiG0aGgXwgryLbd\/0027hSSMhS\/0XPg2bn6XgZ3KaV94R3Sclxyr9ym0La5avSrzKfZ45g7Bal961++P6fl71H1NMcu9vjcXLusfY9vN7fHtIbs4X1Mb8j\/I9oWa9mjpOwRK3vEyh6xskes7BEre8TKHrGyx3\/dWtmjX7PHNXXvVVL3tKw9Hrm68J6jXwUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAut7VN+4RQJwAAA==",
+         "data":"H4sIAAAAAAAACu3R2QkDQRBDwfYJPjD4zD9U93xsCMvIpgoUgHj7qjoE7FgM196mt524Xe+29tEfMXqceueJu5QeCz2y6JFFjyx6ZNEjix5Z9MiiRxY9suiRRY8semTRI8voce89Ju5ZeixevXfAPmsfBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+xhd\/7DO8QJwAAA==",
          "encoding":"base64",
          "height":100,
          "id":1,
@@ -22,8 +22,8 @@
          "name":"rooms",
          "objects":[
                 {
-                 "height":304,
-                 "id":1,
+                 "height":288,
+                 "id":2,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -33,13 +33,13 @@
                  "y":0
                 }, 
                 {
-                 "height":304,
-                 "id":2,
+                 "height":288,
+                 "id":3,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":512,
+                 "width":272,
                  "x":288,
                  "y":0
                 }],
@@ -50,7 +50,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":4,
+ "nextobjectid":6,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",
@@ -58,7 +58,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/tilesets\/proto_dungeon.json"
+         "source":"..\/tilesets\/proto_dungeon_2.json"
         }],
  "tilewidth":16,
  "type":"map",

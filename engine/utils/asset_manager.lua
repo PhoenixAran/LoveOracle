@@ -72,18 +72,18 @@ function AssetManager.loadSpriteSheetFile(path)
       local imageKey = args[2]
       local width = args[3]
       local height = args[4]
-      local padding = args[5]
-      local margin = args[6]
+      local margin = args[5]
+      local spacing = args[6]
       assert(ParseHelpers.argIsString(key), 'Expected string in argument 1, but received :' .. tostring(key) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
       assert(ParseHelpers.argIsString(imageKey), 'Expected string in argument 2, but received :' .. tostring(imageKey) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
       assert(ParseHelpers.argIsNumber(width), 'Expected number in argument 3, but received :' .. tostring(width) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
       assert(ParseHelpers.argIsNumber(height), 'Expected number in argument 4, but received :' .. tostring(height) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(padding == nil or ParseHelpers.argIsNumber(padding), 'Expected nil or number in argument 5, but received :' .. tostring(padding) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      assert(margin == nil or ParseHelpers.argIsNumber(margin), 'Expected nil or number in argument 6, but received :' .. tostring(margin) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(margin == nil or ParseHelpers.argIsNumber(margin), 'Expected nil or number in argument 5, but received :' .. tostring(margin) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
+      assert(spacing == nil or ParseHelpers.argIsNumber(spacing), 'Expected nil or number in argument 6, but received :' .. tostring(spacing) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
       
       key = ParseHelpers.parseStringArg(key)
       imageKey = ParseHelpers.parseStringArg(imageKey)
-      
+
       assert(not AssetManager.spriteSheetCache[key], 'Sprite Sheet with key ' .. key .. ' already exists.')
       AssetManager.spriteSheetCache[key] = SpriteSheet(AssetManager.getImage(imageKey), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]), tonumber(args[6]))
     end
