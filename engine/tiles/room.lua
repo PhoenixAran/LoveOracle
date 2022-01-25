@@ -118,13 +118,22 @@ function Room:load(entities)
 end
 
 function Room:unload(entities)
-  error('TODO')
   -- remove entities
-  lume.each(entities, function(entity)
+  lume.each(self.entities, function(entity)
     entities:removeEntity(entity)
   end)
   self.entities = { }
   -- remove tile entities
+  for layerIndex, tileLayer in ipairs(self.map:getTileLayers()) do
+    for x = self:getTopLeftPositionX(), self:getBottomRightPositionX() do
+      for y = self:getTopLeftPositionY(), self:getBottomRightPositionY() do
+        local tileData = self.map:getTileData(x, y, layerIndex)
+        if tileData then
+          entities:removeTileEntity(x, y, layerIndex)
+        end
+      end
+    end
+  end
 end
 
 function Room:indexInRoom(x, y)

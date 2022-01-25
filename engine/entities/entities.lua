@@ -58,6 +58,7 @@ function Entities:addEntity(entity, awakeEntity)
 end
 
 function Entities:removeEntity(entity)
+  print(self.entitiesHash, entity:getName())
   assert(self.entitiesHash[entity:getName()], 'Attempting to remove entity that is not in entities collection')
   lume.remove(self.entities, entity)
   lume.remove(self.entitiesHash, entity)
@@ -80,7 +81,6 @@ function Entities:setUpTileEntityCollection(mapWidth, mapHeight, layerAmount)
     self.tileEntities[i] = { }
   end
 end
-
 function Entities:addTileEntity(tileEntity)
   assert(tileEntity:isTile())
   local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX
@@ -89,7 +89,7 @@ function Entities:addTileEntity(tileEntity)
   self:emit('tileEntityAdded', tileEntity)
 end
 
-function Entities:removeTileEntity(layer, x, y)
+function Entities:removeTileEntity(x, y, layer)
   local tileIndex = (y - 1) * self.mapWidth + x
   local tileEntity = self.tileEntities[layer][tileIndex]
   if tileEntity then

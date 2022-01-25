@@ -69,7 +69,7 @@ function RoomTransitionState:onBegin()
   -- set camera target so it doesnt flicker position for one frame during transition
   self.camera.target_x = self.camera.x
   self.camera.target_y = self.camera.y
-  self.cameraSubject = { 
+  self.cameraSubject = {
     x = self.camera.x,
     y = self.camera.y
   }
