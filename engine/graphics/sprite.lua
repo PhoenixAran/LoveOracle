@@ -9,6 +9,8 @@ local Sprite = Class {
     self.offsetX = offsetX
     self.offsetY = offsetY
     local w, h = self:getDimensions()
+    self.w = w
+    self.h = h
     self.originX = w / 2
     self.originY = h / 2
   end
@@ -31,13 +33,11 @@ function Sprite:getOffsetY()
 end
 
 function Sprite:getWidth()
-  local w, _ = self.subtexture:getDimensions()
-  return w
+  return self.w
 end
 
 function Sprite:getHeight()
-  local _, h = self.subtexture:getDimensions()
-  return h
+  return self.h
 end
 
 function Sprite:getDimensions()
@@ -55,8 +55,8 @@ function Sprite:getOrigin()
 end
 
 function Sprite:draw(x, y, alpha)
-  x = (x - self:getWidth() / 2) + self:getOffsetX()
-  y = (y - self:getHeight() / 2) + self:getOffsetY()
+  x = (x - self.w / 2) + self.offsetX
+  y = (y - self.h / 2) + self.offsetY
   if alpha == nil then alpha = 1 end
   love.graphics.setColor(1, 1, 1, alpha)
   love.graphics.draw(self.subtexture.image, self.subtexture.quad, x, y)

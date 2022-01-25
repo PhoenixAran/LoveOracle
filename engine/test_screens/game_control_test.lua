@@ -12,6 +12,7 @@ local GameControlTest = Class { __includes = BaseScreen,
   init = function(self)
     BaseScreen.init(self)
     self.gameControl = nil
+    self.profiler = require 'lib.profiler'
   end
 }
 

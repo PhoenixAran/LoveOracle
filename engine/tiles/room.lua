@@ -24,8 +24,6 @@ local Room = Class { __includes = SignalObject,
     self.destroyedEntities = { }
     -- ids of tile entities that were destroyed
     self.destroyedTileEntities = { }
-
-    print(self.topLeftPosX, self.topLeftPosY, self:getBottomRightPosition())
   end
 }
 
@@ -110,7 +108,7 @@ function Room:load(entities)
   lume.push(self.entities, roomEdge)
   -- make bottom room edge
   roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
-  roomRect.y = (self:getBottomRightPositionY() + 1) * GRID_SIZE
+  roomRect.y = (self:getBottomRightPositionY()) * GRID_SIZE
   roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)  
@@ -159,10 +157,8 @@ function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, play
     if direction4 == Direction4.left then
       x = self.topLeftPosX - 1
     elseif direction4 == Direction4.right then
-      print(self:getBottomRightPositionX())
       x = self:getBottomRightPositionX() + 1
     end
-    print(x, playerY)
     newRoom = self.map:getRoomContainingIndex(x, playerY)
   else
     error()

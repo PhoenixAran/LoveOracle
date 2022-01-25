@@ -49,7 +49,7 @@ function TileSpriteRenderer:draw(x, y, forceDrawFirstFrame)
       index = 1
     end
     local currentFrame = self.sprite[index]
-    local sprite = currentFrame:getSprite()
+    local sprite = currentFrame.sprite
     sprite:draw(x, y)
   else
     self.sprite:draw(x, y)
