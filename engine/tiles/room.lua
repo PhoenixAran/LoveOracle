@@ -18,13 +18,14 @@ local Room = Class { __includes = SignalObject,
     self.topLeftPosY = roomData.topLeftPosY
     self.width = roomData.width
     self.height = roomData.height
-    
     -- entities that were spawned
     self.entities = { }
     -- ids of entities that were killed
     self.destroyedEntities = { }
     -- ids of tile entities that were destroyed
     self.destroyedTileEntities = { }
+
+    print(self.topLeftPosX, self.topLeftPosY, self:getBottomRightPosition())
   end
 }
 
@@ -48,12 +49,12 @@ function Room:getBottomRightPosition()
   return self.topLeftPosX + self.width - 1,  self.topLeftPosY + self.height - 1
 end
 
-function Room:getBottomRightPositionY()
-  return self.topLeftPosY + self.height - 1
-end
-
 function Room:getBottomRightPositionX()
   return self.topLeftPosX + self.width - 1
+end
+
+function Room:getBottomRightPositionY()
+  return self.topLeftPosY + self.height - 1
 end
 
 function Room:getWidth()
@@ -68,8 +69,8 @@ function Room:load(entities)
   -- add tiles
   --print(require('lib.inspect').inspect(self))
   for layerIndex, tileLayer in ipairs(self.map:getTileLayers()) do
-    for x = self:getTopLeftPositionX() + 1, self:getBottomRightPositionX() + 1 do
-      for y = self:getTopLeftPositionY() + 1, self:getBottomRightPositionY() + 1 do
+    for x = self:getTopLeftPositionX(), self:getBottomRightPositionX() do
+      for y = self:getTopLeftPositionY(), self:getBottomRightPositionY() do
         local tileData = self.map:getTileData(x, y, layerIndex)
         if tileData then
           entities:addTileEntity(Tile(tileData, x, y, layerIndex))
@@ -79,11 +80,10 @@ function Room:load(entities)
   end
   -- add room edges
   -- make left room edge
-  local roomAvailable = self.map:indexInRoom(self.topLeftPosX - 1, self.topLeftPosY)
   local roomRect = {
     useBumpCoords = true,
-    x = (self.topLeftPosX - 1)* GRID_SIZE,
-    y = (self.topLeftPosY) * GRID_SIZE,
+    x = (self.topLeftPosX - 2)* GRID_SIZE,
+    y = (self.topLeftPosY - 1) * GRID_SIZE,
     w = GRID_SIZE,
     h = self.height * GRID_SIZE
   }
@@ -93,15 +93,15 @@ function Room:load(entities)
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
   -- make right room edge
-  roomRect.x = (self:getBottomRightPositionX() + 1) * GRID_SIZE
-  roomRect.y = (self.topLeftPosY) * GRID_SIZE
+  roomRect.x = (self:getBottomRightPositionX()) * GRID_SIZE
+  roomRect.y = (self.topLeftPosY - 1) * GRID_SIZE
   roomEdge = RoomEdge('roomEdgeRight',roomRect, Direction4.right, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
   -- make top room edge
-  roomRect.x = (self.topLeftPosX ) * GRID_SIZE
-  roomRect.y = (self.topLeftPosY - 1) * GRID_SIZE
+  roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
+  roomRect.y = (self.topLeftPosY - 2) * GRID_SIZE
   roomRect.w = self.width * GRID_SIZE
   roomRect.h = GRID_SIZE
   roomEdge = RoomEdge('roomEdgeUp', roomRect, Direction4.up, 'push')
@@ -109,11 +109,11 @@ function Room:load(entities)
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
   -- make bottom room edge
-  roomRect.x = (self.topLeftPosX) * GRID_SIZE
+  roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
   roomRect.y = (self:getBottomRightPositionY() + 1) * GRID_SIZE
   roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
-  entities:addEntity(roomEdge)
+  entities:addEntity(roomEdge)  
   lume.push(self.entities, roomEdge)
 end
 
@@ -133,10 +133,9 @@ function Room:indexInRoom(x, y)
 end
 
 function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, playerY)
-  playerX = math.floor(playerX / GRID_SIZE)
-  playerY = math.floor(playerY / GRID_SIZE)
+  playerX = math.floor(playerX / GRID_SIZE) + 1
+  playerY = math.floor(playerY / GRID_SIZE) + 1
   local newRoom = nil
-  -- check if there is a room player can transition to
   -- check if there is a room player can transition to
   if direction4 == Direction4.up or direction4 == Direction4.down then
     local y = nil
@@ -151,13 +150,15 @@ function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, play
     if direction4 == Direction4.left then
       x = self.topLeftPosX - 1
     elseif direction4 == Direction4.right then
+      print(self:getBottomRightPositionX())
       x = self:getBottomRightPositionX() + 1
     end
+    print(x, playerY)
     newRoom = self.map:getRoomContainingIndex(x, playerY)
   else
     error()
   end
-  if newRoom then
+  if newRoom ~= nil and newRoom ~= self then
     self:emit('roomTransitionRequest', newRoom, transitionStyle, direction4)
   end
 end

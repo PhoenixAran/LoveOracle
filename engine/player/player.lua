@@ -487,7 +487,6 @@ function Player:update(dt)
 end
 
 function Player:draw()
-  local oldScale = love.graphics.getScale
   for _, item in pairs(self.items) do
     if item.drawBelow then 
       item:drawBelow()

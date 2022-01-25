@@ -52,11 +52,11 @@
             }
         },
         "maps/test_map_1.json": {
-            "scale": 11,
+            "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 93.0909090909091,
-                "y": 121.4090909090909
+                "x": 610.25,
+                "y": 133.5
             }
         },
         "tilesets/proto_dungeon.json": {

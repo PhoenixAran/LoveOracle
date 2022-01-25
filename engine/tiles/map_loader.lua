@@ -64,8 +64,9 @@ function MapLoader.loadMapData(path)
           local roomData = RoomData()
           assert(tiledObj.x ~= nil and tiledObj.y ~= nil and tiledObj.width ~= nil
                 and tiledObj.height ~= nil)
-          roomData.topLeftPosX = tiledObj.x
-          roomData.topLeftPosY = tiledObj.y
+          -- lua index
+          roomData.topLeftPosX = math.floor(tiledObj.x / GRID_SIZE) + 1
+          roomData.topLeftPosY = math.floor(tiledObj.y / GRID_SIZE) + 1
           roomData.width = tiledObj.width / GRID_SIZE
           roomData.height = tiledObj.height / GRID_SIZE
           lume.push(mapData.rooms, roomData)

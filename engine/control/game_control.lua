@@ -70,10 +70,11 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
 
   local x1, y1 = room:getTopLeftPosition()
   local x2, y2 = room:getBottomRightPosition()
+  x1 = x1 - 1
+  y1 = y1 - 1
   x1, y1 = vector.mul(GRID_SIZE, x1, y1)
   x2, y2 = vector.mul(GRID_SIZE, x2, y2)
-  -- self:getCamera():setBounds(x1, y1, x2 - x1, y2 - y1)
-
+  self:getCamera():setBounds(x1, y1, x2 - x1, y2 - y1)
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
 end

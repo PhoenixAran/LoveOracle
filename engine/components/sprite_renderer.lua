@@ -10,7 +10,7 @@ local SpriteRenderer = Class { __includes = Component,
     if offsetY == nil then offsetY = 0 end
     if followZ == nil then followZ = true end
     
-    
+  
     self.palette = nil
     self.offsetX = offsetX
     self.offsetY = offsetY
@@ -86,17 +86,12 @@ function SpriteRenderer:draw()
   if self.followZ then
     y = y - z
   end
-  local shouldSwapBack = false
-  local currentShader = love.graphics.getShader()
-  if self.palette then
-    if currentShader ~= self.palette:getShader() then
-      love.graphics.setShader(self.palette:getShader())
-      shouldSwapBack = true
-    end
-  end
-  self.sprite:draw(x, y, self.alpha)
-  if shouldSwapBack then
-    love.graphics.setShader(currentShader)
+  if self.palette == nil then
+    self.sprite:draw(x, y, self.alpha)
+  else
+    love.graphics.setShader(self.palette:getShader())
+    self.sprite:draw(x, y, self.alpha)
+    love.graphics.setShader()
   end
 end
 
