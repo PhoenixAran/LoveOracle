@@ -24,13 +24,32 @@ SOFTWARE.
 
 --]]
 
-local Common = {}
+local TablePool = {}
+TablePool.__index = TablePool
 
-Common.Event =
-{
-	None = 0,
-	Pressed = 1,
-	Released = 2
-}
+function TablePool:pull()
+	local count = self[0]
+	if count == 0 then return {} end
 
-return Common
+	local result = self[count]
+	self[count], self[0] = nil, count - 1
+
+	return result
+end
+
+function TablePool:pullClean()
+	local result = self:pull()
+	for k in pairs(result) do
+		result[k] = nil
+	end
+	return result
+end
+
+function TablePool:push(t)
+	local count = self[0] + 1
+	self[count], self[0] = t, count
+end
+
+return function()
+	return setmetatable({ [0] = 0 }, TablePool)
+end

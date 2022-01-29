@@ -59,7 +59,7 @@ function Collider:onDisabled()
   if self.registeredWithPhysics then
     Physics.remove(self)
     self.registeredWithPhysics = false
-  end 
+  end
 end
 
 return Collider

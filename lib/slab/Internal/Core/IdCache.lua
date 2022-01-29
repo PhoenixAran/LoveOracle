@@ -24,13 +24,27 @@ SOFTWARE.
 
 --]]
 
-local Common = {}
+local IdCache = {}
+IdCache.__index = IdCache
 
-Common.Event =
-{
-	None = 0,
-	Pressed = 1,
-	Released = 2
-}
+function IdCache:get(parentId, id)
+	local pId = self._ids[parentId]
+	local resultId = pId and pId[id]
 
-return Common
+	if resultId then return resultId end
+
+	resultId = ("%s.%s"):format(parentId, id)
+	if pId then
+		pId[id] = resultId
+	else
+		self._ids[parentId] = { [id] = resultId }
+	end
+
+	return resultId
+end
+
+return function()
+	return setmetatable({
+		_ids = {}
+	}, IdCache)
+end

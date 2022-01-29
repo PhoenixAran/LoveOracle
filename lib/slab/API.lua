@@ -30,6 +30,8 @@ end
 
 SLAB_FILE_PATH = debug.getinfo(1, 'S').source:match("^@(.+)/")
 SLAB_FILE_PATH = SLAB_FILE_PATH == nil and "" or SLAB_FILE_PATH
+local StatsData = {}
+local PrevStatsData = {}
 
 local Button = require(SLAB_PATH .. '.Internal.UI.Button')
 local CheckBox = require(SLAB_PATH .. '.Internal.UI.CheckBox')
@@ -232,37 +234,44 @@ local Slab = {}
 
 -- Slab version numbers.
 local Version_Major = 0
-local Version_Minor = 8
+local Version_Minor = 9
 local Version_Revision = 0
 
 local FrameStatHandle = nil
 
--- The path to save the UI state to a file. This will default to the base source directory.
-local INIStatePath = love.filesystem.getSourceBaseDirectory() .. "/Slab.ini"
+-- The path to save the UI state to a file. This will default to the save directory.
+local INIStatePath = "Slab.ini"
+local IsDefault = true
 local QuitFn = nil
 local Verbose = false
 local Initialized = false
 
 local function LoadState()
-	if INIStatePath ~= nil then
-		local Result, Error = Config.LoadFile(INIStatePath)
-		if Result ~= nil then
-			Dock.Load(Result)
-			Tree.Load(Result)
-			Window.Load(Result)
-		elseif Verbose then
-			print("Failed to load INI file '" .. INIStatePath .. "': " .. Error)
-		end
+	if INIStatePath == nil then return end
+
+	local Result, Error = Config.LoadFile(INIStatePath, IsDefault)
+	if Result ~= nil then
+		Dock.Load(Result)
+		Tree.Load(Result)
+		Window.Load(Result)
+	end
+
+	if Verbose then
+		print("Load INI file:", INIStatePath, "Error:", Error)
 	end
 end
 
 local function SaveState()
-	if INIStatePath ~= nil then
-		local Table = {}
-		Dock.Save(Table)
-		Tree.Save(Table)
-		Window.Save(Table)
-		Config.Save(INIStatePath, Table)
+	if INIStatePath == nil then return end
+
+	local Table = {}
+	Dock.Save(Table)
+	Tree.Save(Table)
+	Window.Save(Table)
+	local Result, Error = Config.Save(INIStatePath, Table, IsDefault)
+
+	if Verbose then
+		print("Save INI file:", INIStatePath, "Error:", Error)
 	end
 end
 
@@ -401,6 +410,10 @@ end
 	Return: None.
 --]]
 function Slab.Draw()
+	if Stats.IsEnabled() then
+		PrevStatsData = love.graphics.getStats(PrevStatsData)
+	end
+
 	local StatHandle = Stats.Begin('Draw', 'Slab')
 
 	Window.Validate()
@@ -437,6 +450,13 @@ function Slab.Draw()
 		Stats.End(FrameStatHandle)
 		FrameStatHandle = nil
 	end
+
+	if Stats.IsEnabled() then
+		StatsData = love.graphics.getStats(StatsData)
+		for k, v in pairs(StatsData) do
+			StatsData[k] = v - PrevStatsData[k]
+		end
+	end
 end
 
 --[[
@@ -448,6 +468,7 @@ end
 --]]
 function Slab.SetINIStatePath(Path)
 	INIStatePath = Path
+	IsDefault = false
 end
 
 --[[
@@ -566,6 +587,7 @@ end
 			the corner of the window and is updated when this button is pressed to reflect the new open state of this window.
 		NoSavedSettings: [Boolean] Flag to disable saving this window's settings to the state INI file.
 		ConstrainPosition: [Boolean] Flag to constrain the position of the window to the bounds of the viewport.
+		ShowMinimize: [Boolean] Flag to show a minimize button in the title bar of the window. Default is `true`.
 
 	Return: [Boolean] The open state of this window. Useful for simplifying API calls by storing the result in a flag instead of a table.
 		EndWindow must still be called regardless of the result for this value.
@@ -1092,6 +1114,8 @@ end
 		UseSlider: [Boolean] If enabled, displays a slider inside the input control. This will only be drawn if the NumbersOnly
 			option is set to true. The position of the slider inside the control determines the value based on the MinNumber
 			and MaxNumber option.
+		IsPassword: [Boolean] If enabled, mask the text with another character. Default is false.
+		PasswordChar: [Char/String] Sets the character or string to use along with IsPassword flag. Default is "*"
 
 	Return: [Boolean] Returns true if the user has pressed the return key while focused on this input box. If ReturnOnText
 		is set to true, then this function will return true whenever the user has input any character into the input box.
@@ -2231,6 +2255,38 @@ end
 --]]
 function Slab.FlushStats()
 	Stats.Flush()
+end
+
+--[[
+	GetStats
+
+	Get the love.graphics.getStats of the Slab.
+	Stats.SetEnabled(true) must be previously set to enable this.
+	Must be called in love.draw (recommended at the end of draw)
+
+	Return: Table.
+--]]
+
+function Slab.GetStats()
+	return StatsData
+end
+
+--[[
+	CalculateStats
+
+	Calculate the passed love.graphics.getStats table of love by subtracting
+	the stats of Slab.
+	Stats.SetEnabled(true) must be previously set to enable this.
+	Must be called in love.draw (recommended at the end of draw)
+
+	Return: Table.
+--]]
+
+function Slab.CalculateStats(LoveStats)
+	for k, v in pairs(LoveStats) do
+		LoveStats[k] = v - StatsData[k]
+	end
+	return LoveStats
 end
 
 --[[
