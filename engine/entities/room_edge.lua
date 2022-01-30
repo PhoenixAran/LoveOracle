@@ -44,7 +44,7 @@ function RoomEdge:canRoomTransition(dir8)
     return dir8 == Direction8.left or dir8 == Direction8.upLeft or dir8 == Direction8.downLeft
          or dir8 == Direction8.up or dir8 == Direction8.down
   elseif self.direction4 == Direction4.right then
-    return dir8 == Direction8.right or dir8 == Direction8.downRight or dir8 == Direction8.downRight
+    return dir8 == Direction8.right or dir8 == Direction8.upRight or dir8 == Direction8.downRight
     or dir8 == Direction8.up or dir8 == Direction8.down
   else
     error()

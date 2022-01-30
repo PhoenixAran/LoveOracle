@@ -58,7 +58,6 @@ function Entities:addEntity(entity, awakeEntity)
 end
 
 function Entities:removeEntity(entity)
-  print(self.entitiesHash, entity:getName())
   assert(self.entitiesHash[entity:getName()], 'Attempting to remove entity that is not in entities collection')
   lume.remove(self.entities, entity)
   lume.remove(self.entitiesHash, entity)

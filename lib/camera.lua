@@ -185,7 +185,6 @@ function Camera:update(dt)
 
     -- Follow -- 
     if not self.target_x and not self.target_y then return end
-
     -- Set follow style deadzones
     if self.follow_style == 'LOCKON' then
         local w, h = self.w/16, self.w/16
@@ -212,7 +211,7 @@ function Camera:update(dt)
 
     -- No deadzone means we just track the target with no lerp
     if not self.deadzone then 
-        self.x, self.y = self.target_x, self.target_y 
+        self.x, self.y = self.target_x, self.target_y
         if self.bound then
             self.x = math.min(math.max(self.x, self.bounds_min_x + self.w/2), self.bounds_max_x - self.w/2)
             self.y = math.min(math.max(self.y, self.bounds_min_y + self.h/2), self.bounds_max_y - self.h/2)
