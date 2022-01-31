@@ -127,7 +127,6 @@ function RoomTransitionState:onEnd()
   self.roomControl.allowRoomTransition = true
 end
 
-
 function RoomTransitionState:draw()
   local camera = self.roomControl.camera
   local entities = self.roomControl.entities
