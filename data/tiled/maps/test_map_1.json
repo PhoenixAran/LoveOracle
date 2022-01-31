@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3RRwpDMRBEQTmCIzje\/6iWwLqAxIe2qYJezmJ421LKLmD7QnOuW9WtJ3b5bvR+U3dd+tEf0Xoc6o4T6z1G709Fj06PLHpk0SOLHln0yKJHFj2y6JFFjyx6ZNEjix5Z9MjSetzq7hPrPUbvH0WP7ln3Cth76UcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgL\/xAVhaPLBAnAAA",
+         "data":"H4sIAAAAAAAACu3ZyQrCMABF0TiCdQDH\/\/9UU7C4cpNUeOI58DZCFuUuLOm6lLIJ2LYwOtQt6pYdO77Wen5Vd\/r2g\/6IsceubujY1KP1\/L7oMdEjix5Z9MiiRxY9suiRRY8semTRI4seWfTIokcWPbKMPc51l45NPVrPX4sek1vdfYY9yrtLyx7fftA\/sy59PXwfbDN8+L3nO6Pvg\/PreS\/wfz4\/PbLokUWPLHpk0SOLHll67l3cl8yv997FfQkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB89gQshCZKQJwAAA==",
          "encoding":"base64",
          "height":100,
          "id":1,
@@ -42,6 +42,17 @@
                  "width":272,
                  "x":288,
                  "y":0
+                }, 
+                {
+                 "height":176,
+                 "id":6,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":272,
+                 "x":288,
+                 "y":288
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -50,7 +61,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":6,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

@@ -18,7 +18,7 @@ local RoomTransitionState = Class { __includes = RoomState,
     self.direction4 = direction4
 
     self.player = nil
-    self.playerTarget = { x = 0, y = 0 }
+    self.playerSubject = { x = 0, y = 0 }
     self.camera = nil
     self.cameraTarget = { }
     self.playerTween = nil
@@ -33,7 +33,7 @@ function RoomTransitionState:getType()
 end
 
 function RoomTransitionState:onBegin()
-  local TWEEN_DURATION = 0.6
+  local TWEEN_DURATION = 1
 
   self.roomControl.allowRoomTransition = false
   self.player = self.roomControl:getPlayer()
@@ -41,7 +41,6 @@ function RoomTransitionState:onBegin()
 
   -- get target player position
   local tx, ty = 0, 0
-  -- TODO rest of positions
   if self.direction4 == Direction4.up then
     tx, ty = self.newRoom:getBottomRightPosition()
     ty = ty + 0.6
@@ -60,13 +59,12 @@ function RoomTransitionState:onBegin()
   tx, ty = vector.mul(GRID_SIZE, tx, ty)
 
   -- setup player tween
-  self.playerTarget.x, self.playerTarget.y = self.player:getPosition()
+  self.playerSubject.x, self.playerSubject.y = self.player:getPosition()
   if self.direction4 == Direction4.left or self.direction4 == Direction4.right then
-    self.playerTween = Tween.new(TWEEN_DURATION, self.playerTarget, { x = tx, y = self.playerTarget.y }, 'linear')
+    self.playerTween = Tween.new(TWEEN_DURATION, self.playerSubject, { x = tx, y = self.playerSubject.y }, 'linear')
   elseif self.direction4 == Direction4.up or self.direction4 == Direction4.down then
-    self.playerTween = Tween.new(TWEEN_DURATION, self.playerTarget, { x = self.playerTarget.x, y = ty}, 'linear')
+    self.playerTween = Tween.new(TWEEN_DURATION, self.playerSubject, { x = self.playerSubject.x, y = ty}, 'linear')
   end
-
   local x1, y1 = self.newRoom:getTopLeftPosition()
   x1 = x1 - 1
   y1 = y1 - 1
@@ -74,20 +72,40 @@ function RoomTransitionState:onBegin()
   x1, y1 = vector.mul(GRID_SIZE, x1, y1)
   x2, y2 = vector.mul(GRID_SIZE, x2, y2)
 
-  self.cameraTarget.bounds_min_x = x1
-  self.cameraTarget.bounds_min_y = y1
-  self.cameraTarget.bounds_max_x = x1 + (x2 - x1)
-  self.cameraTarget.bounds_max_y = y1 + (y2 - y1)
-
-  self.cameraTween = Tween.new(TWEEN_DURATION, self.camera, self.cameraTarget, 'linear')
+  -- setup camera tween
+  -- set camera target so it doesnt flicker position for one frame during transition
+  self.camera.target_x = self.camera.x
+  self.camera.target_y = self.camera.y
+  self.cameraSubject = {
+    x = self.camera.x,
+    y = self.camera.y
+  }
+  self.cameraTarget = {
+    x = self.camera.x,
+    y = self.camera.y
+  }
+  if self.direction4 == Direction4.up then
+    self.cameraTarget.y = y2 - self.camera.h / 2
+  elseif self.direction4 == Direction4.down then
+    self.cameraTarget.y = y1 + self.camera.h / 2
+  elseif self.direction4 == Direction4.left then
+    self.cameraTarget.x = x2 - self.camera.w / 2
+  elseif self.direction4 == Direction4.right then
+    self.cameraTarget.x = x1 + self.camera.w / 2
+  end
+  self.cameraTween = Tween.new(TWEEN_DURATION, self.cameraSubject, self.cameraTarget, 'linear')
   self.newRoom:load(self.roomControl:getEntities())
 end
 
 function RoomTransitionState:update(dt)
   self.playerTweenCompleted = self.playerTween:update(dt)
   self.cameraTweenCompleted = self.cameraTween:update(dt)
-  self.player:setPosition(self.playerTarget.x, self.playerTarget.y)
+  self.player:setPosition(self.playerSubject.x, self.playerSubject.y)
   self.camera:update(dt)
+  self.camera:follow(self.cameraSubject.x, self.cameraSubject.y)
+  -- camera needs to have a call to update with new target values
+  -- before setting bound to false
+  self.camera.bound = false
   if self.playerTweenCompleted and self.cameraTweenCompleted then
     local x1, y1 = self.newRoom:getTopLeftPosition()
     x1 = x1 - 1
