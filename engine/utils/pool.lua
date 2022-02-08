@@ -3,31 +3,32 @@ local pool = { }
 
 local classes = { }
 local pools = { }
+local counts = { }
 
 function pool.register(key, class)
     classes[key] = class
     pools[key] = { }
+    counts[key] = 0
 end
 
 function pool.obtain(key)
   local pTable = pools[key]
-  -- return cached object
-  if 0 < lume.count(pTable) then
-    local index = lume.count(pTable)
-    local returnValue = pTable[index]
-    table.remove(pTable, index)
-    return returnValue
+  if 0 < counts[key] then
+    local result = pTable[counts[key]]
+    counts[key] = counts[key] - 1
+    return result
   end
-  -- create new object
   return classes[key]()
 end
 
 function pool.free(obj)
+  local key = obj:getType()
+  local pTable = pools[key]
   if obj.reset then
     obj:reset()
   end
-  local table = pools[obj:getType()]
-  lume.push(table, obj)
+  counts[key] = counts[key] + 1
+  pTable[counts[key]] = obj
 end
 
 return pool

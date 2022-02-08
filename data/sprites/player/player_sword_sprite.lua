@@ -1,14 +1,14 @@
 return function(spriteBank)
   local builder = spriteBank.createSpriteRendererBuilder()
   local sb = spriteBank.createSpriteAnimationBuilder()
-  
+
   builder:setFollowZ(true)
   builder:setDefaultAnimation('swing')
-  
+
   -- sprite animation builder setup
   sb:setSpriteSheet('player_items')
   -- TODO animate Hitboxes!!
-  
+
   -- @animation swing
   sb:setSubstrips(true)
   -- #substrip up
@@ -37,7 +37,7 @@ return function(spriteBank)
   sb:buildSubstrip('right')
   -- BUILD sword_swing
   builder:addAnimation('swing', sb:build())
-  
+
   -- register builder
   spriteBank.registerSpriteRendererBuilder('player_sword', builder)
 end

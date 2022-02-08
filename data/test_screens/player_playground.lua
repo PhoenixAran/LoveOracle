@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local BaseScreen = require 'engine.screens.base_screen'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
+local Direction4 = require 'engine.enums.direction4'
 
 local PlayerPlayground = Class { __includes = BaseScreen,
   init = function(self)

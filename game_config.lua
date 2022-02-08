@@ -58,10 +58,10 @@ local tilesetThemeRequirements = {
 --local startupScreen = 'engine.test_screens.draw_tilemap_test'
 --local startupScreen = 'engine.test_screens.tiled_map_loader_test'
 --local startupScreen = 'engine.screens.content_viewer'
---local startupScreen = 'data.test_screens.player_playground'
+local startupScreen = 'data.test_screens.player_playground'
 --local startupScreen = 'engine.test_screens.entity_inspector_test'
 --local startupScreen = 'engine.test_screens.physics_test'
-local startupScreen = 'engine.test_screens.game_control_test'
+--local startupScreen = 'engine.test_screens.game_control_test'
 --local startupScreen = 'engine.test_screens.raycast_test'
 
 return {

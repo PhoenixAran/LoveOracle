@@ -1,23 +1,20 @@
 local lume = require 'lib.lume'
 local tables = { }
+local count = 0
 local TablePool = { }
 
 function TablePool.obtain()
-  if #tables < 1 then
+  if count == 0 then
     return { }
   end
-  return table.remove(tables, #tables)
+  local result = tables[count]
+  count = count - 1
+  return result
 end
 
 function TablePool.free(table)
-  lume.clear(table)
-  tables[#tables + 1]  = table
-end
-
-function TablePool.warmCache(amount)
-  for i = 1, amount do
-    tables[#tables + 1] = { }
-  end
+  count = count + 1
+  tables[count] = table
 end
 
 return TablePool

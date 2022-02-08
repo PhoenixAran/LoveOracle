@@ -17,8 +17,8 @@ local BumpBox = Class {
     else
       if zRange.min == nil then zRange.min = 0 end
       if zRange.max == nil then zRange.max = 1 end
-    end    
-    
+    end
+
     assert(zRange.min <= zRange.max)
     self.zRange = zRange
     if collisionTag == nil then collisionTag = 'bump_box' end
@@ -26,7 +26,7 @@ local BumpBox = Class {
     self.y = y
     self.w = w
     self.h = h
-    
+
     -- layers this bumpbox should collide with
     self.collidesWithLayer = 0
     -- layers this bumpbox exists in

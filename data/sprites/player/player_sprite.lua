@@ -2,14 +2,14 @@
 return function(spriteBank)
   local builder = spriteBank.createSpriteRendererBuilder()
   local sb = spriteBank.createSpriteAnimationBuilder()
-  
+
   builder:setDefaultAnimation('idle')
   builder:setFollowZ(true)
-  
+
   -- sprite animation builder setup
   sb:setSpriteSheet('player')
   sb:setDefaultLoopType('cycle')
-  
+
   -- @animation idle
   sb:setSubstrips(true)
   -- #substrip up
@@ -26,7 +26,7 @@ return function(spriteBank)
   sb:buildSubstrip('right')
   -- BUILD idle
   builder:addAnimation('idle', sb:build())
-  
+
   -- @animation walk
   sb:setSubstrips(true)
   -- #substrip up
@@ -47,7 +47,7 @@ return function(spriteBank)
   sb:buildSubstrip('right')
   -- BUILD walk
   builder:addAnimation('walk', sb:build())
-  
+
   -- @animation jump
   sb:setSubstrips(true)
   -- #substrip up
@@ -72,7 +72,7 @@ return function(spriteBank)
   sb:buildSubstrip('right')
   -- BUILD jump
   builder:addAnimation('jump', sb:build())
-  
+
   -- @animation sword_swing
   sb:setSubstrips(true)
   sb:setLoopType('once')
@@ -102,7 +102,7 @@ return function(spriteBank)
   sb:buildSubstrip('right')
   -- BUILD sword_swing
   builder:addAnimation('swing', sb:build())
-  
+
   -- register sprite builder
   spriteBank.registerSpriteRendererBuilder('player', builder)
 end

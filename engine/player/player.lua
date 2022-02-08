@@ -25,8 +25,8 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 
 local Player = Class { __includes = MapEntity,
   init = function(self, name, enabled, visible, position)
-    MapEntity.init(self,name, enabled, visible, { x = position.x, y = position.y,  w = 8, h = 9 })  
-    -- room edge collision 
+    MapEntity.init(self, name, enabled, visible, { x = position.x, y = position.y,  w = 8, h = 9 })
+    -- room edge collision
     --self.roomEdgeCollisionBox = BumpBox((position.x - 12 / 2), (position.y - 13 / 2), 12, 9)
     local ex, ey = self:getPosition()
     self.roomEdgeCollisionBox = Collider(self, true, {
@@ -43,21 +43,21 @@ local Player = Class { __includes = MapEntity,
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
     self.spriteFlasher:addSprite(self.sprite)
-    
+
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
     self.controlStateMachine = PlayerStateMachine(self)
     self.weaponStateMachine = PlayerStateMachine(self)
     self.conditionStateMachines = { }
     self.stateParameters = nil
-    
-    self.stateCollection = { 
+
+    self.stateCollection = {
       -- environment states
       ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self),
       -- weapon states
       ['player_swing_state'] = PlayerSwingState(self),
     }
-    
+
     -- use direction variables are useful for finding what way player
     -- is holding dpad when they are not allowed to move (like during a sword swing)
     -- if the player can move, it will match the direction they are moving in
@@ -69,13 +69,13 @@ local Player = Class { __includes = MapEntity,
 
     self.pressedActionButtons = { }
     self.buttonCallbacks = { }
-    
+
     self.respawnPositionX, self.respawnPositionY = nil, nil
     self.respawnDirection = nil
     self.moveAnimation = nil
-  
+
     -- bind controls (except dpad, thats automatically done)
-    self:addPressInteraction('x', function(player) 
+    self:addPressInteraction('x', function(player)
       self.playerMovementController:jump()
     end)
     self:addPressInteraction('a', function(player)
@@ -97,16 +97,16 @@ local Player = Class { __includes = MapEntity,
       damageInfo.sourceY = damageInfo.sourceY + ry
       player:hurt(damageInfo)
     end)
-  
-    self.items = { 
+
+    self.items = {
       a = nil,
       b = nil
     }
-    
+
     -- entity sprite effect configuration
     self.effectSprite:setOffset(0, 6)
     self.shadowVisible = true
-    
+
   end
 }
 
@@ -159,7 +159,7 @@ function Player:updateUseDirections()
   elseif input:down('right') then
     direction4 = Direction4.right
   end
-  
+
   --- now get actual x y values
   if input:down('up') then
     y = y - 1
@@ -173,7 +173,7 @@ function Player:updateUseDirections()
   if input:down('right') then
     x = x + 1
   end
-  
+
   if self.playerMovementController:isMoving() and self:getStateParameters().canStrafe then
     self.useDirectionX = self.playerMovementController.directionX
     self.useDirectionY = self.playerMovementController.directionY
@@ -303,7 +303,7 @@ function Player:getDesiredNaturalState()
   elseif self:isInAir() then
     return self:getStateFromCollection('player_jump_environment_state')
   end
-  
+
   -- TODO implement rest of environment states
   return nil
 end
@@ -351,13 +351,13 @@ function Player:updateStates(dt)
   self:integrateStateParameters()
   -- update weapon state
   self.weaponStateMachine:update(dt)
-  -- update environment state  
+  -- update environment state
   self.environmentStateMachine:update(dt)
   self:requestNaturalState()
-  
+
   -- update control state
   self.controlStateMachine:update(dt)
-  
+
   -- update condition states
   for i = lume.count(self.conditionStateMachines), 1, -1 do
     self.conditionStateMachines[i]:update(dt)
@@ -365,7 +365,7 @@ function Player:updateStates(dt)
       table.remove(self.conditionStateMachines, i)
     end
   end
-  
+
   self:integrateStateParameters()
 
   -- play the move animation
@@ -457,7 +457,7 @@ function Player:update(dt)
   self.pressedActionButtons['b'] = false
   self.pressedActionButtons['x'] = false
   self.pressedActionButtons['y'] = false
-  
+
   if input:pressed('a') then
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
   end
@@ -470,7 +470,7 @@ function Player:update(dt)
   if input:pressed('y') then
     self.pressedActionButtons['y'] = self:checkPressInteractions('y')
   end
-  
+
   self:integrateStateParameters()
   self:requestNaturalState()
   self:updateStates()
@@ -488,7 +488,7 @@ end
 
 function Player:draw()
   for _, item in pairs(self.items) do
-    if item.drawBelow then 
+    if item.drawBelow then
       item:drawBelow()
     end
   end
