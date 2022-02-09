@@ -25,7 +25,10 @@ end
 
 local function parseTileType(tileType)
   assert(tileType == nil or TileTypeInverse[tileType], 'Invalid tiletype given: ' .. tostring(tileType))
-  return tileType and tileType or TileType.Normal
+  if tileType == nil then
+    return TileType.Normal
+  end
+  return tileType
 end
 
 local function parseRect(dimensions)

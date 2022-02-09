@@ -19,6 +19,4 @@ function Enemy:getCollisionTag()
   return 'enemy'
 end
 
-
-
 return Enemy

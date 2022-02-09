@@ -38,6 +38,10 @@ local Player = Class { __includes = MapEntity,
       offsetY = -2,
     })
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
+    self:setCollidesWithLayer('tile')
+
+    -- tile collision
+    self:setCollisionTile({'wall'})
 
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)

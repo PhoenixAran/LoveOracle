@@ -12,10 +12,10 @@ local BitTag = Class {
     name = string.lower(name)
     self.id = totalTags
     self.value = bit.lshift(1, totalTags)
-    
+
     byId[self.id] = self
     byName[name] = self
-    
+
     totalTags = totalTags + 1
   end
 }

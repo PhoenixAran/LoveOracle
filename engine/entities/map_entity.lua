@@ -42,6 +42,8 @@ local MapEntity = Class { __includes = Entity,
 
     -- table to store collisions that occur when MapEntity:move() is called
     self.moveCollisions = { }
+    -- tile types this entity reports collisions with
+    self.collisionTiles = { }
 
     -- declarations
     self.persistant = false
@@ -79,6 +81,26 @@ end
 
 function MapEntity:isPersistant()
   return self.persistant
+end
+
+function MapEntity:setCollisionTile(tileType)
+  if type(tileType) == 'table' then
+    for _, val in ipairs(tileType) do
+      self.collisionTiles[val] = true
+    end
+  else
+    self.collisionTiles[tileType] = true
+  end
+end
+
+function MapEntity:unsetCollisionTile(tileType)
+  if type(tileType) == 'table' then
+    for _, val in ipairs(tileType) do
+      self.collisionTiles[val] = nil
+    end
+  else
+    self.collisionTiles[tileType] = nil
+  end
 end
 
 -- animation
@@ -162,12 +184,18 @@ function MapEntity:move(dt)
   local neighbors = Physics.boxcastBroadphase(self, bx, by, bw, bh)
   for i, neighbor in ipairs(neighbors) do
     if self:reportsCollisionsWith(neighbor) then
-      local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
-      if collided then
-        -- hit, back off our motion
-        velX, velY = vector.sub(velX, velY, mtvX, mtvY)
-        -- add other box to moveCollisions table
-        lume.push(self.moveCollisions, neighbor)
+      local shouldCarryOutCollision = true
+      if neighbor:isTile() then
+        shouldCarryOutCollision = self.collisionTiles[neighbor:getTileType()]
+      end
+      if shouldCarryOutCollision then
+        local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
+        if collided then
+          -- hit, back off our motion
+          velX, velY = vector.sub(velX, velY, mtvX, mtvY)
+          -- add other box to moveCollisions table
+          lume.push(self.moveCollisions, neighbor)
+        end
       end
     end
   end

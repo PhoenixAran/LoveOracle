@@ -133,18 +133,19 @@ end
 
 -- gameloop callbacks
 function Entity:added(gameScreen)
-  
+
 end
 
 function Entity:awake()
   Physics.add(self)
+  self.registeredWithPhysics = true
   if self.onAwake then
     self:onAwake()
   end
 end
 
 function Entity:update(dt)
-  
+
 end
 
 function Entity:draw()
@@ -153,6 +154,7 @@ end
 
 function Entity:removed(scene)
   Physics.remove(self)
+  self.registedWithPhysics = false
   self.scene = nil
   if self.onRemoved then
     self:onRemoved(scene)

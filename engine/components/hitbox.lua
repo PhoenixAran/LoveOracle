@@ -17,8 +17,6 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     self:signal('damagedOther')
     self:signal('resisted')
 
-
-    self.registeredWithPhysics = false
     self.detectOnly = hitBoxArgs.detectOnly or false
     self.canHitMultiple = hitBoxArgs.canHitMultiple or false
     -- use entity's position as source position

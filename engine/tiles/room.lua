@@ -111,7 +111,7 @@ function Room:load(entities)
   roomRect.y = (self:getBottomRightPositionY()) * GRID_SIZE
   roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, 'push')
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
-  entities:addEntity(roomEdge)  
+  entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
 end
 

@@ -88,8 +88,8 @@
     "project": "love-oracle.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "tilesets/proto_dungeon_2.json",
         "tilesets/proto_dungeon.json",
+        "tilesets/proto_dungeon_2.json",
         "maps/test_map_1.json",
         "C:/Users/phoen/Downloads/test_tileset/test.json",
         "C:/Users/phoen/Downloads/desert_tsx.json",

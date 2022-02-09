@@ -5,11 +5,9 @@ local TILE_SIZE = 16
 
 local Entities = Class { __includes = SignalObject,
   init = function(self, gameScreen, camera, player)
-    SignalObject.init(self)
-    
+    SignalObject.init(self)  
     self:signal('entityAdded')
     self:signal('entityRemoved')
-    
     self:signal('tileEntityAdded')
     self:signal('tileEntityRemoved')
 
@@ -67,7 +65,6 @@ function Entities:removeEntity(entity)
   entity:release()
 end
 
-
 -- sets how large the map is in tile size
 -- this enables querying for tiles via x and y coordinate
 -- also up the tile entities collection
@@ -85,6 +82,7 @@ function Entities:addTileEntity(tileEntity)
   local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX
   self.tileEntities[tileEntity.layer][tileIndex] = tileEntity
   lume.push(self.tileEntities[tileEntity.layer], tileEntity)
+  tileEntity:awake()
   self:emit('tileEntityAdded', tileEntity)
 end
 
@@ -93,6 +91,7 @@ function Entities:removeTileEntity(x, y, layer)
   local tileEntity = self.tileEntities[layer][tileIndex]
   if tileEntity then
     self.tileEntities[layer][tileIndex] = nil
+    tileEntity:removed()
     self:emit('tileEntityRemoved', tileEntity)
     tileEntity:release()
   end

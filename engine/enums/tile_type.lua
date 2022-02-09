@@ -1,5 +1,6 @@
 local TileTypes = {
   Normal = 'normal',
+  Wall = 'wall',
   Stairs = 'stairs',
   Ladder = 'ladder',
   Ice = 'ice',

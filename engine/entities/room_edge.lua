@@ -36,16 +36,16 @@ end
 function RoomEdge:canRoomTransition(dir8)
   if self.direction4 == Direction4.up then
     return dir8 == Direction8.up or dir8 == Direction8.upLeft or dir8 == Direction8.upRight
-          or dir8 == Direction8.left or dir8 == Direction8.right -- allow these for slight angles on analogs
+      or dir8 == Direction8.left or dir8 == Direction8.right -- allow these for slight angles on analogs
   elseif self.direction4 == Direction4.down then
     return dir8 == Direction8.down or dir8 == Direction8.downLeft or dir8 == Direction8.downRight
-          or dir8 == Direction8.left or dir8 == Direction8.right
+      or dir8 == Direction8.left or dir8 == Direction8.right
   elseif self.direction4 == Direction4.left then
     return dir8 == Direction8.left or dir8 == Direction8.upLeft or dir8 == Direction8.downLeft
-         or dir8 == Direction8.up or dir8 == Direction8.down
+      or dir8 == Direction8.up or dir8 == Direction8.down
   elseif self.direction4 == Direction4.right then
     return dir8 == Direction8.right or dir8 == Direction8.upRight or dir8 == Direction8.downRight
-    or dir8 == Direction8.up or dir8 == Direction8.down
+      or dir8 == Direction8.up or dir8 == Direction8.down
   else
     error()
   end

@@ -31,6 +31,9 @@ local BumpBox = Class {
     self.collidesWithLayer = 0
     -- layers this bumpbox exists in
     self.physicsLayer = 0
+
+    -- flag to keep track if this bump box is registered in the physics system
+    self.registeredWithPhysics = false
     -- the bounds of this box when it was registered with they physics system
     -- storing this allows us to always be able to safely remove the box even if it was moved
     -- before attempting to remove it

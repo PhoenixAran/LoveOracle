@@ -26,6 +26,8 @@ local Tile = Class { __includes = Entity,
     self.tileIndexX = tileIndexX
     self.tileIndexY = tileIndexY
     self.sprite = tileData:getSprite()
+
+    self:setPhysicsLayer('tile')
   end
 }
 
