@@ -55,17 +55,17 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 610.25,
+                "x": 238.75,
                 "y": 133.5
             }
         },
         "tilesets/proto_dungeon.json": {
             "scaleInDock": 1,
-            "scaleInEditor": 11
+            "scaleInEditor": 8
         },
         "tilesets/proto_dungeon_2.json": {
             "scaleInDock": 1,
-            "scaleInEditor": 11
+            "scaleInEditor": 8
         }
     },
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
@@ -82,8 +82,8 @@
     "mapScene.enableWorlds": true,
     "openFiles": [
         "maps/test_map_1.json",
-        "tilesets/proto_dungeon.json",
-        "tilesets/proto_dungeon_2.json"
+        "tilesets/proto_dungeon_2.json",
+        "tilesets/proto_dungeon.json"
     ],
     "project": "love-oracle.tiled-project",
     "property.type": "bool",

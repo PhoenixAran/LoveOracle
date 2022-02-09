@@ -15,6 +15,7 @@ end
 function TablePool.free(table)
   count = count + 1
   tables[count] = table
+  lume.clear(table)
 end
 
 return TablePool

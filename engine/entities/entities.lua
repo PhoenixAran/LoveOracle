@@ -5,7 +5,7 @@ local TILE_SIZE = 16
 
 local Entities = Class { __includes = SignalObject,
   init = function(self, gameScreen, camera, player)
-    SignalObject.init(self)  
+    SignalObject.init(self)
     self:signal('entityAdded')
     self:signal('entityRemoved')
     self:signal('tileEntityAdded')
@@ -77,6 +77,7 @@ function Entities:setUpTileEntityCollection(mapWidth, mapHeight, layerAmount)
     self.tileEntities[i] = { }
   end
 end
+
 function Entities:addTileEntity(tileEntity)
   assert(tileEntity:isTile())
   local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX

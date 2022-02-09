@@ -154,7 +154,7 @@ end
 
 function Entity:removed(scene)
   Physics.remove(self)
-  self.registedWithPhysics = false
+  self.registeredWithPhysics = false
   self.scene = nil
   if self.onRemoved then
     self:onRemoved(scene)

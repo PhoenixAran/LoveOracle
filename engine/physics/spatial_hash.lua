@@ -100,7 +100,7 @@ function SpatialHash:remove(box)
   local px1, py1 = self:cellCoords(bounds.x, bounds.y)
   local px2, py2 = self:cellCoords(bounds.x + bounds.w, bounds.y + bounds.h)  -- ( right, bottom )
   for x = px1, px2 do
-    for y = py1, py2 do 
+    for y = py1, py2 do
       -- this cell should always exist since this collider should be in all queryed cells
       local c = self:cellAtPosition(x, y)
       lume.remove(c, box)
