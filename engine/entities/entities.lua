@@ -82,7 +82,6 @@ function Entities:addTileEntity(tileEntity)
   assert(tileEntity:isTile())
   local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX
   self.tileEntities[tileEntity.layer][tileIndex] = tileEntity
-  lume.push(self.tileEntities[tileEntity.layer], tileEntity)
   tileEntity:awake()
   self:emit('tileEntityAdded', tileEntity)
 end
@@ -120,14 +119,18 @@ end
 -- if given a cull rect, will only draw tiles within the cull rectangle
 function Entities:drawTileEntities(x, y, w, h)
   if x == nil then
-    for _, layer in ipairs(self.tileEntities) do
-      lume.each(layer, 'draw')
+    for i, layer in ipairs(self.tileEntities) do
+      for j, tile in pairs(self.tileEntities[i]) do
+        if self.tileEntities[i][j] then
+          self.tileEntities[i][j]:draw()
+        end
+      end
     end
   else
     x = math.floor(x / TILE_SIZE)
     y = math.floor(y / TILE_SIZE)
-    w = math.ceil(w / TILE_SIZE) + 1
-    h = math.ceil(h / TILE_SIZE) + 1
+    w = math.ceil(w / TILE_SIZE)
+    h = math.ceil(h / TILE_SIZE)
     for i = x, x + w, 1 do
       for j = y, y + h, 1 do
         for layerIndex , layer in ipairs(self.tileEntities) do

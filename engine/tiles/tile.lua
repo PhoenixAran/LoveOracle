@@ -59,6 +59,14 @@ function Tile:getSprite()
   return self.sprite
 end
 
+-- local cnt = 0
+-- function Tile:onRemoved()
+--   if self.tileData.tilesetTileId == 6 then
+--     cnt = cnt + 1
+--     print(cnt)
+--   end
+-- end
+
 function Tile:draw()
   local x, y = self:getPosition()
   self.sprite:draw(x, y)

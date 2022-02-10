@@ -28,7 +28,7 @@ function Collider:onTransformChanged()
   local ex, ey = self.entity:getPosition()
   self.x = ex + self.offsetX - self.w / 2
   self.y = ey + self.offsetY - self.h / 2
-  if self.detectOnly then
+  if not self.detectOnly then
     Physics.update(self)
   end
 end

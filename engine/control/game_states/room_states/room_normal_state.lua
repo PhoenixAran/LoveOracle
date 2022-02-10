@@ -31,6 +31,7 @@ function RoomNormalState:draw()
   entities:drawTileEntities(x, y, w, h)
   entities:drawEntities()
   camera:detach()
+  camera:draw()
 end
 
 

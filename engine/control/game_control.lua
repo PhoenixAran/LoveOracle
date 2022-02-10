@@ -18,10 +18,9 @@ local GameControl = Class { __includes = SignalObject,
     self.inventory = Inventory()
     self.player = nil
     local w = GameConfig.window.monocleConfig.windowWidth
-    local h = GameConfig.window.monocleConfig.windowHeight
-    self.camera = Camera(w/2,h/2 , w, h)
+    local h = GameConfig.window.monocleConfig.windowHeight - 16
+    self.camera = Camera(w/2,h/2, w, h)
     self.camera:setFollowStyle('NO_DEADZONE')
-
     self.map = nil
     self.roomControl = nil
     self.gameStateStack = GameStateStack(self)
