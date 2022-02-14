@@ -55,7 +55,7 @@ function RoomEdge:requestRoomTransition(playerX, playerY)
   self:emit('roomTransitionRequest', self.transitionStyle, self.direction4, playerX, playerY)
 end
 
-function RoomEdge:draw()
+function RoomEdge:debugDraw()
   local x, y = self:getBumpPosition()
   love.graphics.setColor(0, 0, 160 / 255, 100 / 255)
   love.graphics.rectangle('fill', x, y, self.w, self.h)

@@ -6,7 +6,7 @@ local TileSpriteRenderer = Class {
   init = function(self, sprite, animated)
     self.sprite = sprite
     self.animated = animated
-    -- these two are used if sprite is a sprite animation instance
+    -- these two are used if sprite is a list of sprite frames
     self.currentTick = 1
     self.currentFrameIndex = 1
   end
@@ -29,8 +29,9 @@ end
 -- This should only be called if this sprite is animated
 function TileSpriteRenderer:update(dt)
   if self.animated then
-    local currentFrame = self.sprite[self.currentFrameIndex] 
-    local spriteFrames = self.sprite:getSpriteFrames()
+    local currentFrame = self.sprite[self.currentFrameIndex]
+    local spriteFrames = self.sprite
+    self.currentTick = self.currentTick + 1
     if currentFrame:getDelay() < self.currentTick then
       self.currentTick = 1
       self.currentFrameIndex = self.currentFrameIndex + 1
@@ -42,12 +43,9 @@ function TileSpriteRenderer:update(dt)
   end
 end
 
-function TileSpriteRenderer:draw(x, y, forceDrawFirstFrame)
+function TileSpriteRenderer:draw(x, y)
   if self.animated then
     local index = self.currentFrameIndex
-    if forceDrawFirstFrame then
-      index = 1
-    end
     local currentFrame = self.sprite[index]
     local sprite = currentFrame.sprite
     sprite:draw(x, y)

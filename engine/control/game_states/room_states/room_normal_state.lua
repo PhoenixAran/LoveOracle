@@ -15,9 +15,11 @@ function RoomNormalState:update(dt)
   local camera = self.roomControl.camera
   local entities = self.roomControl.entities
   local player = self.roomControl.player
+  local map = self.roomControl.map
   entities:update(dt)
   camera:follow(player:getPosition())
   camera:update(dt)
+  map:updateAnimatedTiles(dt)
 end
 
 function RoomNormalState:draw()

@@ -97,5 +97,12 @@ function Map:getRoomContainingIndex(x, y)
   return nil
 end
 
+function Map:updateAnimatedTiles(dt)
+  for _, layerTileset in ipairs(self.layerTilesets) do
+    for _, animatedTile in ipairs(layerTileset.tileset.animatedTiles) do
+      animatedTile.sprite:update(dt)
+    end
+  end
+end
 
 return Map
