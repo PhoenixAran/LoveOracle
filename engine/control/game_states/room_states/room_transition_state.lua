@@ -28,6 +28,20 @@ local RoomTransitionState = Class { __includes = RoomState,
   end
 }
 
+local function resetUnusedTileDataAnimations(oldRoom, newRoom)
+  -- array of tile data with tiles that were animated in the last room,
+  -- but are not used in the new room
+  local tileDatas = { }
+  for k, tileData in pairs(oldRoom.animatedTiles) do
+    if not newRoom.animatedTiles[k] then
+      lume.push(tileDatas, tileData)
+    end
+  end
+  lume.each(tileDatas, function(tileData)
+    tileData.sprite:resetSpriteAnimation()
+  end)
+end
+
 function RoomTransitionState:getType()
   return 'room_transition_state'
 end
@@ -124,6 +138,7 @@ function RoomTransitionState:update(dt)
 end
 
 function RoomTransitionState:onEnd()
+  resetUnusedTileDataAnimations(self.currentRoom, self.newRoom)
   self.roomControl.allowRoomTransition = true
 end
 

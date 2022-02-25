@@ -70,6 +70,7 @@ local function parseZRange(zRange)
   return { min = tonumber(args[1]), max = tonumber(args[2]) }
 end
 
+local InstanceId = 0
 
 local TileData = Class {
   init = function(self, tilesetTile)
@@ -80,6 +81,9 @@ local TileData = Class {
     self.x, self.y, self.w, self.h = parseCollisionBox(properties.collisionBox)
     self.hitX, self.hitY, self.hitW, self.hitH = parseHitBox(properties.hitBox)
     self.zRange = parseZRange(properties.zRange)
+    -- used in Room.animatedTiles, Tileset.animatedTiles
+    InstanceId = InstanceId + 1
+    self.instanceId = InstanceId
     --[[ TODO off the top of my head:
       1. Hit Damage
       2. Break Animation

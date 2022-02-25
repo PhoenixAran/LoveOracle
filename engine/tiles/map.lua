@@ -20,6 +20,12 @@ local Map = Class { __includes = SignalObject,
     for _, roomData in ipairs(mapData.rooms) do
       lume.push(self.rooms, Room(self, roomData))
     end
+    self.animatedTiles = { }
+    for _, layerTileset in ipairs(self.layerTilesets) do
+      for _, tileData in ipairs(layerTileset.tileset.animatedTiles) do
+        print(tileData:getType())
+      end
+    end
   end
 }
 
@@ -28,6 +34,7 @@ function Map:getType()
 end
 
 -- returns tile data for tile at the given position
+-- also returns Gid as second parameter. Only used for the animatedTiles dictionary in room.lua
 function Map:getTileData(x, y, layerIndex)
   -- tiled is column 
   if layerIndex == nil then
@@ -43,16 +50,16 @@ function Map:getTileData(x, y, layerIndex)
   end
   local gid = tileLayer:getTileGid(index)
   if lume.count(self.layerTilesets) == 1 then
-    return self.layerTilesets[1]:getTileData(gid)
+    return self.layerTilesets[1]:getTileData(gid), gid
   end
   for i = 2, lume.count(self.layerTilesets) do
     local setA = self.layerTilesets[i - 1]
     local setB = self.layerTilesets[i]
     if setA.firstGid <= gid and gid < setB.firstGid then
-      return setA:getTileData(gid)
+      return setA:getTileData(gid), gid
     end
   end
-  return lume.last(self.layerTilesets):getTileData(gid)
+  return lume.last(self.layerTilesets):getTileData(gid), gid
 end
 
 -- width in tiles
@@ -95,14 +102,6 @@ function Map:getRoomContainingIndex(x, y)
     end
   end
   return nil
-end
-
-function Map:updateAnimatedTiles(dt)
-  for _, layerTileset in ipairs(self.layerTilesets) do
-    for _, animatedTile in ipairs(layerTileset.tileset.animatedTiles) do
-      animatedTile.sprite:update(dt)
-    end
-  end
 end
 
 return Map

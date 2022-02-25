@@ -24,6 +24,11 @@ local Room = Class { __includes = SignalObject,
     self.destroyedEntities = { }
     -- ids of tile entities that were destroyed
     self.destroyedTileEntities = { }
+
+    -- animated tiles keyd with the TileData instance Id for the given map
+    -- note that this collection is created then the load function is called
+    self.animatedTiles = { }
+    self.animatedTilesCollectionCreated = false
   end
 }
 
@@ -65,17 +70,21 @@ end
 
 function Room:load(entities)
   -- add tiles
-  --print(require('lib.inspect').inspect(self))
   for layerIndex, tileLayer in ipairs(self.map:getTileLayers()) do
     for x = self:getTopLeftPositionX(), self:getBottomRightPositionX() do
       for y = self:getTopLeftPositionY(), self:getBottomRightPositionY() do
-        local tileData = self.map:getTileData(x, y, layerIndex)
+        local tileData, gid = self.map:getTileData(x, y, layerIndex)
         if tileData then
-          entities:addTileEntity(Tile(tileData, x, y, layerIndex))
+          local tile = Tile(tileData, x, y, layerIndex)
+          entities:addTileEntity(tile)
+          if (not self.animatedTilesCollectionCreated) and tile:isAnimated() then
+            self.animatedTiles[tileData.instanceId] = tileData
+          end
         end
       end
     end
   end
+  self.animatedTilesCollectionCreated = true
   -- add room edges
   -- make left room edge
   local roomRect = {
@@ -165,6 +174,12 @@ function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, play
   end
   if newRoom ~= nil and newRoom ~= self then
     self:emit('roomTransitionRequest', newRoom, transitionStyle, direction4)
+  end
+end
+
+function Room:updateAnimatedTiles(dt)
+  for _, tile in pairs(self.animatedTiles) do
+    tile.sprite:update(dt)
   end
 end
 

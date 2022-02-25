@@ -10,16 +10,15 @@ local TiledTileLayerTile = Class {
   end
 }
 
+function TiledTileLayerTile:getType()
+  return 'tiled_tile_layer_tile'
+end
+
 function TiledTileLayerTile:getTile()
-  --No tile exists for Gid of 0 (Luckily for lua this works out just fine)
   if self.gid < 1 then
     return nil
   end
   return self.tileLayerTileset:getTile(self.gid)
-end
-
-function TiledTileLayerTile:getType()
-  return 'tiled_tile_layer_tile'
 end
 
 return TiledTileLayerTile

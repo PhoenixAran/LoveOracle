@@ -6,7 +6,8 @@ local Tileset = Class {
     self.name = nil
     -- indexed by Gid
     self.tiles = { }
-    -- array of animated tiles
+    -- array of animated tiles. This is a dictionary of int, TileData
+    -- the int is the TileData's InstanceId
     self.animatedTiles = { }
   end
 }

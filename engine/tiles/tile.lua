@@ -55,6 +55,10 @@ end
 --   return false
 -- end
 
+function Tile:isAnimated()
+  return self.sprite:isAnimated()
+end
+
 function Tile:getSprite()
   return self.sprite
 end
