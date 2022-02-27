@@ -5,30 +5,39 @@ local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 
 local Movement = Class { __includes = Component,
-  init = function(self, entity, enabled, values)
-    if enabled == nil then enabled = true end
-    Component.init(self, entity, enabled)
+  init = function(self, entity, args)
+    Component.init(self, entity, args)
 
     self:signal('landed')
     self:signal('bounced')
 
+    if args.speed == nil then args.speed = 60 end
+    if args.minSpeed == nil then args.minSpeed = 0 end  --todo dont know if 0 is a good value
+    if args.acceleration == nil then args.acceleration = 1 end
+    if args.deceleration == nil then args.deceleration = 1 end
+    if args.slippery == nil then args.slippery = false end
+    if args.gravity == nil then args.gravity = 9.8 end
+    if args.maxFallSpeed == nil then args.maxFallSpeed = 4 end
+
+    -- declarations
+    self.speed = args.speed
+    self.minSpeed = args.minSpeed
+    self.acceleration = args.acceleration
+    self.deceleration = args.deceleration
+
+    self.slippery = args.slippery -- if true, this component will actually use acceleration and deceleration
+    self.gravity = args.gravity
+    self.maxFallSpeed = args.maxFallSpeed
+
+
+    -- updated values
+
     -- think of this as the directional gamepad for this entity
     self.vectorX, self.vectorY = 0, 0
-
-    self.speed = 60
-    self.minSpeed = 0
-    self.acceleration = 1
-    self.deceleration = 1
-
-    self.slippery = false -- if true, this component will actually use acceleration and deceleration
-    self.gravity = 9.8
-    self.maxFallSpeed = 4
     self.zVelocity = 0
-
     -- NB: Below values isnt how much the entity may actually move
     -- This is just the motion the movement component wants to carry out if nothing is in the way
     -- See MapEntity:move() function
-
     -- useful for calculating acceleration and knowing when to stop accelerating movement
     self.motionX, self.motionY = 0, 0
     -- useful for recalculating linear velocity

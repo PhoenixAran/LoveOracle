@@ -5,17 +5,17 @@ local vector = require 'lib.vector'
 local Combat = Class { __includes = Component,
   init = function(self, entity)
     Component.init(self, entity)
-    
+
     self.currentIntangibilityTime = 0
     self.currentHitstunTime = 0
     self.currentKnockbackTime = 0
-    
+
     self.hitstunTime = 0
     self.knockbackTime = 0
     self.intangibilityTime = 0
     self.knockbackSpeed = 0
     self.knockbackDirectionX = 0
-    self.knockbackDirectionY = 0 
+    self.knockbackDirectionY = 0
   end
 }
 
@@ -24,7 +24,7 @@ function Combat:getType()
 end
 
 function Combat:update(dt)
-  if self:isIntangible() then 
+  if self:isIntangible() then
     self.currentIntangibilityTime = self.currentIntangibilityTime + 1
   else
     self.currentIntangibilityTime = 0
@@ -51,7 +51,7 @@ function Combat:resetCombatVariables()
   self.hitstunTime = 0
   self.knockbackTime = 0
   self.intangibilityTime = 0
-  
+
   self.currentIntangibilityTime = 0
   self.currentHitstunTime = 0
   self.currentKnockbackTime = 0

@@ -6,8 +6,8 @@ local Physics = require 'engine.physics'
 local BitTag = require 'engine.utils.bit_tag'
 
 local Raycast = Class { __includes = { Component },
-  init = function(self, entity, enabled)
-    Component.init(self, entity, enabled)
+  init = function(self, entity, args)
+    Component.init(self, entity, args)
     self.offsetX = 0
     self.offsetY = 0 
     self.castToX = 0

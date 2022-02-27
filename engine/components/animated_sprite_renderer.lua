@@ -10,17 +10,23 @@ local States = {
 }
 
 local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
-  init = function(self, entity, animations, defaultAnimation, offsetX, offsetY, followZ, enabled, visible)
+  --init = function(self, entity, animations, defaultAnimation, offsetX, offsetY, followZ, enabled, visible)
+  init = function(self, entity, args)
+    if args.offsetX == nil then args.offsetX = 0 end
+    if args.offsetY == nil then args.offsetY = 0 end
+    if args.followZ == nil then args.followZ = true end
+    assert(args.animations)
+    assert(args.defaultAnimation)
     self.state = States.None
-    self.animations = animations
+    self.animations = args.animations
     self.substripKey = nil
-    self.currentAnimationKey = defaultAnimation
-    self.currentAnimation = animations[defaultAnimation]
+    self.currentAnimationKey = args.defaultAnimation
+    self.currentAnimation = self.animations[self.defaultAnimation]
     self.currentFrameIndex = 1
     self.currentTick = 1
     self.loopType = 'once'
     local spriteFrames = self.currentAnimation:getSpriteFrames()
-    SpriteRenderer.init(self, entity, spriteFrames[1]:getSprite(), offsetX, offsetY, followZ, enabled, visible)
+    SpriteRenderer.init(self, entity, spriteFrames[1]:getSprite(), args)
   end
 }
 

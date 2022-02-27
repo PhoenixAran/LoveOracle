@@ -3,13 +3,13 @@ local Vector = require 'lib.vector'
 local SignalObject = require 'engine.signal_object'
 
 local Component = Class { __includes = SignalObject,
-  init = function(self, entity, enabled, visible)
+  init = function(self, entity, args)
     SignalObject.init(self)
-    if enabled == nil then enabled = true end
-    if visible == nil then visible = true end
+    if args.enabled == nil then args.enabled = true end
+    if args.visible == nil then args.visible = true end
     self.entity = entity
-    self.enabled = enabled
-    self.visible = visible
+    self.enabled = args.enabled
+    self.visible = args.visible
   end
 }
 
@@ -28,7 +28,7 @@ function Component:setEnabled(enabled)
   self.enabled = enabled
   if enabled then
     self:onEnabled()
-  else 
+  else
     self:onDisabled()
   end
 end
@@ -51,7 +51,7 @@ function Component:onDisabled()
 end
 
 function Component:entityRemoved()
-  
+
 end
 
 return Component

@@ -3,19 +3,16 @@ local Component = require 'engine.entities.component'
 local lume = require 'lib.lume'
 
 local SpriteFlasher = Class { __includes = Component,
-  init = function(self, enabled, sprites, alpha)
-    if enabled == nil then
-      enabled = true
+  init = function(self, entity, args)
+    if args.alpha == nil then
+      args.alpha = 0.5
     end
-    if alpha == nil then
-      alpha = 0.5
-    end
-    Component.init(self, enabled)
+    Component.init(self, entity, args)
     self.tick = 0
     self.duration = 0
     self.isActive = false
     self.alpha = 0.5
-    self.sprites = sprites or { }
+    self.sprites = args.sprites or { }
   end
 }
 

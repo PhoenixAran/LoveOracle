@@ -8,24 +8,33 @@ local DamageInfo = require 'engine.entities.damage_info'
 local TablePool = require 'engine.utils.table_pool'
 
 local Hitbox = Class { __includes = { BumpBox, Component },
-  init = function(self, entity, enabled, bumpBoxArgs, hitBoxArgs)
-    BumpBox.init(self, bumpBoxArgs.x, bumpBoxArgs.y, bumpBoxArgs.w,
-                 bumpBoxArgs.h, bumpBoxArgs.zRange, bumpBoxArgs.collisionTag)
-    Component.init(self, entity, enabled)
+  --init = function(self, entity, enabled, bumpBoxArgs, hitBoxArgs)
+  init = function(self, entity, args)
+    BumpBox.init(self, args.x, args.y, args.w,
+        args.h, args.zRange, args.collisionTag)
+    Component.init(self, entity, args)
 
     self:signal('hitboxEntered')
     self:signal('damagedOther')
     self:signal('resisted')
 
-    self.detectOnly = hitBoxArgs.detectOnly or false
-    self.canHitMultiple = hitBoxArgs.canHitMultiple or false
-    -- use entity's position as source position
-    self.useEntityAsSource = hitBoxArgs.useEntityAsSource or true
+    if args.detectOnly == nil then args.detectOnly = false end
+    if args.canHitMultiple == nil then args.canHitMultiple = false end
+    if args.useEntityAsSource == nil then args.useEntityAsSource = true end
+    if args.damage == nil then args.damage = 0 end
+    if args.knockbackTime == nil then args.knockbackTime = 0 end
+    if args.knockbackSpeed == nil then args.knockbackSpeed = 0 end
+    if args.hitstunTime == nil then args.hitstunTime = 0 end
 
-    self.damage = hitBoxArgs.damage or 5
-    self.knockbackTime = hitBoxArgs.knockbackTime or 30
-    self.knockbackSpeed = hitBoxArgs.knockbackSpeed or 150
-    self.hitstunTime = hitBoxArgs.hitstunTime or 30
+    self.detectOnly = args.detectOnly
+    self.canHitMultiple = args.canHitMultiple
+    -- use entity's position as source position
+    self.useEntityAsSource = args.useEntityAsSource
+
+    self.damage = args.damage
+    self.knockbackTime = args.knockbackTime
+    self.knockbackSpeed = args.knockbackSpeed
+    self.hitstunTime = args.hitstunTime
 
     self.damageInfo = DamageInfo()
     self.damageInfo.damage = self.damage

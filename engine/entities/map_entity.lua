@@ -16,8 +16,8 @@ local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 
 local MapEntity = Class { __includes = Entity,
-  init = function(self, name, enabled, visible, rect, zRange)
-    Entity.init(self, name, enabled, visible, rect, zRange)
+  init = function(self, args)
+    Entity.init(self, args)
 
     -- signals
     self:signal('entityDestroyed')

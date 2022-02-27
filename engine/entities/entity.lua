@@ -9,38 +9,39 @@ local InspectorProperties = require 'engine.entities.inspector_properties'
 local Physics = require 'engine.physics'
 
 local Entity = Class { __includes = { SignalObject, BumpBox },
-  init = function(self, name, enabled, visible, rect, zRange)
+  init = function(self, args)
     SignalObject.init(self)
-    if enabled == nil then enabled = true end
-    if visible == nil then visible = true end
-    if rect == nil then
-      rect = { 
-        x = 0, 
-        y = 0, 
-        w = 1, 
+    if args.enabled == nil then args.enabled = true end
+    if args.visible == nil then args.visible = true end
+    if args.rect == nil then
+      args.rect = {
+        x = 0,
+        y = 0,
+        w = 1,
         h = 1
       }
     else
-      if rect.x == nil then rect.x = 0 end
-      if rect.y == nil then rect.y = 0 end
-      if rect.w == nil then rect.w = 1 end
-      if rect.h == nil then rect.h = 1 end
+      if args.rect.x == nil then args.rect.x = 0 end
+      if args.rect.y == nil then args.rect.y = 0 end
+      if args.rect.w == nil then args.rect.w = 1 end
+      if args.rect.h == nil then args.rect.h = 1 end
     end
-    if rect.useBumpCoords then
-      BumpBox.init(self, rect.x, rect.y, rect.w, rect.h, zRange)
+    if args.rect.useBumpCoords then
+      BumpBox.init(self, args)
     else
-      BumpBox.init(self, rect.x - rect.w / 2, rect.y - rect.h / 2, rect.w, rect.h, zRange)
+      args.x = args.rect.w / 2
+      args.y = args.rect.h / 2
+      BumpBox.init(args)
     end
-    self.enabled = enabled
-    self.visible = visible
-    
+    self.enabled = args.enabled
+    self.visible = args.visible
+
     -- KEEP THESE TWO TOGETHER OR ELSE ENTITY POSITION GETS MESSED UP
     self.transform = Transform:new(self)
     self:setPositionWithBumpCoords(self.x, self.y)
-  
+
     self.transform:setRotation(0)
-    
-    self.name = name
+    self.name = args.name
   end
 }
 

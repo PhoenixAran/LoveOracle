@@ -4,28 +4,31 @@ local rect = require 'engine.utils.rectangle'
 local BitTag = require 'engine.utils.bit_tag'
 
 local BumpBox = Class {
-  init = function(self, x, y, w, h, zRange, collisionTag)
-    if x == nil then x = 0 end
-    if y == nil then y = 0 end
-    if w == nil then w = 1 end
-    if h == nil then h = 1 end
-    if zRange == nil then
-      zRange = {
+  init = function(self, args)
+    if args == nil then
+      args = { }
+    end
+    if args.x == nil then args.x = 0 end
+    if args.y == nil then args.y = 0 end
+    if args.w == nil then args.w = 1 end
+    if args.h == nil then args.h = 1 end
+    if args.zRange == nil then
+      args.zRange = {
         min = 0,
         max = 1
       }
     else
-      if zRange.min == nil then zRange.min = 0 end
-      if zRange.max == nil then zRange.max = 1 end
+      if args.zRange.min == nil then args.zRange.min = 0 end
+      if args.zRange.max == nil then args.zRange.max = 1 end
     end
 
-    assert(zRange.min <= zRange.max)
-    self.zRange = zRange
-    if collisionTag == nil then collisionTag = 'bump_box' end
-    self.x = x
-    self.y = y
-    self.w = w
-    self.h = h
+    assert(args.zRange.min <= args.zRange.max)
+    self.zRange = args.zRange
+    if args.collisionTag == nil then args.collisionTag = 'bump_box' end
+    self.x = args.x
+    self.y = args.y
+    self.w = args.w
+    self.h = args.h
 
     -- layers this bumpbox should collide with
     self.collidesWithLayer = 0

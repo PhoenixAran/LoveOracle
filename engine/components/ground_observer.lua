@@ -5,8 +5,8 @@ local Component = require 'engine.entities.component'
 -- maybe not be a bumpbox and implement some linecast / pointcast
 -- in the global physics object
 local GroundObserver = Class { __includes = {Component},
-  init = function(self, entity, enabled)
-    Component.init(self, entity, enabled)
+  init = function(self, entity, args)
+    Component.init(self, args.entity, args.enabled)
     self.inLava = false
     self.inGrass = false
     self.onStairs = false

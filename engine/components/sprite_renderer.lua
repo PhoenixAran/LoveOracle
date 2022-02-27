@@ -3,21 +3,20 @@ local Component = require 'engine.entities.component'
 local PaletteBank = require 'engine.utils.palette_bank'
 
 local SpriteRenderer = Class { __includes = Component,
-  init = function(self, entity, sprite, offsetX, offsetY, followZ, enabled, visible)
-    Component.init(self, entity, enabled, visible)
-  
-    if offsetX == nil then offsetX = 0 end
-    if offsetY == nil then offsetY = 0 end
-    if followZ == nil then followZ = true end
+  init = function(self, entity, args)
+    Component.init(self, entity, args)
+
+    if args.offsetX == nil then args.offsetX = 0 end
+    if args.offsetY == nil then args.offsetY = 0 end
+    if args.alpha == nil then args.alpha = 1 end
+    if args.followZ == nil then args.followZ = true end
     
-  
-    self.palette = nil
-    self.offsetX = offsetX
-    self.offsetY = offsetY
-    self.sprite = sprite
-    self.followZ = followZ
-    self.alpha = 1
-    self.color = { }
+    self.palette = args.palette
+    self.offsetX = args.offsetX
+    self.offsetY = args.offsetY
+    self.sprite = args.sprite
+    self.followZ = args.followZ
+    self.alpha = args.alpha
     self:setSprite(self.sprite)
   end
 }

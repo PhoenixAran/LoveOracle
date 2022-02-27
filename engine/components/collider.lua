@@ -10,13 +10,12 @@ local Physics = require 'engine.physics'
 -- Main use case (and probably only use case) for this component is for entities to have different
 -- sized collision box for screen edge borders
 local Collider = Class { __includes = { BumpBox, Component },
-  init = function(self, entity, enabled, colliderArgs)
-    BumpBox.init(self, colliderArgs.x + colliderArgs.offsetX, colliderArgs.y + colliderArgs.offsetY,
-                colliderArgs.w, colliderArgs.h, colliderArgs.zRange, colliderArgs.collisionTag)
-    Component.init(self, entity, enabled)
-    self.offsetX = colliderArgs.offsetX or 0
-    self.offsetY = colliderArgs.offsetY or 0
-    self.detectOnly = colliderArgs.detectOnly or false
+  init = function(self, entity, args)
+    BumpBox.init(self, args)
+    Component.init(self, entity, args.enabled)
+    self.offsetX = args.offsetX or 0
+    self.offsetY = args.offsetY or 0
+    self.detectOnly = args.detectOnly or false
   end
 }
 
