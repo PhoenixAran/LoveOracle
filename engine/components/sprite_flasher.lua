@@ -4,10 +4,13 @@ local lume = require 'lib.lume'
 
 local SpriteFlasher = Class { __includes = Component,
   init = function(self, entity, args)
+    if args == nil then
+      args = { }
+    end
+    Component.init(self, entity, args)
     if args.alpha == nil then
       args.alpha = 0.5
     end
-    Component.init(self, entity, args)
     self.tick = 0
     self.duration = 0
     self.isActive = false

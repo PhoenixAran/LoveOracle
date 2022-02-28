@@ -10,7 +10,7 @@ local SpriteRenderer = Class { __includes = Component,
     if args.offsetY == nil then args.offsetY = 0 end
     if args.alpha == nil then args.alpha = 1 end
     if args.followZ == nil then args.followZ = true end
-    
+
     self.palette = args.palette
     self.offsetX = args.offsetX
     self.offsetY = args.offsetY

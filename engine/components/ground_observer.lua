@@ -6,7 +6,7 @@ local Component = require 'engine.entities.component'
 -- in the global physics object
 local GroundObserver = Class { __includes = {Component},
   init = function(self, entity, args)
-    Component.init(self, args.entity, args.enabled)
+    Component.init(self, entity, args)
     self.inLava = false
     self.inGrass = false
     self.onStairs = false

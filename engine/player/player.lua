@@ -24,12 +24,13 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 
 local Player = Class { __includes = MapEntity,
-  init = function(self, name, enabled, visible, position)
-    MapEntity.init(self, name, enabled, visible, { x = position.x, y = position.y,  w = 8, h = 9 })
+  init = function(self, name, args)
+    args.w, args.h = 8, 9
+    MapEntity.init(self, name, args)
     -- room edge collision
     --self.roomEdgeCollisionBox = BumpBox((position.x - 12 / 2), (position.y - 13 / 2), 12, 9)
     local ex, ey = self:getPosition()
-    self.roomEdgeCollisionBox = Collider(self, true, {
+    self.roomEdgeCollisionBox = Collider(self, {
       x = ex - 12/2,
       y = ey - 13/2,
       w = 12,

@@ -6,6 +6,9 @@ local Direction8 = require 'engine.enums.direction8'
 
 local Movement = Class { __includes = Component,
   init = function(self, entity, args)
+    if args == nil then
+      args = { }
+    end
     Component.init(self, entity, args)
 
     self:signal('landed')

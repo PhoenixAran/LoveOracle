@@ -1,9 +1,8 @@
 local Class = require 'lib.class'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
-local Component = require 'engine.entities.component'
 
-local States = { 
-  None = 0, 
+local States = {
+  None = 0,
   Running = 1,
   Paused = 2,
   Completed = 3
@@ -21,12 +20,15 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     self.animations = args.animations
     self.substripKey = nil
     self.currentAnimationKey = args.defaultAnimation
-    self.currentAnimation = self.animations[self.defaultAnimation]
+    self.currentAnimation = self.animations[args.defaultAnimation]
     self.currentFrameIndex = 1
     self.currentTick = 1
     self.loopType = 'once'
+
+    -- setup args table for SpriteRenderer
     local spriteFrames = self.currentAnimation:getSpriteFrames()
-    SpriteRenderer.init(self, entity, spriteFrames[1]:getSprite(), args)
+    args.sprite = spriteFrames[1]:getSprite()
+    SpriteRenderer.init(self, entity, args)
   end
 }
 
@@ -105,18 +107,19 @@ function AnimatedSpriteRenderer:stop()
 end
 
 function AnimatedSpriteRenderer:update(dt)
-  if not self:isPlaying() then 
+  if not self:isPlaying() then
     return
   end
   local timedActions = self.currentAnimation:getTimedActions(self.substripKey)
   local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
   local timedAction = timedActions[self.currentTick]
-  if timedAction then 
-    timedAction(self.entity)   
+
+  if timedAction then
+    timedAction(self.entity)
   end
   -- some animation can have no spriteframes and just action frames
   if #spriteFrames == 0 then return end
-  
+
   local currentFrame = spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
   if currentFrame:getDelay() < self.currentTick then

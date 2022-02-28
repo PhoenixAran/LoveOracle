@@ -10,8 +10,10 @@ local TablePool = require 'engine.utils.table_pool'
 local Hitbox = Class { __includes = { BumpBox, Component },
   --init = function(self, entity, enabled, bumpBoxArgs, hitBoxArgs)
   init = function(self, entity, args)
-    BumpBox.init(self, args.x, args.y, args.w,
-        args.h, args.zRange, args.collisionTag)
+    if args == nil then
+      args = { }
+    end
+    BumpBox.init(self, args)
     Component.init(self, entity, args)
 
     self:signal('hitboxEntered')

@@ -3,8 +3,8 @@ local Component = require 'engine.entities.component'
 local vector = require 'lib.vector'
 
 local Combat = Class { __includes = Component,
-  init = function(self, entity)
-    Component.init(self, entity)
+  init = function(self, entity, args)
+    Component.init(self, entity, args)
 
     self.currentIntangibilityTime = 0
     self.currentHitstunTime = 0

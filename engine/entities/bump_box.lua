@@ -12,18 +12,11 @@ local BumpBox = Class {
     if args.y == nil then args.y = 0 end
     if args.w == nil then args.w = 1 end
     if args.h == nil then args.h = 1 end
-    if args.zRange == nil then
-      args.zRange = {
-        min = 0,
-        max = 1
-      }
-    else
-      if args.zRange.min == nil then args.zRange.min = 0 end
-      if args.zRange.max == nil then args.zRange.max = 1 end
-    end
+    if args.zMin == nil then args.zMin = 0 end
+    if args.zMax == nil then args.zMax = 1 end
 
-    assert(args.zRange.min <= args.zRange.max)
-    self.zRange = args.zRange
+    assert(args.zMin <= args.zMax)
+    self.zRange = { min = args.zMin, max = args.zMax }
     if args.collisionTag == nil then args.collisionTag = 'bump_box' end
     self.x = args.x
     self.y = args.y

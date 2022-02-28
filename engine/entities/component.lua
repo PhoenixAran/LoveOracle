@@ -4,6 +4,9 @@ local SignalObject = require 'engine.signal_object'
 
 local Component = Class { __includes = SignalObject,
   init = function(self, entity, args)
+    if args == nil then
+      args = { }
+    end
     SignalObject.init(self)
     if args.enabled == nil then args.enabled = true end
     if args.visible == nil then args.visible = true end

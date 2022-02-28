@@ -14,13 +14,13 @@ local DEFAULT_KEY = 'default'
 
 local SpriteAnimationBuilder = Class {
   init = function(self)
-    self.spriteSheet = nil   
+    self.spriteSheet = nil
     self.frames = { }
     self.compositeSprites = { }
     self.timedActions = { }
     self.loopType = 'once'
     self.defaultLoopType = 'once'
-    
+
     self.hasSubstrips = false
     self.subFrames = { }
     self.subTimedActions = { }
@@ -68,7 +68,7 @@ function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
   end
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
-  
+
   local subtexture = self.spriteSheet:getTexture(x, y)
   local sprite = Sprite(subtexture, offsetX, offsetY)
   local spriteFrame = SpriteFrame(sprite, delay)
@@ -79,7 +79,7 @@ end
 function SpriteAnimationBuilder:addCompositeSprite(x, y, offsetX, offsetY)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
-  
+
   local subtexture = self.spriteSheet:getTexture(x, y)
   local sprite = Sprite(subtexture, offsetX, offsetY)
   lume.push(self.compositeSprites, sprite)
@@ -89,14 +89,14 @@ end
 function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, offsetY, delay)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
-  
+
   local compositeSprite = CompositeSprite(self.compositeSprites, originX, originY, offsetX, offsetY)
   local spriteFrame = SpriteFrame(compositeSprite, delay)
   lume.push(self.frames, spriteFrame)
   self.compositeSprites = { }
 end
 
-function SpriteAnimationBuilder:addPrototypeFrame(r, g, b, width, height, offsetX, offsetY, delay) 
+function SpriteAnimationBuilder:addPrototypeFrame(r, g, b, width, height, offsetX, offsetY, delay)
   local sprite = PrototypeSprite(r, g, b, width, height, offsetX, offsetY)
   local spriteFrame = SpriteFrame(sprite, delay)
   lume.push(self.frames, spriteFrame)
@@ -116,12 +116,12 @@ function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
   assert(substripKey ~= nil, 'Substrip key out of range')
   self.subFrames[substripKey] = self.frames
   self.subTimedActions[substripKey] = self.timedActions
-  
+
   if makeDefault then
     self.subFrames[DEFAULT_KEY] = self.frames
     self.subTimedActions[DEFAULT_KEY] = self.timedActions
   end
-  
+
   self.frames = { }
   self.timedActions = { }
   self.compositeSprites = { }

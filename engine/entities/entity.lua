@@ -10,32 +10,25 @@ local Physics = require 'engine.physics'
 
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, args)
+    if args == nil then
+      args = { }
+    end
     SignalObject.init(self)
     if args.enabled == nil then args.enabled = true end
     if args.visible == nil then args.visible = true end
-    if args.rect == nil then
-      args.rect = {
-        x = 0,
-        y = 0,
-        w = 1,
-        h = 1
-      }
-    else
-      if args.rect.x == nil then args.rect.x = 0 end
-      if args.rect.y == nil then args.rect.y = 0 end
-      if args.rect.w == nil then args.rect.w = 1 end
-      if args.rect.h == nil then args.rect.h = 1 end
-    end
-    if args.rect.useBumpCoords then
+    if args.x == nil then args.x = 0 end
+    if args.y == nil then args.y = 0 end
+    if args.w == nil then args.w = 1 end
+    if args.h == nil then args.h = 1 end
+    if args.useBumpCoords then
       BumpBox.init(self, args)
     else
-      args.x = args.rect.w / 2
-      args.y = args.rect.h / 2
-      BumpBox.init(args)
+      args.x = args.w / 2
+      args.y = args.h / 2
+      BumpBox.init(self, args)
     end
     self.enabled = args.enabled
     self.visible = args.visible
-
     -- KEEP THESE TWO TOGETHER OR ELSE ENTITY POSITION GETS MESSED UP
     self.transform = Transform:new(self)
     self:setPositionWithBumpCoords(self.x, self.y)

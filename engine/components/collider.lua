@@ -11,8 +11,11 @@ local Physics = require 'engine.physics'
 -- sized collision box for screen edge borders
 local Collider = Class { __includes = { BumpBox, Component },
   init = function(self, entity, args)
+    if args == nil then
+      args = { }
+    end
     BumpBox.init(self, args)
-    Component.init(self, entity, args.enabled)
+    Component.init(self, entity, args)
     self.offsetX = args.offsetX or 0
     self.offsetY = args.offsetY or 0
     self.detectOnly = args.detectOnly or false

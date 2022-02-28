@@ -5,6 +5,7 @@ local BaseScreen = require 'engine.screens.base_screen'
 local Entity = require 'engine.entities.entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
+local Direction4 = require 'engine.enums.direction4'
 
 local AnimatedSpriteRendererTest = Class { __includes = BaseScreen,
   init = function(self)
@@ -18,7 +19,7 @@ local AnimatedSpriteRendererTest = Class { __includes = BaseScreen,
       'squish'
     }
     self.currentAnimationIndex = 1
-    
+
   end
 }
 
@@ -27,37 +28,40 @@ function AnimatedSpriteRendererTest:enter(previous, ...)
   local animations = { }
   sb:setSpriteSheet('player')
   sb:setDefaultLoopType('cycle', true)
- 
+
   -- idle
-  sb:addSpriteFrame(1, 7)
+  sb:addSpriteFrame(7, 1)
   sb:setLoopType('once')
   animations['idle'] = sb:build()
-  
+
   -- walking
   sb:setSubstrips(true)
-  
-  sb:addSpriteFrame(1, 7)
-  sb:addSpriteFrame(1, 8)
+
+  sb:addSpriteFrame(7, 1)
+  sb:addSpriteFrame(8, 1)
   sb:buildSubstrip('down', true)
-  
-  sb:addSpriteFrame(1, 3)
-  sb:addSpriteFrame(1, 4)
-  sb:buildSubstrip('up')  
+
+  sb:addSpriteFrame(3, 1)
+  sb:addSpriteFrame(4, 1)
+  sb:buildSubstrip('up')
   animations['walk'] = sb:build()
-  
+
   -- flying
-  sb:addSpriteFrame(11, 7)
-  sb:addSpriteFrame(11, 8)
+  sb:addSpriteFrame(7, 11)
+  sb:addSpriteFrame(8, 11)
   animations['flying'] = sb:build()
-  
+
   -- composite test
-  sb:addSpriteFrame(21, 5)
-  sb:addCompositeSprite(21, 6)
-  sb:addCompositeSprite(21, 7, 0, -16)
-  sb:addCompositeFrame(8, 24, 0, 0, 24)
+  sb:addSpriteFrame(5, 21)
+  sb:addCompositeSprite(6, 21)
+  sb:addCompositeSprite(7, 21, 0, -16)
+  sb:addCompositeFrame(24, 8, 0, 0, 24)
   animations['squish'] = sb:build()
-  
-  self.sprite = AnimatedSpriteRenderer(self.entity, animations, 'idle')
+
+  self.sprite = AnimatedSpriteRenderer(self.entity, {
+    animations = animations,
+    defaultAnimation = 'idle'
+  })
   self.entity:setPosition(144 / 2 + 8, 160 / 2)
 end
 
@@ -71,12 +75,12 @@ function AnimatedSpriteRendererTest:update(dt)
     self.currentAnimationIndex = self.currentAnimationIndex + 1
     changed = true
   end
-  
+
   if changed then
     self.currentAnimationIndex = ( (self.currentAnimationIndex - 1) % #self.animations + #self.animations) % #self.animations + 1
     local animation = self.animations[self.currentAnimationIndex]
     if type(animation) == 'table' then
-      self.sprite:play(animation[1], animation[2])
+      self.sprite:play(animation[1], Direction4[animation[2]])
     else
       self.sprite:play(animation)
     end
