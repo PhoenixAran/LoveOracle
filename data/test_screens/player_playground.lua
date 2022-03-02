@@ -12,7 +12,11 @@ local PlayerPlayground = Class { __includes = BaseScreen,
 }
 
 function PlayerPlayground:enter(prev, ...)
-  self.player = Player('player', true, true, { x = 24, y = 24, w = 16, h = 16 })
+  self.player = Player({
+    name = 'player',
+    x = 8,
+    y = 8
+  })
   self.sword = Sword()
   self.sword.useButtons = { 'b' }
   self.player:equipItem(self.sword)

@@ -14,10 +14,12 @@ local Collider = Class { __includes = { BumpBox, Component },
     if args == nil then
       args = { }
     end
-    BumpBox.init(self, args)
-    Component.init(self, entity, args)
     self.offsetX = args.offsetX or 0
     self.offsetY = args.offsetY or 0
+    args.x = args.x + self.offsetX
+    args.y = args.y + self.offsetY
+    BumpBox.init(self, args)
+    Component.init(self, entity, args)
     self.detectOnly = args.detectOnly or false
   end
 }

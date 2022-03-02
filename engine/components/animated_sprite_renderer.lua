@@ -29,6 +29,7 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     local spriteFrames = self.currentAnimation:getSpriteFrames()
     args.sprite = spriteFrames[1]:getSprite()
     SpriteRenderer.init(self, entity, args)
+    print(self.offsetX, self.offsetY)
   end
 }
 

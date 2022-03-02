@@ -24,9 +24,11 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 
 local Player = Class { __includes = MapEntity,
-  init = function(self, name, args)
+  init = function(self, args)
     args.w, args.h = 8, 9
-    MapEntity.init(self, name, args)
+    args.direction = Direction4.down
+    MapEntity.init(self, args)
+
     -- room edge collision
     --self.roomEdgeCollisionBox = BumpBox((position.x - 12 / 2), (position.y - 13 / 2), 12, 9)
     local ex, ey = self:getPosition()
@@ -48,6 +50,7 @@ local Player = Class { __includes = MapEntity,
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
+    self:setAnimationDirection4(args.direction)
     self.spriteFlasher:addSprite(self.sprite)
 
     -- states
@@ -112,7 +115,6 @@ local Player = Class { __includes = MapEntity,
     -- entity sprite effect configuration
     self.effectSprite:setOffset(0, 6)
     self.shadowVisible = true
-
   end
 }
 

@@ -19,6 +19,16 @@ local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
 
+    if args.direction == nil then
+      args.direction = Direction4.none
+    else
+      if type(args.direction) == 'string' then
+        args.direction = Direction4[args.direction] or Direction4.none
+      else
+        args.direction = args.direction
+      end
+    end
+    
     -- signals
     self:signal('entityDestroyed')
     self:signal('entityCreated')
@@ -48,7 +58,7 @@ local MapEntity = Class { __includes = Entity,
     -- declarations
     self.persistant = false
     self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
-    self.animationDirection4 = Direction4.none -- will be used as substrip key if syncDirectionWithAnimation is true
+    self.animationDirection4 = args.direction -- will be used as substrip key if syncDirectionWithAnimation is true
     -- shadow, ripple, and grass effects
     -- TODO finish ripple and grass effects
     self.shadowVisible = true

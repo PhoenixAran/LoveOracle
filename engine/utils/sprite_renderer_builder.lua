@@ -32,11 +32,23 @@ end
 function SpriteRendererBuilder:build(entity)
   if self.type == 'sprite_renderer' then
       -- use sprite in SpriteBuilder instance
-      return SpriteRenderer(self.sprite, self.offsetX, self.offsetY, self.followZ)
+      -- return SpriteRenderer(self.sprite, self.offsetX, self.offsetY, self.followZ)
+      return SpriteRenderer(entity, {
+        sprite = self.sprite,
+        offsetX = self.offsetX,
+        offsetY = self.offsetY,
+        followZ = self.followZ
+      })
   elseif self.type == 'animated_sprite_renderer' then
     local animations = { }
     animations = lume.merge(animations, self.animations)
-    return AnimatedSpriteRenderer(entity, animations, self.defaultAnimation, self.offsetX, self.offsetY, self.followZ)
+    return AnimatedSpriteRenderer(entity, {
+      animations = animations,
+      defaultAnimation = self.defaultAnimation,
+      offsetX = self.offsetX,
+      offsetY = self.offsetY,
+      followZ = self.followZ
+    })
   end
 end
 
