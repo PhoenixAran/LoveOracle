@@ -23,8 +23,8 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     if args.useBumpCoords then
       BumpBox.init(self, args)
     else
-      args.x = args.x / 2
-      args.y = args.y / 2
+      args.x = args.x - args.w / 2
+      args.y = args.y - args.h / 2
       BumpBox.init(self, args)
     end
     self.enabled = args.enabled
