@@ -24,7 +24,6 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     self.currentFrameIndex = 1
     self.currentTick = 1
     self.loopType = 'once'
-
     -- setup args table for SpriteRenderer
     local spriteFrames = self.currentAnimation:getSpriteFrames()
     args.sprite = spriteFrames[1]:getSprite()
@@ -113,7 +112,6 @@ function AnimatedSpriteRenderer:update(dt)
   local timedActions = self.currentAnimation:getTimedActions(self.substripKey)
   local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
   local timedAction = timedActions[self.currentTick]
-
   if timedAction then
     timedAction(self.entity)
   end

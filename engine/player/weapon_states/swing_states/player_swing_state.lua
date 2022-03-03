@@ -22,7 +22,7 @@ function PlayerSwingState:getType()
   return 'player_swing_state'
 end
 
-function PlayerSwingState:getPlayerSwingAnimation(lunge)  
+function PlayerSwingState:getPlayerSwingAnimation(lunge)
   if lunge then 
     return self.player:getPlayerAnimations().swing 
   end

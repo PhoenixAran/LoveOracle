@@ -14,7 +14,7 @@ local SpriteSheetTest = Class {
 }
 
 function SpriteSheetTest:enter(previous, ...)
-  self.spriteSheet = AssetManager.getSpriteSheet('proto_dungeon_2')
+  self.spriteSheet = AssetManager.getSpriteSheet('player_items')
   self.maxIndex = self.spriteSheet:size()
 end
 

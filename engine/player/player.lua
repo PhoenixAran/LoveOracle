@@ -26,11 +26,9 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 local Player = Class { __includes = MapEntity,
   init = function(self, args)
     args.w, args.h = 8, 9
-    args.direction = Direction4.down
+    args.direction = args.direction or Direction4.down
     MapEntity.init(self, args)
-
     -- room edge collision
-    --self.roomEdgeCollisionBox = BumpBox((position.x - 12 / 2), (position.y - 13 / 2), 12, 9)
     local ex, ey = self:getPosition()
     self.roomEdgeCollisionBox = Collider(self, {
       x = ex - 12/2,
@@ -50,7 +48,7 @@ local Player = Class { __includes = MapEntity,
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
-    self:setAnimationDirection4(args.direction)
+    --self:setAnimationDirection4(args.direction)
     self.spriteFlasher:addSprite(self.sprite)
 
     -- states

@@ -28,7 +28,7 @@ local MapEntity = Class { __includes = Entity,
         args.direction = args.direction
       end
     end
-    
+
     -- signals
     self:signal('entityDestroyed')
     self:signal('entityCreated')

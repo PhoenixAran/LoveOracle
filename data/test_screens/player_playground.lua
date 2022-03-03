@@ -14,8 +14,8 @@ local PlayerPlayground = Class { __includes = BaseScreen,
 function PlayerPlayground:enter(prev, ...)
   self.player = Player({
     name = 'player',
-    x = 8,
-    y = 8
+    x = 24,
+    y = 24
   })
   self.sword = Sword()
   self.sword.useButtons = { 'b' }
@@ -30,9 +30,10 @@ end
 function PlayerPlayground:draw()
   monocle:begin()
   self.player:draw()
-  if self.sword:isVisible() then 
+  if self.sword:isVisible() then
     self.sword:draw()
   end
+  self.sword:debugDraw()
   self.player:debugDraw()
   self:drawFPS()
   self:drawMemory()

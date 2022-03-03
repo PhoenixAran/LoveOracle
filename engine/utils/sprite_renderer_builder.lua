@@ -32,7 +32,6 @@ end
 function SpriteRendererBuilder:build(entity)
   if self.type == 'sprite_renderer' then
       -- use sprite in SpriteBuilder instance
-      -- return SpriteRenderer(self.sprite, self.offsetX, self.offsetY, self.followZ)
       return SpriteRenderer(entity, {
         sprite = self.sprite,
         offsetX = self.offsetX,
