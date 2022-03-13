@@ -22,7 +22,7 @@ end
 
 function GameControlTest:enter(prev, ...)
   self.gameControl = GameControl()
-  self.gameControl:setPlayer(Player('player', true, true, { x = 30, y = 30, w = 16, h = 16 }))
+  self.gameControl:setPlayer(Player({name = 'player', x = 30, y = 30, w = 16, h = 16 }))
   local map = Map('test_map_1.json')
   self.gameControl:setMap(map)
   -- TODO implement designated player spawn from Tiled editor

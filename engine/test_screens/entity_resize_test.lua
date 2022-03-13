@@ -8,8 +8,8 @@ local BaseScreen = require 'engine.screens.base_screen'
 local Physics = require 'engine.physics'
 
 local TestBox = Class { __includes = Entity,
-  init = function(self, rect)
-    Entity.init(self, true, true, rect)
+  init = function(self, args)
+    Entity.init(self, args)
     self:setPhysicsLayer('entity')
   end
 }
@@ -51,7 +51,6 @@ function Screen:update(dt)
   if love.keyboard.isDown('n') then
     self.testEntity:resize(16, 16)
   end
-  
   for _, b in ipairs(self.testBoxes) do
     b:update(dt)
   end
@@ -66,6 +65,7 @@ function Screen:draw()
   end
   self.testEntity:draw()
   self.testEntity:debugDraw()
+  self:drawFPS()
   monocle:finish()
 end
 

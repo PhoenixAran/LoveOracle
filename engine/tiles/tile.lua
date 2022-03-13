@@ -11,13 +11,18 @@ local function makeTileEntityName(tileIndexX, tileIndexY, layer)
 end
 
 local Tile = Class { __includes = Entity,
-  init = function(self, tileData,  tileIndexX, tileIndexY, layer)
-    local name = makeTileEntityName(layer, tileIndexX, tileIndexY)
-    local collisionRectZRangeX, collisionRectZRangeY = tileData:getCollisionZRange()
-    local collisionRectZRange = { min = collisionRectZRangeX, max = collisionRectZRangeY }
-    local collisionRect = { w = tileData.w, h = tileData.h }
-    Entity.init(self, name, true, true, collisionRect, collisionRectZRange)
-    self:setPositionWithBumpCoords((tileIndexX - 1) * GRID_SIZE, (tileIndexY - 1) * GRID_SIZE)
+  init = function(self, tileData, tileIndexX, tileIndexY, layer)
+    local zMin, zMax = tileData:getCollisionZRange()
+    Entity.init(self, {
+      useBumpCoords = true,
+      name = makeTileEntityName(layer, tileIndexX, tileIndexY),
+      x = (tileIndexX - 1) * GRID_SIZE,
+      y = (tileIndexY - 1) * GRID_SIZE,
+      w = tileData.w,
+      h = tileData.h,
+      zMin = zMin,
+      zMax = zMax
+    })
     -- TODO: check if it has a hurtbox
     -- TODO: make hurtbox
     -- use flyweight pattern via tileData instance

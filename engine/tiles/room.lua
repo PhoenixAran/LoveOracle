@@ -95,14 +95,32 @@ function Room:load(entities)
     h = self.height * GRID_SIZE
   }
   -- make the left room edge
-  local roomEdge = RoomEdge('roomEdgeLeft', roomRect, Direction4.left, 'push')
+  local roomEdge = RoomEdge {
+    name = 'roomEdgeLeft',
+    useBumpCoords = true,
+    x = roomRect.x,
+    y = roomRect.y,
+    w = roomRect.w,
+    h = roomRect.h,
+    direction4 = Direction4.left,
+    transitionStyle = 'push'
+  }
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
   -- make right room edge
   roomRect.x = (self:getBottomRightPositionX()) * GRID_SIZE
   roomRect.y = (self.topLeftPosY - 1) * GRID_SIZE
-  roomEdge = RoomEdge('roomEdgeRight',roomRect, Direction4.right, 'push')
+  roomEdge = RoomEdge {
+    name = 'roomEdgeRight',
+    useBumpCoords = true,
+    x = roomRect.x,
+    y = roomRect.y,
+    w = roomRect.w,
+    h = roomRect.h,
+    direction4 = Direction4.right,
+    transitionStyle = 'push'
+  }
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
@@ -111,14 +129,32 @@ function Room:load(entities)
   roomRect.y = (self.topLeftPosY - 2) * GRID_SIZE
   roomRect.w = self.width * GRID_SIZE
   roomRect.h = GRID_SIZE
-  roomEdge = RoomEdge('roomEdgeUp', roomRect, Direction4.up, 'push')
+  roomEdge = RoomEdge {
+    name = 'roomEdgeUp',
+    useBumpCoords = true,
+    x = roomRect.x,
+    y = roomRect.y,
+    w = roomRect.w,
+    h = roomRect.h,
+    direction4 = Direction4.up,
+    transitionStyle = 'push'
+  }
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)
   -- make bottom room edge
   roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
   roomRect.y = (self:getBottomRightPositionY()) * GRID_SIZE
-  roomEdge = RoomEdge('roomEdgeDown', roomRect, Direction4.down, 'push')
+  roomEdge = RoomEdge {
+    name = 'roomEdgeDown',
+    useBumpCoords = true,
+    x = roomRect.x,
+    y = roomRect.y,
+    w = roomRect.w,
+    h = roomRect.h,
+    direction4 = Direction4.down,
+    transitionStyle = 'push'
+  }
   roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   lume.push(self.entities, roomEdge)

@@ -10,15 +10,14 @@ local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 
 local RoomEdge = Class { __includes = Entity,
-  init = function(self, name, rect, direction4, transitionStyle)
-    Entity.init(self, name, true, false, rect)
-    self.direction4 = direction4
-    -- you dont want to be able to transition if there is no room to transition to
-    -- mainly used for rooms at the edge of the map
+  init = function(self, args)
+    Entity.init(self, args)
+    self.direction4 = args.direction4
+    -- you dont want to be able to transition if there is no room to transitoin to
+    -- mainly ued for rooms ad the edge of you dont put a wall there for whatever reason
     self.canTransition = false
-    self.transitionStyle = transitionStyle or 'push'
+    self.transitionStyle = args.transitionStyle or 'push'
     self:signal('roomTransitionRequest')
-
     self:setPhysicsLayer('room_edge')
     self:setCollidesWithLayer('player')
   end
@@ -33,6 +32,7 @@ function RoomEdge:getCollisionTag()
 end
 
 -- called by player in Player:checkRoomTransitions()
+-- todo should probably have method signature as (x, y) so we can measure the angle
 function RoomEdge:canRoomTransition(dir8)
   if self.direction4 == Direction4.up then
     return dir8 == Direction8.up or dir8 == Direction8.upLeft or dir8 == Direction8.upRight

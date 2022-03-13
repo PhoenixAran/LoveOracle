@@ -4,7 +4,7 @@ local Slab = require 'lib.slab'
 
 local Screen = Class { __includes = BaseScreen,
   init = function(self)
-    
+    BaseScreen.init(self)
   end
 }
 

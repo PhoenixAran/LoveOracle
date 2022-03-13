@@ -12,8 +12,9 @@ local Slab = require 'lib.slab'
 
 
 local TestBox = Class { __includes = Entity,
-  init = function(self, name, rect, zRange)
-    Entity.init(self, true, true, name, rect, zRange)
+  --init = function(self, name, rect, zRange)
+  init = function(self, args)
+    Entity.init(self, args)
     self:setPhysicsLayer('entity')
   end
 }
@@ -25,7 +26,6 @@ local RaycastTestScreen = Class { __includes = BaseScreen,
     self.hits = { }
     self.clickCount = 0
     self.physicsDetectLayer = BitTag.get('entity').value
-
     self.startX, self.startY = 0, 0
     self.endX, self.endY = 0, 0
   end
@@ -34,11 +34,11 @@ local RaycastTestScreen = Class { __includes = BaseScreen,
 function RaycastTestScreen:enter(prev, ...)
   Physics.reset()
   -- this test box will be in the same range as the test raycast
-  lume.push(self.testBoxes, TestBox( 'testbox1', {x = 24, y = 24, w = 24, h = 24}, {min = 20, max = 30}))
+  lume.push(self.testBoxes, TestBox( {name = 'testbox1', x = 24, y = 24, w = 24, h = 24, zMin = 20, zMax = 30}))
   -- this test box will be 'under' the raycast
-  lume.push(self.testBoxes, TestBox('testbox2', {x = 65, y = 40, w = 16, h = 12}, {min = -30, max = -4}))
+  lume.push(self.testBoxes, TestBox({name = 'testbox2', x = 65, y = 40, w = 16, h = 12, zMin = -30, zMax = -4}))
   -- this test box will be 'above' the raycast
-  lume.push(self.testBoxes, TestBox('testbox3', {x = 70, y = 80, w = 24, h = 21}, {min = 101, max = 200}))
+  lume.push(self.testBoxes, TestBox({name = 'testbox3', x = 70, y = 80, w = 24, h = 21, zMin = 101, zMax = 200}))
   lume.each(self.testBoxes, 'awake')
   monocle:resize(1280, 720)
 end
