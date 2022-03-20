@@ -89,7 +89,7 @@ return function(spriteBank)
   sb:addSpriteFrame(7, 5, 0, 0, 3)
   sb:buildSubstrip('down', true)
   -- #substrip left
-  sb:addSpriteFrame(9, 3, 0, 0, 3)
+  sb:addSpriteFrame(3, 9, 0, 0, 3)
   sb:addSpriteFrame(5, 5, 0, 0, 3)
   sb:addSpriteFrame(5, 5, -4, 0, 8)
   sb:addSpriteFrame(5, 5, 0, 0, 3)

@@ -3,6 +3,7 @@ local BaseScreen = require 'engine.screens.base_screen'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
 local Direction4 = require 'engine.enums.direction4'
+local tick = require 'lib.tick'
 
 local PlayerSwordHitboxTest  = Class { __includes = BaseScreen,
   init = function(self)
@@ -12,7 +13,7 @@ local PlayerSwordHitboxTest  = Class { __includes = BaseScreen,
 }
 
 function PlayerSwordHitboxTest:enter(prev, ...)
-  require('lib.tick').timescale = .3
+
   self.player = Player {
     name = 'player',
     x = 24,
@@ -26,6 +27,11 @@ function PlayerSwordHitboxTest:enter(prev, ...)
 end
 
 function PlayerSwordHitboxTest:update(dt)
+  if love.keyboard.isDown('u') then
+    tick.timescale = .3
+  else
+    tick.timescale = 1
+  end
   self.player:update(dt)
 end
 
