@@ -73,6 +73,7 @@ function MapLoader.loadMapData(path)
         end
       elseif layer.name:lower() == 'entities' then
         -- todo parse entities
+        
       else
         error('Unsupported object layer name: ' .. layer.name:lower())
       end

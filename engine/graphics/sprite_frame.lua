@@ -24,5 +24,4 @@ function SpriteFrame:release()
   self.sprite:release()
 end
 
-
 return SpriteFrame

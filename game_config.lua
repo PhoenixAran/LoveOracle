@@ -55,8 +55,9 @@ local physicsFlags = {
 --local startupScreen = 'data.test_screens.player_playground'
 --local startupScreen = 'engine.test_screens.entity_inspector_test'
 --local startupScreen = 'engine.test_screens.physics_test'
-local startupScreen = 'engine.test_screens.game_control_test'
+--local startupScreen = 'engine.test_screens.game_control_test'
 --local startupScreen = 'engine.test_screens.raycast_test'
+local startupScreen = 'data.test_screens.player_sword_hitbox_test'
 
 return {
   showSplash = showSplash,

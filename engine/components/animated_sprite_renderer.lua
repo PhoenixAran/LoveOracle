@@ -111,7 +111,7 @@ function AnimatedSpriteRenderer:update(dt)
   end
   local timedActions = self.currentAnimation:getTimedActions(self.substripKey)
   local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
-  local timedAction = timedActions[self.currentTick]
+  local timedAction = timedActions[self.currentFrameIndex]
   if timedAction then
     timedAction(self.entity)
   end

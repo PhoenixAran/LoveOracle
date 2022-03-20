@@ -3,9 +3,17 @@ local BumpBox = require 'engine.entities.bump_box'
 local Component = require 'engine.entities.component'
 local vector = require 'lib.vector'
 local lume = require 'lib.lume'
+local rect = require 'engine.utils.rectangle'
 local Physics = require 'engine.physics'
 local DamageInfo = require 'engine.entities.damage_info'
 local TablePool = require 'engine.utils.table_pool'
+
+-- helper function
+local function setPositionRelativeToEntity(hitbox)
+  local ex, ey = hitbox.entity:getPosition()
+  hitbox.x = (ex - hitbox.w / 2) + hitbox.offsetX
+  hitbox.y = (ey - hitbox.h / 2) + hitbox.offsetY
+end
 
 local Hitbox = Class { __includes = { BumpBox, Component },
   --init = function(self, entity, enabled, bumpBoxArgs, hitBoxArgs)
@@ -20,6 +28,8 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     self:signal('damagedOther')
     self:signal('resisted')
 
+    if args.offsetX == nil then args.offsetX = 0 end
+    if args.offsetY == nil then args.offsetY = 0 end
     if args.detectOnly == nil then args.detectOnly = false end
     if args.canHitMultiple == nil then args.canHitMultiple = false end
     if args.useEntityAsSource == nil then args.useEntityAsSource = true end
@@ -28,6 +38,8 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     if args.knockbackSpeed == nil then args.knockbackSpeed = 0 end
     if args.hitstunTime == nil then args.hitstunTime = 0 end
 
+    self.offsetX = args.offsetX
+    self.offsetY = args.offsetY
     self.detectOnly = args.detectOnly
     self.canHitMultiple = args.canHitMultiple
     -- use entity's position as source position
@@ -54,10 +66,10 @@ function Hitbox:getCollisionTag()
   return 'hitbox'
 end
 
+
+
 function Hitbox:onTransformChanged()
-  local ex, ey = self.entity:getPosition()
-  self.x = ex - self.w / 2
-  self.y = ey - self.h / 2
+  setPositionRelativeToEntity(self)
   Physics.update(self)
 end
 
@@ -89,20 +101,20 @@ function Hitbox:onDisabled()
 end
 
 function Hitbox:update(dt)
-  if self.detectOnly then
-    return
-  end
-  local neighbors = Physics.boxcastBroadphase(self, self.x, self.y, self.w, self.h)
-  if lume.count(neighbors) > 0 then
-    if self.canHitMultiple then
-      for _, neighbor in ipairs(neighbors) do
-        neighbor:reportCollision(self)
+  Physics.update(self)
+  if not self.detectOnly then
+    local neighbors = Physics.boxcastBroadphase(self, self.x, self.y, self.w, self.h)
+    if lume.count(neighbors) > 0 then
+      if self.canHitMultiple then
+        for _, neighbor in ipairs(neighbors) do
+          neighbor:reportCollision(self)
+        end
+      else
+        neighbors[1]:reportCollision(self)
       end
-    else
-      neighbors[1]:reportCollision(self)
     end
+    TablePool.free(neighbors)
   end
-  TablePool.free(neighbors)
 end
 
 function Hitbox:getDamageInfo()
@@ -115,6 +127,31 @@ function Hitbox:getDamageInfo()
     self.damageInfo.sourceY = self.y + self.y / 2
   end
   return self.damageInfo
+end
+
+function Hitbox:setOffset(x, y)
+  Physics.remove(self)
+  self.offsetX = x
+  self.offsetY = y
+  setPositionRelativeToEntity(self)
+  Physics.add(self)
+end
+
+function Hitbox:resize(width, height)
+  Physics.remove(self)
+  self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
+  setPositionRelativeToEntity(self)
+  Physics.add(self)
+end
+
+--sets offset and resizes hitbox
+function Hitbox:move(offsetX, offsetY, width, height)
+  Physics.remove(self)
+  self.offsetX = offsetX
+  self.offsetY = offsetY
+  setPositionRelativeToEntity(self)
+  self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
+  Physics.add(self)
 end
 
 -- raise the hitbox hitboxEntered signal
@@ -131,6 +168,14 @@ end
 -- used to let the owner know to stop the attack or something
 function Hitbox:notifyResisted(hitbox)
   self:emit('notifyResisted', hitbox)
+end
+
+function Hitbox:debugDraw()
+  local a = .25
+  love.graphics.setColor(176 / 255, 35 / 255, 82 / 255, a)
+  love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
+  love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
+  love.graphics.setColor(1, 1, 1)
 end
 
 return Hitbox
