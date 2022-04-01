@@ -5,10 +5,10 @@ local Hitbox = require 'engine.components.hitbox'
 
 local ItemSword = Class { __includes = Item,
   init = function(self, args)
+    Item.init(self, args)
     -- declare stuff that will be used in onTransformChanged BEFORE entity constructor
     self.hitbox = Hitbox(self)
     self.hitbox:setCollidesWithLayer('enemy')
-    Item.init(self, args)
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWhileInHole = true
     self.sprite = SpriteBank.build('player_sword', self)

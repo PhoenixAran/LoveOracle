@@ -32,8 +32,8 @@ function makeModuleFunction(func)
   return setmetatable({}, {__call = dropSelfArg(func)})
 end
 
-function love.load(arg)
-  --tick.framerate = 60
+function love.load(args)
+  tick.framerate = -1
   tick.rate = 1 / 60
   ContentControl.buildContent()
   --[[

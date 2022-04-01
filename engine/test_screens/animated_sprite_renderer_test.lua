@@ -19,7 +19,6 @@ local AnimatedSpriteRendererTest = Class { __includes = BaseScreen,
       'squish'
     }
     self.currentAnimationIndex = 1
-
   end
 }
 
@@ -62,6 +61,7 @@ function AnimatedSpriteRendererTest:enter(previous, ...)
     animations = animations,
     defaultAnimation = 'idle'
   })
+  self.entity:initTransform()
   self.entity:setPosition(144 / 2 + 8, 160 / 2)
 end
 

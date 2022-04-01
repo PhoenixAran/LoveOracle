@@ -13,15 +13,14 @@ local PlayerSwordHitboxTest  = Class { __includes = BaseScreen,
 }
 
 function PlayerSwordHitboxTest:enter(prev, ...)
-
   self.player = Player {
     name = 'player',
     x = 24,
     y = 24
   }
+  self.player:initTransform()
   self.sword = Sword()
   self.sword.useButtons = { 'b' }
-  print(self.sword.hitbox)
   self.player:equipItem(self.sword)
   self.sword:setVisible(false)
 end

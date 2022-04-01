@@ -31,6 +31,7 @@ end
 
 function Item:setPlayer(player)
   self.player = player
+  self:setPosition(player:getPosition())
 end
 
 function Item:getLevel()

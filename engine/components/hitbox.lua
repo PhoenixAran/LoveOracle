@@ -13,10 +13,10 @@ local function setPositionRelativeToEntity(hitbox)
   local ex, ey = hitbox.entity:getPosition()
   hitbox.x = (ex - hitbox.w / 2) + hitbox.offsetX
   hitbox.y = (ey - hitbox.h / 2) + hitbox.offsetY
+  hitbox.z = hitbox.entity:getZPosition()
 end
 
 local Hitbox = Class { __includes = { BumpBox, Component },
-  --init = function(self, entity, enabled, bumpBoxArgs, hitBoxArgs)
   init = function(self, entity, args)
     if args == nil then
       args = { }
@@ -65,8 +65,6 @@ end
 function Hitbox:getCollisionTag()
   return 'hitbox'
 end
-
-
 
 function Hitbox:onTransformChanged()
   setPositionRelativeToEntity(self)
@@ -173,8 +171,8 @@ end
 function Hitbox:debugDraw()
   local a = .25
   love.graphics.setColor(176 / 255, 35 / 255, 82 / 255, a)
-  love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
-  love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
+  love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
+  love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
   love.graphics.setColor(1, 1, 1)
 end
 

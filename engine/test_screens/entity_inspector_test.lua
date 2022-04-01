@@ -18,8 +18,9 @@ local EntityInspectorTest = Class { __includes = BaseScreen,
 }
 
 function EntityInspectorTest:enter(prev, ...)
-  self.player = Player('player', true, true, { x = 24, y = 24, w = 16, h = 16 })
-  self.sword = Sword('player_sword')
+  self.player = Player({name = 'player', x = 24, y = 24, w = 16, h = 16 })
+  self.player:initTransform()
+  self.sword = Sword()
   self.sword.useButtons = { 'b' }
   self.player:equipItem(self.sword)
   self.sword:setVisible(false)

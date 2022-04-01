@@ -29,11 +29,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     end
     self.enabled = args.enabled
     self.visible = args.visible
-    -- KEEP THESE TWO TOGETHER OR ELSE ENTITY POSITION GETS MESSED UP
     self.transform = Transform:new(self)
-    self:setPositionWithBumpCoords(self.x, self.y)
-
-    self.transform:setRotation(0)
     self.name = args.name
   end
 }
@@ -109,6 +105,15 @@ end
 
 function Entity:setPositionWithBumpCoords(x, y)
   self.transform:setPosition(x + self.w / 2, y + self.h / 2)
+end
+
+-- call this after each constructor
+-- this is due to some thing:onTransformChanged code being called
+-- before their components are initialized (see item_sword)
+-- to get around this, just call this function after creating an entity
+function Entity:initTransform()
+  self:setPositionWithBumpCoords(self.x, self.y)
+  self.transform:setRotation(0)
 end
 
 function Entity:setLocalPosition(x, y)

@@ -13,7 +13,6 @@ local PaletteTest = Class {
 
 function PaletteTest:enter(prev, ...)
   self.spriteSheet = assetManager.getSpriteSheet('player')
-  
   -- credits to https://github.com/thomasgoldstein/zabuyaki
   -- for figuring out this easy to use palette swap shader
   self.shader = love.graphics.newShader [[ 
