@@ -12,7 +12,7 @@ local controls = {
     leftClick = { 'mouse:1' }
   },
   pairs = {
-    move = { 'left', 'right', 'up', 'down'}
+    move = { 'left', 'right', 'up', 'down' }
   },
   joystick = love.joystick.getJoysticks()[1]
 }

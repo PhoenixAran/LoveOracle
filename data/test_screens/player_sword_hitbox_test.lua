@@ -2,7 +2,6 @@ local Class = require 'lib.class'
 local BaseScreen = require 'engine.screens.base_screen'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
-local Direction4 = require 'engine.enums.direction4'
 local tick = require 'lib.tick'
 
 local PlayerSwordHitboxTest  = Class { __includes = BaseScreen,
@@ -37,9 +36,6 @@ end
 function PlayerSwordHitboxTest:draw()
   monocle:begin()
   self.player:draw()
-  if self.sword:isVisible() then
-    self.sword:draw()
-  end
   self.sword:debugDraw()
   self:drawFPS()
   self:drawMemory()

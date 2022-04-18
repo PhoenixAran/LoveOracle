@@ -170,9 +170,17 @@ end
 
 function Hitbox:debugDraw()
   local a = .25
-  love.graphics.setColor(176 / 255, 35 / 255, 82 / 255, a)
-  love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
-  love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+  if self.enabled then
+    love.graphics.setColor(176 / 255, 35 / 255, 82 / 255, a)
+    love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
+    love.graphics.setColor(120 / 255, 22 / 255, 54 / 255)
+    love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+  else
+    love.graphics.setColor(116 / 255, 116 / 255, 117 / 255)
+    love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
+    love.graphics.setColor(55 / 255, 55 / 255, 56 / 255)
+    love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+  end
   love.graphics.setColor(1, 1, 1)
 end
 

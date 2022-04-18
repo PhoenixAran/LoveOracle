@@ -5,6 +5,7 @@ local Collider = require 'engine.components.collider'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local Entity = require 'engine.entities.entity'
 local Combat = require 'engine.components.combat'
+local Health = require 'engine.components.health'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local SpriteFlasher = require 'engine.components.sprite_flasher'
@@ -37,7 +38,7 @@ local MapEntity = Class { __includes = Entity,
     self:signal('entityImmobolized')
     self:signal('entityMarkedDead')
 
-
+    self.health = Health(self)
     self.movement = Movement(self)
     self.groundObserver = GroundObserver(self)
     self.combat = Combat(self)
@@ -56,6 +57,7 @@ local MapEntity = Class { __includes = Entity,
     self.collisionTiles = { }
 
     -- declarations
+    self.deathMarked = false
     self.persistant = false
     self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
     self.animationDirection4 = args.direction -- will be used as substrip key if syncDirectionWithAnimation is true
@@ -134,6 +136,37 @@ end
 
 function MapEntity:getAnimationDirection4()
   return self.animationDirection4
+end
+
+function MapEntity:pollDeath()
+  if self.deathMarked and not (self:inHitstun() or self:inKnockback()) then
+    self:die()
+  end
+end
+
+function MapEntity:die()
+  self:emit('entityDestroyed')
+end
+
+-- health component pass throughs
+function MapEntity:getMaxHealth()
+  return self.health:getMaxHealth()
+end
+
+function MapEntity:getHealth()
+  return self.health:getHealth()
+end
+
+function MapEntity:setHealth(value)
+  self.health:setHealth(value)
+end
+
+function MapEntity:setArmor(value)
+  self.health:setArmor(value)
+end
+
+function MapEntity:getArmor()
+  return self.health:getArmor()
 end
 
 -- movement component pass throughs
@@ -348,5 +381,7 @@ function MapEntity:updateEntityEffectSprite(dt)
   end
   self.effectSprite:update(dt)
 end
+
+-- signal callbacks
 
 return MapEntity

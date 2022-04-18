@@ -9,8 +9,7 @@ local PlayerSwingState = Class { __includes = PlayerState,
     self.weapon = nil
     -- default values, feel free to override in other swing states
     self.lunge = true
-    self.isReswingable = true
-    
+    self.isReswingable = true  
     -- Used to set animation direction when swing ends incase player switches direction mid spam swings.
     -- If they do switch directions, we need to set animation direction when the state end or else
     -- they will turn around to their original direction if player swings again without moving the dpad
@@ -43,7 +42,6 @@ end
 
 function PlayerSwingState:onBegin(previousState)
   self:swing()
-  self.weapon:setVisible(true)
 end
 
 function PlayerSwingState:update(dt)
@@ -59,7 +57,7 @@ function PlayerSwingState:onEnd()
   self.isReswingable = true
   self.player:setAnimationDirection4(self.cachedDirection4)
   self.cachedDirection4 = nil
-  self.weapon:setVisible(false)
+  self.weapon:endSwing()
 end
 
 return PlayerSwingState

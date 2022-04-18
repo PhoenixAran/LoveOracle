@@ -74,11 +74,11 @@ end
 function PlayerMovementController:pollMovementControls(allowMovementControl)
   local x, y = 0, 0
   self.moving = false
-  if allowMovementControl then 
+  if allowMovementControl then
     x, y = input:get('move')
-    x, y = vector.snapDirectionByCount(x, y, DIRECTION_SNAP)    
+    x, y = vector.snapDirectionByCount(x, y, DIRECTION_SNAP)
     self.directionX, self.directionY = x, y
-    if x ~= 0 or y ~= 0 then 
+    if x ~= 0 or y ~= 0 then
       self.moving = true
     end
   end

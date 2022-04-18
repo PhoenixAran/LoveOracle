@@ -19,7 +19,7 @@ function Direction4.getDirection(x, y)
     return direction
   else
     if x == 0 and y == 0 then
-      return Direction4.NONE
+      return Direction4.none
     end
     local theta = math.atan2(y, x)
     if theta < 0 then
@@ -27,7 +27,7 @@ function Direction4.getDirection(x, y)
     end
     local angleInterval =  (math.pi * 2) / 4
     local angleIndex = math.floor((theta / angleInterval) + 0.5)
-    return lume.clamp(angleIndex + 1, 1, 8)
+    return lume.clamp(angleIndex + 1, 1, 4)
   end
 end
 

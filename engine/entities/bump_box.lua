@@ -12,6 +12,7 @@ local BumpBox = Class {
     if args.y == nil then args.y = 0 end
     if args.w == nil then args.w = 1 end
     if args.h == nil then args.h = 1 end
+    if args.z == nil then args.z = 0 end
     if args.zMin == nil then args.zMin = 0 end
     if args.zMax == nil then args.zMax = 1 end
 
@@ -22,6 +23,7 @@ local BumpBox = Class {
     self.y = args.y
     self.w = args.w
     self.h = args.h
+    self.z = args.z
 
     -- layers this bumpbox should collide with
     self.collidesWithLayer = 0

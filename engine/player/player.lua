@@ -494,7 +494,7 @@ end
 
 function Player:draw()
   for _, item in pairs(self.items) do
-    if item.drawBelow then
+    if item.drawBelow and item:isVisible() then
       item:drawBelow()
     end
   end
@@ -505,7 +505,7 @@ function Player:draw()
     self.sprite:draw()
   end
   for _, item in pairs(self.items) do
-    if item.drawAbove then
+    if item.drawAbove and item:isVisible() then
       item:drawAbove()
     end
   end
