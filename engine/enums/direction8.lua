@@ -31,7 +31,7 @@ function Direction8.getDirection(x, y)
     end
     local angleInterval = (math.pi * 2) / 8
     local angleIndex = math.floor((theta / angleInterval) + 0.5)
-    return lume.clamp(angleIndex + 1, 1, 8 )
+    return (angleIndex - (math.floor(angleIndex / 8) * 8)) + 1
   end
 end
 

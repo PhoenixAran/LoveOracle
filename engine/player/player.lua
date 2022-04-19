@@ -132,6 +132,12 @@ function Player:matchAnimationDirection(inputX, inputY)
   -- we want to use Direction8 because of 8-way direction
   -- then man handle how to convert Direction8 to Direction4
   local dir8 = Direction8.getDirection(inputX, inputY)
+  for k, v in pairs(Direction8) do
+    if v == dir8 then
+      print(k)
+      break
+    end
+  end
   if dir8 == Direction8.right and animDir4 ~= Direction4.right then
     animDir4 = Direction4.right
   elseif dir8 == Direction8.upRight and animDir4 ~= Direction4.right and animDir4 ~= Direction4.up then

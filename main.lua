@@ -32,6 +32,10 @@ function makeModuleFunction(func)
   return setmetatable({}, {__call = dropSelfArg(func)})
 end
 
+local vec2 = require 'lib.vector'
+local tx, ty = vec2.normalize(.552, .287)
+print(vec2.snapDirectionByCount(tx, ty, 32))
+
 function love.load(args)
   tick.framerate = -1
   tick.rate = 1 / 60

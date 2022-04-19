@@ -27,7 +27,7 @@ function Direction4.getDirection(x, y)
     end
     local angleInterval =  (math.pi * 2) / 4
     local angleIndex = math.floor((theta / angleInterval) + 0.5)
-    return lume.clamp(angleIndex + 1, 1, 4)
+    return (angleIndex - (math.floor(angleIndex / 4) * 4)) + 1
   end
 end
 
