@@ -23,6 +23,9 @@ print('Save Directory: ' .. love.filesystem.getSaveDirectory())
      Hot reloading can't modify existing functions, but it works with tables.
      To work around this, this function will create a metatable that is callable.
 ]]
+
+love.inspect = require 'lib.inspect'
+
 function makeModuleFunction(func)
   local function dropSelfArg(func)
     return function(...)

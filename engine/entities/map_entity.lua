@@ -87,7 +87,7 @@ function MapEntity:onTransformChanged()
 end
 
 function MapEntity:release()
-  self.moveCollisions = nil
+  lume.clear(self.moveCollisions)
   Entity.release(self)
 end
 
@@ -145,6 +145,7 @@ function MapEntity:pollDeath()
 end
 
 function MapEntity:die()
+  self:release()
   self:emit('entityDestroyed')
 end
 
@@ -161,12 +162,12 @@ function MapEntity:setHealth(value)
   self.health:setHealth(value)
 end
 
-function MapEntity:setArmor(value)
-  self.health:setArmor(value)
-end
-
 function MapEntity:getArmor()
   return self.health:getArmor()
+end
+
+function MapEntity:setArmor(value)
+  self.health:setArmor(value)
 end
 
 -- movement component pass throughs
@@ -343,7 +344,7 @@ function MapEntity:hurt(damageInfo)
     self:setKnockbackVector(vector.sub(ex, ey,damageInfo.sourceX, damageInfo.sourceY))
   end
 
-  -- TODO take damage
+  self.health:takeDamage(damageInfo.damage)
   if self.onHurt then
     self:onHurt(damageInfo)
   end
@@ -383,5 +384,8 @@ function MapEntity:updateEntityEffectSprite(dt)
 end
 
 -- signal callbacks
+function MapEntity:_onHealthDepleted()
+  self.deathMarked = true
+end
 
 return MapEntity

@@ -93,7 +93,7 @@ local Player = Class { __includes = MapEntity,
     end)
     self:addPressInteraction('y', function(player)
       local damageInfo = require('engine.entities.damage_info')()
-      damageInfo.damage = 3
+      damageInfo.damage = 1
       damageInfo.hitstunTime = 8
       damageInfo.knockbackTime = 8
       damageInfo.knockbackSpeed = 80
@@ -113,6 +113,12 @@ local Player = Class { __includes = MapEntity,
     -- entity sprite effect configuration
     self.effectSprite:setOffset(0, 6)
     self.shadowVisible = true
+
+    -- signal connections
+    self.health:connect('healthDepleted', self, '_onHealthDepleted')
+
+    -- put debug stuff here
+    self.health:setMaxHealth(9999999999, true)
   end
 }
 
@@ -132,12 +138,6 @@ function Player:matchAnimationDirection(inputX, inputY)
   -- we want to use Direction8 because of 8-way direction
   -- then man handle how to convert Direction8 to Direction4
   local dir8 = Direction8.getDirection(inputX, inputY)
-  for k, v in pairs(Direction8) do
-    if v == dir8 then
-      print(k)
-      break
-    end
-  end
   if dir8 == Direction8.right and animDir4 ~= Direction4.right then
     animDir4 = Direction4.right
   elseif dir8 == Direction8.upRight and animDir4 ~= Direction4.right and animDir4 ~= Direction4.up then
