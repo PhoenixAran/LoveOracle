@@ -8,6 +8,10 @@ local tick = require 'lib.tick'
 -- Make sure we are using luaJIT
 assert(require('ffi'), 'LoveOracle requires luaJIT')
 
+-- init quake console
+require 'lib.console'
+require 'lib.console.console_commands'
+
 -- not really max, just an unrealistically high number
 math.maxinteger = 1000000000000000000000000000000000000000000000
 -- same as above but negative
@@ -40,7 +44,7 @@ local tx, ty = vec2.normalize(.552, .287)
 print(vec2.snapDirectionByCount(tx, ty, 32))
 
 function love.load(args)
-  tick.framerate = -1
+  tick.framerate = 60
   tick.rate = 1 / 60
   ContentControl.buildContent()
   --[[

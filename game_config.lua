@@ -58,7 +58,7 @@ local physicsFlags = {
 --local startupScreen = 'engine.test_screens.game_control_test'
 --local startupScreen = 'engine.test_screens.raycast_test'
 local startupScreen = 'data.test_screens.player_sword_hitbox_test'
-
+local enableQuakeConsole = true
 return {
   showSplash = showSplash,
   controls = controls,
@@ -66,4 +66,5 @@ return {
   startupScreen = startupScreen,
   version = version,
   physicsFlags = physicsFlags,
+  enableQuakeConsole = enableQuakeConsole
 }

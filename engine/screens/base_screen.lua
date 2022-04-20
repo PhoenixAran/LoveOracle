@@ -3,10 +3,15 @@ local GameConfig = require 'game_config'
 local rect = require 'engine.utils.rectangle'
 local AssetManager = require 'engine.utils.asset_manager'
 local lume = require 'lib.lume'
+local console = nil
+if GameConfig.enableQuakeConsole then
+  console = require 'lib.console'
+end
 
 local BaseScreen = Class {
   init = function(self)
     self.drawVersionText = love.graphics.newText(AssetManager.getFont('monogram'), 'Ver ' .. GameConfig.version)
+    self.consoleEnabled = false
   end
 }
 
@@ -59,6 +64,31 @@ function BaseScreen:getMousePositionInCanvas()
   x = x / monocle.scale
   y = y / monocle.scale
   return x, y
+end
+
+if console then
+  print 'Debug console enabled in basescreen!'
+  function BaseScreen:keypressed(keycode, scancode, isrepeat)
+    if keycode == '`' then
+      if self.consoleEnabled then
+        print('DISABLING CONSOLE')
+        self.consoleEnabled = false
+        love.keyboard.setKeyRepeat(false)
+      else
+        print('ENABLING CONSOLE')
+        self.consoleEnabled = true
+        love.keyboard.setKeyRepeat(true)
+      end
+    elseif self.consoleEnabled then
+      console.keypressed(keycode)
+    end
+  end
+
+  function BaseScreen:textinput(key)
+    if self.consoleEnabled and key ~= '`' then
+      console.textinput(key)
+    end
+  end
 end
 
 return BaseScreen
