@@ -213,13 +213,17 @@ function console.keypressed(key)
         if console.historyPointer == 0 then
             console.history[0] = console.input
         end
-        console.historyPointer = math.min(#console.history, console.historyPointer + 1)
-        console.input = console.history[console.historyPointer]
-        console.cursor = len_utf8(console.input)
+        if console.historyPointer ~= nil then
+            console.historyPointer = math.min(#console.history, console.historyPointer + 1)
+            console.input = console.history[console.historyPointer]
+            console.cursor = len_utf8(console.input)
+        end
     elseif key == "down" then
-        console.historyPointer = math.max(0, console.historyPointer - 1)
-        console.input = console.history[console.historyPointer] or console.input
-        console.cursor = len_utf8(console.input)
+        if console.historyPointer ~= nil then
+            console.historyPointer = math.max(0, console.historyPointer - 1)
+            console.input = console.history[console.historyPointer] or console.input
+            console.cursor = len_utf8(console.input)
+        end
     end
 
     if key == "return" then

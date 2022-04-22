@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local Input = require('engine.singletons.input').getInstance()
 local vector = require 'lib.vector'
 local BumpBox = require 'engine.entities.bump_box'
 local Pool = require 'engine.utils.pool'
@@ -162,27 +163,27 @@ function Player:updateUseDirections()
   local direction4 = Direction4.none
   local x, y = 0, 0
   -- find Direction4
-  if input:down('up') then
+  if Input:down('up') then
     direction4 = Direction4.up
-  elseif input:down('down') then
+  elseif Input:down('down') then
     direction4 = Direction4.down
-  elseif input:down('left') then
+  elseif Input:down('left') then
     direction4 = Direction4.left
-  elseif input:down('right') then
+  elseif Input:down('right') then
     direction4 = Direction4.right
   end
 
   --- now get actual x y values
-  if input:down('up') then
+  if Input:down('up') then
     y = y - 1
   end
-  if input:down('down') then
+  if Input:down('down') then
     y = y + 1
   end
-  if input:down('left') then
+  if Input:down('left') then
     x = x - 1
   end
-  if input:down('right') then
+  if Input:down('right') then
     x = x + 1
   end
 
@@ -470,16 +471,16 @@ function Player:update(dt)
   self.pressedActionButtons['x'] = false
   self.pressedActionButtons['y'] = false
 
-  if input:pressed('a') then
+  if Input:pressed('a') then
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
   end
-  if input:pressed('b') then
+  if Input:pressed('b') then
     self.pressedActionButtons['b'] = self:checkPressInteractions('b')
   end
-  if input:pressed('x') then
+  if Input:pressed('x') then
     self.pressedActionButtons['x'] = self:checkPressInteractions('x')
   end
-  if input:pressed('y') then
+  if Input:pressed('y') then
     self.pressedActionButtons['y'] = self:checkPressInteractions('y')
   end
 

@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
 local ItemUseParameters = require 'engine.items.item_use_parameters'
+local Input = require('engine.singletons.input').getInstance()
 
 local Item = Class { __includes = Entity,
   init = function(self, args)
@@ -48,7 +49,7 @@ end
 
 function Item:isButtonDown()
   for _, button in ipairs(self.useButtons) do
-    if input:down(button) then
+    if Input:down(button) then
       return true
     end
   end
@@ -57,7 +58,7 @@ end
 
 function Item:isButtonPressed()
     for _, button in ipairs(self.useButtons) do
-    if input:pressed(button) then
+    if Input:pressed(button) then
       return true
     end
   end

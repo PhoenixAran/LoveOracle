@@ -4,6 +4,8 @@ local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
 local tick = require 'lib.tick'
 local console = require 'lib.console'
+local Monocle = require('engine.singletons.monocle').instance
+local Input = require('engine.singletons.input').instance
 
 local PlayerSwordHitboxTest  = Class { __includes = BaseScreen,
   init = function(self)
@@ -26,21 +28,15 @@ function PlayerSwordHitboxTest:enter(prev, ...)
 end
 
 function PlayerSwordHitboxTest:update(dt)
-  if self.consoleEnabled then
-    console.update(dt)
-  end
-  if not self.consoleEnabled then
-    if love.keyboard.isDown('u') then
-      tick.timescale = .3
-    else
-      tick.timescale = 1
-    end
+  console.update(dt)
+  if not console.active then
+    Input:update(dt)
     self.player:update(dt)
   end
 end
 
 function PlayerSwordHitboxTest:draw()
-  monocle:begin()
+  Monocle:begin()
   self.player:draw()
   self.sword:debugDraw()
   if self.consoleEnabled then
@@ -49,10 +45,8 @@ function PlayerSwordHitboxTest:draw()
   self:drawFPS()
   self:drawMemory()
   self:drawVersion()
-  monocle:finish()
-  if self.consoleEnabled then
-    console.draw()
-  end
+  Monocle:finish()
+  console.draw()
 end
 
 return PlayerSwordHitboxTest

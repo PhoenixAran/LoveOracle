@@ -13,11 +13,7 @@
 		"Lua.diagnostics.disable": [
 		],
 		"Lua.diagnostics.globals": [
-			"makeModuleFunction",
-			"screenManager",
-			"camera",
-			"input",
-			"monocle"
+			"makeModuleFunction"
 		],
 		"Lua.workspace.preloadFileSize": 150
 	}

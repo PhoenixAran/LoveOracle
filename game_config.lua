@@ -34,7 +34,7 @@ local window = {
   }
 }
 
-local showSplash = false
+local showSplash = true
 
 -- Do not exceed 32 flags!
 local physicsFlags = {

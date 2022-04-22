@@ -3,6 +3,7 @@ local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'lib.vector'
 local Movement = require 'engine.components.movement'
 local Direction4 = require 'engine.enums.direction4'
+local Input = require('engine.singletons.input').getInstance()
 
 -- some class constants
 local JUMP_Z_VELOCITY = 2
@@ -75,7 +76,7 @@ function PlayerMovementController:pollMovementControls(allowMovementControl)
   local x, y = 0, 0
   self.moving = false
   if allowMovementControl then
-    x, y = input:get('move')
+    x, y = Input:get('move')
     x, y = vector.snapDirectionByCount(x, y, DIRECTION_SNAP)
     self.directionX, self.directionY = x, y
     if x ~= 0 or y ~= 0 then

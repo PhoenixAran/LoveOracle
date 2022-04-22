@@ -1,6 +1,5 @@
 local Class = require 'lib.class'
 local splashModule = require 'lib.one_ten_one'
-
 local SplashScreen = Class {
   init = function(self, nextScreen)
     self.nextScreen = nextScreen
