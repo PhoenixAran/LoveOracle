@@ -9,10 +9,7 @@ local tick = require 'lib.tick'
 love.inspect = require 'lib.inspect'
 
 -- singletons
-local Input = require 'engine.singletons.input'
-local Camera = require 'engine.singletons.camera'
-local ScreenManager = require 'engine.singletons.screen_manager'
-local Monocle = require 'engine.singletons.monocle'
+local Singletons = require 'engine.singletons'
 
 -- init quake console
 require 'lib.console'
@@ -42,32 +39,52 @@ function makeModuleFunction(func)
   return setmetatable({}, {__call = dropSelfArg(func)})
 end
 
+
+local screenManager = nil
+local camera = nil
+local input = nil
+local monocle = nil
+
 function love.load(args)
+  -- graphics setup
+  love.graphics.setDefaultFilter('nearest', 'nearest')
+  love.window.setTitle(gameConfig.window.title)
+  love.graphics.setFont(AssetManager.getFont('monogram'))
+  
+  -- build content
+  ContentControl.buildContent()
+
+  -- set up tick rate
   tick.framerate = 60
   tick.rate = 1 / 60
-  ContentControl.buildContent()
 
   --[[
     Singleton Inits
   ]]
-  ScreenManager.setInstance(require('lib.roomy').new())
-  ScreenManager.getInstance():hook({ exclude = {'update','draw', 'resize', 'load'} })
-  Camera.setInstance(require('lib.camera')(0,0, 160, 144))
-  Input.setInstance(require('lib.baton').new(gameConfig.controls))
-  local monocleInstance = require('lib.monocle').new()
-  monocleInstance:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
-  Monocle.setInstance(monocleInstance)
+  -- set up screen manager
+  screenManager = require('lib.roomy').new()
+  screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
+  Singletons.screenManager = screenManager
 
-  love.graphics.setDefaultFilter('nearest', 'nearest')
-  love.window.setTitle(gameConfig.window.title)
-  love.graphics.setFont(AssetManager.getFont('monogram'))
+  -- set up camera
+  camera = require('lib.camera')(0, 0, 160, 144)
+  Singletons.camera = camera
 
+  -- set up input
+  input = require('lib.baton').new(gameConfig.controls)
+  Singletons.input = input
 
+  -- set up monocle
+  monocle = require('lib.monocle').new()
+  monocle:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
+  Singletons.monocle = monocle
+
+  -- setup startup screen
   print('Startup Screen: ' .. gameConfig.startupScreen)
   if gameConfig.showSplash then
-    ScreenManager.getInstance():enter( require('engine.screens.splash_screen')(gameConfig.startupScreen))
+    screenManager:enter( require('engine.screens.splash_screen')(gameConfig.startupScreen))
   else
-    ScreenManager.getInstance():enter( require(gameConfig.startupScreen)() )
+    screenManager:enter( require(gameConfig.startupScreen)() )
   end
 
   local Slab = require 'lib.slab'
@@ -76,14 +93,14 @@ function love.load(args)
 end
 
 function love.update(dt)
-  ScreenManager.instance:emit('update', dt)
+  screenManager:emit('update', dt)
 end
 
 function love.draw()
-  ScreenManager.instance:emit('draw')
+  screenManager:emit('draw')
 end
 
 function love.resize(w, h)
-  Monocle.instance:resize(w, h)
-  ScreenManager.instance:emit('resize', w, h)
+  monocle:resize(w, h)
+  screenManager:emit('resize', w, h)
 end

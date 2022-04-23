@@ -75,9 +75,9 @@ function RoomTransitionState:onBegin()
   -- setup player tween
   self.playerSubject.x, self.playerSubject.y = self.player:getPosition()
   if self.direction4 == Direction4.left or self.direction4 == Direction4.right then
-    self.playerTween = Tween.new(TWEEN_DURATION, self.playerSubject, { x = tx, y = self.playerSubject.y }, 'linear')
+    self.playerTween = Tween.new(TWEEN_DURATION, self.playerSubject, { x = tx, y = self.playerSubject.y }, 'inOutCubic')
   elseif self.direction4 == Direction4.up or self.direction4 == Direction4.down then
-    self.playerTween = Tween.new(TWEEN_DURATION, self.playerSubject, { x = self.playerSubject.x, y = ty}, 'linear')
+    self.playerTween = Tween.new(TWEEN_DURATION, self.playerSubject, { x = self.playerSubject.x, y = ty}, 'inOutCubic')
   end
   local x1, y1 = self.newRoom:getTopLeftPosition()
   x1 = x1 - 1
@@ -107,7 +107,7 @@ function RoomTransitionState:onBegin()
   elseif self.direction4 == Direction4.right then
     self.cameraTarget.x = x1 + self.camera.w / 2
   end
-  self.cameraTween = Tween.new(TWEEN_DURATION, self.cameraSubject, self.cameraTarget, 'linear')
+  self.cameraTween = Tween.new(TWEEN_DURATION, self.cameraSubject, self.cameraTarget, 'inOutCubic')
   self.newRoom:load(self.roomControl:getEntities())
 end
 

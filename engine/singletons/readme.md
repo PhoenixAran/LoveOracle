@@ -1,1 +1,0 @@
-Singletons will be object instances from any lib that would otherwise be globals.
