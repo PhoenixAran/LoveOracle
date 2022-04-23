@@ -302,6 +302,7 @@ function Config.LoadFile(Path, IsDefault)
 end
 
 function Config.Save(Path, Table, IsDefault)
+---@diagnostic disable-next-line: unbalanced-assignments
 	local Result, Error = false
 	if Table ~= nil then
 		local Contents = Config.Encode(Table)

@@ -41,9 +41,14 @@ function AssetManager.getSoundSource(key)
 end
 
 -- font
-function AssetManager.loadFont(path, fontSize)
+function AssetManager.loadFont(path, key, fontSize)
+  if fontSize == nil then
+    fontSize = key
+    key = nil
+  end
   fontSize = fontSize or 16
-  local key = fh.getFileNameWithoutExtension(path)
+  key = key or fh.getFileNameWithoutExtension(path)
+  print(path, key, fontSize)
   assert(not AssetManager.fontCache[key], 'Font with key ' .. key .. ' already exists. Are you loading it twice?')
   local font = love.graphics.newFont(path, fontSize)
   font:setFilter('nearest', 'nearest')

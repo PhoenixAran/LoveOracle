@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local monocle = require('engine.singletons').monocle
 
 local HelloWorldTest = Class {
   init = function(self)

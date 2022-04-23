@@ -245,8 +245,10 @@ function Menu.MenuItemChecked(Label, IsChecked, Options)
 end
 
 function Menu.Separator()
+---@diagnostic disable-next-line: undefined-global
 	local Ctx = Context.Top()
 	if Ctx.Type == 'Menu' then
+---@diagnostic disable-next-line: undefined-global
 		local Item = GetItem("Sep_" .. Ctx.Data.SeparatorId)
 		Item.IsSeparator = true
 		Ctx.Data.SeparatorId = Ctx.Data.SeparatorId + 1

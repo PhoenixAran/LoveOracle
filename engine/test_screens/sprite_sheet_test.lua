@@ -1,7 +1,8 @@
 local Class = require 'lib.class'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local AssetManager = require 'engine.utils.asset_manager'
-
+local Singletons = require 'engine.singletons'
+local monocle = Singletons.monocle
 local SpriteSheetTest = Class {
   init = function(self)
     self.testEntity = 3

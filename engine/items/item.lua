@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
 local ItemUseParameters = require 'engine.items.item_use_parameters'
-local Input = require('engine.singletons.input').getInstance()
+local Input = require('engine.singletons').input
 
 local Item = Class { __includes = Entity,
   init = function(self, args)

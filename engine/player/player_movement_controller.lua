@@ -3,7 +3,7 @@ local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'lib.vector'
 local Movement = require 'engine.components.movement'
 local Direction4 = require 'engine.enums.direction4'
-local Input = require('engine.singletons.input').getInstance()
+local Input = require('engine.singletons').input
 
 -- some class constants
 local JUMP_Z_VELOCITY = 2

@@ -5,6 +5,8 @@ local SpriteRenderer = require 'engine.components.sprite_renderer'
 local Sprite = require 'engine.graphics.sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'
 
+local monocle = require('engine.singletons').monocle
+
 local CompositeSpriteTest = Class { __includes = BaseScreen,
   init = function(self)
     self.testEntity = nil

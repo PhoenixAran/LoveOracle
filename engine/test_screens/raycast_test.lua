@@ -10,6 +10,9 @@ local Physics = require 'engine.physics'
 local AssetManager = require 'engine.utils.asset_manager'
 local Slab = require 'lib.slab'
 
+local Singletons = require 'engine.singletons'
+local monocle = Singletons.monocle
+local input = Singletons.input
 
 local TestBox = Class { __includes = Entity,
   --init = function(self, name, rect, zRange)

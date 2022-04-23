@@ -155,6 +155,7 @@ function Talkies.say(title, messages, config)
     messages = { messages }
   end
 
+---@diagnostic disable-next-line: lowercase-global
   msgFifo = Fifo.new()
   
   for i=1, #messages do

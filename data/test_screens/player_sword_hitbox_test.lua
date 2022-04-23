@@ -4,8 +4,8 @@ local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
 local tick = require 'lib.tick'
 local console = require 'lib.console'
-local Monocle = require('engine.singletons.monocle').instance
-local Input = require('engine.singletons.input').instance
+local Monocle = require('engine.singletons').monocle
+local Input = require('engine.singletons').input
 
 local PlayerSwordHitboxTest  = Class { __includes = BaseScreen,
   init = function(self)
@@ -39,13 +39,11 @@ function PlayerSwordHitboxTest:draw()
   Monocle:begin()
   self.player:draw()
   self.sword:debugDraw()
-  if self.consoleEnabled then
-    love.graphics.print('Console Enabled. Press F8!')
-  end
   self:drawFPS()
   self:drawMemory()
   self:drawVersion()
   Monocle:finish()
+  love.graphics.setFont(console.font)
   console.draw()
 end
 

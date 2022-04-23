@@ -5,7 +5,7 @@ local inspect = require ('lib.inspect').inspect
 local Camera = require 'lib.camera'
 local vector = require 'lib.vector'
 local GRID_SIZE = 16
-
+local monocle = require('engine.singletons').monocle
 local DrawTilemapTest = Class {
   init = function(self)
     self.map = nil

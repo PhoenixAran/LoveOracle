@@ -6,7 +6,7 @@ local Sword = require 'engine.items.weapons.item_sword'
 local EntityInspector = require 'engine.screens.slab_modules.entity_inspector'
 local Slab = require 'lib.slab'
 local PropertyType = require('engine.entities.inspector_properties').PropertyType
-
+local monocle = require('engine.singletons').monocle
 
 local EntityInspectorTest = Class { __includes = BaseScreen,
   init = function(self)

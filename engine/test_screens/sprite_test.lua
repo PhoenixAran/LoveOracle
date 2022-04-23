@@ -4,7 +4,8 @@ local Sprite = require 'engine.graphics.sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local Subtexture = require 'engine.graphics.subtexture'
 local AssetManager = require 'engine.utils.asset_manager'
-
+local Singletons = require 'engine.singletons'
+local monocle = Singletons.monocle
 local SpriteTest = Class {
   init = function(self)
     self.testEntity = nil

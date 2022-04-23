@@ -7,6 +7,7 @@ local BaseScreen = require 'engine.screens.base_screen'
 local lume = require 'lib.lume'
 local bit = require 'bit'
 local Physics = require 'engine.physics'
+local monocle = require('engine.singletons').monocle
 
 
 local TestBox = Class { __includes = Entity,

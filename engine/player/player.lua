@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local Input = require('engine.singletons.input').getInstance()
+local Input = require('engine.singletons').input
 local vector = require 'lib.vector'
 local BumpBox = require 'engine.entities.bump_box'
 local Pool = require 'engine.utils.pool'

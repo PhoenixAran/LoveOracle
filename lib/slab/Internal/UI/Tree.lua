@@ -217,6 +217,7 @@ function Tree.Begin(Id, Options)
 		-- Force the icon to be of the same size as the tree item.
 		icon.W = H
 		icon.H = H
+---@diagnostic disable-next-line: undefined-global
 		Image.Begin(ExpandIconOptions.IconId, icon)
 
 		local ItemX, ItemY, ItemW, ItemH = Cursor.GetItemBounds()

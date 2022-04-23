@@ -11,6 +11,9 @@ local GameConfig = require 'game_config'
 local RoomControl = require 'engine.control.room_control'
 local RoomNormalState = require 'engine.control.game_states.room_states.room_normal_state'
 
+local Singletons = require 'engine.singletons'
+local monocle = Singletons.monocle
+
 local GRID_SIZE = 16
 
 local GameControl = Class { __includes = SignalObject,

@@ -6,6 +6,9 @@ local Entity = require 'engine.entities.entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
 local Direction4 = require 'engine.enums.direction4'
+local input = require('engine.singletons').input
+
+local monocle = require('engine.singletons').monocle
 
 local AnimatedSpriteRendererTest = Class { __includes = BaseScreen,
   init = function(self)

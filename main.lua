@@ -12,7 +12,7 @@ love.inspect = require 'lib.inspect'
 local Singletons = require 'engine.singletons'
 
 -- init quake console
-require 'lib.console'
+local console = require 'lib.console'
 require 'engine.console_commands'
 -- not really max, just an unrealistically high number
 math.maxinteger = 1000000000000000000000000000000000000000000000
@@ -49,10 +49,10 @@ function love.load(args)
   -- graphics setup
   love.graphics.setDefaultFilter('nearest', 'nearest')
   love.window.setTitle(gameConfig.window.title)
-  love.graphics.setFont(AssetManager.getFont('monogram'))
-  
-  -- build content
+  -- build content here (need it for font)
   ContentControl.buildContent()
+  love.graphics.setFont(AssetManager.getFont('baseScreenDebug'))
+  
 
   -- set up tick rate
   tick.framerate = 60
@@ -79,6 +79,9 @@ function love.load(args)
   monocle:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
   Singletons.monocle = monocle
 
+  -- set debug console font
+  console.font = AssetManager.getFont('debugConsole')
+
   -- setup startup screen
   print('Startup Screen: ' .. gameConfig.startupScreen)
   if gameConfig.showSplash then
@@ -86,7 +89,6 @@ function love.load(args)
   else
     screenManager:enter( require(gameConfig.startupScreen)() )
   end
-
   local Slab = require 'lib.slab'
   Slab.SetINIStatePath(nil)
   Slab.Initialize()

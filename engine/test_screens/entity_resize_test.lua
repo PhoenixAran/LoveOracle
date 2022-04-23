@@ -6,6 +6,7 @@ local TestEntity = require 'engine.test_game_entity'
 local BaseScreen = require 'engine.screens.base_screen'
 
 local Physics = require 'engine.physics'
+local monocle = require('engine.singletons').monocle
 
 local TestBox = Class { __includes = Entity,
   init = function(self, args)

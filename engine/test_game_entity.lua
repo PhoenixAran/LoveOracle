@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local Vector = require 'lib.vector'
 local MapEntity = require 'engine.entities.map_entity'
+local input = require('engine.singletons').input
 
 local TestPlayer = Class { __includes = MapEntity,
   init = function(self)

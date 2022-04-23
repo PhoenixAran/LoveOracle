@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local Slab = require 'lib.slab'
 local inspect = require 'lib.inspect'
 local assetManager = require 'engine.utils.asset_manager'
-
+local monocle = require('engine.singletons').monocle
 
 local PaletteTest = Class {
   init = function(self)

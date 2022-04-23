@@ -5,6 +5,8 @@ local BaseScreen = require 'engine.screens.base_screen'
 local TiledMapLoader = require 'engine.tiles.tiled.tiled_map_loader'
 local MapLoader = require 'engine.tiles.map_loader'
 local Map = require 'engine.tiles.map'
+local Singletons = require 'engine.singletons'
+local monocle = Singletons.monocle
 local TiledMapLoaderTest = Class { __includes = BaseScreen,
   init = function(self)
 

@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
-
+local Singletons = require 'engine.singletons'
+local input = Singletons.input
 local A = Class { __includes = SignalObject,
   init = function(self)
     SignalObject.init(self)

@@ -2,19 +2,22 @@ local Class = require 'lib.class'
 local GameConfig = require 'game_config'
 local rect = require 'engine.utils.rectangle'
 local AssetManager = require 'engine.utils.asset_manager'
-local Monocle = require('engine.singletons.monocle').instance
 local lume = require 'lib.lume'
 local console = require 'lib.console'
 
+local Singletons = require 'engine.singletons'
+local monocle = Singletons.monocle
+local input = Singletons.input
+
 local BaseScreen = Class {
   init = function(self)
-    self.drawVersionText = love.graphics.newText(AssetManager.getFont('monogram'), 'Ver ' .. GameConfig.version)
+    self.drawVersionText = love.graphics.newText(AssetManager.getFont('baseScreenDebug'), 'Ver ' .. GameConfig.version)
     self.consoleEnabled = true
   end
 }
 
 function BaseScreen:drawFPS()
-  local monogram = AssetManager.getFont('monogram')  
+  local monogram = AssetManager.getFont('baseScreenDebug')
   love.graphics.setFont(monogram)
   local fps = ("%d fps"):format(love.timer.getFPS())
   love.graphics.setColor(1, 1, 1)
@@ -22,7 +25,7 @@ function BaseScreen:drawFPS()
 end
 
 function BaseScreen:drawMemory()
-  local monogram = AssetManager.getFont('monogram')
+  local monogram = AssetManager.getFont('baseScreenDebug')
   love.graphics.setFont(monogram)
   local memory = ("%d kbs"):format(collectgarbage("count", 10, 10))
   love.graphics.setColor(1, 1, 1)
@@ -30,7 +33,7 @@ function BaseScreen:drawMemory()
 end
 
 function BaseScreen:drawVersion()
-  local monogram = AssetManager.getFont('monogram')
+  local monogram = AssetManager.getFont('baseScreenDebug')
   love.graphics.setFont(monogram)
   local version = 'Ver ' .. GameConfig.version
   love.graphics.setColor(1, 1, 1)
@@ -44,23 +47,23 @@ function BaseScreen:mouseClickInGame(x, y)
   if x == nil or y == nil then
     x, y = love.mouse.getPosition()
   end
-  local mx = Monocle.x
-  local my = Monocle.y
-  local width = Monocle.windowWidth * Monocle.scale
-  local height = Monocle.windowHeight * Monocle.scale
+  local mx = monocle.x
+  local my = monocle.y
+  local width = monocle.windowWidth * monocle.scale
+  local height = monocle.windowHeight * monocle.scale
   return rect.containsPoint(mx, my, width, height, x, y)
 end
 
 function BaseScreen:getMousePositionInCanvas()
   local x, y = love.mouse.getPosition()
-  local mx = Monocle.x
-  local my = Monocle.y
-  local width = Monocle.windowWidth * Monocle.scale
-  local height = Monocle.windowHeight * Monocle.scale 
+  local mx = monocle.x
+  local my = monocle.y
+  local width = monocle.windowWidth * monocle.scale
+  local height = monocle.windowHeight * monocle.scale 
   x = x - mx
   y = y - my 
-  x = x / Monocle.scale
-  y = y / Monocle.scale
+  x = x / monocle.scale
+  y = y / monocle.scale
   return x, y
 end
 

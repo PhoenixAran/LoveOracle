@@ -1,6 +1,8 @@
 local Class = require 'lib.class'
 local BaseScreen = require 'engine.screens.base_screen'
 local Slab = require 'lib.slab'
+local Singletons = require 'engine.singletons'
+local monocle = Singletons.monocle
 
 local Screen = Class { __includes = BaseScreen,
   init = function(self)

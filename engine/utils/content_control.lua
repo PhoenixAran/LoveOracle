@@ -16,9 +16,8 @@ local lume = require 'lib.lume'
 local ContentControl = { }
 
 -- TODO:make fonts non hardcoded
-local function loadFonts()
-  AssetManager.loadFont('data/assets/fonts/monogram.ttf', 16)
-  AssetManager.loadFont('data/assets/fonts/dialogue.ttf', 10)
+local function loadFonts(directory)
+  require('data.fonts')(AssetManager.loadFont)
 end
 
 local function loadImages(directory)
@@ -54,7 +53,7 @@ end
 function ContentControl.buildContent()
   local startTime = love.timer.getTime()
   initBitTags()
-  loadFonts()
+  loadFonts('data/assets/fonts')
   loadImages('data/assets/images')
   loadSpriteSheets('data/assets/spritesheets')
   PaletteBank.initialize('data.palettes')
