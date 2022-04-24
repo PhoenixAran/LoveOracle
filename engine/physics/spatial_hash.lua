@@ -143,6 +143,26 @@ function SpatialHash:aabbBroadphase(box, boundsX, boundsY, boundsW, boundsH)
   return boxes
 end
 
+function SpatialHash:rectcast(x, y, w, h, hits, layerMask, zmin, zmax)
+  local px1, py1 = self:cellCoords(x, y)
+  local px2, py2 = self:cellCoords(x + w, y + h)
+  local count = 0
+  for x  = px1, px2 do
+    for y = py1, py2 do
+      local cell = self:cellAtPosition(x, y)
+      for i, otherBox in ipairs(cell) do
+        if rect.intersects(x, y, w, h, otherBox.x, otherBox.y, otherBox.w, otherBox.h)
+          and bit.band(otherBox.physicsLayer, layerMask) ~= 0
+          and otherBox.zRange.max > zmin and otherBox.zRange.min < zmax then
+            lume.push(hits, otherBox)
+            count = count + 1
+        end
+      end
+    end
+  end
+  return count
+end
+
 function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
   local directionX, directionY = vector.sub(endX, endY, startX, startY)
   self.raycastResultParser:start(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
