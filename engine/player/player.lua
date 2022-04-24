@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local Entity = require 'engine.entities.entity'
 local lume = require 'lib.lume'
 local Input = require('engine.singletons').input
 local vector = require 'lib.vector'
@@ -30,10 +31,9 @@ local Player = Class { __includes = MapEntity,
     args.direction = args.direction or Direction4.down
     MapEntity.init(self, args)
     -- room edge collision
-    local ex, ey = self:getPosition()
     self.roomEdgeCollisionBox = Collider(self, {
-      x = ex - 12/2,
-      y = ey - 13/2,
+      x = -12/2,
+      y = -13/2,
       w = 12,
       h = 12,
       offsetX = 0,
@@ -462,6 +462,7 @@ end
 
 function Player:update(dt)
   -- pre-state update
+  self.groundObserver:update(dt)
   self:requestNaturalState()
   self.playerMovementController:update(dt)
   self:updateUseDirections()
@@ -516,6 +517,11 @@ function Player:draw()
       item:drawAbove()
     end
   end
+end
+
+function Player:debugDraw()
+  Entity.debugDraw(self)
+  self.roomEdgeCollisionBox:debugDraw()
 end
 
 function Player:getInspectorProperties()

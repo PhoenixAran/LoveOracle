@@ -38,6 +38,7 @@ end
 function PlayerSwordHitboxTest:draw()
   Monocle:begin()
   self.player:draw()
+  self.player:debugDraw()
   self.sword:debugDraw()
   self:drawFPS()
   self:drawMemory()

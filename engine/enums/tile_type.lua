@@ -1,3 +1,4 @@
+-- todo: maybe turn these into integer flags like BitTag
 local TileTypes = {
   Normal = 'normal',
   Wall = 'wall',

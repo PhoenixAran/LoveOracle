@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local bit = require 'bit'
 local vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
 local TablePool = require 'engine.utils.table_pool'
@@ -26,12 +27,12 @@ end
 local SpatialHash = Class {
   init = function(self, cellSize)
     if cellSize == nil then cellSize = 32 end
-    
+
     self.cellSize = cellSize
     self.inverseCellSize = 1 / cellSize
-    
+
     self.cellDict = { }
-    
+
     self.gridBounds = { x = 0, y = 0, w = 0, h = 0 }
     self.overlapTestBox = { x = 0, y = 0, w = 0, h = 0 }
 
@@ -228,5 +229,19 @@ function SpatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin,
   return self.raycastResultParser.hitCounter
 end
 
+function SpatialHash:pointcast(posx, posy, hits, layerMask, zmin, zmax)
+  local cellx, celly = self:cellCoords(posx, posy)
+  local cell = self:cellAtPosition(cellx, celly)
+  local count = 0
+  for i, box in ipairs(cell) do
+    if rect.containsPoint(box.x, box.y, box.w, box.h, posx, posy)
+      and box.zRange.max > zmin and box.zRange.min < zmax
+      and bit.band(layerMask, box.physicsLayer) ~= 0 then
+        lume.push(hits, box)
+        count = count + 1
+    end
+  end
+  return count
+end
 
 return SpatialHash

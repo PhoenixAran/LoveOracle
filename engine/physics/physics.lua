@@ -34,4 +34,8 @@ function Physics.linecast(startX, startY, endX, endY, hits, layerMask, zmin, zma
   return spatialHash:linecast(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
 end
 
+function Physics.pointcast(posX, posY, hits, layerMask, zmin, zmax)
+  return spatialHash:pointcast(posX, posY, hits, layerMask, zmin, zmax)
+end
+
 return Physics
