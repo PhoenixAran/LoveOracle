@@ -36,17 +36,6 @@ local window = {
 
 local showSplash = false
 
--- Do not exceed 32 flags!
-local physicsFlags = {
-  'entity',
-  'player',
-  'enemy',
-  'npc',
-  'platform',
-  'tile',
-  'room_edge'
-}
-
 --local startupScreen = 'engine.test_screens.animated_sprite_renderer_test'
 --local startupScreen = 'engine.test_screens.sprite_sheet_test'
 --local startupScreen = 'engine.test_screens.draw_tilemap_test'
@@ -65,6 +54,5 @@ return {
   window = window,
   startupScreen = startupScreen,
   version = version,
-  physicsFlags = physicsFlags,
   enableQuakeConsole = enableQuakeConsole
 }

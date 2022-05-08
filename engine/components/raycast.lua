@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local Component = require 'engine.entities.component'
 local Physics = require 'engine.physics'
-local BitTag = require 'engine.utils.bit_tag'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 
 local Raycast = Class { __includes = { Component },
   init = function(self, entity, args)
@@ -43,20 +43,20 @@ end
 function Raycast:setCollidesWithLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do 
-      self.collidesWithLayer = bit.bor(self.collidesWithLayer, BitTag.get(v).value)
+      self.collidesWithLayer = bit.bor(self.collidesWithLayer, PhysicsFlags:get(v).value)
     end
   else
-    self.collidesWithLayer = bit.bor(self.collidesWithLayer, BitTag.get(layer).value)
+    self.collidesWithLayer = bit.bor(self.collidesWithLayer, PhysicsFlags:get(layer).value)
   end
 end
 
 function Raycast:unsetCollidesWithLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
-      self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(v).value))
+      self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(PhysicsFlags:get(v).value))
     end
   else
-    self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(layer).value))
+    self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(PhysicsFlags:get(layer).value))
   end
 end
 

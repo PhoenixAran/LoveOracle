@@ -5,8 +5,8 @@ local vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
 local lume = require 'lib.lume'
 local bit = require 'bit'
-local BitTag = require 'engine.utils.bit_tag'
 local Physics = require 'engine.physics'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local AssetManager = require 'engine.utils.asset_manager'
 local Slab = require 'lib.slab'
 
@@ -28,7 +28,7 @@ local RaycastTestScreen = Class { __includes = BaseScreen,
     self.testBoxes = { }
     self.hits = { }
     self.clickCount = 0
-    self.physicsDetectLayer = BitTag.get('entity').value
+    self.physicsDetectLayer = PhysicsFlags:get('entity').value
     self.startX, self.startY = 0, 0
     self.endX, self.endY = 0, 0
   end

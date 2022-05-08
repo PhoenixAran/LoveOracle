@@ -3,7 +3,6 @@ local GameConfig = require 'game_config'
 local PaletteBank = require 'engine.utils.palette_bank'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local TiledMapLoader = require 'engine.tiles.tiled.tiled_map_loader'
-local BitTag = require 'engine.utils.bit_tag'
 local lume = require 'lib.lume'
 
 --[[
@@ -44,15 +43,8 @@ local function loadSpriteSheets(directory)
   end
 end
 
-local function initBitTags()
-  for k, v in ipairs(GameConfig.physicsFlags) do
-    BitTag(v)
-  end
-end
-
 function ContentControl.buildContent()
   local startTime = love.timer.getTime()
-  initBitTags()
   loadFonts('data/assets/fonts')
   loadImages('data/assets/images')
   loadSpriteSheets('data/assets/spritesheets')
@@ -64,7 +56,6 @@ function ContentControl.buildContent()
 end
 
 function ContentControl.unloadContent()
-  BitTag.reset()
   SpriteBank.unload()
   PaletteBank.unload()
   AssetManager.unload()

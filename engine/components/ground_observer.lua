@@ -1,9 +1,10 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local Physics = require 'engine.physics'
-local BitTag = require 'engine.utils.bit_tag'
 local Component = require 'engine.entities.component'
-local TileTypes = require 'engine.enums.tile_type'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
+local TileTypes = TileTypeFlags.enumMap
 
 local GroundObserver = Class { __includes = {Component},
   init = function(self, entity, args)
@@ -13,7 +14,7 @@ local GroundObserver = Class { __includes = {Component},
     Component.init(self, entity, args)
     self.pointOffsetX = args.pointOffsetX or 0
     self.pointOffsetY = args.pointOffsetY or 0
-    self.layerMask = BitTag.get('tile').value
+    self.layerMask = PhysicsFlags:get('tile').value
     self.hits = { }
     self.inLava = false
     self.inGrass = false
@@ -37,7 +38,7 @@ function GroundObserver:update(dt)
   if 0 < count then
     for _, tile in ipairs(self.hits) do
       local tileType = tile:getTileType()
-      if tileType == TileTypes.Lava or tileType == TileTypes.LavaFall then
+      if tileType == TileTypes.Lava or tileType == TileTypes.Lavafall then
         self.inLava = true
       elseif tileType == TileTypes.Grass then
         self.inGrass = true
@@ -45,9 +46,9 @@ function GroundObserver:update(dt)
         self.onStairs = true
       elseif tileType == TileTypes.Ice then
         self.onIce = true
-      elseif tileType == TileTypes.puddle or tileType == TileTypes.water 
+      elseif tileType == TileTypes.Puddle or tileType == TileTypes.Water
           or tileType == TileTypes.DeepWater or tileType == TileTypes.Ocean
-          or tileType == TileTypes.WaterFall or tileType == TileTypes.Whirlpool then
+          or tileType == TileTypes.Waterfall or tileType == TileTypes.Whirlpool then
         self.inWater = true
       elseif tileType == TileTypes.Ladder then
         self.onLadder = true

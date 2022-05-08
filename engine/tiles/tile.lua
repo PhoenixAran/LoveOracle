@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local bit = require 'bit'
-local BitTag = require 'engine.utils.bit_tag'
+local PhysicsFlags = require 'engine.utils.bit_tag'
 local Entity = require 'engine.entities.entity'
 local TileType = require 'engine.enums.tile_type'
 local GRID_SIZE = 16

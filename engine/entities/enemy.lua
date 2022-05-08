@@ -8,8 +8,8 @@ local Physics = require 'engine.physics'
 local Collider = require 'engine.components.collider'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
-local TileTypes = require 'engine.enums.tile_type'
-local BitTag = require 'engine.utils.bit_tag'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 
 local Enemy = Class { __includes = MapEntity,
   init = function(self, args)
@@ -40,35 +40,24 @@ function Enemy:canMoveInDirection(x, y)
   x, y = vector.normalize(x, y)
   local hits = TablePool.obtain()
   -- check for any tiles in the way
-  local tileLayer = BitTag.get('tile')
+  local tileLayer = PhysicsFlags:get('tile')
   local ex, ey = self:getPosition()
   local velx, vely = vector.mul(x, y, self.movement:getSpeed())
   local potentialx, potentialy = ex + velx, ey + vely
   -- check for anything the entity can collide with is in the way
   if Physics.rectcast(potentialx, potentialy, self.w, self.h, self.physicsLayer, self.zRange.min, self.zRange.max) then
     for _, otherBox in ipairs(hits) do
-      if otherBox:isTile() then
-        local tileType = otherBox:getTypeType()
-        -- check for solid types, or hazard tiles
-        if self.collisionTiles[otherBox:getTileType()] then
-          canMove = false
-          break
-        elseif self.canFallInHole and tileType == TileTypes.Hole then
-          canMove = false
-          break
-        elseif (not self.canSwimInLava) and (tileType == TileTypes.Lava or tileType == TileTypes.LavaFall) then
-          canMove = false
-          break
-        elseif (not self.canSwimInWater) and (tileType == TileTypes.DeepWater or tileType == TileTypes.ocean) then
-          canMove = false
-          break
-        end
+      if otherBox:isTile() and self.collisionTiles[otherBox:getTileType()] then
+        canMove = false
+        break
       else
         canMove = false
         break
       end
     end
   end
+  -- check for any hazard tiles
+  -- TODO Singletons.entities.getTopTile(vecx, vecy):isHazardTile() or something along these lines
   TablePool.free(hits)
   return canMove
 end

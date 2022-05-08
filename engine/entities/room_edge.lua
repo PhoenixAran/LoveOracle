@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
-local BitTag = require 'engine.utils.bit_tag'
 local Physics = require 'engine.physics'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TablePool = require 'engine.utils.table_pool'
 local vector = require 'lib.vector'
 local lume = require 'lib.lume'
@@ -13,8 +13,8 @@ local RoomEdge = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
     self.direction4 = args.direction4
-    -- you dont want to be able to transition if there is no room to transitoin to
-    -- mainly ued for rooms ad the edge of you dont put a wall there for whatever reason
+    -- you dont want to be able to transition if there is no room to transition to
+    -- mainly used for rooms ad the edge of you dont put a wall there for whatever reason
     self.canTransition = false
     self.transitionStyle = args.transitionStyle or 'push'
     self:signal('roomTransitionRequest')

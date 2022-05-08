@@ -106,6 +106,20 @@ function Entities:getTileEntity(x, y, layer)
   return self.tileEntities[layer][tileIndex]
 end
 
+function Entities:getTopTileEntity(x, y)
+  x, y = math.floor(x), math.floor(y)
+  x = x + 1
+  y = y + 1
+  local tileIndex = (y - 1) * self.mapWidth * x
+  for layer = lume.count(self.tileEntities), 1, -1 do
+    local tileEntity = self.tileEntities[layer][tileIndex]
+    if tileEntity then
+      return tileEntity
+    end
+  end
+  return nil
+end
+
 function Entities:update(dt)
   self.player:update(dt)
   for _, entity in ipairs(self.entities) do

@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local bit = require 'bit'
 local rect = require 'engine.utils.rectangle'
-local BitTag = require 'engine.utils.bit_tag'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 
 local BumpBox = Class {
   init = function(self, args)
@@ -97,20 +97,20 @@ end
 function BumpBox:setCollidesWithLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
-      self.collidesWithLayer = bit.bor(self.collidesWithLayer, BitTag.get(v).value)
+      self.collidesWithLayer = bit.bor(self.collidesWithLayer, PhysicsFlags:get(v).value)
     end
   else
-    self.collidesWithLayer = bit.bor(self.collidesWithLayer, BitTag.get(layer).value)
+    self.collidesWithLayer = bit.bor(self.collidesWithLayer, PhysicsFlags:get(layer).value)
   end
 end
 
 function BumpBox:unsetCollidesWithLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
-      self.collidesWithLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(v).value))
+      self.collidesWithLayer = bit.band(self.collidesWithLayer, bit.bnot(PhysicsFlags:get(v).value))
     end
   else
-    self.collidesWithLayer = bit.band(self.collidesWithLayer, bit.bnot(BitTag.get(layer).value))
+    self.collidesWithLayer = bit.band(self.collidesWithLayer, bit.bnot(PhysicsFlags:get(layer).value))
   end
 end
 
@@ -121,20 +121,20 @@ end
 function BumpBox:setPhysicsLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
-      self.physicsLayer = bit.bor(self.physicsLayer, BitTag.get(v).value)
+      self.physicsLayer = bit.bor(self.physicsLayer, PhysicsFlags:get(v).value)
     end
   else
-    self.physicsLayer = bit.bor(self.physicsLayer, BitTag.get(layer).value)
+    self.physicsLayer = bit.bor(self.physicsLayer, PhysicsFlags:get(layer).value)
   end
 end
 
 function BumpBox:unsetPhysicsLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
-      self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(v).value))
+      self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(PhysicsFlags:get(v).value))
     end
   else
-    self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(BitTag.get(layer).value))
+    self.physicsLayer = bit.band(self.physicsLayer, bit.bnot(PhysicsFlags:get(layer).value))
   end
 end
 
