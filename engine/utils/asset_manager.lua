@@ -48,7 +48,6 @@ function AssetManager.loadFont(path, key, fontSize)
   end
   fontSize = fontSize or 16
   key = key or fh.getFileNameWithoutExtension(path)
-  print(path, key, fontSize)
   assert(not AssetManager.fontCache[key], 'Font with key ' .. key .. ' already exists. Are you loading it twice?')
   local font = love.graphics.newFont(path, fontSize)
   font:setFilter('nearest', 'nearest')
