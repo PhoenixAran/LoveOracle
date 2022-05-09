@@ -1,9 +1,8 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local bit = require 'bit'
-local PhysicsFlags = require 'engine.utils.bit_tag'
 local Entity = require 'engine.entities.entity'
-local TileType = require 'engine.enums.tile_type'
+local TileType = require('engine.enums.flags.tile_type_flags').enumMap
 local GRID_SIZE = 16
 
 local function makeTileEntityName(tileIndexX, tileIndexY, layer)
@@ -31,7 +30,6 @@ local Tile = Class { __includes = Entity,
     self.tileIndexX = tileIndexX
     self.tileIndexY = tileIndexY
     self.sprite = tileData:getSprite()
-
     self:setPhysicsLayer('tile')
   end
 }

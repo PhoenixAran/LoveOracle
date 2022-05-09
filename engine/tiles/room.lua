@@ -76,6 +76,7 @@ function Room:load(entities)
         local tileData, gid = self.map:getTileData(x, y, layerIndex)
         if tileData then
           local tile = Tile(tileData, x, y, layerIndex)
+          tile:initTransform()
           entities:addTileEntity(tile)
           if (not self.animatedTilesCollectionCreated) and tile:isAnimated() then
             self.animatedTiles[tileData.instanceId] = tileData

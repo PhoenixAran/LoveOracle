@@ -7,8 +7,7 @@ local lume = require 'lib.lume'
 
 --[[
   Module that will take care of loading in assets, setting
-  up the banks (palette banks, sprite banks, tileset banks),
-  and setting up the BitTag module.
+  up the banks (palette banks, sprite banks, tileset banks)
   You can also use this module to unload assets and reload them.
   Useful for Content Viewing / debugging
 ]]

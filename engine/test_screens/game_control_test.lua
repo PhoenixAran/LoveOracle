@@ -6,6 +6,7 @@ local Map = require 'engine.tiles.map'
 local BaseScreen = require 'engine.screens.base_screen'
 local Physics = require 'engine.physics'
 local Player = require 'engine.player.player'
+local Input = require('engine.singletons').input
 
 
 local GameControlTest = Class { __includes = BaseScreen,
@@ -34,6 +35,7 @@ function GameControlTest:enter(prev, ...)
 end
 
 function GameControlTest:update(dt)
+  Input:update(dt)
   self.gameControl:update(dt)
 end
 

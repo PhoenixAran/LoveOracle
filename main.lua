@@ -7,7 +7,6 @@ local AssetManager = require 'engine.utils.asset_manager'
 local tick = require 'lib.tick'
 
 love.inspect = require 'lib.inspect'
-love.inspect(love.graphics.getSystemLimits( ))
 -- singletons
 local Singletons = require 'engine.singletons'
 

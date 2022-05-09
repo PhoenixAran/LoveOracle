@@ -5,6 +5,7 @@ local Sword = require 'engine.items.weapons.item_sword'
 local Direction4 = require 'engine.enums.direction4'
 local Singletons = require 'engine.singletons'
 local monocle = Singletons.monocle
+local Input = require('engine.singletons').input
 
 local PlayerPlayground = Class { __includes = BaseScreen,
   init = function(self)
@@ -19,6 +20,7 @@ function PlayerPlayground:enter(prev, ...)
     x = 24,
     y = 24
   })
+  self.player:initTransform()
   self.sword = Sword()
   self.sword.useButtons = { 'b' }
   self.player:equipItem(self.sword)
@@ -26,6 +28,7 @@ function PlayerPlayground:enter(prev, ...)
 end
 
 function PlayerPlayground:update(dt)
+  Input:update(dt)
   self.player:update(dt)
 end
 

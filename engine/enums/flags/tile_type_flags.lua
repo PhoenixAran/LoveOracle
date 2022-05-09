@@ -20,7 +20,7 @@ TileTypeFlags:makeTags {
 }
 
 TileTypeFlags:makeEnumMap {
-  Normal = 'normal', 
+  Normal = 'normal',
   Wall = 'wall',
   Stairs = 'stairs',
   Ladder = 'ladder',

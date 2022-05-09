@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local TileType = require 'engine.enums.tile_type'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local ph = require 'engine.utils.parse_helpers'
 
 local Sprite = require 'engine.graphics.sprite'
@@ -8,7 +8,7 @@ local SpriteFrame = require 'engine.graphics.sprite_frame'
 local TileSpriteRenderer = require 'engine.tiles.tile_sprite_renderer'
 
 -- used to validate tile types
-local TileTypeInverse = lume.invert(TileType)
+local TileTypeInverse = lume.invert(TileTypeFlags.enumMap)
 
 local function makeTileSprite(tilesetTile)
   if tilesetTile:isAnimated() then
@@ -24,11 +24,11 @@ local function makeTileSprite(tilesetTile)
 end
 
 local function parseTileType(tileType)
-  assert(tileType == nil or TileTypeInverse[tileType], 'Invalid tiletype given: ' .. tostring(tileType))
   if tileType == nil then
-    return TileType.Normal
+    return TileTypeFlags:get('normal').value
   end
-  return tileType
+  assert(TileTypeFlags:get(tileType) ~= nil, 'Invalid tiletype given: ' .. tostring(tileType))
+  return TileTypeFlags:get(tileType).value
 end
 
 local function parseRect(dimensions)
