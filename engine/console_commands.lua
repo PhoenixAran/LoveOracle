@@ -1,11 +1,8 @@
 local console = require 'lib.console'
 
--- timescale command
-console.help.timescale = {
-  section = "Gameplay",
-  "Sets the timescale if a number is given.",
-  "If not, it will return the current timescale value"
-}
+
+--- Console Command. Sets or Gets timescale
+---@param args table
 function console.commands.timescale(args)
   local tick  = require 'lib.tick'
   print(tonumber(args))
@@ -15,12 +12,13 @@ function console.commands.timescale(args)
     console.print('Current timescale: ' .. tick.timescale)
   end
 end
-
--- fullscreen command
-console.help.fullscreen = {
-  section = 'Graphics',
-  'Toggles fullscreen'
+console.help.timescale = {
+  section = "Gameplay",
+  "Sets the timescale if a number is given.",
+  "If not, it will return the current timescale value"
 }
+
+--- Console Command. Toggles fullscreen mode
 function console.commands.fullscreen()
   local wasFullscreen = love.window.getFullscreen()
   if not love.window.setFullscreen(not love.window.getFullscreen()) then
@@ -31,3 +29,7 @@ function console.commands.fullscreen()
     end
   end
 end
+console.help.fullscreen = {
+  section = 'Graphics',
+  'Toggles fullscreen'
+}
