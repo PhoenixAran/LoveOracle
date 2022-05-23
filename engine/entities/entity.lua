@@ -35,7 +35,6 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
 }
 
 function Entity:getName()
-  return self.name
 end
 
 function Entity:getType()

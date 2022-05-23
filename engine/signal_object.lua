@@ -8,6 +8,7 @@ local lume = require 'lib.lume'
 ---@field bindingArgs table
 ---@field argumentHolder table
 ---@field targetMethod function
+---@field init function
 local SignalConnection = Class {
   init = function(self, signal, targetObject, targetMethod, bindingArgs)
     self.signal = signal
@@ -89,6 +90,7 @@ end
 ---@class SignalObject
 ---@field signals Signal[]
 ---@field connections SignalConnection[] SignalConnections this SignalObject exists in
+---@field init function We get this from the class module
 local SignalObject = Class {
   init = function(self)
     self.signals = { }
