@@ -9,6 +9,10 @@ local lume = require 'lib.lume'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 
+---@class RoomEdge : Entity
+---@field canTransition boolean
+---@field direction4 integer
+---@field transitionStyle string
 local RoomEdge = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)

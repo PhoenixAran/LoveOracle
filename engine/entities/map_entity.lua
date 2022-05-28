@@ -16,7 +16,7 @@ local Physics = require 'engine.physics'
 local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 
----@class MapEntity
+---@class MapEntity : Entity
 ---@field health Health
 ---@field movement Movement
 ---@field groundObserver GroundObserver
@@ -34,6 +34,8 @@ local DamageInfo = require 'engine.entities.damage_info'
 ---@field shadowVisible boolean
 ---@field rippleVisible boolean
 ---@field grassVisible boolean
+---@field onHurt function
+---@field onBump function
 local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -113,6 +115,8 @@ function MapEntity:isPersistant()
   return self.persistant
 end
 
+--- unset a tiletype this map entity can collide with
+---@param tileType string|string[]
 function MapEntity:setCollisionTile(tileType)
   if type(tileType) == 'table' then
     for _, val in ipairs(tileType) do
@@ -123,6 +127,8 @@ function MapEntity:setCollisionTile(tileType)
   end
 end
 
+--- set a tiletype this map entity can collide with
+---@param tileType string|string[]
 function MapEntity:unsetCollisionTile(tileType)
   if type(tileType) == 'table' then
     for _, val in ipairs(tileType) do
@@ -133,10 +139,14 @@ function MapEntity:unsetCollisionTile(tileType)
   end
 end
 
--- animation
+-- animation stuff
+
+---sets if this map entity should match its direction with it's sprite
+---@param value boolean
 function MapEntity:setSyncDirectionWithAnimation(value)
   self.syncDirectionWithAnimation = true
 end
+
 
 function MapEntity:doesSyncDirectionWithAnimation()
   return self.syncDirectionWithAnimation
@@ -156,6 +166,7 @@ function MapEntity:getAnimationDirection4()
   return self.animationDirection4
 end
 
+---makes sure this entity should be dead. If it should, it marks this entity as death marked
 function MapEntity:pollDeath()
   if self.deathMarked and not (self:inHitstun() or self:inKnockback()) then
     self:die()
@@ -210,8 +221,8 @@ function MapEntity:setVectorAwayFrom(x, y)
   return self.movement:setVector(vector.sub(mx, my, x, y))
 end
 
-function MapEntity:getLinearVelocity(x, y)
-  return self.movement:getLinearVelocity(x, y)
+function MapEntity:getLinearVelocity(dt)
+  return self.movement:getLinearVelocity(dt)
 end
 
 function MapEntity:getSpeed()
@@ -233,6 +244,9 @@ function MapEntity:isOnGround()
   return not self:isInAir()
 end
 
+
+---carries out the movement designated by the Movement Component
+---@param dt number
 function MapEntity:move(dt)
   lume.clear(self.moveCollisions)
   local posX, posY = self:getPosition()
@@ -295,6 +309,7 @@ function MapEntity:move(dt)
 end
 
 -- combat component pass throughs
+
 function MapEntity:isIntangible()
   return self.combat:isIntangible()
 end
@@ -343,6 +358,8 @@ function MapEntity:getKnockbackVelocity(dt)
   return self.combat:getKnockbackVelocity(dt)
 end
 
+--- hurt this entity
+---@param damageInfo DamageInfo|integer
 function MapEntity:hurt(damageInfo)
   if type(damageInfo) == 'number' then
     local damage = damageInfo
@@ -369,6 +386,11 @@ function MapEntity:hurt(damageInfo)
   self:signal('entityHit')
 end
 
+---TODO bump this entity
+---@param sourcePositionX any
+---@param sourcePositionY any
+---@param duration any
+---@param speed any
 function MapEntity:bump(sourcePositionX, sourcePositionY, duration, speed)
   -- TODO bump entity
   if self.onBump then
@@ -378,6 +400,7 @@ function MapEntity:bump(sourcePositionX, sourcePositionY, duration, speed)
 end
 
 -- sprite flash
+---@param duration integer
 function MapEntity:flashSprite(duration)
   self.spriteFlasher:flash(duration)
 end

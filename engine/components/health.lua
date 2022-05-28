@@ -83,6 +83,15 @@ function Health:heal(amount)
   self:emit('healthChanged', self.health)
 end
 
+---@param value number
+function Health:setArmor(value)
+  self.armor = value
+end
+
+function Health:getArmor()
+  return self.armor
+end
+
 function Health:isDepleted()
   return self.health <= 0
 end

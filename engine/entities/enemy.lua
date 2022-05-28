@@ -11,6 +11,10 @@ local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 
+---@class Enemy : MapEntity
+---@field canFallInHole boolean
+---@field canSwimInLava boolean
+---@field canSwimInWater boolean
 local Enemy = Class { __includes = MapEntity,
   init = function(self, args)
     MapEntity.init(self, args)
