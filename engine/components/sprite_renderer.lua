@@ -2,9 +2,12 @@ local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
 local PaletteBank = require 'engine.utils.palette_bank'
 
----@class SpriteRenderer
+---@class SpriteRenderer : Component
 ---@field palette Palette
-
+---@field offsetX number
+---@field offsetY number
+---@field followZ boolean
+---@field sprite Sprite|ColorSprite|CompositeSprite|PrototypeSprite
 local SpriteRenderer = Class { __includes = Component,
   init = function(self, entity, args)
     Component.init(self, entity, args)
@@ -28,6 +31,7 @@ function SpriteRenderer:getType()
   return 'sprite_renderer'
 end
 
+---@param sprite Sprite|ColorSprite|CompositeSprite|PrototypeSprite
 function SpriteRenderer:setSprite(sprite)
   self.sprite = sprite
 end
@@ -73,6 +77,7 @@ function SpriteRenderer:getPalette()
   return self.palette
 end
 
+---@param palette Palette
 function SpriteRenderer:setPalette(palette)
   self.palette = palette
 end

@@ -8,6 +8,15 @@ local States = {
   Completed = 3
 }
 
+---@class AnimatedSpriteRenderer : SpriteRenderer
+---@field state integer
+---@field animations table<any, SpriteAnimation>
+---@field substripKey integer
+---@field currentAnimationKey string
+---@field currentAnimation SpriteAnimation
+---@field currentFrameIndex integer
+---@field currentTick integer
+---@field loopType string
 local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
   --init = function(self, entity, animations, defaultAnimation, offsetX, offsetY, followZ, enabled, visible)
   init = function(self, entity, args)
@@ -61,6 +70,10 @@ function AnimatedSpriteRenderer:setSubstripKey(value)
   end
 end
 
+---play given animation
+---@param animation string
+---@param substripKey integer?
+---@param forcePlayFromStart boolean?
 function AnimatedSpriteRenderer:play(animation, substripKey, forcePlayFromStart)
   if forcePlayFromStart == nil then forcePlayFromStart = false end
   local playFromStart = forcePlayFromStart

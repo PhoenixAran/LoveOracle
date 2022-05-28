@@ -5,11 +5,19 @@ local Component = require 'engine.entities.component'
 local Physics = require 'engine.physics'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 
+---@class Raycast : Component
+---@field offsetX number
+---@field offsetY number
+---@field castToX number
+---@field castToY number
+---@field zRange ZRange
+---@field exceptions BumpBox[]
+---@field collidesWityLayer integer
 local Raycast = Class { __includes = { Component },
   init = function(self, entity, args)
     Component.init(self, entity, args)
     self.offsetX = 0
-    self.offsetY = 0 
+    self.offsetY = 0
     self.castToX = 0
     self.castToY = 0
     self.zRange = {
@@ -40,6 +48,7 @@ function Raycast:getCollisionLayer()
   return self.collidesWithLayer
 end
 
+---@param layer string|string[]
 function Raycast:setCollidesWithLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do 
@@ -50,6 +59,7 @@ function Raycast:setCollidesWithLayer(layer)
   end
 end
 
+---@param layer string|string[]
 function Raycast:unsetCollidesWithLayer(layer)
   if type(layer) == 'table' then
     for _, v in ipairs(layer) do
@@ -60,14 +70,17 @@ function Raycast:unsetCollidesWithLayer(layer)
   end
 end
 
+---@param value number
 function Raycast:setCollidesWithLayerExplicit(value)
   self.collidesWithLayer = value
 end
 
+---@param box BumpBox
 function Raycast:addException(box)
   lume.push(self.exceptions, box)
 end
 
+---@param box BumpBox
 function Raycast:removeException(box)
   lume.push(self.exceptions, box)
 end

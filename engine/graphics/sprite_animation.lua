@@ -5,6 +5,7 @@ local Class = require 'lib.class'
 ---@field spriteFrames table
 ---@field timedActions table
 ---@field substrips boolean
+---@field loopType string
 local SpriteAnimation = Class {
   init = function(self, spriteFrames, timedActions, loopType, substrips)
     if substrips == nil then substrips = false end
@@ -23,7 +24,7 @@ local SpriteAnimation = Class {
         left = { ... },
         right = { ... }
       }
-      timedActions will also be structured as 
+      timedActions will also be structured as
       {
         1 = { ... } -- default when no substripKey is used in getter function
         up = { 

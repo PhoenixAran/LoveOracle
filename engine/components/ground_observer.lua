@@ -6,6 +6,18 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local TileTypes = TileTypeFlags.enumMap
 
+---@class GroundObserver : Component
+---@field pointOffsetX number
+---@field pointOffsetY number
+---@field layerMask number
+---@field hits Tile[]
+---@field inLava boolean
+---@field inGrass boolean
+---@field onStairs boolean
+---@field onLadder boolean
+---@field onIce boolean
+---@field inWater boolean
+---@field inHole boolean
 local GroundObserver = Class { __includes = {Component},
   init = function(self, entity, args)
     if args == nil then

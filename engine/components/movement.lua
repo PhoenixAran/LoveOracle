@@ -4,6 +4,22 @@ local vector = require 'lib.vector'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 
+---component that manages an entity's movement
+---@class Movement : Component
+---@field speed number
+---@field minSpeed number
+---@field acceleration number
+---@field deceleration number
+---@field slippery boolean
+---@field gravity number
+---@field maxFallSpeed number
+---@field vectorX number
+---@field vectorY number
+---@field zVelocity number
+---@field motionX number
+---@field motionY number
+---@field prevMotionX number
+---@field prevMotionY number
 local Movement = Class { __includes = Component,
   init = function(self, entity, args)
     if args == nil then
@@ -56,6 +72,9 @@ function Movement:getVector()
   return self.vectorX, self.vectorY
 end
 
+---sets movement vector
+---@param x number
+---@param y number
 function Movement:setVector(x, y)
   self.vectorX, self.vectorY = x, y
 end

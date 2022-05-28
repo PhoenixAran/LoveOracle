@@ -17,7 +17,7 @@ local lume = require 'lib.lume'
 ---@field sizeX integer
 ---@field sizeY integer
 ---@field Sprites Sprite[]|ColorSprite[]|PrototypeSprite[]|CompositeSprite[]
----@field SpriteHash table<number, Sprite>
+---@field SpriteHash table<string, Sprite>
 ---@field viewerSize number
 local Spriteset = Class {
   -- viewersize is used in SpriteSet viewer

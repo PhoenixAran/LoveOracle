@@ -16,6 +16,17 @@ local function setPositionRelativeToEntity(hitbox)
   hitbox.z = hitbox.entity:getZPosition()
 end
 
+---@class Hitbox : BumpBox, Component
+---@field offsetX integer
+---@field offsetY integer
+---@field detectOnly integer
+---@field canHitMultiple boolean
+---@field useEntityAsSource boolean
+---@field damage integer
+---@field knockbackTime integer
+---@field knockbackSpeed integer
+---@field hitstunTime integer
+---@field damageInfo DamageInfo
 local Hitbox = Class { __includes = { BumpBox, Component },
   init = function(self, entity, args)
     if args == nil then
@@ -127,6 +138,8 @@ function Hitbox:getDamageInfo()
   return self.damageInfo
 end
 
+---@param x number
+---@param y number
 function Hitbox:setOffset(x, y)
   Physics.remove(self)
   self.offsetX = x
@@ -135,6 +148,8 @@ function Hitbox:setOffset(x, y)
   Physics.add(self)
 end
 
+---@param width integer
+---@param height integer
 function Hitbox:resize(width, height)
   Physics.remove(self)
   self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
@@ -142,7 +157,11 @@ function Hitbox:resize(width, height)
   Physics.add(self)
 end
 
---sets offset and resizes hitbox
+---sets offset and resizes hitbox
+---@param offsetX number
+---@param offsetY number
+---@param width integer
+---@param height integer
 function Hitbox:move(offsetX, offsetY, width, height)
   Physics.remove(self)
   self.offsetX = offsetX
@@ -152,18 +171,21 @@ function Hitbox:move(offsetX, offsetY, width, height)
   Physics.add(self)
 end
 
--- raise the hitbox hitboxEntered signal
+---raise the hitbox hitboxEntered signal
+---@param hitbox Hitbox
 function Hitbox:reportCollision(hitbox)
   self:emit('hitboxEntered', hitbox)
 end
 
--- notify that this hitbox inflicted damage
+---notify that this hitbox inflicted damage
+---@param hitbox Hitbox
 function Hitbox:notifyDidDamage(hitbox)
   self:emit('damagedOther', hitbox)
 end
 
--- notify that this hitbox has been resisted
--- used to let the owner know to stop the attack or something
+---notify that this hitbox has been resisted
+---used to let the owner know to stop the attack or something
+---@param hitbox Hitbox
 function Hitbox:notifyResisted(hitbox)
   self:emit('notifyResisted', hitbox)
 end

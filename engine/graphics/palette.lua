@@ -92,7 +92,9 @@ function Palette:compileShader()
   else
     local otherOrignalColors = lume.slice(self.originalColors, 1)
     local otherAlternateColors = lume.slice(self.alternateColors, 1)
+---@diagnostic disable-next-line: redundant-parameter
     self.shader:sendColor('originalColors', self.originalColors[1], otherOrignalColors)
+---@diagnostic disable-next-line: redundant-parameter
     self.shader:sendColor('alternateColors', self.alternateColors[1], otherAlternateColors)
   end
 end

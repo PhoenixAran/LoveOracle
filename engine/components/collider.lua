@@ -9,6 +9,10 @@ local Physics = require 'engine.physics'
 -- If your entity just needs one collider, just use the entity itself since it is a bumpbox
 -- Main use case (and probably only use case) for this component is for entities to have different
 -- sized collision box for screen edge borders
+---@class Collider : BumpBox, Component
+---@field offsetX number
+---@field offsetY number
+---@field detectOnly number
 local Collider = Class { __includes = { BumpBox, Component },
   init = function(self, entity, args)
     if args == nil then

@@ -2,6 +2,13 @@ local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
 local lume = require 'lib.lume'
 
+---manages 'flashing' of sprite renderers and animated sprite renderers
+---@class SpriteFlasher
+---@field tick integer
+---@field duration integer
+---@field isActive boolean
+---@field alpha number
+---@field sprites SpriteRenderer[]
 local SpriteFlasher = Class { __includes = Component,
   init = function(self, entity, args)
     if args == nil then
@@ -23,18 +30,22 @@ function SpriteFlasher:getType()
   return 'sprite_flasher'
 end
 
+---@param value number
 function SpriteFlasher:setAlpha(value)
   self.alpha = value
 end
 
+---@param spriteRenderer SpriteRenderer
 function SpriteFlasher:addSprite(spriteRenderer)
   lume.push(self.sprites, spriteRenderer)
 end
 
+---@param spriteRenderer SpriteRenderer
 function SpriteFlasher:removeSprite(spriteRenderer)
   lume.remove(self.sprites, spriteRenderer)
 end
 
+---@param duration integer
 function SpriteFlasher:flash(duration)
   self.isActive = true
   self.tick = 0

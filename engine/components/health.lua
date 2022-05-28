@@ -2,6 +2,10 @@ local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
 local lume = require 'lib.lume'
 
+---@class Health : Component
+---@field maxHealth integer
+---@field health integer
+---@field armor integer
 local Health = Class { __includes = Component,
   init = function(self, entity, args)
     if args == nil then
@@ -29,6 +33,9 @@ function Health:getMaxHealth()
   return self.maxHealth
 end
 
+---sets max health
+---@param value integer
+---@param setCurrentHealthAlso integer if the current health should also be set to max value
 function Health:setMaxHealth(value, setCurrentHealthAlso)
   self.maxHealth = value
   self:emit('maxHealthChanged', self.maxHealth)
@@ -45,6 +52,7 @@ function Health:getHealth()
   return self.health
 end
 
+---@param value integer
 function Health:setHealth(value)
   local oldHealth = self.health
   self.health = value
@@ -54,6 +62,7 @@ function Health:setHealth(value)
   end
 end
 
+---@param damage integer
 function Health:takeDamage(damage)
   local oldHealth = self.health
   if 0 < damage then
@@ -68,6 +77,7 @@ function Health:takeDamage(damage)
   end
 end
 
+---@param amount integer
 function Health:heal(amount)
   self.health = lume.clamp(self.health + amount, 0, self.maxHealth)
   self:emit('healthChanged', self.health)

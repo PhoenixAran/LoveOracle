@@ -39,7 +39,8 @@ end
 
 ---get specific subtexture with spritesheet index
 ---@param x integer
----@param y integer?
+---@param y integer
+---@overload fun(index : integer)
 ---@return Subtexture
 function SpriteSheet:getTexture(x, y)
   if y == nil then -- treat x as a one dimensional index
