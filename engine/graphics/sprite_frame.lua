@@ -1,5 +1,9 @@
 local Class = require 'lib.class'
 
+--- used in SpriteAnimation class
+---@class SpriteFrame
+---@field sprite Sprite|ColorSprite|PrototypeSprite|CompositeSprite
+---@field delay integer
 local SpriteFrame = Class {
   init = function(self, sprite, delay)
     if delay == nil then delay = 6 end

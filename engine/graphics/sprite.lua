@@ -1,6 +1,14 @@
 local Class = require 'lib.class'
 
--- Basic Sprite Class
+--- basic sprite
+---@class Sprite
+---@field subtexture Subtexture
+---@field offsetX number
+---@field offsetY number
+---@field w number
+---@field h number
+---@field originX number
+---@field originY number
 local Sprite = Class {
   init = function(self, subtexture, offsetX, offsetY)
     if offsetX == nil then offsetX = 0 end
@@ -44,6 +52,11 @@ function Sprite:getDimensions()
   return self.subtexture:getDimensions()
 end
 
+---gets the boundaries of this sprite
+---@return number x
+---@return number y
+---@return number w
+---@return number h
 function Sprite:getBounds()
   local x, y = self:getOffset()
   local w, h = self:getDimensions()

@@ -27,15 +27,19 @@ local function makePaletteShader(originalColors, alternateColors)
   return love.graphics.newShader(shaderCode)
 end
 
+---@class Palette
+---@field name string
+---@field originalColors number[]
+---@field alternateColors number[]
+---@field shader love.Shader
+---@field normalizeValues boolean
 local Palette = Class {
   init = function(self, name, originalColors, alternateColors)
     self.name = name
-    
     -- color tables will be array of tables 
     -- table elements will represent colors as such: { .23, .1, .32 } (alpha values not supported!)
     self.originalColors = originalColors or { }
     self.alternateColors = alternateColors or { }
-    self.hash = nil
     self.shader = nil
     self.normalizeValues = true
   end
@@ -45,6 +49,9 @@ function Palette:getName()
   return self.name
 end
 
+---adds color pair for shader
+---@param originalColor number[]
+---@param alternateColor number[]
 function Palette:addColorPair(originalColor, alternateColor)
   assert(lume.count(originalColor) == 3, 'color must be an array of 3 values')
   assert(lume.count(alternateColor) == 3, 'alternateColor must be an array of 3 values')
@@ -69,6 +76,8 @@ function Palette:addColorPair(originalColor, alternateColor)
   lume.push(self.alternateColors, alternateColor)
 end
 
+---returns the love shader instance
+---@return love.Shader
 function Palette:getShader()
   return self.shader
 end

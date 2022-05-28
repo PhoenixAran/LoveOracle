@@ -22,6 +22,7 @@ local __ZRange = { }
 ---@field physicsLayer number layer this bumpbox exists in
 ---@field registeredWithPhysics boolean flag to keep track if this bumpbox
 ---@field registeredPhysicsBounds table the bounds of this box when it was registered with the physics system
+---@field init function given from class module. Here so language server doesnt complain init does not exist
 local BumpBox = Class {
   init = function(self, args)
     if args == nil then

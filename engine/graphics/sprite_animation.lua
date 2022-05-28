@@ -1,6 +1,10 @@
 local Class = require 'lib.class'
 
--- should this really be a class? it kinda just serves at documentation at this point
+-- sprite animation instance
+---@class SpriteAnimation
+---@field spriteFrames table
+---@field timedActions table
+---@field substrips boolean
 local SpriteAnimation = Class {
   init = function(self, spriteFrames, timedActions, loopType, substrips)
     if substrips == nil then substrips = false end
@@ -54,12 +58,12 @@ end
 
 function SpriteAnimation:getSpriteFrames(substripKey)
   if substripKey == nil then
-    if self:hasSubstrips() then
+    if self.substrips then
       return self.spriteFrames[1]
     end
     return self.spriteFrames
   else
-    if not self:hasSubstrips() then
+    if not self.substrips then
       return self.spriteFrames
     end
     return self.spriteFrames[substripKey]
@@ -68,12 +72,12 @@ end
 
 function SpriteAnimation:getTimedActions(substripKey)
   if substripKey == nil then
-    if self:hasSubstrips() then
+    if self.substrips then
       return self.timedActions[1]
     end
     return self.timedActions
   else
-    if not self:hasSubstrips() then
+    if not self.substrips then
       return self.timedActions
     end
     return self.timedActions[substripKey]
@@ -86,7 +90,7 @@ end
 
 function SpriteAnimation:release()
   self.timedActions = nil
-  if self:hasSubstrips() then
+  if self.substrips then
     for i, frames in pairs(self.spriteFrames) do
       for j, frame in pairs(frames) do
         frame:release()

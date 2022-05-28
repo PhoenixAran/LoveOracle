@@ -16,6 +16,24 @@ local Physics = require 'engine.physics'
 local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 
+---@class MapEntity
+---@field health Health
+---@field movement Movement
+---@field groundObserver GroundObserver
+---@field combat Combat
+---@field effectSprite AnimatedSpriteRenderer
+---@field spriteFlasher SpriteFlasher
+---@field sprite SpriteRenderer | AnimatedSpriteRenderer
+---@field roomEdgeCollisionBox Collider
+---@field moveCollisions BumpBox[]
+---@field collisionTiles Tile[]
+---@field deathMarked boolean
+---@field persistant boolean
+---@field syncDirectionWithAnimation boolean
+---@field animationDirection4 integer
+---@field shadowVisible boolean
+---@field rippleVisible boolean
+---@field grassVisible boolean
 local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)

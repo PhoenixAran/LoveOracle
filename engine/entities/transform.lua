@@ -1,5 +1,12 @@
 -- @author Starkkz
 
+---@class Transform
+---@field x number
+---@field y number
+---@field z number
+---@field Parent Transform
+---@field Children Transform[]
+---@field Entity Entity
 Transform = {}
 Transform.__index = Transform
 Transform.x, Transform.y, Transform.z = 0, 0, 0
@@ -16,7 +23,8 @@ function Transform:new(entity)
 
 end
 
--- @description: Assigns a transform as a parent of another transform
+--- @description: Assigns a transform as a parent of another transform
+---@param Parent Transform
 function Transform:setParent(Parent)
 	if self.Parent then
 

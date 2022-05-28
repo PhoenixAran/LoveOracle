@@ -2,6 +2,11 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local Subtexture = require 'engine.graphics.subtexture'
 
+---collection of Subtextures organized as a spritesheet
+---@class SpriteSheet
+---@field textures Subtexture[]
+---@field rowCount integer
+---@field colCount integer
 local SpriteSheet = Class {
   init = function(self, image, width, height, margin, spacing)
     self.textures = { }
@@ -32,6 +37,10 @@ function SpriteSheet:getType()
   return 'sprite_sheet'
 end
 
+---get specific subtexture with spritesheet index
+---@param x integer
+---@param y integer?
+---@return Subtexture
 function SpriteSheet:getTexture(x, y)
   if y == nil then -- treat x as a one dimensional index
     return self.textures[x]
@@ -39,6 +48,8 @@ function SpriteSheet:getTexture(x, y)
   return self.textures[(y - 1) * self.colCount + x]
 end
 
+---number of subtextures in spritesheet
+---@return integer
 function SpriteSheet:size()
   return lume.count(self.textures)
 end

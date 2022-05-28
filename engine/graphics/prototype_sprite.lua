@@ -2,6 +2,16 @@ local Class = require 'lib.class'
 
 -- Acts as a sprite
 -- Its really just a colored rectangle
+---@class PrototypeSprite
+---@field r number
+---@field g number
+---@field b number
+---@field w number width
+---@field h number height
+---@field originX number
+---@field originY number
+---@field offsetX number
+---@field offsetY number
 local PrototypeSprite = Class {
   init = function(self, r, g, b, width, height, offsetX, offsetY)
     if offsetX == nil then offsetX = 0 end
@@ -67,7 +77,6 @@ function PrototypeSprite:draw(x, y, alpha)
 end
 
 function PrototypeSprite:release()
-  
 end
 
 return PrototypeSprite

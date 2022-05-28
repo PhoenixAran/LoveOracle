@@ -6,6 +6,12 @@ local PaletteBank = require 'engine.utils.palette_bank'
 -- Will override the current palette shader.
 -- Useful if sprite doesnt match your current color palette
 -- defined in your SpriteRenderer or current Tile Set Theme
+
+---@class ColorSprite
+---@field sprite Sprite
+---@field palette Palette
+---@field offsetX number
+---@field offsetY number
 local ColorSprite = Class {
   init = function(self, sprite, palette, offsetX, offsetY)
     if offsetX == nil then offsetX = 0 end
@@ -34,11 +40,11 @@ function ColorSprite:getOffset()
 end
 
 function ColorSprite:getOffsetX()
-  return self.x + self.sprite:getOffsetX()
+  return self.offsetX + self.sprite:getOffsetX()
 end
 
 function ColorSprite:getOffsetY()
-  return self.y + self.sprite:getOffsetY()
+  return self.offsetY + self.sprite:getOffsetY()
 end
 
 function ColorSprite:getWidth()

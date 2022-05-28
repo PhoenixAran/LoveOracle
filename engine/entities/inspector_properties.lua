@@ -20,7 +20,19 @@ local PropertyMode = {
   Direct = 2
 }
 
--- friend type
+---@class Property
+---@field source table
+---@field label string
+---@field propType string
+---@field readOnly boolean
+---@field mode integer
+---@field isObjectFuncs boolean
+---@field getFunc function
+---@field setFunc function
+---@field propName string
+---@field min number
+---@field max number
+---@field argumentHolder any[]
 local Property = Class {
   init = function(self, source, label, propType, readOnly)
     self.propType = propType
@@ -114,7 +126,9 @@ function Property:isReadOnly()
   return self.readOnly
 end
 
--- export type
+---@class InspectorProperties
+---@field source table
+---@field properties Property[]
 local InspectorProperties = Class {
   init = function(self, source)
     self.source = source
@@ -148,13 +162,13 @@ local function setReadOnlyAccessor(property, getFunc, isObjectFuncs)
   end
 end
 
--- INT
 function InspectorProperties:addInt(label, getFunc, setFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Int)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
+---
 function InspectorProperties:addReadOnlyInt(label, getFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Int, true)
   setReadOnlyAccessor(property, getFunc, isObjectFuncs)

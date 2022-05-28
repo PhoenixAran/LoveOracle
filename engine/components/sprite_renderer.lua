@@ -2,6 +2,9 @@ local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
 local PaletteBank = require 'engine.utils.palette_bank'
 
+---@class SpriteRenderer
+---@field palette Palette
+
 local SpriteRenderer = Class { __includes = Component,
   init = function(self, entity, args)
     Component.init(self, entity, args)

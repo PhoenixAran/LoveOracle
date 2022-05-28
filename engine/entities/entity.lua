@@ -8,6 +8,14 @@ local InspectorProperties = require 'engine.entities.inspector_properties'
 
 local Physics = require 'engine.physics'
 
+---@class Entity : SignalObject, BumpBox
+---@field enabled boolean
+---@field visible boolean
+---@field transform Transform
+---@field name string
+---@field onTransformChanged function
+---@field onAwake function
+---@field onRemoved function
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, args)
     if args == nil then
@@ -35,6 +43,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
 }
 
 function Entity:getName()
+  return self.name
 end
 
 function Entity:getType()
@@ -65,7 +74,7 @@ function Entity:isEnabled()
   return self.enabled
 end
 
--- position and transform stuff
+---called when transform is changed
 function Entity:transformChanged()
   local ex, ey = self:getPosition()
   -- need to manually calculate it because Entity:setPositionWithBumpCoords
@@ -77,31 +86,48 @@ function Entity:transformChanged()
   end
 end
 
+---position of the trasnform relative to the parnet transform. If the transform has no parent, it is the same as the Transform
+---@return number x
+---@return number y
 function Entity:getLocalPosition()
   local x, y, z = self.transform:getLocalPosition()
   return x, y
 end
 
+---gets z position
+---@return number z
 function Entity:getZPosition()
   local x, y, z = self.transform:getPosition()
   return z
 end
 
+---sets z position
+---@param z number
 function Entity:setZPosition(z)
   local x, y = self:getPosition()
   self.transform:setPosition(x, y, z)
 end
 
+---returns position
+---@return number x
+---@return number y
 function Entity:getPosition()
   local x, y, z = self.transform:getPosition()
   return x, y
 end
 
+---sets entity position
+---@param x any
+---@param y any
+---@param z any
 function Entity:setPosition(x, y, z)
   if z == nil then z = self:getZPosition() end
   self.transform:setPosition(x, y, z)
 end
 
+---sets position via top left corner position
+---@param x number
+---@param y number
 function Entity:setPositionWithBumpCoords(x, y)
   self.transform:setPosition(x + self.w / 2, y + self.h / 2)
 end
@@ -115,25 +141,35 @@ function Entity:initTransform()
   self.transform:setRotation(0)
 end
 
+---sets local position
+---@param x number
+---@param y number
 function Entity:setLocalPosition(x, y)
   self.transform:setLocalPosition(x, y)
 end
 
+---resizes entity
+---@param width number
+---@param height number
 function Entity:resize(width, height)
   Physics.remove(self)
   self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
   Physics.add(self)
 end
 
+---adds given entity's transform as child
+---@param entity any
 function Entity:addChild(entity)
   entity.transform:setParent(self.transform)
 end
 
--- gameloop callbacks
+---called when entity as added
+---@param gameScreen any current scene
 function Entity:added(gameScreen)
 
 end
 
+---called when the entity is awaken
 function Entity:awake()
   Physics.add(self)
   self.registeredWithPhysics = true
@@ -142,14 +178,19 @@ function Entity:awake()
   end
 end
 
+---called every frame interval
+---@param dt number
 function Entity:update(dt)
 
 end
 
+---draw method
 function Entity:draw()
 
 end
 
+---called when the entity is removed
+---@param scene any
 function Entity:removed(scene)
   Physics.remove(self)
   self.registeredWithPhysics = false
@@ -159,6 +200,7 @@ function Entity:removed(scene)
   end
 end
 
+---debug draw
 function Entity:debugDraw()
   --love draws from the upper left corner so we use our bump coordinates
   local positionX, positionY = self:getBumpPosition()
@@ -167,6 +209,8 @@ function Entity:debugDraw()
   love.graphics.setColor(1, 1, 1)
 end
 
+---gets inspector properties object for entity inspector
+---@return InspectorProperties
 function Entity:getInspectorProperties()
   local props = InspectorProperties(self)
   props:addReadOnlyString('Name', 'name')
