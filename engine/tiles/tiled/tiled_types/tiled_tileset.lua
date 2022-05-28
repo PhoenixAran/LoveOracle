@@ -2,6 +2,14 @@ local Class = require 'lib.class'
 
 -- raw tileset data directly translated from json file. This requires the wrapper class TileLayerTileset for
 -- tile id mappings. This class can be reused since it does not contain MapData specific values like 'firstGid'
+---@class TiledTileset
+---@field name string?
+---@field width integer
+---@field height integer
+---@field tileWidth integer
+---@field tileHeight integer
+---@field tiles table<integer, TiledTilesetTile>
+---@field spritesheet SpriteSheet?
 local TiledTileset = Class {
   init = function(self)
     self.name = nil

@@ -1,5 +1,18 @@
 local Class = require 'lib.class'
 
+---@class TiledObject
+---@field id integer
+---@field name string
+---@field objectType string
+---@field tiledType string
+---@field x integer
+---@field y integer
+---@field width integer
+---@field height integer
+---@field points table[]
+---@field properties table
+---@field rotation number
+---@field jid integer
 local TiledObject = Class {
   init = function(self)
     self.id = nil

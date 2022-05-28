@@ -1,5 +1,10 @@
 local Class = require 'lib.class'
 
+---@class TiledObjectLayer
+---@field name string?
+---@field objects table[]
+---@field properties table
+---@field type string
 local TiledObjectLayer = Class {
   init = function(self)
     self.name = nil

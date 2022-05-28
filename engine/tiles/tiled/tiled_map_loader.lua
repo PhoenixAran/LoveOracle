@@ -5,7 +5,7 @@ local FileHelper = require 'engine.utils.file_helper'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local AssetManager = require 'engine.utils.asset_manager'
 local TiledMapData = require 'engine.tiles.tiled.tiled_types.tiled_map_data'
-local TileLayerTileset = require 'engine.tiles.tiled.tiled_types.tiled_tile_layer_tileset'
+local TiledLayerTileset = require 'engine.tiles.tiled.tiled_types.tiled_tile_layer_tileset'
 local TiledTileset = require 'engine.tiles.tiled.tiled_types.tiled_tileset'
 local TiledTilesetTile = require 'engine.tiles.tiled.tiled_types.tiled_tileset_tile'
 local TiledObject = require 'engine.tiles.tiled.tiled_types.tiled_object'
@@ -20,6 +20,8 @@ local tiledMapDataCache  = { }
 -- export type
 local TiledMapLoader = { }
 
+---@param jProperties table
+---@return table
 local function parsePropertyDict(jProperties)
   -- JSON converts quite nicely to lua, so we just select the key and value
   local properties = { }
@@ -31,6 +33,9 @@ local function parsePropertyDict(jProperties)
   return properties
 end
 
+---@param jObject table
+---@param mapData TiledMapData
+---@return TiledObject
 local function parseObject(jObject, mapData)
   local tiledObject = TiledObject()
   tiledObject.id = jObject.id
@@ -69,6 +74,7 @@ end
 -- Only tilelayer and objectgroup is supported. The only ones I'll probably use
 local layerParsers = {
   ['tilelayer'] = function(jLayer)
+    ---@type TiledTileLayer
     local tiledTileLayer = TiledTileLayer()
     tiledTileLayer.name = jLayer.name
     tiledTileLayer.width = jLayer.width
@@ -85,6 +91,7 @@ local layerParsers = {
     return tiledTileLayer
   end,
   ['objectgroup'] = function(jLayer)
+    ---@type TiledObjectLayer
     local tiledObjLayer = TiledObjectLayer()
     tiledObjLayer.name = jLayer.name
     for _, jObj in ipairs(jLayer.objects) do
@@ -103,13 +110,17 @@ end
 
 -- not exposed to public API.
 -- They will need to call TiledMapLoader.initTilesets() to load all the tilesets into memory
+---@param path string
+---@return TiledTileset
 local function loadTileset(path)
   -- tileset is indexed by name
   local key = FileHelper.getFileNameWithoutExtension(path)
   if tiledTilesetCache[key] then
     return tiledTilesetCache[key]
   end
+  ---@type table
   local jTileset = json.decode(love.filesystem.read(path))
+  ---@type TiledTileset
   local tileset = TiledTileset()
   tileset.name = key
   -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
@@ -155,6 +166,8 @@ local function loadTileset(path)
 end
 
 -- NB: path will be relative to data/tiled/maps
+---@param path string
+---@return TiledMapData
 function TiledMapLoader.loadMapData(path)
   assert(tilesetCacheCreated, 'Call TiledMapLoader.initTilesets before you load maps')
   local pathPrefix = 'data/tiled/maps/'
@@ -163,8 +176,9 @@ function TiledMapLoader.loadMapData(path)
   if tiledMapDataCache[path] then
     return tiledMapDataCache[path]
   end
-
+  ---@type TiledMapData
   local mapData = TiledMapData()
+  ---@type table
   local jMap = json.decode(love.filesystem.read(path))
   assert(jMap.orientation == "orthogonal", 'Only orthogonal tiled maps are supported')
   mapData.name = FileHelper.getFileNameWithoutExtension(path)
@@ -175,7 +189,7 @@ function TiledMapLoader.loadMapData(path)
   mapData.properties = parsePropertyDict(jMap.properties)
   for _, jTileLayerTileset in ipairs(jMap.tilesets) do
     assert(jTileLayerTileset.source, 'Embedded tilesets are not supported')
-    local tileLayerTileset = TileLayerTileset()
+    local tileLayerTileset = TiledLayerTileset()
     tileLayerTileset.firstGid = jTileLayerTileset.firstgid
     tileLayerTileset.tileset = loadTileset(jTileLayerTileset.source)
     lume.push(mapData.tilesets, tileLayerTileset)
@@ -193,6 +207,7 @@ function TiledMapLoader.loadMapData(path)
   return mapData
 end
 
+---@return TiledTileset
 function TiledMapLoader.getTileset(name)
   assert(tiledTilesetCache[name], 'Tileset with name ' .. name .. ' does not exist')
   return tiledTilesetCache[name]

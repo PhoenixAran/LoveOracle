@@ -3,6 +3,12 @@ local lume = require 'lib.lume'
 
 -- Tile element in Tilesets. Requires wrapper class TileLayerTile for correct Tile mapping ids
 -- Can be reused since it does not contain any MapData specific data
+---@class TiledTilesetTile
+---@field id integer
+---@field subtexture Subtexture
+---@field animatedTextures Subtexture[]
+---@field durations integer[]
+---@field properties table
 local TiledTilesetTile = Class {
   init = function(self)
     self.id = -1
@@ -21,6 +27,7 @@ function TiledTilesetTile:getType()
   return 'tiled_tileset_tile'
 end
 
+---@return boolean
 function TiledTilesetTile:isAnimated()
   if self.animatedTextures == nil then
     return false

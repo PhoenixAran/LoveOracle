@@ -6,8 +6,11 @@ local Class = require 'lib.class'
    Example, map has Tileset A and Tileset B. Tileset A has the default firstgid of 1 and Tileset B has first gid of 7
    Tile 1 will point to A[1 - A.firstgid]
    Tile 7 will point to B[7 - B.firstgid]
+   Wrapper around Tileset. Do not reuse cache this class, as each MapData instance has unique TileLayerTilesets
 ]]--
--- Wrapper around Tileset. Do not reuse cache this class, as each MapData instance has unique TileLayerTilesets
+---@class TiledTileLayerTileset
+---@field firstGid integer
+---@field tileset TiledTileset
 local TiledTileLayerTileset = Class {
   init = function(self, firstGid, tileset)
     self.firstGid = firstGid

@@ -1,6 +1,12 @@
 local Class = require 'lib.class'
 
+-- NB: I dont think this is used at all
 -- wrapper around TilesetTile. Do not reuse this class, as each MapData instance has unique tile id mappings
+---@class TiledTileLayerTile
+---@field tileLayerTileset TiledTileLayerTileset
+---@field gid integer
+---@field x integer
+---@field y integer
 local TiledTileLayerTile = Class {
   init = function(self)
     self.tileLayerTileset = nil

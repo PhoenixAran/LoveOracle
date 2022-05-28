@@ -1,6 +1,15 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
+---@class TiledMapData
+---@field name string?
+---@field height integer
+---@field width integer
+---@field layers TiledObjectLayer[]|TiledTileLayer[]
+---@field properties table
+---@field tilesets TiledTileLayerTileset[]
+---@field tileLayers TiledTileLayer[]
+---@field objectLayers TiledObjectLayer[]
 local TiledMapData = Class {
   init = function(self)
     self.name = nil
@@ -24,6 +33,7 @@ function TiledMapData:getType()
   return 'tiled_map_data'
 end
 
+---@return TiledTileLayerTileset
 function TiledMapData:getTilesetForTileLayerGid(gid)
   local tilesetCount = lume.count(self.tilesets)
   assert(tilesetCount > 0)
