@@ -11,6 +11,7 @@ local lume = require 'lib.lume'
 ---@field tileLayers TiledTileLayer[]
 ---@field objectLayers TiledObjectLayer[]
 local TiledMapData = Class {
+  ---@param self TiledMapData
   init = function(self)
     self.name = nil
     -- number of tile rows

@@ -7,13 +7,17 @@ local MapData = require 'engine.tiles.map_data'
 local LayerTileset = require 'engine.tiles.layer_tileset'
 local RoomData = require 'engine.tiles.room_data'
 
+---@type table<string, Tileset>
 local tilesetCache = { }
+---@type table<string, MapData>
 local mapCache = { }
 local GRID_SIZE = 16
 
--- export type
+---@class MapLoader
 local MapLoader = { }
 
+---@param name string
+---@return Tileset
 function MapLoader.getTileset(name)
   if tilesetCache[name] then
     return tilesetCache[name]
@@ -33,6 +37,8 @@ function MapLoader.getTileset(name)
 end
 
 -- NB: path will be relative to data/tiled/maps
+---@param path string
+---@return MapData
 function MapLoader.loadMapData(path)
   if mapCache[path] then
     return mapCache[path]
@@ -73,7 +79,6 @@ function MapLoader.loadMapData(path)
         end
       elseif layer.name:lower() == 'entities' then
         -- todo parse entities
-        
       else
         error('Unsupported object layer name: ' .. layer.name:lower())
       end

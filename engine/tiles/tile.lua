@@ -9,6 +9,12 @@ local function makeTileEntityName(tileIndexX, tileIndexY, layer)
   return tostring(tileIndexX) .. '_' .. tostring(tileIndexY) .. '-' .. tostring(layer)
 end
 
+---@class Tile : Entity
+---@field tileData TileData
+---@field layer integer
+---@field tileIndexX integer
+---@field tileIndexY integer
+---@field sprite TileSpriteRenderer
 local Tile = Class { __includes = Entity,
   init = function(self, tileData, tileIndexX, tileIndexY, layer)
     local zMin, zMax = tileData:getCollisionZRange()

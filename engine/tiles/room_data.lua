@@ -1,6 +1,11 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
+---@class RoomData
+---@field topLeftPosX integer
+---@field topLeftPosY integer
+---@field width integer
+---@field height integer
 local RoomData = Class {
   init = function(self)
     self.topLeftPosX = -1

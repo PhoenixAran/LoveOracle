@@ -1,5 +1,9 @@
 local Class = require 'lib.class'
 
+---@class TileLayer
+---@field tiles integer[]
+---@field width integer
+---@field height integer
 local TileLayer = Class {
   init = function(self)
     -- tiledata Gids

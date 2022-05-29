@@ -72,7 +72,19 @@ end
 
 local InstanceId = 0
 
+---@class TileData
+---@field tilesetTileId integer
+---@field sprite TileSpriteRenderer
+---@field tileType integer
+---@field x integer
+---@field y integer
+---@field w integer
+---@field h integer
+---@field zRange ZRange
+---@field intstanceId integer
 local TileData = Class {
+  ---@param self TileData
+  ---@param tilesetTile TiledTilesetTile
   init = function(self, tilesetTile)
     local properties = tilesetTile:getProperties()
     self.tilesetTileId = tilesetTile.id
@@ -94,16 +106,16 @@ local TileData = Class {
   end
 }
 
+function TileData:getType()
+  return 'tile_data'
+end
+
 function TileData:getCollisionZRange()
   return self.zRange.min, self.zRange.max
 end
 
 function TileData:getSprite()
   return self.sprite
-end
-
-function TileData:getType()
-  return 'tile_data'
 end
 
 return TileData

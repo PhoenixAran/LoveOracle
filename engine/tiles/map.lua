@@ -4,6 +4,8 @@ local SignalObject = require 'engine.signal_object'
 local Room = require 'engine.tiles.room'
 local MapLoader = require 'engine.tiles.map_loader'
 
+---@class Map
+---@field mapData MapData
 local Map = Class { __includes = SignalObject,
   init = function(self, mapData)
     SignalObject.init(self)

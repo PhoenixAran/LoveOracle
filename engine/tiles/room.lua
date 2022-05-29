@@ -7,7 +7,21 @@ local Tile = require 'engine.tiles.tile'
 
 local GRID_SIZE = 16
 
+---@class Room
+---@field map Map
+---@field topLeftPosX integer
+---@field topLeftPosY integer
+---@field width integer
+---@field height integer
+---@field entities Entity[]
+---@field destroyedEntites integer[]
+---@field destroyedTileEntities integer[]
+---@field animatedTiles table<integer, TileData>
+---@field animatedTilesCollectionCreated boolean
 local Room = Class { __includes = SignalObject,
+  ---@param self table
+  ---@param map Map
+  ---@param roomData RoomData
   init = function(self, map, roomData)
     SignalObject.init(self)
     self:signal('roomTransitionRequest')
@@ -68,6 +82,7 @@ function Room:getHeight()
   return self.height
 end
 
+---@param entities Entities
 function Room:load(entities)
   -- add tiles
   for layerIndex, tileLayer in ipairs(self.map:getTileLayers()) do
@@ -161,6 +176,7 @@ function Room:load(entities)
   lume.push(self.entities, roomEdge)
 end
 
+---@param entities Entities
 function Room:unload(entities)
   -- remove entities
   lume.each(self.entities, function(entity)

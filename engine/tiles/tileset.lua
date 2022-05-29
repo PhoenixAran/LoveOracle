@@ -1,8 +1,12 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
+---@class Tileset
+---@field name string
+---@field tiles TileData[]
+---@field animatedTiles TileData[]
 local Tileset = Class {
-  init = function(self, tiledTileset)
+  init = function(self)
     self.name = nil
     -- indexed by Gid
     self.tiles = { }

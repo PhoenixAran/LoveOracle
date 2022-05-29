@@ -18,6 +18,7 @@ local tilesetCacheCreated = false
 local tiledMapDataCache  = { }
 
 -- export type
+---@class TiledMapLoader
 local TiledMapLoader = { }
 
 ---@param jProperties table
@@ -34,9 +35,8 @@ local function parsePropertyDict(jProperties)
 end
 
 ---@param jObject table
----@param mapData TiledMapData
 ---@return TiledObject
-local function parseObject(jObject, mapData)
+local function parseObject(jObject)
   local tiledObject = TiledObject()
   tiledObject.id = jObject.id
   tiledObject.name = jObject.name
@@ -197,9 +197,9 @@ function TiledMapLoader.loadMapData(path)
   for _, jLayer in ipairs(jMap.layers) do
     local mapLayer = parseLayer(jLayer)
     lume.push(mapData.layers, mapLayer)
-    if mapLayer.type == "tilelayer" then
+    if mapLayer:getType() == 'tiled_tile_layer' then
       lume.push(mapData.tileLayers, mapLayer)
-    elseif mapLayer.type == 'objectgroup' then
+    elseif mapLayer:getType() == 'tiled_object_layer' then
       lume.push(mapData.objectLayers, mapLayer)
     end
   end

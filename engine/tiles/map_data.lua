@@ -1,6 +1,13 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
+---@class MapData
+---@field name string
+---@field height integer
+---@field width integer
+---@field layerTilesets LayerTileset[]
+---@field tileLayers TileLayer[]
+---@field rooms Room[]
 local MapData = Class {
   init = function(self)
     self.name = nil

@@ -2,6 +2,11 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
 -- meant to be shared between multiple tile instances
+---@class TileSpriteRenderer
+---@field sprite Sprite|SpriteFrame[]
+---@field animated boolean
+---@field currentTick integer
+---@field currentFrameIndex integer
 local TileSpriteRenderer = Class {
   init = function(self, sprite, animated)
     self.sprite = sprite
