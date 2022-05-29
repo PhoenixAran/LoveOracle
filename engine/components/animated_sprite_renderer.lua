@@ -70,8 +70,8 @@ function AnimatedSpriteRenderer:setSubstripKey(value)
   end
 end
 
----play given animation
----@param animation string
+---play given animation. If no arguments are given, it just continues the current animation
+---@param animation string?
 ---@param substripKey integer?
 ---@param forcePlayFromStart boolean?
 function AnimatedSpriteRenderer:play(animation, substripKey, forcePlayFromStart)

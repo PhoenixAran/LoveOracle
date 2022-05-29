@@ -11,6 +11,7 @@ local GroundObserver = require 'engine.components.ground_observer'
 local SpriteFlasher = require 'engine.components.sprite_flasher'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 
 local Physics = require 'engine.physics'
 local TablePool = require 'engine.utils.table_pool'
@@ -26,7 +27,7 @@ local DamageInfo = require 'engine.entities.damage_info'
 ---@field sprite SpriteRenderer | AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
 ---@field moveCollisions BumpBox[]
----@field collisionTiles Tile[]
+---@field collisionTiles integer
 ---@field deathMarked boolean
 ---@field persistant boolean
 ---@field syncDirectionWithAnimation boolean
@@ -74,7 +75,7 @@ local MapEntity = Class { __includes = Entity,
     -- table to store collisions that occur when MapEntity:move() is called
     self.moveCollisions = { }
     -- tile types this entity reports collisions with
-    self.collisionTiles = { }
+    self.collisionTiles = 0
 
     -- declarations
     self.deathMarked = false
@@ -120,10 +121,10 @@ end
 function MapEntity:setCollisionTile(tileType)
   if type(tileType) == 'table' then
     for _, val in ipairs(tileType) do
-      self.collisionTiles[val] = true
+      self.collisionTiles = bit.bor(self.collisionTiles, TileTypeFlags:get(val).value)
     end
   else
-    self.collisionTiles[tileType] = true
+    self.collisionTiles = bit.bor(self.collisionTiles, TileTypeFlags:get(tileType).value)
   end
 end
 
@@ -132,10 +133,10 @@ end
 function MapEntity:unsetCollisionTile(tileType)
   if type(tileType) == 'table' then
     for _, val in ipairs(tileType) do
-      self.collisionTiles[val] = nil
+      self.collisionTiles = bit.band(self.collisionTiles, bit.bnot(TileTypeFlags:get(val).value))
     end
   else
-    self.collisionTiles[tileType] = nil
+    self.collisionTiles = bit.bor(self.collisionTiles, bit.bnot(TileTypeFlags:get(tileType).value))
   end
 end
 
@@ -218,7 +219,7 @@ end
 
 function MapEntity:setVectorAwayFrom(x, y)
   local mx, my = self.movement:getVector()
-  return self.movement:setVector(vector.sub(mx, my, x, y))
+  self.movement:setVector(vector.sub(mx, my, x, y))
 end
 
 function MapEntity:getLinearVelocity(dt)
@@ -262,7 +263,9 @@ function MapEntity:move(dt)
     if self:reportsCollisionsWith(neighbor) then
       local shouldCarryOutCollision = true
       if neighbor:isTile() then
-        shouldCarryOutCollision = self.collisionTiles[neighbor:getTileType()]
+        ---@type TileData
+        local tileData = neighbor.tileData
+        shouldCarryOutCollision = bit.band(self.collisionTiles, tileData.tileType) ~= 0
       end
       if shouldCarryOutCollision then
         local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)

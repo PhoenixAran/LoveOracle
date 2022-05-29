@@ -115,7 +115,7 @@ end
 ---@param signalName string
 ---@param otherObject SignalObject
 ---@param targetMethod SignalObject
----@param bindArgs any[]
+---@param bindArgs any[]?
 function SignalObject:connect(signalName, otherObject, targetMethod, bindArgs)
   assert(self.signals[signalName] ~= nil, 'Signal ' .. signalName .. ' does not exist')
   self.signals[signalName]:connect(otherObject, targetMethod, bindArgs)

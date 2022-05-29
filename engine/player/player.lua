@@ -25,7 +25,28 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 -- weapon states
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 
+---@class Player : MapEntity
+---@field roomEdgeCollisionBox Collider
+---@field playerMovementController PlayerMovementController
+---@field environmentStateMachine PlayerStateMachine
+---@field controlStateMachine PlayerStateMachine
+---@field weaponStateMachine PlayerStateMachine
+---@field conditionStateMachines PlayerStateMachine[]
+---@field stateParameters PlayerStateParameters
+---@field stateCollection table<string, PlayerState>
+---@field useDirectionX number
+---@field userDirectionY number
+---@field useDirection4 integer
+---@field pressedActionButtons string[]
+---@field buttonCallbacks table<string, function>
+---@field respawnPositionX number
+---@field respawnPositionY number
+---@field respawnDirection number
+---@field moveAnimation string
+---@field items table<string, Item>
 local Player = Class { __includes = MapEntity,
+  ---@param self Player
+  ---@param args table
   init = function(self, args)
     args.w, args.h = 8, 9
     args.direction = args.direction or Direction4.down
@@ -42,7 +63,6 @@ local Player = Class { __includes = MapEntity,
     })
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     self:setCollidesWithLayer('tile')
-
     -- tile collision
     self:setCollisionTile({'wall'})
 
@@ -79,7 +99,7 @@ local Player = Class { __includes = MapEntity,
     self.buttonCallbacks = { }
 
     self.respawnPositionX, self.respawnPositionY = nil, nil
-    self.respawnDirection = nil
+    self.respawnDirection = Direction4.down
     self.moveAnimation = nil
 
     -- bind controls (except dpad, thats automatically done)
@@ -245,6 +265,7 @@ function Player:getPlayerAnimations()
   return self.stateParameters.animations
 end
 
+---@param state PlayerState
 function Player:beginConditionState(state)
   local count = lume.count(self.conditionStateMachines)
   for i = count, 1, -1 do
@@ -260,6 +281,7 @@ function Player:beginConditionState(state)
   stateMachine:beginState(state)
 end
 
+---@param conditionType string
 function Player:hasConditionState(conditionType)
   for _, conditionState in ipairs(self.conditionStateMachines) do
     if conditionState:isActive() and conditionState:getType() == conditionType then
@@ -269,32 +291,36 @@ function Player:hasConditionState(conditionType)
   return false
 end
 
+---@param conditionType string
 function Player:endConditionState(conditionType)
   for _, conditionState in ipairs(self.conditionStateMachines) do
-    if conditionState:isActive() and conditionState:getType() == conditionType then
-      conditionState:endState()
+    if conditionState:isActive() and conditionState.currentState:getType() == conditionType then
+      conditionState.currentState:endState()
       break
     end
   end
 end
 
 -- begin a new weapon state, replacing the previous weapon state
+---@param state PlayerState
 function Player:beginWeaponState(state)
   self.weaponStateMachine:beginState(state)
 end
 
 -- begin a new constrol state, replacing the previuos control state
+---@param state PlayerState
 function Player:beginControlState(state)
   self.controlStateMachine:beginState(state)
 end
 
 function Player:endControlState()
   if self.controlStateMachine:isActive() then
-    self.controlStateMachine.state:endState()
+    self.controlStateMachine.currentState:endState()
   end
 end
 
 -- begin a new environment state, replacing the previous environment state
+---@param state PlayerEnvironmentState
 function Player:beginEnvironmentState(state)
   self.environmentStateMachine:beginState(state)
 end
@@ -308,6 +334,7 @@ end
 
 -- return the player environment state that the player wants to be in
 -- based on his current surface and jumping state
+---@return PlayerEnvironmentState?
 function Player:getDesiredNaturalState()
   -- get ground observer
   local go = self.groundObserver
@@ -323,6 +350,8 @@ end
 
 -- begin a new busy condition state with the specified duration
 -- and optional specified animation
+---@param duration integer
+---@param animation string?
 function Player:beginBusyState(duration, animation)
   if animation == nil then animation = self.sprite:getCurrentAnimationKey() end
   if self:getWeaponState() == nil then
@@ -391,6 +420,8 @@ function Player:updateStates(dt)
   end
 end
 
+-- equip the given item
+---@param item Item
 function Player:equipItem(item)
   self:addChild(item)
   item:setPlayer(self)
@@ -410,6 +441,8 @@ function Player:updateEquippedItems(dt)
   end
 end
 
+--- calls the item:onButtonPress callback for the given mapped button
+---@param button string
 function Player:actionUseItem(button)
   local item = self.items[button]
   if item ~= nil and item:isUsable() then
@@ -450,9 +483,11 @@ function Player:checkRoomTransitions()
   if self:getStateParameters().canRoomTransition then
     for _, other in ipairs(self.moveCollisions) do
       if other:getType() == 'room_edge' then
-        if other.canRoomTransition then
-          if other:canRoomTransition(self:getDirection8()) then
-            other:requestRoomTransition(self:getPosition())
+        ---@type RoomEdge
+        local roomEdge = other
+        if roomEdge.canRoomTransition then
+          if roomEdge:canRoomTransition(self:getDirection8()) then
+            roomEdge:requestRoomTransition(self:getPosition())
           end
         end
       end

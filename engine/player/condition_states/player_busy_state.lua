@@ -2,6 +2,12 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local PlayerState = require 'engine.player.player_state'
 
+---@class PlayerBusyState : PlayerState
+---@field timer integer
+---@field duration integer
+---@field timedActions table<integer, function>
+---@field animation string
+---@field endAction function
 local PlayerBusyState = Class { __includes = PlayerState,
   init = function(self, duration, animation)
     if duration == nil then duration = 0 end
@@ -22,15 +28,19 @@ function PlayerBusyState:getAnimation()
   return self.animation
 end
 
+---@param time integer
+---@param func function
 function PlayerBusyState:addTimedAction(time, func)
   self.timedActions[time] = func
 end
 
+---@param func function
 function PlayerBusyState:setEndAction(func)
   self.endAction = func
 end
 
 -- override playerstate methods
+---@param previousState PlayerState?
 function PlayerBusyState:onBegin(previousState)
     self.canJump = false
     self.canWarp = false
@@ -41,7 +51,7 @@ function PlayerBusyState:onBegin(previousState)
     self.canUseWeapons = false
     self.canRoomTransition = false
     self.canStrafe = false
-    
+
     self.timer = 1
     --[[
     not sure if i should invoke the first timed action here
@@ -52,8 +62,9 @@ function PlayerBusyState:onBegin(previousState)
     ]]--
 end
 
+---@param newState PlayerState?
 function PlayerBusyState:onEnd(newState)
-  self.timer = 0
+  self.timer = 1
   self.duration = 0
   lume.clear(self.timedActions)
   if self.endAction ~= nil then

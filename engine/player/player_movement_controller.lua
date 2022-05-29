@@ -12,7 +12,25 @@ local JUMP_GRAVITY = 8
 local DIRECTION_SNAP = 32
 
 ---@class PlayerMovementController
+---@field player Player
+---@field movement Movement
+---@field allowMovementControl boolean
+---@field strokeSpeedScale number
+---@field directionX number
+---@field directionY number
+---@field stroking boolean
+---@field capeDeployed boolean
+---@field holeTile Tile?
+---@field holeDoomTimer number
+---@field holeSlipVelocityX number
+---@field holeSlipVelocityY number
+---@field fallingInHole number
+---@field moveNormalMode PlayerMotionType
+---@field mode PlayerMotionType
 local PlayerMovementController = Class {
+  ---@param self PlayerMovementController
+  ---@param player Player
+  ---@param movement Movement
   init = function(self, player, movement)
     self.player = player
     self.movement = movement
@@ -74,6 +92,7 @@ function PlayerMovementController:jump()
   end
 end
 
+---@param allowMovementControl boolean
 function PlayerMovementController:pollMovementControls(allowMovementControl)
   local x, y = 0, 0
   self.moving = false

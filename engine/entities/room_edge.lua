@@ -37,6 +37,7 @@ end
 
 -- called by player in Player:checkRoomTransitions()
 -- todo should probably have method signature as (x, y) so we can measure the angle
+---@param dir8 integer
 function RoomEdge:canRoomTransition(dir8)
   if self.direction4 == Direction4.up then
     return dir8 == Direction8.up or dir8 == Direction8.upLeft or dir8 == Direction8.upRight
@@ -55,6 +56,8 @@ function RoomEdge:canRoomTransition(dir8)
   end
 end
 
+---@param playerX number
+---@param playerY number
 function RoomEdge:requestRoomTransition(playerX, playerY)
   self:emit('roomTransitionRequest', self.transitionStyle, self.direction4, playerX, playerY)
 end

@@ -2,6 +2,11 @@ local Class = require 'lib.class'
 local PlayerState = require 'engine.player.player_state'
 local Direction4 = require 'engine.enums.direction4'
 
+---@class PlayerSwingState : PlayerState
+---@field weapon ItemSword
+---@field lunge boolean
+---@field isReswingable boolean
+---@field cachedDirection4 integer
 local PlayerSwingState = Class { __includes = PlayerState,
   init = function(self, player)
     PlayerState.init(self, player)
@@ -9,7 +14,7 @@ local PlayerSwingState = Class { __includes = PlayerState,
     self.weapon = nil
     -- default values, feel free to override in other swing states
     self.lunge = true
-    self.isReswingable = true  
+    self.isReswingable = true
     -- Used to set animation direction when swing ends incase player switches direction mid spam swings.
     -- If they do switch directions, we need to set animation direction when the state end or else
     -- they will turn around to their original direction if player swings again without moving the dpad
@@ -22,8 +27,8 @@ function PlayerSwingState:getType()
 end
 
 function PlayerSwingState:getPlayerSwingAnimation(lunge)
-  if lunge then 
-    return self.player:getPlayerAnimations().swing 
+  if lunge then
+    return self.player:getPlayerAnimations().swing
   end
   return self.player:getPlayerAnimations().swingNoLunge
 end

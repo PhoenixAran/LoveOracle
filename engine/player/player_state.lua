@@ -6,6 +6,7 @@ local PlayerStateParameters = require 'engine.player.player_state_parameters'
 ---@field player Player
 ---@field playerController PlayerController
 ---@field stateParameters PlayerStateParameters
+---@field init function
 local PlayerState = Class {
   init = function(self)
     self.active = false
@@ -61,7 +62,7 @@ function PlayerState:beginState(player, previousState)
   self:onBegin(previousState)
 end
 
----@param newState PlayerState
+---@param newState PlayerState?
 function PlayerState:endState(newState)
   self.active = false
   self:onEnd(newState)

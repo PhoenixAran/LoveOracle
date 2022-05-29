@@ -3,7 +3,12 @@ local SignalObject = require 'engine.signal_object'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
 local Pool = require 'engine.utils.pool'
 
+---@class PlayerStateMachine : SignalObject
+---@field previousState PlayerState
+---@field currentState PlayerState
 local PlayerStateMachine = Class { _includes = SignalObject,
+  ---@param self PlayerStateMachine
+  ---@param player Player
   init = function(self, player)
     SignalObject.init(self)
     self.player = player
@@ -16,6 +21,7 @@ function PlayerStateMachine:getType()
   return 'player_state_machine'
 end
 
+---@param player Player
 function PlayerStateMachine:setPlayer(player)
   self.player = player
 end
@@ -28,6 +34,7 @@ function PlayerStateMachine:getPreviousState()
   return self.previousState
 end
 
+---@param newState PlayerState?
 function PlayerStateMachine:canTransitionTo(newState)
   if newState ~= nil then
     -- lazy initialize
@@ -43,6 +50,7 @@ function PlayerStateMachine:canTransitionTo(newState)
   return true
 end
 
+---@param newState PlayerState
 function PlayerStateMachine:beginState(newState)
   if self:canTransitionTo(newState) then
     if newState ~= self.currentState then
@@ -54,13 +62,14 @@ function PlayerStateMachine:beginState(newState)
   end
 end
 
+---@param newState PlayerState
 function PlayerStateMachine:forceBeginState(newState)
   -- end the current state
   self.previousState = self.currentState
   if self.currentState ~= nil then
     self.currentState:endState(newState)
   end
-  
+
   --begin the new state
   self.currentState = newState
   if self.currentState ~= nil then
@@ -84,10 +93,12 @@ function PlayerStateMachine:update(dt)
   end
 end
 
+---@return PlayerStateParameters
 function PlayerStateMachine:getStateParameters()
   if self.currentState ~= nil then return self.currentState.stateParameters end
   return PlayerStateParameters.EmptyStateParameters
 end
+
 
 function PlayerStateMachine:isActive()
   return self.currentState ~= nil and self.currentState:isActive()

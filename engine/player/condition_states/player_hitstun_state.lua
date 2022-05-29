@@ -2,7 +2,10 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local PlayerState = require 'engine.player.player_state'
 
+---@class PlayerHitstunState : PlayerState
+---@field combat Combat
 local PlayerHitstunState = Class { __includes = PlayerState,
+  ---@param self PlayerHitstunState
   init = function(self)
     PlayerState.init(self)
     self.combat = nil
@@ -23,6 +26,7 @@ function PlayerHitstunState:getType()
   return 'player_hitstun_state'
 end
 
+---@param previousState PlayerState
 function PlayerHitstunState:onBegin(previousState)
   self.combat = self.player.combat
   self.player:interruptItems()
@@ -36,6 +40,7 @@ function PlayerHitstunState:update(dt)
   end
 end
 
+---@param newState PlayerState
 function PlayerHitstunState:onEnd(newState)
   self.combat = nil
 end

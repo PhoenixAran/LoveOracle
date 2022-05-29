@@ -17,6 +17,7 @@ local Pool = require 'engine.utils.pool'
 ---@field alwaysFaceDown boolean
 ---@field alwaysFaceLeft boolean
 ---@field alwaysFaceRight boolean
+---@field EmptyStateParameters PlayerStateParameters
 local PlayerStateParameters = Class {
   init = function(self)
 
