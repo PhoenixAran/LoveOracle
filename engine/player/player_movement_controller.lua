@@ -11,11 +11,12 @@ local JUMP_GRAVITY = 8
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
 local DIRECTION_SNAP = 32
 
+---@class PlayerMovementController
 local PlayerMovementController = Class {
   init = function(self, player, movement)
     self.player = player
     self.movement = movement
-    
+
     self.allowMovementControl = true
     self.strokeSpeedScale = 1.0
     self.directionX, self.directionY = 0, 0
@@ -27,7 +28,7 @@ local PlayerMovementController = Class {
     self.holeDoomTimer = 0
     self.holeSlipVelocityX, self.holeSlipVelocityY = 0, 0
     self.fallingInHole = false
-    
+
 
     self.moveNormalMode = PlayerMotionType()
     self.mode = self.moveNormalMode
@@ -38,6 +39,7 @@ function PlayerMovementController:isMoving()
   return self.moving
 end
 
+---@param mode PlayerMotionType
 function PlayerMovementController:setMode(mode)
   if self.mode ~= mode then
     self.mode = mode
@@ -100,16 +102,16 @@ function PlayerMovementController:chooseAnimation()
       end
     elseif animation ~= player:getPlayerAnimations().default then
       sprite:play(player:getPlayerAnimations().default)
-    end    
+    end
   end
-  
+
   -- change to the default animation while in the air and not using weapon
   if player:isInAir() and self.allowMovementControl and player:getWeaponState() == nil and sprite:getCurrentAnimationKey() ~= 'jump' then
     sprite:play(player:getPlayerAnimations().move)
   end
-  
+
   animation = sprite:getCurrentAnimationKey()
-  
+
   -- move animation can be replaced by cap animation
   if animation == player:getPlayerAnimations().move and player:isInAir() and self.capeDeployed then
     sprite:play('cape')
@@ -136,8 +138,8 @@ function PlayerMovementController:updateMoveControls()
       self.allowMovementControl = true
     end
   else
-    self.allowMovementControl = not self.player:inHitstun() and not self.player:inKnockback() 
-                                and self.player:getStateParameters().canControlOnGround 
+    self.allowMovementControl = not self.player:inHitstun() and not self.player:inKnockback()
+                                and self.player:getStateParameters().canControlOnGround
   end
 
   local inputX, inputY = self:pollMovementControls(self.allowMovementControl)
@@ -153,7 +155,7 @@ function PlayerMovementController:updateMoveControls()
   else
     canUpdateDirection = not self.player:getStateParameters().canStrafe
   end
-  
+
   if canUpdateDirection and self.allowMovementControl and self.moving then
     self.player:matchAnimationDirection(inputX, inputY)
   end

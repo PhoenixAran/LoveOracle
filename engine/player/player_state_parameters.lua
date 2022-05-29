@@ -1,10 +1,26 @@
 local Class = require 'lib.class'
 local Pool = require 'engine.utils.pool'
 
+---@class PlayerStateParameters
+---@field animations table<string, string>
+---@field canJump boolean
+---@field canWarp boolean
+---@field canLedgeJump boolean
+---@field canControlOnGround boolean
+---@field canControlInAir boolean
+---@field canPush boolean
+---@field canUseWeapons boolean
+---@field canRoomTransition boolean
+---@field defaultAnimationWhenNotStill boolean
+---@field canStrafe boolean
+---@field alwaysFaceUp boolean
+---@field alwaysFaceDown boolean
+---@field alwaysFaceLeft boolean
+---@field alwaysFaceRight boolean
 local PlayerStateParameters = Class {
   init = function(self)
-    
-    self.animations = { 
+
+    self.animations = {
       swing = nil,
       swingNoLunge = nil,
       swingBig = nil,
@@ -17,7 +33,7 @@ local PlayerStateParameters = Class {
       carry = nil,
       count = nil
     }
-    
+
     -- default values
     self.canJump = true
     self.canWarp = true
@@ -28,13 +44,13 @@ local PlayerStateParameters = Class {
     self.canUseWeapons = true
     self.canRoomTransition = true
     self.defaultAnimationWhenNotStill = true
-    
+
     self.canStrafe = false
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false
     self.alwaysFaceRight = false
-    
+
     self.movementSpeedScale = 1.0
   end
 }
@@ -53,6 +69,7 @@ local function prioritizeFalse(a, b)
   return a
 end
 
+---@param other PlayerStateParameters
 function PlayerStateParameters:integrateParameters(other)
   self.canJump = prioritizeFalse(self.canJump, other.canJump)
   self.canWarp =  prioritizeFalse(self.canWarp, other.canWarp)
@@ -62,7 +79,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.canUseWeapons =  prioritizeFalse(self.canUseWeapons, other.canUseWeapons)
   self.canRoomTransition =  prioritizeFalse(self.canRoomTransition, other.canRoomTransition)
   self.defaultAnimationWhenNotMoving =  prioritizeFalse(self.defaultAnimationWhenNotMoving, other.defaultAnimationWhenNotMoving)
-  
+
   -- you wanna prioritize true for these ones
   self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp
   self.alwaysFaceDown = self.alwaysFaceDown or other.alwaysFaceDown
@@ -73,7 +90,7 @@ function PlayerStateParameters:integrateParameters(other)
   -- prefer the other animations if they are non null
   for k, v in pairs(self.animations) do
     self.animations[k] = other.animations[k] or self.animations[k]
-  end  
+  end
 end
 
 
@@ -89,15 +106,15 @@ function PlayerStateParameters:reset()
     self.canUseWeapons = true
     self.canRoomTransition = true
     self.defaultAnimationWhenNotMoving = true
-    
+
     self.canStrafe = false
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false
     self.alwaysFaceRight = false
-    
+
     self.movementSpeedScale = 1.0
-    
+
     for k, v in pairs(self.animations) do
       self.animations[k] = nil
     end

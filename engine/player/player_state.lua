@@ -1,6 +1,11 @@
 local Class = require 'lib.class'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
 
+---@class PlayerState
+---@field active boolean
+---@field player Player
+---@field playerController PlayerController
+---@field stateParameters PlayerStateParameters
 local PlayerState = Class {
   init = function(self)
     self.active = false
@@ -19,8 +24,11 @@ function PlayerState:isActive()
 end
 
 -- "Virtual" methods
+
+---@param previousState PlayerState
 function PlayerState:onBegin(previousState) end
 
+---@param newState PlayerState
 function PlayerState:onEnd(newState) end
 
 function PlayerState:onEnterRoom() end
@@ -33,21 +41,27 @@ function PlayerState:onInterruptItems() end
 
 function PlayerState:update(dt) end
 
+---@param state PlayerState
+---@return boolean
 function PlayerState:canTransitionFromState(state)
   return true
 end
 
+---@param state PlayerState
+---@return boolean
 function PlayerState:canTransitionToState(state)
   return true
 end
 
--- beginState and endState
+---@param player Player
+---@param previousState PlayerState
 function PlayerState:beginState(player, previousState)
   self.active = true
   self.player = player
   self:onBegin(previousState)
 end
 
+---@param newState PlayerState
 function PlayerState:endState(newState)
   self.active = false
   self:onEnd(newState)

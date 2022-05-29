@@ -3,6 +3,14 @@ local SignalObject = require 'engine.signal_object'
 local lume = require 'lib.lume'
 local TILE_SIZE = 16
 
+---@class Entities : SignalObject
+---@field player Player
+---@field entities Entity[]
+---@field entitiesHash table<string, Entity>
+---@field entitiesDraw Entity[]
+---@field mapWidth integer
+---@field mapHeight integer
+---@field tileEntities Tile[]
 local Entities = Class { __includes = SignalObject,
   init = function(self, gameScreen, camera, player)
     SignalObject.init(self)
@@ -10,8 +18,6 @@ local Entities = Class { __includes = SignalObject,
     self:signal('entityRemoved')
     self:signal('tileEntityAdded')
     self:signal('tileEntityRemoved')
-
-    self.gameScreen = gameScreen
 
     self.player = player
     self.entities = { }
