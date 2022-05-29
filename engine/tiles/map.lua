@@ -23,11 +23,6 @@ local Map = Class { __includes = SignalObject,
       lume.push(self.rooms, Room(self, roomData))
     end
     self.animatedTiles = { }
-    for _, layerTileset in ipairs(self.layerTilesets) do
-      for _, tileData in ipairs(layerTileset.tileset.animatedTiles) do
-        print(tileData:getType())
-      end
-    end
   end
 }
 

@@ -9,6 +9,9 @@ local Player = require 'engine.player.player'
 local Input = require('engine.singletons').input
 
 -- base screen will set up the game control class for you
+---@class BaseGameplayScreen : BaseScreen
+---@field gameControl GameControl
+---@field profiler any
 local BaseGameplayScreen = Class { __includes = BaseScreen,
   init = function(self)
     BaseScreen.init(self)

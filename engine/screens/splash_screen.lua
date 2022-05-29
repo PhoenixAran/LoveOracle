@@ -1,6 +1,10 @@
 local Class = require 'lib.class'
 local splashModule = require 'lib.one_ten_one'
 local screenManager = require('engine.singletons').screenManager
+
+---@class SplashScreen
+---@field nextScreen any
+---@field splash any
 local SplashScreen = Class {
   init = function(self, nextScreen)
     self.nextScreen = nextScreen

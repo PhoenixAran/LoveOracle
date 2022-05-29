@@ -5,7 +5,7 @@
 ---@class Singletons
 ---@field input any
 ---@field monocle any
----@field screenManager ScreenManager
+---@field screenManager any
 ---@field camera any
 local singletons = {
   input = nil,

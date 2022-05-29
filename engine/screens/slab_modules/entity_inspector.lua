@@ -5,6 +5,10 @@ local Slab = require 'lib.slab'
 local PropertyType = require('engine.entities.inspector_properties').PropertyType
 local InspectorPropertyFields = require 'engine.screens.slab_modules.inspector_property_fields'
 
+---@class EntityInspector
+---@field entities Entities
+---@field currentEntity Entity
+---@field searchText string
 local EntityInspector = Class { __includes = SignalObject,
   init = function(self, entities)
     self.entities = entities

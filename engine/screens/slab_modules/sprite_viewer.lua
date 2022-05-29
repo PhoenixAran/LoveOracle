@@ -3,17 +3,27 @@ local lume = require 'lib.lume'
 local Slab = require 'lib.slab'
 local SpriteBank = require 'engine.utils.sprite_bank'
 
+---@class SpriteViewer
+---@field initialX integer
+---@field initialY integer
+---@field searchText string
+---@field spriteName string
+---@field sprite Sprite
+---@field spriteCanvas love.Canvas
+---@field canvasCache table<string, love.Canvas>
+---@field zoomLevels integer[]
+---@field zoom integer
 local SpriteViewer = Class {
   init = function(self, initialX, initialY)
     self.initialX = initialX or 24
     self.initialY = initialY or 24
-    
+
     self.searchText = ''
-    
+
     self.spriteName = ''
     self.sprite = nil
     self.spriteCanvas = love.graphics.newCanvas(1, 1)
-    
+
     self.zoomLevels = { 1, 2, 4, 6, 8, 12 }
     self.zoom = 1
     self.canvasCache = { 

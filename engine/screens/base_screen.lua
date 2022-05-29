@@ -9,6 +9,10 @@ local Singletons = require 'engine.singletons'
 local monocle = Singletons.monocle
 local input = Singletons.input
 
+---@class BaseScreen
+---@field drawVersionText love.Text
+---@field consoleEnabled boolean
+---@field init function
 local BaseScreen = Class {
   init = function(self)
     self.drawVersionText = love.graphics.newText(AssetManager.getFont('baseScreenDebug'), 'Ver ' .. GameConfig.version)
