@@ -3,6 +3,9 @@ local Item = require 'engine.items.item'
 local SpriteBank = require 'engine.utils.sprite_bank'
 local Hitbox = require 'engine.components.hitbox'
 
+---@class ItemSword : Item
+---@field hitbox Hitbox
+---@field sprite AnimatedSpriteRenderer
 local ItemSword = Class { __includes = Item,
   init = function(self, args)
     Item.init(self, args)
@@ -43,6 +46,7 @@ function ItemSword:debugDraw()
   self.hitbox:debugDraw()
 end
 
+---@param direction4 integer
 function ItemSword:swing(direction4)
   self:setVisible(true)
   self.hitbox:setEnabled(true)

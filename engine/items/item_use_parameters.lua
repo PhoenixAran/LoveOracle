@@ -1,6 +1,11 @@
 local Class = require 'lib.class'
 
 -- determines if item can be used
+---@class ItemUseParameters
+---@field twoHanded boolean
+---@field usableWhileJumping boolean
+---@field usableWithSword boolean
+---@field usableWhileInHole boolean
 local ItemUseParameters = Class {
   init = function(self)
     self.twoHanded = false

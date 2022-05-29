@@ -3,6 +3,11 @@ local Entity = require 'engine.entities.entity'
 local ItemUseParameters = require 'engine.items.item_use_parameters'
 local Input = require('engine.singletons').input
 
+---@class Item : Entity
+---@field useParameters ItemUseParameters
+---@field player Player
+---@field level integer
+---@field useButtons string[]
 local Item = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -44,7 +49,7 @@ function Item:isTwoHanded()
 end
 
 function Item:getUseButton()
-  return self.useButton
+  return self.useButtons
 end
 
 function Item:isButtonDown()

@@ -3,6 +3,13 @@ local SignalObject = require 'engine.signal_object'
 local lume = require 'lib.lume'
 
 -- Class that ItemSlot will utilise
+---@class ItemData
+---@field name string
+---@field category string
+---@field itemId integer
+---@field maxLevel integer
+---@field menuSprites Sprite|Sprite[]
+---@field itemTypes string[]
 local ItemData = Class {
   init = function(self, itemId, category, name)
     assert(itemId, 'Item ID cannot be null')
@@ -48,21 +55,21 @@ end
 
 function ItemData:setMenuSprites(sprites)
   if type(sprites) == 'table' then
-    lume.push(self.sprites, unpack(sprites))
+    lume.push(self.menuSprites, unpack(sprites))
   else
-    lume.push(self.sprites, sprites)
+    lume.push(self.menuSprites, sprites)
   end
 end
 
 function ItemData:getMenuSprites()
-  return self.sprites
+  return self.menuSprites
 end
 
 function ItemData:setItemTypes(types)
   if type(types) == 'table' then
-    lume.push(self.types, unpack(types))
+    lume.push(self.itemTypes, unpack(types))
   else
-    lume.push(self.types, types)
+    lume.push(self.itemTypes, types)
   end
 end
 
