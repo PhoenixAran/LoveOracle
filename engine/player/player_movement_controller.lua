@@ -141,7 +141,9 @@ end
 
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
-    self:setMode(self.player.environmentStateMachine:getCurrentState().motionSettings)
+    ---@type PlayerEnvironmentState
+    local currentEnvironmentState = self.player.environmentStateMachine:getCurrentState()
+    self:setMode(currentEnvironmentState.motionSettings)
   else
     self:setMode(self.moveNormalMode)
   end
@@ -185,22 +187,21 @@ end
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
   self:updateMoveControls()
-
   if self.allowMovementControl  then
     if self.player:getStateParameters().alwaysFaceUp then
-      if self.player.direction ~= Direction4.up then
+      if self.player.animationDirection4 ~= Direction4.up then
         self.player:setAnimationDirection4(Direction4.up)
       end
     elseif self.player:getStateParameters().alwaysFaceLeft then
-      if self.player.direction ~= Direction4.left then
+      if self.player.animationDirection4 ~= Direction4.left then
         self.player:setAnimationDirection4(Direction4.left)
       end
     elseif self.player:getStateParameters().alwaysFaceRight  then
-      if self.player.direction ~= Direction4.right then
+      if self.player.animationDirection4 ~= Direction4.right then
         self.player:setAnimationDirection4(Direction4.right)
       end
     elseif self.player:getStateParameters().alwaysFaceDown then
-      if self.player.direction ~= Direction4.down then
+      if self.player.animationDirection4 ~= Direction4.down then
         self.player:setAnimationDirection4(Direction4.down)
       end
     end

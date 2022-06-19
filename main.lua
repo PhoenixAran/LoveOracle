@@ -51,7 +51,6 @@ function love.load(args)
   -- build content here (need it for font)
   ContentControl.buildContent()
   love.graphics.setFont(AssetManager.getFont('baseScreenDebug'))
-  
 
   -- set up tick rate
   tick.framerate = 60

@@ -34,6 +34,7 @@ function PlayerStateMachine:getPreviousState()
   return self.previousState
 end
 
+--- checks if player can transition to the given state
 ---@param newState PlayerState?
 function PlayerStateMachine:canTransitionTo(newState)
   if newState ~= nil then

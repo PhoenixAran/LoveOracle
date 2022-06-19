@@ -16,6 +16,13 @@ local monocle = Singletons.monocle
 
 local GRID_SIZE = 16
 
+---@class GameControl
+---@field inventory Inventory
+---@field player Player
+---@field camera any
+---@field map Map
+---@field roomControl RoomControl
+---@field gameStateStack GameStateStack
 local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()

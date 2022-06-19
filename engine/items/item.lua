@@ -8,6 +8,8 @@ local Input = require('engine.singletons').input
 ---@field player Player
 ---@field level integer
 ---@field useButtons string[]
+---@field drawBelow nil|function
+---@field drawAbove nil|function
 local Item = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)

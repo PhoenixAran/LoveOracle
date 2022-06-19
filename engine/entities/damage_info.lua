@@ -26,13 +26,13 @@ function DamageInfo:getType()
 end
 
 ---if we should apply hitstun
----@return unknown
+---@return boolean
 function DamageInfo:applyHitstun()
   return 0 < self.hitstunTime
 end
 
 ---if we should apply knockback
----@return unknown
+---@return boolean
 function DamageInfo:applyKnockback()
   return 0 < self.knockbackTime
 end

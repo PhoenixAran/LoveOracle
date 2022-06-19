@@ -151,6 +151,9 @@ function Player:getCollisionTag()
   return 'player'
 end
 
+---matches animation direction with a given vector
+---@param inputX number
+---@param inputY number
 function Player:matchAnimationDirection(inputX, inputY)
   if inputX == 0 and inputY == 0 then
     return
@@ -179,6 +182,7 @@ function Player:matchAnimationDirection(inputX, inputY)
   self:setAnimationDirection4(animDir4)
 end
 
+--- update use direction vector
 function Player:updateUseDirections()
   local direction4 = Direction4.none
   local x, y = 0, 0
@@ -221,14 +225,23 @@ function Player:updateUseDirections()
   end
 end
 
+--- return use Direction4 enum value
+---@return any
 function Player:getUseDirection4()
   return self.useDirection4
 end
 
+--- return use direction vector value
+---@return number useDirectionX
+---@return number useDirectionY
 function Player:getUseDirectionXY()
   return self.useDirectionX, self.useDirectionY
 end
 
+--- add an event for when a gamepad key is pressed
+--- usually used to add item use events
+---@param key string
+---@param func function
 function Player:addPressInteraction(key, func)
   if self.buttonCallbacks[key] == nil then
     self.buttonCallbacks[key] = { }
@@ -236,6 +249,9 @@ function Player:addPressInteraction(key, func)
   lume.push(self.buttonCallbacks[key], func)
 end
 
+--- check if any key press events need to be invoked
+---@param key string
+---@return boolean if event was called
 function Player:checkPressInteractions(key)
   local callbacks = self.buttonCallbacks[key]
   if callbacks ~= nil then
@@ -248,6 +264,8 @@ function Player:checkPressInteractions(key)
   return false
 end
 
+--- return current player state parameters
+---@return PlayerStateParameters
 function Player:getStateParameters()
   return self.stateParameters
 end
@@ -257,10 +275,14 @@ function Player:getStateFromCollection(name)
   return self.stateCollection[name]
 end
 
+---return current weapon state (if there is any)
+---@return PlayerState | nil
 function Player:getWeaponState()
   return self.weaponStateMachine:getCurrentState()
 end
 
+---return player animation table
+---@return table<string, string>
 function Player:getPlayerAnimations()
   return self.stateParameters.animations
 end
@@ -446,7 +468,7 @@ end
 function Player:actionUseItem(button)
   local item = self.items[button]
   if item ~= nil and item:isUsable() then
-    return item:onButtonPress()
+    return item:onButtonPressed()
   end
   return false
 end
@@ -513,7 +535,7 @@ function Player:update(dt)
   if Input:pressed('b') then
     self.pressedActionButtons['b'] = self:checkPressInteractions('b')
   end
-  if Input:pressed('x') then
+  if Input:pressed('x') then  
     self.pressedActionButtons['x'] = self:checkPressInteractions('x')
   end
   if Input:pressed('y') then

@@ -6,6 +6,13 @@ local MapLoader = require 'engine.tiles.map_loader'
 
 ---@class Map
 ---@field mapData MapData
+---@field name string
+---@field width integer
+---@field height integer
+---@field layerTilesets LayerTileset
+---@field tileLayers TileLayer[]
+---@field rooms Room[]
+---@field animatedTiles TileData[]
 local Map = Class { __includes = SignalObject,
   init = function(self, mapData)
     SignalObject.init(self)
@@ -32,6 +39,11 @@ end
 
 -- returns tile data for tile at the given position
 -- also returns Gid as second parameter. Only used for the animatedTiles dictionary in room.lua
+---@param x integer
+---@param y integer
+---@param layerIndex any
+---@return TileData tileData
+---@return integer Gid
 function Map:getTileData(x, y, layerIndex)
   -- tiled is column 
   if layerIndex == nil then
