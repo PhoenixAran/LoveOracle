@@ -87,10 +87,12 @@ function RoomControl:setCurrentRoom(room)
   self:connectToRoomSignals(self.currentRoom)
 end
 
+---@param room Room
 function RoomControl:connectToRoomSignals(room)
   room:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
 end
 
+---@param room Room
 function RoomControl:disconnectFromRoomSignals(room)
   room:disconnect('roomTransitionRequest', self, 'onRoomTransitionRequest')
 end
@@ -119,6 +121,10 @@ function RoomControl:draw()
   end
 end
 
+---function thats gets called when a Room's roomTransitionRequest signal is emitted
+---@param newRoom Room
+---@param transitionStyle string
+---@param direction4 integer
 function RoomControl:onRoomTransitionRequest(newRoom, transitionStyle, direction4)
   if self:canRoomTransition() then
     self:pushState(RoomTransitionState(self.currentRoom, newRoom, transitionStyle, direction4))

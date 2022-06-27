@@ -10,7 +10,7 @@ local TILE_SIZE = 16
 ---@field entitiesDraw Entity[]
 ---@field mapWidth integer
 ---@field mapHeight integer
----@field tileEntities Tile[]
+---@field tileEntities table<integer, Tile[]>
 local Entities = Class { __includes = SignalObject,
   init = function(self, gameScreen, camera, player)
     SignalObject.init(self)
@@ -30,12 +30,18 @@ local Entities = Class { __includes = SignalObject,
   end
 }
 
+--- y sort function to sort entities with
+---@param entityA Entity
+---@param entityB Entity
+---@return boolean
 local function ySort(entityA, entityB)
-  local ax, ay = entityA:getPosition()
-  local bx, by = entityB:getPosition()
+  local _, ay = entityA:getPosition()
+  local _, by = entityB:getPosition()
   return by < ay
 end
 
+--- sets player
+---@param player Player
 function Entities:setPlayer(player)
   assert(not self.entitiesHash[player:getName()])
   self.player = player
@@ -44,10 +50,15 @@ function Entities:setPlayer(player)
   lume.push(self.entitiesDraw, player)
 end
 
+--- gets player
+---@return Player player
 function Entities:getPlayer()
   return self.player
 end
 
+---adds entity
+---@param entity Entity
+---@param awakeEntity boolean? default true
 function Entities:addEntity(entity, awakeEntity)
   assert(entity:getName(), 'Entity requires name')
   if awakeEntity == nil then awakeEntity = true end
@@ -61,6 +72,8 @@ function Entities:addEntity(entity, awakeEntity)
   self:emit('entityAdded', entity)
 end
 
+---removes entity
+---@param entity Entity
 function Entities:removeEntity(entity)
   assert(self.entitiesHash[entity:getName()], 'Attempting to remove entity that is not in entities collection')
   lume.remove(self.entities, entity)
@@ -71,10 +84,13 @@ function Entities:removeEntity(entity)
   entity:release()
 end
 
--- sets how large the map is in tile size
--- this enables querying for tiles via x and y coordinate
--- also up the tile entities collection
--- note that this just discards the current tile Entities
+---sets how large the map is in tile size
+---this enables querying for tiles via x and y coordinate
+---also up the tile entities collection
+---note that this just discards the current tile Entities
+---@param mapWidth integer
+---@param mapHeight integer
+---@param layerAmount integer
 function Entities:setUpTileEntityCollection(mapWidth, mapHeight, layerAmount)
   self.mapWidth = mapWidth
   self.mapHeight = mapHeight
@@ -84,6 +100,8 @@ function Entities:setUpTileEntityCollection(mapWidth, mapHeight, layerAmount)
   end
 end
 
+---add tile entity
+---@param tileEntity Tile
 function Entities:addTileEntity(tileEntity)
   assert(tileEntity:isTile())
   local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX
@@ -92,6 +110,10 @@ function Entities:addTileEntity(tileEntity)
   self:emit('tileEntityAdded', tileEntity)
 end
 
+---remove tile entity by map index
+---@param x integer
+---@param y integer
+---@param layer integer
 function Entities:removeTileEntity(x, y, layer)
   local tileIndex = (y - 1) * self.mapWidth + x
   local tileEntity = self.tileEntities[layer][tileIndex]
@@ -103,15 +125,27 @@ function Entities:removeTileEntity(x, y, layer)
   end
 end
 
+---get entity by name
+---@param name string
+---@return Entity
 function Entities:getByName(name)
   return self.entitiesHash[name]
 end
 
+--- get tile entity by map index
+---@param x integer
+---@param y integer
+---@param layer integer
+---@return Tile?
 function Entities:getTileEntity(x, y, layer)
   local tileIndex = (y - 1) * self.mapWidth + x
   return self.tileEntities[layer][tileIndex]
 end
 
+--- get the top tile at a given map index
+---@param x number
+---@param y number
+---@return Tile?
 function Entities:getTopTileEntity(x, y)
   x, y = math.floor(x), math.floor(y)
   x = x + 1
@@ -135,8 +169,12 @@ function Entities:update(dt)
   end
 end
 
--- draws tile entities
--- if given a cull rect, will only draw tiles within the cull rectangle
+---draws tile entities
+---if given a cull rect, will only draw tiles within the cull rectangle
+---@param x number
+---@param y number
+---@param w integer
+---@param h integer
 function Entities:drawTileEntities(x, y, w, h)
   if x == nil then
     for i, layer in ipairs(self.tileEntities) do

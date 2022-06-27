@@ -7,11 +7,13 @@
 ---@field monocle any
 ---@field screenManager any
 ---@field camera any
+---@field gameControl GameControl?
 local singletons = {
   input = nil,
   monocle = nil,
   screenManager = nil,
-  camera = nil
+  camera = nil,
+  gameControl = nil
 }
 
 function singletons.getType()

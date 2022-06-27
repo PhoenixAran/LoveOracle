@@ -7,7 +7,7 @@ local Tile = require 'engine.tiles.tile'
 
 local GRID_SIZE = 16
 
----@class Room
+---@class Room : SignalObject
 ---@field map Map
 ---@field topLeftPosX integer
 ---@field topLeftPosY integer
