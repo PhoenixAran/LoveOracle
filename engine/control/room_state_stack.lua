@@ -1,6 +1,9 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
+---@class RoomStateStack
+---@field roomControl RoomControl
+---@field states RoomState[]
 local RoomStateStack = Class {
   init = function(self, roomControl)
     self.roomControl = roomControl

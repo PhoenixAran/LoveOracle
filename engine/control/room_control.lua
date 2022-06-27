@@ -8,6 +8,15 @@ local Entities = require 'engine.entities.entities'
 local GRID_SIZE = 16
 local RoomTransitionState = require 'engine.control.game_states.room_states.room_transition_state'
 
+---@class RoomControl : GameState
+---@field player Player
+---@field camera any
+---@field map Map
+---@field entities Entities
+---@field previousRooms Room[]
+---@field currentRoom Room?
+---@field allowRoomTransition boolean
+---@field roomStateStack RoomStateStack
 local RoomControl = Class { __includes = GameState,
   init = function(self, map, player, camera)
     GameState.init(self)
@@ -49,21 +58,28 @@ function RoomControl:canRoomTransition()
   return self.allowRoomTransition
 end
 
+---sets if room control should allow room transitions
+---@param enable boolean
 function RoomControl:enableRoomTransition(enable)
   self.allowRoomTransition = enable
 end
 
+--- push a room state onto the state stack
+---@param roomState RoomState
 function RoomControl:pushState(roomState)
   self.roomStateStack:pushState(roomState)
 end
 
+
+--- pop room state from state stack
 function RoomControl:popState()
   self.roomStateStack:popState()
 end
 
--- note that this wont handle room transtioning and loading
--- This will only set the reference the variable currentRoom, and push 
--- the old room in the old table
+--- note that this wont handle room transtioning and loading
+--- This will only set the reference the variable currentRoom, and push
+--- the old room in the old table
+---@param room Room
 function RoomControl:setCurrentRoom(room)
   self:disconnectFromRoomSignals(self.currentRoom)
   lume.push(self.previousRooms, self.currentRoom)

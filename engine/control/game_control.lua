@@ -41,32 +41,50 @@ function GameControl:getType()
   return 'game_control'
 end
 
+---@return RoomControl
 function GameControl:getRoomControl()
   return self.roomControl
 end
 
+---@return Inventory
 function GameControl:getInventory()
   return self.inventory
 end
 
+---@return Player
 function GameControl:getPlayer()
   return self.player
 end
 
+---@param player Player
 function GameControl:setPlayer(player)
   self.player = player
 end
 
+---@return Map
 function GameControl:getMap()
   return self.map
 end
 
+---@return Map
 function GameControl:setMap(map)
   self.map = map
 end
 
--- creates the initial room control state
--- called when game starts
+---@return any
+function GameControl:getCamera()
+  return self.camera
+end
+
+---@param camera any
+function GameControl:setCamera(camera)
+  self.camera = camera
+end
+
+--- creates the initial room control state. called when game starts
+---@param room Room
+---@param spawnIndexX integer
+---@param spawnIndexY integer
 function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   self:getPlayer():setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
   self.roomControl = RoomControl(self:getMap(), self:getPlayer(), self:getCamera())
@@ -88,14 +106,6 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   self:pushState(self.roomControl)
 end
 
-function GameControl:getCamera()
-  return self.camera
-end
-
-function GameControl:setCamera(camera)
-  self.camera = camera
-end
-
 function GameControl:update(dt)
   local gameState = self.gameStateStack:getCurrentState()
   if gameState then
@@ -112,13 +122,16 @@ function GameControl:draw()
   monocle:finish()
 end
 
+---@param gameState GameState
 function GameControl:pushState(gameState)
   self.gameStateStack:pushState(gameState)
 end
 
+---@return GameState
 function GameControl:popState()
   return self.gameStateStack:popState()
 end
+
 
 function GameControl:release()
   -- TODO release signal object members

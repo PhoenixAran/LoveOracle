@@ -51,6 +51,7 @@ function PlayerStateMachine:canTransitionTo(newState)
   return true
 end
 
+
 ---@param newState PlayerState
 function PlayerStateMachine:beginState(newState)
   if self:canTransitionTo(newState) then

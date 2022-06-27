@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local RoomState = require 'engine.control.room_state'
 
+---@class RoomNormalState : RoomState
 local RoomNormalState = Class { __includes = RoomState,
   init = function(self)
     RoomState.init(self)

@@ -1,6 +1,11 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 
+---@class RoomState
+---@field active boolean
+---@field visible boolean
+---@field roomControl RoomControl
+---@field init function
 local RoomState = Class { _includes = SignalObject,
   init = function(self)
     SignalObject.init(self)
@@ -18,6 +23,7 @@ function RoomState:onBegin() end
 
 function RoomState:onEnd() end
 
+---@param roomControl RoomControl
 function RoomState:begin(roomControl)
   if not self.active then
     self.active = true

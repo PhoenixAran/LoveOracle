@@ -3,7 +3,13 @@ local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local fh = require 'engine.utils.file_helper'
 local ParseHelpers = require 'engine.utils.parse_helpers'
 
-local AssetManager = { 
+--- AssetManager instance
+---@class AssetManager
+---@field imageCache table<string, love.Image>
+---@field fontCache table<string, love.font>
+---@field soundCache table<string, love.Source>
+---@field spriteSheetCache table<string, SpriteSheet>
+local AssetManager = {
   imageCache = { },
   fontCache = { },
   soundCache = { },
@@ -71,7 +77,7 @@ function AssetManager.loadSpriteSheetFile(path)
     if not (line == nil or line == '' or line:sub(1, 1) == '#') then
       local args = ParseHelpers.split(line, ',')
       assert(#args == 4 or #args == 5 or #args == 6, 'Not enough arguments in ' .. path .. ' on line ' .. tostring(lineCounter) )
-      
+
       local key = args[1]
       local imageKey = args[2]
       local width = args[3]
@@ -84,7 +90,7 @@ function AssetManager.loadSpriteSheetFile(path)
       assert(ParseHelpers.argIsNumber(height), 'Expected number in argument 4, but received :' .. tostring(height) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
       assert(margin == nil or ParseHelpers.argIsNumber(margin), 'Expected nil or number in argument 5, but received :' .. tostring(margin) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
       assert(spacing == nil or ParseHelpers.argIsNumber(spacing), 'Expected nil or number in argument 6, but received :' .. tostring(spacing) .. ' in ' .. path .. ' on line ' .. tostring(lineCounter))
-      
+
       key = ParseHelpers.parseStringArg(key)
       imageKey = ParseHelpers.parseStringArg(imageKey)
 

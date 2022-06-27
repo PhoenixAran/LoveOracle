@@ -7,6 +7,20 @@ local vector = require 'lib.vector'
 local Physics = require 'engine.physics'
 
 local GRID_SIZE = 16
+
+---@class RoomTransitionState : RoomState
+---@field transitionStyle string
+---@field currentRoom Room
+---@field newRoom Room
+---@field player Player
+---@field playerSubject table
+---@field camera any
+---@field cameraTarget table
+---@field playerTween any
+---@field cameraTween any
+---@field playerTweenCompleted boolean
+---@field cameraTweenCompleted boolean
+---@field direction4 integer
 local RoomTransitionState = Class { __includes = RoomState,
   init = function(self, currentRoom, newRoom, transitionStyle, direction4)
     assert(transitionStyle == 'push', 'Only Push transitions are supported for now')
@@ -14,7 +28,6 @@ local RoomTransitionState = Class { __includes = RoomState,
     self.transitionStyle = transitionStyle
     self.currentRoom = currentRoom
     self.newRoom = newRoom
-    self.transitionStyle = transitionStyle
     self.direction4 = direction4
 
     self.player = nil
@@ -28,6 +41,8 @@ local RoomTransitionState = Class { __includes = RoomState,
   end
 }
 
+---@param oldRoom Room
+---@param newRoom Room
 local function resetUnusedTileDataAnimations(oldRoom, newRoom)
   -- array of tile data with tiles that were animated in the last room,
   -- but are not used in the new room
@@ -81,7 +96,7 @@ function RoomTransitionState:onBegin()
   end
   local x1, y1 = self.newRoom:getTopLeftPosition()
   x1 = x1 - 1
-  y1 = y1 - 1
+  y1 = y1 - 1  
   local x2, y2 = self.newRoom:getBottomRightPosition()
   x1, y1 = vector.mul(GRID_SIZE, x1, y1)
   x2, y2 = vector.mul(GRID_SIZE, x2, y2)

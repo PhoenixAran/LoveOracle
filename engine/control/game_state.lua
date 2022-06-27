@@ -1,7 +1,11 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 
-
+---@class GameState : SignalObject
+---@field active boolean
+---@field visible boolean
+---@field gameControl GameControl
+---@field init function
 local GameState = Class { _includes = SignalObject,
   init = function(self)
     SignalObject.init(self)
@@ -16,6 +20,7 @@ function GameState:getType()
   return 'game_state'
 end
 
+
 function GameState:onBegin()
 end
 
@@ -23,6 +28,8 @@ function GameState:onEnd()
 
 end
 
+--- called when gamestate is being set as the current state
+---@param gameControl GameControl
 function GameState:begin(gameControl)
   if not self.active then
     self.active = true
