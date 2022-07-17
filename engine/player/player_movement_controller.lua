@@ -24,7 +24,7 @@ local DIRECTION_SNAP = 32
 ---@field holeDoomTimer number
 ---@field holeSlipVelocityX number
 ---@field holeSlipVelocityY number
----@field fallingInHole number
+---@field fallingInHole boolean
 ---@field moveNormalMode PlayerMotionType
 ---@field mode PlayerMotionType
 local PlayerMovementController = Class {
@@ -46,7 +46,6 @@ local PlayerMovementController = Class {
     self.holeDoomTimer = 0
     self.holeSlipVelocityX, self.holeSlipVelocityY = 0, 0
     self.fallingInHole = false
-
 
     self.moveNormalMode = PlayerMotionType()
     self.mode = self.moveNormalMode
@@ -141,7 +140,6 @@ end
 
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
-    ---@type PlayerEnvironmentState
     local currentEnvironmentState = self.player.environmentStateMachine:getCurrentState()
     self:setMode(currentEnvironmentState.motionSettings)
   else

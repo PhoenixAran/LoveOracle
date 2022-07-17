@@ -7,7 +7,7 @@ local lume = require 'lib.lume'
 ---@field targetObject SignalObject
 ---@field bindingArgs table
 ---@field argumentHolder table
----@field targetMethod function
+---@field targetMethod string
 ---@field init function
 local SignalConnection = Class {
   init = function(self, signal, targetObject, targetMethod, bindingArgs)
@@ -60,8 +60,8 @@ end
 
 --- Connect object to signal
 ---@param targetObject SignalObject
----@param targetMethod SignalObject
----@param bindArgs any[]
+---@param targetMethod string
+---@param bindArgs any[]?
 function Signal:connect(targetObject, targetMethod, bindArgs)
   local connection = SignalConnection(self, targetObject, targetMethod, bindArgs)
   self.connections[#self.connections + 1] = connection
@@ -70,7 +70,7 @@ end
 
 --- Disconnect object from signal
 ---@param otherObject SignalObject
----@param targetMethod SignalObject
+---@param targetMethod string
 function Signal:disconnect(otherObject, targetMethod)
   for i, connection in ipairs(self.connections) do
     if connection.targetObject == otherObject and targetMethod == connection.targetMethod then
@@ -114,7 +114,7 @@ end
 ---Connect to specified signal
 ---@param signalName string
 ---@param otherObject SignalObject
----@param targetMethod SignalObject
+---@param targetMethod string
 ---@param bindArgs any[]?
 function SignalObject:connect(signalName, otherObject, targetMethod, bindArgs)
   assert(self.signals[signalName] ~= nil, 'Signal ' .. signalName .. ' does not exist')
@@ -124,7 +124,7 @@ end
 ---Disconnect from specified signal
 ---@param signalName string
 ---@param otherObject SignalObject
----@param targetMethod SignalObject
+---@param targetMethod string
 function SignalObject:disconnect(signalName, otherObject, targetMethod)
   self.signals[signalName]:disconnect(otherObject, targetMethod)
 end

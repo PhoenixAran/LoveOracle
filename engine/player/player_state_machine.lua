@@ -4,8 +4,8 @@ local PlayerStateParameters = require 'engine.player.player_state_parameters'
 local Pool = require 'engine.utils.pool'
 
 ---@class PlayerStateMachine : SignalObject
----@field previousState PlayerState
----@field currentState PlayerState
+---@field previousState PlayerState | PlayerEnvironmentState
+---@field currentState PlayerState | PlayerEnvironmentState
 local PlayerStateMachine = Class { _includes = SignalObject,
   ---@param self PlayerStateMachine
   ---@param player Player
@@ -26,16 +26,18 @@ function PlayerStateMachine:setPlayer(player)
   self.player = player
 end
 
+---@return PlayerState|PlayerEnvironmentState
 function PlayerStateMachine:getCurrentState()
   return self.currentState
 end
 
+---@return PlayerState|PlayerEnvironmentState
 function PlayerStateMachine:getPreviousState()
   return self.previousState
 end
 
 --- checks if player can transition to the given state
----@param newState PlayerState?
+---@param newState PlayerState?|PlayerEnvironmentState?
 function PlayerStateMachine:canTransitionTo(newState)
   if newState ~= nil then
     -- lazy initialize
@@ -52,7 +54,7 @@ function PlayerStateMachine:canTransitionTo(newState)
 end
 
 
----@param newState PlayerState
+---@param newState PlayerState|PlayerEnvironmentState
 function PlayerStateMachine:beginState(newState)
   if self:canTransitionTo(newState) then
     if newState ~= self.currentState then
@@ -64,7 +66,7 @@ function PlayerStateMachine:beginState(newState)
   end
 end
 
----@param newState PlayerState
+---@param newState PlayerState|PlayerEnvironmentState
 function PlayerStateMachine:forceBeginState(newState)
   -- end the current state
   self.previousState = self.currentState
@@ -75,7 +77,7 @@ function PlayerStateMachine:forceBeginState(newState)
   --begin the new state
   self.currentState = newState
   if self.currentState ~= nil then
-    self.currentState.playerController = self
+    self.currentState.stateMachine = self
     self.currentState:beginState(self.player, self.previousState)
     if not self.currentState:isActive() then
       self.previousState = self.currentState

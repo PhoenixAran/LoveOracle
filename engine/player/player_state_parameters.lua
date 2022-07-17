@@ -45,6 +45,8 @@ local PlayerStateParameters = Class {
     self.canUseWeapons = true
     self.canRoomTransition = true
     self.defaultAnimationWhenNotStill = true
+    -- if the player should be moved if they snag a corner
+    self.autoCorrectMovement = true
 
     self.canStrafe = false
     self.alwaysFaceUp = false
@@ -80,6 +82,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.canUseWeapons =  prioritizeFalse(self.canUseWeapons, other.canUseWeapons)
   self.canRoomTransition =  prioritizeFalse(self.canRoomTransition, other.canRoomTransition)
   self.defaultAnimationWhenNotMoving =  prioritizeFalse(self.defaultAnimationWhenNotMoving, other.defaultAnimationWhenNotMoving)
+  self.autoCorrectMovement = prioritizeFalse(self.autoCorrectMovement, other.autoCorrectMovement)
 
   -- you wanna prioritize true for these ones
   self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp
