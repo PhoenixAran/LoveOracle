@@ -6,7 +6,8 @@ local SLOT_B = 1 -- should be hardcoded to always be equipped to sword if it exi
 local SLOT_X = 2
 local SLOT_Y = 3
 
-
+---@class Inventory
+---@field items table
 local Inventory = Class { __includes = SignalObject,
   init = function(self, gameControl)
     SignalObject.init(self)

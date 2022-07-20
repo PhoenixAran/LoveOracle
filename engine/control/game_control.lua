@@ -66,7 +66,7 @@ function GameControl:getMap()
   return self.map
 end
 
----@return Map
+---@param map Map    
 function GameControl:setMap(map)
   self.map = map
 end

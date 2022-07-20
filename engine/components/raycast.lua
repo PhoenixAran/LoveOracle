@@ -16,10 +16,13 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Raycast = Class { __includes = { Component },
   init = function(self, entity, args)
     Component.init(self, entity, args)
-    self.offsetX = 0
-    self.offsetY = 0
-    self.castToX = 0
-    self.castToY = 0
+    if args == nil then
+      args = { }
+    end
+    self.offsetX = args.offsetX or 0
+    self.offsetY = args.offsetY or 0
+    self.castToX = args.castToX or 0
+    self.castToY = args.castToY or 0
     self.zRange = {
       min = -100,
       max = 100
@@ -70,7 +73,7 @@ function Raycast:unsetCollidesWithLayer(layer)
   end
 end
 
----@param value number
+---@param value integer
 function Raycast:setCollidesWithLayerExplicit(value)
   self.collidesWithLayer = value
 end
@@ -86,11 +89,35 @@ function Raycast:removeException(box)
 end
 
 function Raycast:linecast()
-  -- TODO
+  love.graphics.setColor(.52, 0, .80)
+  -- draw line
+  local ex, ey = self.entity:getPosition()
+  love.graphics.line(ex + self.offsetX, ey + self.offsetY, self.castToX, self.castToY)
+  local lineAngle = lume.angle(ex + self.offsetX, ey + self.offsetY, self.castToX, self.castToY)
+  local lineArrowLength = 5
+  local castedPositionX = (ex + self.offsetX + self.castToX)
+
+
+  -- draw right arrow line
+  love.graphics.setColor(0, 0, 0)
 end
 
 function Raycast:debugDraw()
-  -- TODO
+  local arrowLength = 10
+  local arrowLineAngle = math.pi / 6
+  local ex, ey = self.entity:getPosition()
+  local x1, y1 = ex + self.offsetX, ey + self.offsetY
+  local x2, y2 = ex + self.castToX, ey + self.castToY
+  love.graphics.setColor(.52, 0, .80)
+  love.graphics.line(x1, y1, x2, y2)
+  -- draw left arrow line
+  local a = math.atan2(y1 - y2, x1 - x2)
+  love.graphics.setColor(.52, 0, .80)
+  love.graphics.line(x2, y2, x2 + arrowLength * math.cos(a + arrowLineAngle),
+                     y2 + arrowLineAngle + arrowLength * math.sin(a + arrowLineAngle))
+  love.graphics.line(x2, y2, x2 + arrowLength * math.cos(a - arrowLineAngle),
+                     y2 + arrowLineAngle + arrowLength * math.sin(a - arrowLineAngle))
+  love.graphics.setColor(0, 0, 0)
 end
 
 return Raycast
