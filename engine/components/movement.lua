@@ -59,7 +59,7 @@ local Movement = Class { __includes = Component,
     -- See MapEntity:move() function
     -- useful for calculating acceleration and knowing when to stop accelerating movement
     self.motionX, self.motionY = 0, 0
-    -- useful for recalculating linear velocity
+    -- useful for if you want to recalculate linear velocity
     self.prevMotionX, self.prevMotionY = 0, 0
   end
 }
@@ -143,6 +143,10 @@ function Movement:setZVelocity(value)
   self.zVelocity = value
 end
 
+--- calculate linear velocity for this frame
+---@param dt number
+---@return number linearVelocityX
+---@return number linearVelocityY
 function Movement:getLinearVelocity(dt)
   self.prevMotionX = self.motionX
   self.prevMotionY = self.motionY
@@ -188,9 +192,15 @@ function Movement:getLinearVelocity(dt)
   return self.motionX, self.motionY
 end
 
+-- rolls back the last movement performed
+---@param dt any
+---@param newX any
+---@param newY any
+---@return number, number
 function Movement:recalculateLinearVelocity(dt, newX, newY)
-  -- TODO BUT HOPEFULLY NOT
-  -- want to find a way to "autododge" without recalculating linear velocity
+  self.motionX, self.motionY = self.prevMotionX, self.prevMotionY
+  self.vectorX, self.vectorY = newX, newY
+  return self:getLinearVelocity(dt)
 end
 
 -- update z position
