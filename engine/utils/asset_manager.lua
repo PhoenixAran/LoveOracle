@@ -6,7 +6,7 @@ local ParseHelpers = require 'engine.utils.parse_helpers'
 --- AssetManager instance
 ---@class AssetManager
 ---@field imageCache table<string, love.Image>
----@field fontCache table<string, love.font>
+---@field fontCache table<string, love.Font>
 ---@field soundCache table<string, love.Source>
 ---@field spriteSheetCache table<string, SpriteSheet>
 local AssetManager = {

@@ -81,7 +81,7 @@ local InstanceId = 0
 ---@field w integer
 ---@field h integer
 ---@field zRange ZRange
----@field intstanceId integer
+---@field instanceId integer
 local TileData = Class {
   ---@param self TileData
   ---@param tilesetTile TiledTilesetTile

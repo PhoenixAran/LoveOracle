@@ -4,16 +4,24 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local rect = require 'engine.utils.rectangle'
 
+---@class RaycastResultParser
+---@field hits any[]
+---@field distances number[]
+---@field checkedBoxes any[]
+---@field ray table
+---@field layerMask integer
+---@field zmin number
+---@field zmax number
 local RaycastResultParser = Class {
   init = function(self)
     self.hitCounter = 0
-    
+
     self.hits = { }
     -- Parallel array to hits 
     self.distances = { }
 
     self.checkedBoxes = { }
-    
+
     self.ray = {
       startX = 0,
       startY = 0,
@@ -28,6 +36,14 @@ local RaycastResultParser = Class {
   end
 }
 
+---@param startX number
+---@param startY number
+---@param endX number
+---@param endY number
+---@param hits any[]
+---@param layerMask integer
+---@param zmin number
+---@param zmax number
 function RaycastResultParser:start(startX, startY, endX, endY, hits, layerMask, zmin, zmax)
   self.hits = hits
   self.layerMask = layerMask
@@ -49,6 +65,9 @@ function RaycastResultParser:start(startX, startY, endX, endY, hits, layerMask, 
   end
 end
 
+---@param cellX integer
+---@param cellY integer
+---@param cell any[]
 function RaycastResultParser:checkRayIntersection(cellX, cellY, cell)
   for i = 1, lume.count(cell) do
     local potential = cell[i]
@@ -78,7 +97,7 @@ function RaycastResultParser:sortHits()
     local hit = self.hits[j]
     local i = j - 1
     while i >= 1 and dist < self.distances[j] do
-      self.distances[i + 1] = self.distance[i]
+      self.distances[i + 1] = self.distances[i]
       self.hits[i + 1] = self.hits[j]
       i = i - 1
     end
