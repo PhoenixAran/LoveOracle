@@ -12,7 +12,8 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 ---@field castToY number
 ---@field zRange ZRange
 ---@field exceptions BumpBox[]
----@field collidesWityLayer integer
+---@field collidesWithLayer integer
+---@field hits any[]
 local Raycast = Class { __includes = { Component },
   init = function(self, entity, args)
     Component.init(self, entity, args)
@@ -28,7 +29,7 @@ local Raycast = Class { __includes = { Component },
       max = 100
     }
     self.exceptions = { }
-
+    self.hits = { } 
     -- layer this raycast should detect
     self.collidesWithLayer = 0
   end
@@ -88,18 +89,14 @@ function Raycast:removeException(box)
   lume.push(self.exceptions, box)
 end
 
+---@return boolean collisionsExisted
 function Raycast:linecast()
-  love.graphics.setColor(.52, 0, .80)
-  -- draw line
+  lume.clear(self.hits)
   local ex, ey = self.entity:getPosition()
-  love.graphics.line(ex + self.offsetX, ey + self.offsetY, self.castToX, self.castToY)
-  local lineAngle = lume.angle(ex + self.offsetX, ey + self.offsetY, self.castToX, self.castToY)
-  local lineArrowLength = 5
-  local castedPositionX = (ex + self.offsetX + self.castToX)
-
-
-  -- draw right arrow line
-  love.graphics.setColor(0, 0, 0)
+  local x1, y1 = ex + self.offsetX, ey + self.offsetY
+  local x2, y2 = x1 + self.castToX, y1 + self.castToY
+  Physics.linecast(x1, y1, x2, y2, self.hits, self.collidesWithLayer, self.zRange.min, self.zRange.max)
+  return lume.count(self.hits) > 0
 end
 
 function Raycast:debugDraw()
@@ -107,7 +104,7 @@ function Raycast:debugDraw()
   local arrowLineAngle = math.pi / 6
   local ex, ey = self.entity:getPosition()
   local x1, y1 = ex + self.offsetX, ey + self.offsetY
-  local x2, y2 = ex + self.castToX, ey + self.castToY
+  local x2, y2 = x1 + self.castToX, y1 + self.castToY
   love.graphics.setColor(.52, 0, .80)
   love.graphics.line(x1, y1, x2, y2)
   -- draw left arrow line
