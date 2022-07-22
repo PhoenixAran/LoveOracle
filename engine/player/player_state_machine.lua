@@ -4,8 +4,8 @@ local PlayerStateParameters = require 'engine.player.player_state_parameters'
 local Pool = require 'engine.utils.pool'
 
 ---@class PlayerStateMachine : SignalObject
----@field previousState PlayerState | PlayerEnvironmentState
----@field currentState PlayerState | PlayerEnvironmentState
+---@field previousState PlayerState | PlayerEnvironmentState | nil
+---@field currentState PlayerState | PlayerEnvironmentState | nil
 local PlayerStateMachine = Class { _includes = SignalObject,
   ---@param self PlayerStateMachine
   ---@param player Player
@@ -54,7 +54,7 @@ function PlayerStateMachine:canTransitionTo(newState)
 end
 
 
----@param newState PlayerState|PlayerEnvironmentState
+---@param newState PlayerState|PlayerEnvironmentState|nil
 function PlayerStateMachine:beginState(newState)
   if self:canTransitionTo(newState) then
     if newState ~= self.currentState then
@@ -66,7 +66,7 @@ function PlayerStateMachine:beginState(newState)
   end
 end
 
----@param newState PlayerState|PlayerEnvironmentState
+---@param newState PlayerState|PlayerEnvironmentState|nil
 function PlayerStateMachine:forceBeginState(newState)
   -- end the current state
   self.previousState = self.currentState

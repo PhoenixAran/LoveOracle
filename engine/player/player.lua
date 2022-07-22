@@ -33,12 +33,12 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 ---@field weaponStateMachine PlayerStateMachine
 ---@field conditionStateMachines PlayerStateMachine[]
 ---@field stateParameters PlayerStateParameters
----@field stateCollection table<string, PlayerState>
+---@field stateCollection table<string, PlayerState|PlayerEnvironmentState>
 ---@field useDirectionX number
 ---@field userDirectionY number
 ---@field useDirection4 integer
 ---@field pressedActionButtons string[]
----@field buttonCallbacks table<string, function>
+---@field buttonCallbacks table<string, function[]>
 ---@field respawnPositionX number
 ---@field respawnPositionY number
 ---@field respawnDirection number
@@ -356,7 +356,7 @@ end
 
 -- return the player environment state that the player wants to be in
 -- based on his current surface and jumping state
----@return PlayerEnvironmentState?
+---@return PlayerEnvironmentState|nil
 function Player:getDesiredNaturalState()
   -- get ground observer
   local go = self.groundObserver
