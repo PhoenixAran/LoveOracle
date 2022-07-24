@@ -35,7 +35,7 @@ end
 
 ---sets max health
 ---@param value integer
----@param setCurrentHealthAlso integer if the current health should also be set to max value
+---@param setCurrentHealthAlso boolean if the current health should also be set to max value
 function Health:setMaxHealth(value, setCurrentHealthAlso)
   self.maxHealth = value
   self:emit('maxHealthChanged', self.maxHealth)
@@ -83,7 +83,7 @@ function Health:heal(amount)
   self:emit('healthChanged', self.health)
 end
 
----@param value number
+---@param value integer
 function Health:setArmor(value)
   self.armor = value
 end

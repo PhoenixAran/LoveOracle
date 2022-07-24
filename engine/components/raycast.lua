@@ -79,6 +79,20 @@ function Raycast:setCollidesWithLayerExplicit(value)
   self.collidesWithLayer = value
 end
 
+---@param x number
+---@param y number
+function Raycast:setOffset(x, y)
+  self.offsetX = x
+  self.offsetY = y
+end
+
+---@param x number
+---@param y number
+function Raycast:setCastTo(x, y)
+  self.castToX = x
+  self.castToY = y
+end
+
 ---@param box BumpBox
 function Raycast:addException(box)
   lume.push(self.exceptions, box)
@@ -107,7 +121,6 @@ function Raycast:debugDraw()
   local x2, y2 = x1 + self.castToX, y1 + self.castToY
   love.graphics.setColor(.52, 0, .80)
   love.graphics.line(x1, y1, x2, y2)
-  -- draw left arrow line
   local a = math.atan2(y1 - y2, x1 - x2)
   love.graphics.setColor(.52, 0, .80)
   love.graphics.line(x2, y2, x2 + arrowLength * math.cos(a + arrowLineAngle),

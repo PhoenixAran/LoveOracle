@@ -9,6 +9,7 @@ local SpriteBank = require 'engine.utils.sprite_bank'
 local MapEntity = require 'engine.entities.map_entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local Collider = require 'engine.components.collider'
+local Raycast = require 'engine.components.raycast'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local PlayerStateMachine = require 'engine.player.player_state_machine'
@@ -43,7 +44,12 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 ---@field respawnPositionY number
 ---@field respawnDirection number
 ---@field moveAnimation string
----@field items table<string, Item>
+---@field items table<string, Item?>
+---@field raycast1 Raycast
+---@field raycast2 Raycast
+---@field raycastTargetValues table<integer, table>
+---@field raycastPositions table<integer, table<integer, table>>
+---@field raycastDirection integer
 local Player = Class { __includes = MapEntity,
   ---@param self Player
   ---@param args table
@@ -69,9 +75,11 @@ local Player = Class { __includes = MapEntity,
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
-    --self:setAnimationDirection4(args.direction)
     self.spriteFlasher:addSprite(self.sprite)
-
+    self.raycast1 = Raycast(self)
+    self.raycast1:setCollidesWithLayer('tile')
+    self.raycast2 = Raycast(self)
+    self.raycast2:setCollidesWithLayer('tile')
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
     self.controlStateMachine = PlayerStateMachine(self)
@@ -127,8 +135,8 @@ local Player = Class { __includes = MapEntity,
     end)
 
     self.items = {
-      a = nil,
-      b = nil
+      ['a'] = nil,
+      ['b'] = nil
     }
 
     -- entity sprite effect configuration
@@ -138,8 +146,84 @@ local Player = Class { __includes = MapEntity,
     -- signal connections
     self.health:connect('healthDepleted', self, '_onHealthDepleted')
 
+    --raycast stuff for movement corner corrections
+    self.raycastTargetValues = {
+      [Direction4.left] = {
+        x = -5,
+        y = 0
+      },
+      [Direction4.right] = {
+        x = 5,
+        y = 0
+      },
+      [Direction4.up] = {
+        x = 0,
+        y = -5
+      },
+      [Direction4.down] = {
+        x = 0,
+        y = 10
+      }
+    }
+    self.raycastPositions = {
+      [1] = {
+        [Direction4.left] = {
+          normalX = 0,
+          normalY = 0,
+          offsetX = 0,
+          offsetY = -4
+        },
+        [Direction4.right] = {
+          normalX = 0,
+          normalY = 0,
+          offsetX = 0,
+          offsetY = -4
+        },
+        [Direction4.up] = {
+          normalX = -2,
+          normalY = 0,
+          offsetX = -5,
+          offsetY = 0
+        },
+        [Direction4.down] = {
+          normalX = -2,
+          normalY = 0,
+          offsetX = 0,
+          offsetY = -5, 0
+        }
+      },
+      [2] = {
+        [Direction4.left] = {
+          normalX = 0,
+          normalY = 3,
+          offsetX = 0,
+          offsetY = 7
+        },
+        [Direction4.right] = {
+          normalX = 0,
+          normalY = 3,
+          offsetX = 0,
+          offsetY = 7
+        },
+        [Direction4.up] = {
+          normalX = 2,
+          normalY = 0,
+          offsetX = 5,
+          offsetY = 0
+        },
+        [Direction4.down] = {
+          normalX = 2,
+          normalY = 0,
+          offsetX = 5,
+          offsetY = 0
+        }
+      }
+    }
+    self.raycastDirection = args.direction
     -- put debug stuff here
     self.health:setMaxHealth(9999999999, true)
+ 
+
   end
 }
 
@@ -356,7 +440,7 @@ end
 
 -- return the player environment state that the player wants to be in
 -- based on his current surface and jumping state
----@return PlayerEnvironmentState|nil
+---@return PlayerEnvironmentState?
 function Player:getDesiredNaturalState()
   -- get ground observer
   local go = self.groundObserver
@@ -515,6 +599,60 @@ function Player:checkRoomTransitions()
       end
     end
   end
+end
+
+---@param direction4 integer
+---@return number x
+---@return number y
+function Player:getRaycastTargetValue(direction4)
+  local vectorTable = self.raycastTargetValues[direction4]
+  return vectorTable.x, vectorTable.y
+end
+
+---@param raycastNumber integer
+---@param direction4 integer
+---@param key string?
+---@return number x
+---@return number y
+function Player:getRaycastPosition(raycastNumber, direction4, key)
+  if key == nil then
+    key = 'normal'
+  end
+  local vectorTable = self.raycastPositions[raycastNumber][direction4][key]
+  return vectorTable.x, vectorTable.y
+end
+
+---@param forceMatch boolean?
+function Player:updateRaycastPositions(forceMatch)
+  if self.raycastDirection ~= self.movement:getDirection4() or forceMatch then
+    self.raycastDirection = self.movement:getDirection4()
+    self.raycast1:setOffset(self:getRaycastPosition(1, self.raycastDirection))
+    self.raycast2:setOffset(self:getRaycastPosition(2, self.raycastDirection))
+    self.raycast1:setCastTo(self:getRaycastTargetValue(self.raycastDirection))
+    self.raycast2:setCastTo(self:getRaycastTargetValue(self.raycastDirection))
+  end
+end
+
+function Player:updateMovementCorrection(dt, mtvx, mtvy)
+  local mx, my = self.movement:getVector()
+  local mDirection = Direction4.getDirection(mx, my)
+  -- if the player is moving diagonally or switched directions or stopped moving,
+  -- force update the raycast positions to their default state based on 
+  -- which way the player is facing
+  if mtvx == 0 and mtvy == 0 and mx == 0 and my == 0 then
+    self:updateRaycastPositions(true)
+    return
+  end
+  self:updateRaycastPositions()
+  -- the player can stop moving mid movement correction
+  -- should resume movement correction when they start moving in the same direction 
+  -- so just exit out at this point
+  if mx == 0 and my == 0 then
+    return
+  end
+
+  
+
 end
 
 function Player:update(dt)
