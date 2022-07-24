@@ -17,6 +17,7 @@ local PlayerStateParameters = require 'engine.player.player_state_parameters'
 local PlayerMovementController = require 'engine.player.player_movement_controller'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 -- ### STATES ###
 -- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
@@ -78,8 +79,10 @@ local Player = Class { __includes = MapEntity,
     self.spriteFlasher:addSprite(self.sprite)
     self.raycast1 = Raycast(self)
     self.raycast1:setCollidesWithLayer('tile')
+    self.raycast1:setCollisionTileExplicit(self.collisionTiles)
     self.raycast2 = Raycast(self)
     self.raycast2:setCollidesWithLayer('tile')
+    self.raycast2:setCollisionTileExplicit(self.collisionTiles)
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
     self.controlStateMachine = PlayerStateMachine(self)
@@ -644,6 +647,7 @@ function Player:updateMovementCorrection(dt, mtvx, mtvy)
     return
   end
   self:updateRaycastPositions()
+
   -- the player can stop moving mid movement correction
   -- should resume movement correction when they start moving in the same direction 
   -- so just exit out at this point
@@ -651,8 +655,48 @@ function Player:updateMovementCorrection(dt, mtvx, mtvy)
     return
   end
 
-  
+  local isStillCollidingWithWallTile = false
+  for _, other in ipairs(self.moveCollisions) do
+    if other:isTile() then
+      local tileData = other.tileData
+      if bit.band(tileData.tileType, self.collisionTiles) ~= 0 then
+        isStillCollidingWithWallTile = true
+      end
+    end
+  end
+  -- this check means that the movement correction has been completed
+  -- we then reset the raycast positions and exit out
+  if not isStillCollidingWithWallTile then
+    self:updateRaycastPositions(true)
+    return
+  end
 
+  -- manhandle slippery corner sliding so players dont get snagged on corners
+  local newX, newY = 0, 0
+
+  -- in each case we slide the opposite raycast to the end of the player's collision box
+  -- so we know when to stop correcting the movement 
+  local dir4 = Direction4.getDirection(self:getVector())
+  -- todo this stuff
+  if dir4 == Direction4.up then
+
+  elseif dir4 == Direction4.down then
+    
+  elseif dir4 == Direction4.left then
+    
+  elseif dir4 == Direction4.right then
+    
+  end
+
+  -- if the player is not close enough to the edge to get corrected, just return out early
+  if mx == newX and my == newY then
+    self:updateRaycastPositions(true)
+    return
+  end
+
+  self.movement:setVector(newX, newY)
+  local newLinearVelocityX, newLinearVelocityY = self.movement:recalculateLinearVelocity(dt, newX, newY)
+  self:move(dt)
 end
 
 function Player:update(dt)
@@ -717,6 +761,8 @@ end
 function Player:debugDraw()
   Entity.debugDraw(self)
   self.roomEdgeCollisionBox:debugDraw()
+  self.raycast1:debugDraw()
+  self.raycast2:debugDraw()
 end
 
 function Player:getInspectorProperties()

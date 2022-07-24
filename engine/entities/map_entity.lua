@@ -26,7 +26,7 @@ local DamageInfo = require 'engine.entities.damage_info'
 ---@field spriteFlasher SpriteFlasher
 ---@field sprite SpriteRenderer | AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
----@field moveCollisions BumpBox[]
+---@field moveCollisions any[]
 ---@field collisionTiles integer
 ---@field deathMarked boolean
 ---@field persistant boolean
@@ -136,7 +136,7 @@ function MapEntity:unsetCollisionTile(tileType)
       self.collisionTiles = bit.band(self.collisionTiles, bit.bnot(TileTypeFlags:get(val).value))
     end
   else
-    self.collisionTiles = bit.bor(self.collisionTiles, bit.bnot(TileTypeFlags:get(tileType).value))
+    self.collisionTiles = bit.band(self.collisionTiles, bit.bnot(TileTypeFlags:get(tileType).value))
   end
 end
 

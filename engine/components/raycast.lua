@@ -4,6 +4,7 @@ local vector = require 'lib.vector'
 local Component = require 'engine.entities.component'
 local Physics = require 'engine.physics'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 
 ---@class Raycast : Component
 ---@field offsetX number
@@ -13,6 +14,7 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 ---@field zRange ZRange
 ---@field exceptions BumpBox[]
 ---@field collidesWithLayer integer
+---@field collidesWithTileLayer integer
 ---@field hits any[]
 local Raycast = Class { __includes = { Component },
   init = function(self, entity, args)
@@ -32,6 +34,8 @@ local Raycast = Class { __includes = { Component },
     self.hits = { } 
     -- layer this raycast should detect
     self.collidesWithLayer = 0
+    -- tiletypes this raycast should detect
+    self.collidesWithTileLayer = 0
   end
 }
 
@@ -79,6 +83,33 @@ function Raycast:setCollidesWithLayerExplicit(value)
   self.collidesWithLayer = value
 end
 
+---@param tileType string|string[]
+function Raycast:setCollisionTile(tileType)
+  if type(tileType) == 'string' then
+    for _, v in ipairs(tileType) do
+      self.collidesWithTileLayer = bit.band(self.collidesWithTileLayer, bit.bnot(TileTypeFlags:get(v).value))
+    end
+  else
+    self.collidesWithTileLayer = bit.band(self.collidesWithTileLayer, bit.bnot(TileTypeFlags:get(tileType).value))
+  end
+end
+
+---@param tileType string|string[]
+function Raycast:unsetCollisionTile(tileType)
+  if (tileType) == 'table' then
+    for _, v in ipairs(tileType) do
+      self.collidesWithTileLayer = bit.band(self.collidesWithTileLayer, bit.bnot(TileTypeFlags:get(v).value))
+    end
+  else
+    self.collidesWithTileLayer = bit.band(self.collidesWithTileLayer, bit.bnot(TileTypeFlags:get(tileType).value))
+  end
+end
+
+---@param value integer
+function Raycast:setCollisionTileExplicit(value)
+  self.collidesWithTileLayer = value
+end
+
 ---@param x number
 ---@param y number
 function Raycast:setOffset(x, y)
@@ -110,6 +141,14 @@ function Raycast:linecast()
   local x1, y1 = ex + self.offsetX, ey + self.offsetY
   local x2, y2 = x1 + self.castToX, y1 + self.castToY
   Physics.linecast(x1, y1, x2, y2, self.hits, self.collidesWithLayer, self.zRange.min, self.zRange.max)
+  for i = lume.count(self.hits), 1, -1 do
+    local hit = self.hits[i]
+    if hit.isTile and hit:isTile() then
+      if bit.band(self.collidesWithTileLayer, hit:getTileType()) == 0 then
+        self.hits[i] = nil
+      end
+    end
+  end
   return lume.count(self.hits) > 0
 end
 
