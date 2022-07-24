@@ -171,54 +171,38 @@ local Player = Class { __includes = MapEntity,
     self.raycastPositions = {
       [1] = {
         [Direction4.left] = {
-          normalX = 0,
-          normalY = 0,
-          offsetX = 0,
-          offsetY = -4
+          normal = { x = 0, y = 0 },
+          offset = { x = 0 , y = -4 }
         },
         [Direction4.right] = {
-          normalX = 0,
-          normalY = 0,
-          offsetX = 0,
-          offsetY = -4
+          normal = { x = 0, y = 0 },
+          offset = { x = 0, y = -4 }
         },
         [Direction4.up] = {
-          normalX = -2,
-          normalY = 0,
-          offsetX = -5,
-          offsetY = 0
+          normal = { x = -2, y = 0 },
+          offset = { x = -5, y = 0 }
         },
         [Direction4.down] = {
-          normalX = -2,
-          normalY = 0,
-          offsetX = 0,
-          offsetY = -5, 0
+          normal = { x = -2, y = 0 },
+          offset = { x = 0, y = -5 }
         }
       },
       [2] = {
         [Direction4.left] = {
-          normalX = 0,
-          normalY = 3,
-          offsetX = 0,
-          offsetY = 7
+          normal = { x = 0, y = 3},
+          offset = { x = 0, y = 7}
         },
         [Direction4.right] = {
-          normalX = 0,
-          normalY = 3,
-          offsetX = 0,
-          offsetY = 7
+          normal = { x = 0, y = 3 },
+          offset = { x = 0, y = 7 }
         },
         [Direction4.up] = {
-          normalX = 2,
-          normalY = 0,
-          offsetX = 5,
-          offsetY = 0
+          normal = { x = 2, y = 0 },
+          offset = { x = 5, y = 0}
         },
         [Direction4.down] = {
-          normalX = 2,
-          normalY = 0,
-          offsetX = 5,
-          offsetY = 0
+          normal = { x = 2, y = 0 },
+          offset = { x = 5, y = 0 }
         }
       }
     }
@@ -636,13 +620,21 @@ function Player:updateRaycastPositions(forceMatch)
   end
 end
 
-function Player:updateMovementCorrection(dt, mtvx, mtvy)
+---
+---@param dt number delta time
+---@param tvx number translation vector x
+---@param tvy number translation vector y
+function Player:updateMovementCorrection(dt, tvx, tvy)
   local mx, my = self.movement:getVector()
   local mDirection = Direction4.getDirection(mx, my)
+  -- we're not inputting a move, so exit out
+  if mDirection == Direction4.none then
+    return
+  end
   -- if the player is moving diagonally or switched directions or stopped moving,
   -- force update the raycast positions to their default state based on 
   -- which way the player is facing
-  if mtvx == 0 and mtvy == 0 and mx == 0 and my == 0 then
+  if tvx == 0 and tvy == 0 and mx == 0 and my == 0 then
     self:updateRaycastPositions(true)
     return
   end
@@ -791,7 +783,8 @@ function Player:update(dt)
   self:integrateStateParameters()
   self:requestNaturalState()
   self:updateStates()
-  self:move(dt)
+  local tvx, tvy = self:move(dt)
+  self:updateMovementCorrection(dt, tvx, tvy)
   self:updateEquippedItems(dt)
   self:updateEntityEffectSprite(dt)
 
@@ -820,6 +813,8 @@ function Player:draw()
       item:drawAbove()
     end
   end
+  self.raycast1:debugDraw()
+  self.raycast2:debugDraw()
 end
 
 function Player:debugDraw()

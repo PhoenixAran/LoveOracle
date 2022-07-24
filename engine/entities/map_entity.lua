@@ -248,6 +248,8 @@ end
 
 ---carries out the movement designated by the Movement Component
 ---@param dt number
+---@return number tvx translation vector x
+---@return number tvy translation vector y
 function MapEntity:move(dt)
   lume.clear(self.moveCollisions)
   local posX, posY = self:getPosition()
@@ -307,8 +309,11 @@ function MapEntity:move(dt)
     end
     TablePool.free(neighbors)
   end
+  local oldX, oldY = self:getPosition()
   self:setPosition(posX + velX, posY + velY)
   Physics.update(self)
+  local newX, newY = self:getPosition()
+  return vector.sub(oldX, oldY, newX, newY)
 end
 
 -- combat component pass throughs
