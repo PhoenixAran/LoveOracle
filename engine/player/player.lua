@@ -677,15 +677,76 @@ function Player:updateMovementCorrection(dt, mtvx, mtvy)
   -- in each case we slide the opposite raycast to the end of the player's collision box
   -- so we know when to stop correcting the movement 
   local dir4 = Direction4.getDirection(self:getVector())
-  -- todo this stuff
+  
   if dir4 == Direction4.up then
-
+    local corrected = false
+    if not self.raycast1:linecast() then
+      self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
+      self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
+      if self.raycast2:linecast() then
+        newX = -1
+        corrected = true
+      end
+    end
+    if not corrected and not self.raycast2:linecast() then
+      self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
+      self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
+      if self.raycast1:linecast() then
+        newY = 1
+      end
+    end
   elseif dir4 == Direction4.down then
-    
+    local corrected = false
+    if not self.raycast1:linecast() then
+      self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
+      self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
+      if self.raycast2:linecast() then
+        newX = -1
+        corrected = true
+      end
+    end
+    if not corrected and not self.raycast2:linecast() then
+      self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
+      self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
+      if self.raycast2:linecast() then
+        newX = 1
+        corrected = true
+      end
+    end
   elseif dir4 == Direction4.left then
-    
+    local corrected = false
+    if not self.raycast1:linecast() then
+      self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
+      self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
+      if self.raycast2:linecast() then
+        newY = -1
+        corrected = true
+      end
+    end
+    if not corrected and not self.raycast2:linecast() then
+      self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
+      self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
+      if self.raycast1:linecast() then
+        newY = 1
+      end
+    end
   elseif dir4 == Direction4.right then
-    
+    local corrected = false
+    if not self.raycast1:linecast() then
+      self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
+      self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
+      if not self.raycast2:linecast() then
+        newY = -1
+        corrected = true
+      end
+    end
+    if not corrected and not self.raycast2:linecast() then
+      self.raycast2:setOffset(2, dir4)
+      self.raycast1:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
+      if not self.raycast1:linecast() then
+        newY = 1
+      end
+    end
   end
 
   -- if the player is not close enough to the edge to get corrected, just return out early
@@ -694,8 +755,11 @@ function Player:updateMovementCorrection(dt, mtvx, mtvy)
     return
   end
 
+  -- recalculate the movement now with our new values
   self.movement:setVector(newX, newY)
-  local newLinearVelocityX, newLinearVelocityY = self.movement:recalculateLinearVelocity(dt, newX, newY)
+  -- rollback last movement
+  self.movement:recalculateLinearVelocity(dt, newX, newY)
+  -- move again
   self:move(dt)
 end
 
