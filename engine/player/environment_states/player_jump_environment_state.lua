@@ -12,6 +12,7 @@ local PlayerJumpEnvironmentState = Class { __includes = PlayerEnvironmentState,
     self.stateParameters.canPush = false
     self.stateParameters.canLedgeJump = false
     self.stateParameters.canRoomTransition = false
+    self.stateParameters.autoCorrectMovement = false
 
     -- value modifiers for Movement component
     self.motionSettings.speed = 60

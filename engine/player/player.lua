@@ -627,6 +627,10 @@ end
 ---@param tvx number translation vector x
 ---@param tvy number translation vector y
 function Player:updateMovementCorrection(dt, tvx, tvy)
+  -- we are not allowed to auto correct movement in our current state
+  if not self:getStateParameters().autoCorrectMovement then
+    return
+  end
   local mx, my = self.movement:getVector()
   local mDirection = Direction4.getDirection(mx, my)
   -- we're not inputting a move, so exit out
@@ -638,7 +642,6 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   if mDirection ~= self.animationDirection4 then
     return
   end
-
   -- if the player is moving diagonally or switched directions or stopped moving,
   -- force update the raycast positions to their default state based on 
   -- which way the player is facing

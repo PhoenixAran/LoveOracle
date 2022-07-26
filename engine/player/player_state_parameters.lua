@@ -110,6 +110,7 @@ function PlayerStateParameters:reset()
     self.canUseWeapons = true
     self.canRoomTransition = true
     self.defaultAnimationWhenNotMoving = true
+    self.autoCorrectMovement = true
 
     self.canStrafe = false
     self.alwaysFaceUp = false
