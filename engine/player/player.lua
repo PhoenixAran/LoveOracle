@@ -55,7 +55,7 @@ local Player = Class { __includes = MapEntity,
   ---@param self Player
   ---@param args table
   init = function(self, args)
-    args.w, args.h = 8, 9
+    args.w, args.h = 8, 10
     args.direction = args.direction or Direction4.down
     MapEntity.init(self, args)
     -- room edge collision
@@ -80,9 +80,11 @@ local Player = Class { __includes = MapEntity,
     self.raycast1 = Raycast(self)
     self.raycast1:setCollidesWithLayer('tile')
     self.raycast1:setCollisionTileExplicit(self.collisionTiles)
+    self.raycast1:addException(self)
     self.raycast2 = Raycast(self)
     self.raycast2:setCollidesWithLayer('tile')
     self.raycast2:setCollisionTileExplicit(self.collisionTiles)
+    self.raycast2:addException(self)
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
     self.controlStateMachine = PlayerStateMachine(self)
@@ -184,7 +186,7 @@ local Player = Class { __includes = MapEntity,
         },
         [Direction4.down] = {
           normal = { x = -2, y = 0 },
-          offset = { x = 0, y = -5 }
+          offset = { x = -5, y = 0 }
         }
       },
       [2] = {
@@ -631,6 +633,12 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   if mDirection == Direction4.none then
     return
   end
+  -- if the player's animation direction does not match their animation direction, dont correct
+  -- movement or else stuff gets janky in certain cases when sliding against a wall
+  if mDirection ~= self.animationDirection4 then
+    return
+  end
+
   -- if the player is moving diagonally or switched directions or stopped moving,
   -- force update the raycast positions to their default state based on 
   -- which way the player is facing
@@ -684,7 +692,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
       self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
       if self.raycast1:linecast() then
-        newY = 1
+        newX = 1
       end
     end
   elseif dir4 == Direction4.down then
@@ -700,7 +708,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
     if not corrected and not self.raycast2:linecast() then
       self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
-      if self.raycast2:linecast() then
+      if self.raycast1:linecast() then
         newX = 1
         corrected = true
       end
@@ -727,20 +735,19 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
     if not self.raycast1:linecast() then
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
       self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
-      if not self.raycast2:linecast() then
+      if self.raycast2:linecast() then
         newY = -1
         corrected = true
       end
     end
     if not corrected and not self.raycast2:linecast() then
-      self.raycast2:setOffset(2, dir4)
-      self.raycast1:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
-      if not self.raycast1:linecast() then
+      self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
+      self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
+      if self.raycast1:linecast() then
         newY = 1
       end
     end
   end
-
   -- if the player is not close enough to the edge to get corrected, just return out early
   if mx == newX and my == newY then
     self:updateRaycastPositions(true)
@@ -813,8 +820,6 @@ function Player:draw()
       item:drawAbove()
     end
   end
-  self.raycast1:debugDraw()
-  self.raycast2:debugDraw()
 end
 
 function Player:debugDraw()

@@ -160,12 +160,13 @@ function Raycast:debugDraw()
   local x2, y2 = x1 + self.castToX, y1 + self.castToY
   love.graphics.setColor(.52, 0, .80)
   love.graphics.line(x1, y1, x2, y2)
-  local a = math.atan2(y1 - y2, x1 - x2)
-  love.graphics.setColor(.52, 0, .80)
-  love.graphics.line(x2, y2, x2 + arrowLength * math.cos(a + arrowLineAngle),
-                     y2 + arrowLineAngle + arrowLength * math.sin(a + arrowLineAngle))
-  love.graphics.line(x2, y2, x2 + arrowLength * math.cos(a - arrowLineAngle),
-                     y2 + arrowLineAngle + arrowLength * math.sin(a - arrowLineAngle))
+  --local a = math.atan2(y1 - y2, x1 - x2)
+  --love.graphics.line(x2, y2, x2 + arrowLength * math.cos(a + arrowLineAngle),
+  --                   y2 + arrowLineAngle + arrowLength * math.sin(a + arrowLineAngle))
+  --love.graphics.line(x2, y2, x2 + arrowLength * math.cos(a - arrowLineAngle),
+  --                   y2 + arrowLineAngle + arrowLength * math.sin(a - arrowLineAngle))
+  love.graphics.setColor(.88, 0, .2)
+  love.graphics.rectangle('fill', x2 - .5, y2 - .5, 1, 1)
   love.graphics.setColor(0, 0, 0)
 end
 

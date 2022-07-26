@@ -48,6 +48,7 @@ end
 
 
 function RaycastTestScreen:update(dt)
+  input:update(dt)
   Slab.Update(dt)
   for _, b in ipairs(self.testBoxes) do
     b:update(dt)
