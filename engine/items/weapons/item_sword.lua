@@ -26,7 +26,7 @@ function ItemSword:getType()
   return 'item_sword'
 end
 
-function ItemSword:onButtonPress()
+function ItemSword:onButtonPressed()
   local swingSwordState = self.player:getStateFromCollection('player_swing_state')
   swingSwordState.weapon = self
   self.player:beginWeaponState(swingSwordState)
