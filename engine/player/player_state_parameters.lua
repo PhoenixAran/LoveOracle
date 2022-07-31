@@ -97,8 +97,6 @@ function PlayerStateParameters:integrateParameters(other)
   end
 end
 
-
-
 function PlayerStateParameters:reset()
     -- default values
     self.canJump = true

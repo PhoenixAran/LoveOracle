@@ -51,6 +51,8 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 ---@field raycastTargetValues table<integer, table>
 ---@field raycastPositions table<integer, table<integer, table>>
 ---@field raycastDirection integer
+---@field pushTileRaycast Raycast
+---@field pushTileRaycastTargetValues table<integer, table>
 local Player = Class { __includes = MapEntity,
   ---@param self Player
   ---@param args table
@@ -85,6 +87,11 @@ local Player = Class { __includes = MapEntity,
     self.raycast2:setCollidesWithLayer('tile')
     self.raycast2:setCollisionTileExplicit(self.collisionTiles)
     self.raycast2:addException(self)
+    self.pushTileRaycast = Raycast(self)
+    self.pushTileRaycast:addException(self)
+    self.pushTileRaycast:setCollidesWithLayer('push_block')
+
+    
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
     self.controlStateMachine = PlayerStateMachine(self)
@@ -209,6 +216,24 @@ local Player = Class { __includes = MapEntity,
       }
     }
     self.raycastDirection = args.direction
+    self.pushTileRaycastTargetValues = {
+      [Direction4.left] = {
+        x = -5,
+        y = 0
+      },
+      [Direction4.right] = {
+        x = 5,
+        y = 0
+      },
+      [Direction4.up] = {
+        x = 0,
+        y = -5
+      },
+      [Direction4.down] = {
+        x = 0,
+        y = 8
+      }
+    }
     -- put debug stuff here
     self.health:setMaxHealth(9999999999, true)
  
@@ -486,6 +511,10 @@ end
 
 function Player:updateStates(dt)
   self:integrateStateParameters()
+
+  -- check for push state
+  local currentWeaponState = self:getWeaponState()
+
   -- update weapon state
   self.weaponStateMachine:update(dt)
   -- update environment state
@@ -622,32 +651,32 @@ function Player:updateRaycastPositions(forceMatch)
   end
 end
 
----
 ---@param dt number delta time
 ---@param tvx number translation vector x
 ---@param tvy number translation vector y
+---@return boolean movementCorrected 
 function Player:updateMovementCorrection(dt, tvx, tvy)
   -- we are not allowed to auto correct movement in our current state
   if not self:getStateParameters().autoCorrectMovement then
-    return
+    return false
   end
   local mx, my = self.movement:getVector()
   local mDirection = Direction4.getDirection(mx, my)
   -- we're not inputting a move, so exit out
   if mDirection == Direction4.none then
-    return
+    return false
   end
   -- if the player's animation direction does not match their animation direction, dont correct
   -- movement or else stuff gets janky in certain cases when sliding against a wall
   if mDirection ~= self.animationDirection4 then
-    return
+    return false
   end
   -- if the player is moving diagonally or switched directions or stopped moving,
   -- force update the raycast positions to their default state based on 
   -- which way the player is facing
   if tvx == 0 and tvy == 0 and mx == 0 and my == 0 then
     self:updateRaycastPositions(true)
-    return
+    return false
   end
   self:updateRaycastPositions()
 
@@ -655,7 +684,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   -- should resume movement correction when they start moving in the same direction 
   -- so just exit out at this point
   if mx == 0 and my == 0 then
-    return
+    return false
   end
 
   local isStillCollidingWithWallTile = false
@@ -671,7 +700,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   -- we then reset the raycast positions and exit out
   if not isStillCollidingWithWallTile then
     self:updateRaycastPositions(true)
-    return
+    return false
   end
 
   -- manhandle slippery corner sliding so players dont get snagged on corners
@@ -754,7 +783,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   -- if the player is not close enough to the edge to get corrected, just return out early
   if mx == newX and my == newY then
     self:updateRaycastPositions(true)
-    return
+    return false
   end
 
   -- recalculate the movement now with our new values
@@ -763,6 +792,27 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   self.movement:recalculateLinearVelocity(dt, newX, newY)
   -- move again
   self:move(dt)
+  return true
+end
+
+--- will start a push tile state if the player is able to
+--- assumes movement is not being corrected from Player:updateMovementCorrection method
+function Player:updatePushTileRaycast()
+  if self:getStateParameters().canPush then
+    local movementDirection = self.movement:getDirection4()
+    local animDirection = self.animationDirection4
+    if movementDirection == animDirection then
+      local vectorTable = self.pushTileRaycastTargetValues[movementDirection]
+      local x, y = vectorTable.x, vectorTable.y
+      self.pushTileRaycast:setCastTo(x, y)
+      if self.pushTileRaycast:linecast() then
+        local hits = self.pushTileRaycast.hits
+        for k, v in ipairs(hits) do
+          -- TODO
+        end
+      end
+    end
+  end
 end
 
 function Player:update(dt)
@@ -794,7 +844,15 @@ function Player:update(dt)
   self:requestNaturalState()
   self:updateStates()
   local tvx, tvy = self:move(dt)
-  self:updateMovementCorrection(dt, tvx, tvy)
+  local movementCorrected = self:updateMovementCorrection(dt, tvx, tvy)
+  -- check if we are pushing a tile
+  if not movementCorrected then
+    local currentWeaponState = self:getWeaponState()
+    if currentWeaponState == nil then
+      self:updatePushTileRaycast()
+    end
+  end
+
   self:updateEquippedItems(dt)
   self:updateEntityEffectSprite(dt)
 
@@ -823,6 +881,7 @@ function Player:draw()
       item:drawAbove()
     end
   end
+  self.pushTileRaycast:debugDraw()
 end
 
 function Player:debugDraw()

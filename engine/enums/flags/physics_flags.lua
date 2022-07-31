@@ -8,7 +8,8 @@ PhysicsFlags:makeTags {
   'npc',
   'platform',
   'tile', 
-  'room_edge'
+  'room_edge',
+  'push_block',
 }
 PhysicsFlags:makeEnumMap {
   Entity = 'entity',
@@ -17,6 +18,7 @@ PhysicsFlags:makeEnumMap {
   NPC = 'npc',
   Platform = 'platform',
   Tile = 'tile',
-  RoomEdge = 'room_edge'
+  RoomEdge = 'room_edge',
+  PushBlock = 'push_block'
 }
 return PhysicsFlags
