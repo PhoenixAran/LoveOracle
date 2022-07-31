@@ -1,4 +1,5 @@
 -- player sprites
+---@param spriteBank SpriteBank
 return function(spriteBank)
   local sb = spriteBank.createSpriteRendererBuilder()
   local ab = spriteBank.createSpriteAnimationBuilder()
@@ -102,6 +103,28 @@ return function(spriteBank)
   ab:buildSubstrip('right')
   -- BUILD sword_swing
   sb:addAnimation('swing', ab:build())
+
+  -- @animation push
+  ab:setSubstrips(true)
+  ab:setLoopType('cycle')
+  -- #substrip up
+  ab:addSpriteFrame(3, 7)
+  ab:addSpriteFrame(4, 7)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 7)
+  ab:addSpriteFrame(8, 7)
+  ab:buildSubstrip('down')
+  -- #substrip left
+  ab:addSpriteFrame(5, 7)
+  ab:addSpriteFrame(6, 7)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 7)
+  ab:addSpriteFrame(2, 7)
+  ab:buildSubstrip('right')
+  -- BUILD push
+  sb:addAnimation('push', ab:build())
 
   -- register sprite builder
   spriteBank.registerSpriteRendererBuilder('player', sb)

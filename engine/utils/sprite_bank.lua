@@ -12,6 +12,7 @@ local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_render
 local fh = require 'engine.utils.file_helper'
 
 -- export type
+---@class SpriteBank
 local SpriteBank = {
   -- holds singular sprite instances
   sprites = { },

@@ -26,6 +26,7 @@ local PlayerHitstunState = require 'engine.player.condition_states.player_hitstu
 local PlayerJumpEnvironmentState = require 'engine.player.environment_states.player_jump_environment_state'
 -- weapon states
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
+local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 
 ---@class Player : MapEntity
 ---@field roomEdgeCollisionBox Collider
@@ -35,7 +36,7 @@ local PlayerSwingState = require 'engine.player.weapon_states.swing_states.playe
 ---@field weaponStateMachine PlayerStateMachine
 ---@field conditionStateMachines PlayerStateMachine[]
 ---@field stateParameters PlayerStateParameters
----@field stateCollection table<string, PlayerState|PlayerEnvironmentState>
+---@field stateCollection table<string, any>
 ---@field useDirectionX number
 ---@field userDirectionY number
 ---@field useDirection4 integer
@@ -79,18 +80,21 @@ local Player = Class { __includes = MapEntity,
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
     self.spriteFlasher:addSprite(self.sprite)
+
     self.raycast1 = Raycast(self)
     self.raycast1:setCollidesWithLayer('tile')
     self.raycast1:setCollisionTileExplicit(self.collisionTiles)
     self.raycast1:addException(self)
+
     self.raycast2 = Raycast(self)
     self.raycast2:setCollidesWithLayer('tile')
     self.raycast2:setCollisionTileExplicit(self.collisionTiles)
     self.raycast2:addException(self)
+
     self.pushTileRaycast = Raycast(self)
     self.pushTileRaycast:addException(self)
+    self.pushTileRaycast:setCollidesWithLayer('tile')
     self.pushTileRaycast:setCollidesWithLayer('push_block')
-
     
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
@@ -100,10 +104,12 @@ local Player = Class { __includes = MapEntity,
     self.stateParameters = nil
 
     self.stateCollection = {
+      -- condition states
       -- environment states
       ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self),
       -- weapon states
       ['player_swing_state'] = PlayerSwingState(self),
+      ['player_push_state'] = PlayerPushState(self),
     }
 
     -- use direction variables are useful for finding what way player
@@ -231,13 +237,11 @@ local Player = Class { __includes = MapEntity,
       },
       [Direction4.down] = {
         x = 0,
-        y = 8
+        y = 10
       }
     }
     -- put debug stuff here
     self.health:setMaxHealth(9999999999, true)
- 
-
   end
 }
 
@@ -453,7 +457,7 @@ function Player:requestNaturalState()
 end
 
 -- return the player environment state that the player wants to be in
--- based on his current surface and jumping state
+-- based on his current surface and jumping state 
 ---@return PlayerEnvironmentState?
 function Player:getDesiredNaturalState()
   -- get ground observer
@@ -511,9 +515,6 @@ end
 
 function Player:updateStates(dt)
   self:integrateStateParameters()
-
-  -- check for push state
-  local currentWeaponState = self:getWeaponState()
 
   -- update weapon state
   self.weaponStateMachine:update(dt)
@@ -709,9 +710,8 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   -- in each case we slide the opposite raycast to the end of the player's collision box
   -- so we know when to stop correcting the movement 
   local dir4 = Direction4.getDirection(self:getVector())
-  
+  local corrected = false
   if dir4 == Direction4.up then
-    local corrected = false
     if not self.raycast1:linecast() then
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
       self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
@@ -728,7 +728,6 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
       end
     end
   elseif dir4 == Direction4.down then
-    local corrected = false
     if not self.raycast1:linecast() then
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
       self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
@@ -746,7 +745,6 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
       end
     end
   elseif dir4 == Direction4.left then
-    local corrected = false
     if not self.raycast1:linecast() then
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
       self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
@@ -763,7 +761,6 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
       end
     end
   elseif dir4 == Direction4.right then
-    local corrected = false
     if not self.raycast1:linecast() then
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
       self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
@@ -781,11 +778,10 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
     end
   end
   -- if the player is not close enough to the edge to get corrected, just return out early
-  if mx == newX and my == newY then
+  if not corrected then
     self:updateRaycastPositions(true)
     return false
   end
-
   -- recalculate the movement now with our new values
   self.movement:setVector(newX, newY)
   -- rollback last movement
@@ -797,7 +793,7 @@ end
 
 --- will start a push tile state if the player is able to
 --- assumes movement is not being corrected from Player:updateMovementCorrection method
-function Player:updatePushTileRaycast()
+function Player:updatePushTileState()
   if self:getStateParameters().canPush then
     local movementDirection = self.movement:getDirection4()
     local animDirection = self.animationDirection4
@@ -807,8 +803,11 @@ function Player:updatePushTileRaycast()
       self.pushTileRaycast:setCastTo(x, y)
       if self.pushTileRaycast:linecast() then
         local hits = self.pushTileRaycast.hits
-        for k, v in ipairs(hits) do
-          -- TODO
+        if lume.count(hits) > 0 then
+          print('success')
+          local playerPushState = self:getStateFromCollection('player_push_state')
+          playerPushState.pushTile = lume.first(hits)
+          self:beginWeaponState(playerPushState)
         end
       end
     end
@@ -849,7 +848,7 @@ function Player:update(dt)
   if not movementCorrected then
     local currentWeaponState = self:getWeaponState()
     if currentWeaponState == nil then
-      self:updatePushTileRaycast()
+      self:updatePushTileState()
     end
   end
 
@@ -881,7 +880,8 @@ function Player:draw()
       item:drawAbove()
     end
   end
-  self.pushTileRaycast:debugDraw()
+  self.raycast1:debugDraw()
+  self.raycast2:debugDraw()
 end
 
 function Player:debugDraw()

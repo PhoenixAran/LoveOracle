@@ -9,7 +9,7 @@ local Input = require('engine.singletons').input
 local JUMP_Z_VELOCITY = 2
 local JUMP_GRAVITY = 8
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
-local DIRECTION_SNAP = 32
+local DIRECTION_SNAP = 40
 
 ---@class PlayerMovementController
 ---@field player Player

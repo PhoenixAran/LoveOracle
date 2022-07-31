@@ -144,6 +144,7 @@ function Raycast:linecast()
   for i = lume.count(self.hits), 1, -1 do
     local hit = self.hits[i]
     if hit.isTile and hit:isTile() then
+      -- check tile against our collision tile bit value
       if bit.band(self.collidesWithTileLayer, hit:getTileType()) == 0 then
         self.hits[i] = nil
       end
