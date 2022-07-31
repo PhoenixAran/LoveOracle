@@ -192,7 +192,6 @@ function Movement:getLinearVelocity(dt)
   return self.motionX, self.motionY
 end
 
--- rolls back the last movement performed
 ---@param dt any
 ---@param newX any
 ---@param newY any

@@ -18,6 +18,7 @@ local PlayerMovementController = require 'engine.player.player_movement_controll
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
+local Physics = require 'engine.physics'
 -- ### STATES ###
 -- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
@@ -54,6 +55,8 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field raycastDirection integer
 ---@field pushTileRaycast Raycast
 ---@field pushTileRaycastTargetValues table<integer, table>
+---@field previousPositionX number
+---@field previousPositionY number
 local Player = Class { __includes = MapEntity,
   ---@param self Player
   ---@param args table
@@ -240,6 +243,11 @@ local Player = Class { __includes = MapEntity,
         y = 10
       }
     }
+
+    -- declarations
+    self.previousPositionX = 0
+    self.previousPositionY = 0
+
     -- put debug stuff here
     self.health:setMaxHealth(9999999999, true)
   end
@@ -688,15 +696,18 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
     return false
   end
 
-  local isStillCollidingWithWallTile = false
-  for _, other in ipairs(self.moveCollisions) do
-    if other:isTile() then
-      local tileData = other.tileData
-      if bit.band(tileData.tileType, self.collisionTiles) ~= 0 then
-        isStillCollidingWithWallTile = true
-      end
-    end
-  end
+  -- local isStillCollidingWithWallTile = false
+  -- for _, other in ipairs(self.moveCollisions) do
+  --   if other:isTile() then
+  --     local tileData = other.tileData
+  --     if bit.band(tileData.tileType, self.collisionTiles) ~= 0 then
+  --       isStillCollidingWithWallTile = true
+  --       break
+  --     end
+  --   end
+  -- end
+  
+  local isStillCollidingWithWallTile = self.raycast1:linecast() or self.raycast2:linecast()
   -- this check means that the movement correction has been completed
   -- we then reset the raycast positions and exit out
   if not isStillCollidingWithWallTile then
@@ -774,6 +785,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
       if self.raycast1:linecast() then
         newY = 1
+        corrected = true
       end
     end
   end
@@ -785,9 +797,12 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   -- recalculate the movement now with our new values
   self.movement:setVector(newX, newY)
   -- rollback last movement
+  self:setPositionWithBumpCoords(self.previousPositionX, self.previousPositionY)
+  Physics.update(self)
   self.movement:recalculateLinearVelocity(dt, newX, newY)
   -- move again
   self:move(dt)
+  print(newX, newY)
   return true
 end
 
@@ -815,6 +830,7 @@ function Player:updatePushTileState()
 end
 
 function Player:update(dt)
+  self.previousPositionX, self.previousPositionY = self.x, self.y
   -- pre-state update
   self.groundObserver:update(dt)
   self:requestNaturalState()

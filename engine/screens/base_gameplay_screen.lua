@@ -39,7 +39,6 @@ function BaseGameplayScreen:enter(prev, ...)
 end
 
 function BaseGameplayScreen:update()
-
 end
 
 return BaseGameplayScreen

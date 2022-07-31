@@ -39,7 +39,7 @@ function Physics.update(box)
   spatialHash:register(box)
 end
 
----remove BumpBox from physics system
+---remove BumpBox from physics systemz
 ---@param box any
 function Physics.remove(box)
   spatialHash:remove(box)
