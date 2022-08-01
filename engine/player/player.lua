@@ -183,7 +183,7 @@ local Player = Class { __includes = MapEntity,
       },
       [Direction4.down] = {
         x = 0,
-        y = 10
+        y = 6
       }
     }
     self.raycastPositions = {
@@ -240,7 +240,7 @@ local Player = Class { __includes = MapEntity,
       },
       [Direction4.down] = {
         x = 0,
-        y = 10
+        y = 6
       }
     }
 
@@ -736,6 +736,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
       if self.raycast1:linecast() then
         newX = 1
+        corrected = true
       end
     end
   elseif dir4 == Direction4.down then
@@ -802,7 +803,6 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   self.movement:recalculateLinearVelocity(dt, newX, newY)
   -- move again
   self:move(dt)
-  print(newX, newY)
   return true
 end
 
@@ -819,7 +819,6 @@ function Player:updatePushTileState()
       if self.pushTileRaycast:linecast() then
         local hits = self.pushTileRaycast.hits
         if lume.count(hits) > 0 then
-          print('success')
           local playerPushState = self:getStateFromCollection('player_push_state')
           playerPushState.pushTile = lume.first(hits)
           self:beginWeaponState(playerPushState)
@@ -858,6 +857,16 @@ function Player:update(dt)
   self:integrateStateParameters()
   self:requestNaturalState()
   self:updateStates()
+
+
+  self:updateEquippedItems(dt)
+  self:updateEntityEffectSprite(dt)
+
+  self.spriteFlasher:update(dt)
+  self.sprite:update(dt)
+  self.combat:update(dt)
+  self.movement:update(dt)
+
   local tvx, tvy = self:move(dt)
   local movementCorrected = self:updateMovementCorrection(dt, tvx, tvy)
   -- check if we are pushing a tile
@@ -867,14 +876,6 @@ function Player:update(dt)
       self:updatePushTileState()
     end
   end
-
-  self:updateEquippedItems(dt)
-  self:updateEntityEffectSprite(dt)
-
-  self.spriteFlasher:update(dt)
-  self.sprite:update(dt)
-  self.combat:update(dt)
-  self.movement:update(dt)
 
   self:checkRoomTransitions()
 end

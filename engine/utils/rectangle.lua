@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 
 -- floating-point margin of error
-local DELTA = 1e-4
+local DELTA = 1e-5
 
 -- module function holder
 local rectMethods = { }

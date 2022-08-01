@@ -12,7 +12,7 @@ local monocle = require('engine.singletons').monocle
 
 local TestBox = Class { __includes = Entity,
   init = function(self, name, rect, zRange)
-    Entity.init(self, true, true, name, rect, zRange)
+    Entity.init(self, {name = name, x = rect.x, y = rect.y, w = rect.w, h = rect.h, zMin = zRange.min, zMax = zRange.max})
     self:setPhysicsLayer('entity')
   end
 }
@@ -48,6 +48,8 @@ function Screen:enter(prev, ...)
 end
 
 function Screen:update(dt)
+  local s = require 'engine.singletons'
+  s.input:update(dt)
   for _, b in ipairs(self.testBoxes) do
     b:update(dt)
   end

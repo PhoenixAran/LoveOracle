@@ -11,19 +11,7 @@ local TestPlayer = Class { __includes = MapEntity,
 }
 
 function TestPlayer:update(dt)
-  local inputX, inputY = 0, 0
-  if input:down('left') then
-    inputX = inputX - 1
-  end
-  if input:down('right') then
-    inputX = inputX + 1
-  end
-  if input:down('up') then
-    inputY = inputY - 1
-  end
-  if input:down('down') then
-    inputY = inputY + 1
-  end
+  local inputX, inputY = input:get('move')
   self:setVector(inputX, inputY)
   self:move(dt)
 end
