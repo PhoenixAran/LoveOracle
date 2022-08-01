@@ -13,10 +13,6 @@ local Singletons = require 'engine.singletons'
 -- init quake console
 local console = require 'lib.console'
 require 'engine.console_commands'
--- not really max, just an unrealistically high number
-math.maxinteger = 1000000000000000000000000000000000000000000000
--- same as above but negative
-math.mininteger = -math.maxinteger
 math.randomseed(os.time())
 
 print('Oracle Engine ' .. gameConfig.version)

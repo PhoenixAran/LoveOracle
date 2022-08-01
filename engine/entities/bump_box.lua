@@ -205,25 +205,4 @@ function BumpBox:reportsCollisionsWith(otherBumpBox)
   return false
 end
 
----performs boxcast on otherbumpbox
----@param otherBumpBox BumpBox
----@param motionX number
----@param motionY number
----@return boolean didCollide
----@return number minimum translation vectorX
----@return number minimum translation vectorY
----@return number normal vector x
----@return number normal vector y
-function BumpBox:boxCast(otherBumpBox, motionX, motionY)
-  if motionX == nil then motionX = 0 end
-  if motionY == nil then motionY = 0 end
-  local oldX, oldY = self:getBumpPosition()
-  self.x = oldX + motionX
-  self.y = oldY + motionY
-  local didCollide, mtvx, mtvy, nx, ny = rect.boxToBox(self.x, self.y, self.w, self.h, otherBumpBox.x, otherBumpBox.y, otherBumpBox.w, otherBumpBox.h)
-  self.x = oldX
-  self.y = oldY
-  return didCollide, mtvx, mtvy, nx, ny
-end
-
 return BumpBox
