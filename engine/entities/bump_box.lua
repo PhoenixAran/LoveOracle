@@ -210,7 +210,6 @@ end
 ---@param other BumpBox
 ---@return boolean
 BumpBox.canCollide = function(item, other)
-  print('BumpBox:canCollide')
   return bit.band(other.physicsLayer, item.collidesWithLayer) ~= 0 
          and other.zRange.max > item.zRange.min and other.zRange.min < item.zRange.max
 end

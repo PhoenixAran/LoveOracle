@@ -79,6 +79,8 @@ local CollisionInfo = require('lib.class') {
     self.touchY = 0
     self.itemRect = nil
     self.otherRect = nil
+    self.itemRect = { }
+    self.otherRect ={ }
     self.responseVars = {}
   end
 }
@@ -173,7 +175,8 @@ local function detectCollision(x1,y1,w1,h1, x2,y2,w2,h2, goalX, goalY)
   else -- tunnel
     tx, ty = x1 + dx * ti, y1 + dy * ti
   end
-  local collisionInfo = Pool.obtain('colliison_info')
+  local collisionInfo = Pool.obtain('collision_info')
+
   collisionInfo.overlaps = overlaps
   collisionInfo.ti = ti
   collisionInfo.moveX = dx
@@ -208,6 +211,7 @@ end
 -- by John Amanides and Andrew Woo - http://www.cse.yorku.ca/~amana/research/grid.pdf
 -- It has been modified to include both cells when the ray "touches a grid corner",
 -- and with a different exit condition
+
 local function grid_traverse_initStep(cellSize, ct, t1, t2)
   local v = t2 - t1
   if     v > 0 then
@@ -245,6 +249,7 @@ local function grid_traverse(cellSize, x1,y1,x2,y2, f)
 
   -- If we have not arrived to the last cell, use it
   if cx ~= cx2 or cy ~= cy2 then f(cx2, cy2) end
+
 end
 
 local function grid_toCellRect(cellSize, x,y,w,h)
@@ -252,7 +257,6 @@ local function grid_toCellRect(cellSize, x,y,w,h)
   local cr,cb = ceil((x+w) / cellSize), ceil((y+h) / cellSize)
   return cx, cy, cr - cx + 1, cb - cy + 1
 end
-
 ------------------------------------------
 -- Responses
 ------------------------------------------
@@ -311,7 +315,6 @@ end
 local function slide(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   goalX = goalX or x
   goalY = goalY or y
-
   local tchx, tchy, movex, movey  = col.touchX, col.touchY, col.moveX, col.moveY
   if movex ~= 0 or movey ~= 0 then
     if col.normalX ~= 0 then
@@ -323,7 +326,7 @@ local function slide(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
 
   col.responseVars.slideX = goalX
   col.responseVars.slideY = goalY
-
+  print(love.inspect(col))
   x,y = tchx, tchy
   local cols, len  = world:project(col.item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   return goalX, goalY, cols, len
@@ -363,7 +366,7 @@ local function bounce(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   x,y          = tchx, tchy
   goalX, goalY = bx, by
 
-  local cols, len    = world:project(col.item, x,y,w,h, goalX, goalY, filter)
+  local cols, len    = world:project(col.item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   return goalX, goalY, cols, len
 end
 
@@ -594,7 +597,6 @@ end
 ---@return integer
 function World:project(item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   assertIsRect(x,y,w,h)
-
   goalX = goalX or x
   goalY = goalY or y
   filter  = filter  or defaultFilter
@@ -613,12 +615,9 @@ function World:project(item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   local cl,ct,cw,ch = grid_toCellRect(self.cellSize, tl,tt,tw,th)
 
   local dictItemsInCellRect = getDictItemsInCellRect(self, cl,ct,cw,ch)
-
   for other,_ in pairs(dictItemsInCellRect) do
-    print(other)
     if not visited[other] and (alreadyVisited == nil or not alreadyVisited[other]) then
       visited[other] = true
-
       local responseName = filter(item, other)
       if responseName then
         local ox,oy,ow,oh   = self:getRect(other)
@@ -800,6 +799,7 @@ end
 
 
 -- main methods
+
 function World:add(item, x,y,w,h)
   local rect = self.rects[item]
   if rect then
@@ -818,6 +818,7 @@ function World:add(item, x,y,w,h)
 
   return item
 end
+
 
 function World:remove(item)
   local x,y,w,h = self:getRect(item)
@@ -892,7 +893,6 @@ function World:check(item, goalX, goalY, filter)
   local x,y,w,h = self:getRect(item)
   local projected_cols, projected_len = self:project(item, x,y,w,h, goalX,goalY, filter)
   while projected_len > 0 do
-    print('here')
     local col = projected_cols[1]
     len       = len + 1
     cols[len] = col
@@ -906,6 +906,7 @@ function World:check(item, goalX, goalY, filter)
       col,
       x, y, w, h,
       goalX, goalY,
+      filter,
       visited
     )
   end
@@ -924,6 +925,7 @@ bump.newWorld = function(cellSize)
   cellSize = cellSize or 64
   assertIsPositiveNumber(cellSize, 'cellSize')
   local world = World()
+  world.cellSize = cellSize
   world:addResponse('touch', touch)
   world:addResponse('cross', cross)
   world:addResponse('slide', slide)
