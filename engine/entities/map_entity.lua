@@ -340,14 +340,44 @@ end
 ---@return number tvy translation vector y
 function MapEntity:move(dt)
   lume.clear(self.moveCollisions)
+  local oldX, oldY = self:getPosition()
   local posX, posY = self:getBumpPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
   velX, velY = vector.add(velX, velY, self:getKnockbackVector(dt))
   local goalX, goalY = vector.add(posX, posY, velX, velY)
   local actualX, actualY, cols, len = Physics:move(self, goalX, goalY, self.moveFilter)
-  self:setPositionWithBumpCoords(actualX, actualY)
+  for _, v in ipairs(cols) do
+    lume.push(self.moveCollisions, v.other)
+  end
   Physics.freeCollisions(cols)
-  return vector.sub(posX, posY, velX, velY)
+  if self.roomEdgeCollisionBox then
+    -- create goal vector value for room edge collision box
+    --goalX, goalY = actualX, actualY
+    local offsetX, offsetY = vector.add(self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y, self.roomEdgeCollisionBox.offsetX, self.roomEdgeCollisionBox.offsetY)
+    goalX, goalY = vector.add(actualX, actualY, offsetX, offsetY)
+    actualX, actualY, cols, len = Physics:move(self.roomEdgeCollisionBox, goalX, goalY, self.moveFilter)
+    for i, col in ipairs(cols) do
+      local shouldAddToMoveCollisions = true
+      for j, moveCollision in ipairs(self.moveCollisions) do
+        if col.other == moveCollision then
+          shouldAddToMoveCollisions = false
+          break
+        end
+      end
+      if shouldAddToMoveCollisions then
+        lume.push(self.moveCollisions, col.other)
+      end
+    end
+    Physics.freeCollision(cols)
+  end
+  self:setPositionWithBumpCoords(actualX, actualY)
+  local newX,newY = self:getPosition()
+  return vector.sub(oldX, oldY, newX, newY)
+end
+
+
+function MapEntity:moveWithRoomEdgeCollisionBox(dt)
+
 end
 
 -- combat component pass throughs
