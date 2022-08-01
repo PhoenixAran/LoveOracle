@@ -17,7 +17,6 @@ local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 local Pool = require 'engine.utils.pool'
 
-local mem_freeCollisionInfoArray = require('engine.physics.bump').memory.freeCollisionInfoArray
 local canCollide = require('engine.entities.bump_box').canCollide
 
 --- default filter for move function in Physics module
@@ -347,7 +346,7 @@ function MapEntity:move(dt)
   local goalX, goalY = vector.add(posX, posY, velX, velY)
   local actualX, actualY, cols, len = Physics:move(self, goalX, goalY, self.moveFilter)
   self:setPositionWithBumpCoords(actualX, actualY)
-  mem_freeCollisionInfoArray(cols)
+  Physics.freeCollisions(cols)
   return vector.sub(posX, posY, velX, velY)
 end
 
