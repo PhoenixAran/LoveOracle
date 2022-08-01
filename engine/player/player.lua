@@ -770,6 +770,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
       self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
       if self.raycast1:linecast() then
         newY = 1
+        corrected = true
       end
     end
   elseif dir4 == Direction4.right then
@@ -897,8 +898,7 @@ function Player:draw()
       item:drawAbove()
     end
   end
-  self.raycast1:debugDraw()
-  self.raycast2:debugDraw()
+  self:debugDraw()
 end
 
 function Player:debugDraw()

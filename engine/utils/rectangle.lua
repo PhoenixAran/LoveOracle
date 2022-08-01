@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 
 -- floating-point margin of error
-local DELTA = 1e-5
+local DELTA = 1e-10
 
 -- module function holder
 local rectMethods = { }
@@ -31,27 +31,38 @@ function rectMethods.getClosestPointOnBoundsToOrigin(x, y, w, h)
   local maxX = x + w
   local maxY = y + h
   local minDist = math.abs(x)
-  local boundsX, boundsY = x, 0  
+  local boundsX, boundsY = x, 0
   
   if math.abs(maxX) < minDist then
     minDist = math.abs(maxX)
     boundsX = maxX
     boundsY = 0
+    print('1')
   end
   
   if math.abs(maxY) < minDist then
     minDist = math.abs(maxY)
     boundsX = 0
     boundsY = maxY
+    print('2')
   end
   
   if math.abs(y) < minDist then
     minDist = math.abs(y)
     boundsX = 0
     boundsY = y
+    print('3')
   end
+  print('---')
   
   return boundsX, boundsY
+end
+
+function rectMethods.minkowskiDifference(x1, y1, w1, h1,  x2, y2, w2, h2)
+  return x2 - x1 - w1,
+         y2 - y1 - h1,
+         w1 + w2,
+         h1 + h2
 end
 
 -- returns if the box1 collides with box2, the minimum translation vector, and the normal vector 
@@ -68,12 +79,6 @@ function rectMethods.boxToBox(x1, y1, w1, h1,  x2, y2, w2, h2)
   return false, 0, 0, 0, 0
 end
 
-function rectMethods.minkowskiDifference(x1, y1, w1, h1,  x2, y2, w2, h2)
-  return x2 - x1 - w1,
-         y2 - y1 - h1,
-         w1 + w2,
-         h1 + h2
-end
 
 function rectMethods.resizeAroundCenter(x, y, w, h, newWidth, newHeight)
   local ox, oy = x + w / 2, y + h / 2

@@ -171,8 +171,10 @@ end
 
 ---called when the entity is awaken
 function Entity:awake()
-  Physics.add(self)
-  self.registeredWithPhysics = true
+  if not self.registeredWithPhysics then
+    Physics.add(self)
+    self.registeredWithPhysics = true
+  end
   if self.onAwake then
     self:onAwake()
   end
@@ -205,7 +207,8 @@ function Entity:debugDraw()
   --love draws from the upper left corner so we use our bump coordinates
   local positionX, positionY = self:getBumpPosition()
   love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
-  love.graphics.rectangle('fill', positionX, positionY, self.w, self.h)
+  love.graphics.rectangle('line', positionX, positionY, self.w, self.h)
+  love.graphics.rectangle('fill',(positionX + self.w / 2) - .5, (positionY + self.h / 2) - .5, 1, 1)
   love.graphics.setColor(1, 1, 1)
 end
 

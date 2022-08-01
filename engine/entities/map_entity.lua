@@ -245,7 +245,6 @@ function MapEntity:isOnGround()
   return not self:isInAir()
 end
 
-
 ---carries out the movement designated by the Movement Component
 ---@param dt number
 ---@return number tvx translation vector x

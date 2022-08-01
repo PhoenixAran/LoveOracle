@@ -75,6 +75,10 @@ end
 function Tile:draw()
   local x, y = self:getPosition()
   self.sprite:draw(x, y)
+  if self.tileData.tileType == TileType.Wall then
+    self:debugDraw()
+  end
+
 end
 
 return Tile
