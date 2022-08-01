@@ -27,6 +27,7 @@ local Screen = Class { __includes = BaseScreen,
 
 function Screen:enter(prev, ...)
   self.testEntity = TestEntity()
+  self.testEntity:initTransform()
   self.testEntity:setCollidesWithLayer('entity')
   self.testEntity:awake()
   
@@ -42,6 +43,7 @@ function Screen:enter(prev, ...)
   -- this test box will be 'above' the player
   lume.push(self.testBoxes, TestBox('testbox3', {x = 60, y = 16, w = 24, h = 21}, {min = 51, max = 200}))
   
+  lume.each(self.testBoxes, 'initTransform')
   lume.each(self.testBoxes, 'awake')
 end
 

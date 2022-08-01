@@ -1,1 +1,1 @@
-return require('engine.physics.bump').newWorld(32)
+return require('engine.physics.bump').newWorld()

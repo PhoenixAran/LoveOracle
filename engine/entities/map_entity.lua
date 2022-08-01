@@ -12,12 +12,14 @@ local SpriteFlasher = require 'engine.components.sprite_flasher'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
-
 local Physics = require 'engine.physics'
 local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
+local Pool = require 'engine.utils.pool'
 
+local mem_freeCollisionInfoArray = require('engine.physics.bump').memory.freeCollisionInfoArray
 local canCollide = require('engine.entities.bump_box').canCollide
+
 --- default filter for move function in Physics module
 ---@param item MapEntity
 ---@param other any
@@ -339,13 +341,13 @@ end
 ---@return number tvy translation vector y
 function MapEntity:move(dt)
   lume.clear(self.moveCollisions)
-  local posX, posY = self:getPosition()
+  local posX, posY = self:getBumpPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
   velX, velY = vector.add(velX, velY, self:getKnockbackVector(dt))
   local goalX, goalY = vector.add(posX, posY, velX, velY)
   local actualX, actualY, cols, len = Physics:move(self, goalX, goalY, self.moveFilter)
   self:setPositionWithBumpCoords(actualX, actualY)
-
+  mem_freeCollisionInfoArray(cols)
   return vector.sub(posX, posY, velX, velY)
 end
 

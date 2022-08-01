@@ -152,7 +152,7 @@ local function detectCollision(x1,y1,w1,h1, x2,y2,w2,h2, goalX, goalY)
     end
   end
 
-  if not ti then return end
+  if not ti then return nil end
 
   local tx, ty
 
@@ -167,7 +167,7 @@ local function detectCollision(x1,y1,w1,h1, x2,y2,w2,h2, goalX, goalY)
       -- intersecting and moving - move in the opposite direction
       local ti1, _
       ti1,_,nx,ny = rectangle.getSegmentIntersectionIndices(x,y,w,h, 0,0,dx,dy, -math.huge, 1)
-      if not ti1 then return end
+      if not ti1 then return nil end
       tx, ty = x1 + dx * ti1, y1 + dy * ti1
     end
   else -- tunnel
@@ -266,11 +266,12 @@ end
 ---@param goalX number
 ---@param goalY number
 ---@param filter function
+---@param alreadyVisited table
 ---@return number
 ---@return number
 ---@return any[]
 ---@return integer length
-local function touch(world, col,  x,y,w,h, goalX, goalY, filter)
+local function touch(world, col,  x,y,w,h, goalX, goalY, filter, alreadyVisited)
   return col.touchX, col.touchY, TablePool.obtain(), 0
 end
 
@@ -283,12 +284,13 @@ end
 ---@param goalX number
 ---@param goalY number
 ---@param filter function
+---@param alreadyVisited table
 ---@return number
 ---@return number
 ---@return any[]
 ---@return integer length
-local function cross(world, col, x,y,w,h, goalX, goalY, filter)
-  local cols, len = world:project(col.item, x,y,w,h, goalX, goalY, filter)
+local function cross(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
+  local cols, len = world:project(col.item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   return goalX, goalY, cols, len
 end
 
@@ -301,11 +303,12 @@ end
 ---@param goalX number
 ---@param goalY number
 ---@param filter function
+---@param alreadyVisited table
 ---@return number
 ---@return number
 ---@return any[]
 ---@return integer length
-local function slide(world, col, x,y,w,h, goalX, goalY, filter)
+local function slide(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   goalX = goalX or x
   goalY = goalY or y
 
@@ -319,10 +322,10 @@ local function slide(world, col, x,y,w,h, goalX, goalY, filter)
   end
 
   col.responseVars.slideX = goalX
-  col.responseVars.sliedY = goalY
+  col.responseVars.slideY = goalY
 
   x,y = tchx, tchy
-  local cols, len  = world:project(col.item, x,y,w,h, goalX, goalY, filter)
+  local cols, len  = world:project(col.item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   return goalX, goalY, cols, len
 end
 
@@ -335,11 +338,12 @@ end
 ---@param goalX number
 ---@param goalY number
 ---@param filter function
+---@param alreadyVisited boolean
 ---@return number
 ---@return number
 ---@return any[]
 ---@return integer length
-local function bounce(world, col, x,y,w,h, goalX, goalY, filter)
+local function bounce(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   goalX = goalX or x
   goalY = goalY or y
 
@@ -362,6 +366,24 @@ local function bounce(world, col, x,y,w,h, goalX, goalY, filter)
   local cols, len    = world:project(col.item, x,y,w,h, goalX, goalY, filter)
   return goalX, goalY, cols, len
 end
+
+------------------------------------------
+-- Memory Management
+------------------------------------------
+
+--- Free array of collision info objects
+local function mem_freeCollisionInfoArray(cols, len)
+  if len == nil then
+    len = lume.count(cols)
+  end
+  if len > 0 then
+    for _, v in ipairs(cols) do
+      Pool.free(v)
+    end
+  end
+  TablePool.free(cols)
+end
+
 
 ------------------------------------------
 -- World
@@ -570,7 +592,7 @@ end
 ---@param filter function
 ---@return CollisionInfo[any]
 ---@return integer
-function World:project(item, x,y,w,h, goalX, goalY, filter)
+function World:project(item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   assertIsRect(x,y,w,h)
 
   goalX = goalX or x
@@ -593,7 +615,8 @@ function World:project(item, x,y,w,h, goalX, goalY, filter)
   local dictItemsInCellRect = getDictItemsInCellRect(self, cl,ct,cw,ch)
 
   for other,_ in pairs(dictItemsInCellRect) do
-    if not visited[other] then
+    print(other)
+    if not visited[other] and (alreadyVisited == nil or not alreadyVisited[other]) then
       visited[other] = true
 
       local responseName = filter(item, other)
@@ -613,6 +636,8 @@ function World:project(item, x,y,w,h, goalX, goalY, filter)
     end
   end
   TablePool.free(visited)
+  TablePool.free(dictItemsInCellRect)
+
   table.sort(collisions, sortByTiAndDistance)
 
   return collisions, len
@@ -720,6 +745,7 @@ function World:queryPoint(x,y, filter)
       items[len] = item
     end
   end
+  TablePool.free(dictItemsInCellRect)
 
   return items, len
 end
@@ -860,18 +886,13 @@ function World:check(item, goalX, goalY, filter)
   filter = filter or defaultFilter
   local visited = TablePool.obtain()
   visited[item] = true
-  local visitedFilter = function(itm, other)
-    if visited[other] then return false end
-    return filter(itm, other)
-  end
 
   local cols, len = TablePool.obtain(), 0
 
   local x,y,w,h = self:getRect(item)
-
-  local projected_cols, projected_len = self:project(item, x,y,w,h, goalX,goalY, visitedFilter)
-
+  local projected_cols, projected_len = self:project(item, x,y,w,h, goalX,goalY, filter)
   while projected_len > 0 do
+    print('here')
     local col = projected_cols[1]
     len       = len + 1
     cols[len] = col
@@ -879,18 +900,21 @@ function World:check(item, goalX, goalY, filter)
     visited[col.other] = true
 
     local response = getResponseByName(self, col.type)
-
+    mem_freeCollisionInfoArray(projected_cols, projected_len)
     goalX, goalY, projected_cols, projected_len = response(
       self,
       col,
       x, y, w, h,
       goalX, goalY,
-      visitedFilter
+      visited
     )
   end
+  mem_freeCollisionInfoArray(projected_cols, projected_len)
   TablePool.free(visited)
+
   return goalX, goalY, cols, len
 end
+
 
 -- Public library functions
 ---create a new world
@@ -913,6 +937,12 @@ bump.responses = {
   slide  = slide,
   bounce = bounce
 }
+
+bump.memory = {
+  freeCollisionInfoArray = mem_freeCollisionInfoArray
+}
+
+
 
 bump.detectCollision = detectCollision
 

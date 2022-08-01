@@ -171,6 +171,7 @@ end
 ---called when the entity is awaken
 function Entity:awake()
   if not self.registeredWithPhysics then
+    print(self, self.x, self.y, self.w, self.h)
     Physics:add(self, self.x, self.y, self.w, self.h)
     self.registeredWithPhysics = true
   end

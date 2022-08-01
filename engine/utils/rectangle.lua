@@ -26,33 +26,6 @@ function rectMethods.union(x1, y1, w1, h1,  x2, y2, w2, h2)
   return resultX, resultY, resultW, resultH
 end
 
-function rectMethods.getClosestPointOnBoundsToOrigin(x, y, w, h)
-  local maxX = x + w
-  local maxY = y + h
-  local minDist = math.abs(x)
-  local boundsX, boundsY = x, 0
-  
-  if math.abs(maxX) < minDist then
-    minDist = math.abs(maxX)
-    boundsX = maxX
-    boundsY = 0
-  end
-  
-  if math.abs(maxY) < minDist then
-    minDist = math.abs(maxY)
-    boundsX = 0
-    boundsY = maxY
-  end
-  
-  if math.abs(y) < minDist then
-    minDist = math.abs(y)
-    boundsX = 0
-    boundsY = y
-  end
-  
-  return boundsX, boundsY
-end
-
 function rectMethods.resizeAroundCenter(x, y, w, h, newWidth, newHeight)
   local ox, oy = x + w / 2, y + h / 2
   w = newWidth
@@ -60,52 +33,6 @@ function rectMethods.resizeAroundCenter(x, y, w, h, newWidth, newHeight)
   x = ox - w / 2
   y = oy - h / 2
   return x, y, w, h
-end
-
-function rectMethods.rayIntersects(x, y, w, h,  startX, startY, endX, endY)
-  local directionX, directionY = vector.sub(endX, endY, startX, startY)
-  local distance = 0.0
-  local maxValue = math.maxinteger
-  if math.abs(directionX) < 1e-6  then
-    if (startX < x) or (startX > x + w) then
-      return false, 0.0
-    end
-  else
-    local num11 = 1.0 / directionX
-    local num8 = (x - startX) * num11
-    local num7 = (x + w - startX) * num11
-    if num8 > num7 then
-      local num14 = num8
-      num8 = num7
-      num7 = num14
-    end
-    distance = math.max(num8, distance)
-    maxValue = math.min(num7, maxValue)
-    if distance > maxValue then
-      return false, 0.0
-    end
-  end
-  if math.abs(directionY) < 1e-6 then
-    if (startY < y) or (startY > y + h) then
-      return false, 0.0
-    end
-  else
-    local num10 = 1 / directionY
-    local num6 = (y - startY) * num10
-    local num5 = (y + h - startY) * num10
-    if num6 > num5 then
-      local num13 = num6
-      num6 = num5
-      num5 = num13
-    end
-
-    distance = math.max(num6, distance)
-    maxValue = math.min(num5, maxValue)
-    if distance > maxValue then
-      return false, 0
-    end
-  end
-  return true, distance
 end
 
 function rectMethods.getNearestCorner(x,y,w,h, px, py)
@@ -199,7 +126,5 @@ function rectMethods.getSquaredDistance(x1,y1,w1,h1, x2,y2,w2,h2)
   local dy = y1 - y2 + (h1 - h2)/2
   return dx*dx + dy*dy
 end
-
-
 
 return rectMethods
