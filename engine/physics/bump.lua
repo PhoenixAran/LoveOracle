@@ -326,7 +326,6 @@ local function slide(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
 
   col.responseVars.slideX = goalX
   col.responseVars.slideY = goalY
-  print(love.inspect(col))
   x,y = tchx, tchy
   local cols, len  = world:project(col.item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   return goalX, goalY, cols, len
@@ -503,7 +502,7 @@ end
 ---@field item any? item being intersected by the segment
 ---@field x1 number coordinates of the first intersection between item and the segment
 ---@field y1 number coordinates of the first intersection between item and the segment
----@field x2 number coordinates of the second intersection between item and the segment
+---@field x2 number coordinates of the second intersection between item and the segmentgetInfoAboutItemsTouchedBySegment
 ---@field y2 number coordinates of the second intersection between item and the segment
 ---@field ti1 number between 0 and 1 which say how farr from the starting point did the impact happend
 ---@field ti2 number between 0 and 1 which say how farr from the starting point did the impact happend
@@ -900,7 +899,7 @@ function World:check(item, goalX, goalY, filter)
     visited[col.other] = true
 
     local response = getResponseByName(self, col.type)
-    mem_freeCollisionInfoArray(projected_cols, projected_len)
+    --mem_freeCollisionInfoArray(projected_cols, projected_len)
     goalX, goalY, projected_cols, projected_len = response(
       self,
       col,
@@ -910,8 +909,8 @@ function World:check(item, goalX, goalY, filter)
       visited
     )
   end
-  mem_freeCollisionInfoArray(projected_cols, projected_len)
-  TablePool.free(visited)
+ -- mem_freeCollisionInfoArray(projected_cols, projected_len)
+  --TablePool.free(visited)
 
   return goalX, goalY, cols, len
 end
