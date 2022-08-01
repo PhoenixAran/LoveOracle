@@ -26,8 +26,6 @@ local Screen = Class { __includes = BaseScreen,
 }
 
 function Screen:enter(prev, ...)
-  Physics.reset()
-  
   self.testEntity = TestEntity()
   self.testEntity:setCollidesWithLayer('entity')
   self.testEntity:awake()
@@ -62,6 +60,7 @@ function Screen:draw()
     b:debugDraw()
   end
   self.testEntity:debugDraw()
+  self:drawMemory()
   monocle:finish()
 end
 

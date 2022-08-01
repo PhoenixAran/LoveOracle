@@ -136,6 +136,7 @@ end
 
 ---@return boolean collisionsExisted
 function Raycast:linecast()
+  --TODO update to new physics api
   lume.clear(self.hits)
   local ex, ey = self.entity:getPosition()
   local x1, y1 = ex + self.offsetX, ey + self.offsetY

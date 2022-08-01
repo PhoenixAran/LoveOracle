@@ -205,4 +205,13 @@ function BumpBox:reportsCollisionsWith(otherBumpBox)
   return false
 end
 
+--helper function that determines if a bumpbox can collide with another bumpbox (see bump module)
+---@param item BumpBox
+---@param other BumpBox
+---@return boolean
+BumpBox.canCollide = function(item, other)
+  return bit.band(other.physicsLayer, item.collidesWithLayer) ~= 0 
+         and other.zRange.max > item.zRange.min and other.zRange.min < item.zRange.max
+end
+
 return BumpBox

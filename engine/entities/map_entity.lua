@@ -17,6 +17,23 @@ local Physics = require 'engine.physics'
 local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 
+local canCollide = require('engine.entities.bump_box').canCollide
+--- default filter for move function in Physics module
+---@param item MapEntity
+---@param other any
+---@return string?
+local function defaultMoveFilter(item, other)
+  if canCollide(item, other) then
+    if other:isTile() then
+      if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
+        return nil
+      end
+    end
+    return 'slide'
+  end
+  return nil
+end
+
 ---@class MapEntity : Entity
 ---@field health Health
 ---@field movement Movement
@@ -37,6 +54,7 @@ local DamageInfo = require 'engine.entities.damage_info'
 ---@field grassVisible boolean
 ---@field onHurt function
 ---@field onBump function
+---@field moveFilter function filter for move function in Physics:move()
 local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -76,6 +94,7 @@ local MapEntity = Class { __includes = Entity,
     self.moveCollisions = { }
     -- tile types this entity reports collisions with
     self.collisionTiles = 0
+    self.moveFilter = defaultMoveFilter
 
     -- declarations
     self.deathMarked = false
@@ -245,74 +264,89 @@ function MapEntity:isOnGround()
   return not self:isInAir()
 end
 
----carries out the movement designated by the Movement Component
----@param dt number
+-- ---carries out the movement designated by the Movement Component
+-- ---@param dt number
+-- ---@return number tvx translation vector x
+-- ---@return number tvy translation vector y
+-- function MapEntity:move(dt)
+--   lume.clear(self.moveCollisions)
+--   local posX, posY = self:getPosition()
+--   local velX, velY = self.movement:getLinearVelocity(dt)
+--   local kx, ky = self:getKnockbackVelocity(dt)
+--   velX, velY = vector.add(velX, velY, kx, ky)
+--   local bx = self.x + velX
+--   local by = self.y + velY
+--   local bw = self.w
+--   local bh = self.h
+--   local neighbors = Physics.boxcastBroadphase(self, bx, by, bw, bh)
+--   for i, neighbor in ipairs(neighbors) do
+--     if self:reportsCollisionsWith(neighbor) then
+--       local shouldCarryOutCollision = true
+--       if neighbor:isTile() then
+--         ---@type TileData
+--         local tileData = neighbor.tileData
+--         shouldCarryOutCollision = bit.band(self.collisionTiles, tileData.tileType) ~= 0
+--       end
+--       if shouldCarryOutCollision then
+--         local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
+--         if collided then
+--           -- hit, back off our motion
+--           velX, velY = vector.sub(velX, velY, mtvX, mtvY)
+--           -- add other box to moveCollisions table
+--           lume.push(self.moveCollisions, neighbor)
+--         end
+--       end
+--     end
+--   end
+--   TablePool.free(neighbors)
+--   if self.roomEdgeCollisionBox then
+--     bx = self.roomEdgeCollisionBox.x + velX
+--     by = self.roomEdgeCollisionBox.y + velY
+--     bw = self.roomEdgeCollisionBox.w
+--     bh = self.roomEdgeCollisionBox.h
+--     neighbors = Physics.boxcastBroadphase(self.roomEdgeCollisionBox, bx, by, bw, bh)
+--     for i, neighbor in ipairs(neighbors) do
+--       if self.roomEdgeCollisionBox:reportsCollisionsWith(neighbor) then
+--         local collided, mtvX, mtvY, normX, normY = self.roomEdgeCollisionBox:boxCast(neighbor, velX, velY)
+--         if collided then
+--           -- hit from roomEdge, back off from motion
+--           velX, velY = vector.sub(velX, velY, mtvX, mtvY)
+--           -- add to moveCollisions table if it is not present
+--           local shouldAddToMoveCollisions = true
+--           for _, other in ipairs(self.moveCollisions) do
+--             if other == neighbor or self == neighbor then
+--               shouldAddToMoveCollisions = false
+--               break
+--             end
+--           end
+--           if shouldAddToMoveCollisions then
+--             lume.push(self.moveCollisions, neighbor)
+--           end
+--         end
+--       end
+--     end
+--     TablePool.free(neighbors)
+--   end
+--   local oldX, oldY = self:getPosition()
+--   self:setPosition(posX + velX, posY + velY)
+--   Physics.update(self)
+--   local newX, newY = self:getPosition()
+--   return vector.sub(oldX, oldY, newX, newY)
+-- end
+
+---@param dt number delta time
 ---@return number tvx translation vector x
 ---@return number tvy translation vector y
 function MapEntity:move(dt)
   lume.clear(self.moveCollisions)
   local posX, posY = self:getPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
-  local kx, ky = self:getKnockbackVelocity(dt)
-  velX, velY = vector.add(velX, velY, kx, ky)
-  local bx = self.x + velX
-  local by = self.y + velY
-  local bw = self.w
-  local bh = self.h
-  local neighbors = Physics.boxcastBroadphase(self, bx, by, bw, bh)
-  for i, neighbor in ipairs(neighbors) do
-    if self:reportsCollisionsWith(neighbor) then
-      local shouldCarryOutCollision = true
-      if neighbor:isTile() then
-        ---@type TileData
-        local tileData = neighbor.tileData
-        shouldCarryOutCollision = bit.band(self.collisionTiles, tileData.tileType) ~= 0
-      end
-      if shouldCarryOutCollision then
-        local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
-        if collided then
-          -- hit, back off our motion
-          velX, velY = vector.sub(velX, velY, mtvX, mtvY)
-          -- add other box to moveCollisions table
-          lume.push(self.moveCollisions, neighbor)
-        end
-      end
-    end
-  end
-  TablePool.free(neighbors)
-  if self.roomEdgeCollisionBox then
-    bx = self.roomEdgeCollisionBox.x + velX
-    by = self.roomEdgeCollisionBox.y + velY
-    bw = self.roomEdgeCollisionBox.w
-    bh = self.roomEdgeCollisionBox.h
-    neighbors = Physics.boxcastBroadphase(self.roomEdgeCollisionBox, bx, by, bw, bh)
-    for i, neighbor in ipairs(neighbors) do
-      if self.roomEdgeCollisionBox:reportsCollisionsWith(neighbor) then
-        local collided, mtvX, mtvY, normX, normY = self.roomEdgeCollisionBox:boxCast(neighbor, velX, velY)
-        if collided then
-          -- hit from roomEdge, back off from motion
-          velX, velY = vector.sub(velX, velY, mtvX, mtvY)
-          -- add to moveCollisions table if it is not present
-          local shouldAddToMoveCollisions = true
-          for _, other in ipairs(self.moveCollisions) do
-            if other == neighbor or self == neighbor then
-              shouldAddToMoveCollisions = false
-              break
-            end
-          end
-          if shouldAddToMoveCollisions then
-            lume.push(self.moveCollisions, neighbor)
-          end
-        end
-      end
-    end
-    TablePool.free(neighbors)
-  end
-  local oldX, oldY = self:getPosition()
-  self:setPosition(posX + velX, posY + velY)
-  Physics.update(self)
-  local newX, newY = self:getPosition()
-  return vector.sub(oldX, oldY, newX, newY)
+  velX, velY = vector.add(velX, velY, self:getKnockbackVector(dt))
+  local goalX, goalY = vector.add(posX, posY, velX, velY)
+  local actualX, actualY, cols, len = Physics:move(self, goalX, goalY, self.moveFilter)
+  self:setPositionWithBumpCoords(actualX, actualY)
+
+  return vector.sub(posX, posY, velX, velY)
 end
 
 -- combat component pass throughs
@@ -345,6 +379,7 @@ function MapEntity:resetCombatVariables()
   self.combat:resetCombatVariables()
 end
 
+---@return number, number
 function MapEntity:getKnockbackVector(x, y)
   return self.combat:getKnockbackVector()
 end

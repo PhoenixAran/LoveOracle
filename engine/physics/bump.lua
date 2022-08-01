@@ -182,18 +182,14 @@ local function detectCollision(x1,y1,w1,h1, x2,y2,w2,h2, goalX, goalY)
   collisionInfo.normalY = ny
   collisionInfo.touchX = tx
   collisionInfo.touchY = ty
-  collisionInfo.itemRect = {
-    x = x1,
-    y = y1,
-    w = w1,
-    h = h1
-  }
-  collisionInfo.itemRect = {
-    x = x2,
-    y = y2,
-    w = w2,
-    h = h2
-  }
+  collisionInfo.itemRect.x = x1
+  collisionInfo.itemRect.y = y1
+  collisionInfo.itemRect.w = w1
+  collisionInfo.itemRect.h = h1
+  collisionInfo.otherRect.x = x2
+  collisionInfo.otherRect.y = y2
+  collisionInfo.otherRect.w = w2
+  collisionInfo.otherRect.h = h2
   return collisionInfo
 end
 
@@ -370,6 +366,7 @@ end
 ------------------------------------------
 -- World
 ------------------------------------------
+
 ---@class World
 ---@field cellSize integer
 ---@field rects any[]
@@ -861,8 +858,8 @@ end
 
 function World:check(item, goalX, goalY, filter)
   filter = filter or defaultFilter
-
-  local visited = {[item] = true}
+  local visited = TablePool.obtain()
+  visited[item] = true
   local visitedFilter = function(itm, other)
     if visited[other] then return false end
     return filter(itm, other)
@@ -891,7 +888,7 @@ function World:check(item, goalX, goalY, filter)
       visitedFilter
     )
   end
-
+  TablePool.free(visited)
   return goalX, goalY, cols, len
 end
 

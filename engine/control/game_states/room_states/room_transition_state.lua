@@ -148,7 +148,7 @@ function RoomTransitionState:update(dt)
     self.roomControl:popState()
     -- update player position or else they have one frame where they are considered in the last position between room transitons
     -- which can cause them to hit a room edge loading zone
-    Physics.update(self.player)
+    Physics:update(self.player, self.player.x, self.player.y, self.player.w, self.player.h)
   end
 end
 

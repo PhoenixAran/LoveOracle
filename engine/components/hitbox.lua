@@ -79,50 +79,51 @@ end
 
 function Hitbox:onTransformChanged()
   setPositionRelativeToEntity(self)
-  Physics.update(self)
+  Physics:update(self, self.x, self.y, self.w, self.h)
 end
 
 function Hitbox:entityAwake()
   assert(not self.registeredWithPhysics)
-  Physics.add(self)
+  Physics:add(self, self.x, self.y, self.w, self.h)
   self.registeredWithPhysics = true
 end
 
 function Hitbox:onRemoved()
   if self.registeredWithPhysics then
-    Physics.remove(self)
+    Physics:remove(self)
     self.registeredWithPhysics = false
   end
 end
 
 function Hitbox:onEnabled()
   if not self.registeredWithPhysics then
-    Physics.add(self)
+    Physics:add(self, self.x, self.y, self.w, self.h)
     self.registeredWithPhysics = true
   end
 end
 
 function Hitbox:onDisabled()
   if self.registeredWithPhysics then
-    Physics.remove(self)
+    Physics:remove(self)
     self.registeredWithPhysics = false
   end
 end
 
 function Hitbox:update(dt)
-  Physics.update(self)
   if not self.detectOnly then
-    local neighbors = Physics.boxcastBroadphase(self, self.x, self.y, self.w, self.h)
-    if lume.count(neighbors) > 0 then
-      if self.canHitMultiple then
-        for _, neighbor in ipairs(neighbors) do
-          neighbor:reportCollision(self)
-        end
-      else
-        neighbors[1]:reportCollision(self)
-      end
-    end
-    TablePool.free(neighbors)
+    Physics:update(self, self.x, self.y, self.w, self.h)
+    --TODO update to new physics API
+    -- local neighbors = Physics.boxcastBroadphase(self, self.x, self.y, self.w, self.h)
+    -- if lume.count(neighbors) > 0 then
+    --   if self.canHitMultiple then
+    --     for _, neighbor in ipairs(neighbors) do
+    --       neighbor:reportCollision(self)
+    --     end
+    --   else
+    --     neighbors[1]:reportCollision(self)
+    --   end
+    -- end
+    -- TablePool.free(neighbors)
   end
 end
 
@@ -141,20 +142,22 @@ end
 ---@param x number
 ---@param y number
 function Hitbox:setOffset(x, y)
-  Physics.remove(self)
   self.offsetX = x
   self.offsetY = y
   setPositionRelativeToEntity(self)
-  Physics.add(self)
+  if self.registeredWithPhysics then
+    Physics:update(self, self.x, self.y, self.w, self.h)
+  end
 end
 
 ---@param width integer
 ---@param height integer
 function Hitbox:resize(width, height)
-  Physics.remove(self)
   self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
   setPositionRelativeToEntity(self)
-  Physics.add(self)
+  if self.registeredWithPhysics then
+    Physics:update(self, self.x, self.y, self.w, self.h)
+  end
 end
 
 ---sets offset and resizes hitbox
@@ -163,12 +166,13 @@ end
 ---@param width integer
 ---@param height integer
 function Hitbox:move(offsetX, offsetY, width, height)
-  Physics.remove(self)
   self.offsetX = offsetX
   self.offsetY = offsetY
   setPositionRelativeToEntity(self)
   self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
-  Physics.add(self)
+  if self.registeredWithPhysics then
+    Physics:update(self, self.x, self.y, self.w, self.h)
+  end
 end
 
 ---raise the hitbox hitboxEntered signal

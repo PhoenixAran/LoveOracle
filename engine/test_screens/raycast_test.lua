@@ -35,7 +35,6 @@ local RaycastTestScreen = Class { __includes = BaseScreen,
 }
 
 function RaycastTestScreen:enter(prev, ...)
-  Physics.reset()
   -- this test box will be in the same range as the test raycast
   lume.push(self.testBoxes, TestBox( {name = 'testbox1', x = 24, y = 24, w = 24, h = 24, zMin = 20, zMax = 30}))
   -- this test box will be 'under' the raycast

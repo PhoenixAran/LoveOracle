@@ -37,35 +37,35 @@ function Collider:onTransformChanged()
   self.x = ex + self.offsetX - self.w / 2
   self.y = ey + self.offsetY - self.h / 2
   if not self.detectOnly then
-    Physics.update(self)
+    Physics:update(self, self.x, self.y, self.w, self.h)
   end
 end
 
 function Collider:entityAwake()
   assert(not self.registeredWithPhysics)
   if not self.detectOnly then
-    Physics.add(self)
+    Physics:add(self, self.x, self.y, self.w, self.h)
     self.registeredWithPhysics = true
   end
 end
 
 function Collider:onRemoved()
   if self.registeredWithPhysics then
-    Physics.remove(self)
+    Physics:remove(self)
     self.registeredWithPhysics = false
   end
 end
 
 function Collider:onEnabled()
   if not self.registeredWithPhysics then
-    Physics.add(self)
+    Physics:add(self, self.x, self.y, self.w, self.h)
     self.registeredWithPhysics = true
   end
 end
 
 function Collider:onDisabled()
   if self.registeredWithPhysics then
-    Physics.remove(self)
+    Physics:remove(self)
     self.registeredWithPhysics = false
   end
 end

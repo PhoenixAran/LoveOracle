@@ -15,10 +15,6 @@ local TestBox = Class { __includes = Entity,
   end
 }
 
-function TestBox:entityAwake()
-  Physics.add(self)
-end
-
 -- experiental physics test screen
 local Screen = Class { __includes = BaseScreen,
   init = function(self)
@@ -28,12 +24,11 @@ local Screen = Class { __includes = BaseScreen,
 }
 
 function Screen:enter(prev, ...)
-  Physics.reset()
   self.testEntity = TestEntity()
   self.testEntity:setCollidesWithLayer('entity')
   self.testEntity:awake()
   self.testBoxes[#self.testBoxes+ 1] = TestBox({x = 24, y = 24, w = 24, h = 24})
-  self.testBoxes[#self.testBoxes]:entityAwake()
+  self.testBoxes[#self.testBoxes]:awake()
 end
 
 function Screen:update(dt)

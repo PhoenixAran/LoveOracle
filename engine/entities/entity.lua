@@ -152,9 +152,8 @@ end
 ---@param width number
 ---@param height number
 function Entity:resize(width, height)
-  Physics.remove(self)
   self.x, self.y, self.w, self.h = rect.resizeAroundCenter(self.x, self.y, self.w, self.h, width, height)
-  Physics.add(self)
+  Physics:update(self, self.x, self.y, self.w, self.h)
 end
 
 ---adds given entity's transform as child
@@ -172,7 +171,7 @@ end
 ---called when the entity is awaken
 function Entity:awake()
   if not self.registeredWithPhysics then
-    Physics.add(self)
+    Physics:add(self, self.x, self.y, self.w, self.h)
     self.registeredWithPhysics = true
   end
   if self.onAwake then
@@ -194,7 +193,7 @@ end
 ---called when the entity is removed
 ---@param scene any
 function Entity:removed(scene)
-  Physics.remove(self)
+  Physics:remove(self)
   self.registeredWithPhysics = false
   self.scene = nil
   if self.onRemoved then

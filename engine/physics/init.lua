@@ -1,3 +1,1 @@
-local path = ...
-
-return require(path .. '.physics')
+return require('engine.physics.bump').newWorld(32)
