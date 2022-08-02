@@ -343,7 +343,7 @@ function MapEntity:move(dt)
   local oldX, oldY = self:getPosition()
   local posX, posY = self:getBumpPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
-  velX, velY = vector.add(velX, velY, self:getKnockbackVector(dt))
+  velX, velY = vector.add(velX, velY, self:getKnockbackVelocity(dt))
   local goalX, goalY = vector.add(posX, posY, velX, velY)
   local actualX, actualY, cols, len = Physics:move(self, goalX, goalY, self.moveFilter)
   for _, v in ipairs(cols) do
@@ -411,7 +411,7 @@ function MapEntity:resetCombatVariables()
 end
 
 ---@return number, number
-function MapEntity:getKnockbackVector(x, y)
+function MapEntity:getKnockbackVector()
   return self.combat:getKnockbackVector()
 end
 
