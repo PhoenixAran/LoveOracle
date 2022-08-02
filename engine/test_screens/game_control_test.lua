@@ -8,7 +8,8 @@ local Physics = require 'engine.physics'
 local Player = require 'engine.player.player'
 local Input = require('engine.singletons').input
 
-
+---@class GameControlTest : BaseScreen
+---@field gameControl GameControl
 local GameControlTest = Class { __includes = BaseScreen,
   init = function(self)
     BaseScreen.init(self)
@@ -23,7 +24,10 @@ end
 
 function GameControlTest:enter(prev, ...)
   self.gameControl = GameControl()
-  self.gameControl:setPlayer(Player({name = 'player', x = 30, y = 30, w = 16, h = 16 }))
+  local player = Player({name = 'player', x = 30, y = 30, w = 16, h = 16 })
+  print(player.roomEdgeCollisionBox)
+  player:initTransform()
+  self.gameControl:setPlayer(player)
   local map = Map('test_map_1.json')
   self.gameControl:setMap(map)
   -- TODO implement designated player spawn from Tiled editor

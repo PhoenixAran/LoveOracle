@@ -45,6 +45,9 @@ function RaycastTestScreen:enter(prev, ...)
   monocle:resize(1280, 720)
 end
 
+local function zFilter(item)
+  return item.zRange.max > -100 and item.zRange.min < 100
+end
 
 function RaycastTestScreen:update(dt)
   input:update(dt)
@@ -80,10 +83,10 @@ function RaycastTestScreen:update(dt)
   else 
     -- report hits
     lume.clear(self.hits)
-    Physics.linecast(self.startX, self.startY, self.endX, self.endY, self.hits, self.physicsDetectLayer, -100, 100)
+    local items, len = Physics:querySegment(self.startX, self.startY, self.endX, self.endY, zFilter)
     Slab.Text('Start: ( ' .. self.startX .. ' , ' .. self.startY .. ' )')
     Slab.Text('End: ( ' .. self.endX .. ' , ' .. self.endY .. ' )')
-    Slab.Text('Hits: ' .. #self.hits)
+    Slab.Text('Hits: ' .. len)
       
     for i, box in ipairs(self.hits) do
       Slab.Text(tostring(i) .. '. ' .. tostring(box))
@@ -91,6 +94,7 @@ function RaycastTestScreen:update(dt)
     if Slab.Button('Remake Raycast') then
       self.clickCount = 0
     end
+    Physics.freeTable(items)
   end
   Slab.EndWindow()
 end

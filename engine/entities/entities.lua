@@ -42,12 +42,16 @@ end
 
 --- sets player
 ---@param player Player
-function Entities:setPlayer(player)
+function Entities:setPlayer(player, awakeEntity)
+  if awakeEntity == nil then awakeEntity = true end
   assert(not self.entitiesHash[player:getName()])
   self.player = player
   lume.push(self.entities, player)
   self.entitiesHash[self.player:getName()] = player
   lume.push(self.entitiesDraw, player)
+  if awakeEntity then
+    player:awake()
+  end
 end
 
 --- gets player

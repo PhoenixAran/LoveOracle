@@ -352,10 +352,9 @@ function MapEntity:move(dt)
   Physics.freeCollisions(cols)
   if self.roomEdgeCollisionBox then
     -- create goal vector value for room edge collision box
-    --goalX, goalY = actualX, actualY
-    local offsetX, offsetY = vector.add(self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y, self.roomEdgeCollisionBox.offsetX, self.roomEdgeCollisionBox.offsetY)
-    goalX, goalY = vector.add(actualX, actualY, offsetX, offsetY)
-    actualX, actualY, cols, len = Physics:move(self.roomEdgeCollisionBox, goalX, goalY, self.moveFilter)
+    local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x + self.roomEdgeCollisionBox.offsetX, self.roomEdgeCollisionBox.y + self.roomEdgeCollisionBox.offsetY)
+    local goalX2, goalY2 = vector.sub(actualX, actualY, diffX, diffY)
+    local actualX2, actualY2, cols, len = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, self.moveFilter)
     for i, col in ipairs(cols) do
       local shouldAddToMoveCollisions = true
       for j, moveCollision in ipairs(self.moveCollisions) do
@@ -368,7 +367,8 @@ function MapEntity:move(dt)
         lume.push(self.moveCollisions, col.other)
       end
     end
-    Physics.freeCollision(cols)
+    Physics.freeCollisions(cols)
+    actualX, actualY = vector.add(actualX2, actualY2, diffX, diffY)
   end
   self:setPositionWithBumpCoords(actualX, actualY)
   local newX,newY = self:getPosition()

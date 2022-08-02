@@ -175,6 +175,7 @@ function Entity:awake()
     self.registeredWithPhysics = true
   end
   if self.onAwake then
+    print('here')
     self:onAwake()
   end
 end

@@ -137,21 +137,22 @@ end
 ---@return boolean collisionsExisted
 function Raycast:linecast()
   --TODO update to new physics api
-  lume.clear(self.hits)
-  local ex, ey = self.entity:getPosition()
-  local x1, y1 = ex + self.offsetX, ey + self.offsetY
-  local x2, y2 = x1 + self.castToX, y1 + self.castToY
-  Physics.linecast(x1, y1, x2, y2, self.hits, self.collidesWithLayer, self.zRange.min, self.zRange.max)
-  for i = lume.count(self.hits), 1, -1 do
-    local hit = self.hits[i]
-    if hit.isTile and hit:isTile() then
-      -- check tile against our collision tile bit value
-      if bit.band(self.collidesWithTileLayer, hit:getTileType()) == 0 then
-        self.hits[i] = nil
-      end
-    end
-  end
-  return lume.count(self.hits) > 0
+  -- lume.clear(self.hits)
+  -- local ex, ey = self.entity:getPosition()
+  -- local x1, y1 = ex + self.offsetX, ey + self.offsetY
+  -- local x2, y2 = x1 + self.castToX, y1 + self.castToY
+  -- Physics.linecast(x1, y1, x2, y2, self.hits, self.collidesWithLayer, self.zRange.min, self.zRange.max)
+  -- for i = lume.count(self.hits), 1, -1 do
+  --   local hit = self.hits[i]
+  --   if hit.isTile and hit:isTile() then
+  --     -- check tile against our collision tile bit value
+  --     if bit.band(self.collidesWithTileLayer, hit:getTileType()) == 0 then
+  --       self.hits[i] = nil
+  --     end
+  --   end
+  -- end
+  -- return lume.count(self.hits) > 0
+  return false
 end
 
 function Raycast:debugDraw()

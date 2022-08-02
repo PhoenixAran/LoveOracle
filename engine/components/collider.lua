@@ -24,7 +24,6 @@ local Collider = Class { __includes = { BumpBox, Component },
     args.y = args.y + self.offsetY
     BumpBox.init(self, args)
     Component.init(self, entity, args)
-    self.detectOnly = args.detectOnly or false
   end
 }
 
@@ -36,17 +35,14 @@ function Collider:onTransformChanged()
   local ex, ey = self.entity:getPosition()
   self.x = ex + self.offsetX - self.w / 2
   self.y = ey + self.offsetY - self.h / 2
-  if not self.detectOnly then
+  if not self.detectOnly and self.registeredWithPhysics then
     Physics:update(self, self.x, self.y, self.w, self.h)
   end
 end
 
 function Collider:entityAwake()
-  assert(not self.registeredWithPhysics)
-  if not self.detectOnly then
-    Physics:add(self, self.x, self.y, self.w, self.h)
-    self.registeredWithPhysics = true
-  end
+  Physics:add(self, self.x, self.y, self.w, self.h)
+  self.registeredWithPhysics = true
 end
 
 function Collider:onRemoved()

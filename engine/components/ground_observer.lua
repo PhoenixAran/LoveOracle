@@ -27,7 +27,6 @@ local GroundObserver = Class { __includes = {Component},
     self.pointOffsetX = args.pointOffsetX or 0
     self.pointOffsetY = args.pointOffsetY or 0
     self.layerMask = PhysicsFlags:get('tile').value
-    self.hits = { }
     self.inLava = false
     self.inGrass = false
     self.onStairs = false
@@ -38,6 +37,10 @@ local GroundObserver = Class { __includes = {Component},
   end
 }
 
+local function zFilter(item)
+  return item.isTile and item:isTile() 
+end
+
 function GroundObserver:getType()
   return 'ground_observer'
 end
@@ -45,10 +48,9 @@ end
 function GroundObserver:update(dt)
   self:reset()
   local ex, ey = self.entity:getPosition()
-  local count = Physics.pointcast(ex + self.pointOffsetX, ey + self.pointOffsetY, self.hits,
-                                self.layerMask, math.mininteger, math.maxinteger)
-  if 0 < count then
-    for _, tile in ipairs(self.hits) do
+  local hits, len = Physics:queryPoint(ex + self.pointOffsetX, ey + self.pointOffsetY, zFilter)
+  if 0 < len then
+    for _, tile in ipairs(hits) do
       local tileType = tile:getTileType()
       if tileType == TileTypes.Lava or tileType == TileTypes.Lavafall then
         self.inLava = true
@@ -69,7 +71,7 @@ function GroundObserver:update(dt)
       end
     end
   end
-  lume.clear(self.hits)
+  Physics.freeTable(hits)
 end
 
 function GroundObserver:reset()

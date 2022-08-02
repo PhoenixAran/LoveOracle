@@ -18,6 +18,7 @@ local PlayerMovementController = require 'engine.player.player_movement_controll
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Physics = require 'engine.physics'
 -- ### STATES ###
 -- condition states
@@ -71,8 +72,7 @@ local Player = Class { __includes = MapEntity,
       w = 12,
       h = 12,
       offsetX = 0,
-      offsetY = -2,
-      detectOnly = true
+      offsetY = -2
     })
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     self:setCollidesWithLayer('tile')
@@ -829,6 +829,10 @@ function Player:updatePushTileState()
   end
 end
 
+function Player:onAwake()
+  self.roomEdgeCollisionBox:entityAwake()
+end
+
 function Player:update(dt)
   self.previousPositionX, self.previousPositionY = self.x, self.y
   -- pre-state update
@@ -869,14 +873,15 @@ function Player:update(dt)
   self.movement:update(dt)
 
   local tvx, tvy = self:move(dt)
-  local movementCorrected = self:updateMovementCorrection(dt, tvx, tvy)
-  -- check if we are pushing a tile
-  if not movementCorrected then
-    local currentWeaponState = self:getWeaponState()
-    if currentWeaponState == nil then
-      self:updatePushTileState()
-    end
-  end
+  -- TODO reimplement below
+  -- local movementCorrected = self:updateMovementCorrection(dt, tvx, tvy)
+  -- -- check if we are pushing a tile
+  -- if not movementCorrected then
+  --   local currentWeaponState = self:getWeaponState()
+  --   if currentWeaponState == nil then
+  --     self:updatePushTileState()
+  --   end
+  -- end
 
   self:checkRoomTransitions()
 end
