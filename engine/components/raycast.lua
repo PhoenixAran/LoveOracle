@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'lib.vector'
+local bit = require 'bit'
 local Component = require 'engine.entities.component'
 local Physics = require 'engine.physics'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
@@ -16,6 +17,7 @@ local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 ---@field collidesWithLayer integer
 ---@field collidesWithTileLayer integer
 ---@field hits any[]
+---@field filter function
 local Raycast = Class { __includes = { Component },
   init = function(self, entity, args)
     Component.init(self, entity, args)
@@ -36,6 +38,21 @@ local Raycast = Class { __includes = { Component },
     self.collidesWithLayer = 0
     -- tiletypes this raycast should detect
     self.collidesWithTileLayer = 0
+
+    local raycastInstance = self
+    self.filter = function(item)
+      if bit.band(item.physicsLayer, raycastInstance.collidesWithLayer) ~= 0 and item.zRange.max > raycastInstance.zRange.min
+      and item.zRange.min < item.zRange.max then
+        if item.isTile and item:isTile() then
+          if bit.band(raycastInstance.collidesWithTileLayer, item.tileData.tileType) ~= 0 then
+            return true
+          end
+          return false
+        end
+        return true
+      end
+      return false
+    end
   end
 }
 
@@ -51,6 +68,7 @@ function Raycast:setZRange(min, max)
   self.zRange.min = min
   self.zRange.max = max
 end
+
 
 function Raycast:getCollisionLayer()
   return self.collidesWithLayer
@@ -85,7 +103,7 @@ end
 
 ---@param tileType string|string[]
 function Raycast:setCollisionTile(tileType)
-  if type(tileType) == 'string' then
+  if type(tileType) == 'table' then
     for _, v in ipairs(tileType) do
       self.collidesWithTileLayer = bit.band(self.collidesWithTileLayer, bit.bnot(TileTypeFlags:get(v).value))
     end
@@ -136,23 +154,17 @@ end
 
 ---@return boolean collisionsExisted
 function Raycast:linecast()
-  --TODO update to new physics api
-  -- lume.clear(self.hits)
-  -- local ex, ey = self.entity:getPosition()
-  -- local x1, y1 = ex + self.offsetX, ey + self.offsetY
-  -- local x2, y2 = x1 + self.castToX, y1 + self.castToY
-  -- Physics.linecast(x1, y1, x2, y2, self.hits, self.collidesWithLayer, self.zRange.min, self.zRange.max)
-  -- for i = lume.count(self.hits), 1, -1 do
-  --   local hit = self.hits[i]
-  --   if hit.isTile and hit:isTile() then
-  --     -- check tile against our collision tile bit value
-  --     if bit.band(self.collidesWithTileLayer, hit:getTileType()) == 0 then
-  --       self.hits[i] = nil
-  --     end
-  --   end
-  -- end
-  -- return lume.count(self.hits) > 0
-  return false
+  lume.clear(self.hits)
+  local ex, ey = self.entity:getPosition()
+  local x1, y1 = vector.add(ex, ey, self.offsetX, self.offsetY)
+  local x2, y2 = vector.add(x1, y1, self.castToX, self.castToY)
+  local items, len = Physics:querySegment(x1, y1, x2, y2, self.filter)
+  for _, item in ipairs(items) do
+    lume.push(self.hits, item)
+  end
+  Physics.freeTable(items)
+
+  return len > 0
 end
 
 function Raycast:debugDraw()

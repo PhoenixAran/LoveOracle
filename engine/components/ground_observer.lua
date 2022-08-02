@@ -38,7 +38,7 @@ local GroundObserver = Class { __includes = {Component},
 }
 
 local function zFilter(item)
-  return item.isTile and item:isTile() 
+  return item.isTile and item:isTile()
 end
 
 function GroundObserver:getType()
@@ -48,9 +48,9 @@ end
 function GroundObserver:update(dt)
   self:reset()
   local ex, ey = self.entity:getPosition()
-  local hits, len = Physics:queryPoint(ex + self.pointOffsetX, ey + self.pointOffsetY, zFilter)
+  local items, len = Physics:queryPoint(ex + self.pointOffsetX, ey + self.pointOffsetY, zFilter)
   if 0 < len then
-    for _, tile in ipairs(hits) do
+    for _, tile in ipairs(items) do
       local tileType = tile:getTileType()
       if tileType == TileTypes.Lava or tileType == TileTypes.Lavafall then
         self.inLava = true
@@ -71,7 +71,7 @@ function GroundObserver:update(dt)
       end
     end
   end
-  Physics.freeTable(hits)
+  Physics.freeTable(items)
 end
 
 function GroundObserver:reset()

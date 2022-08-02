@@ -30,6 +30,13 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 
+-- custom response for Bump
+-- TODO
+local function slideAndAutoDodge(item)
+  local EPSILON = 0.001
+
+end 
+
 ---@class Player : MapEntity
 ---@field roomEdgeCollisionBox Collider
 ---@field playerMovementController PlayerMovementController
@@ -96,8 +103,8 @@ local Player = Class { __includes = MapEntity,
 
     self.pushTileRaycast = Raycast(self)
     self.pushTileRaycast:addException(self)
-    self.pushTileRaycast:setCollidesWithLayer('tile')
-    self.pushTileRaycast:setCollidesWithLayer('push_block')
+    self.pushTileRaycast:setCollidesWithLayer({'tile', 'push_block'})
+    self.pushTileRaycast:setCollisionTile('wall')
     
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
@@ -179,7 +186,7 @@ local Player = Class { __includes = MapEntity,
       },
       [Direction4.up] = {
         x = 0,
-        y = -5
+        y = -6
       },
       [Direction4.down] = {
         x = 0,
@@ -190,11 +197,11 @@ local Player = Class { __includes = MapEntity,
       [1] = {
         [Direction4.left] = {
           normal = { x = 0, y = 0 },
-          offset = { x = 0 , y = -4 }
+          offset = { x = 0 , y = -5 }
         },
         [Direction4.right] = {
           normal = { x = 0, y = 0 },
-          offset = { x = 0, y = -4 }
+          offset = { x = 0, y = -5 }
         },
         [Direction4.up] = {
           normal = { x = -2, y = 0 },
@@ -208,19 +215,19 @@ local Player = Class { __includes = MapEntity,
       [2] = {
         [Direction4.left] = {
           normal = { x = 0, y = 3},
-          offset = { x = 0, y = 7}
+          offset = { x = 0, y = 5}
         },
         [Direction4.right] = {
           normal = { x = 0, y = 3 },
-          offset = { x = 0, y = 7 }
+          offset = { x = 0, y = 5 }
         },
         [Direction4.up] = {
           normal = { x = 2, y = 0 },
-          offset = { x = 5, y = 0}
+          offset = { x = 4, y = 0}
         },
         [Direction4.down] = {
           normal = { x = 2, y = 0 },
-          offset = { x = 5, y = 0 }
+          offset = { x = 4, y = 0 }
         }
       }
     }
@@ -800,7 +807,7 @@ function Player:updateMovementCorrection(dt, tvx, tvy)
   self.movement:setVector(newX, newY)
   -- rollback last movement
   self:setPositionWithBumpCoords(self.previousPositionX, self.previousPositionY)
-  Physics.update(self)
+  Physics:update(self, self.x, self.y, self.w, self.h)
   self.movement:recalculateLinearVelocity(dt, newX, newY)
   -- move again
   self:move(dt)
@@ -873,15 +880,14 @@ function Player:update(dt)
   self.movement:update(dt)
 
   local tvx, tvy = self:move(dt)
-  -- TODO reimplement below
-  -- local movementCorrected = self:updateMovementCorrection(dt, tvx, tvy)
-  -- -- check if we are pushing a tile
-  -- if not movementCorrected then
-  --   local currentWeaponState = self:getWeaponState()
-  --   if currentWeaponState == nil then
-  --     self:updatePushTileState()
-  --   end
-  -- end
+  local movementCorrected = self:updateMovementCorrection(dt, tvx, tvy)
+  --check if we are pushing a tile
+  if not movementCorrected then
+    local currentWeaponState = self:getWeaponState()
+    if currentWeaponState == nil then
+      self:updatePushTileState()
+    end
+  end
 
   self:checkRoomTransitions()
 end
@@ -903,7 +909,6 @@ function Player:draw()
       item:drawAbove()
     end
   end
-  self:debugDraw()
 end
 
 function Player:debugDraw()

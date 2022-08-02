@@ -265,76 +265,6 @@ function MapEntity:isOnGround()
   return not self:isInAir()
 end
 
--- ---carries out the movement designated by the Movement Component
--- ---@param dt number
--- ---@return number tvx translation vector x
--- ---@return number tvy translation vector y
--- function MapEntity:move(dt)
---   lume.clear(self.moveCollisions)
---   local posX, posY = self:getPosition()
---   local velX, velY = self.movement:getLinearVelocity(dt)
---   local kx, ky = self:getKnockbackVelocity(dt)
---   velX, velY = vector.add(velX, velY, kx, ky)
---   local bx = self.x + velX
---   local by = self.y + velY
---   local bw = self.w
---   local bh = self.h
---   local neighbors = Physics.boxcastBroadphase(self, bx, by, bw, bh)
---   for i, neighbor in ipairs(neighbors) do
---     if self:reportsCollisionsWith(neighbor) then
---       local shouldCarryOutCollision = true
---       if neighbor:isTile() then
---         ---@type TileData
---         local tileData = neighbor.tileData
---         shouldCarryOutCollision = bit.band(self.collisionTiles, tileData.tileType) ~= 0
---       end
---       if shouldCarryOutCollision then
---         local collided, mtvX, mtvY, normX, normY = self:boxCast(neighbor, velX, velY)
---         if collided then
---           -- hit, back off our motion
---           velX, velY = vector.sub(velX, velY, mtvX, mtvY)
---           -- add other box to moveCollisions table
---           lume.push(self.moveCollisions, neighbor)
---         end
---       end
---     end
---   end
---   TablePool.free(neighbors)
---   if self.roomEdgeCollisionBox then
---     bx = self.roomEdgeCollisionBox.x + velX
---     by = self.roomEdgeCollisionBox.y + velY
---     bw = self.roomEdgeCollisionBox.w
---     bh = self.roomEdgeCollisionBox.h
---     neighbors = Physics.boxcastBroadphase(self.roomEdgeCollisionBox, bx, by, bw, bh)
---     for i, neighbor in ipairs(neighbors) do
---       if self.roomEdgeCollisionBox:reportsCollisionsWith(neighbor) then
---         local collided, mtvX, mtvY, normX, normY = self.roomEdgeCollisionBox:boxCast(neighbor, velX, velY)
---         if collided then
---           -- hit from roomEdge, back off from motion
---           velX, velY = vector.sub(velX, velY, mtvX, mtvY)
---           -- add to moveCollisions table if it is not present
---           local shouldAddToMoveCollisions = true
---           for _, other in ipairs(self.moveCollisions) do
---             if other == neighbor or self == neighbor then
---               shouldAddToMoveCollisions = false
---               break
---             end
---           end
---           if shouldAddToMoveCollisions then
---             lume.push(self.moveCollisions, neighbor)
---           end
---         end
---       end
---     end
---     TablePool.free(neighbors)
---   end
---   local oldX, oldY = self:getPosition()
---   self:setPosition(posX + velX, posY + velY)
---   Physics.update(self)
---   local newX, newY = self:getPosition()
---   return vector.sub(oldX, oldY, newX, newY)
--- end
-
 ---@param dt number delta time
 ---@return number tvx translation vector x
 ---@return number tvy translation vector y
@@ -354,8 +284,8 @@ function MapEntity:move(dt)
     -- create goal vector value for room edge collision box
     local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x + self.roomEdgeCollisionBox.offsetX, self.roomEdgeCollisionBox.y + self.roomEdgeCollisionBox.offsetY)
     local goalX2, goalY2 = vector.sub(actualX, actualY, diffX, diffY)
-    local actualX2, actualY2, cols, len = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, self.moveFilter)
-    for i, col in ipairs(cols) do
+    local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, self.moveFilter)
+    for i, col in ipairs(cols2) do
       local shouldAddToMoveCollisions = true
       for j, moveCollision in ipairs(self.moveCollisions) do
         if col.other == moveCollision then
@@ -367,7 +297,7 @@ function MapEntity:move(dt)
         lume.push(self.moveCollisions, col.other)
       end
     end
-    Physics.freeCollisions(cols)
+    Physics.freeCollisions(cols2)
     actualX, actualY = vector.add(actualX2, actualY2, diffX, diffY)
   end
   self:setPositionWithBumpCoords(actualX, actualY)

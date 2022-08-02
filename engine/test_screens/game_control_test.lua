@@ -25,7 +25,6 @@ end
 function GameControlTest:enter(prev, ...)
   self.gameControl = GameControl()
   local player = Player({name = 'player', x = 30, y = 30, w = 16, h = 16 })
-  print(player.roomEdgeCollisionBox)
   player:initTransform()
   self.gameControl:setPlayer(player)
   local map = Map('test_map_1.json')

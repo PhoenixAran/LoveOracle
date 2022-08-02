@@ -3,17 +3,24 @@
 Fan made Zelda game using Love2D  
 
 ## Libraries
-- [Baton](https://github.com/tesselode/baton)
+- [baton](https://github.com/tesselode/baton)
+- [bump-niji](https://github.com/oniietzschan/bump-niji)
+- [Erogodic](https://github.com/oniietzschan/erogodic)
 - [STALKER-X](https://github.com/a327ex/STALKER-X)
-- [Inspect](http://github.com/kikito/inspect.lua)
+- [inspect](http://github.com/kikito/inspect.lua)
 - [JSON](https://github.com/rxi/json.lua)
 - [HUMP](https://github.com/vrld/hump)
-- [Lume](https://github.com/rxi/lume/)
-- [Lurker](https://github.com/rxi/lurker)
-- [Roomy](https://github.com/tesselode/roomy)
-- [Profile](https://github.com/2dengine/profile.lua)
-- [Ripple](https://github.com/tesselode/ripple)
-- [Slab](https://github.com/flamendless/Slab)
+- [love-quakeconsole](https://github.com/pfirsich/love-quakeconsole)
+- [lume](https://github.com/rxi/lume/)
+- [lurker](https://github.com/rxi/lurker)
+- [profile](https://github.com/2dengine/profile.lua)
+- [ripple](https://github.com/tesselode/ripple)
+- [roomy](https://github.com/tesselode/roomy)
+- [splashes](https://github.com/love2d-community/splashes)
+- [talkies](https://github.com/tanema/talkies)
+- [tick](https://github.com/bjornbytes/tick)
+- [tween](https://github.com/kikito/tween.lua)
+
 
 ## Acknowledgements  
 - [Zelda Oracle](https://github.com/trigger-segfault/ZeldaOracle)
