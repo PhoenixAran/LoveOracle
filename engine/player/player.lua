@@ -84,31 +84,6 @@ local Player = Class { __includes = MapEntity,
     self.sprite = SpriteBank.build('player', self)
     self.spriteFlasher:addSprite(self.sprite)
 
-    --[[
-      Racyast position diagram below
-      say the player is facing AND walking right
-      the default raycast posiutions before setting offsets would be:
-       -------------- ===============> - raycast1
-       |            | 
-       |            | ===============> - raycast2
-       |            |
-       |            | ===============> - raycast3 
-       |            |
-       -------------- ===============> - raycast 4
-    --]]
-
-    self.raycast1 = Raycast(self)
-    self.raycast1:setCollidesWithLayer('tile')
-    self.raycast1:setCollisionTileExplicit(self.collisionTiles)
-    self.raycast1:addException(self)
-
-    self.raycast2 = Raycast(self)
-    self.raycast2:setCollidesWithLayer('tile')
-    self.raycast2:setCollisionTileExplicit(self.collisionTiles)
-    self.raycast2:addException(self)
-
-
-
     self.pushTileRaycast = Raycast(self)
     self.pushTileRaycast:addException(self)
     self.pushTileRaycast:setCollidesWithLayer({'tile', 'push_block'})
@@ -182,64 +157,6 @@ local Player = Class { __includes = MapEntity,
     -- signal connections
     self.health:connect('healthDepleted', self, '_onHealthDepleted')
 
-    --raycast stuff for movement corner corrections
-    self.raycastTargetValues = {
-      [Direction4.left] = {
-        x = -5,
-        y = 0
-      },
-      [Direction4.right] = {
-        x = 5,
-        y = 0
-      },
-      [Direction4.up] = {
-        x = 0,
-        y = -6
-      },
-      [Direction4.down] = {
-        x = 0,
-        y = 6
-      }
-    }
-    self.raycastPositions = {
-      [1] = {
-        [Direction4.left] = {
-          normal = { x = 0, y = 0 },
-          offset = { x = 0 , y = -5 }
-        },
-        [Direction4.right] = {
-          normal = { x = 0, y = 0 },
-          offset = { x = 0, y = -5 }
-        },
-        [Direction4.up] = {
-          normal = { x = -2, y = 0 },
-          offset = { x = -5, y = 0 }
-        },
-        [Direction4.down] = {
-          normal = { x = -2, y = 0 },
-          offset = { x = -5, y = 0 }
-        }
-      },
-      [2] = {
-        [Direction4.left] = {
-          normal = { x = 0, y = 3},
-          offset = { x = 0, y = 5}
-        },
-        [Direction4.right] = {
-          normal = { x = 0, y = 3 },
-          offset = { x = 0, y = 5 }
-        },
-        [Direction4.up] = {
-          normal = { x = 2, y = 0 },
-          offset = { x = 4, y = 0}
-        },
-        [Direction4.down] = {
-          normal = { x = 2, y = 0 },
-          offset = { x = 4, y = 0 }
-        }
-      }
-    }
-    self.raycastDirection = args.direction
     self.pushTileRaycastTargetValues = {
       [Direction4.left] = {
         x = -5,
@@ -265,6 +182,25 @@ local Player = Class { __includes = MapEntity,
 
     -- put debug stuff here
     self.health:setMaxHealth(9999999999, true)
+    -- set up player move filter
+    local canCollide = require('engine.entities.bump_box').canCollide
+    local playerInstance = self
+    self.moveFilter = function(item, other)
+      local responseName = 'slide'
+      -- make sure item is the player because we use the same filter for our room edge collision box
+      if item == playerInstance and item:getStateParameters().autoCorrectMovement then
+        responseName = 'slide_and_corner_correct'
+      end
+      if canCollide(item, other) then
+        if other:isTile() then
+          if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
+            return nil
+          end
+        end
+        return responseName
+      end
+      return nil
+    end
   end
 }
 
@@ -643,185 +579,6 @@ function Player:checkRoomTransitions()
   end
 end
 
----@param direction4 integer
----@return number x
----@return number y
-function Player:getRaycastTargetValue(direction4)
-  local vectorTable = self.raycastTargetValues[direction4]
-  return vectorTable.x, vectorTable.y
-end
-
----@param raycastNumber integer
----@param direction4 integer
----@param key string?
----@return number x
----@return number y
-function Player:getRaycastPosition(raycastNumber, direction4, key)
-  if key == nil then
-    key = 'normal'
-  end
-  local vectorTable = self.raycastPositions[raycastNumber][direction4][key]
-  return vectorTable.x, vectorTable.y
-end
-
----@param forceMatch boolean?
-function Player:updateRaycastPositions(forceMatch)
-  if self.raycastDirection ~= self.movement:getDirection4() or forceMatch then
-    self.raycastDirection = self.movement:getDirection4()
-    self.raycast1:setOffset(self:getRaycastPosition(1, self.raycastDirection))
-    self.raycast2:setOffset(self:getRaycastPosition(2, self.raycastDirection))
-    self.raycast1:setCastTo(self:getRaycastTargetValue(self.raycastDirection))
-    self.raycast2:setCastTo(self:getRaycastTargetValue(self.raycastDirection))
-  end
-end
-
----@param dt number delta time
----@param tvx number translation vector x
----@param tvy number translation vector y
----@return boolean movementCorrected 
-function Player:updateMovementCorrection(dt, tvx, tvy)
-  -- we are not allowed to auto correct movement in our current state
-  if not self:getStateParameters().autoCorrectMovement then
-    return false
-  end
-  local mx, my = self.movement:getVector()
-  local mDirection = Direction4.getDirection(mx, my)
-  -- we're not inputting a move, so exit out
-  if mDirection == Direction4.none then
-    return false
-  end
-  -- if the player's animation direction does not match their animation direction, dont correct
-  -- movement or else stuff gets janky in certain cases when sliding against a wall
-  if mDirection ~= self.animationDirection4 then
-    return false
-  end
-  -- if the player is moving diagonally or switched directions or stopped moving,
-  -- force update the raycast positions to their default state based on 
-  -- which way the player is facing
-  if tvx == 0 and tvy == 0 and mx == 0 and my == 0 then
-    self:updateRaycastPositions(true)
-    return false
-  end
-  self:updateRaycastPositions()
-
-  -- the player can stop moving mid movement correction
-  -- should resume movement correction when they start moving in the same direction 
-  -- so just exit out at this point
-  if mx == 0 and my == 0 then
-    return false
-  end
-
-  -- local isStillCollidingWithWallTile = false
-  -- for _, other in ipairs(self.moveCollisions) do
-  --   if other:isTile() then
-  --     local tileData = other.tileData
-  --     if bit.band(tileData.tileType, self.collisionTiles) ~= 0 then
-  --       isStillCollidingWithWallTile = true
-  --       break
-  --     end
-  --   end
-  -- end
-  
-  local isStillCollidingWithWallTile = self.raycast1:linecast() or self.raycast2:linecast()
-  -- this check means that the movement correction has been completed
-  -- we then reset the raycast positions and exit out
-  if not isStillCollidingWithWallTile then
-    self:updateRaycastPositions(true)
-    return false
-  end
-
-  -- manhandle slippery corner sliding so players dont get snagged on corners
-  local newX, newY = 0, 0
-
-  -- in each case we slide the opposite raycast to the end of the player's collision box
-  -- so we know when to stop correcting the movement 
-  local dir4 = Direction4.getDirection(self:getVector())
-  local corrected = false
-  if dir4 == Direction4.up then
-    if not self.raycast1:linecast() then
-      self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
-      self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
-      if self.raycast2:linecast() then
-        newX = -1
-        corrected = true
-      end
-    end
-    if not corrected and not self.raycast2:linecast() then
-      self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
-      self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
-      if self.raycast1:linecast() then
-        newX = 1
-        corrected = true
-      end
-    end
-  elseif dir4 == Direction4.down then
-    if not self.raycast1:linecast() then
-      self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
-      self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
-      if self.raycast2:linecast() then
-        newX = -1
-        corrected = true
-      end
-    end
-    if not corrected and not self.raycast2:linecast() then
-      self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
-      self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
-      if self.raycast1:linecast() then
-        newX = 1
-        corrected = true
-      end
-    end
-  elseif dir4 == Direction4.left then
-    if not self.raycast1:linecast() then
-      self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
-      self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
-      if self.raycast2:linecast() then
-        newY = -1
-        corrected = true
-      end
-    end
-    if not corrected and not self.raycast2:linecast() then
-      self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
-      self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
-      if self.raycast1:linecast() then
-        newY = 1
-        corrected = true
-      end
-    end
-  elseif dir4 == Direction4.right then
-    if not self.raycast1:linecast() then
-      self.raycast1:setOffset(self:getRaycastPosition(1, dir4))
-      self.raycast2:setOffset(self:getRaycastPosition(2, dir4, 'offset'))
-      if self.raycast2:linecast() then
-        newY = -1
-        corrected = true
-      end
-    end
-    if not corrected and not self.raycast2:linecast() then
-      self.raycast2:setOffset(self:getRaycastPosition(2, dir4))
-      self.raycast1:setOffset(self:getRaycastPosition(1, dir4, 'offset'))
-      if self.raycast1:linecast() then
-        newY = 1
-        corrected = true
-      end
-    end
-  end
-  -- if the player is not close enough to the edge to get corrected, just return out early
-  if not corrected then
-    self:updateRaycastPositions(true)
-    return false
-  end
-  -- recalculate the movement now with our new values
-  self.movement:setVector(newX, newY)
-  -- rollback last movement
-  self:setPositionWithBumpCoords(self.previousPositionX, self.previousPositionY)
-  Physics:update(self, self.x, self.y, self.w, self.h)
-  self.movement:recalculateLinearVelocity(dt, newX, newY)
-  -- move again
-  self:move(dt)
-  return true
-end
-
 --- will start a push tile state if the player is able to
 --- assumes movement is not being corrected from Player:updateMovementCorrection method
 function Player:updatePushTileState()
@@ -887,14 +644,14 @@ function Player:update(dt)
   self.combat:update(dt)
   self.movement:update(dt)
   local tvx, tvy = self:move(dt)
-  local movementCorrected = self:updateMovementCorrection(dt, tvx, tvy)
+  -- todo reimplement below
   --check if we are pushing a tile
-  if not movementCorrected then
-    local currentWeaponState = self:getWeaponState()
-    if currentWeaponState == nil then
-      self:updatePushTileState()
-    end
-  end
+  -- if not movementCorrected then
+  --   local currentWeaponState = self:getWeaponState()
+  --   if currentWeaponState == nil then
+  --     self:updatePushTileState()
+  --   end
+  -- end
 
   self:checkRoomTransitions()
 end
