@@ -30,13 +30,6 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 
--- custom response for Bump
--- TODO
-local function slideAndAutoDodge(item)
-  local EPSILON = 0.001
-
-end 
-
 ---@class Player : MapEntity
 ---@field roomEdgeCollisionBox Collider
 ---@field playerMovementController PlayerMovementController
@@ -91,6 +84,19 @@ local Player = Class { __includes = MapEntity,
     self.sprite = SpriteBank.build('player', self)
     self.spriteFlasher:addSprite(self.sprite)
 
+    --[[
+      Racyast position diagram below
+      say the player is facing AND walking right
+      the default raycast posiutions before setting offsets would be:
+       -------------- ===============> - raycast1
+       |            | 
+       |            | ===============> - raycast2
+       |            |
+       |            | ===============> - raycast3 
+       |            |
+       -------------- ===============> - raycast 4
+    --]]
+
     self.raycast1 = Raycast(self)
     self.raycast1:setCollidesWithLayer('tile')
     self.raycast1:setCollisionTileExplicit(self.collisionTiles)
@@ -100,6 +106,8 @@ local Player = Class { __includes = MapEntity,
     self.raycast2:setCollidesWithLayer('tile')
     self.raycast2:setCollisionTileExplicit(self.collisionTiles)
     self.raycast2:addException(self)
+
+
 
     self.pushTileRaycast = Raycast(self)
     self.pushTileRaycast:addException(self)
@@ -878,7 +886,6 @@ function Player:update(dt)
   self.sprite:update(dt)
   self.combat:update(dt)
   self.movement:update(dt)
-
   local tvx, tvy = self:move(dt)
   local movementCorrected = self:updateMovementCorrection(dt, tvx, tvy)
   --check if we are pushing a tile

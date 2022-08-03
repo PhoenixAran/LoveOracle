@@ -332,7 +332,6 @@ end
 local slide = function(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   goalX = goalX or x
   goalY = goalY or y
-
   if col.moveX ~= 0 or col.moveY ~= 0 then
     if col.normalX ~= 0 then
       goalX = col.touchX
