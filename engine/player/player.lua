@@ -58,6 +58,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field pushTileRaycastTargetValues table<integer, table>
 ---@field previousPositionX number
 ---@field previousPositionY number
+---@field slideAndCornerCorrectQueryRectFilter function 
 local Player = Class { __includes = MapEntity,
   ---@param self Player
   ---@param args table
@@ -182,9 +183,12 @@ local Player = Class { __includes = MapEntity,
 
     -- put debug stuff here
     self.health:setMaxHealth(9999999999, true)
-    -- set up player move filter
+
+
+    -- set up Bump callbacks
     local canCollide = require('engine.entities.bump_box').canCollide
     local playerInstance = self
+    -- set up filter to be used for world:move()
     self.moveFilter = function(item, other)
       local responseName = 'slide'
       -- make sure item is the player because we use the same filter for our room edge collision box
@@ -200,6 +204,19 @@ local Player = Class { __includes = MapEntity,
         return responseName
       end
       return nil
+    end
+    -- set up queryRect filter that is used when the response is slide_and_corner_correct
+    self.slideAndCornerCorrectQueryRectFilter = function(item)
+      if item == playerInstance or item == self.roomEdgeCollisionBox then
+        return false
+      end
+      if canCollide(playerInstance, item) then
+        if item:isTile() then
+          return bit.band(playerInstance.collisionTiles, item.tileData.tileType) ~= 0
+        end
+        return true
+      end
+      return false
     end
   end
 }
@@ -619,6 +636,9 @@ function Player:update(dt)
   self.pressedActionButtons['y'] = false
 
   if Input:pressed('a') then
+    print(self.x, self.y)
+  end
+  if Input:pressed('a') then
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
   end
   if Input:pressed('b') then
@@ -646,12 +666,13 @@ function Player:update(dt)
   local tvx, tvy = self:move(dt)
   -- todo reimplement below
   --check if we are pushing a tile
-  -- if not movementCorrected then
-  --   local currentWeaponState = self:getWeaponState()
-  --   if currentWeaponState == nil then
-  --     self:updatePushTileState()
-  --   end
-  -- end
+  local movementDir8 = self.movement:getDirection8()
+  if movementDir8 == Direction8.up or movementDir8 == Direction8.down or movementDir8 == Direction8.left or movementDir8 == Direction8.right then
+    local currentWeaponState = self:getWeaponState()
+    if currentWeaponState == nil then
+      self:updatePushTileState()
+    end
+  end
 
   self:checkRoomTransitions()
 end

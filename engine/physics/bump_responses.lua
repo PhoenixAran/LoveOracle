@@ -3,7 +3,6 @@ local bit = require 'bit'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 
-
 local EPSILON = 0.001
 local SIGN_RANGE = {-1, 1}
 
@@ -11,12 +10,14 @@ local SIGN_RANGE = {-1, 1}
 -- the player should be the only one using this bump response anyways
 local CORNER_CORRECT_DISTANCE = 6
 local CORNER_CORRECT_SPEED = 1
--- the distance after corner correction to check for collision
-local CORNER_CORRECT_COLLISION_CHECK_DISTANCE = 4.0
+-- how far past the corner to check there is a collision
+local AFTER_CORNER_CORRECT_DEPTH_CHECK = 2
 
+-- NB: Kind of scuffed but an entity that uses this response needs a slideAndCornerCorrectQueryFilter for the queryRect call
+-- it should be the same as your moveFilter response
 -- this bump response is like the slide response, except it will auto correct the item's position if it is
 -- snagging the edge of a corner (like lttp and stardew valley does for the player)
-local slideAndCornerCorrect = function(world, col, x, y, w, h, goalX, goalY, filter, alreadyVisited)
+local slideAndCornerCorrect = function(world, col, x,y,w,h, goalX,goalY, filter, alreadyVisited)
   goalX = goalX or x
   goalY = goalY or y
 
@@ -28,31 +29,45 @@ local slideAndCornerCorrect = function(world, col, x, y, w, h, goalX, goalY, fil
     -- check dodging for both edges of the solid object
     for _, sign in ipairs(SIGN_RANGE) do
       local ox, oy, ow, oh = world:getRect(col.other)
-      local correctX, correctY = 0, 0
-      local distanceToEdge = 0
+      local correctX, correctY = 0.0, 0.0
+      local distanceToEdge = 0.0
       if correctHorizontal then
         correctX = sign
         local entityEdgePosition = sign == 1 and x or x + w
         local otherEdgePosition = sign == -1 and ox or ox + ow
         distanceToEdge = math.abs(entityEdgePosition - otherEdgePosition)
+
       else
         correctY = sign
         local entityEdgePosition = sign == 1 and y or y + h
         local otherEdgePosition = sign == -1 and oy or oy + oh
         distanceToEdge = math.abs(entityEdgePosition - otherEdgePosition)
+
       end
       if distanceToEdge <= CORNER_CORRECT_DISTANCE then
+
         local moveAmount = math.min(CORNER_CORRECT_SPEED, distanceToEdge)
-        --local nextX, nextY = vector.add(math.floor(x + 0.5), math.floor(y + 0.5), vector.mul(distanceToEdge, correctX, correctY))
         local nextX, nextY = vector.add(x, y, vector.mul(moveAmount, correctX, correctY))
-        local newGoalX, newGoalY = vector.add(x, y, vector.mul(CORNER_CORRECT_COLLISION_CHECK_DISTANCE, correctX, correctY))
-        newGoalX, newGoalY = vector.add(newGoalX, newGoalY, vector.mul(distanceToEdge, correctX, correctY))
-        -- make sure the player is not colliding when placed at the solid object's edge
         local _, _, testCols, testLen = world:projectMove(col.item, x,y,w,h, nextX,nextY, filter)
         world.freeCollisions(testCols)
-        local _, _, testCols2, testLen2 = world:projectMove(col.item, x,y,w,h, newGoalX,newGoalY, filter)
-        world.freeCollisions(testCols2)
-        if testLen == 0 and testLen2 == 0 then
+        
+        -- local newGoalX, newGoalY = vector.add(x, y, vector.mul(4.0, correctX, correctY))
+        -- newGoalX, newGoalY = vector.add(newGoalX, newGoalY, vector.mul(distanceToEdge, correctX, correctY))
+        -- local _, _, testCols2, testLen2 = world:projectMove(col.item, x,y,w,h, newGoalX, newGoalY, filter)      
+        -- world.freeCollisions(testCols2)
+
+        -- make sure the player is not going to run into another bump box after they are corner corrected
+        local afterCorrectionX, afterCorrectionY = x, y
+        if correctHorizontal then
+          afterCorrectionX = sign == 1 and ox + ow or ox - w
+          afterCorrectionY = afterCorrectionY + (AFTER_CORNER_CORRECT_DEPTH_CHECK * -col.normalY)
+        else
+          afterCorrectionX = afterCorrectionX + (AFTER_CORNER_CORRECT_DEPTH_CHECK * -col.normalY)
+        end
+        local items, itemLen = world:queryRect(afterCorrectionX, afterCorrectionY,w,h, col.item.slideAndCornerCorrectQueryRectFilter)
+        world.freeTable(items)
+
+        if testLen == 0 and itemLen == 0 then
           -- corner correct is not obstructed, so we can carry out the new corrected movement
           local cols, len = world:project(col.item, nextX,nextY,w,h, nextX, nextY, filter, alreadyVisited)
           return nextX, nextY, cols, len

@@ -330,7 +330,6 @@ local cross = function(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited
 end
 
 local slide = function(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
-  print(col.other:getType())
   goalX = goalX or x
   goalY = goalY or y
   if col.moveX ~= 0 or col.moveY ~= 0 then
