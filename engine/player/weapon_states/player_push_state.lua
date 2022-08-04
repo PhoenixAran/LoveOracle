@@ -32,6 +32,7 @@ function PlayerPushState:onBegin()
   elseif self.pushTile:getType() == 'push_block' then
     self.mode = Mode.RealPush
   end
+  print(self.direction4)
 end
 
 function PlayerPushState:getType()

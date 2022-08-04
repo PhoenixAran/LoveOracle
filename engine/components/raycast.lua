@@ -41,13 +41,12 @@ local Raycast = Class { __includes = { Component },
 
     local raycastInstance = self
     self.filter = function(item)
-      if bit.band(item.physicsLayer, raycastInstance.collidesWithLayer) ~= 0 and item.zRange.max > raycastInstance.zRange.min
-      and item.zRange.min < item.zRange.max then
+      if bit.band(item.physicsLayer, raycastInstance.collidesWithLayer) ~= 0 
+      and item.zRange.max > raycastInstance.zRange.min and item.zRange.min < raycastInstance.zRange.max then
         if item.isTile and item:isTile() then
-          if bit.band(raycastInstance.collidesWithTileLayer, item.tileData.tileType) ~= 0 then
-            return true
+          if bit.band(raycastInstance.collidesWithTileLayer, item.tileData.tileType) == 0 then
+            return false
           end
-          return false
         end
         return true
       end
@@ -82,6 +81,7 @@ function Raycast:setCollidesWithLayer(layer)
     end
   else
     self.collidesWithLayer = bit.bor(self.collidesWithLayer, PhysicsFlags:get(layer).value)
+    print(self.collidesWithLayer, layer)
   end
 end
 
@@ -105,10 +105,10 @@ end
 function Raycast:setCollisionTile(tileType)
   if type(tileType) == 'table' then
     for _, v in ipairs(tileType) do
-      self.collidesWithTileLayer = bit.band(self.collidesWithTileLayer, bit.bnot(TileTypeFlags:get(v).value))
+      self.collidesWithTileLayer = bit.bor(self.collidesWithTileLayer, TileTypeFlags:get(v).value)
     end
   else
-    self.collidesWithTileLayer = bit.band(self.collidesWithTileLayer, bit.bnot(TileTypeFlags:get(tileType).value))
+    self.collidesWithTileLayer = bit.bor(self.collidesWithTileLayer, TileTypeFlags:get(tileType).value)
   end
 end
 
@@ -163,7 +163,6 @@ function Raycast:linecast()
     lume.push(self.hits, item)
   end
   Physics.freeTable(items)
-
   return len > 0
 end
 

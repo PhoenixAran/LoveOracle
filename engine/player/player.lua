@@ -165,7 +165,7 @@ local Player = Class { __includes = MapEntity,
       },
       [Direction4.up] = {
         x = 0,
-        y = -5
+        y = -6
       },
       [Direction4.down] = {
         x = 0,
@@ -595,15 +595,14 @@ function Player:checkRoomTransitions()
 end
 
 --- will start a push tile state if the player is able to
---- assumes movement is not being corrected from Player:updateMovementCorrection method
 function Player:updatePushTileState()
   if self:getStateParameters().canPush then
     local movementDirection = self.movement:getDirection4()
     local animDirection = self.animationDirection4
+    local vectorTable = self.pushTileRaycastTargetValues[animDirection]
+    local x, y = vectorTable.x, vectorTable.y
+    self.pushTileRaycast:setCastTo(x, y)
     if movementDirection == animDirection then
-      local vectorTable = self.pushTileRaycastTargetValues[movementDirection]
-      local x, y = vectorTable.x, vectorTable.y
-      self.pushTileRaycast:setCastTo(x, y)
       if self.pushTileRaycast:linecast() then
         local hits = self.pushTileRaycast.hits
         if lume.count(hits) > 0 then
@@ -662,17 +661,18 @@ function Player:update(dt)
   self.combat:update(dt)
   self.movement:update(dt)
   local tvx, tvy = self:move(dt)
-  -- todo reimplement below
   --check if we are pushing a tile
-  local movementDir8 = self.movement:getDirection8()
-  if movementDir8 == Direction8.up or movementDir8 == Direction8.down or movementDir8 == Direction8.left or
-      movementDir8 == Direction8.right then
-    local currentWeaponState = self:getWeaponState()
-    if currentWeaponState == nil then
-      self:updatePushTileState()
+  local EPSILON = 0.001
+  if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then
+    local movementDir8 = self.movement:getDirection8()
+    if movementDir8 == Direction8.up or movementDir8 == Direction8.down 
+    or movementDir8 == Direction8.left or movementDir8 == Direction8.right then
+      local currentWeaponState = self:getWeaponState()
+      if currentWeaponState == nil then
+        self:updatePushTileState()
+      end
     end
   end
-
   self:checkRoomTransitions()
 end
 
@@ -693,6 +693,7 @@ function Player:draw()
       item:drawAbove()
     end
   end
+  self.pushTileRaycast:debugDraw()
 end
 
 function Player:debugDraw()
