@@ -48,14 +48,14 @@ local slideAndCornerCorrect = function(world, col, x,y,w,h, goalX,goalY, filter,
         local nextX, nextY = vector.add(x, y, vector.mul(moveAmount, correctX, correctY))
         local _, _, testCols, testLen = world:projectMove(col.item, x,y,w,h, nextX,nextY, filter)
         world.freeCollisions(testCols)
-        
         -- make sure the player is not going to run into another bump box after they are corner corrected
         local afterCorrectionX, afterCorrectionY = x, y
         if correctHorizontal then
           afterCorrectionX = sign == 1 and ox + ow or ox - w
           afterCorrectionY = afterCorrectionY + (AFTER_CORNER_CORRECT_DEPTH_CHECK * -col.normalY)
         else
-          afterCorrectionX = afterCorrectionX + (AFTER_CORNER_CORRECT_DEPTH_CHECK * -col.normalY)
+          afterCorrectionX = afterCorrectionX + (AFTER_CORNER_CORRECT_DEPTH_CHECK * -col.normalX)
+          afterCorrectionY = sign == 1 and oy + oh or oy - h 
         end
         local items, itemLen = world:queryRect(afterCorrectionX, afterCorrectionY,w,h, col.item.slideAndCornerCorrectQueryRectFilter)
         world.freeTable(items)
