@@ -1,7 +1,7 @@
-# Zelda Oracle in Love2D
+# Zelda Oracle
 
-Fan made Zelda game using Love2D  
-
+Fan made Zelda game.
+Requires [LOVE 11.4](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch.io/tiled)
 ## Libraries
 - [baton](https://github.com/tesselode/baton)
 - [bump-niji](https://github.com/oniietzschan/bump-niji)

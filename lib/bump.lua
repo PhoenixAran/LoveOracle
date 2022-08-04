@@ -341,7 +341,6 @@ local slide = function(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited
   end
 
   col.slideX, col.slideY = goalX, goalY
-
   x, y = col.touchX, col.touchY
   local cols, len  = world:project(col.item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   return goalX, goalY, cols, len

@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3Z0WrCQBRF0WnVim0ttFX\/\/1OdgANxKI0k5HKFteC8CHmQDTETt6WUXYK9FQafdS91rwt2vG3u9Zu6r7W\/6JMYehzq3hes9Zh7\/UfRo9Ejl77Httzf0\/WI1fc41Z1vuxQ9ov13vzp202N9euSiRy6er3LRIxc9ctEjFz1y0SMXPXIZenzX\/SxY6zH3+t+iRzN+XxW51nD8rowY+z\/Weow\/I8bUf5D+H4w19czg9zxW36N\/HtMjlh65uF\/lMnXGcf6I9cgZx\/kDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ7fFa9kIrZAnAAA",
+         "data":"H4sIAAAAAAAACu3Za0vDMBQG4KhT8TLBW\/\/\/TzWFHahFl\/U2TuF54P0ylkD7QtM0h1LKfYI8FHqvNTc1twtyPGXu+Luat60vdCf6Pp5qnhck+pg7\/qXoI+gjl3Efh\/L7ma6P6xr38VXzfUpX9HFt555Xx1H0sT195KKPXLxf5aKPXPSRiz5y0Ucu+shFH7n0fbzXfCxI9DF3\/GfRRxh+r2ol7vul\/58yV7f1he7c8DtvJO7h1HO\/xz8Scw1\/439rnBvGuV9rLueDbWus87FOt+aynrdt2cf4fUwfbWv1EfdeH8ts2Yfn1XRr7EtiX9Gay\/6jbcq+5Fy6C+ey\/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA\/fsBwWTxHkCcAAA=",
          "encoding":"base64",
          "height":100,
          "id":1,
@@ -22,36 +22,47 @@
          "name":"Rooms",
          "objects":[
                 {
+                 "class":"",
                  "height":288,
                  "id":2,
                  "name":"",
                  "rotation":0,
-                 "type":"",
                  "visible":true,
                  "width":288,
                  "x":0,
                  "y":0
                 }, 
                 {
+                 "class":"",
                  "height":288,
                  "id":3,
                  "name":"",
                  "rotation":0,
-                 "type":"",
                  "visible":true,
                  "width":272,
                  "x":288,
                  "y":0
                 }, 
                 {
+                 "class":"",
                  "height":128,
                  "id":6,
                  "name":"",
                  "rotation":0,
-                 "type":"",
                  "visible":true,
                  "width":160,
                  "x":400,
+                 "y":288
+                }, 
+                {
+                 "class":"",
+                 "height":128,
+                 "id":10,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":304,
+                 "x":96,
                  "y":288
                 }],
          "opacity":1,
@@ -61,10 +72,10 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":7,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.7.2",
+ "tiledversion":"1.9.0",
  "tileheight":16,
  "tilesets":[
         {
@@ -73,6 +84,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":"1.6",
+ "version":"1.9",
  "width":100
 }

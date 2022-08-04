@@ -83,14 +83,17 @@ end
 
 --- creates the initial room control state. called when game starts
 ---@param room Room
----@param spawnIndexX integer
----@param spawnIndexY integer
+---@param spawnIndexX integer?
+---@param spawnIndexY integer?
 function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
-  self:getPlayer():setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
   self.roomControl = RoomControl(self:getMap(), self:getPlayer(), self:getCamera())
+  if spawnIndexX ~= nil and spawnIndexY ~= nil then
+    self:getPlayer():setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
+    self.roomControl.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
+  end
   -- man handle room control for initial startup
   self.roomControl.currentRoom = room
-  self.roomControl.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
+
   self.roomControl.currentRoom:load(self.roomControl.entities)
   self.roomControl:connectToRoomSignals(room)
   self.roomControl:pushState(RoomNormalState())
@@ -107,6 +110,9 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
 end
 
 function GameControl:update(dt)
+  if love.keyboard.isDown('r') then
+    error()
+  end
   local gameState = self.gameStateStack:getCurrentState()
   if gameState then
     gameState:update(dt)

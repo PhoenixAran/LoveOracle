@@ -49,27 +49,23 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field respawnDirection number
 ---@field moveAnimation string
 ---@field items table<string, Item?>
----@field raycast1 Raycast
----@field raycast2 Raycast
----@field raycastTargetValues table<integer, table>
----@field raycastPositions table<integer, table<integer, table>>
----@field raycastDirection integer
 ---@field pushTileRaycast Raycast
 ---@field pushTileRaycastTargetValues table<integer, table>
 ---@field previousPositionX number
 ---@field previousPositionY number
----@field slideAndCornerCorrectQueryRectFilter function 
+---@field slideAndCornerCorrectQueryRectFilter function
 local Player = Class { __includes = MapEntity,
   ---@param self Player
   ---@param args table
   init = function(self, args)
     args.w, args.h = 8, 10
     args.direction = args.direction or Direction4.down
+    args.name = 'player'
     MapEntity.init(self, args)
     -- room edge collision
     self.roomEdgeCollisionBox = Collider(self, {
-      x = -12/2,
-      y = -13/2,
+      x = -12 / 2,
+      y = -13 / 2,
       w = 12,
       h = 12,
       offsetX = 0,
@@ -78,7 +74,7 @@ local Player = Class { __includes = MapEntity,
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     self:setCollidesWithLayer('tile')
     -- tile collision
-    self:setCollisionTile({'wall'})
+    self:setCollisionTile({ 'wall' })
 
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
@@ -87,14 +83,14 @@ local Player = Class { __includes = MapEntity,
 
     self.pushTileRaycast = Raycast(self)
     self.pushTileRaycast:addException(self)
-    self.pushTileRaycast:setCollidesWithLayer({'tile', 'push_block'})
+    self.pushTileRaycast:setCollidesWithLayer({ 'tile', 'push_block' })
     self.pushTileRaycast:setCollisionTile('wall')
-    
+
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
     self.controlStateMachine = PlayerStateMachine(self)
     self.weaponStateMachine = PlayerStateMachine(self)
-    self.conditionStateMachines = { }
+    self.conditionStateMachines = {}
     self.stateParameters = nil
 
     self.stateCollection = {
@@ -115,8 +111,8 @@ local Player = Class { __includes = MapEntity,
     -- and if they need an animation Direction4 should be enough
     self.useDirection4 = self.animationDirection4 or Direction4.none
 
-    self.pressedActionButtons = { }
-    self.buttonCallbacks = { }
+    self.pressedActionButtons = {}
+    self.buttonCallbacks = {}
 
     self.respawnPositionX, self.respawnPositionY = nil, nil
     self.respawnDirection = Direction4.down
@@ -192,7 +188,7 @@ local Player = Class { __includes = MapEntity,
     self.moveFilter = function(item, other)
       local responseName = 'slide'
       -- make sure item is the player because we use the same filter for our room edge collision box
-      if item == playerInstance and item:getStateParameters().autoCorrectMovement then
+      if item:getStateParameters().autoCorrectMovement then
         responseName = 'slide_and_corner_correct'
       end
       if canCollide(item, other) then
@@ -322,7 +318,7 @@ end
 ---@param func function
 function Player:addPressInteraction(key, func)
   if self.buttonCallbacks[key] == nil then
-    self.buttonCallbacks[key] = { }
+    self.buttonCallbacks[key] = {}
   end
   lume.push(self.buttonCallbacks[key], func)
 end
@@ -433,7 +429,7 @@ function Player:requestNaturalState()
 end
 
 -- return the player environment state that the player wants to be in
--- based on his current surface and jumping state 
+-- based on his current surface and jumping state
 ---@return PlayerEnvironmentState?
 function Player:getDesiredNaturalState()
   -- get ground observer
@@ -513,9 +509,11 @@ function Player:updateStates(dt)
 
   -- play the move animation
   if self:isOnGround() and self.stateParameters.canControlOnGround then
-    if self.playerMovementController:isMoving() and self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().move then
+    if self.playerMovementController:isMoving() and
+        self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().move then
       self.sprite:play(self:getPlayerAnimations().move)
-    elseif not self.playerMovementController:isMoving() and self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().default then
+    elseif not self.playerMovementController:isMoving() and
+        self.sprite:getCurrentAnimationKey() ~= self:getPlayerAnimations().default then
       self.sprite:play(self:getPlayerAnimations().default)
     end
   end
@@ -644,7 +642,7 @@ function Player:update(dt)
   if Input:pressed('b') then
     self.pressedActionButtons['b'] = self:checkPressInteractions('b')
   end
-  if Input:pressed('x') then  
+  if Input:pressed('x') then
     self.pressedActionButtons['x'] = self:checkPressInteractions('x')
   end
   if Input:pressed('y') then
@@ -667,7 +665,8 @@ function Player:update(dt)
   -- todo reimplement below
   --check if we are pushing a tile
   local movementDir8 = self.movement:getDirection8()
-  if movementDir8 == Direction8.up or movementDir8 == Direction8.down or movementDir8 == Direction8.left or movementDir8 == Direction8.right then
+  if movementDir8 == Direction8.up or movementDir8 == Direction8.down or movementDir8 == Direction8.left or
+      movementDir8 == Direction8.right then
     local currentWeaponState = self:getWeaponState()
     if currentWeaponState == nil then
       self:updatePushTileState()
@@ -699,18 +698,16 @@ end
 function Player:debugDraw()
   Entity.debugDraw(self)
   self.roomEdgeCollisionBox:debugDraw()
-  self.raycast1:debugDraw()
-  self.raycast2:debugDraw()
 end
 
 function Player:getInspectorProperties()
   local props = MapEntity.getInspectorProperties(self)
   props:addReadOnlyString('Animated Sprite Key', function()
-      local textValue = self.sprite:getCurrentAnimationKey()
-      if self.sprite:getSubstripKey() ~= nil then
-        textValue = textValue .. '[' .. self.sprite:getSubstripKey() .. ']'
-      end
-      return textValue
+    local textValue = self.sprite:getCurrentAnimationKey()
+    if self.sprite:getSubstripKey() ~= nil then
+      textValue = textValue .. '[' .. self.sprite:getSubstripKey() .. ']'
+    end
+    return textValue
   end, false)
   return props
 end

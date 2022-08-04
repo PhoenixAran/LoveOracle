@@ -5,6 +5,10 @@ local BumpBox = require 'engine.entities.bump_box'
 local Component = require 'engine.entities.component'
 local Physics = require 'engine.physics'
 
+local function defaultColliderMoveFilter(item, other)
+  return 'cross'
+end
+
 -- Use this if you want to have an additional 'collider' for you entity 
 -- If your entity just needs one collider, just use the entity itself since it is a bumpbox
 -- Main use case (and probably only use case) for this component is for entities to have different
@@ -13,6 +17,7 @@ local Physics = require 'engine.physics'
 ---@field offsetX number
 ---@field offsetY number
 ---@field detectOnly number
+---@field moveFilter function
 local Collider = Class { __includes = { BumpBox, Component },
   init = function(self, entity, args)
     if args == nil then
@@ -24,6 +29,7 @@ local Collider = Class { __includes = { BumpBox, Component },
     args.y = args.y + self.offsetY
     BumpBox.init(self, args)
     Component.init(self, entity, args)
+    self.moveFilter = defaultColliderMoveFilter
   end
 }
 

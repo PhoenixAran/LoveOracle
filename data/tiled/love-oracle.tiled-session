@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/test_map_1.json",
+    "activeFile": "tilesets/proto_dungeon_2.json",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -87,8 +87,8 @@
     "project": "love-oracle.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "tilesets/proto_dungeon_2.json",
         "maps/test_map_1.json",
+        "tilesets/proto_dungeon_2.json",
         "tilesets/proto_dungeon.json",
         "C:/Users/phoen/Downloads/test_tileset/test.json",
         "C:/Users/phoen/Downloads/desert_tsx.json",

@@ -20,7 +20,6 @@ local AFTER_CORNER_CORRECT_DEPTH_CHECK = 2
 local slideAndCornerCorrect = function(world, col, x,y,w,h, goalX,goalY, filter, alreadyVisited)
   goalX = goalX or x
   goalY = goalY or y
-
   local moveXNorm, moveYNorm = vector.normalize(col.moveX, col.moveY)
   local correctHorizontal = math.abs(moveYNorm) > EPSILON
   local correctVertical = math.abs(moveXNorm) > EPSILON
@@ -45,17 +44,11 @@ local slideAndCornerCorrect = function(world, col, x,y,w,h, goalX,goalY, filter,
 
       end
       if distanceToEdge <= CORNER_CORRECT_DISTANCE then
-
         local moveAmount = math.min(CORNER_CORRECT_SPEED, distanceToEdge)
         local nextX, nextY = vector.add(x, y, vector.mul(moveAmount, correctX, correctY))
         local _, _, testCols, testLen = world:projectMove(col.item, x,y,w,h, nextX,nextY, filter)
         world.freeCollisions(testCols)
         
-        -- local newGoalX, newGoalY = vector.add(x, y, vector.mul(4.0, correctX, correctY))
-        -- newGoalX, newGoalY = vector.add(newGoalX, newGoalY, vector.mul(distanceToEdge, correctX, correctY))
-        -- local _, _, testCols2, testLen2 = world:projectMove(col.item, x,y,w,h, newGoalX, newGoalY, filter)      
-        -- world.freeCollisions(testCols2)
-
         -- make sure the player is not going to run into another bump box after they are corner corrected
         local afterCorrectionX, afterCorrectionY = x, y
         if correctHorizontal then

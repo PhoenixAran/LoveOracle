@@ -24,17 +24,16 @@ end
 
 function GameControlTest:enter(prev, ...)
   self.gameControl = GameControl()
-  local player = Player({name = 'player', x = 30, y = 30, w = 16, h = 16 })
+  --local player = Player({x = 30, y = 30})
+  local player = Player {}
   player:initTransform()
   self.gameControl:setPlayer(player)
   local map = Map('test_map_1.json')
   self.gameControl:setMap(map)
   -- TODO implement designated player spawn from Tiled editor
-  local mapIndexX, mapIndexY = vector.div(16, self.gameControl:getPlayer().x, self.gameControl:getPlayer().y)
-  mapIndexX, mapIndexY = math.floor(mapIndexX), math.floor(mapIndexY)
-  local initialRoom = map:getRoomContainingIndex(mapIndexX, mapIndexY)
+  local initialRoom = map:getRoomContainingIndex(27, 7)
   assert(initialRoom, 'Initial player position not in room')
-  self.gameControl:setInitialRoomControlState(initialRoom, 3, 3)
+  self.gameControl:setInitialRoomControlState(initialRoom, 27, 7)
 end
 
 function GameControlTest:update(dt)

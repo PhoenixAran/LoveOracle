@@ -13,6 +13,7 @@ local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local Physics = require 'engine.physics'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 local Pool = require 'engine.utils.pool'
@@ -30,6 +31,13 @@ local function defaultMoveFilter(item, other)
         return nil
       end
     end
+    return 'slide'
+  end
+  return nil
+end
+
+local function roomEdgeCollisionBoxMoveFilter(item, other)
+  if bit.band(PhysicsFlags:get('room_edge').value, other.physicsLayer) ~= 0 then
     return 'slide'
   end
   return nil
@@ -282,9 +290,9 @@ function MapEntity:move(dt)
   Physics.freeCollisions(cols)
   if self.roomEdgeCollisionBox then
     -- create goal vector value for room edge collision box
-    local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x + self.roomEdgeCollisionBox.offsetX, self.roomEdgeCollisionBox.y + self.roomEdgeCollisionBox.offsetY)
+    local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y)
     local goalX2, goalY2 = vector.sub(actualX, actualY, diffX, diffY)
-    local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, self.moveFilter)
+    local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, roomEdgeCollisionBoxMoveFilter)
     for i, col in ipairs(cols2) do
       local shouldAddToMoveCollisions = true
       for j, moveCollision in ipairs(self.moveCollisions) do
@@ -305,13 +313,7 @@ function MapEntity:move(dt)
   return vector.sub(oldX, oldY, newX, newY)
 end
 
-
-function MapEntity:moveWithRoomEdgeCollisionBox(dt)
-
-end
-
 -- combat component pass throughs
-
 function MapEntity:isIntangible()
   return self.combat:isIntangible()
 end
