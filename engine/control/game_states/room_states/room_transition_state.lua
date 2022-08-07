@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local RoomState = require 'engine.control.room_state'
+local GameState = require 'engine.control.game_state'
 local Direction4 = require 'engine.enums.direction4'
 local Tween = require 'lib.tween'
 local lume = require 'lib.lume'
@@ -8,7 +8,7 @@ local Physics = require 'engine.physics'
 
 local GRID_SIZE = 16
 
----@class RoomTransitionState : RoomState
+---@class RoomTransitionState : GameState
 ---@field transitionStyle string
 ---@field currentRoom Room
 ---@field newRoom Room
@@ -21,10 +21,10 @@ local GRID_SIZE = 16
 ---@field playerTweenCompleted boolean
 ---@field cameraTweenCompleted boolean
 ---@field direction4 integer
-local RoomTransitionState = Class { __includes = RoomState,
+local RoomTransitionState = Class { __includes = GameState,
   init = function(self, currentRoom, newRoom, transitionStyle, direction4)
     assert(transitionStyle == 'push', 'Only Push transitions are supported for now')
-    RoomState.init(self)
+    GameState.init(self)
     self.transitionStyle = transitionStyle
     self.currentRoom = currentRoom
     self.newRoom = newRoom
@@ -64,9 +64,9 @@ end
 function RoomTransitionState:onBegin()
   local TWEEN_DURATION = 1
 
-  self.roomControl.allowRoomTransition = false
-  self.player = self.roomControl:getPlayer()
-  self.camera = self.roomControl:getCamera()
+  self.control.allowRoomTransition = false
+  self.player = self.control:getPlayer()
+  self.camera = self.control:getCamera()
 
   -- get target player position
   local tx, ty = 0, 0
@@ -123,7 +123,7 @@ function RoomTransitionState:onBegin()
     self.cameraTarget.x = x1 + self.camera.w / 2
   end
   self.cameraTween = Tween.new(TWEEN_DURATION, self.cameraSubject, self.cameraTarget, 'inOutCubic')
-  self.newRoom:load(self.roomControl:getEntities())
+  self.newRoom:load(self.control:getEntities())
 end
 
 function RoomTransitionState:update(dt)
@@ -143,9 +143,9 @@ function RoomTransitionState:update(dt)
     x1, y1 = vector.mul(GRID_SIZE, x1, y1)
     x2, y2 = vector.mul(GRID_SIZE, x2, y2)
     self.camera:setBounds(x1, y1, x2 - x1, y2 - y1)
-    self.currentRoom:unload(self.roomControl:getEntities())
-    self.roomControl:setCurrentRoom(self.newRoom)
-    self.roomControl:popState()
+    self.currentRoom:unload(self.control:getEntities())
+    self.control:setCurrentRoom(self.newRoom)
+    self.control:popState()
     -- update player position or else they have one frame where they are considered in the last position between room transitons
     -- which can cause them to hit a room edge loading zone
     Physics:update(self.player, self.player.x, self.player.y, self.player.w, self.player.h)
@@ -154,12 +154,12 @@ end
 
 function RoomTransitionState:onEnd()
   resetUnusedTileDataAnimations(self.currentRoom, self.newRoom)
-  self.roomControl.allowRoomTransition = true
+  self.control.allowRoomTransition = true
 end
 
 function RoomTransitionState:draw()
-  local camera = self.roomControl.camera
-  local entities = self.roomControl.entities
+  local camera = self.control.camera
+  local entities = self.control.entities
   camera:attach()
   -- we want to force the tiles in the next room to draw the first frame of their animations
   local x = camera.x - camera.w / 2

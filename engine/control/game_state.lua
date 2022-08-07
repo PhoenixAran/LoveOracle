@@ -4,15 +4,14 @@ local SignalObject = require 'engine.signal_object'
 ---@class GameState : SignalObject
 ---@field active boolean
 ---@field visible boolean
----@field gameControl GameControl
+---@field control GameControl|RoomControl
 ---@field init function
 local GameState = Class { _includes = SignalObject,
   init = function(self)
     SignalObject.init(self)
-
     self.active = false
     self.visible = false
-    self.gameControl = nil
+    self.control = nil
   end
 }
 
@@ -33,7 +32,7 @@ end
 function GameState:begin(gameControl)
   if not self.active then
     self.active = true
-    self.gameControl = gameControl
+    self.control = gameControl
     self:onBegin()
   end
 end
@@ -41,7 +40,7 @@ end
 function GameState:endState()
   if self.active  then
     self.active = false
-    self.gameControl = nil
+    self.control = nil
     self:onEnd()
   end
 end

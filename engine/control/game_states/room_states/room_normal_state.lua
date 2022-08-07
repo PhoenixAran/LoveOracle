@@ -1,10 +1,10 @@
 local Class = require 'lib.class'
-local RoomState = require 'engine.control.room_state'
+local GameState = require 'engine.control.game_state'
 
----@class RoomNormalState : RoomState
-local RoomNormalState = Class { __includes = RoomState,
+---@class RoomNormalState : GameState
+local RoomNormalState = Class { __includes = GameState,
   init = function(self)
-    RoomState.init(self)
+    GameState.init(self)
   end
 }
 
@@ -13,10 +13,10 @@ function RoomNormalState:getType()
 end
 
 function RoomNormalState:update(dt)
-  local camera = self.roomControl.camera
-  local entities = self.roomControl.entities
-  local player = self.roomControl.player
-  local room = self.roomControl.currentRoom
+  local camera = self.control.camera
+  local entities = self.control.entities
+  local player = self.control.player
+  local room = self.control.currentRoom
   entities:update(dt)
   camera:follow(player:getPosition())
   camera:update(dt)
@@ -24,8 +24,8 @@ function RoomNormalState:update(dt)
 end
 
 function RoomNormalState:draw()
-  local camera = self.roomControl.camera
-  local entities = self.roomControl.entities
+  local camera = self.control.camera
+  local entities = self.control.entities
   camera:attach()
   local x = camera.x - camera.w / 2
   local y = camera.y - camera.h / 2

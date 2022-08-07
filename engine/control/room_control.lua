@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local GameState = require 'engine.control.game_state'
-local RoomStateStack = require 'engine.control.room_state_stack'
+local GameStateStack = require 'engine.control.game_state_stack'
 local Entities = require 'engine.entities.entities'
 
 local GRID_SIZE = 16
@@ -16,7 +16,7 @@ local RoomTransitionState = require 'engine.control.game_states.room_states.room
 ---@field previousRooms Room[]
 ---@field currentRoom Room?
 ---@field allowRoomTransition boolean
----@field roomStateStack RoomStateStack
+---@field roomStateStack GameStateStack
 local RoomControl = Class { __includes = GameState,
   init = function(self, map, player, camera)
     GameState.init(self)
@@ -30,7 +30,7 @@ local RoomControl = Class { __includes = GameState,
     self.previousRooms = { }
     self.currentRoom = nil
     self.allowRoomTransition = true
-    self.roomStateStack = RoomStateStack(self)
+    self.roomStateStack = GameStateStack(self)
   end
 }
 
@@ -65,7 +65,7 @@ function RoomControl:enableRoomTransition(enable)
 end
 
 --- push a room state onto the state stack
----@param roomState RoomState
+---@param roomState GameState
 function RoomControl:pushState(roomState)
   self.roomStateStack:pushState(roomState)
 end
