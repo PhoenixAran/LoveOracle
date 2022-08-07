@@ -332,6 +332,7 @@ end
 local slide = function(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   goalX = goalX or x
   goalY = goalY or y
+
   if col.moveX ~= 0 or col.moveY ~= 0 then
     if col.normalX ~= 0 then
       goalX = col.touchX
@@ -341,6 +342,7 @@ local slide = function(world, col, x,y,w,h, goalX, goalY, filter, alreadyVisited
   end
 
   col.slideX, col.slideY = goalX, goalY
+
   x, y = col.touchX, col.touchY
   local cols, len  = world:project(col.item, x,y,w,h, goalX, goalY, filter, alreadyVisited)
   return goalX, goalY, cols, len
@@ -465,36 +467,31 @@ local function getInfoAboutItemsTouchedBySegment(self, x1,y1, x2,y2, filter)
   local cells, len = getCellsTouchedBySegment(self, x1,y1,x2,y2)
   local cell, rect, x,y,w,h, ti1,ti2, tii0,tii1
   local visited, itemInfo, itemInfoLen = fetchTable(), fetchTable(), 0
+
   for i = 1, len do
     cell = cells[i]
-    for item in pairs(cell.items) do 
-      repeat
-        if visited[item] then
-          break -- continue
-        end
+    for item in pairs(cell.items) do repeat
+      if visited[item] then
+        break -- continue
+      end
 
-        visited[item] = true
+      visited[item] = true
 
-        if filter and not filter(item) then
-          break -- continue
-        end
-        rect = self.rects[item]
-        x, y, w, h = rect.x,rect.y,rect.w,rect.h
+      if filter and not filter(item) then
+        break -- continue
+      end
 
-        ti1,ti2 = rect_getSegmentIntersectionIndices(x,y,w,h, x1,y1, x2,y2, 0, 1)
-        if ti1 and ((0 < ti1 and ti1 < 1) or (0 < ti2 and ti2 < 1)) then
-          print('Accept', x,y)
-          print('Args', x,y,w,h, x1,y1, x2,y2)
-          -- the sorting is according to the t of an infinite line, not the segment
-          tii0,tii1    = rect_getSegmentIntersectionIndices(x,y,w,h, x1,y1, x2,y2, -math.huge, math.huge)
-          itemInfoLen  = itemInfoLen + 1
-          itemInfo[itemInfoLen] = {item = item, ti1 = ti1, ti2 = ti2, weight = min(tii0,tii1)}
-        else
-          print('Reject', x, y)
-          print('Args', x,y,w,h, x1,y1, x2,y2)
-        end
-      until true 
-    end
+      rect = self.rects[item]
+      x, y, w, h = rect.x,rect.y,rect.w,rect.h
+
+      ti1,ti2 = rect_getSegmentIntersectionIndices(x,y,w,h, x1,y1, x2,y2, 0, 1)
+      if ti1 and ((0 < ti1 and ti1 < 1) or (0 < ti2 and ti2 < 1)) then
+        -- the sorting is according to the t of an infinite line, not the segment
+        tii0,tii1    = rect_getSegmentIntersectionIndices(x,y,w,h, x1,y1, x2,y2, -math.huge, math.huge)
+        itemInfoLen  = itemInfoLen + 1
+        itemInfo[itemInfoLen] = {item = item, ti1 = ti1, ti2 = ti2, weight = min(tii0,tii1)}
+      end
+    until true end
   end
 
   freeTable(visited)
@@ -668,7 +665,6 @@ function World:querySegment(x1, y1, x2, y2, filter)
   for i=1, len do
     items[i] = itemInfo[i].item
   end
-  freeTable(itemInfo)
   return items, len
 end
 
