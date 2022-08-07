@@ -38,10 +38,10 @@ function GameState:begin(gameControl)
 end
 
 function GameState:endState()
-  if self.active  then
+  if self.active then
+    self:onEnd()
     self.active = false
     self.control = nil
-    self:onEnd()
   end
 end
 

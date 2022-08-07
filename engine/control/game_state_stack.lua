@@ -31,8 +31,7 @@ end
 function GameStateStack:popState()
   local state = self:getCurrentState()
   state:endState()
-  assert(state)
-  lume.remove(state)
+  lume.remove(self.states, state)
   return state
 end
 
