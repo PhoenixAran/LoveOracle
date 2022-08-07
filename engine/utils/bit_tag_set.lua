@@ -1,6 +1,10 @@
 local Class = require 'lib.class'
 local bit = require 'bit'
-
+ 
+---@class BitTag
+---@field id integer
+---@field value integer
+---@field enumMap table
 local BitTag = Class {
   init = function(self, id, value, name)
     self.id = id
@@ -14,6 +18,11 @@ function BitTag:getType()
   return 'bit_tag'
 end
 
+---@class BitTagSet
+---@field setName string
+---@field totalTags integer
+---@field byId table<integer, BitTag>
+---@field byName table<string, BitTag>
 local BitTagSet = Class {
   init = function(self, setName)
     self.setName = setName
@@ -43,6 +52,7 @@ function BitTagSet:makeTags(names)
     self:makeTag(v)
   end
 end
+
 
 function BitTagSet:get(str)
   str = string.lower(str)

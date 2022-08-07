@@ -1,4 +1,4 @@
-local cellSize = 64
+local cellSize = 32
 print('Initializing physics world with cellsize ' .. cellSize)
 local World =  require('lib.bump').newWorld(cellSize)
 print 'Registering custom bump responses'

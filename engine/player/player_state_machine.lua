@@ -26,12 +26,15 @@ function PlayerStateMachine:setPlayer(player)
   self.player = player
 end
 
----@return PlayerState|PlayerEnvironmentState
+---@return PlayerState?|PlayerEnvironmentState?
 function PlayerStateMachine:getCurrentState()
+  if self.currentState == nil or not self.currentState.active then
+    return nil
+  end
   return self.currentState
 end
 
----@return PlayerState|PlayerEnvironmentState
+---@return PlayerState?|PlayerEnvironmentState?
 function PlayerStateMachine:getPreviousState()
   return self.previousState
 end

@@ -3,6 +3,7 @@ local lume = require 'lib.lume'
 local bit = require 'bit'
 local Entity = require 'engine.entities.entity'
 local TileType = require('engine.enums.flags.tile_type_flags').enumMap
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local GRID_SIZE = 16
 
 local function makeTileEntityName(tileIndexX, tileIndexY, layer)
@@ -63,6 +64,10 @@ end
 -- function Tile:isUpdatable()
 --   return false
 -- end
+
+function Tile:isWall()
+  return bit.band(self.tileData.tileType, TileType.Wall) ~= 0
+end
 
 function Tile:isAnimated()
   return self.sprite:isAnimated()

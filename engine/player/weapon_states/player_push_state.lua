@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local PlayerState = require 'engine.player.player_state'
 local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
 
 
 local Mode = {
@@ -32,7 +33,6 @@ function PlayerPushState:onBegin()
   elseif self.pushTile:getType() == 'push_block' then
     self.mode = Mode.RealPush
   end
-  print(self.direction4)
 end
 
 function PlayerPushState:getType()
@@ -45,6 +45,10 @@ function PlayerPushState:update(dt)
     self:endState()
     return
   end
+  if self.player:isInAir() then
+    self:endState()
+    return
+  end
   local currentDirection4 = self.player:getDirection4()
   local currentAnimationDirection4 = self.player:getAnimationDirection4()
   if currentDirection4 ~= currentAnimationDirection4 then
@@ -52,6 +56,16 @@ function PlayerPushState:update(dt)
     return
   end
   if currentDirection4 ~= self.direction4 then
+    self:endState()
+    return
+  end
+  local movementDir8 = self.player.movement:getDirection8()
+  if movementDir8 ~= Direction8.up and movementDir8 ~= Direction8.down and movementDir8 ~= Direction8.left and movementDir8 ~= Direction8.right then
+    self:endState()
+    return
+  end
+  local items, len = self.player:queryPushTileRect()
+  if len == 0 then
     self:endState()
     return
   end

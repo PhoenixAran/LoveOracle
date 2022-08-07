@@ -84,6 +84,11 @@ function PlayerMovementController:jump()
     self.movement:setZVelocity(JUMP_Z_VELOCITY)
     self.player:requestNaturalState()
     self.player:integrateStateParameters()
+    if self.player:getWeaponState() ~= nil and self.player:getWeaponState():getType() == 'player_push_state' then
+      -- end the push state so we can jump
+      self.player:getWeaponState():endState()
+      self.player:integrateStateParameters()
+    end
     if self.player:getWeaponState() == nil then
       self.player.sprite:play('jump')
     end

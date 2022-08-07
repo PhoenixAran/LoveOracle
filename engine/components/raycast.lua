@@ -7,13 +7,15 @@ local Physics = require 'engine.physics'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 
+
+-- NB: Raycast can go between tiles if it is att he perfect integer position and pointing straight up, down, left, or right
 ---@class Raycast : Component
 ---@field offsetX number
 ---@field offsetY number
 ---@field castToX number
 ---@field castToY number
 ---@field zRange ZRange
----@field exceptions BumpBox[]
+---@field exceptions table<BumpBox, boolean>
 ---@field collidesWithLayer integer
 ---@field collidesWithTileLayer integer
 ---@field hits any[]
@@ -41,12 +43,14 @@ local Raycast = Class { __includes = { Component },
 
     local raycastInstance = self
     self.filter = function(item)
+      if raycastInstance.exceptions[item] then
+        return false
+      end
       if bit.band(item.physicsLayer, raycastInstance.collidesWithLayer) ~= 0 
       and item.zRange.max > raycastInstance.zRange.min and item.zRange.min < raycastInstance.zRange.max then
         if item.isTile and item:isTile() then
-          if bit.band(raycastInstance.collidesWithTileLayer, item.tileData.tileType) == 0 then
-            return false
-          end
+          --print(item:isWall(), item.tileIndexX - 1, item.tileIndexY - 1)
+          return bit.band(raycastInstance.collidesWithTileLayer, item.tileData.tileType) ~= 0
         end
         return true
       end
@@ -81,7 +85,6 @@ function Raycast:setCollidesWithLayer(layer)
     end
   else
     self.collidesWithLayer = bit.bor(self.collidesWithLayer, PhysicsFlags:get(layer).value)
-    print(self.collidesWithLayer, layer)
   end
 end
 
@@ -144,12 +147,12 @@ end
 
 ---@param box BumpBox
 function Raycast:addException(box)
-  lume.push(self.exceptions, box)
+  self.exceptions[box] = true
 end
 
 ---@param box BumpBox
 function Raycast:removeException(box)
-  lume.push(self.exceptions, box)
+  self.exceptions[box] = nil
 end
 
 ---@return boolean collisionsExisted

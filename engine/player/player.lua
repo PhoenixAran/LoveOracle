@@ -49,11 +49,12 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field respawnDirection number
 ---@field moveAnimation string
 ---@field items table<string, Item?>
----@field pushTileRaycast Raycast
----@field pushTileRaycastTargetValues table<integer, table>
 ---@field previousPositionX number
 ---@field previousPositionY number
 ---@field slideAndCornerCorrectQueryRectFilter function
+---@field tileQueryRect table
+---@field tileQueryRectTargets table
+---@field tileQueryRectFilter function
 local Player = Class { __includes = MapEntity,
   ---@param self Player
   ---@param args table
@@ -74,17 +75,12 @@ local Player = Class { __includes = MapEntity,
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     self:setCollidesWithLayer('tile')
     -- tile collision
-    self:setCollisionTile({ 'wall' })
+    self:setCollisionTile('wall')
 
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
     self.spriteFlasher:addSprite(self.sprite)
-
-    self.pushTileRaycast = Raycast(self)
-    self.pushTileRaycast:addException(self)
-    self.pushTileRaycast:setCollidesWithLayer({ 'tile', 'push_block' })
-    self.pushTileRaycast:setCollisionTile('wall')
 
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
@@ -154,22 +150,28 @@ local Player = Class { __includes = MapEntity,
     -- signal connections
     self.health:connect('healthDepleted', self, '_onHealthDepleted')
 
-    self.pushTileRaycastTargetValues = {
+    self.tileQueryRect = {
+      x = 0,
+      y = 0,
+      w = 2,
+      h = 2
+    }
+    self.tileQueryRectTargets = {
       [Direction4.left] = {
-        x = -5,
-        y = 0
+        x = -5 - self.tileQueryRect.w / 2,
+        y = 0 - self.tileQueryRect.h / 2
       },
       [Direction4.right] = {
-        x = 5,
-        y = 0
+        x = 5 - self.tileQueryRect.w / 2,
+        y = 0 - self.tileQueryRect.h / 2,
       },
       [Direction4.up] = {
-        x = 0,
-        y = -6
+        x = 0 - self.tileQueryRect.w / 2,
+        y = -6 - self.tileQueryRect.h / 2
       },
       [Direction4.down] = {
-        x = 0,
-        y = 6
+        x = 0 - self.tileQueryRect.w / 2,
+        y = 6 - self.tileQueryRect.h / 2
       }
     }
 
@@ -192,7 +194,7 @@ local Player = Class { __includes = MapEntity,
         responseName = 'slide_and_corner_correct'
       end
       if canCollide(item, other) then
-        if other:isTile() then
+        if other.isTile and other:isTile() then
           if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
             return nil
           end
@@ -207,10 +209,21 @@ local Player = Class { __includes = MapEntity,
         return false
       end
       if canCollide(playerInstance, item) then
-        if item:isTile() then
+        if item.isTile and item:isTile() then
           return bit.band(playerInstance.collisionTiles, item.tileData.tileType) ~= 0
         end
         return true
+      end
+      return false
+    end
+
+    -- set up tile query rect filter that is used when determining if the player is pushing a tile
+    self.tileQueryRectFilter = function(item)
+      if canCollide(playerInstance, item) then
+        if item.isTile and item:isTile() then
+          return bit.band(playerInstance.collisionTiles, item.tileData.tileType) ~= 0
+        end
+        return bit.band(PhysicsFlags:get('push_block').value, item.physicsLayer)
       end
       return false
     end
@@ -308,7 +321,7 @@ end
 --- return use direction vector value
 ---@return number useDirectionX
 ---@return number useDirectionY
-function Player:getUseDirectionXY()
+function Player:getUseDirection()
   return self.useDirectionX, self.useDirectionY
 end
 
@@ -594,23 +607,33 @@ function Player:checkRoomTransitions()
   end
 end
 
+
+---query physics world with push tile rect
+---@return any[] items
+---@return integer len
+function Player:queryPushTileRect()
+  local x,y,w,h = self.tileQueryRect.x,self.tileQueryRect.y,self.tileQueryRect.w, self.tileQueryRect.h
+  x,y = vector.add(x,y, self:getPosition())
+  local items, len = Physics:queryRect(x,y,w,h, self.tileQueryRectFilter)
+  return items, len
+end
+
 --- will start a push tile state if the player is able to
 function Player:updatePushTileState()
   if self:getStateParameters().canPush then
-    local movementDirection = self.movement:getDirection4()
+    local movementDirection4 = self.movement:getDirection4()
     local animDirection = self.animationDirection4
-    local vectorTable = self.pushTileRaycastTargetValues[animDirection]
-    local x, y = vectorTable.x, vectorTable.y
-    self.pushTileRaycast:setCastTo(x, y)
-    if movementDirection == animDirection then
-      if self.pushTileRaycast:linecast() then
-        local hits = self.pushTileRaycast.hits
-        if lume.count(hits) > 0 then
-          local playerPushState = self:getStateFromCollection('player_push_state')
-          playerPushState.pushTile = lume.first(hits)
-          self:beginWeaponState(playerPushState)
-        end
+    local vectorTable = self.tileQueryRectTargets[animDirection]
+    self.tileQueryRect.x, self.tileQueryRect.y = vectorTable.x, vectorTable.y
+    if movementDirection4 == animDirection then
+      local items, len = self:queryPushTileRect()
+      if len > 0 then
+        local pushTile = lume.first(items)
+        local playerPushState = self:getStateFromCollection('player_push_state')
+        playerPushState.pushTile = pushTile
+        self:beginWeaponState(playerPushState)
       end
+      Physics.freeTable(items)
     end
   end
 end
@@ -632,9 +655,6 @@ function Player:update(dt)
   self.pressedActionButtons['x'] = false
   self.pressedActionButtons['y'] = false
 
-  if Input:pressed('a') then
-    print(self.x, self.y)
-  end
   if Input:pressed('a') then
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
   end
@@ -693,7 +713,6 @@ function Player:draw()
       item:drawAbove()
     end
   end
-  self.pushTileRaycast:debugDraw()
 end
 
 function Player:debugDraw()

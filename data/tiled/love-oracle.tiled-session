@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tilesets/proto_dungeon_2.json",
+    "activeFile": "maps/test_map_1.json",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -55,8 +55,8 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 313.5,
-                "y": 245
+                "x": -209.5,
+                "y": 73.5
             }
         },
         "tilesets/proto_dungeon.json": {
@@ -65,7 +65,7 @@
         },
         "tilesets/proto_dungeon_2.json": {
             "scaleInDock": 1,
-            "scaleInEditor": 8
+            "scaleInEditor": 5.5
         }
     },
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
@@ -87,8 +87,8 @@
     "project": "love-oracle.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/test_map_1.json",
         "tilesets/proto_dungeon_2.json",
+        "maps/test_map_1.json",
         "tilesets/proto_dungeon.json",
         "C:/Users/phoen/Downloads/test_tileset/test.json",
         "C:/Users/phoen/Downloads/desert_tsx.json",
