@@ -39,7 +39,6 @@ end
 function BaseScreen:drawVersion()
   local monogram = AssetManager.getFont('baseScreenDebug')
   love.graphics.setFont(monogram)
-  local version = 'Ver ' .. GameConfig.version
   love.graphics.setColor(1, 1, 1)
   love.graphics.draw(self.drawVersionText, 160 - self.drawVersionText:getWidth(), 132)
 end

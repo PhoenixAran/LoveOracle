@@ -5,7 +5,6 @@ local console = require 'lib.console'
 ---@param args table
 function console.commands.timescale(args)
   local tick  = require 'lib.tick'
-  print(tonumber(args))
   if tonumber(args) then
     tick.timescale = tonumber(args)
   else

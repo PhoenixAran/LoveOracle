@@ -28,7 +28,7 @@ local GameControl = Class { __includes = SignalObject,
     self.inventory = Inventory()
     self.player = nil
     local w = GameConfig.window.monocleConfig.windowWidth
-    local h = GameConfig.window.monocleConfig.windowHeight - 16
+    local h = GameConfig.window.monocleConfig.windowHeight - GRID_SIZE
     self.camera = Camera(w/2,h/2, w, h)
     self.camera:setFollowStyle('NO_DEADZONE')
     self.map = nil
@@ -110,9 +110,6 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
 end
 
 function GameControl:update(dt)
-  if love.keyboard.isDown('r') then
-    error()
-  end
   local gameState = self.gameStateStack:getCurrentState()
   if gameState then
     gameState:update(dt)

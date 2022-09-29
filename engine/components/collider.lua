@@ -47,7 +47,9 @@ function Collider:onTransformChanged()
 end
 
 function Collider:entityAwake()
-  Physics:add(self, self.x, self.y, self.w, self.h)
+  if not self.detectOnly and self.registeredWithPhysics then
+    Physics:add(self, self.x, self.y, self.w, self.h)
+  end
   self.registeredWithPhysics = true
 end
 

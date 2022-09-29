@@ -19,7 +19,7 @@
         {
          "draworder":"topdown",
          "id":2,
-         "name":"Rooms",
+         "name":"rooms",
          "objects":[
                 {
                  "class":"",
@@ -82,7 +82,7 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":3,
+ "nextlayerid":4,
  "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",

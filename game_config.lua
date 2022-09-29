@@ -27,8 +27,8 @@ local window = {
     maxScale = 6
   },
   windowConfig = {
-    minwidth = 800,
-    minheight = 600,
+    minwidth = 160,
+    minheight = 144,
     vsync = true,
     resizable = true
   }

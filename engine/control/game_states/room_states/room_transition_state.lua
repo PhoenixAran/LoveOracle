@@ -161,7 +161,6 @@ function RoomTransitionState:draw()
   local camera = self.control.camera
   local entities = self.control.entities
   camera:attach()
-  -- we want to force the tiles in the next room to draw the first frame of their animations
   local x = camera.x - camera.w / 2
   local y = camera.y - camera.h / 2
   local w = camera.w
