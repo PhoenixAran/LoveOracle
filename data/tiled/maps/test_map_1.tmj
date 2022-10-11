@@ -91,7 +91,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/tilesets\/proto_dungeon_2.json"
+         "source":"..\/tilesets\/proto_dungeon_2.tsj"
         }],
  "tilewidth":16,
  "type":"map",

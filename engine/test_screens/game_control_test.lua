@@ -28,7 +28,7 @@ function GameControlTest:enter(prev, ...)
   local player = Player {}
   player:initTransform()
   self.gameControl:setPlayer(player)
-  local map = Map('test_map_1.json')
+  local map = Map('test_map_1.tmj')
   self.gameControl:setMap(map)
   -- TODO implement designated player spawn from Tiled editor
   local initialRoom = map:getRoomContainingIndex(27, 7)
