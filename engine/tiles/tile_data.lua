@@ -15,7 +15,9 @@ local function makeTileSprite(tilesetTile)
     local spriteFrames = { }
     for i = 1, lume.count(tilesetTile.animatedTextures) do
       local subtexture = tilesetTile.animatedTextures[i]
+      print(tilesetTile.durations[i])
       local delay = math.floor(tilesetTile.durations[i] / 60) + 1
+      print(delay)
       lume.push(spriteFrames, SpriteFrame(Sprite(subtexture), delay))
     end
     return TileSpriteRenderer(spriteFrames, true)

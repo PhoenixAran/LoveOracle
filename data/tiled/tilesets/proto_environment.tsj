@@ -10,27 +10,44 @@
  "tileheight":16,
  "tiles":[
         {
+         "animation":[
+                {
+                 "duration":480,
+                 "tileid":0
+                }, 
+                {
+                 "duration":480,
+                 "tileid":1
+                }, 
+                {
+                 "duration":480,
+                 "tileid":2
+                }, 
+                {
+                 "duration":480,
+                 "tileid":3
+                }],
          "id":0,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -39,22 +56,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -63,22 +80,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -87,22 +104,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -111,46 +128,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":360,
+                 "tileid":5
+                }, 
+                {
+                 "duration":360,
+                 "tileid":6
+                }, 
+                {
+                 "duration":360,
+                 "tileid":7
+                }, 
+                {
+                 "duration":360,
+                 "tileid":8
+                }],
          "id":5,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -159,22 +193,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -183,22 +217,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -207,22 +241,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -231,46 +265,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":480,
+                 "tileid":10
+                }, 
+                {
+                 "duration":480,
+                 "tileid":11
+                }, 
+                {
+                 "duration":480,
+                 "tileid":12
+                }, 
+                {
+                 "duration":480,
+                 "tileid":13
+                }],
          "id":10,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -279,22 +330,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -303,22 +354,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -327,22 +378,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -351,46 +402,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":360,
+                 "tileid":15
+                }, 
+                {
+                 "duration":360,
+                 "tileid":16
+                }, 
+                {
+                 "duration":360,
+                 "tileid":17
+                }, 
+                {
+                 "duration":360,
+                 "tileid":18
+                }],
          "id":15,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -399,22 +467,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -423,22 +491,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -447,22 +515,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -471,46 +539,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":480,
+                 "tileid":20
+                }, 
+                {
+                 "duration":480,
+                 "tileid":21
+                }, 
+                {
+                 "duration":480,
+                 "tileid":22
+                }, 
+                {
+                 "duration":480,
+                 "tileid":23
+                }],
          "id":20,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -519,22 +604,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -543,22 +628,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -567,22 +652,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -591,46 +676,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":360,
+                 "tileid":25
+                }, 
+                {
+                 "duration":360,
+                 "tileid":26
+                }, 
+                {
+                 "duration":360,
+                 "tileid":27
+                }, 
+                {
+                 "duration":360,
+                 "tileid":28
+                }],
          "id":25,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -639,22 +741,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -663,22 +765,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -687,22 +789,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -711,46 +813,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":480,
+                 "tileid":30
+                }, 
+                {
+                 "duration":480,
+                 "tileid":31
+                }, 
+                {
+                 "duration":480,
+                 "tileid":32
+                }, 
+                {
+                 "duration":480,
+                 "tileid":33
+                }],
          "id":30,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -759,22 +878,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -783,22 +902,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -807,22 +926,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -831,46 +950,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":360,
+                 "tileid":35
+                }, 
+                {
+                 "duration":360,
+                 "tileid":36
+                }, 
+                {
+                 "duration":360,
+                 "tileid":37
+                }, 
+                {
+                 "duration":360,
+                 "tileid":38
+                }],
          "id":35,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -879,22 +1015,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -903,22 +1039,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -927,22 +1063,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -951,46 +1087,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":360,
+                 "tileid":40
+                }, 
+                {
+                 "duration":360,
+                 "tileid":41
+                }, 
+                {
+                 "duration":360,
+                 "tileid":42
+                }, 
+                {
+                 "duration":360,
+                 "tileid":43
+                }],
          "id":40,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -999,22 +1152,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1023,22 +1176,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1047,22 +1200,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1071,46 +1224,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":360,
+                 "tileid":45
+                }, 
+                {
+                 "duration":360,
+                 "tileid":46
+                }, 
+                {
+                 "duration":360,
+                 "tileid":47
+                }, 
+                {
+                 "duration":360,
+                 "tileid":48
+                }],
          "id":45,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1119,22 +1289,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1143,22 +1313,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1167,22 +1337,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1191,46 +1361,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":360,
+                 "tileid":50
+                }, 
+                {
+                 "duration":360,
+                 "tileid":51
+                }, 
+                {
+                 "duration":360,
+                 "tileid":52
+                }, 
+                {
+                 "duration":360,
+                 "tileid":53
+                }],
          "id":50,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1239,22 +1426,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1263,22 +1450,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1287,22 +1474,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1311,22 +1498,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1335,22 +1522,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1359,22 +1546,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1383,22 +1570,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1407,22 +1594,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1431,46 +1618,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":360,
+                 "tileid":60
+                }, 
+                {
+                 "duration":360,
+                 "tileid":61
+                }, 
+                {
+                 "duration":360,
+                 "tileid":62
+                }, 
+                {
+                 "duration":360,
+                 "tileid":63
+                }],
          "id":60,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1479,22 +1683,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1503,22 +1707,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1527,22 +1731,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1551,22 +1755,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1575,22 +1779,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1599,22 +1803,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1623,22 +1827,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1647,22 +1851,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1671,46 +1875,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":480,
+                 "tileid":70
+                }, 
+                {
+                 "duration":480,
+                 "tileid":71
+                }, 
+                {
+                 "duration":480,
+                 "tileid":72
+                }, 
+                {
+                 "duration":480,
+                 "tileid":73
+                }],
          "id":70,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1719,22 +1940,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1743,22 +1964,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1767,22 +1988,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1791,22 +2012,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1815,22 +2036,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1839,22 +2060,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1863,22 +2084,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1887,22 +2108,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1911,46 +2132,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":480,
+                 "tileid":80
+                }, 
+                {
+                 "duration":480,
+                 "tileid":81
+                }, 
+                {
+                 "duration":480,
+                 "tileid":82
+                }, 
+                {
+                 "duration":480,
+                 "tileid":83
+                }],
          "id":80,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"wall"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1959,22 +2197,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -1983,22 +2221,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2007,22 +2245,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2031,22 +2269,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2055,22 +2293,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2079,22 +2317,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2103,22 +2341,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2127,22 +2365,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2151,46 +2389,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":480,
+                 "tileid":90
+                }, 
+                {
+                 "duration":480,
+                 "tileid":91
+                }, 
+                {
+                 "duration":480,
+                 "tileid":92
+                }, 
+                {
+                 "duration":480,
+                 "tileid":93
+                }],
          "id":90,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"wall"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2199,22 +2454,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2223,22 +2478,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2247,22 +2502,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2271,22 +2526,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2295,22 +2550,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2319,22 +2574,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2343,22 +2598,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2367,22 +2622,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2391,46 +2646,63 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
+         "animation":[
+                {
+                 "duration":480,
+                 "tileid":100
+                }, 
+                {
+                 "duration":480,
+                 "tileid":101
+                }, 
+                {
+                 "duration":480,
+                 "tileid":102
+                }, 
+                {
+                 "duration":480,
+                 "tileid":103
+                }],
          "id":100,
          "properties":[
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2439,22 +2711,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2463,22 +2735,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2487,22 +2759,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2511,22 +2783,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2535,22 +2807,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2559,22 +2831,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2583,22 +2855,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2607,22 +2879,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2631,22 +2903,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2655,22 +2927,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2679,22 +2951,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2703,22 +2975,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2727,22 +2999,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2751,22 +3023,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2775,22 +3047,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2799,22 +3071,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2823,22 +3095,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2847,22 +3119,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2871,22 +3143,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2895,22 +3167,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2919,22 +3191,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2943,22 +3215,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2967,22 +3239,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -2991,22 +3263,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3015,22 +3287,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3039,22 +3311,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3063,22 +3335,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3087,22 +3359,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3111,22 +3383,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3135,22 +3407,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3159,22 +3431,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3183,22 +3455,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3207,22 +3479,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3231,22 +3503,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3255,22 +3527,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3279,22 +3551,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3303,22 +3575,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3327,22 +3599,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3351,22 +3623,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3375,22 +3647,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3399,22 +3671,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3423,22 +3695,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3447,22 +3719,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3471,22 +3743,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3495,22 +3767,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3519,22 +3791,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3543,22 +3815,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3567,22 +3839,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3591,22 +3863,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3615,22 +3887,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3639,22 +3911,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3663,22 +3935,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3687,22 +3959,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3711,22 +3983,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3735,22 +4007,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3759,22 +4031,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3783,22 +4055,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3807,22 +4079,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3831,22 +4103,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3855,22 +4127,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3879,22 +4151,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3903,22 +4175,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3927,22 +4199,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3951,22 +4223,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3975,22 +4247,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -3999,22 +4271,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4023,22 +4295,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4047,22 +4319,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4071,22 +4343,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4095,22 +4367,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4119,22 +4391,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4143,22 +4415,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4167,22 +4439,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4191,22 +4463,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4215,22 +4487,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4239,22 +4511,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4263,22 +4535,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4287,22 +4559,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4311,22 +4583,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4335,22 +4607,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4359,22 +4631,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4383,22 +4655,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4407,22 +4679,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4431,22 +4703,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4455,22 +4727,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4479,22 +4751,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4503,22 +4775,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4527,22 +4799,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4551,22 +4823,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4575,22 +4847,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4599,22 +4871,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4623,22 +4895,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4647,22 +4919,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4671,22 +4943,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4695,22 +4967,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4719,22 +4991,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4743,22 +5015,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4767,22 +5039,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }, 
         {
@@ -4791,22 +5063,22 @@
                 {
                  "name":"bumpBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,16,16"
                 }, 
                 {
                  "name":"hurtBox",
                  "type":"string",
-                 "value":""
+                 "value":"0,0,0,0"
                 }, 
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":""
+                 "value":"normal"
                 }, 
                 {
                  "name":"zRange",
                  "type":"string",
-                 "value":""
+                 "value":"0,1"
                 }]
         }],
  "tilewidth":16,

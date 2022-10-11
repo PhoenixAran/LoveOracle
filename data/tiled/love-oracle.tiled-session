@@ -88,6 +88,7 @@
             "scaleInEditor": 5.5
         }
     },
+    "frame.defaultDuration": 1800,
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
     "last.externalTilesetPath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/tiled/tilesets",
     "last.imagePath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/assets/images/tiles",
@@ -109,10 +110,10 @@
     "project": "love-oracle.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "tilesets/proto_environment.tsj",
         "tilesets/proto_dungeon.tsj",
-        "tilesets/proto_dungeon_2.tsj",
         "maps/test_map_1.tmj",
+        "tilesets/proto_environment.tsj",
+        "tilesets/proto_dungeon_2.tsj",
         "maps/test_map_1.json",
         "tilesets/proto_dungeon_2.json",
         "tilesets/proto_dungeon.json",
