@@ -164,13 +164,6 @@ function Entities:getTopTileEntity(x, y)
   return nil
 end
 
-function Entities:getTopTileEntities(x, y, w, h)
-  
-  for layer = lume.count(self.tileEntities), 1, -1 do
-    
-  end
-end
-
 function Entities:update(dt)
   self.player:update(dt)
   for _, entity in ipairs(self.entities) do

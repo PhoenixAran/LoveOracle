@@ -13,11 +13,12 @@ end
 ---@class Tile : Entity
 ---@field tileData TileData
 ---@field layer integer
----@field tileIndexX integer
----@field tileIndexY integer
+---@field index integer index in 1d array
+---@field tileIndexX integer x index in 2d array
+---@field tileIndexY integer y index in 2d array
 ---@field sprite TileSpriteRenderer
 local Tile = Class { __includes = Entity,
-  init = function(self, tileData, tileIndexX, tileIndexY, layer)
+  init = function(self, tileData, index, tileIndexX, tileIndexY, layer)
     local zMin, zMax = tileData:getCollisionZRange()
     Entity.init(self, {
       useBumpCoords = true,
@@ -33,9 +34,10 @@ local Tile = Class { __includes = Entity,
     -- TODO: make hurtbox
     -- use flyweight pattern via tileData instance
     self.tileData = tileData
-    self.layer = layer
+    self.index = index
     self.tileIndexX = tileIndexX
     self.tileIndexY = tileIndexY
+    self.layer = layer
     self.sprite = tileData:getSprite()
     self:setPhysicsLayer('tile')
   end

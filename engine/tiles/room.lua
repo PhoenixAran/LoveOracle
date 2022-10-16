@@ -90,7 +90,7 @@ function Room:load(entities)
       for y = self:getTopLeftPositionY(), self:getBottomRightPositionY() do
         local tileData, gid = self.map:getTileData(x, y, layerIndex)
         if tileData then
-          local tile = Tile(tileData, x, y, layerIndex)
+          local tile = Tile(tileData, lume.count(entities) + 1, x, y, layerIndex)
           tile:initTransform()
           entities:addTileEntity(tile)
           if (not self.animatedTilesCollectionCreated) and tile:isAnimated() then
