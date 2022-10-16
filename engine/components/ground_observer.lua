@@ -12,6 +12,7 @@ local TileTypes = TileTypeFlags.enumMap
 ---@field layerMask number
 ---@field hits Tile[]
 ---@field inLava boolean
+---@field inPuddle boolean
 ---@field inGrass boolean
 ---@field onStairs boolean
 ---@field onLadder boolean
@@ -34,6 +35,7 @@ local GroundObserver = Class { __includes = {Component},
     self.onIce = false
     self.inWater = false
     self.inHole = false
+    self.inPuddle = false
   end
 }
 
@@ -56,12 +58,11 @@ function GroundObserver:update(dt)
         self.inLava = true
       elseif tileType == TileTypes.Grass then
         self.inGrass = true
+      elseif tileType == TileTypes.Puddle then
+        self.inPuddle = true
       elseif tileType == TileTypes.Stairs then
         self.onStairs = true
-      elseif tileType == TileTypes.Ice then
-        self.onIce = true
-      elseif tileType == TileTypes.Puddle or tileType == TileTypes.Water
-          or tileType == TileTypes.DeepWater or tileType == TileTypes.Ocean
+      elseif tileType == TileTypes.Water or tileType == TileTypes.DeepWater or tileType == TileTypes.Ocean
           or tileType == TileTypes.Waterfall or tileType == TileTypes.Whirlpool then
         self.inWater = true
       elseif tileType == TileTypes.Ladder then
@@ -77,6 +78,7 @@ end
 function GroundObserver:reset()
   self.inLava = false
   self.inGrass = false
+  self.inPuddle = false
   self.onStairs = false
   self.onLadder = false
   self.onIce = false

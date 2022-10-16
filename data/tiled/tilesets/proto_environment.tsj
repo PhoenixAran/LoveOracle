@@ -179,7 +179,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -453,7 +453,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -727,7 +727,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1001,7 +1001,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1138,7 +1138,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"water"
                 }, 
                 {
                  "name":"zRange",
@@ -1275,7 +1275,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1412,7 +1412,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"water"
                 }, 
                 {
                  "name":"zRange",
@@ -1669,7 +1669,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"water"
                 }, 
                 {
                  "name":"zRange",
@@ -1926,7 +1926,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"water"
                 }, 
                 {
                  "name":"zRange",
@@ -2697,7 +2697,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"water"
                 }, 
                 {
                  "name":"zRange",
@@ -2793,7 +2793,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"grass"
                 }, 
                 {
                  "name":"zRange",

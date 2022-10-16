@@ -43,6 +43,15 @@ local function roomEdgeCollisionBoxMoveFilter(item, other)
   return nil
 end
 
+local _tileDict = { }
+---@param tiles Tile[]
+local function filterForTopTiles(tiles)
+  -- find pairs
+  for _,tile in ipairs(tiles) do
+    
+  end
+end
+
 ---@class MapEntity : Entity
 ---@field health Health
 ---@field movement Movement
