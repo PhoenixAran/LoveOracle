@@ -10,6 +10,11 @@ return function(spriteBank)
   -- @animation shadow
   sb:addSpriteFrame(1, 1)
   builder:addAnimation('shadow', sb:build())
+
+  --@animation puddle ripple
+
+  --@animation grass movement
+  
   
   -- register builder
   spriteBank.registerSpriteRendererBuilder('entity_effects', builder)
