@@ -12,7 +12,8 @@ return function(spriteBank)
   builder:addAnimation('shadow', sb:build())
 
   --@animation puddle ripple
-
+  sb:addSpriteFrame(5, 3, -5, -5, 8)
+  
 
   --@animation grass movement
   
