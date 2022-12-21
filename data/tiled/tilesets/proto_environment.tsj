@@ -6,7 +6,7 @@
  "name":"proto_environment",
  "spacing":3,
  "tilecount":200,
- "tiledversion":"1.9.0",
+ "tiledversion":"1.9.2",
  "tileheight":16,
  "tiles":[
         {
@@ -1138,7 +1138,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"water"
+                 "value":"puddle"
                 }, 
                 {
                  "name":"zRange",
@@ -1412,7 +1412,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"water"
+                 "value":"puddle"
                 }, 
                 {
                  "name":"zRange",
@@ -1669,7 +1669,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"water"
+                 "value":"puddle"
                 }, 
                 {
                  "name":"zRange",
@@ -1926,7 +1926,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"water"
+                 "value":"puddle"
                 }, 
                 {
                  "name":"zRange",
@@ -2697,7 +2697,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"water"
+                 "value":"puddle"
                 }, 
                 {
                  "name":"zRange",
@@ -5083,5 +5083,5 @@
         }],
  "tilewidth":16,
  "type":"tileset",
- "version":"1.8"
+ "version":"1.9"
 }

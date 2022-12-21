@@ -12,6 +12,17 @@ local assetManager = require 'engine.utils.asset_manager'
 
 local DEFAULT_KEY = 'default'
 
+---@class SpriteAnimationBuilder
+---@field spriteSheet SpriteSheet
+---@field frames SpriteFrame[]
+---@field compositeSprites Sprite[]
+---@field timedActions table<integer, function>
+---@field loopType string
+---@field defaultLoopType string
+---@field hasSubstrips boolean
+---@field subFrames table<string, SpriteFrame[]>
+---@field subTimedActions table<integer, function[]>
+---@field Direction4 table<string, integer>
 local SpriteAnimationBuilder = Class {
   init = function(self)
     self.spriteSheet = nil
@@ -29,18 +40,26 @@ local SpriteAnimationBuilder = Class {
   end
 }
 
+---@return string
 function SpriteAnimationBuilder:getType()
   return 'sprite_animation_builder'
 end
 
+---toggles substrip animation building
+---@param bool boolean
 function SpriteAnimationBuilder:setSubstrips(bool)
   self.hasSubstrips = bool
 end
 
+---sets looptype when animation is built
+---@param loopType string
 function SpriteAnimationBuilder:setLoopType(loopType)
   self.loopType = loopType
 end
 
+---sets the default looptype
+---@param loopType string
+---@param overrideCurrentLoopType boolean?
 function SpriteAnimationBuilder:setDefaultLoopType(loopType, overrideCurrentLoopType)
   self.defaultLoopType = loopType
   if overrideCurrentLoopType then
@@ -48,6 +67,8 @@ function SpriteAnimationBuilder:setDefaultLoopType(loopType, overrideCurrentLoop
   end
 end
 
+---sets the current spritesheet
+---@param spriteSheet string|SpriteSheet
 function SpriteAnimationBuilder:setSpriteSheet(spriteSheet)
   if type(spriteSheet) == 'string' then
     self.spriteSheet = assetManager.getSpriteSheet(spriteSheet)
@@ -56,7 +77,12 @@ function SpriteAnimationBuilder:setSpriteSheet(spriteSheet)
   end
 end
 
--- adds a regular sprite frame using the current internal spritesheet
+---adds a regular sprite frame using the current internal spritesheet
+---@param x integer | Sprite
+---@param y integer?
+---@param offsetX number?
+---@param offsetY number?
+---@param delay integer?
 function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
   -- user is adding an explicit Sprite object
   if type(x) == 'table' then
@@ -75,7 +101,11 @@ function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
   lume.push(self.frames, spriteFrame)
 end
 
--- add a sprite to the composite sprite table using the current internal spritesheet
+---add a sprite to the composite sprite table using the current internal spritesheet
+---@param x integer
+---@param y integer
+---@param offsetX number
+---@param offsetY number
 function SpriteAnimationBuilder:addCompositeSprite(x, y, offsetX, offsetY)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
@@ -85,7 +115,12 @@ function SpriteAnimationBuilder:addCompositeSprite(x, y, offsetX, offsetY)
   lume.push(self.compositeSprites, sprite)
 end
 
--- use the current stored sprite frames to make composite sprite frames
+---use the current stored sprite frames to make composite sprite frames
+---@param originX number
+---@param originY number
+---@param offsetX number
+---@param offsetY number
+---@param delay integer
 function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, offsetY, delay)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
@@ -96,16 +131,31 @@ function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, off
   self.compositeSprites = { }
 end
 
+---create a SpriteFrame with a PrototypeSprite type
+---@param r number
+---@param g number
+---@param b number
+---@param width integer
+---@param height integer
+---@param offsetX number
+---@param offsetY number
+---@param delay integer
 function SpriteAnimationBuilder:addPrototypeFrame(r, g, b, width, height, offsetX, offsetY, delay)
   local sprite = PrototypeSprite(r, g, b, width, height, offsetX, offsetY)
   local spriteFrame = SpriteFrame(sprite, delay)
   lume.push(self.frames, spriteFrame)
 end
 
+---add a timed action to the animation
+---@param tick integer
+---@param func function
 function SpriteAnimationBuilder:addTimedAction(tick, func)
   self.timedActions[tick] = func
 end
 
+---build substrip with current content
+---@param substripKey string|integer
+---@param makeDefault boolean?
 function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
   if makeDefault == nil then
     makeDefault = false
@@ -127,6 +177,9 @@ function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
   self.compositeSprites = { }
 end
 
+---build sprite animation
+---internal content will be cleared after it is built
+---@return SpriteAnimation
 function SpriteAnimationBuilder:build()
   local animation = nil
   if self.hasSubstrips then

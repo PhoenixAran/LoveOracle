@@ -44,10 +44,11 @@ local function roomEdgeCollisionBoxMoveFilter(item, other)
 end
 
 local _tileDict = { }
+-- TODO
 ---@param tiles Tile[]
 local function filterForTopTiles(tiles)
   -- find pairs
-  for _,tile in ipairs(tiles) do
+  for _, tile in ipairs(tiles) do
     
   end
 end
@@ -123,7 +124,7 @@ local MapEntity = Class { __includes = Entity,
     -- TODO finish ripple and grass effects
     self.shadowVisible = true
     --self.shadowOffsetX, self.shadowOffsetY = 0, 0
-    self.rippleVisible = false
+    self.rippleVisible = true
     --self.rippleOffsetX, self.rippleOffsetY = 0, 0
     self.grassVisible = false
     --self.grassOffsetX, self.grassOffsetY = 0, 0
@@ -430,6 +431,12 @@ function MapEntity:updateEntityEffectSprite(dt)
       self.effectSprite:play('shadow')
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = .5
+    end
+  elseif self.rippleVisible and self.groundObserver.inPuddle then
+    if self.effectSprite:getCurrentAnimationKey() ~= 'puddle' or not self.effectSprite:isVisible() then
+      self.effectSprite:play('puddle')
+      self.effectSprite:setVisible(true)
+      self.effectSprite.alpha = 1
     end
   elseif self.effectSprite:isVisible() then
     self.effectSprite:stop()
