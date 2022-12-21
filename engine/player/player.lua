@@ -41,7 +41,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field stateCollection table<string, any>
 ---@field useDirectionX number
 ---@field userDirectionY number
----@field useDirection4 integer
+---@field useDirection4 Direction4
 ---@field pressedActionButtons string[]
 ---@field buttonCallbacks table<string, function[]>
 ---@field respawnPositionX number

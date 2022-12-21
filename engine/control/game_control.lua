@@ -16,6 +16,8 @@ local monocle = Singletons.monocle
 
 local GRID_SIZE = 16
 
+local console = require 'lib.console'
+
 ---@class GameControl
 ---@field inventory Inventory
 ---@field player Player
@@ -105,14 +107,12 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   x1, y1 = vector.mul(GRID_SIZE, x1, y1)
   x2, y2 = vector.mul(GRID_SIZE, x2, y2)
   self:getCamera():setBounds(x1, y1, x2 - x1, y2 - y1)
+  
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
 end
 
 function GameControl:update(dt)
-  if love.keyboard.isDown('r') then
-    error()
-  end
   local gameState = self.gameStateStack:getCurrentState()
   if gameState then
     gameState:update(dt)

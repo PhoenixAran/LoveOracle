@@ -1,5 +1,8 @@
 -- Make sure we are using luaJIT
 assert(require('ffi'), 'LoveOracle requires luaJIT')
+
+math.randomseed(os.time())
+
 local lume = require 'lib.lume'
 local gameConfig = require 'game_config'
 local ContentControl = require 'engine.utils.content_control'
@@ -13,7 +16,6 @@ local Singletons = require 'engine.singletons'
 -- init quake console
 local console = require 'lib.console'
 require 'engine.console_commands'
-math.randomseed(os.time())
 
 print('Oracle Engine ' .. gameConfig.version)
 print("OS: " .. love.system.getOS())
@@ -73,8 +75,9 @@ function love.load(args)
   monocle:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
   Singletons.monocle = monocle
 
-  -- set debug console font
-  console.font = AssetManager.getFont('debugConsole')
+  -- set up console
+  love.keyboard.setKeyRepeat(true)
+  --console.font = AssetManager.getFont('debugConsole')
 
   -- setup startup screen
   print('Startup Screen: ' .. gameConfig.startupScreen)
@@ -92,6 +95,8 @@ function love.update(dt)
   screenManager:emit('update', dt)
 end
 
+
+---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
   screenManager:emit('draw')
 end
