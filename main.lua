@@ -86,9 +86,6 @@ function love.load(args)
   else
     screenManager:enter( require(gameConfig.startupScreen)() )
   end
-  local Slab = require 'lib.slab'
-  Slab.SetINIStatePath(nil)
-  Slab.Initialize()
 end
 
 function love.update(dt)

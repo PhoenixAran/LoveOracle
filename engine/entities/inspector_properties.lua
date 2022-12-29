@@ -1,6 +1,5 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local Slab = require 'lib.slab'
 
 local PropertyType = {
   Int = 'int',

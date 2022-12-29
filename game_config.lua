@@ -36,19 +36,7 @@ local window = {
 
 local showSplash = false
 
---local startupScreen = 'engine.test_screens.animated_sprite_renderer_test'
---local startupScreen = 'engine.test_screens.sprite_sheet_test'
---local startupScreen = 'engine.test_screens.draw_tilemap_test'
---local startupScreen = 'engine.test_screens.tiled_map_loader_test'
---local startupScreen = 'engine.screens.content_viewer'
---local startupScreen = 'data.test_screens.player_playground'
---local startupScreen = 'engine.test_screens.entity_inspector_test'
---local startupScreen = 'engine.test_screens.physics_test'
 local startupScreen = 'engine.test_screens.game_control_test'
---local startupScreen = 'engine.test_screens.raycast_test'
---local startupScreen = 'data.test_screens.player_sword_hitbox_test'
---local startupScreen = 'engine.test_screens.raycast_debug_draw_test'
---local startupScreen = 'engine.test_screens.entity_resize_test'
 
 local enableQuakeConsole = true
 return {
