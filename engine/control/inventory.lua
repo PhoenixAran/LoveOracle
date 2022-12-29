@@ -1,4 +1,4 @@
- local Class = require 'lib.class'
+local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local ItemBank = require 'engine.utils.item_bank'
 

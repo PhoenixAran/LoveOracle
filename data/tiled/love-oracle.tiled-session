@@ -3,11 +3,7 @@
         "height": 4300,
         "width": 2
     },
-<<<<<<< HEAD
-    "activeFile": "maps/test_map_2.json",
-=======
     "activeFile": "maps/test_map_1.tmj",
->>>>>>> gameplay
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
