@@ -42,6 +42,7 @@ end
 
 --- sets player
 ---@param player Player
+---@param awakeEntity boolean?
 function Entities:setPlayer(player, awakeEntity)
   if awakeEntity == nil then awakeEntity = true end
   assert(not self.entitiesHash[player:getName()])

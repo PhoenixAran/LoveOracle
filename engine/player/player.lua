@@ -30,6 +30,8 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 
+local _cnt = 0
+
 ---@class Player : MapEntity
 ---@field roomEdgeCollisionBox Collider
 ---@field playerMovementController PlayerMovementController

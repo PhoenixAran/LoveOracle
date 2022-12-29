@@ -30,7 +30,9 @@ end
 function BaseGameplayScreen:enter(prev, ...)
   -- TODO stop hardcoding the positions and map
   self.gameControl = GameControl()
-  self.gameControl:setPlayer(Player({name = 'player', x = 30, y = 30, w = 16, h = 16 }))
+  local player = Player({name = 'player', x = 30, y = 30, w = 16, h = 16 })
+  player:initTransform()
+  self.gameControl:setPlayer(player)
   local map = Map('test_map_1.tmj')
   self.gameControl:setMap(map)
   -- TODO implement designated player spawn from Tiled editor
