@@ -3,7 +3,11 @@
         "height": 4300,
         "width": 2
     },
+<<<<<<< HEAD
     "activeFile": "maps/test_map_2.json",
+=======
+    "activeFile": "maps/test_map_1.tmj",
+>>>>>>> gameplay
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -52,6 +56,7 @@
             }
         },
         "maps/test_map_1.json": {
+<<<<<<< HEAD
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
@@ -65,17 +70,50 @@
             "viewCenter": {
                 "x": 240.2829885303891,
                 "y": 160.01715082002357
+=======
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 588,
+                "y": 192
+            }
+        },
+        "maps/test_map_1.tmj": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+<<<<<<< HEAD
+                "x": 404,
+                "y": 66
+=======
+                "x": 366.16666666666663,
+                "y": 184.83333333333331
+>>>>>>> bda580db113b45e0c373fa0f6e66d7dbff4a94a1
+>>>>>>> gameplay
             }
         },
         "tilesets/proto_dungeon.json": {
             "scaleInDock": 1,
             "scaleInEditor": 8
         },
+        "tilesets/proto_dungeon.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "tilesets/proto_dungeon_2.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 5.5
+        },
+        "tilesets/proto_dungeon_2.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesets/proto_environment.tsj": {
             "scaleInDock": 1,
             "scaleInEditor": 5.5
         }
     },
+    "frame.defaultDuration": 1800,
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
     "last.externalTilesetPath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/tiled/tilesets",
     "last.imagePath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/assets/images/tiles",
@@ -89,29 +127,44 @@
     "map.tileWidth": 16,
     "mapScene.enableWorlds": true,
     "openFiles": [
+<<<<<<< HEAD
         "maps/test_map_1.json",
         "tilesets/proto_dungeon_2.json",
         "maps/test_map_2.json"
+=======
+        "tilesets/proto_environment.tsj",
+        "tilesets/proto_dungeon.tsj",
+        "tilesets/proto_dungeon_2.tsj",
+        "maps/test_map_1.tmj"
+>>>>>>> gameplay
     ],
     "project": "love-oracle.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
+<<<<<<< HEAD
         "maps/test_map_1.json",
         "tilesets/proto_dungeon_2.json",
         "maps/test_map_2.json",
+=======
+        "tilesets/proto_environment.tsj",
+        "tilesets/proto_dungeon.tsj",
+        "tilesets/proto_dungeon_2.tsj",
+        "maps/test_map_1.tmj",
+        "maps/test_map_1.json",
+        "tilesets/proto_dungeon_2.json",
+>>>>>>> gameplay
         "tilesets/proto_dungeon.json",
         "C:/Users/phoen/Downloads/test_tileset/test.json",
         "C:/Users/phoen/Downloads/desert_tsx.json",
         "C:/Users/phoen/Downloads/desert_map.json",
         "C:/Users/phoen/Downloads/desert.json",
-        "C:/Program Files/Tiled/examples/desert.tmx",
-        "C:/Users/phoen/untitled.tmx"
+        "C:/Program Files/Tiled/examples/desert.tmx"
     ],
     "tileset.lastUsedExportFilter": "Lua files (*.lua)",
     "tileset.lastUsedFilter": "JSON tileset files (*.json)",
     "tileset.lastUsedFormat": "json",
     "tileset.margin": 1,
-    "tileset.spacing": 1,
+    "tileset.spacing": 3,
     "tileset.tileSize": {
         "height": 16,
         "width": 16

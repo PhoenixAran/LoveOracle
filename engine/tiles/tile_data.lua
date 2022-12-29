@@ -70,6 +70,30 @@ local function parseZRange(zRange)
   return { min = tonumber(args[1]), max = tonumber(args[2]) }
 end
 
+local function parseConveyorVector(conveyorVector)
+  if conveyorVector == nil then
+    return 0, 0
+  end
+  if conveyorVector == '' then
+    return 0, 0
+  end
+  local args = ph.split(conveyorVector, ',')
+  assert(lume.count(args) == 2)
+  lume.each(args, ph.argIsNumber)
+  return tonumber(args[1]), tonumber(args[2])
+end
+
+local function parseConveyorSpeed(conveyorSpeed)
+  if conveyorSpeed == nil then
+    return 0
+  end
+  if conveyorSpeed == '' then
+    return 0
+  end
+  ph.argIsNumber(conveyorSpeed)
+  return tonumber(conveyorSpeed)
+end
+
 local InstanceId = 0
 
 ---@class TileData
@@ -80,6 +104,9 @@ local InstanceId = 0
 ---@field y integer
 ---@field w integer
 ---@field h integer
+---@field conveyorVectorX number
+---@field conveyorVectorY number
+---@field conveyorSpeed number
 ---@field zRange ZRange
 ---@field instanceId integer
 local TileData = Class {
@@ -92,6 +119,8 @@ local TileData = Class {
     self.tileType = parseTileType(properties.tileType)
     self.x, self.y, self.w, self.h = parseCollisionBox(properties.collisionBox)
     self.hitX, self.hitY, self.hitW, self.hitH = parseHitBox(properties.hitBox)
+    self.conveyorVectorX, self.conveyorVectorY = parseConveyorVector(properties.conveyorVector)
+    self.conveyorSpeed = parseConveyorSpeed(properties.conveyorSpeed)
     self.zRange = parseZRange(properties.zRange)
     -- used in Room.animatedTiles, Tileset.animatedTiles
     InstanceId = InstanceId + 1

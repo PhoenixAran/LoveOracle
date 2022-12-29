@@ -1,3 +1,4 @@
+---@enum TransitionStyle
 local TransitionStyle = {
   push = 'push',
   fade = 'fade',

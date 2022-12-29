@@ -11,12 +11,10 @@ local input = Singletons.input
 
 ---@class BaseScreen
 ---@field drawVersionText love.Text
----@field consoleEnabled boolean
 ---@field init function
 local BaseScreen = Class {
   init = function(self)
     self.drawVersionText = love.graphics.newText(AssetManager.getFont('baseScreenDebug'), 'Ver ' .. GameConfig.version)
-    self.consoleEnabled = true
   end
 }
 
@@ -74,13 +72,11 @@ if GameConfig.enableQuakeConsole then
   print 'Debug console enabled in basescreen!'
   
   function BaseScreen:keypressed(keycode, scancode, isrepeat)
-      console.keypressed(keycode)
+    console.keypressed(keycode)
   end
 
   function BaseScreen:textinput(key)
-    if self.consoleEnabled and key ~= '`' then
-      console.textinput(key)
-    end
+    console.textinput(key)
   end
 end
 

@@ -2,6 +2,7 @@ local vector = require 'lib.vector'
 local lume = require 'lib.lume'
 
 -- values determined by angleindex + 1
+---@enum Direction4
 local Direction4 = {
   none = 0,
   right = 1,

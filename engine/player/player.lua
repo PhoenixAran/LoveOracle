@@ -41,7 +41,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field stateCollection table<string, any>
 ---@field useDirectionX number
 ---@field userDirectionY number
----@field useDirection4 integer
+---@field useDirection4 Direction4
 ---@field pressedActionButtons string[]
 ---@field buttonCallbacks table<string, function[]>
 ---@field respawnPositionX number
@@ -451,6 +451,8 @@ function Player:getDesiredNaturalState()
     return self:getStateFromCollection('player_grass_environment_state')
   elseif self:isInAir() then
     return self:getStateFromCollection('player_jump_environment_state')
+  elseif go.inGrass then
+    return
   end
 
   -- TODO implement rest of environment states
@@ -684,8 +686,8 @@ function Player:update(dt)
   --check if we are pushing a tile
   local EPSILON = 0.001
   if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then
-    local movementDir8 = self.movement:getDirection8()
-    if movementDir8 == Direction8.up or movementDir8 == Direction8.down 
+    local movementDir8 = self.movement:getDirection8()  
+    if movementDir8 == Direction8.up or movementDir8 == Direction8.down
     or movementDir8 == Direction8.left or movementDir8 == Direction8.right then
       local currentWeaponState = self:getWeaponState()
       if currentWeaponState == nil then
