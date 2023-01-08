@@ -13,7 +13,6 @@ local lume = require 'lib.lume'
 ]]
 local ContentControl = { }
 
--- TODO:make fonts non hardcoded
 local function loadFonts(directory)
   require('data.fonts')(AssetManager.loadFont)
 end

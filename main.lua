@@ -36,7 +36,6 @@ function makeModuleFunction(func)
   return setmetatable({}, {__call = dropSelfArg(func)})
 end
 
-
 local screenManager = nil
 local camera = nil
 local input = nil
@@ -46,6 +45,7 @@ function love.load(args)
   -- graphics setup
   love.graphics.setDefaultFilter('nearest', 'nearest')
   love.window.setTitle(gameConfig.window.title)
+  
   -- build content here (need it for font)
   ContentControl.buildContent()
   love.graphics.setFont(AssetManager.getFont('baseScreenDebug'))

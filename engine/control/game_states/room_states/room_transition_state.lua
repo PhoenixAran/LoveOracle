@@ -68,6 +68,7 @@ function RoomTransitionState:onBegin()
   self.player = self.control:getPlayer()
   self.camera = self.control:getCamera()
 
+  -- TODO look into using flux library instead of kikito's tween
   -- get target player position
   local tx, ty = 0, 0
   if self.direction4 == Direction4.up then

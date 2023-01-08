@@ -37,7 +37,7 @@ local window = {
 local showSplash = false
 
 --local startupScreen = 'engine.test_screens.game_control_test'
-local startupScreen = 'engine.test_screens.helium_test'
+local startupScreen = 'engine.test_screens.inky_test'
 
 local enableQuakeConsole = true
 return {
