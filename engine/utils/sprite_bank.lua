@@ -13,13 +13,16 @@ local fh = require 'engine.utils.file_helper'
 
 -- export type
 ---@class SpriteBank
+---@field sprites table<string, Sprite>
+---@field animaions table<string, SpriteAnimation>
+---@field builders table<string, SpriteRendererBuilder>
 local SpriteBank = {
   -- holds singular sprite instances
   sprites = { },
   -- holds individual sprite animations
   -- useful for shared animation such as death effects or breaking animations
   animations = { },
-  -- holds AnimatedSpriteBuilder instances
+  -- holds SpriteRendererBuilder instances
   builders = { },
   -- holds SpriteSet instances
   spritesets = { },
