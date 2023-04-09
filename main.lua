@@ -92,7 +92,6 @@ function love.update(dt)
   screenManager:emit('update', dt)
 end
 
-
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
   screenManager:emit('draw')

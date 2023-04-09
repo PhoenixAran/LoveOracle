@@ -30,14 +30,14 @@ local window = {
     minwidth = 160,
     minheight = 144,
     vsync = true,
-    resizable = true
+    resizable = false
   }
 }
 
 local showSplash = false
 
 --local startupScreen = 'engine.test_screens.game_control_test'
-local startupScreen = 'engine.test_screens.inky_test'
+local startupScreen = 'engine.screens.content_viewer'
 
 local enableQuakeConsole = true
 return {
