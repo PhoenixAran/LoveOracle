@@ -17,6 +17,11 @@ local function getKeyList(t)
   return keyset
 end
 
+local AnimationSource = {
+  Builder = 'Sprite Renderer Builders',
+  Singular = 'Singular Animations'
+}
+
 ---@class ContentViewer
 ---@field showAnimViewer boolean
 ---@field animViewerCanvas love.Canvas
@@ -27,38 +32,55 @@ end
 ---@field animViewerCanvasSizeIdx integer
 ---@field animViewerCanvasSizeSelect string[]
 ---@field animViewerCanvasScaleSelect integer[]
+---@field animViewerSourceSelect string[]
+---@field animViewerSourceIdx integer
 ---@field entityScriptList string[]
 ---@field animViewerSourceType integer
+---@field animSelectSource string[]
+---@field animViewerCurrentSource string
+---@field animViewerBuilderSelect string[]
+---@field animViewerBuilderIdx integer
+---@field animViewerBuilder SpriteRendererBuilder
+---@field animViewerAnimationSelectIdx integer
+---@field animViewerAnimationSelect string[]
 local ContentViewer = Class {
   init = function(self)
-    -- animation viewer
+    -- animation viewer 
     self.showAnimViewer = true
-    self.animViewerCanvasCache = { 
+    self.animViewerCanvasCache = {
       ['32x32'] = love.graphics.newCanvas(32, 32),
       ['64x64'] = love.graphics.newCanvas(64, 64),
       ['128x128'] = love.graphics.newCanvas(128, 128),
-      ['240x240'] = love.graphics.newCanvas(240, 240)
+      ['240x240'] = love.graphics.newCanvas(240, 240),
+      ['500x500'] = love.graphics.newCanvas(500, 500),
+      ['800x600'] = love.graphics.newCanvas(800, 600)
     }
-    self.animViewerCanvasSizeSelect = { '32x32', '64x64', '128x128', '240x240'}
+    self.animViewerCanvasSizeSelect = { '32x32', '64x64', '128x128', '240x240', '500x500', '800x600'}
     self.animViewerCanvasScaleSelect = { 1, 2, 4, 8 }
     self.animViewerCanvasSizeIdx = 3
     self.animViewerCanvasScaleIdx = 2
     self.animViewerCanvas = self.animViewerCanvasCache[self.animViewerCanvasSizeSelect[self.animViewerCanvasSizeIdx]]
-    -- 1 = singular animation instance, 2 = sprite renderer instance
-    self.animViewerSourceType = 1
-    self.spriteAnimations = { }
-    self.spriteBuilders = { }
-    self.entityScriptList = { }
 
+    self.animViewerSourceSelect = { AnimationSource.Builder, AnimationSource.Singular }
+    self.animViewerSourceIdx = 1
+    self.animViewerCurrentSource = AnimationSource.Builder
+
+    self.animViewerBuilderSelect = { }
+    self.animViewerBuilderIdx = 1
+    self.animViewerAnimationSelectIdx = 1
+    self.animViewerAnimationSelect = { }
+
+    self.animViewerCurrentBuilder = nil
+
+    self.entityScriptList = { }
   end
 }
-
 
 -- roomy callbacks
 function ContentViewer:enter(prev, ...)
   -- init animation viewer stuff
-  self.spriteBuilders = getKeyList(SpriteBank.builders)
-  self.spriteAnimations = getKeyList(SpriteBank.animations)
+  self:updateAnimationViewerSource(true)
+
 end
 
 function ContentViewer:update(dt)
@@ -69,15 +91,15 @@ function ContentViewer:update(dt)
       self.showAnimViewer = not self.showAnimViewer
     end
   end
-  
+
   if self.showAnimViewer then
-    imgui.Begin("Animation Viewer")
+    imgui.Begin('Animation Viewer', true, 'ImGuiWindowFlags_AlwaysAutoResize')
     imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
 
     if imgui.BeginCombo('Canvas Size', self.animViewerCanvasSizeSelect[self.animViewerCanvasSizeIdx]) then
       for k, v in ipairs(self.animViewerCanvasSizeSelect) do
         local isSelected = self.animViewerCanvasSizeIdx == k
-        
+
         if imgui.Selectable(self.animViewerCanvasSizeSelect[k], isSelected) then
           --update canvas size
           self.animViewerCanvasSizeIdx = k
@@ -104,21 +126,55 @@ function ContentViewer:update(dt)
           imgui.SetItemDefaultFocus()
         end
       end
+      imgui.EndCombo()
     end
 
-    imgui.Text('Animation Source')
-    if imgui.RadioButton('Singular Animation', false) then
+    if imgui.BeginCombo('Animation Source', self.animViewerSourceSelect[self.animViewerSourceIdx]) then
+      for k, v in ipairs(self.animViewerSourceSelect) do
+        local isSelected = self.animViewerSourceIdx == k
+
+        if imgui.Selectable(self.animViewerSourceSelect[k], isSelected) then
+          -- update animation source
+          self.animViewerSourceIdx = k
+          self:updateAnimationViewerSource()
+        end
+
+        if isSelected then
+          imgui.SetItemDefaultFocus()
+        end
+      end
+      imgui.EndCombo()
     end
-    if imgui.RadioButton('Builder', false) then
+
+    if self.animViewerCurrentSource == AnimationSource.Builder then
+      if imgui.BeginCombo('Entity', self.animViewerBuilderSelect[self.animViewerBuilderIdx]) then
+        for k, v in ipairs(self.animViewerBuilderSelect) do
+          local isSelected = self.animViewerBuilderIdx == k
+
+          if imgui.Selectable(self.animViewerBuilderSelect[k], isSelected) then
+            -- update animation builder source
+            self.animViewerBuilderIdx = k
+            self.animViewerCurrentBuilder = SpriteBank.builders[v]
+            
+            -- update animation select
+            lume.clear(self.animViewerAnimationSelect)
+            self.animViewerAnimationSelectIdx = 1
+            lume.push(self.animViewerAnimationSelect, unpack(getKeyList(self.animViewerCurrentBuilder.animations)))
+          end
+
+          if isSelected then
+            imgui.SetItemDefaultFocus()
+          end
+        end
+      end
+      imgui.EndCombo()
     end
-    imgui.End()
   end
-
-  imgui.ShowDemoWindow(true)
 end
 
 function ContentViewer:draw()
   -- animation viewer canvas
+  love.graphics.clear(202 / 255, 103 / 255, 2 / 255)
   love.graphics.setCanvas(self.animViewerCanvas)
   local animViewerCanvasScale = self.animViewerCanvasScaleSelect[self.animViewerCanvasScaleIdx]
   if animViewerCanvasScale > 1 then
@@ -126,17 +182,36 @@ function ContentViewer:draw()
     love.graphics.scale(animViewerCanvasScale)
   end
   love.graphics.clear(204 / 255, 204 / 255, 204 / 255)
-  love.graphics.print('hello world')
   if animViewerCanvasScale > 1 then
     love.graphics.pop()
   end
   love.graphics.setCanvas()
-
   imgui.Render()
 end
 
--- functions
+-- ContentViewer functions
 
+--- reset some fields when the user updates what kind of animation source we are viewing
+function ContentViewer:updateAnimationViewerSource(forceUpdate)
+  local source = self.animViewerSourceSelect[self.animViewerSourceIdx]
+  if source == self.animViewerCurrentSource and not forceUpdate then
+    return
+  end
+
+  lume.clear(self.animViewerBuilderSelect)
+  self.animViewerBuilderIdx = 1
+  lume.clear(self.animViewerAnimationSelect)
+  self.animViewerAnimationSelectIdx = 1
+  self.animViewerCurrentSource = source
+
+  if source == AnimationSource.Builder then
+    local builderKeys = getKeyList(SpriteBank.builders)
+    lume.push(self.animViewerBuilderSelect, unpack(builderKeys))
+  else
+    local animationKeys = getKeyList(SpriteBank.animations)
+    lume.push(self.animViewerAnimationSelect, unpack(animationKeys))
+  end
+end
 
 -- imgui hooks
 function ContentViewer:textinput(t)

@@ -30,7 +30,7 @@ local window = {
     minwidth = 160,
     minheight = 144,
     vsync = true,
-    resizable = false
+    resizable = true
   }
 }
 

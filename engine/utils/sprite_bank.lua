@@ -14,7 +14,7 @@ local fh = require 'engine.utils.file_helper'
 -- export type
 ---@class SpriteBank
 ---@field sprites table<string, Sprite>
----@field animaions table<string, SpriteAnimation>
+---@field animations table<string, SpriteAnimation>
 ---@field builders table<string, SpriteRendererBuilder>
 local SpriteBank = {
   -- holds singular sprite instances
@@ -93,20 +93,20 @@ end
 
 function SpriteBank.unload()
   SpriteBank.builders = { }
-  
+
   for _, spriteset in pairs(SpriteBank.spritesets) do
     spriteset:release()
   end
   SpriteBank.spritesets = { }
-  
+
   for _, animation in ipairs(SpriteBank.animations) do
     animation:release()
   end
-  
+
   for _, sprite in pairs(SpriteBank.sprites) do
     sprite:release()
   end
-  
+
   SpriteBank.sprites = { }
 end
 
