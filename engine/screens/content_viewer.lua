@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local imgui = require 'imgui'
 local lume = require 'lib.lume'
+local Direction4 = require 'engine.enums.direction4'
 
 local SpriteBank = require 'engine.utils.sprite_bank'
 
@@ -43,6 +44,10 @@ local AnimationSource = {
 ---@field animViewerBuilder SpriteRendererBuilder
 ---@field animViewerAnimationSelectIdx integer
 ---@field animViewerAnimationSelect string[]
+---@field animViewerCurrentAnimation SpriteAnimation
+---@field animViewerDir4Select string[]
+---@field animViewerDir4Idx integer
+---@field 
 local ContentViewer = Class {
   init = function(self)
     -- animation viewer 
@@ -67,10 +72,15 @@ local ContentViewer = Class {
 
     self.animViewerBuilderSelect = { }
     self.animViewerBuilderIdx = 1
-    self.animViewerAnimationSelectIdx = 1
-    self.animViewerAnimationSelect = { }
-
     self.animViewerCurrentBuilder = nil
+    self.animViewerSpriteEntity = nil
+
+    self.animViewerAnimationSelect = { }
+    self.animViewerAnimationSelectIdx = 1
+    self.animViewerCurrentAnimation = nil
+
+    self.animViewerDir4Select = { 'right', 'down', 'left', 'up' }
+    self.animViewerDir4Idx = 1
 
     self.entityScriptList = { }
   end
@@ -87,13 +97,14 @@ function ContentViewer:update(dt)
   imgui.NewFrame()
 
   if imgui.BeginMainMenuBar() then
-    if imgui.MenuItem("Animation Viewer") then
+    if imgui.MenuItem('Animation Viewer') then
       self.showAnimViewer = not self.showAnimViewer
     end
+    imgui.EndMainMenuBar()
   end
 
   if self.showAnimViewer then
-    imgui.Begin('Animation Viewer', true, 'ImGuiWindowFlags_AlwaysAutoResize')
+    imgui.Begin('Animation Viewer', true, "ImGuiWindowFlags_AlwaysAutoResize")
     imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
 
     if imgui.BeginCombo('Canvas Size', self.animViewerCanvasSizeSelect[self.animViewerCanvasSizeIdx]) then
@@ -147,27 +158,55 @@ function ContentViewer:update(dt)
     end
 
     if self.animViewerCurrentSource == AnimationSource.Builder then
-      if imgui.BeginCombo('Entity', self.animViewerBuilderSelect[self.animViewerBuilderIdx]) then
-        for k, v in ipairs(self.animViewerBuilderSelect) do
-          local isSelected = self.animViewerBuilderIdx == k
+      if lume.count(self.animViewerBuilderSelect) > 0 then
+        if imgui.BeginCombo('Entity', self.animViewerBuilderSelect[self.animViewerBuilderIdx]) then
+          for k, v in ipairs(self.animViewerBuilderSelect) do
+            local isSelected = self.animViewerBuilderIdx == k
 
-          if imgui.Selectable(self.animViewerBuilderSelect[k], isSelected) then
-            -- update animation builder source
-            self.animViewerBuilderIdx = k
-            self.animViewerCurrentBuilder = SpriteBank.builders[v]
-            
-            -- update animation select
-            lume.clear(self.animViewerAnimationSelect)
-            self.animViewerAnimationSelectIdx = 1
-            lume.push(self.animViewerAnimationSelect, unpack(getKeyList(self.animViewerCurrentBuilder.animations)))
+            if imgui.Selectable(self.animViewerBuilderSelect[k], isSelected) then
+              -- update animation builder source
+              self.animViewerBuilderIdx = k
+              self.animViewerCurrentBuilder = SpriteBank.builders[v]
+              
+              -- update animation select
+              lume.clear(self.animViewerAnimationSelect)
+              self.animViewerAnimationSelectIdx = 1
+              lume.push(self.animViewerAnimationSelect, unpack(getKeyList(self.animViewerCurrentBuilder.animations)))
+            end
+
+            if isSelected then
+              imgui.SetItemDefaultFocus()
+            end
           end
+          imgui.EndCombo()
+        end
+      else
+        imgui.Text('No builders found')
+      end
+    end
 
-          if isSelected then
-            imgui.SetItemDefaultFocus()
+    if lume.count(self.animViewerAnimationSelect) > 0 then
+      if imgui.BeginCombo('Animation', self.animViewerAnimationSelect[self.animViewerAnimationSelectIdx]) then
+        for k, v in ipairs(self.animViewerAnimationSelect) do
+          local isSelected = self.animViewerAnimationSelectIdx == k
+          
+          if imgui.Selectable(self.animViewerAnimationSelect[k], isSelected) then
+            -- update animation select
+            self.animViewerAnimationSelectIdx = k
+            self.animViewerCurrentAnimation = self.animViewerCurrentBuilder.animations[v]
           end
         end
+        imgui.EndCombo()
       end
-      imgui.EndCombo()
+    else
+      imgui.Text('No animations found')
+    end
+
+    local hasSubstrips = false 
+    if self.animViewerCurrentBuilder then
+      
+    elseif self.animViewerCurrentAnimation then
+      
     end
   end
 end
@@ -207,6 +246,10 @@ function ContentViewer:updateAnimationViewerSource(forceUpdate)
   if source == AnimationSource.Builder then
     local builderKeys = getKeyList(SpriteBank.builders)
     lume.push(self.animViewerBuilderSelect, unpack(builderKeys))
+    
+    --TODO set animation key list on initial load
+    local animationKeys = getKeyList(self.animViewerCurrentBuilder.animations)
+    lume.push(self.animViewerAnimationSelect, unpack(animationKeys))
   else
     local animationKeys = getKeyList(SpriteBank.animations)
     lume.push(self.animViewerAnimationSelect, unpack(animationKeys))
@@ -241,6 +284,5 @@ end
 function ContentViewer:wheelmoved(x, y)
   imgui.WheelMoved(y)
 end
-
 
 return ContentViewer
