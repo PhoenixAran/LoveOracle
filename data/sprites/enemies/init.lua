@@ -1,4 +1,4 @@
 local path = ...
-return function(spriteBank)
+return makeModuleFunction(function(spriteBank)
   require(path .. 'stalfos_sprite')(spriteBank)
-end
+end)

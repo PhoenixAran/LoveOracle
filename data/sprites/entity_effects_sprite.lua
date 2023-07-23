@@ -1,4 +1,4 @@
-return function(spriteBank)
+return makeModuleFunction(function(spriteBank)
   local builder = spriteBank.createSpriteRendererBuilder()
   local sb = spriteBank.createSpriteAnimationBuilder()
   builder:setDefaultAnimation('shadow')
@@ -13,11 +13,11 @@ return function(spriteBank)
 
   --@animation puddle ripple
   sb:addSpriteFrame(5, 3, -5, -5, 8)
-  
+
 
   --@animation grass movement
-  
-  
+
+
   -- register builder
   spriteBank.registerSpriteRendererBuilder('entity_effects', builder)
-end
+end)

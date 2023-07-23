@@ -47,7 +47,7 @@ local AnimationSource = {
 ---@field animViewerCurrentAnimation SpriteAnimation
 ---@field animViewerDir4Select string[]
 ---@field animViewerDir4Idx integer
----@field 
+---@field animViewerCurrentDir4 string|integer
 local ContentViewer = Class {
   init = function(self)
     -- animation viewer 
@@ -79,8 +79,10 @@ local ContentViewer = Class {
     self.animViewerAnimationSelectIdx = 1
     self.animViewerCurrentAnimation = nil
 
-    self.animViewerDir4Select = { 'right', 'down', 'left', 'up' }
+    -- we add 1 for the default animation
+    self.animViewerDir4Select = {'right', 'down', 'left', 'up' , 1}
     self.animViewerDir4Idx = 1
+    self.animViewerCurrentDir4 = nil
 
     self.entityScriptList = { }
   end
@@ -89,6 +91,9 @@ local ContentViewer = Class {
 -- roomy callbacks
 function ContentViewer:enter(prev, ...)
   -- init animation viewer stuff
+  -- man handle self.animViewerCurrentBuilder
+  self.animViewerCurrentBuilder = SpriteBank.builders[lume.first(getKeyList(SpriteBank.builders))]
+  assert(self.animViewerCurrentBuilder, 'Atleast one builder is required on startup')
   self:updateAnimationViewerSource(true)
 
 end
@@ -172,6 +177,9 @@ function ContentViewer:update(dt)
               lume.clear(self.animViewerAnimationSelect)
               self.animViewerAnimationSelectIdx = 1
               lume.push(self.animViewerAnimationSelect, unpack(getKeyList(self.animViewerCurrentBuilder.animations)))
+              if lume.any(self.animViewerAnimationSelect) then
+                self.animViewerCurrentAnimation = self.animViewerCurrentBuilder.animations[lume.first(self.animViewerAnimationSelect)]
+              end
             end
 
             if isSelected then
@@ -193,7 +201,11 @@ function ContentViewer:update(dt)
           if imgui.Selectable(self.animViewerAnimationSelect[k], isSelected) then
             -- update animation select
             self.animViewerAnimationSelectIdx = k
-            self.animViewerCurrentAnimation = self.animViewerCurrentBuilder.animations[v]
+            if self.animViewerCurrentSource == AnimationSource.Builder then
+              self.animViewerCurrentAnimation = self.animViewerCurrentBuilder.animations[v]
+            else  -- we are using animations straight from SpriteBank.animations
+              self.animViewerCurrentAnimation = SpriteBank.animations[v]
+            end
           end
         end
         imgui.EndCombo()
@@ -202,11 +214,21 @@ function ContentViewer:update(dt)
       imgui.Text('No animations found')
     end
 
-    local hasSubstrips = false 
-    if self.animViewerCurrentBuilder then
-      
-    elseif self.animViewerCurrentAnimation then
-      
+    if self.animViewerCurrentAnimation then
+      if self.animViewerCurrentAnimation:hasSubstrips() then
+        if imgui.BeginCombo('Substrip', self.animViewerDir4Select[self.animViewerDir4Idx]) then
+          for k, v in ipairs(self.animViewerDir4Select) do
+            local isSelected = self.animViewerDir4Idx == k
+
+            if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
+              -- update animation substrip selection
+              self.animViewerDir4Idx = k
+              self.animViewerCurrentDir4 = self.animViewerDir4Select[self.animViewerDir4Idx]
+            end
+          end
+        end
+        imgui.EndCombo()
+      end
     end
   end
 end
@@ -242,17 +264,23 @@ function ContentViewer:updateAnimationViewerSource(forceUpdate)
   lume.clear(self.animViewerAnimationSelect)
   self.animViewerAnimationSelectIdx = 1
   self.animViewerCurrentSource = source
-
   if source == AnimationSource.Builder then
     local builderKeys = getKeyList(SpriteBank.builders)
     lume.push(self.animViewerBuilderSelect, unpack(builderKeys))
     
-    --TODO set animation key list on initial load
     local animationKeys = getKeyList(self.animViewerCurrentBuilder.animations)
     lume.push(self.animViewerAnimationSelect, unpack(animationKeys))
+
+    if lume.any(self.animViewerAnimationSelect) then
+      self.animViewerCurrentAnimation = self.animViewerCurrentBuilder.animations[lume.first(self.animViewerAnimationSelect)]
+    end
   else
     local animationKeys = getKeyList(SpriteBank.animations)
     lume.push(self.animViewerAnimationSelect, unpack(animationKeys))
+
+    if lume.any(self.animViewerAnimationSelect) then
+      self.animViewerCurrentAnimation = SpriteBank.animations[lume.first(self.animViewerAnimationSelect)]
+    end
   end
 end
 

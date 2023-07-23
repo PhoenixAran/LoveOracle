@@ -57,7 +57,8 @@ local slideAndCornerCorrect = function(world, col, x,y,w,h, goalX,goalY, filter,
           afterCorrectionX = afterCorrectionX + (AFTER_CORNER_CORRECT_DEPTH_CHECK * -col.normalX)
           afterCorrectionY = sign == 1 and oy + oh or oy - h 
         end
-        local items, itemLen = world:queryRect(afterCorrectionX, afterCorrectionY,w,h, col.item.slideAndCornerCorrectQueryRectFilter)
+        --local items, itemLen = world:queryRect(afterCorrectionX, afterCorrectionY,w,h, col.item.slideAndCornerCorrectQueryRectFilter)
+        local items, itemLen = world:queryRect(afterCorrectionX,afterCorrectionY,w,h, 'slide')
         world.freeTable(items)
 
         if testLen == 0 and itemLen == 0 then

@@ -1,6 +1,6 @@
 -- player sprites
 ---@param spriteBank SpriteBank
-return function(spriteBank)
+return makeModuleFunction(function(spriteBank)
   local sb = spriteBank.createSpriteRendererBuilder()
   local ab = spriteBank.createSpriteAnimationBuilder()
 
@@ -128,4 +128,4 @@ return function(spriteBank)
 
   -- register sprite builder
   spriteBank.registerSpriteRendererBuilder('player', sb)
-end
+end)
