@@ -3,7 +3,7 @@ local imgui = require 'imgui'
 local lume = require 'lib.lume'
 local Direction4 = require 'engine.enums.direction4'
 
-local SpriteBank = require 'engine.utils.sprite_bank'
+local SpriteBank = require 'engine.banks.sprite_bank'
 
 ---@param t table
 ---@return any[]
@@ -18,6 +18,7 @@ local function getKeyList(t)
   return keyset
 end
 
+-- TODO add animatiom source Entity so we can also view hitboxes
 local AnimationSource = {
   Builder = 'Sprite Renderer Builders',
   Singular = 'Singular Animations'
@@ -48,6 +49,8 @@ local AnimationSource = {
 ---@field animViewerDir4Select string[]
 ---@field animViewerDir4Idx integer
 ---@field animViewerCurrentDir4 string|integer
+---@field animViewerTick integer
+---@field animViewerPlaying boolean
 local ContentViewer = Class {
   init = function(self)
     -- animation viewer 
@@ -84,7 +87,10 @@ local ContentViewer = Class {
     self.animViewerDir4Idx = 1
     self.animViewerCurrentDir4 = nil
 
-    self.entityScriptList = { }
+    self.animViewerTick = 1
+    self.animViewerPlaying = false
+
+    --self.entityScriptList = { }
   end
 }
 
@@ -110,7 +116,7 @@ function ContentViewer:update(dt)
 
   if self.showAnimViewer then
     imgui.Begin('Animation Viewer', true, "ImGuiWindowFlags_AlwaysAutoResize")
-    imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
+    --imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
 
     if imgui.BeginCombo('Canvas Size', self.animViewerCanvasSizeSelect[self.animViewerCanvasSizeIdx]) then
       for k, v in ipairs(self.animViewerCanvasSizeSelect) do
@@ -223,14 +229,43 @@ function ContentViewer:update(dt)
             if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
               -- update animation substrip selection
               self.animViewerDir4Idx = k
-              self.animViewerCurrentDir4 = self.animViewerDir4Select[self.animViewerDir4Idx]
+              self.animViewerCurrentDir4 = self.animViewerDir4Select[v]
             end
           end
+          imgui.EndCombo()
         end
-        imgui.EndCombo()
       end
     end
-  end
+
+    -- animation tick state
+    imgui.Separator()
+    imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
+    local tick = imgui.SliderInt('Tick', self.animViewerTick, 1, lume.count(self.animViewerCurrentAnimation:getSpriteFrames()))
+    if tick ~= self.animViewerTick then
+      self.animViewerTick = tick
+    end
+
+    if self.animViewerPlaying then
+      if imgui.Button('Pause') then
+        self.animViewerPlaying = false
+      end
+    else
+      if imgui.Button('Play') then
+        self.animViewerPlaying = true
+      end
+    end
+    imgui.SameLine()
+    if imgui.Button('Stop') then
+      self.animViewerPlaying = false
+      self.animViewerTick = 1
+    end
+
+    -- draw the animation on our canvas
+    --- @type SpriteFrame[]
+    local spriteFrames = nil
+
+    imgui.End()
+  end -- end animation viewer
 end
 
 function ContentViewer:draw()
@@ -267,7 +302,7 @@ function ContentViewer:updateAnimationViewerSource(forceUpdate)
   if source == AnimationSource.Builder then
     local builderKeys = getKeyList(SpriteBank.builders)
     lume.push(self.animViewerBuilderSelect, unpack(builderKeys))
-    
+  
     local animationKeys = getKeyList(self.animViewerCurrentBuilder.animations)
     lume.push(self.animViewerAnimationSelect, unpack(animationKeys))
 

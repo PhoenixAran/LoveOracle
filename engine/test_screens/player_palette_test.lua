@@ -4,7 +4,7 @@ local Entities = require 'engine.entities.entities'
 local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
 local Slab = require 'lib.slab'
-local PaletteBank = require 'engine.utils.palette_bank'
+local PaletteBank = require 'engine.banks.palette_bank'
 local monocle = require('engine.singletons').monocle
 
 local PlayerPaletteTest = Class { __includes = BaseScreen,

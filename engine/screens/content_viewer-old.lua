@@ -7,9 +7,9 @@ local BaseScreen = require 'engine.screens.base_screen'
 local SpriteViewer = require 'engine.screens.slab_modules.sprite_viewer'
 
 local ContentControl = require 'engine.utils.content_control'
-local PaletteBank = require 'engine.utils.palette_bank'
+local PaletteBank = require 'engine.banks.palette_bank'
 local AssetManager = require 'engine.utils.asset_manager'
-local SpriteBank = require 'engine.utils.sprite_bank'
+local SpriteBank = require 'engine.banks.sprite_bank'
 local Inspect = require 'lib.inspect'
 local ContentViewer = Class { __includes = BaseScreen,
   init = function(self)

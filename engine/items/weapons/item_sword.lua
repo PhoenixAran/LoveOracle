@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local Item = require 'engine.items.item'
-local SpriteBank = require 'engine.utils.sprite_bank'
+local SpriteBank = require 'engine.banks.sprite_bank'
 local Hitbox = require 'engine.components.hitbox'
 
 ---@class ItemSword : Item

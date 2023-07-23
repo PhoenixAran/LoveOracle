@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
-local PaletteBank = require 'engine.utils.palette_bank'
+local PaletteBank = require 'engine.banks.palette_bank'
 
 ---@class SpriteRenderer : Component
 ---@field palette Palette

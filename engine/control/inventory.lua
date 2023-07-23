@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
-local ItemBank = require 'engine.utils.item_bank'
+local ItemBank = require 'engine.banks.item_bank'
 
 local SLOT_B = 1 -- should be hardcoded to always be equipped to sword if it exists
 local SLOT_X = 2

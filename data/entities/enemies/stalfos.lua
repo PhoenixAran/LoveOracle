@@ -3,7 +3,7 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local Enemy = require 'engine.entities.enemy'
 local Direction4 = require 'engine.enums.direction4'
-local SpriteBank = require 'engine.utils.sprite_bank'
+local SpriteBank = require 'engine.banks.sprite_bank'
 local Collider = require 'engine.components.collider'
 local Hitbox = require 'engine.components.hitbox'
 

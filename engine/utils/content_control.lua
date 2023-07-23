@@ -1,7 +1,7 @@
 local AssetManager = require 'engine.utils.asset_manager'
 local GameConfig = require 'game_config'
-local PaletteBank = require 'engine.utils.palette_bank'
-local SpriteBank = require 'engine.utils.sprite_bank'
+local PaletteBank = require 'engine.banks.palette_bank'
+local SpriteBank = require 'engine.banks.sprite_bank'
 local TiledMapLoader = require 'engine.tiles.tiled.tiled_map_loader'
 local lume = require 'lib.lume'
 

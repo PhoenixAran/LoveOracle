@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local AssetManager = require 'engine.utils.asset_manager'
-local PaletteBank = require 'engine.utils.palette_bank'
+local PaletteBank = require 'engine.banks.palette_bank'
 
 -- Acts as a sprite.
 -- Will override the current palette shader.
