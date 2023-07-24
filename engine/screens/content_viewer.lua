@@ -48,9 +48,11 @@ local AnimationSource = {
 ---@field animViewerCurrentAnimation SpriteAnimation
 ---@field animViewerDir4Select string[]
 ---@field animViewerDir4Idx integer
----@field animViewerCurrentDir4 string|integer
+---@field animViewerCurrentDir4 string
 ---@field animViewerTick integer
+---@field animViewerFrameIndex integer
 ---@field animViewerPlaying boolean
+---@field animViewerCurrentSprite Sprite|CompositeSprite|ColorSprite|PrototypeSprite|nil
 local ContentViewer = Class {
   init = function(self)
     -- animation viewer 
@@ -83,12 +85,14 @@ local ContentViewer = Class {
     self.animViewerCurrentAnimation = nil
 
     -- we add 1 for the default animation
-    self.animViewerDir4Select = {'right', 'down', 'left', 'up' , 1}
+    self.animViewerDir4Select = {'right', 'down', 'left', 'up' , 'default'}
     self.animViewerDir4Idx = 1
     self.animViewerCurrentDir4 = nil
 
+    self.animViewerFrameIndex = 1
     self.animViewerTick = 1
     self.animViewerPlaying = false
+    self.animViewerCurrentSprite = nil
 
     --self.entityScriptList = { }
   end
@@ -212,6 +216,10 @@ function ContentViewer:update(dt)
             else  -- we are using animations straight from SpriteBank.animations
               self.animViewerCurrentAnimation = SpriteBank.animations[v]
             end
+
+            -- reset anim playing variables
+            self.animViewerTick = 1
+            self.animViewerFrameIndex = 1
           end
         end
         imgui.EndCombo()
@@ -229,7 +237,11 @@ function ContentViewer:update(dt)
             if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
               -- update animation substrip selection
               self.animViewerDir4Idx = k
-              self.animViewerCurrentDir4 = self.animViewerDir4Select[v]
+              self.animViewerCurrentDir4 = v
+
+              -- reset anim playing variables
+              self.animViewerTick = 1
+              self.animViewerFrameIndex = 1
             end
           end
           imgui.EndCombo()
@@ -240,9 +252,11 @@ function ContentViewer:update(dt)
     -- animation tick state
     imgui.Separator()
     imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
-    local tick = imgui.SliderInt('Tick', self.animViewerTick, 1, lume.count(self.animViewerCurrentAnimation:getSpriteFrames()))
-    if tick ~= self.animViewerTick then
-      self.animViewerTick = tick
+    local frameIndex = imgui.SliderInt('Frame', self.animViewerFrameIndex, 1, lume.count(self.animViewerCurrentAnimation:getSpriteFrames()))
+    if frameIndex ~= self.animViewerFrameIndex then
+      self.animViewerFrameIndex = frameIndex
+      self.animViewerPlaying = false
+      self.animViewerTick = 1
     end
 
     if self.animViewerPlaying then
@@ -258,29 +272,70 @@ function ContentViewer:update(dt)
     if imgui.Button('Stop') then
       self.animViewerPlaying = false
       self.animViewerTick = 1
+      self.animViewerFrameIndex = 1
     end
 
-    -- draw the animation on our canvas
-    --- @type SpriteFrame[]
-    local spriteFrames = nil
 
+
+    ---@type any
+    local substripValue = nil
+    if self.animViewerCurrentDir4 == 'default' then
+      substripValue = self.animViewerCurrentDir4
+    else
+      substripValue = Direction4[self.animViewerCurrentDir4]
+    end
+
+    -- altered duped logic from AnimatedSpriteRenderer:update() function
+    --- @type SpriteFrame[]
+    local spriteFrames = self.animViewerCurrentAnimation:getSpriteFrames(substripValue)
+
+    if self.animViewerPlaying then
+      -- draw the animation on our canvas
+      if lume.count(spriteFrames) > 0 then
+        local currentFrame = spriteFrames[self.animViewerFrameIndex]
+        self.animViewerTick = self.animViewerTick + 1
+        if currentFrame:getDelay() < self.animViewerTick then
+          self.animViewerTick = 1
+          self.animViewerFrameIndex = self.animViewerFrameIndex + 1
+          if lume.count(spriteFrames) < self.animViewerFrameIndex then
+            self.animViewerFrameIndex = 1
+          end
+        end
+        currentFrame = spriteFrames[self.animViewerFrameIndex]
+        self.animViewerCurrentSprite = currentFrame:getSprite()
+      end
+    else
+      self.animViewerCurrentSprite = spriteFrames[self.animViewerFrameIndex]:getSprite()
+    end
+  
     imgui.End()
   end -- end animation viewer
 end
 
 function ContentViewer:draw()
-  -- animation viewer canvas
-  love.graphics.clear(202 / 255, 103 / 255, 2 / 255)
-  love.graphics.setCanvas(self.animViewerCanvas)
+  -- clear screen
+  love.graphics.clear(149 / 255, 125 / 255, 173 / 255)
+
   local animViewerCanvasScale = self.animViewerCanvasScaleSelect[self.animViewerCanvasScaleIdx]
   if animViewerCanvasScale > 1 then
     love.graphics.push()
     love.graphics.scale(animViewerCanvasScale)
   end
-  love.graphics.clear(204 / 255, 204 / 255, 204 / 255)
+
+  -- set animation viewer canvas as current target
+  love.graphics.setCanvas(self.animViewerCanvas)
+  love.graphics.clear(.4, .4, .4, 1.0)
+
+  -- draw animation on animation viewer canvas
+  if self.animViewerCurrentSprite then
+    self.animViewerCurrentSprite:draw((self.animViewerCanvas:getPixelWidth() / animViewerCanvasScale) / 2, (self.animViewerCanvas:getPixelHeight() / animViewerCanvasScale) / 2)
+  end
+
   if animViewerCanvasScale > 1 then
     love.graphics.pop()
   end
+
+  -- set canvas to screen canvas
   love.graphics.setCanvas()
   imgui.Render()
 end

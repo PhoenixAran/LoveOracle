@@ -114,7 +114,7 @@ return makeModuleFunction(function(spriteBank)
   -- #substrip down
   ab:addSpriteFrame(7, 7)
   ab:addSpriteFrame(8, 7)
-  ab:buildSubstrip('down')
+  ab:buildSubstrip('down', true)
   -- #substrip left
   ab:addSpriteFrame(5, 7)
   ab:addSpriteFrame(6, 7)

@@ -1,5 +1,7 @@
 local Class = require 'lib.class'
 
+local DEFAULT_KEY = 'default'
+
 -- sprite animation instance
 ---@class SpriteAnimation
 ---@field spriteFrames table
@@ -60,7 +62,7 @@ end
 function SpriteAnimation:getSpriteFrames(substripKey)
   if substripKey == nil then
     if self.substrips then
-      return self.spriteFrames[1]
+      return self.spriteFrames[DEFAULT_KEY]
     end
     return self.spriteFrames
   else
@@ -74,7 +76,7 @@ end
 function SpriteAnimation:getTimedActions(substripKey)
   if substripKey == nil then
     if self.substrips then
-      return self.timedActions[1]
+      return self.timedActions[DEFAULT_KEY]
     end
     return self.timedActions
   else
