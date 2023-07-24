@@ -78,7 +78,6 @@ local ContentViewer = Class {
     self.animViewerBuilderSelect = { }
     self.animViewerBuilderIdx = 1
     self.animViewerCurrentBuilder = nil
-    self.animViewerSpriteEntity = nil
 
     self.animViewerAnimationSelect = { }
     self.animViewerAnimationSelectIdx = 1
@@ -93,6 +92,7 @@ local ContentViewer = Class {
     self.animViewerTick = 1
     self.animViewerPlaying = false
     self.animViewerCurrentSprite = nil
+    self.animViewerSpriteEntity = nil
 
     --self.entityScriptList = { }
   end
@@ -174,7 +174,7 @@ function ContentViewer:update(dt)
 
     if self.animViewerCurrentSource == AnimationSource.Builder then
       if lume.count(self.animViewerBuilderSelect) > 0 then
-        if imgui.BeginCombo('Entity', self.animViewerBuilderSelect[self.animViewerBuilderIdx]) then
+        if imgui.BeginCombo('Builder', self.animViewerBuilderSelect[self.animViewerBuilderIdx]) then
           for k, v in ipairs(self.animViewerBuilderSelect) do
             local isSelected = self.animViewerBuilderIdx == k
 
@@ -182,7 +182,7 @@ function ContentViewer:update(dt)
               -- update animation builder source
               self.animViewerBuilderIdx = k
               self.animViewerCurrentBuilder = SpriteBank.builders[v]
-              
+
               -- update animation select
               lume.clear(self.animViewerAnimationSelect)
               self.animViewerAnimationSelectIdx = 1
@@ -190,6 +190,10 @@ function ContentViewer:update(dt)
               if lume.any(self.animViewerAnimationSelect) then
                 self.animViewerCurrentAnimation = self.animViewerCurrentBuilder.animations[lume.first(self.animViewerAnimationSelect)]
               end
+
+              -- reset anim playing variables
+              self.animViewerTick = 1
+              self.animViewerFrameIndex = 1
             end
 
             if isSelected then
@@ -207,7 +211,7 @@ function ContentViewer:update(dt)
       if imgui.BeginCombo('Animation', self.animViewerAnimationSelect[self.animViewerAnimationSelectIdx]) then
         for k, v in ipairs(self.animViewerAnimationSelect) do
           local isSelected = self.animViewerAnimationSelectIdx == k
-          
+
           if imgui.Selectable(self.animViewerAnimationSelect[k], isSelected) then
             -- update animation select
             self.animViewerAnimationSelectIdx = k
@@ -220,6 +224,10 @@ function ContentViewer:update(dt)
             -- reset anim playing variables
             self.animViewerTick = 1
             self.animViewerFrameIndex = 1
+          end
+
+          if isSelected then
+            imgui.SetItemDefaultFocus()
           end
         end
         imgui.EndCombo()
@@ -242,6 +250,10 @@ function ContentViewer:update(dt)
               -- reset anim playing variables
               self.animViewerTick = 1
               self.animViewerFrameIndex = 1
+            end
+
+            if isSelected then
+              imgui.SetItemDefaultFocus()
             end
           end
           imgui.EndCombo()
@@ -340,6 +352,7 @@ function ContentViewer:draw()
   imgui.Render()
 end
 
+
 -- ContentViewer functions
 
 --- reset some fields when the user updates what kind of animation source we are viewing
@@ -357,7 +370,7 @@ function ContentViewer:updateAnimationViewerSource(forceUpdate)
   if source == AnimationSource.Builder then
     local builderKeys = getKeyList(SpriteBank.builders)
     lume.push(self.animViewerBuilderSelect, unpack(builderKeys))
-  
+
     local animationKeys = getKeyList(self.animViewerCurrentBuilder.animations)
     lume.push(self.animViewerAnimationSelect, unpack(animationKeys))
 

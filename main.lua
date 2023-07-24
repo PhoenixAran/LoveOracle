@@ -1,6 +1,3 @@
--- Make sure we are using luaJIT
-assert(require('ffi'), 'LoveOracle requires luaJIT')
-
 math.randomseed(os.time())
 
 local lume = require 'lib.lume'

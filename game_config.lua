@@ -28,7 +28,7 @@ local window = {
   },
   windowConfig = {
     minwidth = 160,
-    minheight = 144,
+    minheight = 144, 
     vsync = true,
     resizable = true
   }
