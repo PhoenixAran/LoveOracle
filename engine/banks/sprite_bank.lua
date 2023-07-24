@@ -70,14 +70,17 @@ function SpriteBank.getSpriteset(key)
   return SpriteBank.spritesets[key]
 end
 
+---@return SpriteRendererBuilder
 function SpriteBank.createSpriteRendererBuilder()
   return SpriteRendererBuilder()
 end
 
+---@return SpriteAnimationBuilder
 function SpriteBank.createSpriteAnimationBuilder()
   return SpriteAnimationBuilder()
 end
 
+---@return SpriteBuilder
 function SpriteBank.createSpriteBuilder()
   return SpriteBuilder()
 end

@@ -307,7 +307,7 @@ function ContentViewer:update(dt)
     else
       self.animViewerCurrentSprite = spriteFrames[self.animViewerFrameIndex]:getSprite()
     end
-  
+
     imgui.End()
   end -- end animation viewer
 end
