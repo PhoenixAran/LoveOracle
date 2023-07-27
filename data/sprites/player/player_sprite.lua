@@ -4,10 +4,11 @@ return makeModuleFunction(function(spriteBank)
   local sb = spriteBank.createSpriteRendererBuilder()
   local ab = spriteBank.createSpriteAnimationBuilder()
 
+
+  -- builder setup
   sb:setDefaultAnimation('idle')
   sb:setFollowZ(true)
 
-  -- animation builder setup
   ab:setSpriteSheet('player')
   ab:setDefaultLoopType('cycle')
   ab:setSubstrips(true)
