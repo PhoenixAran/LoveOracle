@@ -146,7 +146,7 @@ local Player = Class { __includes = MapEntity,
     }
 
     -- entity sprite effect configuration
-    self.effectSprite:setOffset(0, 6)
+    self.shadowOffsetY = 6
     self.shadowVisible = true
 
     -- signal connections

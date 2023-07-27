@@ -53,6 +53,7 @@ local AnimationSource = {
 ---@field animViewerFrameIndex integer
 ---@field animViewerPlaying boolean
 ---@field animViewerCurrentSprite Sprite|CompositeSprite|ColorSprite|PrototypeSprite|nil
+---@field animViewerDrawCenterPoint boolean
 local ContentViewer = Class {
   init = function(self)
     -- animation viewer 
@@ -93,6 +94,7 @@ local ContentViewer = Class {
     self.animViewerPlaying = false
     self.animViewerCurrentSprite = nil
     self.animViewerSpriteEntity = nil
+    self.animViewerDrawCenterPoint = false
 
     --self.entityScriptList = { }
   end
@@ -287,8 +289,9 @@ function ContentViewer:update(dt)
       self.animViewerFrameIndex = 1
     end
 
+    self.animViewerDrawCenterPoint = imgui.Checkbox('Draw Center', self.animViewerDrawCenterPoint)
 
-
+    -- sprite animation logic below
     ---@type any
     local substripValue = nil
     if self.animViewerCurrentDir4 == 'default' then
@@ -337,10 +340,19 @@ function ContentViewer:draw()
   -- set animation viewer canvas as current target
   love.graphics.setCanvas(self.animViewerCanvas)
   love.graphics.clear(.4, .4, .4, 1.0)
+  local animCanvasCenterX = (self.animViewerCanvas:getPixelWidth() / animViewerCanvasScale) / 2
+  local animCanvasCenterY = (self.animViewerCanvas:getPixelHeight() / animViewerCanvasScale) / 2
 
   -- draw animation on animation viewer canvas
   if self.animViewerCurrentSprite then
-    self.animViewerCurrentSprite:draw((self.animViewerCanvas:getPixelWidth() / animViewerCanvasScale) / 2, (self.animViewerCanvas:getPixelHeight() / animViewerCanvasScale) / 2)
+    self.animViewerCurrentSprite:draw(animCanvasCenterX, animCanvasCenterY)
+  end
+
+  -- draw center point
+  if self.animViewerDrawCenterPoint then
+    local crosshairLen = 6
+    love.graphics.line(animCanvasCenterX,animCanvasCenterX - (crosshairLen / 2), animCanvasCenterX,animCanvasCenterY + (crosshairLen / 2))
+    love.graphics.line(animCanvasCenterX - (crosshairLen / 2),animCanvasCenterY, animCanvasCenterX + (crosshairLen / 2),animCanvasCenterY)
   end
 
   if animViewerCanvasScale > 1 then

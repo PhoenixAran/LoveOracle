@@ -59,6 +59,12 @@ end
 ---@field groundObserver GroundObserver
 ---@field combat Combat
 ---@field effectSprite AnimatedSpriteRenderer
+---@field shadowOffsetX number offset X when effect sprite is playing shadow animation
+---@field shadowOffsetY number offset Y when effect sprite is playing shadow animation
+---@field rippleOffsetX number offset X when effect sprite is playing ripple animation
+---@field rippleOffsetY number offset y when effect sprite is playing ripple animation
+---@field grassOffsetX number offset x when effect sprite is playing grass animation
+---@field grassOffsetY number offset y when effect sprite is playing grass animation
 ---@field spriteFlasher SpriteFlasher
 ---@field sprite SpriteRenderer | AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
@@ -73,7 +79,7 @@ end
 ---@field grassVisible boolean
 ---@field onHurt function
 ---@field onBump function
----@field moveFilter function filter for move function in Physics:move()
+---@field moveFilter function filter for move function in Physics:move()\
 local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -120,14 +126,14 @@ local MapEntity = Class { __includes = Entity,
     self.persistant = false
     self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
     self.animationDirection4 = args.direction -- will be used as substrip key if syncDirectionWithAnimation is true
-    -- shadow, ripple, and grass effects
-    -- TODO finish ripple and grass effects
+    
+    -- effect sprite animations configurations
     self.shadowVisible = true
-    --self.shadowOffsetX, self.shadowOffsetY = 0, 0
+    self.shadowOffsetX, self.shadowOffsetY = 0, 0
     self.rippleVisible = true
-    --self.rippleOffsetX, self.rippleOffsetY = 0, 0
+    self.rippleOffsetX, self.rippleOffsetY = 0, 0
     self.grassVisible = false
-    --self.grassOffsetX, self.grassOffsetY = 0, 0
+    self.grassOffsetX, self.grassOffsetY = 0, 0
   end
 }
 
@@ -428,17 +434,27 @@ end
 function MapEntity:updateEntityEffectSprite(dt)
   if self.shadowVisible and self:isInAir() then
     if self.effectSprite:getCurrentAnimationKey() ~= 'shadow' or not self.effectSprite:isVisible() then
+      self.effectSprite:setOffset(self.shadowOffsetX, self.shadowOffsetY)
       self.effectSprite:play('shadow')
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = .5
     end
   elseif self.rippleVisible and self.groundObserver.inPuddle then
-    if self.effectSprite:getCurrentAnimationKey() ~= 'puddle' or not self.effectSprite:isVisible() then
+    if self.effectSprite:getCurrentAnimationKey() ~= 'ripple' or not self.effectSprite:isVisible() then
+      self.effectSprite:setOffset(self.rippleOffsetX, self.shadowOffsetY)
       self.effectSprite:play('ripple')
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = 1
     end
+  elseif self.grassVisible and self.groundObserver.inGrass then
+    if self.effectSprite:getCurrentAnimationKey() ~= 'grass' or not self.effectSprite:isVisible() then
+      self.effectSprite:setOffset(self.grassOffsetX, self.grassOffsetY)
+      self.effectSprite:play('grass')
+      self.effectSprite:setVisible(true)
+      self.effectSprite.alpha = 1
+    end
   elseif self.effectSprite:isVisible() then
+    self.effectSprite:setOffset(0, 0)
     self.effectSprite:stop()
     self.effectSprite:setVisible(false)
   end
