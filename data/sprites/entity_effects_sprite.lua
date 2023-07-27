@@ -17,20 +17,20 @@ return makeModuleFunction(
     builder:addAnimation('shadow', sb:build())
 
     -- @animation ripples
-    sb:addCompositeSprite(5, 3, -5, -5)
-    sb:addCompositeSprite(6, 3, -11, -5)
+    sb:addCompositeSprite(5, 3, -5 + 8, -5)
+    sb:addCompositeSprite(6, 3, -11 + 8, -5)
     sb:addCompositeFrame(0, 0, 0, 0, 8)
 
-    sb:addCompositeSprite(5, 3, -6, -5)
-    sb:addCompositeSprite(6, 3, -10, -5)
+    sb:addCompositeSprite(5, 3, -6 + 8, -5)
+    sb:addCompositeSprite(6, 3, -10 + 8, -5)
     sb:addCompositeFrame(0, 0, 0, 0, 8)
 
-    sb:addCompositeSprite(5, 3, -7, -4)
-    sb:addCompositeSprite(6, 3, -9, -4)
+    sb:addCompositeSprite(5, 3, -7 + 8, -4)
+    sb:addCompositeSprite(6, 3, -9 + 8, -4)
     sb:addCompositeFrame(0, 0, 0, 0, 8)
 
-    sb:addCompositeSprite(5, 3, -8, -3)
-    sb:addCompositeSprite(6, 3, -8, -3)
+    sb:addCompositeSprite(5, 3, -8 + 8, -3)
+    sb:addCompositeSprite(6, 3, -8 + 8, -3)
     sb:addCompositeFrame(0, 0, 0, 0, 8)
     -- BUILD rippples
     builder:addAnimation('ripple', sb:build())
