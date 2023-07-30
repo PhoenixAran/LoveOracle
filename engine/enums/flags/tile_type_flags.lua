@@ -25,6 +25,7 @@ TileTypeFlags:makeEnumMap {
   Stairs = 'stairs',
   Ladder = 'ladder',
   Puddle = 'puddle',
+  Grass = 'grass',
   Hole = 'hole',
   Water = 'water',
   DeepWater = 'deep_water',

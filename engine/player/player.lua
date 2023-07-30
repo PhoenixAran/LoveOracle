@@ -70,7 +70,7 @@ local Player = Class { __includes = MapEntity,
       x = -12 / 2,
       y = -13 / 2,
       w = 12,
-      h = 12,
+      h = 13,
       offsetX = 0,
       offsetY = -2
     })
@@ -78,6 +78,9 @@ local Player = Class { __includes = MapEntity,
     self:setCollidesWithLayer('tile')
     -- tile collision
     self:setCollisionTile('wall')
+    
+    -- ground observer
+    self.groundObserver:setOffset(0, 4)
 
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
@@ -99,7 +102,7 @@ local Player = Class { __includes = MapEntity,
       ['player_swing_state'] = PlayerSwingState(self),
       ['player_push_state'] = PlayerPushState(self),
     }
-
+    
     -- use direction variables are useful for finding what way player
     -- is holding dpad when they are not allowed to move (like during a sword swing)
     -- if the player can move, it will match the direction they are moving in
@@ -706,11 +709,15 @@ function Player:draw()
       item:drawBelow()
     end
   end
-  if self.effectSprite:isVisible() then
+  local grassEffectPlaying = self.effectSprite:getCurrentAnimationKey() == 'grass'
+  if self.effectSprite:isVisible() and not grassEffectPlaying then
     self.effectSprite:draw()
   end
   if self.sprite:isVisible() then
     self.sprite:draw()
+  end
+  if self.effectSprite:isVisible() and grassEffectPlaying then
+    self.effectSprite:draw()
   end
   for _, item in pairs(self.items) do
     if item.drawAbove and item:isVisible() then

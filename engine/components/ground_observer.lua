@@ -63,6 +63,13 @@ function GroundObserver:getType()
   return 'ground_observer'
 end
 
+---@param x number
+---@param y number
+function GroundObserver:setOffset(x, y)
+  self.pointOffsetX = x
+  self.pointOffsetY = y
+end
+
 function GroundObserver:update(dt)
   self:reset()
   local ex, ey = self.entity:getPosition()

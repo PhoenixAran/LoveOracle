@@ -132,8 +132,9 @@ local MapEntity = Class { __includes = Entity,
     self.shadowOffsetX, self.shadowOffsetY = 0, 0
     self.rippleVisible = true
     self.rippleOffsetX, self.rippleOffsetY = 0, 0
-    self.grassVisible = false
+    self.grassVisible = true
     self.grassOffsetX, self.grassOffsetY = 0, 0
+    
   end
 }
 
@@ -439,6 +440,7 @@ function MapEntity:updateEntityEffectSprite(dt)
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = .5
     end
+    self.effectSprite:update(dt)
   elseif self.rippleVisible and self.groundObserver.inPuddle then
     if self.effectSprite:getCurrentAnimationKey() ~= 'ripple' or not self.effectSprite:isVisible() then
       self.effectSprite:setOffset(self.rippleOffsetX, self.shadowOffsetY)
@@ -446,6 +448,7 @@ function MapEntity:updateEntityEffectSprite(dt)
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = 1
     end
+    self.effectSprite:update(dt)
   elseif self.grassVisible and self.groundObserver.inGrass then
     if self.effectSprite:getCurrentAnimationKey() ~= 'grass' or not self.effectSprite:isVisible() then
       self.effectSprite:setOffset(self.grassOffsetX, self.grassOffsetY)
@@ -453,12 +456,13 @@ function MapEntity:updateEntityEffectSprite(dt)
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = 1
     end
+    
+    self.effectSprite:update(dt)
   elseif self.effectSprite:isVisible() then
     self.effectSprite:setOffset(0, 0)
     self.effectSprite:stop()
     self.effectSprite:setVisible(false)
   end
-  self.effectSprite:update(dt)
 end
 
 -- signal callbacks
