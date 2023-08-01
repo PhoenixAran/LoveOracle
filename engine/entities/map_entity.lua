@@ -53,6 +53,8 @@ local function filterForTopTiles(tiles)
   end
 end
 
+local GRASS_ANIMATION_UPDATE_INTERVAL = 3
+
 ---@class MapEntity : Entity
 ---@field health Health
 ---@field movement Movement
@@ -65,6 +67,7 @@ end
 ---@field rippleOffsetY number offset y when effect sprite is playing ripple animation
 ---@field grassOffsetX number offset x when effect sprite is playing grass animation
 ---@field grassOffsetY number offset y when effect sprite is playing grass animation
+---@field grassMovementTick integer current number of frames entity has been moving when effect sprite is showing grass effect
 ---@field spriteFlasher SpriteFlasher
 ---@field sprite SpriteRenderer|AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
@@ -134,7 +137,7 @@ local MapEntity = Class { __includes = Entity,
     self.rippleOffsetX, self.rippleOffsetY = 0, 0
     self.grassVisible = true
     self.grassOffsetX, self.grassOffsetY = 0, 0
-    
+    self.grassMovementTick = 0
   end
 }
 
@@ -458,9 +461,18 @@ function MapEntity:updateEntityEffectSprite(dt)
       self.effectSprite:play('grass')
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = 1
+      self.grassMovementTick = 0
+      -- initial update when playing the grass animation
+      self.effectSprite:update(dt)
     end
     
-    self.effectSprite:update(dt)
+    if self.movement.vectorX ~= 0 or self.movement.vectorY ~= 0 then
+      self.grassMovementTick = self.grassMovementTick + 1
+      if self.grassMovementTick > GRASS_ANIMATION_UPDATE_INTERVAL then
+        self.grassMovementTick = 0
+        self.effectSprite:update(dt)
+      end
+    end
   elseif self.effectSprite:isVisible() then
     self.effectSprite:setOffset(0, 0)
     self.effectSprite:stop()

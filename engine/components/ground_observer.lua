@@ -20,7 +20,7 @@ local TileTypes = TileTypeFlags.enumMap
 ---@field inWater boolean
 ---@field inHole boolean
 ---@field onPlatform boolean
----@field queryPointFilter function
+---@field queryFilter function
 ---@field visitedTileIndices table<integer, boolean>
 local GroundObserver = Class { __includes = {Component},
   init = function(self, entity, args)
@@ -41,7 +41,7 @@ local GroundObserver = Class { __includes = {Component},
     self.inPuddle = false
 
     local parentEntity = self.entity
-    self.queryPointFilter = function(item)
+    self.queryFilter = function(item)
       if (item.isTile and item:isTile()) or (item.getType and item:getType() == 'platform') then
         local entityZMin, entityZMax = parentEntity.zRange.min, parentEntity.zRange.max
         local itemZMin, itemZMax = item.zRange.min, item.zRange.max
@@ -70,11 +70,15 @@ function GroundObserver:setOffset(x, y)
   self.pointOffsetY = y
 end
 
+local QUERY_RECT_LENGTH = 1.5
 function GroundObserver:update(dt)
   self:reset()
   local ex, ey = self.entity:getPosition()
-  local items, len = Physics:queryPoint(ex + self.pointOffsetX, ey + self.pointOffsetY, self.queryPointFilter)
+  ex = ex + self.pointOffsetX
+  ey = ey + self.pointOffsetY
+  local items, len = Physics:queryRect(ex - QUERY_RECT_LENGTH / 2, ey - QUERY_RECT_LENGTH / 2, QUERY_RECT_LENGTH, QUERY_RECT_LENGTH, self.queryFilter)
   lume.sort(items, zRangeMaxSort)
+  -- TODO just get the closest one?
   if 0 < len then
     for _, item in ipairs(items) do
       if item:isTile() then

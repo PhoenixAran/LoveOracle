@@ -130,7 +130,6 @@ function AnimatedSpriteRenderer:update(dt)
   end
   -- some animation can have no spriteframes and just action frames
   if #spriteFrames == 0 then return end
-
   local currentFrame = spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
   if currentFrame:getDelay() < self.currentTick then

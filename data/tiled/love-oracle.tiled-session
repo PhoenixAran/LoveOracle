@@ -63,8 +63,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 380,
-                "y": 238
+                "x": 379.75,
+                "y": 237.75
             }
         },
         "tilesets/proto_dungeon.json": {
@@ -84,7 +84,7 @@
             "scaleInEditor": 1
         },
         "tilesets/proto_environment.tsj": {
-            "scaleInDock": 1,
+            "scaleInDock": 4,
             "scaleInEditor": 5.5
         }
     },
@@ -96,10 +96,14 @@
     "loadedWorlds": [
         "C:/Users/phoen/test.world"
     ],
+    "map.fixedSize": true,
+    "map.height": 16,
     "map.lastUsedExportFilter": "JSON map files (*.json)",
     "map.lastUsedFormat": "json",
+    "map.orientation": 1,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
+    "map.width": 16,
     "mapScene.enableWorlds": true,
     "openFiles": [
         "tilesets/proto_environment.tsj",
@@ -123,6 +127,7 @@
         "C:/Users/phoen/Downloads/desert.json",
         "C:/Program Files/Tiled/examples/desert.tmx"
     ],
+    "tileset.embedInMap": false,
     "tileset.lastUsedExportFilter": "Lua files (*.lua)",
     "tileset.lastUsedFilter": "JSON tileset files (*.json)",
     "tileset.lastUsedFormat": "json",
@@ -131,5 +136,8 @@
     "tileset.tileSize": {
         "height": 16,
         "width": 16
-    }
+    },
+    "tileset.transparentColor": "#ff00ff",
+    "tileset.type": 0,
+    "tileset.useTransparentColor": false
 }

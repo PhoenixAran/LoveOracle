@@ -4,8 +4,8 @@ local DEFAULT_KEY = 'default'
 
 -- sprite animation instance
 ---@class SpriteAnimation
----@field spriteFrames table
----@field timedActions table
+---@field spriteFrames SpriteFrame[]
+---@field timedActions function[]
 ---@field substrips boolean
 ---@field loopType string
 local SpriteAnimation = Class {
@@ -59,6 +59,8 @@ function SpriteAnimation:getType()
   return 'sprite_animation'
 end
 
+---@param substripKey string|integer
+---@return SpriteFrame[]
 function SpriteAnimation:getSpriteFrames(substripKey)
   if substripKey == nil then
     if self.substrips then
