@@ -29,6 +29,7 @@ end
 function BaseScreen:drawMemory()
   local monogram = AssetManager.getFont('baseScreenDebug')
   love.graphics.setFont(monogram)
+---@diagnostic disable-next-line: redundant-parameter
   local memory = ("%d kbs"):format(collectgarbage("count", 10, 10))
   love.graphics.setColor(1, 1, 1)
   love.graphics.printf(memory, 0, 120, 200, 'left')

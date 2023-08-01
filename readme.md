@@ -1,8 +1,9 @@
 # Zelda Oracle
 
 Fan made Zelda game.
-Requires [LOVE 11.4](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch.io/tiled).  
-[love-imgui](https://github.com/MikuAuahDark/love-imgui) binaries will be required for some screens.
+Requires [LOVE 11.4](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch.io/tiled).   
+
+[love-imgui](https://github.com/MikuAuahDark/love-imgui) binaries will be required for some screens. See given repository for build instructions.
 ## Libraries
 - [baton](https://github.com/tesselode/baton)
 - [bump-niji](https://github.com/oniietzschan/bump-niji)

@@ -66,7 +66,7 @@ end
 ---@field grassOffsetX number offset x when effect sprite is playing grass animation
 ---@field grassOffsetY number offset y when effect sprite is playing grass animation
 ---@field spriteFlasher SpriteFlasher
----@field sprite SpriteRenderer | AnimatedSpriteRenderer
+---@field sprite SpriteRenderer|AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
 ---@field moveCollisions any[]
 ---@field collisionTiles integer
@@ -202,8 +202,10 @@ function MapEntity:setAnimationDirection4(value)
   self.animationDirection4 = value
   if self:doesSyncDirectionWithAnimation() and self.sprite ~= nil then
     assert(self.sprite:getType() == 'animated_sprite_renderer')
-    if self.sprite:getSubstripKey() ~= value then
-      self.sprite:setSubstripKey(value)
+    local animatedSprite = self.sprite
+    ---@cast animatedSprite AnimatedSpriteRenderer
+    if animatedSprite:getSubstripKey() ~= value then
+      animatedSprite:setSubstripKey(value)
     end
   end
 end
@@ -388,6 +390,7 @@ function MapEntity:hurt(damageInfo)
     damageInfo = DamageInfo()
     damageInfo.damage = damage
   end
+  ---@cast damageInfo -integer
   self:resetCombatVariables()
   if damageInfo:applyHitstun() then
     self:setHitstun(damageInfo.hitstunTime)

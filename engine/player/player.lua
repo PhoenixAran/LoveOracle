@@ -689,6 +689,7 @@ function Player:update(dt)
   self.movement:update(dt)
   local tvx, tvy = self:move(dt)
   --check if we are pushing a tile
+  
   local EPSILON = 0.001
   if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then
     local movementDir8 = self.movement:getDirection8()

@@ -1,5 +1,3 @@
-math.randomseed(os.time())
-
 local lume = require 'lib.lume'
 local gameConfig = require 'game_config'
 local ContentControl = require 'engine.utils.content_control'
@@ -14,10 +12,22 @@ local Singletons = require 'engine.singletons'
 local console = require 'lib.console'
 require 'engine.console_commands'
 
-print('Oracle Engine ' .. gameConfig.version)
+print('Ziggy Engine ' .. gameConfig.version)
+print('   |\\|\\')
+print('  ..    \\       .')
+print('o--     \\\\    / @)')
+print(' v__///\\\\\\\\__/ @')
+print('   {           }')
+print('    {  } \\\\\\{  }')
+print('    <_|      <_|')
+
+print()
+
 print("OS: " .. love.system.getOS())
 print(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
 print('Save Directory: ' .. love.filesystem.getSaveDirectory())
+
+print()
 
 --[[
      Defining helper function used in data scripting
