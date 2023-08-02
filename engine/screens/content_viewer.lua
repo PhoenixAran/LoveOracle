@@ -2,7 +2,6 @@ local Class = require 'lib.class'
 local imgui = require 'imgui'
 local lume = require 'lib.lume'
 local Direction4 = require 'engine.enums.direction4'
-
 local SpriteBank = require 'engine.banks.sprite_bank'
 
 ---@param t table

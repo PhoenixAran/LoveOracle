@@ -680,7 +680,6 @@ function Player:update(dt)
   -- update states
   self:updateStates()
 
-
   self:updateEquippedItems(dt)
   self:updateEntityEffectSprite(dt)
 

@@ -59,7 +59,7 @@ function SpriteAnimation:getType()
   return 'sprite_animation'
 end
 
----@param substripKey string|integer
+---@param substripKey string|integer|nil
 ---@return SpriteFrame[]
 function SpriteAnimation:getSpriteFrames(substripKey)
   if substripKey == nil then

@@ -281,10 +281,6 @@ function MapEntity:isInAir()
   return self:getZPosition() > 0
 end
 
-function MapEntity:isOnGround()
-  return not self:isInAir()
-end
-
 ---@param dt number delta time
 ---@return number tvx translation vector x
 ---@return number tvy translation vector y

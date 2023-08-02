@@ -205,6 +205,10 @@ function Entity:isInAir()
   return false
 end
 
+function Entity:isOnGround()
+  return not self:isInAir()
+end
+
 ---debug draw
 function Entity:debugDraw()
   --love draws from the upper left corner so we use our bump coordinates
