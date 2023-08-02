@@ -128,6 +128,15 @@ function Entities:removeTileEntity(x, y, layer)
     self:emit('tileEntityRemoved', tileEntity)
     tileEntity:release()
   end
+
+  -- update top tile
+  for i = lume.count(self.tileEntities), 1, -1 do
+    tileEntity = self.tileEntities[i][tileIndex]
+    if tileEntity then
+      tileEntity.topTile = true
+      break
+    end
+  end
 end
 
 ---get entity by name
@@ -147,7 +156,7 @@ function Entities:getTileEntity(x, y, layer)
   return self.tileEntities[layer][tileIndex]
 end
 
---- get the top tile at a given map index
+--- get the top tile at a given position
 ---@param x number
 ---@param y number
 ---@return Tile?
@@ -176,10 +185,10 @@ end
 
 ---draws tile entities
 ---if given a cull rect, will only draw tiles within the cull rectangle
----@param x number
----@param y number
----@param w integer
----@param h integer
+---@param x number?
+---@param y number?
+---@param w integer?
+---@param h integer?
 function Entities:drawTileEntities(x, y, w, h)
   if x == nil then
     for i, layer in ipairs(self.tileEntities) do
@@ -212,5 +221,22 @@ function Entities:drawEntities()
   lume.sort(self.entitiesDraw, ySort)
   lume.each(self.entitiesDraw, 'draw')
 end
+
+
+-- signal callbacks
+
+---callback when an entity is destroyed
+---@param entity Entity
+function Entities:onEntityDestroyed(entity)
+  self:removeEntity(entity)
+end
+
+---callback when a tile entity is destroyed. 
+---this will update the current toptile on the given tile entity's tile index
+---@param tileEntity Tile
+function Entities:onTileEntityDestroyed(tileEntity)
+  self:removeTileEntity(tileEntity.tileIndexX, tileEntity.tileIndexY, tileEntity.layer)
+end
+
 
 return Entities

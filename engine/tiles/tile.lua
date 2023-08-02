@@ -16,6 +16,7 @@ end
 ---@field index integer index in 1d array
 ---@field tileIndexX integer x index in 2d array
 ---@field tileIndexY integer y index in 2d array
+---@field topTile boolean if this given tile is the top tile
 ---@field sprite TileSpriteRenderer
 local Tile = Class { __includes = Entity,
   init = function(self, tileData, index, tileIndexX, tileIndexY, layer)
@@ -39,7 +40,12 @@ local Tile = Class { __includes = Entity,
     self.tileIndexY = tileIndexY
     self.layer = layer
     self.sprite = tileData:getSprite()
+    self.topTile = false
     self:setPhysicsLayer('tile')
+
+    -- signals
+    self:signal('tileDestroyed')
+    self:signal('entityCreated')
   end
 }
 
@@ -82,6 +88,10 @@ end
 function Tile:draw()
   local x, y = self:getPosition()
   self.sprite:draw(x, y)
+end
+
+function Tile:isTopTile()
+  return self.topTile
 end
 
 return Tile

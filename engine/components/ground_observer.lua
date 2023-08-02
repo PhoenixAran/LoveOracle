@@ -5,6 +5,7 @@ local Component = require 'engine.entities.component'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local TileTypes = TileTypeFlags.enumMap
+local vector = require 'lib.vector'
 
 ---@class GroundObserver : Component
 ---@field pointOffsetX number
@@ -21,6 +22,7 @@ local TileTypes = TileTypeFlags.enumMap
 ---@field inHole boolean
 ---@field onPlatform boolean
 ---@field queryFilter function
+---@field bumpSorter function
 ---@field visitedTileIndices table<integer, boolean>
 local GroundObserver = Class { __includes = {Component},
   init = function(self, entity, args)
@@ -40,14 +42,28 @@ local GroundObserver = Class { __includes = {Component},
     self.inHole = false
     self.inPuddle = false
 
+    local groundObserver = self
     local parentEntity = self.entity
+
     self.queryFilter = function(item)
       if (item.isTile and item:isTile()) or (item.getType and item:getType() == 'platform') then
+        if item.isTopTile and not item:isTopTile() then
+          return false
+        end
         local entityZMin, entityZMax = parentEntity.zRange.min, parentEntity.zRange.max
         local itemZMin, itemZMax = item.zRange.min, item.zRange.max
         return entityZMax > itemZMin and itemZMax > entityZMin
       end
       return false
+    end
+
+    self.bumpSorter = function(a, b)
+      local ex, ey = groundObserver.entity:getPosition()
+      ex = ex + groundObserver.pointOffsetX
+      ey = ey + groundObserver.pointOffsetY
+      local distanceA = vector.dist(ex, ey, a.x, a.y)
+      local distanceB = vector.dist(ex, ey, b.x, b.y)
+      return distanceA <= distanceB
     end
     self.visitedTileIndices = { }
   end
@@ -77,8 +93,7 @@ function GroundObserver:update(dt)
   ex = ex + self.pointOffsetX
   ey = ey + self.pointOffsetY
   local items, len = Physics:queryRect(ex - QUERY_RECT_LENGTH / 2, ey - QUERY_RECT_LENGTH / 2, QUERY_RECT_LENGTH, QUERY_RECT_LENGTH, self.queryFilter)
-  lume.sort(items, zRangeMaxSort)
-  -- TODO just get the closest one?
+  lume.sort(items, self.bumpSorter)
   if 0 < len then
     for _, item in ipairs(items) do
       if item:isTile() then

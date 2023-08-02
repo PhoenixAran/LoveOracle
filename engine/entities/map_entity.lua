@@ -43,16 +43,6 @@ local function roomEdgeCollisionBoxMoveFilter(item, other)
   return nil
 end
 
-local _tileDict = { }
--- TODO
----@param tiles Tile[]
-local function filterForTopTiles(tiles)
-  -- find pairs
-  for _, tile in ipairs(tiles) do
-    
-  end
-end
-
 local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 
 ---@class MapEntity : Entity
@@ -226,7 +216,7 @@ end
 
 function MapEntity:die()
   self:release()
-  self:emit('entityDestroyed')
+  self:emit('entityDestroyed', self)
 end
 
 -- health component pass throughs

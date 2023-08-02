@@ -100,6 +100,21 @@ function Room:load(entities)
       end
     end
   end
+
+  -- TODO: See if we can set this via scripting in Tiled editor
+  for x = self:getTopLeftPositionX(), self:getBottomRightPositionX() do
+    for y = self:getTopLeftPositionY(), self:getBottomRightPositionY() do
+      -- go from top to bottom
+      for layerIndex = lume.count(entities.tileEntities), 1, -1 do
+        local tileEntity = entities:getTileEntity(x, y, layerIndex)
+        if tileEntity then
+          tileEntity.topTile = true
+          break
+        end
+      end
+    end
+  end
+
   self.animatedTilesCollectionCreated = true
   -- add room edges
   -- make left room edge
