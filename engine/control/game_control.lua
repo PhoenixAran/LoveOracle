@@ -110,6 +110,9 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
+
+  -- set singleton
+  Singletons.roomControl = self.roomControl
 end
 
 function GameControl:update(dt)

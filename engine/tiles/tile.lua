@@ -5,6 +5,7 @@ local Entity = require 'engine.entities.entity'
 local TileType = require('engine.enums.flags.tile_type_flags').enumMap
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local GRID_SIZE = 16
+local Singletons = require 'engine.singletons'
 
 local function makeTileEntityName(tileIndexX, tileIndexY, layer)
   return tostring(tileIndexX) .. '_' .. tostring(tileIndexY) .. '-' .. tostring(layer)
@@ -91,7 +92,7 @@ function Tile:draw()
 end
 
 function Tile:isTopTile()
-  return self.topTile
+  return Singletons.roomControl:isTopTile(self)
 end
 
 return Tile

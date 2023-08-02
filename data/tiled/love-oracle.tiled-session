@@ -63,8 +63,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 379.75,
-                "y": 237.75
+                "x": 499.5,
+                "y": 69.5
             }
         },
         "tilesets/proto_dungeon.json": {

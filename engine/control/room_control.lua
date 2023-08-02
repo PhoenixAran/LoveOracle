@@ -121,6 +121,11 @@ function RoomControl:draw()
   end
 end
 
+---@param tile Tile
+function RoomControl:isTopTile(tile)
+  return self.entities:isTopTile(tile)
+end
+
 ---function thats gets called when a Room's roomTransitionRequest signal is emitted
 ---@param newRoom Room
 ---@param transitionStyle string

@@ -88,11 +88,13 @@ function love.load(args)
 
   -- setup startup screen
   print('Startup Screen: ' .. gameConfig.startupScreen)
-  if gameConfig.showSplash then
-    screenManager:enter( require('engine.screens.splash_screen')(gameConfig.startupScreen))
-  else
-    screenManager:enter( require(gameConfig.startupScreen)() )
-  end
+  --TODO: splash screen
+  -- if gameConfig.showSplash then
+  --   screenManager:enter( require('engine.screens.splash_screen')(gameConfig.startupScreen))
+  -- else
+  --   screenManager:enter( require(gameConfig.startupScreen)() )
+  -- end
+  screenManager:enter(require(gameConfig.startupScreen))
 end
 
 function love.update(dt)
