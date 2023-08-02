@@ -80,7 +80,7 @@ function Item:isUsable()
   elseif player:isInAir() and not self.useParameters.usableWhileJumping then
     return false
   elseif self.player:getWeaponState() ~= nil and
-          self.player:getWeaponState():getType() == 'sword' and -- TODO add sword state checks as time goes on
+          self.player:getWeaponState():getType() == 'sword' and -- TODO: add sword state checks as time goes on
           not self.useParameters.usableWithSword then
     return false
   end

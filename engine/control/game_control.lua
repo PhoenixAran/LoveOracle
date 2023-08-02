@@ -32,10 +32,10 @@ local GameControl = Class { __includes = SignalObject,
     local w = GameConfig.window.monocleConfig.windowWidth
     local h = GameConfig.window.monocleConfig.windowHeight - GRID_SIZE
     self.camera = Camera(w/2,h/2, w, h)
-    self.camera:setFollowStyle('NO_DEADZONE')
     self.map = nil
     self.roomControl = nil
     self.gameStateStack = GameStateStack(self)
+    Singletons.camera = self.camera
   end
 }
 

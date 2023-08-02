@@ -25,6 +25,7 @@ local Physics = require 'engine.physics'
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
 local PlayerHitstunState = require 'engine.player.condition_states.player_hitstun_state'
 -- environment states
+local PlayerGrassEnvironmentState = require 'engine.player.environment_states.player_grass_environment_state'
 local PlayerJumpEnvironmentState = require 'engine.player.environment_states.player_jump_environment_state'
 -- weapon states
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
@@ -97,6 +98,7 @@ local Player = Class { __includes = MapEntity,
     self.stateCollection = {
       -- condition states
       -- environment states
+      ['player_grass_environment_state'] = PlayerGrassEnvironmentState(self),
       ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self),
       -- weapon states
       ['player_swing_state'] = PlayerSwingState(self),
@@ -456,10 +458,7 @@ function Player:getDesiredNaturalState()
     return self:getStateFromCollection('player_grass_environment_state')
   elseif self:isInAir() then
     return self:getStateFromCollection('player_jump_environment_state')
-  elseif go.inGrass then
-    return
   end
-
   -- TODO implement rest of environment states
   return nil
 end
@@ -677,6 +676,8 @@ function Player:update(dt)
 
   self:integrateStateParameters()
   self:requestNaturalState()
+  
+  -- update states
   self:updateStates()
 
 
