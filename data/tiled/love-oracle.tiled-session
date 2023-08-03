@@ -60,11 +60,11 @@
             }
         },
         "maps/test_map_1.tmj": {
-            "scale": 2,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 499.5,
-                "y": 69.5
+                "x": -64,
+                "y": 108.5
             }
         },
         "tilesets/proto_dungeon.json": {
@@ -106,18 +106,15 @@
     "map.width": 16,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "tilesets/proto_environment.tsj",
-        "tilesets/proto_dungeon.tsj",
-        "tilesets/proto_dungeon_2.tsj",
         "maps/test_map_1.tmj"
     ],
     "project": "love-oracle.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "maps/test_map_1.tmj",
         "tilesets/proto_environment.tsj",
         "tilesets/proto_dungeon.tsj",
         "tilesets/proto_dungeon_2.tsj",
-        "maps/test_map_1.tmj",
         "maps/test_map_1.json",
         "tilesets/proto_dungeon_2.json",
         "tilesets/proto_dungeon.json",
