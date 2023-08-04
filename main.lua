@@ -94,7 +94,7 @@ function love.load(args)
   -- else
   --   screenManager:enter( require(gameConfig.startupScreen)() )
   -- end
-  screenManager:enter(require(gameConfig.startupScreen))
+  screenManager:enter(require(gameConfig.startupScreen)())
 end
 
 function love.update(dt)
