@@ -50,6 +50,45 @@ return makeModuleFunction(function(spriteBank)
   -- BUILD walk
   sb:addAnimation('walk', ab:build())
 
+  --@animation idle_shield
+  ab:setSubstrips(true)
+  -- #substrip up
+  ab:addSpriteFrame(3, 2)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 2)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 2)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 2)
+  ab:buildSubstrip('right')
+  -- BUILD idle_shield
+  sb:addAnimation('idle_shield', ab:build())
+
+  --@animation walk_shield
+  ab:setSubstrips(true)
+  -- #substrip up
+  ab:addSpriteFrame(3, 2)
+  ab:addSpriteFrame(4, 2)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 2)
+  ab:addSpriteFrame(8, 2)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 2)
+  ab:addSpriteFrame(6, 2)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 2)
+  ab:addSpriteFrame(2, 2)
+  ab:buildSubstrip('right')
+  -- BUILD idle_shield
+  sb:addAnimation('walk_shield', ab:build())
+
+
   -- @animation jump
   ab:setSubstrips(true)
   -- #substrip up
