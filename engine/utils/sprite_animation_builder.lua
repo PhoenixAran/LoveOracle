@@ -184,11 +184,11 @@ function SpriteAnimationBuilder:build()
   local animation = nil
   if self.hasSubstrips then
     animation = SpriteAnimation(self.subFrames, self.subTimedActions, self.loopType, true)
-    self.subFrames = { }
-    self.subTimedActions = { }
   else
     animation = SpriteAnimation(self.frames, self.timedActions, self.loopType, false)
   end
+  self.subFrames = { }
+  self.subTimedActions = { }
   self.frames = { }
   self.timedActions = { }
   self.compositeSprites = { }

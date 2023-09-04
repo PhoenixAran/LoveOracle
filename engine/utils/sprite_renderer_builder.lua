@@ -70,6 +70,9 @@ end
 ---@param key string
 ---@param animation SpriteAnimation
 function SpriteRendererBuilder:addAnimation(key, animation)
+  if self.animations[key] then
+    error(tostring(key) .. ' animation already exists in sprite builder')
+  end
   self.animations[key] = animation
 end
 
