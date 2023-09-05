@@ -167,27 +167,6 @@ return makeModuleFunction(function(spriteBank)
   -- BUILD walk_carry
   sb:addAnimation('walk_carry', ab:build())
 
-  -- @animation push
-  ab:setSubstrips(true)
-  -- #substrip up
-  ab:addSpriteFrame(3, 7)
-  ab:addSpriteFrame(4, 7)
-  ab:buildSubstrip('up')
-  -- #substrip down
-  ab:addSpriteFrame(7, 7)
-  ab:addSpriteFrame(8, 7)
-  ab:buildSubstrip('down', true)
-  -- #substrip left
-  ab:addSpriteFrame(5, 7)
-  ab:addSpriteFrame(6, 7)
-  ab:buildSubstrip('left')
-  -- #substrip right
-  ab:addSpriteFrame(1, 7)
-  ab:addSpriteFrame(2, 7)
-  ab:buildSubstrip('right')
-  -- BUILD push
-  sb:addAnimation('push', ab:build())
-
   -- @animation swim
   ab:setSubstrips(true)
   -- #substrip up
@@ -216,28 +195,84 @@ return makeModuleFunction(function(spriteBank)
   -- BUILD submerged
   sb:addAnimation('submerged', ab:build())
 
-  -- @animation grab
-  -- NOTE SAME AS PULL
+  -- @animation pull
   ab:setSubstrips(true)
-  ab:setLoopType('once')
+  ab:setLoopType('cycle')
   -- #substrip up
-  ab:addSpriteFrame(3, 8)
   ab:addSpriteFrame(4, 8)
   ab:buildSubstrip('up')
   -- #substrip down
-  ab:addSpriteFrame(7, 8)
   ab:addSpriteFrame(8, 8)
   ab:buildSubstrip('down', true)
   -- #substrip left
-  ab:addSpriteFrame(5, 8)
   ab:addSpriteFrame(6, 8)
   ab:buildSubstrip('left')
   -- #substrip right
-  ab:addSpriteFrame(1, 8)
   ab:addSpriteFrame(2, 8)
   ab:buildSubstrip('right')
   -- BUILD grab
+  sb:addAnimation('pull', ab:build())
+
+  -- @animation grab
+  ab:setSubstrips(true)
+  ab:setLoopType('cycle')
+  -- #substrip up
+  ab:addSpriteFrame(3, 8)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 8)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 8)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 8)
+  ab:buildSubstrip('right')
+  -- BUILD pull
   sb:addAnimation('grab', ab:build())
+
+  -- @animation push
+  ab:setSubstrips(true)
+  -- #substrip up
+  ab:addSpriteFrame(3, 7)
+  ab:addSpriteFrame(4, 7)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 7)
+  ab:addSpriteFrame(8, 7)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 7)
+  ab:addSpriteFrame(6, 7)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 7)
+  ab:addSpriteFrame(2, 7)
+  ab:buildSubstrip('right')
+  -- BUILD push
+  sb:addAnimation('push', ab:build())
+
+  -- @animation dig
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(3, 10, 0, 0, 8)
+  ab:addSpriteFrame(4, 10, 0, 0, 16)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 10, 0, 0, 8)
+  ab:addSpriteFrame(8, 10, 0, 0, 16)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 10, 0, 0, 8)
+  ab:addSpriteFrame(6, 10, 0, 0, 16)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 10, 0, 0, 8)
+  ab:addSpriteFrame(2, 10, 0, 0, 16)
+  ab:buildSubstrip('right')
+  -- BUILD dig
+  sb:addAnimation('dig', ab:build())
 
   -- @animation jump
   ab:setSubstrips(true)
