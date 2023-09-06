@@ -18,6 +18,7 @@ return makeModuleFunction(function(spriteBank)
   -- #substrip up
   ab:addSpriteFrame(3, 1)
   ab:buildSubstrip('up')
+  ab:setLoopType('once')
   -- #substrip down
   ab:addSpriteFrame(7, 1)
   ab:buildSubstrip('down', true)
@@ -32,6 +33,7 @@ return makeModuleFunction(function(spriteBank)
 
   -- @animation walk
   ab:setSubstrips(true)
+  ab:setLoopType('cycle')
   -- #substrip up
   ab:addSpriteFrame(4, 1)
   ab:addSpriteFrame(3, 1)
@@ -53,6 +55,7 @@ return makeModuleFunction(function(spriteBank)
 
   --@animation idle_shield
   ab:setSubstrips(true)
+  ab:setLoopType('once')
   -- #substrip up
   ab:addSpriteFrame(3, 2)
   ab:buildSubstrip('up')
@@ -70,6 +73,7 @@ return makeModuleFunction(function(spriteBank)
 
   --@animation walk_shield
   ab:setSubstrips(true)
+  ab:setLoopType('cycle')
   -- #substrip up
   ab:addSpriteFrame(3, 2)
   ab:addSpriteFrame(4, 2)
@@ -91,7 +95,7 @@ return makeModuleFunction(function(spriteBank)
 
   -- @animation idle_shield_block
   ab:setSubstrips(true)
-  ab:setLoopType('cycle')
+  ab:setLoopType('once')
   -- #substrip up
   ab:addSpriteFrame(3, 3)
   ab:buildSubstrip('up')
@@ -126,11 +130,53 @@ return makeModuleFunction(function(spriteBank)
   ab:addSpriteFrame(2, 3)
   ab:addSpriteFrame(1, 3)
   ab:buildSubstrip('right')
-  -- BUILD idle_shield
+  -- BUILD walk_shield_block
   sb:addAnimation('walk_shield_block', ab:build())
+
+  -- @animation idle_shield_block
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(3, 3)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(3, 4)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 3)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 3)
+  ab:buildSubstrip('right')
+  -- BUILD idle_shield_large_block
+  sb:addAnimation('idle_shield_large_block', ab:build())
+
+  -- @animation walk_shield_block
+  ab:setSubstrips(true)
+  ab:setLoopType('cycle')
+  -- #substrip up
+  ab:addSpriteFrame(4, 3)
+  ab:addSpriteFrame(3, 3)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(4, 4)
+  ab:addSpriteFrame(3, 4)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(6, 3)
+  ab:addSpriteFrame(5, 3)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(2, 4)
+  ab:addSpriteFrame(1, 4)
+  ab:buildSubstrip('right')
+  -- BUILD walk_shield_large_block
+  sb:addAnimation('walk_shield_large_block', ab:build())
+
 
   -- @animation idle_carry
   ab:setSubstrips(true)
+  ab:setLoopType('once')
   -- #substrip up
   ab:addSpriteFrame(3, 6)
   ab:buildSubstrip('up')
@@ -148,6 +194,7 @@ return makeModuleFunction(function(spriteBank)
 
   -- @animation walk_carry
   ab:setSubstrips(true)
+  ab:setLoopType('cycle')
   -- #substrip up
   ab:addSpriteFrame(4, 6)
   ab:addSpriteFrame(3, 6)
@@ -169,6 +216,7 @@ return makeModuleFunction(function(spriteBank)
 
   -- @animation swim
   ab:setSubstrips(true)
+  ab:setLoopType('cycle')
   -- #substrip up
   ab:addSpriteFrame(4, 14)
   ab:addSpriteFrame(3, 14)
@@ -190,6 +238,7 @@ return makeModuleFunction(function(spriteBank)
 
   -- @animation submerged
   ab:setSubstrips(false)
+  ab:setLoopType('cycle')
   ab:addSpriteFrame(1, 22, 0, 0, 16)
   ab:addSpriteFrame(2, 22, 0, 0, 16)
   -- BUILD submerged
@@ -233,6 +282,7 @@ return makeModuleFunction(function(spriteBank)
 
   -- @animation push
   ab:setSubstrips(true)
+  ab:setLoopType('cycle')
   -- #substrip up
   ab:addSpriteFrame(3, 7)
   ab:addSpriteFrame(4, 7)
@@ -274,6 +324,33 @@ return makeModuleFunction(function(spriteBank)
   -- BUILD dig
   sb:addAnimation('dig', ab:build())
 
+  -- @animation throw
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(3, 1, 0, 0, 1)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 1, 0, 0, 1)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 1, 0, 0, 1)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 1, 0, 0, 1)
+  ab:buildSubstrip('right')
+  -- BUILD throw
+  sb:addAnimation('throw', ab:build())
+
+  -- @animation fall
+  ab:setSubstrips(false)
+  ab:setLoopType('once')
+  ab:addSpriteFrame(2, 21, 0, 0, 16)
+  ab:addSpriteFrame(3, 21, 0, 0, 16)
+  ab:addSpriteFrame(4, 21, 0, 0, 16)
+  -- BUILD fall
+  sb:addAnimation('fall', ab:build())
+
   -- @animation jump
   ab:setSubstrips(true)
   ab:setLoopType('cycle')
@@ -300,7 +377,29 @@ return makeModuleFunction(function(spriteBank)
   -- BUILD jump
   sb:addAnimation('jump', ab:build())
 
-  -- @animation sword_swing
+  -- @animation cape
+  ab:setSubstrips(true)
+  ab:setLoopType('cycle')
+  -- #substrip up
+  ab:addSpriteFrame(3, 11)
+  ab:addSpriteFrame(4, 11)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 11)
+  ab:addSpriteFrame(8, 11)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 11)
+  ab:addSpriteFrame(6, 11)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 11)
+  ab:addSpriteFrame(2, 11)
+  ab:buildSubstrip('right')
+  -- BUILD cape
+  sb:addAnimation('cape', ab:build())
+
+  -- @animation swing
   ab:setSubstrips(true)
   ab:setLoopType('once')
   -- #substrip up
@@ -327,8 +426,60 @@ return makeModuleFunction(function(spriteBank)
   ab:addSpriteFrame(1, 5, 4, 0, 8)
   ab:addSpriteFrame(1, 5, 0, 0, 3)
   ab:buildSubstrip('right')
-  -- BUILD sword_swing
+  -- BUILD swing
   sb:addAnimation('swing', ab:build())
+
+  --@animation swing_no_lunge
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(4, 9, 0, 0, 3)
+  ab:addSpriteFrame(3, 5, 0, 0, 3)
+  ab:addSpriteFrame(3, 5, 0, 0, 8)
+  ab:addSpriteFrame(3, 5, 0, 0, 3)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(2, 9, 0, 0, 3)
+  ab:addSpriteFrame(7, 5, 0, 0, 3)
+  ab:addSpriteFrame(7, 5, 0, 0, 8)
+  ab:addSpriteFrame(7, 5, 0, 0, 3)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(3, 9, 0, 0, 3)
+  ab:addSpriteFrame(5, 5, 0, 0, 3)
+  ab:addSpriteFrame(5, 5, 0, 0, 8)
+  ab:addSpriteFrame(5, 5, 0, 0, 3)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(5, 9, 0, 0, 3)
+  ab:addSpriteFrame(1, 5, 0, 0, 3)
+  ab:addSpriteFrame(1, 5, 0, 0, 8)
+  ab:addSpriteFrame(1, 5, 0, 0, 3)
+  ab:buildSubstrip('right')
+  -- BUILD swing_no_lunge
+  sb:addAnimation('swing_no_lunge', ab:build())
+
+  -- -- @animation spin
+  -- ab:setSubstrips(true)
+  -- ab:setLoopType('once')
+  -- -- #substrip up
+  
+  -- -- #substrip down
+  -- ab:addSpriteFrame(1, 5, 3, 0, 5)
+  -- ab:addSpriteFrame(7, 5, 0, 3, 5)
+  -- ab:addSpriteFrame(5, 5, -3, 0, 5)
+  -- ab:addSpriteFrame(3, 5, 0, -3, 5)
+  -- ab:addSpriteFrame(1, 5, 3, 0, 3)
+  -- -- #substrip left
+  -- -- #substrip right
+  -- ab:addSpriteFrame(1, 5, 3, 0, 5)
+  -- ab:addSpriteFrame(7, 5, 0, 3, 5)
+  -- ab:addSpriteFrame(5, 5, -3, 0, 5)
+  -- ab:addSpriteFrame(3, 5, 0, -3, 5)
+  -- ab:addSpriteFrame(1, 5, 3, 0, 3)
+  -- ab:buildSubstrip('right')
+  -- -- BUILD spin
+  -- sb:addAnimation('spin', ab:build())
 
   -- register sprite builder
   spriteBank.registerSpriteRendererBuilder('player', sb)

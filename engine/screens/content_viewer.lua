@@ -265,6 +265,7 @@ function ContentViewer:update(dt)
     -- animation tick state
     imgui.Separator()
     imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
+    assert(self.animViewerCurrentAnimation:getSpriteFrames(), 'Expected an animation instance. Did you forget to set a default substrip?')
     local frameIndex = imgui.SliderInt('Frame', self.animViewerFrameIndex, 1, lume.count(self.animViewerCurrentAnimation:getSpriteFrames()))
     if frameIndex ~= self.animViewerFrameIndex then
       self.animViewerFrameIndex = frameIndex

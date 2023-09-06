@@ -157,6 +157,7 @@ end
 ---@param substripKey string|integer
 ---@param makeDefault boolean?
 function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
+  assert(self.hasSubstrips, 'Cannot build substrip when animation builder is set not to have any')
   if makeDefault == nil then
     makeDefault = false
   end
