@@ -329,7 +329,7 @@ end
 
 function ContentViewer:draw()
   -- clear screen
-  love.graphics.clear(149 / 255, 125 / 255, 173 / 255)
+  love.graphics.clear(195 / 255, 125 / 255, 130 / 255)
 
   local animViewerCanvasScale = self.animViewerCanvasScaleSelect[self.animViewerCanvasScaleIdx]
   if animViewerCanvasScale > 1 then

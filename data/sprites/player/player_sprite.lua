@@ -459,27 +459,39 @@ return makeModuleFunction(function(spriteBank)
   -- BUILD swing_no_lunge
   sb:addAnimation('swing_no_lunge', ab:build())
 
-  -- -- @animation spin
-  -- ab:setSubstrips(true)
-  -- ab:setLoopType('once')
-  -- -- #substrip up
-  
-  -- -- #substrip down
-  -- ab:addSpriteFrame(1, 5, 3, 0, 5)
-  -- ab:addSpriteFrame(7, 5, 0, 3, 5)
-  -- ab:addSpriteFrame(5, 5, -3, 0, 5)
-  -- ab:addSpriteFrame(3, 5, 0, -3, 5)
-  -- ab:addSpriteFrame(1, 5, 3, 0, 3)
-  -- -- #substrip left
-  -- -- #substrip right
-  -- ab:addSpriteFrame(1, 5, 3, 0, 5)
-  -- ab:addSpriteFrame(7, 5, 0, 3, 5)
-  -- ab:addSpriteFrame(5, 5, -3, 0, 5)
-  -- ab:addSpriteFrame(3, 5, 0, -3, 5)
-  -- ab:addSpriteFrame(1, 5, 3, 0, 3)
-  -- ab:buildSubstrip('right')
-  -- -- BUILD spin
-  -- sb:addAnimation('spin', ab:build())
+  -- @animation spin
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(3, 5, 0, -3, 5)
+  ab:addSpriteFrame(1, 5, 3, 0, 3)
+  ab:addSpriteFrame(7, 5, 0, 3, 5)
+  ab:addSpriteFrame(5, 5, -3, 0, 5)
+  ab:addSpriteFrame(3, 5, 0, -3, 3)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 5, 0, 3, 5)
+  ab:addSpriteFrame(5, 5, -3, 0, 5)
+  ab:addSpriteFrame(3, 5, 0, -3, 5)
+  ab:addSpriteFrame(1, 5, 3, 0, 3)
+  ab:addSpriteFrame(7, 5, 0, 3, 5)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 5, -3, 0, 5)
+  ab:addSpriteFrame(3, 5, 0, -3, 5)
+  ab:addSpriteFrame(1, 5, 3, 0, 3)
+  ab:addSpriteFrame(7, 5, 0, 3, 5)
+  ab:addSpriteFrame(5, 5, -3, 0, 5)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 5, 3, 0, 5)
+  ab:addSpriteFrame(7, 5, 0, 3, 5)
+  ab:addSpriteFrame(5, 5, -3, 0, 5)
+  ab:addSpriteFrame(3, 5, 0, -3, 5)
+  ab:addSpriteFrame(1, 5, 3, 0, 3)
+  ab:buildSubstrip('right')
+  -- BUILD spin
+  sb:addAnimation('spin', ab:build())
 
   -- register sprite builder
   spriteBank.registerSpriteRendererBuilder('player', sb)
