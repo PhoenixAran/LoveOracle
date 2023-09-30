@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 
 --- used in SpriteAnimation class
 ---@class SpriteFrame
----@field sprite Sprite|ColorSprite|PrototypeSprite|CompositeSprite
+---@field sprite Sprite|ColorSprite|PrototypeSprite|CompositeSprite|EmptySprite
 ---@field delay integer
 local SpriteFrame = Class {
   init = function(self, sprite, delay)

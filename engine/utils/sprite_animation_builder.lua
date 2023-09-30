@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
+local EmptySprite = require 'engine.graphics.empty_sprite'
 local Sprite = require 'engine.graphics.sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'
 local SpriteFrame = require 'engine.graphics.sprite_frame'
@@ -146,6 +147,12 @@ function SpriteAnimationBuilder:addPrototypeFrame(r, g, b, width, height, offset
   lume.push(self.frames, spriteFrame)
 end
 
+---create an empty frame
+---@param delay integer
+function SpriteAnimationBuilder:addEmptyFrame(delay)
+  lume.push(self.frames, SpriteFrame(EmptySprite(), delay))
+end
+
 ---add a timed action to the animation
 ---@param tick integer
 ---@param func function
@@ -176,6 +183,16 @@ function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
   self.frames = { }
   self.timedActions = { }
   self.compositeSprites = { }
+end
+
+---repeats the given function
+---useful for building animations that have multiple unique cycles and needs to have it repeated alot
+---@param repeatCount integer
+---@param buildFunc function
+function SpriteAnimationBuilder:repeatBuild(repeatCount, buildFunc)
+  for i = 1, repeatCount do
+    buildFunc()
+  end
 end
 
 ---build sprite animation

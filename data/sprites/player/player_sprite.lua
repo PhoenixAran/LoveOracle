@@ -493,6 +493,139 @@ return makeModuleFunction(function(spriteBank)
   -- BUILD spin
   sb:addAnimation('spin', ab:build())
 
+  --@animation stab
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(7, 5, 0, 4, 6)
+  ab:addSpriteFrame(7, 5, 0, 0, 7)
+  ab:addSpriteFrame(8, 1, 0, 0, 1)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(3, 5, 0, -4, 6)
+  ab:addSpriteFrame(3, 5, 0, 0, 7)
+  ab:addSpriteFrame(4, 1, 0, 0, 1)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 5, -4, 0, 6)
+  ab:addSpriteFrame(5, 5, 0, 0, 7)
+  ab:addSpriteFrame(6, 1, 0, 0, 1)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 5, -4, 0, 6)
+  ab:addSpriteFrame(1, 5, 0, 0, 7)
+  ab:addSpriteFrame(2, 1, 0, 0, 1)
+  ab:buildSubstrip('right')
+  -- BUILD stab
+  sb:addAnimation('stab', ab:build())
+
+  -- @animation raise_one_hand
+  ab:setSubstrips(false)
+  ab:setLoopType('once')
+  ab:addSpriteFrame(1, 17)
+  -- BUILD raise_one_hand
+  sb:addAnimation('raise_one_hand', ab:build())
+
+  -- @animation raise_two_hands
+  ab:setSubstrips(false)
+  ab:setLoopType('once')
+  ab:addSpriteFrame(2, 17)
+  -- BUILD raise_two_hands
+  sb:addAnimation('raise_two_hands', ab:build())
+
+  -- @animation drown
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(3, 14, 0, 2, 8)
+  ab:addSpriteFrame(1, 22, 0, 4, 17)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 14, 0, 2, 8)
+  ab:addSpriteFrame(1, 22, 0, 4, 17)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 14, 0, 2, 8)
+  ab:addSpriteFrame(1, 22, 0, 4, 17)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(1, 14, 0, 2, 8)
+  ab:addSpriteFrame(1, 22, 0, 4, 17)
+  ab:buildSubstrip('right')
+  -- BUILD drown
+  sb:addAnimation('drown', ab:build())
+
+  -- @animation crush_horizontal
+  ab:setSubstrips(false)
+  ab:setLoopType('once')
+  ab:addCompositeSprite(6, 21, 0, 0)
+  ab:addCompositeSprite(7, 21, 0, -16)
+  ab:addCompositeFrame(0, 0, 0, 0, 44)
+  ab:repeatBuild(5, function()
+    ab:addEmptyFrame(1)
+    ab:addSpriteFrame(7, 1, 0, 0, 1)
+    ab:addEmptyFrame(1)
+    ab:addCompositeSprite(6, 21, 0, 0)
+    ab:addCompositeSprite(7, 21, 0, -16)
+    ab:addCompositeFrame(0, 0, 0, 0, 1)
+    ab:addEmptyFrame(1)
+    ab:addCompositeSprite(6, 21, 0, 0)
+    ab:addCompositeSprite(7, 21, 0, -16)
+    ab:addCompositeFrame(0, 0, 0, 0, 1)
+    ab:addEmptyFrame(1)
+  end)
+  -- BUILD crush_horizontal
+  sb:addAnimation('crush_horizontal', ab:build())
+
+  -- @animation crush_vertical
+  ab:setSubstrips(false)
+  ab:setLoopType('once')
+  ab:addSpriteFrame(5, 21, 0, 0, 44)
+  -- repeat
+  ab:repeatBuild(5, function()
+    ab:addEmptyFrame(1)
+    ab:addSpriteFrame(7, 1, 0, 0, 1)
+    ab:addEmptyFrame(1)
+    ab:addSpriteFrame(5, 21, 0, 0, 1)
+    ab:addEmptyFrame(1)
+    ab:addSpriteFrame(5, 21, 0, 0, 1)
+    ab:addEmptyFrame(1)
+    ab:addSpriteFrame(7, 1, 0, 0, 1)
+  end)
+  -- BUILD crush_vertical
+  sb:addAnimation('crush_vertical', ab:build())
+
+  -- @animation invisible
+  ab:setSubstrips(false)
+  ab:setLoopType('once')
+  ab:addEmptyFrame(1)
+  -- BUILD invisible
+  sb:addAnimation('invisible', ab:build())
+
+  -- @animation aim
+  -- TODO split this up into aim_down, aim_bottom_left, etc
+  -- have to do it this way since we only have 4 substrips instead of 8
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(3, 5, 0, 0, 1)
+  ab:addSpriteFrame(3, 9, 0, 0, 1)
+  ab:buildSubstrip('up')
+  -- #substrip down
+  ab:addSpriteFrame(7, 5, 0, 0, 1)
+  ab:addSpriteFrame(1, 9, 0, 0, 1)
+  ab:buildSubstrip('down', true)
+  -- #substrip left
+  ab:addSpriteFrame(5, 5, 0, 0, 1)
+  ab:addSpriteFrame(2, 9, 0, 0, 1)
+  ab:buildSubstrip('left')
+  -- #substrip right
+  ab:addSpriteFrame(7, 5, 0, 0, 1)
+  ab:addSpriteFrame(1, 9, 0, 0, 1)
+  ab:buildSubstrip('right')
+  -- BUILD player_aim
+  sb:addAnimation('player_aim', ab:build())
+
   -- register sprite builder
   spriteBank.registerSpriteRendererBuilder('player', sb)
 end)
