@@ -31,8 +31,6 @@ local PlayerJumpEnvironmentState = require 'engine.player.environment_states.pla
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
 local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 
-local _cnt = 0
-
 ---@class Player : MapEntity
 ---@field roomEdgeCollisionBox Collider
 ---@field playerMovementController PlayerMovementController
@@ -468,7 +466,9 @@ end
 ---@param duration integer
 ---@param animation string?
 function Player:beginBusyState(duration, animation)
-  if animation == nil then animation = self.sprite:getCurrentAnimationKey() end
+  if animation == nil then 
+    animation = self.sprite:getCurrentAnimationKey() 
+  end
   if self:getWeaponState() == nil then
     -- should i check if the current animation is the same? not sure yet
     self.sprite:play(animation)
@@ -584,11 +584,11 @@ function Player:interruptItems()
   end
   for _, stateMachine in ipairs(self.conditionStateMachines) do
     if stateMachine:isActive() then
-      stateMachine:getCurrentState():onInterruptItems()
+      stateMachine:getCurrentState():endState()
     end
   end
   if self.weaponStateMachine:isActive() then
-    self.weaponStateMachine:getCurrentState():endState()
+    self.weaponStateMachine:getCurrentState():onInterruptItems()
   end
   self:integrateStateParameters()
 end
@@ -612,7 +612,6 @@ function Player:checkRoomTransitions()
     end
   end
 end
-
 
 ---query physics world with push tile rect
 ---@return any[] items

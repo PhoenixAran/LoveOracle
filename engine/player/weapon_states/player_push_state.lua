@@ -6,7 +6,7 @@ local Direction8 = require 'engine.enums.direction8'
 
 local Mode = {
   RealPush = 1,
-  FakePush = 2 
+  FakePush = 2
 }
 
 ---@class PlayerPushState : PlayerState

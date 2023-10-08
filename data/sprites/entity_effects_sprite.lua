@@ -4,7 +4,6 @@ return makeModuleFunction(
     local builder = spriteBank.createSpriteRendererBuilder()
     local sb = spriteBank.createSpriteAnimationBuilder()
 
-
     -- builder setup
     builder:setDefaultAnimation('shadow')
     builder:setFollowZ(false)
@@ -46,8 +45,6 @@ return makeModuleFunction(
     sb:addCompositeFrame(0, 0, 0, 0, 4)
     -- BUILD grass
     builder:addAnimation('grass', sb:build())
-
-    --@animation red grass movement
 
     -- register builder
     spriteBank.registerSpriteRendererBuilder('entity_effects', builder)
