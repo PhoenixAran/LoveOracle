@@ -108,6 +108,13 @@ return function(spriteBank)
   -- BUILD stab
   sb:addAnimation('stab', ab:build())
 
+  --@animation spin
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  -- #substrip down
+  -- #substrip left
+  -- #substrip right
 
   -- register builder
   spriteBank.registerSpriteRendererBuilder('player_sword', sb)

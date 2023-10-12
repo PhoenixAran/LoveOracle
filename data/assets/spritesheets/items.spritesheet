@@ -2,4 +2,4 @@
 # <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 1)
 
 # player items Spritesheet Declarations
-"player_items", "player_items", 16, 16,1,1
+"player_items", "player_items", 16, 16, 1, 3
