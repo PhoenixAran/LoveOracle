@@ -44,6 +44,10 @@ local Tile = Class { __includes = Entity,
     self.topTile = false
     self:setPhysicsLayer('tile')
 
+    -- interact vars
+    self.minBoomerangLevel = 0
+    self.minSwordLevel = 0
+
     -- signals
     self:signal('tileDestroyed')
     self:signal('entityCreated')
@@ -94,5 +98,17 @@ end
 function Tile:isTopTile()
   return Singletons.roomControl:isTopTile(self)
 end
+
+
+-- interaction methods
+
+---called when the player presses the interact button on this tile
+---@param dir8 any
+function Tile:onSwordHit(swordItem)
+
+end
+
+
+
 
 return Tile

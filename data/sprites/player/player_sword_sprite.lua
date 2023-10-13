@@ -17,7 +17,6 @@ return function(spriteBank)
 
   -- sprite animation builder setup
   ab:setSpriteSheet('player_items')
-  -- TODO animate Hitboxes!!
 
   -- @animation swing
   ab:setSubstrips(true)
@@ -108,13 +107,68 @@ return function(spriteBank)
   -- BUILD stab
   sb:addAnimation('stab', ab:build())
 
+  -- TODO animate Hitboxes!!
   --@animation spin
   ab:setSubstrips(true)
   ab:setLoopType('once')
   -- #substrip up
+  ab:addSpriteFrame(3, 1, -4, -19, 3)
+  ab:addSpriteFrame(2, 1, 16, -16, 2)
+  ab:addSpriteFrame(1, 1, 19, 4, 3)
+
+  ab:addSpriteFrame(8, 1, 16, 16, 2)
+  ab:addSpriteFrame(7, 1, 3, 19, 3)
+  ab:addSpriteFrame(6, 1, -13, 15, 2)
+
+  ab:addSpriteFrame(5, 1, -19, 4, 3)
+  ab:addSpriteFrame(4, 1, -13, -13, 2)
+  ab:addSpriteFrame(3, 1, -4, -19, 3)
+
+  ab:buildSubstrip('up')
   -- #substrip down
+  ab:addSpriteFrame(7, 1, 3, 19, 3)
+  ab:addSpriteFrame(6, 1, -13, 15, 2)
+  ab:addSpriteFrame(5, 1, -19, 4, 3)
+
+  ab:addSpriteFrame(4, 1, -13, -13, 2)
+  ab:addSpriteFrame(3, 1, -4, -19, 3)
+  ab:addSpriteFrame(2, 1, 16, -16, 2)
+
+  ab:addSpriteFrame(1, 1, 19, 4, 3)
+  ab:addSpriteFrame(8, 1, 16, 16, 2)
+  ab:addSpriteFrame(7, 1, 3, 19, 3)
+
+  ab:buildSubstrip('down', true)
   -- #substrip left
+  ab:addSpriteFrame(5, 1, -19, 4, 3)
+  ab:addSpriteFrame(4, 1, -13, -13, 2)
+  ab:addSpriteFrame(3, 1, -4, -19, 3)
+
+  ab:addSpriteFrame(2, 1, 16, -16, 2)
+  ab:addSpriteFrame(1, 1, 19, 4, 3)
+  ab:addSpriteFrame(8, 1, 16, 16, 2)
+
+  ab:addSpriteFrame(7, 1, 3, 19, 3)
+  ab:addSpriteFrame(6, 1, -13, 15, 2)
+  ab:addSpriteFrame(5, 1, -19, 4, 3)
+  
+  ab:buildSubstrip('left')
   -- #substrip right
+  ab:addSpriteFrame(1, 1, 19, 4, 3)
+  ab:addSpriteFrame(8, 1, 16, 16, 2)
+  ab:addSpriteFrame(7, 1, 3, 19, 3)
+  
+  ab:addSpriteFrame(6, 1, -13, 15, 2)
+  ab:addSpriteFrame(5, 1, -19, 4, 3)
+  ab:addSpriteFrame(4, 1, -13, -13, 2)
+
+  ab:addSpriteFrame(3, 1, -4, -19, 3)
+  ab:addSpriteFrame(2, 1, 16, -16, 2)
+  ab:addSpriteFrame(1, 1, 19, 4, 3)
+  
+  ab:buildSubstrip('right')
+  -- BUILD spin
+  sb:addAnimation('spin', ab:build())
 
   -- register builder
   spriteBank.registerSpriteRendererBuilder('player_sword', sb)
