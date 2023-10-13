@@ -466,7 +466,7 @@ end
 ---@param duration integer
 ---@param animation string?
 function Player:beginBusyState(duration, animation)
-  if animation == nil then 
+  if animation == nil then
     animation = self.sprite:getCurrentAnimationKey() 
   end
   if self:getWeaponState() == nil then
@@ -686,9 +686,9 @@ function Player:update(dt)
   self.sprite:update(dt)
   self.combat:update(dt)
   self.movement:update(dt)
+
   local tvx, tvy = self:move(dt)
   --check if we are pushing a tile
-  
   local EPSILON = 0.001
   if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then
     local movementDir8 = self.movement:getDirection8()
@@ -700,6 +700,7 @@ function Player:update(dt)
       end
     end
   end
+  
   self:checkRoomTransitions()
 end
 

@@ -5,7 +5,7 @@
 ---@field screenManager any
 ---@field camera any
 ---@field gameControl GameControl?
----@field RoomControl RoomControl?
+---@field roomControl RoomControl?
 local singletons = {
   input = nil,
   monocle = nil,
