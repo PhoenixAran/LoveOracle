@@ -104,6 +104,12 @@ local InstanceId = 0
 ---@field y integer
 ---@field w integer
 ---@field h integer
+---@field hitX integer
+---@field hitY integer
+---@field hitW integer
+---@field hitH integer
+---@field minSwordLevel integer
+---@field minBoomerangLevel integer
 ---@field conveyorVectorX number
 ---@field conveyorVectorY number
 ---@field conveyorSpeed number
@@ -125,6 +131,11 @@ local TileData = Class {
     -- used in Room.animatedTiles, Tileset.animatedTiles
     InstanceId = InstanceId + 1
     self.instanceId = InstanceId
+
+    -- interact vars
+    self.minSwordLevel = properties.minSwordLevel
+    self.minBoomerangLevel  = properties.minBoomerangLevel
+    
     --[[ TODO off the top of my head:
       1. Hit Damage
       2. Break Animation

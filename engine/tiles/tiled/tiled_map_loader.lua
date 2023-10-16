@@ -15,6 +15,9 @@ local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_ob
 local tiledTilesetCache = { }
 local tilesetCacheCreated = false
 
+local tiledTemplates = { }
+local templateCacheCreated = false
+
 local tiledMapDataCache  = { }
 
 -- export type
@@ -38,6 +41,15 @@ end
 ---@return TiledObject
 local function parseObject(jObject)
   local tiledObject = TiledObject()
+  -- if this is a templated object, inject the template object value properties first
+  if jObject.template then
+    local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
+    local template = tiledTemplates[templateKey]
+    -- inject template values into our jObject
+    for k, v in pairs(template) do
+      jObject[k] = v
+    end
+  end
   tiledObject.id = jObject.id
   tiledObject.name = jObject.name
   tiledObject.x = jObject.x
@@ -56,6 +68,8 @@ local function parseObject(jObject)
   if jObject.points then
     error('Need to implement point parsing')
   end
+  
+
   tiledObject.properties = parsePropertyDict(jObject.properties)
   return tiledObject
 end
@@ -165,11 +179,25 @@ local function loadTileset(path)
   return tileset
 end
 
+local function loadTemplate(path)
+  local key = FileHelper.getFileNameWithoutExtension(path)
+  if tiledTemplates[key] then
+    return tiledTemplates[key]
+  end
+
+  local jTemplate = json.decode(love.filesystem.read(path))
+  assert(jTemplate.type == 'template', 'Cannot parse template form non-template tiled object')
+  tiledTemplates[key] = jTemplate.object
+  return jTemplate
+end
+
+
 -- NB: path will be relative to data/tiled/maps
 ---@param path string
 ---@return TiledMapData
 function TiledMapLoader.loadMapData(path)
   assert(tilesetCacheCreated, 'Call TiledMapLoader.initTilesets before you load maps')
+  assert(templateCacheCreated, 'Call TiledMapLoader.initTemplates before you load maps')
   local pathPrefix = 'data/tiled/maps/'
   path = pathPrefix .. path
   -- map data is indexed by filepath
@@ -228,6 +256,22 @@ function TiledMapLoader.initializeTilesets(directory)
     end
   end
   tilesetCacheCreated = true
+end
+
+function TiledMapLoader.initializeTemplates(directory)
+  if directory == nil then
+    directory = 'data/tiled/templates'
+  end
+  local templateFiles = love.filesystem.getDirectoryItems(directory)
+  for _, file in ipairs(templateFiles) do
+    local path = directory .. '/' .. file
+    if love.filesystem.getInfo(path).type == 'directory' then
+      TiledMapLoader.initializeTemplates(path)
+    else
+      loadTemplate(path)
+    end
+  end
+  templateCacheCreated = true
 end
 
 function TiledMapLoader.unload()

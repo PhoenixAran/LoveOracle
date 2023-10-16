@@ -49,6 +49,7 @@ function ContentControl.buildContent()
   PaletteBank.initialize('data.palettes')
   SpriteBank.initialize('data.sprites')
   TiledMapLoader.initializeTilesets()
+  TiledMapLoader.initializeTemplates()
   local runTime = love.timer.getTime() - startTime
   print('Asset load time: ' .. tostring(runTime * 1000) .. ' ms')
 end

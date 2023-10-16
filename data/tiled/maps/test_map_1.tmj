@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3Zu07DMAAFUPMWjyLx6v8wwMIACwMsLCxdWPgSBiYGJgb+EkfYaojauiUJtNI50pXapLWUXCmOk80QwtYSZDtQOYhZi1lvkUFK6Xd3Kc3tGzGHfR\/oiqj62I3Za5HcR3P7Vcp1+n6bUn0+T7mI2Q\/6yPSxXJp9bIaf1\/Q2fcwbfYw1+ziNOUsZhm77eEjRx3SzrleDRrrs4y1mFPMS9FH3l31ch\/FcMgr6mOQv+zB\/lHV9f\/Wekvc9N6KP2f6rj8uY+5iboI+6rvt4Tcn7PhvJ25\/CdyePQR91fa4HZ\/XhejXZf\/XxUYs+xvSxXPruY57oY6zq4yjmuEVyH7\/9\/0nQR1Z\/XlVKPu\/z\/n6RsYZ9H+iKqz\/nzcnncNH3fjsTkseqb2O6Lt4b5vd+pbG8HyzrYp7P83RpLPN5WZ99NO\/H9FHWVR\/53OujnT77cL1aXBfrkryuKI1l\/VG2yLpkVoZzjmX9AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACr7wvWnGKIQJwAAA==",
+         "data":"H4sIAAAAAAAACu3ZPY\/TMAAGYAO9IihF4oD+HwZYGMrCcLewsHS5hV\/CwMTAxMC\/xBW2EkI\/nItDq+Z5pFe6pm4V+dW5dT0LIVydQeYxs8Jxl+xZzIOYhwOyTDk27iale\/1RzPOCe8njLtl2Dp7EPB2Q3Ef3+vuUdXr8MWX795uUtzGL0PRx6F7yuEt2Ln0sCu5jin201\/B5GNZHafTR6PbxKuZ1yirU7eNTyr55tl4dnoNlJzX7+B6zifka\/u7jRcz1nrwM+qjZxzo0nyWb8G8f7f\/NfVmNMw1n43\/2MeV1qFTt71c\/UvJzXzrRx2Gn6uNdzG3Mh6CPttp9fEvJz\/3qJF+\/C386+Rz00TbmfvBQH9ar3U7Vx89W9NHQx3kZu4+S6KNxbE9cktzHfV8\/hX13qZI9cU6e99Lxfd7r0vfdQ+06q8tz2Pfc7\/GO5PdqX2O\/GueGzv3qqfE573f0esbso\/t9TB\/H1eojz70+hhmzD+tVfzX2JXlf4dxvuD77kmPnec79AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAafgPjmSGIQJwAAA==",
          "encoding":"base64",
          "height":100,
          "id":1,
@@ -46,17 +46,6 @@
                 {
                  "class":"",
                  "height":128,
-                 "id":6,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":160,
-                 "x":400,
-                 "y":288
-                }, 
-                {
-                 "class":"",
-                 "height":128,
                  "id":10,
                  "name":"",
                  "rotation":0,
@@ -75,6 +64,24 @@
                  "width":16,
                  "x":-176,
                  "y":512
+                }, 
+                {
+                 "id":13,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":560,
+                 "y":0
+                }, 
+                {
+                 "id":14,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":400,
+                 "y":288
+                }, 
+                {
+                 "id":15,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":560,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -83,10 +90,10 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":12,
+ "nextobjectid":16,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.9.2",
+ "tiledversion":"1.9.0",
  "tileheight":16,
  "tilesets":[
         {

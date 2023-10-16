@@ -68,8 +68,10 @@ function MapLoader.loadMapData(path)
         -- parse room data
         for _, tiledObj in ipairs(layer.objects) do
           local roomData = RoomData()
+          print(tiledObj.id)
+          print(tiledObj.x, tiledObj.y, tiledObj.width, tiledObj.height)
           assert(tiledObj.x ~= nil and tiledObj.y ~= nil and tiledObj.width ~= nil
-                and tiledObj.height ~= nil)
+                and tiledObj.height ~= nil, 'Could not find values for x, y, width, height')
           -- lua index
           roomData.topLeftPosX = math.floor(tiledObj.x / GRID_SIZE) + 1
           roomData.topLeftPosY = math.floor(tiledObj.y / GRID_SIZE) + 1

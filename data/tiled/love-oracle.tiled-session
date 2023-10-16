@@ -60,11 +60,22 @@
             }
         },
         "maps/test_map_1.tmj": {
-            "scale": 2,
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 645.6666666666667,
+                "y": 241.3333333333333
+            }
+        },
+        "maps/test_map_1_debug.json": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 272,
-                "y": 115.25
+                "x": 257,
+                "y": 742
             }
         },
         "tilesets/proto_dungeon.json": {
@@ -80,11 +91,11 @@
             "scaleInEditor": 5.5
         },
         "tilesets/proto_dungeon_2.tsj": {
-            "scaleInDock": 1,
+            "scaleInDock": 2,
             "scaleInEditor": 1
         },
         "tilesets/proto_environment.tsj": {
-            "scaleInDock": 4,
+            "scaleInDock": 2,
             "scaleInEditor": 5.5
         }
     },
@@ -92,6 +103,7 @@
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
     "last.externalTilesetPath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/tiled/tilesets",
     "last.imagePath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/assets/images/tiles",
+    "last.objectTemplatePath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/tiled/templates",
     "last.worldFilePath": "C:/Users/phoen",
     "loadedWorlds": [
         "C:/Users/phoen/test.world"
@@ -106,23 +118,26 @@
     "map.width": 16,
     "mapScene.enableWorlds": true,
     "openFiles": [
+        "tilesets/proto_dungeon_2.tsj",
+        "tilesets/proto_environment.tsj",
+        "tilesets/proto_dungeon.tsj",
         "maps/test_map_1.tmj"
     ],
     "project": "love-oracle.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "maps/test_map_1.tmj",
+        "tilesets/proto_dungeon_2.tsj",
         "tilesets/proto_environment.tsj",
         "tilesets/proto_dungeon.tsj",
-        "tilesets/proto_dungeon_2.tsj",
+        "maps/test_map_1.tmj",
+        "maps/test_map_1_debug.json",
         "maps/test_map_1.json",
         "tilesets/proto_dungeon_2.json",
         "tilesets/proto_dungeon.json",
         "C:/Users/phoen/Downloads/test_tileset/test.json",
         "C:/Users/phoen/Downloads/desert_tsx.json",
         "C:/Users/phoen/Downloads/desert_map.json",
-        "C:/Users/phoen/Downloads/desert.json",
-        "C:/Program Files/Tiled/examples/desert.tmx"
+        "C:/Users/phoen/Downloads/desert.json"
     ],
     "tileset.embedInMap": false,
     "tileset.lastUsedExportFilter": "Lua files (*.lua)",

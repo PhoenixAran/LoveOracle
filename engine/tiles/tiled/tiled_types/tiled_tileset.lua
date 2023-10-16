@@ -9,7 +9,8 @@ local Class = require 'lib.class'
 ---@field tileWidth integer
 ---@field tileHeight integer
 ---@field tiles table<integer, TiledTilesetTile>
----@field spritesheet SpriteSheet?
+---@field spriteSheet SpriteSheet?
+---@field properties table
 local TiledTileset = Class {
   init = function(self)
     self.name = nil
@@ -23,6 +24,8 @@ local TiledTileset = Class {
 
     -- spritesheet used for tiles
     self.spriteSheet = nil
+
+    self.properties = { }
   end
 }
 

@@ -70,6 +70,14 @@ function Tile:getTileData()
   return self.tileData
 end
 
+function Tile:getMinSwordLevel()
+  return self.tileData.minSwordLevel
+end
+
+function Tile:getMinBoomerangLevel()
+  return self.tileData.minBoomerangLevel
+end
+
 -- function Tile:isActionTile()
 --   return false
 -- end
@@ -103,9 +111,11 @@ end
 -- interaction methods
 
 ---called when the player presses the interact button on this tile
----@param dir8 any
+---@param swordItem Item
 function Tile:onSwordHit(swordItem)
-
+  if self.tileData.minSwordLevel < swordItem.level then
+    
+  end
 end
 
 

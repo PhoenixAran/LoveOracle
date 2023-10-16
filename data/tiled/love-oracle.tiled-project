@@ -4,6 +4,10 @@
     ],
     "extensionsPath": "extensions",
     "folders": [
+        "maps",
+        "templates",
+        "tilesets"
     ],
-    "objectTypesFile": ""
+    "propertyTypes": [
+    ]
 }
