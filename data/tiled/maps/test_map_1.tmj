@@ -73,12 +73,24 @@
                 }, 
                 {
                  "id":14,
+                 "properties":[
+                        {
+                         "name":"customProp",
+                         "type":"string",
+                         "value":"customValue"
+                        }],
                  "template":"..\/templates\/single_room_template.tj",
                  "x":400,
                  "y":288
                 }, 
                 {
                  "id":15,
+                 "properties":[
+                        {
+                         "name":"testProp",
+                         "type":"string",
+                         "value":"overrideValue"
+                        }],
                  "template":"..\/templates\/single_room_template.tj",
                  "x":560,
                  "y":0

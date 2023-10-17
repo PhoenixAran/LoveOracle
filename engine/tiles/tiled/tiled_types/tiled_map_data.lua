@@ -10,6 +10,8 @@ local lume = require 'lib.lume'
 ---@field tilesets TiledTileLayerTileset[]
 ---@field tileLayers TiledTileLayer[]
 ---@field objectLayers TiledObjectLayer[]
+---@field tileWidth integer
+---@field tileHeight integer
 local TiledMapData = Class {
   ---@param self TiledMapData
   init = function(self)
@@ -18,6 +20,9 @@ local TiledMapData = Class {
     self.height = 0
     -- number of tile columns
     self.width = 0
+    -- individual tile dimension
+    self.tileWidth = 0
+    self.tileHeight = 0
     -- array of layers
     self.layers = { }
     -- custom properties

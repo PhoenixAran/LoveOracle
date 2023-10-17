@@ -4,6 +4,12 @@
      "height":128,
      "id":13,
      "name":"",
+     "properties":[
+            {
+             "name":"testProp",
+             "type":"string",
+             "value":"testValue"
+            }],
      "rotation":0,
      "visible":true,
      "width":160
