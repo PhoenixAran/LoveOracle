@@ -44,7 +44,7 @@ function Stalfos:getType()
 end
 
 function Stalfos:chooseDirection()
-
+  
 end
 
 function Stalfos:prepForMoveState()

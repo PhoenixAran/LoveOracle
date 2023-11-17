@@ -6,7 +6,7 @@ local lume = require 'lib.lume'
 local vector = require 'lib.vector'
 local Physics = require 'engine.physics'
 
-local GRID_SIZE = 16
+local GRID_SIZE = require('constants').GRID_SIZE
 
 ---@class RoomTransitionState : GameState
 ---@field transitionStyle string
@@ -161,6 +161,7 @@ end
 function RoomTransitionState:draw()
   local camera = self.control.camera
   local entities = self.control.entities
+
   camera:attach()
   local x = camera.x - camera.w / 2
   local y = camera.y - camera.h / 2

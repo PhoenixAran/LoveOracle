@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local GameState = require 'engine.control.game_state'
+local GRID_SIZE = require('constants').GRID_SIZE
 
 ---@class RoomNormalState : GameState
 local RoomNormalState = Class { __includes = GameState,
@@ -34,7 +35,6 @@ function RoomNormalState:draw()
   entities:drawTileEntities(x, y, w, h)
   entities:drawEntities()
   camera:detach()
-  camera:draw()
 end
 
 

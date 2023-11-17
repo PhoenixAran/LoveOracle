@@ -6,7 +6,7 @@
  "name":"proto_dungeon",
  "spacing":1,
  "tilecount":64,
- "tiledversion":"1.7.2",
+ "tiledversion":"1.9.0",
  "tileheight":16,
  "tiles":[
         {
@@ -1584,5 +1584,5 @@
         }],
  "tilewidth":16,
  "type":"tileset",
- "version":"1.6"
+ "version":"1.8"
 }

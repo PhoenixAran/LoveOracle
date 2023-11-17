@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3ZPY\/TMAAGYAO9IihF4oD+HwZYGMrCcLewsHS5hV\/CwMTAxMC\/xBW2EkI\/nItDq+Z5pFe6pm4V+dW5dT0LIVydQeYxs8Jxl+xZzIOYhwOyTDk27iale\/1RzPOCe8njLtl2Dp7EPB2Q3Ef3+vuUdXr8MWX795uUtzGL0PRx6F7yuEt2Ln0sCu5jin201\/B5GNZHafTR6PbxKuZ1yirU7eNTyr55tl4dnoNlJzX7+B6zifka\/u7jRcz1nrwM+qjZxzo0nyWb8G8f7f\/NfVmNMw1n43\/2MeV1qFTt71c\/UvJzXzrRx2Gn6uNdzG3Mh6CPttp9fEvJz\/3qJF+\/C386+Rz00TbmfvBQH9ar3U7Vx89W9NHQx3kZu4+S6KNxbE9cktzHfV8\/hX13qZI9cU6e99Lxfd7r0vfdQ+06q8tz2Pfc7\/GO5PdqX2O\/GueGzv3qqfE573f0esbso\/t9TB\/H1eojz70+hhmzD+tVfzX2JXlf4dxvuD77kmPnec79AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAafgPjmSGIQJwAAA==",
+         "data":"H4sIAAAAAAAACu3ZPU\/jMAAGYHN8nIAD6Tjg\/zDAcgMsDLCwsLCw8EtuuImBiYF\/iRG2EqK2cYkDVfs80iu1qakiv5JT440QwuYCZCtmo3DcMvsVsxbzY0D2UvrGXaV0r6\/H7BfcSx63zN7mYDtmZ0ByH93rf1PO0\/vLlLfXJymnMbuh6WPWveRxy2xR+tgtuI9V7KO9hm+FYX2URh+Nbh+HMUcpx6FuHzcp0+bZejV7DvY6qdnHY8xdzL\/wsY\/fMQdT8ifoo2Yf56F5ltwFfUzylX30rUPttXJajseZhoVR+\/fVU0r+7KGTVX0ulPquPs5irmMugj7aavfxPyV\/9tJJvn4f3ju5DfpoG3M\/OKsP69Vk39XHcyv6aOhjsYzdR0n00ejbg5Uk9\/HZv1+FfV6pkj1YTp730vHzfNey7\/OGmnRWl+dw3nO\/nxOSv6t9jelqnBs696unxnPe\/9HrGbOP7u8xffSr1Ueee30MM2Yf1qv51diX5H2Fc6bh5tmX9J0fOWcCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgNXwCtJatZxAnAAA",
          "encoding":"base64",
          "height":100,
          "id":1,
@@ -66,12 +66,6 @@
                  "y":512
                 }, 
                 {
-                 "id":13,
-                 "template":"..\/templates\/single_room_template.tj",
-                 "x":560,
-                 "y":0
-                }, 
-                {
                  "id":14,
                  "properties":[
                         {
@@ -84,14 +78,13 @@
                  "y":288
                 }, 
                 {
-                 "id":15,
-                 "properties":[
-                        {
-                         "name":"testProp",
-                         "type":"string",
-                         "value":"overrideValue"
-                        }],
-                 "template":"..\/templates\/single_room_template.tj",
+                 "class":"",
+                 "height":144,
+                 "id":17,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":160,
                  "x":560,
                  "y":0
                 }],
@@ -102,7 +95,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":16,
+ "nextobjectid":19,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",

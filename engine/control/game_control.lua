@@ -7,6 +7,7 @@ local Inventory = require 'engine.control.inventory'
 local GameStateStack = require 'engine.control.game_state_stack'
 local Camera = require 'lib.camera'
 local GameConfig = require 'game_config'
+local Consts = require 'constants'
 
 local RoomControl = require 'engine.control.room_control'
 local RoomNormalState = require 'engine.control.game_states.room_states.room_normal_state'
@@ -14,7 +15,6 @@ local RoomNormalState = require 'engine.control.game_states.room_states.room_nor
 local Singletons = require 'engine.singletons'
 local monocle = Singletons.monocle
 
-local GRID_SIZE = 16
 
 local console = require 'lib.console'
 
@@ -30,7 +30,7 @@ local GameControl = Class { __includes = SignalObject,
     self.inventory = Inventory()
     self.player = nil
     local w = GameConfig.window.monocleConfig.windowWidth
-    local h = GameConfig.window.monocleConfig.windowHeight - GRID_SIZE
+    local h = GameConfig.window.monocleConfig.windowHeight - Consts.GRID_SIZE
     self.camera = Camera(w/2,h/2, w, h)
     self.map = nil
     self.roomControl = nil
@@ -90,8 +90,8 @@ end
 function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   self.roomControl = RoomControl(self:getMap(), self:getPlayer(), self:getCamera())
   if spawnIndexX ~= nil and spawnIndexY ~= nil then
-    self:getPlayer():setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
-    self.roomControl.player:setPosition(spawnIndexX * GRID_SIZE, spawnIndexY * GRID_SIZE)
+    self:getPlayer():setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
+    self.roomControl.player:setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
   end
   -- man handle room control for initial startup
   self.roomControl.currentRoom = room
@@ -104,8 +104,8 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   local x2, y2 = room:getBottomRightPosition()
   x1 = x1 - 1
   y1 = y1 - 1
-  x1, y1 = vector.mul(GRID_SIZE, x1, y1)
-  x2, y2 = vector.mul(GRID_SIZE, x2, y2)
+  x1, y1 = vector.mul(Consts.GRID_SIZE, x1, y1)
+  x2, y2 = vector.mul(Consts.GRID_SIZE, x2, y2)
   self:getCamera():setBounds(x1, y1, x2 - x1, y2 - y1)
   
   -- push room control state so user can actually start playing

@@ -5,7 +5,7 @@ local RoomEdge = require 'engine.entities.room_edge'
 local Direction4 = require 'engine.enums.direction4'
 local Tile = require 'engine.tiles.tile'
 
-local GRID_SIZE = 16
+local GRID_SIZE = require('constants').GRID_SIZE
 
 ---@class Room : SignalObject
 ---@field map Map

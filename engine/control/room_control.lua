@@ -5,7 +5,7 @@ local GameState = require 'engine.control.game_state'
 local GameStateStack = require 'engine.control.game_state_stack'
 local Entities = require 'engine.entities.entities'
 
-local GRID_SIZE = 16
+local GRID_SIZE = require('constants').GRID_SIZE
 local RoomTransitionState = require 'engine.control.game_states.room_states.room_transition_state'
 
 ---@class RoomControl : GameState

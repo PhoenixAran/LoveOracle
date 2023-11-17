@@ -154,23 +154,6 @@
                 }]
         }, 
         {
-         "animation":[
-                {
-                 "duration":360,
-                 "tileid":6
-                }, 
-                {
-                 "duration":360,
-                 "tileid":3
-                }, 
-                {
-                 "duration":360,
-                 "tileid":4
-                }, 
-                {
-                 "duration":360,
-                 "tileid":5
-                }],
          "id":6,
          "properties":[
                 {

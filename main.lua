@@ -9,7 +9,7 @@ love.inspect = require 'lib.inspect'
 local Singletons = require 'engine.singletons'
 
 -- init quake console
-local console = require 'lib.console'
+require 'lib.console'
 require 'engine.console_commands'
 
 print('Ziggy Engine ' .. gameConfig.version)

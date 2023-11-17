@@ -11,7 +11,7 @@ local RoomData = require 'engine.tiles.room_data'
 local tilesetCache = { }
 ---@type table<string, MapData>
 local mapCache = { }
-local GRID_SIZE = 16
+local GRID_SIZE = require('constants').GRID_SIZE
 
 ---@class MapLoader
 local MapLoader = { }

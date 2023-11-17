@@ -4,7 +4,7 @@ local bit = require 'bit'
 local Entity = require 'engine.entities.entity'
 local TileType = require('engine.enums.flags.tile_type_flags').enumMap
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
-local GRID_SIZE = 16
+local GRID_SIZE = require('constants').GRID_SIZE
 local Singletons = require 'engine.singletons'
 
 local function makeTileEntityName(tileIndexX, tileIndexY, layer)
