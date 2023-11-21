@@ -43,10 +43,10 @@ function makeModuleFunction(func)
   return setmetatable({}, {__call = dropSelfArg(func)})
 end
 
+---@type any
 local screenManager = nil
 local camera = nil
 local input = nil
-local monocle = nil
 
 function love.load(args)
   -- graphics setup
@@ -77,10 +77,15 @@ function love.load(args)
   input = require('lib.baton').new(gameConfig.controls)
   Singletons.input = input
 
-  -- set up monocle
-  monocle = require('lib.monocle').new()
-  monocle:setup(gameConfig.window.monocleConfig, gameConfig.window.windowConfig)
-  Singletons.monocle = monocle
+  -- set up display handler
+  Singletons.displayHandler = require('display_handler')
+  Singletons.displayHandler.init({
+    canvasWidth = gameConfig.window.displayConfig.virtualWidth,
+    canvasHeight= gameConfig.window.displayConfig.virtualHeight,
+    game_width = gameConfig.window.displayConfig.gameWidth,
+    game_height = gameConfig.window.displayConfig.gameHeight,
+    scale_mode = 1
+  })
 
   -- set up console
   love.keyboard.setKeyRepeat(true)
@@ -107,6 +112,6 @@ function love.draw()
 end
 
 function love.resize(w, h)
-  monocle:resize(w, h)
   screenManager:emit('resize', w, h)
+  Singletons.displayHandler.resize(w, h)
 end

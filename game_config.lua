@@ -19,9 +19,9 @@ local controls = {
 
 local window = {
   title = "Love Oracle " .. version,
-  monocleConfig = {
-    windowWidth = 160,
-    windowHeight = 144,
+  displayConfig = {
+    gameWidth = 160,
+    gameHeight = 144,
     virtualWidth = 1280,
     virtualHeight = 720,
     maxScale = 6
