@@ -5,7 +5,7 @@ local inspect = require ('lib.inspect').inspect
 local Camera = require 'lib.camera'
 local vector = require 'lib.vector'
 local GRID_SIZE = require('constants').GRID_SIZE
-local monocle = require('engine.singletons').monocle
+local DisplayHandler = require 'engine.display_handler'
 local DrawTilemapTest = Class {
   init = function(self)
     self.map = nil
@@ -30,7 +30,7 @@ function DrawTilemapTest:update(dt)
 end
 
 function DrawTilemapTest:draw()
-  monocle:begin()
+  DisplayHandler.push()
   self.camera:attach()
   for layerIndex, tileLayer in ipairs(self.map.tileLayers) do
     for y = 1, self.map.height do
@@ -44,7 +44,7 @@ function DrawTilemapTest:draw()
     end
   end
   self.camera:detach()
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 return DrawTilemapTest

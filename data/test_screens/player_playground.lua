@@ -4,7 +4,7 @@ local Player = require 'engine.player.player'
 local Sword = require 'engine.items.weapons.item_sword'
 local Direction4 = require 'engine.enums.direction4'
 local Singletons = require 'engine.singletons'
-local DisplayHandler = Singletons.DisplayHandler
+local DisplayHandler = require 'engine.display_handler'
 local Input = require('engine.singletons').input
 
 local PlayerPlayground = Class { __includes = BaseScreen,
@@ -33,17 +33,17 @@ function PlayerPlayground:update(dt)
 end
 
 function PlayerPlayground:draw()
-  monocle:begin()
-  self.player:draw()
-  if self.sword:isVisible() then
-    self.sword:draw()
-  end
-  self.sword:debugDraw()
-  self.player:debugDraw()
-  self:drawFPS()
-  self:drawMemory()
-  self:drawVersion()
-  monocle:finish()
+  DisplayHandler.push()
+    self.player:draw()
+    if self.sword:isVisible() then
+      self.sword:draw()
+    end
+    self.sword:debugDraw()
+    self.player:debugDraw()
+    self:drawFPS()
+    self:drawMemory()
+    self:drawVersion()
+  DisplayHandler.pop()
 end
 
 return PlayerPlayground

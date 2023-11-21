@@ -3,6 +3,7 @@ local gameConfig = require 'game_config'
 local ContentControl = require 'engine.utils.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
 local tick = require 'lib.tick'
+local DisplayHandler = require 'engine.display_handler'
 
 love.inspect = require 'lib.inspect'
 -- singletons
@@ -78,15 +79,17 @@ function love.load(args)
   Singletons.input = input
 
   -- set up display handler
-  Singletons.displayHandler = require('display_handler')
-  Singletons.displayHandler.init({
+
+  DisplayHandler.init({
+    -- display handler arguments
     canvasWidth = gameConfig.window.displayConfig.virtualWidth,
     canvasHeight= gameConfig.window.displayConfig.virtualHeight,
+
+    -- resolution solution arguments
     game_width = gameConfig.window.displayConfig.gameWidth,
     game_height = gameConfig.window.displayConfig.gameHeight,
     scale_mode = 1
   })
-
   -- set up console
   love.keyboard.setKeyRepeat(true)
   --console.font = AssetManager.getFont('debugConsole')
@@ -113,5 +116,5 @@ end
 
 function love.resize(w, h)
   screenManager:emit('resize', w, h)
-  Singletons.displayHandler.resize(w, h)
+  DisplayHandler.resize(w, h)
 end

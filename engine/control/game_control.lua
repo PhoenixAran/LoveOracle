@@ -13,8 +13,7 @@ local RoomControl = require 'engine.control.room_control'
 local RoomNormalState = require 'engine.control.game_states.room_states.room_normal_state'
 
 local Singletons = require 'engine.singletons'
-local monocle = Singletons.monocle
-
+local DisplayHandler = require 'engine.display_handler'
 
 local console = require 'lib.console'
 
@@ -29,8 +28,8 @@ local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()
     self.player = nil
-    local w = GameConfig.window.monocleConfig.windowWidth
-    local h = GameConfig.window.monocleConfig.windowHeight - Consts.GRID_SIZE
+    local w = GameConfig.window.displayConfig.gameWidth
+    local h = GameConfig.window.displayConfig.gameHeight - Consts.GRID_SIZE
     self.camera = Camera(w/2,h/2, w, h)
     self.map = nil
     self.roomControl = nil
@@ -123,12 +122,12 @@ function GameControl:update(dt)
 end
 
 function GameControl:draw()
-  monocle:begin()
+  DisplayHandler.push()
   local gameState = self.gameStateStack:getCurrentState()
   if gameState then
     gameState:draw()
   end
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 ---@param gameState GameState

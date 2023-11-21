@@ -9,7 +9,6 @@
 ---@field roomControl RoomControl
 local singletons = {
   input = nil,
-  displayHandler = { },
   screenManager = { },
   camera = { },
   gameControl = { },

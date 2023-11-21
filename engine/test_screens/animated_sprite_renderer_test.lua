@@ -8,7 +8,7 @@ local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
 local Direction4 = require 'engine.enums.direction4'
 local input = require('engine.singletons').input
 
-local monocle = require('engine.singletons').monocle
+local DisplayHandler = require 'engine.display_handler'
 
 local AnimatedSpriteRendererTest = Class { __includes = BaseScreen,
   init = function(self)
@@ -92,7 +92,7 @@ function AnimatedSpriteRendererTest:update(dt)
 end
 
 function AnimatedSpriteRendererTest:draw()
-  monocle:begin()
+  DisplayHandler.push()
   self.sprite:draw()
   local x, y = 2, 2
   for i, v in ipairs(self.animations) do
@@ -108,7 +108,7 @@ function AnimatedSpriteRendererTest:draw()
     end
     y = y + 16
   end
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 return AnimatedSpriteRendererTest

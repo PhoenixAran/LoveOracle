@@ -3,7 +3,7 @@ local rs = require 'lib.resolution_solution'
 
 
 ---@type love.Canvas
-local mainCanvas
+local gameCanvas
 
 --- module that handles graphics scaling and shader application
 --- wraps resolution solution
@@ -12,27 +12,35 @@ local DisplayHandler = {
   
 }
 
-function DisplayHandler.init(options)
-  if mainCanvas then
-    mainCanvas:release()
+function DisplayHandler.init(args)
+  if gameCanvas then
+    gameCanvas:release()
   end
-  rs.conf(options)
+  rs.conf(args)
 
-  mainCanvas = love.graphics.newCanvas(options.canvasWidth, options.canvasHeight)
-  mainCanvas:setFilter('nearest', 'nearest')
+  gameCanvas = love.graphics.newCanvas(args.canvasWidth, args.canvasHeight)
+  gameCanvas:setFilter('nearest', 'nearest')
+  
+  love.window.setMode(args.game_width, args.game_height, { resizable = true, vsync = true, minwidth = args.game_width, minheight = args.game_height })
 end
 
 function DisplayHandler.pop()
   rs.pop()
+  --love.graphics.setCanvas()
 end
 
 function DisplayHandler.push()
-  rs.pop()
+  --love.graphics.setCanvas(gameCanvas)
+  rs.push()
 end
 
+function DisplayHandler.debugInfo()
+  rs.debug_info(0, 0)
+end
+
+-- love callback
 function DisplayHandler.resize(w, h)
   rs.resize()
 end
-
 
 return DisplayHandler

@@ -5,7 +5,7 @@ local SpriteRenderer = require 'engine.components.sprite_renderer'
 local Subtexture = require 'engine.graphics.subtexture'
 local AssetManager = require 'engine.utils.asset_manager'
 local Singletons = require 'engine.singletons'
-local monocle = Singletons.monocle
+local DisplayHandler = require 'engine.display_handler'
 local SpriteTest = Class {
   init = function(self)
     self.testEntity = nil
@@ -24,10 +24,10 @@ end
 
 
 function SpriteTest:draw()
-  monocle:begin()
+  DisplayHandler.push()
   self.testEntity['sr']:draw()
   self.testEntity:debugDraw()
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 return SpriteTest

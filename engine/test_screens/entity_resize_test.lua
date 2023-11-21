@@ -6,7 +6,7 @@ local TestEntity = require 'engine.test_game_entity'
 local BaseScreen = require 'engine.screens.base_screen'
 
 local Physics = require 'engine.physics'
-local monocle = require('engine.singletons').monocle
+local DisplayHandler = require 'engine.display_handler'
 
 local TestBox = Class { __includes = Entity,
   init = function(self, args)
@@ -54,7 +54,7 @@ function Screen:update(dt)
 end
 
 function Screen:draw()
-  monocle:begin()
+  DisplayHandler.push()
   for _, b in ipairs(self.testBoxes) do
     b:draw()
     b:debugDraw()
@@ -62,7 +62,7 @@ function Screen:draw()
   self.testEntity:draw()
   self.testEntity:debugDraw()
   self:drawFPS()
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 return Screen

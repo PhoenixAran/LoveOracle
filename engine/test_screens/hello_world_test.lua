@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local monocle = require('engine.singletons').monocle
+local DisplayHandler = require 'engine.display_handler'
 
 local HelloWorldTest = Class {
   init = function(self)
@@ -11,9 +11,9 @@ function HelloWorldTest:update(dt)
 end
 
 function HelloWorldTest:draw()
-  monocle:begin()
+  DisplayHandler.push()
   love.graphics.print("Hello World!", 24, 24)
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 return HelloWorldTest

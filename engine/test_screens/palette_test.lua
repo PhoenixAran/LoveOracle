@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local Slab = require 'lib.slab'
 local inspect = require 'lib.inspect'
 local assetManager = require 'engine.utils.asset_manager'
-local monocle = require('engine.singletons').monocle
+local DisplayHandler = require 'engine.display_handler'
 
 local PaletteTest = Class {
   init = function(self)
@@ -50,7 +50,7 @@ function PaletteTest:updateColor()
 end
 
 function PaletteTest:draw()
-  monocle:begin()
+  DisplayHandler.push()
   local subtexture = self.spriteSheet:getTexture(1)
   love.graphics.setShader(self.shader)
   love.graphics.draw(subtexture.image, subtexture.quad, 160 / 2, 144 / 2)
@@ -58,7 +58,7 @@ function PaletteTest:draw()
   love.graphics.setColor(0, 70 / 255, 120 / 255, 255 / 255)
   love.graphics.rectangle("line", (160 / 2) - 1, (144 / 2) - 1, 18, 18)
   love.graphics.setColor(1, 1, 1)
-  monocle:finish()
+  DisplayHandler.pop()
   Slab.Draw()
 end
 

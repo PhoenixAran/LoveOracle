@@ -163,13 +163,18 @@ function RoomTransitionState:draw()
   local entities = self.control.entities
 
   camera:attach()
-  local x = camera.x - camera.w / 2
-  local y = camera.y - camera.h / 2
-  local w = camera.w
-  local h = camera.h
-  entities:drawTileEntities(x, y, w, h)
-  entities:drawEntities()
+    local x = camera.x - camera.w / 2
+    local y = camera.y - camera.h / 2
+    local w = camera.w
+    local h = camera.h
+    entities:drawTileEntities(x, y, w, h)
+    entities:drawEntities()
   camera:detach()
+
+  -- HUD placeholder
+  love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
+  love.graphics.rectangle('fill', 0, 144 - 16, 160, 16)
+  love.graphics.setColor(0, 0, 0)
 end
 
 return RoomTransitionState

@@ -5,7 +5,7 @@ local SpriteRenderer = require 'engine.components.sprite_renderer'
 local Sprite = require 'engine.graphics.sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'
 
-local monocle = require('engine.singletons').monocle
+local DisplayHandler = require 'engine.display_handler'
 
 local CompositeSpriteTest = Class { __includes = BaseScreen,
   init = function(self)
@@ -34,11 +34,11 @@ function CompositeSpriteTest:update(dt)
 end
 
 function CompositeSpriteTest:draw()
-  monocle:begin()
+  DisplayHandler.push()
   self.testEntity['s1']:draw()
   self.testEntity['s2']:draw()
   self.testEntity['s3']:draw()
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 return CompositeSpriteTest

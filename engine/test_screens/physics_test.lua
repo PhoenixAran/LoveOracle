@@ -7,7 +7,7 @@ local BaseScreen = require 'engine.screens.base_screen'
 local lume = require 'lib.lume'
 local bit = require 'bit'
 local Physics = require 'engine.physics'
-local monocle = require('engine.singletons').monocle
+local DisplayHandler = require 'engine.display_handler'
 
 
 local TestBox = Class { __includes = Entity,
@@ -57,13 +57,13 @@ function Screen:update(dt)
 end
 
 function Screen:draw()
-  monocle:begin()
+  DisplayHandler.push()
   for _, b in ipairs(self.testBoxes) do
     b:debugDraw()
   end
   self.testEntity:debugDraw()
   self:drawMemory()
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 return Screen

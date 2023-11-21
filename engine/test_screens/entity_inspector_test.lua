@@ -6,7 +6,7 @@ local Sword = require 'engine.items.weapons.item_sword'
 local EntityInspector = require 'engine.screens.slab_modules.entity_inspector'
 local Slab = require 'lib.slab'
 local PropertyType = require('engine.entities.inspector_properties').PropertyType
-local monocle = require('engine.singletons').monocle
+local DisplayHandler = require 'engine.display_handler'
 
 local EntityInspectorTest = Class { __includes = BaseScreen,
   init = function(self)
@@ -34,7 +34,7 @@ function EntityInspectorTest:update(dt)
 end
 
 function EntityInspectorTest:draw()
-  monocle:begin()
+  DisplayHandler.push()
   self.player:draw()
   --self.player:debugDraw()
   if self.sword:isVisible() then 
@@ -43,7 +43,7 @@ function EntityInspectorTest:draw()
   self:drawFPS()
   self:drawMemory()
   self:drawVersion()
-  monocle:finish()
+  DisplayHandler.pop()
   Slab.Draw()
 end
 

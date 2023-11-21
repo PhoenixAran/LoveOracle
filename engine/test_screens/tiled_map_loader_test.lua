@@ -6,7 +6,7 @@ local TiledMapLoader = require 'engine.tiles.tiled.tiled_map_loader'
 local MapLoader = require 'engine.tiles.map_loader'
 local Map = require 'engine.tiles.map'
 local Singletons = require 'engine.singletons'
-local monocle = Singletons.monocle
+local DisplayHandler = require 'engine.display_handler'
 local TiledMapLoaderTest = Class { __includes = BaseScreen,
   init = function(self)
 
@@ -30,9 +30,9 @@ function TiledMapLoaderTest:enter(...)
 end
 
 function TiledMapLoaderTest:draw()
-  monocle:begin()
+  DisplayHandler.push()
   love.graphics.print('It works')
-  monocle:finish()
+  DisplayHandler.pop()
 end
 
 return TiledMapLoaderTest

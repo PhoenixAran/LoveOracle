@@ -25,12 +25,6 @@ local window = {
     virtualWidth = 1280,
     virtualHeight = 720,
     maxScale = 6
-  },
-  windowConfig = {
-    minwidth = 160,
-    minheight = 144, 
-    vsync = true,
-    resizable = true
   }
 }
 
