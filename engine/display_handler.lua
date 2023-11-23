@@ -2,6 +2,8 @@ local Class = require 'lib.class'
 local rs = require 'lib.resolution_solution'
 
 
+local oldX, oldY, oldW, oldH = 0,0,0,0
+
 ---@type love.Canvas
 local gameCanvas
 
@@ -22,17 +24,22 @@ function DisplayHandler.init(args)
   gameCanvas:setFilter('nearest', 'nearest')
   
   love.window.setMode(args.game_width, args.game_height, { resizable = true, vsync = true, minwidth = args.game_width, minheight = args.game_height })
+  DisplayHandler.resize()
+end
+
+
+function DisplayHandler.push()
+  rs.push()
+
+  oldX, oldY, oldW, oldH = love.graphics.getScissor()
+  love.graphics.setScissor(rs.get_game_zone())
 end
 
 function DisplayHandler.pop()
   rs.pop()
-  --love.graphics.setCanvas()
+  love.graphics.setScissor(oldX, oldY, oldW, oldH)
 end
 
-function DisplayHandler.push()
-  --love.graphics.setCanvas(gameCanvas)
-  rs.push()
-end
 
 function DisplayHandler.debugInfo()
   rs.debug_info(0, 0)

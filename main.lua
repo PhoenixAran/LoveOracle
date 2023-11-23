@@ -83,12 +83,12 @@ function love.load(args)
   DisplayHandler.init({
     -- display handler arguments
     canvasWidth = gameConfig.window.displayConfig.virtualWidth,
-    canvasHeight= gameConfig.window.displayConfig.virtualHeight,
+    canvasHeight = gameConfig.window.displayConfig.virtualHeight,
 
     -- resolution solution arguments
     game_width = gameConfig.window.displayConfig.gameWidth,
     game_height = gameConfig.window.displayConfig.gameHeight,
-    scale_mode = 1
+    scale_mode = 3
   })
   -- set up console
   love.keyboard.setKeyRepeat(true)
