@@ -18,13 +18,11 @@ function DisplayHandler.init(args)
   if gameCanvas then
     gameCanvas:release()
   end
-  rs.conf(args)
-
   gameCanvas = love.graphics.newCanvas(args.canvasWidth, args.canvasHeight)
   gameCanvas:setFilter('nearest', 'nearest')
   
-  love.window.setMode(args.game_width, args.game_height, { resizable = true, vsync = true, minwidth = args.game_width, minheight = args.game_height })
-  DisplayHandler.resize()
+  love.window.setMode(args.canvasWidth, args.canvasHeight, { resizable = true, vsync = true, minwidth = args.game_width, minheight = args.game_height })
+  rs.conf(args)
 end
 
 

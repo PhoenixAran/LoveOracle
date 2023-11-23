@@ -6,8 +6,8 @@
     "activeFile": "maps/test_map_1.tmj",
     "expandedProjectPaths": [
         "tilesets",
-        "maps",
-        "templates"
+        "templates",
+        "maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -64,10 +64,10 @@
         },
         "maps/test_map_1.tmj": {
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 642.5,
-                "y": 95
+                "x": 480,
+                "y": 293
             }
         },
         "maps/test_map_1_debug.json": {
