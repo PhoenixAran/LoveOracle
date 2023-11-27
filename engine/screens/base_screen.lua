@@ -42,34 +42,6 @@ function BaseScreen:drawVersion()
   love.graphics.draw(self.drawVersionText, 160 - self.drawVersionText:getWidth(), 132)
 end
 
--- TODO
--- function BaseScreen:mouseClickInGame(x, y)
---   if not input:pressed('leftClick') then
---     return false
---   end
---   if x == nil or y == nil then
---     x, y = love.mouse.getPosition()
---   end
---   local mx = monocle.x
---   local my = monocle.y
---   local width = monocle.windowWidth * monocle.scale
---   local height = monocle.windowHeight * monocle.scale
---   return rect.containsPoint(mx, my, width, height, x, y)
--- end
-
--- function BaseScreen:getMousePositionInCanvas()
---   local x, y = love.mouse.getPosition()
---   local mx = monocle.x
---   local my = monocle.y
---   local width = monocle.windowWidth * monocle.scale
---   local height = monocle.windowHeight * monocle.scale 
---   x = x - mx
---   y = y - my 
---   x = x / monocle.scale
---   y = y / monocle.scale
---   return x, y
--- end
-
 if GameConfig.enableQuakeConsole then
   print 'Debug console enabled in basescreen'
   function BaseScreen:keypressed(keycode, scancode, isrepeat)

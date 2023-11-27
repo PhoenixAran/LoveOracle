@@ -88,7 +88,7 @@ function love.load(args)
     -- resolution solution arguments
     game_width = gameConfig.window.displayConfig.gameWidth,
     game_height = gameConfig.window.displayConfig.gameHeight,
-    scale_mode = 3
+    scale_mode = 1
   })
   -- set up console
   love.keyboard.setKeyRepeat(true)
@@ -96,12 +96,6 @@ function love.load(args)
 
   -- setup startup screen
   print('Startup Screen: ' .. gameConfig.startupScreen)
-  --TODO: splash screen
-  -- if gameConfig.showSplash then
-  --   screenManager:enter( require('engine.screens.splash_screen')(gameConfig.startupScreen))
-  -- else
-  --   screenManager:enter( require(gameConfig.startupScreen)() )
-  -- end
   screenManager:enter(require(gameConfig.startupScreen)())
 end
 
@@ -112,6 +106,7 @@ end
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
   screenManager:emit('draw')
+  DisplayHandler.debugInfo()
 end
 
 function love.resize(w, h)

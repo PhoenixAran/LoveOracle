@@ -174,7 +174,7 @@ function RoomTransitionState:draw()
   -- HUD placeholder
   love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
   love.graphics.rectangle('fill', 0, 144 - 16, 160, 16)
-  love.graphics.setColor(0, 0, 0)
+  love.graphics.setColor(1,1,1)
 end
 
 return RoomTransitionState

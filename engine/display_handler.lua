@@ -15,29 +15,36 @@ local DisplayHandler = {
 }
 
 function DisplayHandler.init(args)
-  if gameCanvas then
-    gameCanvas:release()
+  rs.resize_callback = function()
+    if gameCanvas then
+      gameCanvas:release()
+    end
+    gameCanvas = love.graphics.newCanvas()
+    gameCanvas:setFilter('nearest', 'nearest')
   end
-  gameCanvas = love.graphics.newCanvas(args.canvasWidth, args.canvasHeight)
-  gameCanvas:setFilter('nearest', 'nearest')
-  
   love.window.setMode(args.canvasWidth, args.canvasHeight, { resizable = true, vsync = true, minwidth = args.game_width, minheight = args.game_height })
   rs.conf(args)
 end
 
 
 function DisplayHandler.push()
-  rs.push()
+  love.graphics.setCanvas(gameCanvas)
+  love.graphics.clear(0, 0, 0, 1)
 
+  rs.push()
   oldX, oldY, oldW, oldH = love.graphics.getScissor()
   love.graphics.setScissor(rs.get_game_zone())
 end
 
 function DisplayHandler.pop()
-  rs.pop()
   love.graphics.setScissor(oldX, oldY, oldW, oldH)
-end
+  
+  rs.pop()
 
+  love.graphics.setCanvas()
+  love.graphics.setBlendMode('alpha')
+  love.graphics.draw(gameCanvas)
+end
 
 function DisplayHandler.debugInfo()
   rs.debug_info(0, 0)
