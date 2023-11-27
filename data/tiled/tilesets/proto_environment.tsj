@@ -35,6 +35,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":".5"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"1,1"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -42,7 +52,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"conveyor"
                 }, 
                 {
                  "name":"zRange",
@@ -57,6 +67,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -83,6 +103,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -107,6 +137,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -129,6 +169,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -172,6 +222,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -194,6 +254,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -220,6 +290,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -244,6 +324,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -266,6 +356,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -309,6 +409,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":".5"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"1,-1"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -316,7 +426,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"conveyor"
                 }, 
                 {
                  "name":"zRange",
@@ -331,6 +441,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -357,6 +477,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -381,6 +511,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -403,6 +543,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -446,6 +596,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -468,6 +628,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -494,6 +664,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -518,6 +698,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -540,6 +730,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -583,6 +783,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":".5"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"-1,1"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -590,7 +800,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"conveyor"
                 }, 
                 {
                  "name":"zRange",
@@ -605,6 +815,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -631,6 +851,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -655,6 +885,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -677,6 +917,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -720,6 +970,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -742,6 +1002,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -768,6 +1038,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -792,6 +1072,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -814,6 +1104,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -857,6 +1157,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":".5"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"-1,-1"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -864,7 +1174,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"conveyor"
                 }, 
                 {
                  "name":"zRange",
@@ -879,6 +1189,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -905,6 +1225,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -929,6 +1259,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -951,6 +1291,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -994,6 +1344,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1016,6 +1376,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1042,6 +1412,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1066,6 +1446,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1088,6 +1478,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1131,6 +1531,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1153,6 +1563,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1179,6 +1599,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1203,6 +1633,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1225,6 +1665,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1268,6 +1718,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1290,6 +1750,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1316,6 +1786,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1340,6 +1820,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1362,6 +1852,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1405,6 +1905,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1427,6 +1937,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1453,6 +1973,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1475,6 +2005,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1501,6 +2041,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1523,6 +2073,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1549,6 +2109,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1571,6 +2141,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1597,6 +2177,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1619,6 +2209,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1662,6 +2262,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1684,6 +2294,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1710,6 +2330,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1732,6 +2362,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1758,6 +2398,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1780,6 +2430,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1806,6 +2466,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1828,6 +2498,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1854,6 +2534,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1876,6 +2566,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1919,6 +2619,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1941,6 +2651,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -1967,6 +2687,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -1989,6 +2719,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2015,6 +2755,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2037,6 +2787,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2063,6 +2823,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2085,6 +2855,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2111,6 +2891,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2133,6 +2923,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2176,6 +2976,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2198,6 +3008,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2224,6 +3044,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2246,6 +3076,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2272,6 +3112,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2294,6 +3144,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2320,6 +3180,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2342,6 +3212,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2368,6 +3248,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2390,6 +3280,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2433,6 +3333,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2455,6 +3365,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2481,6 +3401,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2503,6 +3433,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2529,6 +3469,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2551,6 +3501,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2577,6 +3537,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2599,6 +3569,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2625,6 +3605,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2647,6 +3637,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2690,6 +3690,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2712,6 +3722,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2738,6 +3758,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2760,6 +3790,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2786,6 +3826,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2808,6 +3858,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2834,6 +3894,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2856,6 +3926,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2882,6 +3962,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2904,6 +3994,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2930,6 +4030,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -2952,6 +4062,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -2978,6 +4098,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3000,6 +4130,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3026,6 +4166,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3048,6 +4198,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3074,6 +4234,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3096,6 +4266,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3122,6 +4302,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3144,6 +4334,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3170,6 +4370,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3192,6 +4402,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3218,6 +4438,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3240,6 +4470,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3266,6 +4506,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3288,6 +4538,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3314,6 +4574,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3336,6 +4606,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3362,6 +4642,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3384,6 +4674,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3410,6 +4710,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3432,6 +4742,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3458,6 +4778,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3480,6 +4810,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3506,6 +4846,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3528,6 +4878,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3554,6 +4914,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3576,6 +4946,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3602,6 +4982,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3624,6 +5014,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3650,6 +5050,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3672,6 +5082,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3698,6 +5118,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3720,6 +5150,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3746,6 +5186,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3768,6 +5218,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3794,6 +5254,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3816,6 +5286,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3842,6 +5322,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3864,6 +5354,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3890,6 +5390,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3912,6 +5422,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3938,6 +5458,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -3960,6 +5490,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -3986,6 +5526,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4008,6 +5558,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4034,6 +5594,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4056,6 +5626,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4082,6 +5662,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4104,6 +5694,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4130,6 +5730,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4152,6 +5762,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4178,6 +5798,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4200,6 +5830,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4226,6 +5866,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4248,6 +5898,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4274,6 +5934,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4296,6 +5966,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4322,6 +6002,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4344,6 +6034,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4370,6 +6070,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4392,6 +6102,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4418,6 +6138,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4440,6 +6170,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4466,6 +6206,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4488,6 +6238,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4514,6 +6274,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4536,6 +6306,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4562,6 +6342,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4584,6 +6374,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4610,6 +6410,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4632,6 +6442,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4658,6 +6478,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4680,6 +6510,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4706,6 +6546,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4728,6 +6578,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4754,6 +6614,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4776,6 +6646,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4802,6 +6682,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4824,6 +6714,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4850,6 +6750,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4872,6 +6782,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4898,6 +6818,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4920,6 +6850,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4946,6 +6886,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -4968,6 +6918,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -4994,6 +6954,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -5016,6 +6986,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",
@@ -5042,6 +7022,16 @@
                  "value":"0,0,16,16"
                 }, 
                 {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
+                }, 
+                {
                  "name":"hurtBox",
                  "type":"string",
                  "value":"0,0,0,0"
@@ -5064,6 +7054,16 @@
                  "name":"bumpBox",
                  "type":"string",
                  "value":"0,0,16,16"
+                }, 
+                {
+                 "name":"conveyorSpeed",
+                 "type":"string",
+                 "value":"0"
+                }, 
+                {
+                 "name":"conveyorVector",
+                 "type":"string",
+                 "value":"0,0"
                 }, 
                 {
                  "name":"hurtBox",

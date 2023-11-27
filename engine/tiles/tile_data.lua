@@ -78,7 +78,7 @@ local function parseConveyorVector(conveyorVector)
     return 0, 0
   end
   local args = ph.split(conveyorVector, ',')
-  assert(lume.count(args) == 2)
+  assert(lume.count(args) == 2, love.inspect(args))
   lume.each(args, ph.argIsNumber)
   return tonumber(args[1]), tonumber(args[2])
 end

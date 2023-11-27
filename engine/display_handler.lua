@@ -10,11 +10,10 @@ local gameCanvas
 --- module that handles graphics scaling and shader application
 --- wraps resolution solution
 ---@class DisplayHandler
-local DisplayHandler = {
-  
-}
+local DisplayHandler = { }
 
 function DisplayHandler.init(args)
+---@diagnostic disable-next-line: duplicate-set-field
   rs.resize_callback = function()
     if gameCanvas then
       gameCanvas:release()
@@ -22,7 +21,7 @@ function DisplayHandler.init(args)
     gameCanvas = love.graphics.newCanvas()
     gameCanvas:setFilter('nearest', 'nearest')
   end
-  love.window.setMode(args.canvasWidth, args.canvasHeight, { resizable = true, vsync = true, minwidth = args.game_width, minheight = args.game_height })
+  love.window.setMode(args.canvasWidth, args.canvasHeight, { resizable = false, vsync = true, minwidth = args.game_width, minheight = args.game_height })
   rs.conf(args)
 end
 
@@ -38,7 +37,7 @@ end
 
 function DisplayHandler.pop()
   love.graphics.setScissor(oldX, oldY, oldW, oldH)
-  
+
   rs.pop()
 
   love.graphics.setCanvas()

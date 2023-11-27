@@ -6,6 +6,7 @@ local TileType = require('engine.enums.flags.tile_type_flags').enumMap
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local GRID_SIZE = require('constants').GRID_SIZE
 local Singletons = require 'engine.singletons'
+local vec2 = require 'lib.vector'
 
 local function makeTileEntityName(tileIndexX, tileIndexY, layer)
   return tostring(tileIndexX) .. '_' .. tostring(tileIndexY) .. '-' .. tostring(layer)
@@ -60,6 +61,11 @@ end
 
 function Tile:getTileType()
   return self.tileData.tileType
+end
+
+function Tile:getConveyorVelocity()
+  local td = self.tileData
+  return vec2.mul(td.conveyorSpeed, vec2.normalize(td.conveyorVectorX, td.conveyorVectorY))
 end
 
 function Tile:isTile()

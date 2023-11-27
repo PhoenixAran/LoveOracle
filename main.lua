@@ -106,7 +106,6 @@ end
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
   screenManager:emit('draw')
-  DisplayHandler.debugInfo()
 end
 
 function love.resize(w, h)

@@ -281,6 +281,10 @@ function MapEntity:isInAir()
   return self:getZPosition() > 0
 end
 
+function MapEntity:movesWithConveyors()
+  return self.movement.movesWithConveyors
+end
+
 ---@param dt number delta time
 ---@return number tvx translation vector x
 ---@return number tvy translation vector y
@@ -290,8 +294,13 @@ function MapEntity:move(dt)
   local posX, posY = self:getBumpPosition()
   local velX, velY = self.movement:getLinearVelocity(dt)
   velX, velY = vector.add(velX, velY, self:getKnockbackVelocity(dt))
+  if self:movesWithConveyors() and self:onConveyor() then
+    velX, velY = vector.add(velX, velY, self.groundObserver.conveyorVelocityX, self.groundObserver.conveyorVelocityY)
+  end
+
   local goalX, goalY = vector.add(posX, posY, velX, velY)
   local actualX, actualY, cols, len = Physics:move(self, goalX, goalY, self.moveFilter)
+
   for _, v in ipairs(cols) do
     lume.push(self.moveCollisions, v.other)
   end
@@ -369,6 +378,15 @@ end
 
 function MapEntity:getKnockbackVelocity(dt)
   return self.combat:getKnockbackVelocity(dt)
+end
+
+-- ground observer pass throughs
+function MapEntity:onConveyor()
+  return self.groundObserver.onConveyor
+end
+
+function MapEntity:onPlatform()
+  return self.groundObserver.onPlatform()
 end
 
 --- hurt this entity

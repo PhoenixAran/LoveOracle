@@ -16,7 +16,8 @@ TileTypeFlags:makeTags {
   'waterfall',
   'lava',
   'lavafall',
-  'whirlpool'
+  'whirlpool',
+  'conveyor'
 }
 
 TileTypeFlags:makeEnumMap {
@@ -33,6 +34,7 @@ TileTypeFlags:makeEnumMap {
   Waterfall = 'waterfall',
   Lava = 'lava',
   Lavafall = 'lavafall',
-  Whirlpool = 'whirlpool'
+  Whirlpool = 'whirlpool',
+  Conveyor = 'conveyor'
 }
 return TileTypeFlags

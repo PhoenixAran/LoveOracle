@@ -18,9 +18,12 @@ local vector = require 'lib.vector'
 ---@field onStairs boolean
 ---@field onLadder boolean
 ---@field onIce boolean
+---@field onConveyor boolean
 ---@field inWater boolean
 ---@field inHole boolean
 ---@field onPlatform boolean
+---@field conveyorVelocityX number
+---@field conveyorVelocityY number
 ---@field queryFilter function
 ---@field bumpSorter function
 ---@field visitedTileIndices table<integer, boolean>
@@ -38,12 +41,16 @@ local GroundObserver = Class { __includes = {Component},
     self.onStairs = false
     self.onLadder = false
     self.onIce = false
+    self.onConveyor = false
     self.inWater = false
     self.inHole = false
     self.inPuddle = false
 
     local groundObserver = self
     local parentEntity = self.entity
+
+    self.conveyorVelocityX = 0
+    self.conveyorVelocityY = 0
 
     self.queryFilter = function(item)
       if (item.isTile and item:isTile()) or (item.getType and item:getType() == 'platform') then
@@ -121,6 +128,9 @@ function GroundObserver:update(dt)
             self.onLadder = true
           elseif tileType == TileTypes.Ice then
             self.onIce = true
+          elseif tileType == TileTypes.Conveyor then
+            self.conveyorVelocityX, self.conveyorVelocityY = item:getConveyorVelocity()
+            self.onConveyor = true
           end
         end
       else  -- its a platform
@@ -139,6 +149,7 @@ function GroundObserver:reset()
   self.onStairs = false
   self.onLadder = false
   self.onIce = false
+  self.onConveyor = false
   self.inWater = false
   self.inHole = false
   lume.clear(self.visitedTileIndices)
