@@ -53,14 +53,18 @@ function love.load(args)
   -- graphics setup
   love.graphics.setDefaultFilter('nearest', 'nearest')
   love.window.setTitle(gameConfig.window.title)
-  
+
   -- build content here (need it for font)
   ContentControl.buildContent()
   love.graphics.setFont(AssetManager.getFont('baseScreenDebug'))
 
   -- set up tick rate
-  tick.framerate = 60
   tick.rate = 1 / 60
+  tick.framerate = 60
+  local _, _, windowFlags = love.window.getMode()
+  if windowFlags.refreshrate then
+    tick.framerate = math.max(tick.framerate, windowFlags.refreshrate)
+  end
 
   --[[
     Singleton Inits

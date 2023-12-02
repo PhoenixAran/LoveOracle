@@ -20,6 +20,8 @@ local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Physics = require 'engine.physics'
+local Consts = require 'constants'
+
 -- ### STATES ###
 -- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
@@ -47,11 +49,13 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field buttonCallbacks table<string, function[]>
 ---@field respawnPositionX number
 ---@field respawnPositionY number
----@field respawnDirection number
+---@field respawnDirection4 number
 ---@field moveAnimation string
 ---@field items table<string, Item?>
 ---@field previousPositionX number
 ---@field previousPositionY number
+---@field respawnIndexX integer
+---@field respawnIndexY integer
 ---@field slideAndCornerCorrectQueryRectFilter function
 ---@field tileQueryRect table
 ---@field tileQueryRectTargets table
@@ -116,7 +120,7 @@ local Player = Class { __includes = MapEntity,
     self.buttonCallbacks = {}
 
     self.respawnPositionX, self.respawnPositionY = nil, nil
-    self.respawnDirection = Direction4.down
+    self.respawnDirection4 = Direction4.down
     self.moveAnimation = nil
 
     -- bind controls (except dpad, thats automatically done)
@@ -272,6 +276,11 @@ function Player:matchAnimationDirection(inputX, inputY)
     animDir4 = Direction4.down
   end
   self:setAnimationDirection4(animDir4)
+end
+
+function Player:markRespawn()
+  self.respawnPositionX, self.respawnPositionY = self:getPosition()
+  self.respawnDirection4 = self:getDirection4()
 end
 
 --- update use direction vector

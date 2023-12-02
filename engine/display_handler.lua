@@ -7,6 +7,8 @@ local oldX, oldY, oldW, oldH = 0,0,0,0
 ---@type love.Canvas
 local gameCanvas
 
+
+
 --- module that handles graphics scaling and shader application
 --- wraps resolution solution
 ---@class DisplayHandler
@@ -37,9 +39,7 @@ end
 
 function DisplayHandler.pop()
   love.graphics.setScissor(oldX, oldY, oldW, oldH)
-
   rs.pop()
-
   love.graphics.setCanvas()
   love.graphics.setBlendMode('alpha')
   love.graphics.draw(gameCanvas)

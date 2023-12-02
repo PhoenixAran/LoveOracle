@@ -1,6 +1,7 @@
 local Palette = require 'engine.graphics.palette'
 local lume = require 'lib.lume'
 
+---deprecated
 local PaletteBank = {
   palettes = { }
 }

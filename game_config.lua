@@ -23,8 +23,7 @@ local window = {
     gameWidth = 160,
     gameHeight = 144,
     virtualWidth = 1280,
-    virtualHeight = 720,
-    maxScale = 6
+    virtualHeight = 720
   }
 }
 

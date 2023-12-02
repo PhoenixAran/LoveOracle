@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3ZPU8bMQAGYJcvCShIQMv\/YaBLB1gYYGFhYenSX8LQiaETA\/8SI2zdcUpyDueD6PI80islFxOd\/Eq+GG+FELZXIDsxW4Xjpux7zLeYjQE5SOkbd53Svb4Zc1hwL3nclL3OwW7M3oDkPrrXf6dcpPdXKa+vz1LOY\/ZD08eie8njpmxV+tgvuI917KO9hu+EYX2URh+Nbh8\/Yn6mnIa6fdymzJtn69XiOTjopGYfjzH3MQ\/hfR9HMcdzchL0UbOPi9A8S+6DPmb5zD761qH2Wjkvp+NMw8qo\/fvqf0r+7G8n6\/pcKPVVffyKuYm5DPpoq93Hv5T82XMn+fqf8NbJXdBH25j7wUV9WK9m+6o+nlrRR0Mfq2XsPkqij0bfHqwkuY+P\/v067PNKlezBcvK8l45f5rumvs8batZZXZ7DGud+3e+a+rnfUDXODZ371VPjOe\/\/6PWM2Uf395g++tXqI8+9PoYZsw\/r1fJq7EvyvsI503DL7Ev6zo+cMwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAengBjmLpqkCcAAA=",
+         "data":"H4sIAAAAAAAACu3ZPU\/cMAAGYLd8SEBBKgX+DwNdOtClQ7t06cLC0l9yAxMDEwP\/Ep+wFSvl8kGcgyvPI70S3Jko+OWcmGyHEHbeQHZjtiuP20SfYj7EfJyQw5S+cT9T2q9vxRwNOJdy3G3MfUeOak7SGi1\/t72Y\/QnJfbRf\/5Zymb7\/kbL8+jzlIuYgNPPcdS7luIegjzn7OBhwHssx+bPyXvoo1+bdMK2PoRnTx3FK2cci5X\/s4yTmNOUs1O3jd0rXOmS9Wj0Hh63U7GN5Pb4KT3\/X5Tx\/7jlGHtfVxSLoY0gfl6G5llyFf\/soP5urcjZi3CZaZx996xD176\/uUvJ7f1vRR7fX6uNrzK+Y70Efpdp93KTk9x5aya9fh6dO\/gR9lObcD3b1Yb163mv1Ud6f6qOhj7dl7j6GRB+NvCc+npDcx0t\/\/kvQRzZkr5uT533o+DHH2tT99Lo89wwuz2GN537tY23q87x1qfHccOxzP1arcZ0f+390Vpuzj\/b9mD761eojz70+ppmzD+vVeDX2JXlf0Xcs+49+Y\/Yl7\/l5HgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQeAS5i+OqQJwAAA==",
          "encoding":"base64",
          "height":100,
          "id":1,
@@ -79,13 +79,19 @@
                 }, 
                 {
                  "class":"",
-                 "height":144,
+                 "height":128,
                  "id":17,
                  "name":"",
                  "rotation":0,
                  "visible":true,
                  "width":160,
                  "x":560,
+                 "y":0
+                }, 
+                {
+                 "id":19,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":720,
                  "y":0
                 }],
          "opacity":1,
@@ -95,7 +101,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":19,
+ "nextobjectid":20,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",
