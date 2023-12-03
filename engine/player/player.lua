@@ -21,6 +21,7 @@ local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Physics = require 'engine.physics'
 local Consts = require 'constants'
+local PlayerSwimEnvironmentState = require 'engine.player.environment_states.player_swim_environment_state'
 
 -- ### STATES ###
 -- condition states
@@ -102,6 +103,7 @@ local Player = Class { __includes = MapEntity,
       -- environment states
       ['player_grass_environment_state'] = PlayerGrassEnvironmentState(self),
       ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self),
+      ['player_swim_environment_state'] = PlayerSwimEnvironmentState(self),
       -- weapon states
       ['player_swing_state'] = PlayerSwingState(self),
       ['player_push_state'] = PlayerPushState(self),
@@ -128,7 +130,7 @@ local Player = Class { __includes = MapEntity,
       self.playerMovementController:jump()
     end)
     self:addPressInteraction('a', function(player)
-      self:actionUseItem('a')
+      self:actionUseItem('a') 
     end)
     self:addPressInteraction('b', function(player)
       self:actionUseItem('b')
@@ -465,6 +467,10 @@ function Player:getDesiredNaturalState()
     return self:getStateFromCollection('player_grass_environment_state')
   elseif self:isInAir() then
     return self:getStateFromCollection('player_jump_environment_state')
+  elseif go.inLava then
+    return nil -- TODO lava thing
+  elseif go.inDeepWater then
+    return self:getStateFromCollection('player_swim_environment_state')
   end
   -- TODO implement rest of environment states
   return nil

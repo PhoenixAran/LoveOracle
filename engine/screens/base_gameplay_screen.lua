@@ -30,6 +30,7 @@ end
 function BaseGameplayScreen:enter(prev, ...)
   -- TODO stop hardcoding the positions and map
   self.gameControl = GameControl()
+  -- TODO init player based off save file and actual spawn point
   local player = Player({name = 'player', x = 30, y = 30, w = 16, h = 16 })
   player:initTransform()
   self.gameControl:setPlayer(player)

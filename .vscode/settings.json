@@ -1,0 +1,4 @@
+{
+  "Lua.type.weakNilCheck": true,
+  "Lua.type.weakUnionCheck": true
+}

@@ -386,7 +386,11 @@ function MapEntity:onConveyor()
 end
 
 function MapEntity:onPlatform()
-  return self.groundObserver.onPlatform()
+  return self.groundObserver.onPlatform
+end
+
+function MapEntity:inDeepWater()
+  return self.groundObserver.inDeepWater
 end
 
 --- hurt this entity

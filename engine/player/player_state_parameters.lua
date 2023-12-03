@@ -12,6 +12,7 @@ local Pool = require 'engine.utils.pool'
 ---@field canUseWeapons boolean
 ---@field canRoomTransition boolean
 ---@field defaultAnimationWhenNotStill boolean
+---@field interactionCollisions boolean
 ---@field canStrafe boolean
 ---@field alwaysFaceUp boolean
 ---@field alwaysFaceDown boolean
@@ -83,6 +84,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.canRoomTransition =  prioritizeFalse(self.canRoomTransition, other.canRoomTransition)
   self.defaultAnimationWhenNotMoving =  prioritizeFalse(self.defaultAnimationWhenNotMoving, other.defaultAnimationWhenNotMoving)
   self.autoCorrectMovement = prioritizeFalse(self.autoCorrectMovement, other.autoCorrectMovement)
+  self.interactionCollisions = prioritizeFalse(self.interactionCollisions, other.interactionCollisions)
 
   -- you wanna prioritize true for these ones
   self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp
@@ -109,6 +111,7 @@ function PlayerStateParameters:reset()
     self.canRoomTransition = true
     self.defaultAnimationWhenNotMoving = true
     self.autoCorrectMovement = true
+    self.interactionCollisions = true
 
     self.canStrafe = false
     self.alwaysFaceUp = false

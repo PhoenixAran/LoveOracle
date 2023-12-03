@@ -154,6 +154,7 @@ function RoomTransitionState:update(dt)
 end
 
 function RoomTransitionState:onEnd()
+  self.player:markRespawn()
   resetUnusedTileDataAnimations(self.currentRoom, self.newRoom)
   self.control.allowRoomTransition = true
 end

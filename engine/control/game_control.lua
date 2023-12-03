@@ -88,10 +88,9 @@ end
 ---@param spawnIndexY integer?
 function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   self.roomControl = RoomControl(self:getMap(), self:getPlayer(), self:getCamera())
-  if spawnIndexX ~= nil and spawnIndexY ~= nil then
-    self:getPlayer():setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
-    self.roomControl.player:setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
-  end
+  self:getPlayer():setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
+  self:getPlayer():markRespawn()
+  self.roomControl.player:setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
   -- man handle room control for initial startup
   self.roomControl.currentRoom = room
 
@@ -106,7 +105,7 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   x1, y1 = vector.mul(Consts.GRID_SIZE, x1, y1)
   x2, y2 = vector.mul(Consts.GRID_SIZE, x2, y2)
   self:getCamera():setBounds(x1, y1, x2 - x1, y2 - y1)
-  
+
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
 
@@ -143,6 +142,7 @@ end
 
 function GameControl:release()
   -- TODO release signal object members
+---@diagnostic disable-next-line: param-type-mismatch
   SignalObject.release(self)
 end
 

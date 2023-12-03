@@ -21,6 +21,7 @@ local vector = require 'lib.vector'
 ---@field onConveyor boolean
 ---@field inWater boolean
 ---@field inHole boolean
+---@field inDeepWater boolean
 ---@field onPlatform boolean
 ---@field conveyorVelocityX number
 ---@field conveyorVelocityY number
@@ -45,6 +46,7 @@ local GroundObserver = Class { __includes = {Component},
     self.inWater = false
     self.inHole = false
     self.inPuddle = false
+    self.inDeepWater = false
 
     local groundObserver = self
     local parentEntity = self.entity
@@ -124,6 +126,10 @@ function GroundObserver:update(dt)
           elseif tileType == TileTypes.Water or tileType == TileTypes.DeepWater or tileType == TileTypes.Ocean
               or tileType == TileTypes.Waterfall or tileType == TileTypes.Whirlpool then
             self.inWater = true
+            if tileType == TileTypes.DeepWater or tileType == TileTypes.Ocean then
+              self.inDeepWater = true
+              -- TODO whirlpool and ocean and waterfall maybe?
+            end
           elseif tileType == TileTypes.Ladder then
             self.onLadder = true
           elseif tileType == TileTypes.Ice then
@@ -152,6 +158,7 @@ function GroundObserver:reset()
   self.onConveyor = false
   self.inWater = false
   self.inHole = false
+  self.inOcean = false
   lume.clear(self.visitedTileIndices)
 end
 

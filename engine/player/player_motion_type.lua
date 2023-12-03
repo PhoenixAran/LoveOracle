@@ -5,17 +5,17 @@ local Class = require 'lib.class'
 ---@field acceleration integer
 ---@field deceleration integer
 ---@field minSpeed integer
----@field slippery integer
+---@field slippery boolean
+---@field directionSnapCount integer
 local PlayerMotionType = Class {
   init = function(self)
     -- movement component modifiers
     self.speed = 60
     self.acceleration = 1
     self.deceleration = 1
-    self.minSpeed = 0
+    self.minSpeed = 0.05
     self.slippery = false
-    -- TODO?
-    -- self.directionSnapCount = 32
+    self.directionSnapCount = 32
   end
 }
 
