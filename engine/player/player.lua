@@ -22,7 +22,7 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Physics = require 'engine.physics'
 local Consts = require 'constants'
 local PlayerSwimEnvironmentState = require 'engine.player.environment_states.player_swim_environment_state'
-
+local PlayerSkills = require 'engine.player.player_skills'
 -- ### STATES ###
 -- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
@@ -43,6 +43,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field conditionStateMachines PlayerStateMachine[]
 ---@field stateParameters PlayerStateParameters
 ---@field stateCollection table<string, any>
+---@field skills PlayerSkills
 ---@field useDirectionX number
 ---@field userDirectionY number
 ---@field useDirection4 Direction4
@@ -69,6 +70,9 @@ local Player = Class { __includes = MapEntity,
     args.direction = args.direction or Direction4.down
     args.name = 'player'
     MapEntity.init(self, args)
+    -- player skills
+    self.skills = PlayerSkills(args.skills)
+
     -- room edge collision
     self.roomEdgeCollisionBox = Collider(self, {
       x = -12 / 2,
@@ -249,6 +253,10 @@ function Player:getCollisionTag()
   return 'player'
 end
 
+function Player:getSkills()
+  return self.skills
+end
+
 ---matches animation direction with a given vector
 ---@param inputX number
 ---@param inputY number
@@ -283,6 +291,11 @@ end
 function Player:markRespawn()
   self.respawnPositionX, self.respawnPositionY = self:getPosition()
   self.respawnDirection4 = self:getDirection4()
+end
+
+---@param instant boolean
+function Player:respawnDeath(instant)
+  
 end
 
 --- update use direction vector

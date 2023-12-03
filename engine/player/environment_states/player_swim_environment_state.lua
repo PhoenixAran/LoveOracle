@@ -40,7 +40,14 @@ function PlayerSwimEnvironmentState:getType()
 end
 
 function PlayerSwimEnvironmentState:canSwimInCurrentLiquid()
-  -- TODO player flags
+  local skills = self.player:getSkills()
+  if self.player:isInLava() then
+    return skills.canSwimInLava
+  elseif self.player:isInDeepWater() then
+    return skills.canSwimInWater
+  end
+
+  return false
 end
 
 
@@ -58,7 +65,50 @@ function PlayerSwimEnvironmentState:resurface()
   self.stateParameters.animations.default = 'swim'
 end
 
+function PlayerSwimEnvironmentState:drown()
+  self.player.sprite:play('drown')
+  if self.player:isInLava() then
+    self.player.spriteFlasher:flash(24)
+  end
+  self.player:respawnDeath()
+end
 
+---@param previousState PlayerState
+function PlayerSwimEnvironmentState:onBegin(previousState)
+  self.stateParameters.animations.default = 'swim'
+  self.stateParameters.interactionCollisions = true
+  self.player:interruptItems()
+  self.isSubmerged = false
+
+  if not self.silentBeginning then
+    createSplashEffect()
+
+    if not self:canSwimInCurrentLiquid() then
+      self:drown()
+    end
+  else
+    self.silentBeginning = false
+  end
+end
+
+---@param newState PlayerState
+function PlayerSwimEnvironmentState:onEnd(newState)
+  self.isSubmerged = false
+end
+
+function PlayerSwimEnvironmentState:update()
+  if self.isSubmerged then
+    self.submergedTimed = self.submergedTimer - 1
+    if self.submergedTimer <= 0 then
+      self:resurface()
+    end
+  end
+
+  if not self:canSwimInCurrentLiquid() then
+    createSplashEffect()
+    self:drown()
+  end
+end
 
 
 return PlayerSwimEnvironmentState

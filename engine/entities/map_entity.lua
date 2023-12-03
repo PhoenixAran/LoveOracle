@@ -389,9 +389,15 @@ function MapEntity:onPlatform()
   return self.groundObserver.onPlatform
 end
 
-function MapEntity:inDeepWater()
+function MapEntity:isInDeepWater()
   return self.groundObserver.inDeepWater
 end
+
+function MapEntity:isInLava()
+  return self.groundObserver.inLava
+end
+
+
 
 --- hurt this entity
 ---@param damageInfo DamageInfo|integer
