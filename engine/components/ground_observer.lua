@@ -100,7 +100,7 @@ end
 
 function GroundObserver:update(dt)
   self:reset()
-  
+
   if self.entity:isInAir() then
     return
   end

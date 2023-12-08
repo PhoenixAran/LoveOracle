@@ -7,15 +7,17 @@ local Class = require 'lib.class'
 ---@field knockbackTime integer
 ---@field knockbackSpeed integer
 ---@field hitstunTime integer
+---@field intangibilityTime integer|nil
 local DamageInfo = Class {
-  init = function(self)
-    self.sourceX = 0
-    self.sourceY = 0
+  init = function(self, args)
+    self.sourceX = args.sourceX or 0
+    self.sourceY = args.sourceY or 0
 
-    self.damage = 0
-    self.knockbackTime = 0
-    self.knockbackSpeed = 0
-    self.hitstunTime = 0
+    self.damage = args.damage or 0
+    self.knockbackTime = args.knockbackTime or 0
+    self.knockbackSpeed = args.knoackbackSpeed or 0
+    self.hitstunTime = args.hitstunTime or 0
+    self.intangibilityTime = args.intangibilityTime
     -- todo store sound here?
     -- self.sound = nil
   end

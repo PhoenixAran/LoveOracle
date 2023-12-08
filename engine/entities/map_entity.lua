@@ -411,7 +411,14 @@ function MapEntity:hurt(damageInfo)
   self:resetCombatVariables()
   if damageInfo:applyHitstun() then
     self:setHitstun(damageInfo.hitstunTime)
-    self:setIntangibility(damageInfo.hitstunTime)
+    -- apply intangible time if it is set
+    if damageInfo.intangibilityTime then
+      self:setIntangibility(damageInfo.intangibilityTime)
+    else
+      -- apply default intangibility time
+      self:setIntangibility(damageInfo.hitstunTime + 8)
+    end
+
     self:flashSprite(damageInfo.hitstunTime)
   end
   if damageInfo:applyKnockback() then

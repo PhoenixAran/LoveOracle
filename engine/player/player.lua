@@ -71,6 +71,10 @@ local Player = Class { __includes = MapEntity,
     args.direction = args.direction or Direction4.down
     args.name = 'player'
     MapEntity.init(self, args)
+    -- signals
+    self:signal 'respawn'
+
+
     -- player skills
     self.skills = PlayerSkills(args.skills)
 
@@ -123,7 +127,7 @@ local Player = Class { __includes = MapEntity,
     -- I don't see a usecase for Direction8 version for Use Direction
     -- If they need that much control they already have the vector values for direction,
     -- and if they need an animation Direction4 should be enough
-    self.useDirection4 = self.animationDirection4 or Direction4.none
+    self.useDirection4 = Direction4.none
 
     self.pressedActionButtons = {}
     self.buttonCallbacks = {}
@@ -143,17 +147,18 @@ local Player = Class { __includes = MapEntity,
       self:actionUseItem('b')
     end)
     self:addPressInteraction('y', function(player)
-      local damageInfo = require('engine.entities.damage_info')()
-      damageInfo.damage = 1
-      damageInfo.hitstunTime = 8
-      damageInfo.knockbackTime = 8
-      damageInfo.knockbackSpeed = 80
-      damageInfo.sourceX, damageInfo.sourceY = player:getPosition()
-      local rx = lume.random(-20, 20)
-      local ry = lume.random(-20, 20)
-      damageInfo.sourceX = damageInfo.sourceX + rx
-      damageInfo.sourceY = damageInfo.sourceY + ry
-      player:hurt(damageInfo)
+      -- local damageInfo = require('engine.entities.damage_info')()
+      -- damageInfo.damage = 1
+      -- damageInfo.hitstunTime = 8
+      -- damageInfo.knockbackTime = 8
+      -- damageInfo.knockbackSpeed = 80
+      -- damageInfo.sourceX, damageInfo.sourceY = player:getPosition()
+      -- local rx = lume.random(-20, 20)
+      -- local ry = lume.random(-20, 20)
+      -- damageInfo.sourceX = damageInfo.sourceX + rx
+      -- damageInfo.sourceY = damageInfo.sourceY + ry
+      -- player:hurt(damageInfo)
+      player:startRespawnControlState()
     end)
 
     self.items = {
@@ -293,12 +298,23 @@ end
 
 function Player:markRespawn()
   self.respawnPositionX, self.respawnPositionY = self:getPosition()
-  self.respawnDirection4 = self:getDirection4()
+  self.respawnDirection4 = self:getAnimationDirection4()
 end
 
 ---@param instant boolean
-function Player:respawnDeath(instant)
+function Player:startRespawnControlState(instant)
+  if instant == nil then
+    instant = false
+  end
+  local respawnDeathState = self:getStateFromCollection('player_respawn_death_state')
+  respawnDeathState['waitForAnimation'] = instant
+  self:beginControlState(respawnDeathState)
+end
 
+function Player:respawn()
+  self:setPosition(self.respawnPositionX, self.respawnPositionY)
+  self:setAnimationDirection4(self.respawnDirection4)
+  self:emit('respawn')
 end
 
 --- update use direction vector

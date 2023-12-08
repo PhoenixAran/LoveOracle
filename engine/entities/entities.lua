@@ -3,6 +3,15 @@ local SignalObject = require 'engine.signal_object'
 local lume = require 'lib.lume'
 local TILE_SIZE = 16
 
+local function drawEntity(ent)
+  if ent.isVisible == nil then
+    ent:draw()
+  end
+  if ent:isVisible() then
+    ent:draw()
+  end
+end
+
 ---@class Entities : SignalObject
 ---@field player Player
 ---@field entities Entity[]
@@ -224,7 +233,7 @@ end
 -- draws all the non tile entities
 function Entities:drawEntities()
   lume.sort(self.entitiesDraw, ySort)
-  lume.each(self.entitiesDraw, 'draw')
+  lume.each(self.entitiesDraw, drawEntity)
 end
 
 -- signal callbacks

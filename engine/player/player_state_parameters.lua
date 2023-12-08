@@ -13,6 +13,7 @@ local Pool = require 'engine.utils.pool'
 ---@field canRoomTransition boolean
 ---@field defaultAnimationWhenNotStill boolean
 ---@field interactionCollisions boolean
+---@field hitboxCollisions boolean
 ---@field canStrafe boolean
 ---@field alwaysFaceUp boolean
 ---@field alwaysFaceDown boolean
@@ -40,12 +41,18 @@ local PlayerStateParameters = Class {
     self.canJump = true
     self.canWarp = true
     self.canLedgeJump = true
+
+    -- note you can still jump when these are false
     self.canControlOnGround = true
     self.canControlInAir = true
+
     self.canPush = true
     self.canUseWeapons = true
     self.canRoomTransition = true
+
+    -- im not sure when this is used
     self.defaultAnimationWhenNotStill = true
+
     -- if the player should be moved if they snag a corner
     self.autoCorrectMovement = true
 
@@ -85,6 +92,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.defaultAnimationWhenNotMoving =  prioritizeFalse(self.defaultAnimationWhenNotMoving, other.defaultAnimationWhenNotMoving)
   self.autoCorrectMovement = prioritizeFalse(self.autoCorrectMovement, other.autoCorrectMovement)
   self.interactionCollisions = prioritizeFalse(self.interactionCollisions, other.interactionCollisions)
+  self.hitboxCollisions = prioritizeFalse(self.hitboxCollisions, other.hitboxCollisions)
 
   -- you wanna prioritize true for these ones
   self.alwaysFaceUp = self.alwaysFaceUp or other.alwaysFaceUp

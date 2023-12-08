@@ -647,6 +647,7 @@ return makeModuleFunction(function(spriteBank)
   ab:buildSubstrip('up', false)
   -- BUILD death
   sb:addAnimation('death', ab:build())
+
   -- register sprite builder
   spriteBank.registerSpriteRendererBuilder('player', sb)
 end)
