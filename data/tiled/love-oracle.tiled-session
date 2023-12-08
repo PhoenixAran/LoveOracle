@@ -63,10 +63,10 @@
         },
         "maps/test_map_1.tmj": {
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 316.66666666666663,
-                "y": 209.99999999999997
+                "x": 315.3333333333333,
+                "y": 209.33333333333337
             }
         },
         "maps/test_map_1_debug.json": {

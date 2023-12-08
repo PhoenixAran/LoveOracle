@@ -173,7 +173,7 @@ function Entities:isTopTile(tile)
   for layer = lume.count(self.tileEntities), 1, -1 do
     local tileEntity = self.tileEntities[layer][tileIndex]
     if tileEntity then
-      return tileEntity == tileEntity
+      return tile == tileEntity
     end
   end
   return false
