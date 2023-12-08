@@ -624,8 +624,29 @@ return makeModuleFunction(function(spriteBank)
   ab:addSpriteFrame(1, 9, 0, 0, 1)
   ab:buildSubstrip('right')
   -- BUILD player_aim
-  sb:addAnimation('player_aim', ab:build())
+  sb:addAnimation('aim', ab:build())
 
+  -- @animation death
+  ab:setSubstrips(true)
+  ab:setLoopType('once')
+  -- #substrip up
+  ab:addSpriteFrame(3, 1, 0, 0, 10)
+  ab:addSpriteFrame(1, 21, 0, 0, 32)
+  ab:buildSubstrip('up', false)
+  -- #substrip down
+  ab:addSpriteFrame(6, 1, 0, 0, 10)
+  ab:addSpriteFrame(1, 21, 0, 0, 32)
+  ab:buildSubstrip('up', true)
+  -- #substrip left
+  ab:addSpriteFrame(4, 1, 0, 0, 10)
+  ab:addSpriteFrame(1, 21, 0, 0, 32)
+  ab:buildSubstrip('up', false)
+  -- #substrip right
+  ab:addSpriteFrame(1, 1, 0, 0, 10)
+  ab:addSpriteFrame(1, 21, 0, 0, 32)
+  ab:buildSubstrip('up', false)
+  -- BUILD death
+  sb:addAnimation('death', ab:build())
   -- register sprite builder
   spriteBank.registerSpriteRendererBuilder('player', sb)
 end)

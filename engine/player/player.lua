@@ -22,6 +22,7 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Physics = require 'engine.physics'
 local Consts = require 'constants'
 local PlayerSwimEnvironmentState = require 'engine.player.environment_states.player_swim_environment_state'
+local PlayerRespawnDeathState = require 'engine.player.control_states.player_respawn_death_state'
 local PlayerSkills = require 'engine.player.player_skills'
 -- ### STATES ###
 -- condition states
@@ -104,6 +105,8 @@ local Player = Class { __includes = MapEntity,
 
     self.stateCollection = {
       -- condition states
+      -- control states
+      ['player_respawn_death_state'] = PlayerRespawnDeathState(self),
       -- environment states
       ['player_grass_environment_state'] = PlayerGrassEnvironmentState(self),
       ['player_jump_environment_state'] = PlayerJumpEnvironmentState(self),
@@ -295,7 +298,7 @@ end
 
 ---@param instant boolean
 function Player:respawnDeath(instant)
-  
+
 end
 
 --- update use direction vector

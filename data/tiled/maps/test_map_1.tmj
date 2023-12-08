@@ -4,11 +4,25 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3ZPU\/cMAAGYLd8SEBBKgX+DwNdOtClQ7t06cLC0l9yAxMDEwP\/Ep+wFSvl8kGcgyvPI70S3Jko+OWcmGyHEHbeQHZjtiuP20SfYj7EfJyQw5S+cT9T2q9vxRwNOJdy3G3MfUeOak7SGi1\/t72Y\/QnJfbRf\/5Zymb7\/kbL8+jzlIuYgNPPcdS7luIegjzn7OBhwHssx+bPyXvoo1+bdMK2PoRnTx3FK2cci5X\/s4yTmNOUs1O3jd0rXOmS9Wj0Hh63U7GN5Pb4KT3\/X5Tx\/7jlGHtfVxSLoY0gfl6G5llyFf\/soP5urcjZi3CZaZx996xD176\/uUvJ7f1vRR7fX6uNrzK+Y70Efpdp93KTk9x5aya9fh6dO\/gR9lObcD3b1Yb163mv1Ud6f6qOhj7dl7j6GRB+NvCc+npDcx0t\/\/kvQRzZkr5uT533o+DHH2tT99Lo89wwuz2GN537tY23q87x1qfHccOxzP1arcZ0f+390Vpuzj\/b9mD761eojz70+ppmzD+vVeDX2JXlf0Xcs+49+Y\/Yl7\/l5HgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQeAS5i+OqQJwAAA==",
+         "data":"H4sIAAAAAAAACu3ZPU\/cMAAGYEMpEqUg9Qr8nw7t0gEWhnbp0oWF\/8LQiYGJof+yPmErVnqXj8YJPXge6ZUg+KLgl3PO5CCE8PY\/yGHMQeVxu+h9zF7M\/oScpPSN+5bSPv4m5nTAtZTj7mMeO3Jac5IWtP7djmLeTUjuo338a8pl+v46Zf31p5TPMcehmeeuaynH\/Q76mLOP4wHXsR6T3yuvpY9ybT4M0\/oYmjF9rFLKPu5SXmIfZzHnKRehbh8\/UrrWIevV9jk4aaVmH+v78U14+rsu5\/lDzznyuK4u7oI+hvRxGZp7yU34u4\/yvbktFyPG7aIl++hbh6j\/+eohpfz5aq+JPro9Vx9fYr7HXAV9lGr38StlUxdlH7fhqZOfQR+lOfeDXX1YrzZ7rj7KY\/poLN3HpuijMXcfQ6KPRt4TryYk9\/Gvr\/8Y9JEN2evm5HkfOn7MuXZ1P72UTc\/g8hzWeO7XPteuPs9bSo3nhmOf+7Fdjfv82P+js92cfbQ\/j+mjX60+8tzrY5o5+7BejVdjX5L3FX3nsv\/oN2Zf8pqf5wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjT9c0CZzQJwAAA==",
          "encoding":"base64",
          "height":100,
          "id":1,
-         "name":"Tile Layer 1",
+         "name":"bottom",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":100,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "compression":"gzip",
+         "data":"H4sIAAAAAAAACu3TIQ6DQBCG0b0apgZTg6muwWB6kmp0RW\/Jki7JhkBSxYh9L\/n8JH8mJSBCX9oMpVVX4jr2gP\/t\/4VY9R5zbsy9486hMiZ7wOpVRbyjPW65e+4RclG7vrs2z\/TbYoo4qmFnexDjbI9PFdexBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0KoFpwY8JECcAAA=",
+         "encoding":"base64",
+         "height":100,
+         "id":4,
+         "name":"top",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
@@ -22,44 +36,44 @@
          "name":"rooms",
          "objects":[
                 {
-                 "class":"",
                  "height":288,
                  "id":2,
                  "name":"",
                  "rotation":0,
+                 "type":"",
                  "visible":true,
                  "width":288,
                  "x":0,
                  "y":0
                 }, 
                 {
-                 "class":"",
                  "height":288,
                  "id":3,
                  "name":"",
                  "rotation":0,
+                 "type":"",
                  "visible":true,
                  "width":272,
                  "x":288,
                  "y":0
                 }, 
                 {
-                 "class":"",
                  "height":128,
                  "id":10,
                  "name":"",
                  "rotation":0,
+                 "type":"",
                  "visible":true,
                  "width":304,
                  "x":96,
                  "y":288
                 }, 
                 {
-                 "class":"",
                  "height":0,
                  "id":11,
                  "name":"",
                  "rotation":0,
+                 "type":"",
                  "visible":true,
                  "width":16,
                  "x":-176,
@@ -78,11 +92,11 @@
                  "y":288
                 }, 
                 {
-                 "class":"",
                  "height":128,
                  "id":17,
                  "name":"",
                  "rotation":0,
+                 "type":"",
                  "visible":true,
                  "width":160,
                  "x":560,
@@ -100,11 +114,11 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":4,
+ "nextlayerid":5,
  "nextobjectid":20,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.9.0",
+ "tiledversion":"1.10.2",
  "tileheight":16,
  "tilesets":[
         {
@@ -114,9 +128,13 @@
         {
          "firstgid":65,
          "source":"..\/tilesets\/proto_environment.tsj"
+        }, 
+        {
+         "firstgid":265,
+         "source":"..\/tilesets\/proto_dungeon.tsj"
         }],
  "tilewidth":16,
  "type":"map",
- "version":"1.9",
+ "version":"1.10",
  "width":100
 }

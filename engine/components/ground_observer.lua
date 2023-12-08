@@ -7,6 +7,8 @@ local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local TileTypes = TileTypeFlags.enumMap
 local vector = require 'lib.vector'
 
+local QUERY_RECT_LENGTH = 1.5
+
 ---@class GroundObserver : Component
 ---@field pointOffsetX number
 ---@field pointOffsetY number
@@ -95,7 +97,7 @@ function GroundObserver:setOffset(x, y)
   self.pointOffsetY = y
 end
 
-local QUERY_RECT_LENGTH = 1.5
+
 function GroundObserver:update(dt)
   self:reset()
   
