@@ -421,7 +421,6 @@ function MapEntity:hurt(damageInfo)
       self:flashSprite(damageInfo.hitstunTime + 8)
     end
 
-
   end
   if damageInfo:applyKnockback() then
     self:setKnockback(damageInfo.knockbackTime)

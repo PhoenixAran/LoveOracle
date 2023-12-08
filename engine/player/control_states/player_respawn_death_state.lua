@@ -42,10 +42,9 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
 
     self.respawnDamageInfo = DamageInfo({
       damage = 2,
-      hitstunTime = 2,
+      hitstunTime = 15,
       intangibilityTime = 44
     })
-    print(love.inspect(self.respawnDamageInfo))
   end
 }
 

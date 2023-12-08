@@ -31,9 +31,6 @@ local GameControl = Class { __includes = SignalObject,
     local w = GameConfig.window.displayConfig.gameWidth
     local h = GameConfig.window.displayConfig.gameHeight - Consts.GRID_SIZE
     self.camera = Camera(w/2,h/2, w, h)
- 
-    print(self.camera.follow_style, self.camera.follow_lerp_x, self.camera.follow_lead_x)
-  
     self.map = nil
     self.roomControl = nil
     self.gameStateStack = GameStateStack(self)
