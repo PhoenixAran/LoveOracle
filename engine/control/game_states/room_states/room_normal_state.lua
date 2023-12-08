@@ -1,6 +1,8 @@
 local Class = require 'lib.class'
 local GameState = require 'engine.control.game_state'
 local GRID_SIZE = require('constants').GRID_SIZE
+local Camera = require 'engine.camera'
+local DisplayHandler = require 'engine.display_handler'
 
 ---@class RoomNormalState : GameState
 local RoomNormalState = Class { __includes = GameState,
@@ -14,28 +16,26 @@ function RoomNormalState:getType()
 end
 
 function RoomNormalState:update(dt)
-  local camera = self.control.camera
   local entities = self.control.entities
   local player = self.control.player
   local room = self.control.currentRoom
   entities:update(dt)
-  camera:follow(player:getPosition())
-  camera:update(dt)
+  Camera.update(dt)
+  print(Camera.x, Camera.y)
   room:updateAnimatedTiles(dt)
 end
 
 function RoomNormalState:draw()
-  local camera = self.control.camera
   local entities = self.control.entities
-
-  camera:attach()
-    local x = camera.x - camera.w / 2
-    local y = camera.y - camera.h / 2
-    local w = camera.w
-    local h = camera.h
-    entities:drawTileEntities(x, y, w, h)
+  Camera.push()
+    local gameW, gameH = DisplayHandler.getGameSize()
+    local cullX = Camera.x - gameW / 2
+    local cullY = Camera.y - gameH / 2
+    local cullW = gameW
+    local cullY = gameH
+    entities:drawTileEntities(cullX, cullY, cullW, cullY)
     entities:drawEntities()
-  camera:detach()
+  Camera.pop()
 
   -- HUD placeholder
   love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)

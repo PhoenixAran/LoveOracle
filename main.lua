@@ -46,7 +46,6 @@ end
 
 ---@type any
 local screenManager = nil
-local camera = nil
 local input = nil
 
 function love.load(args)
@@ -73,10 +72,6 @@ function love.load(args)
   screenManager = require('lib.roomy').new()
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   Singletons.screenManager = screenManager
-
-  -- set up camera
-  camera = require('lib.camera')(0, 0, 160, 144)
-  Singletons.camera = camera
 
   -- set up input
   input = require('lib.baton').new(gameConfig.controls)

@@ -5,9 +5,9 @@ local SignalObject = require 'engine.signal_object'
 local Entities = require 'engine.entities.entities'
 local Inventory = require 'engine.control.inventory'
 local GameStateStack = require 'engine.control.game_state_stack'
-local Camera = require 'lib.camera'
 local GameConfig = require 'game_config'
 local Consts = require 'constants'
+local Camera = require 'engine.camera'
 
 local RoomControl = require 'engine.control.room_control'
 local RoomNormalState = require 'engine.control.game_states.room_states.room_normal_state'
@@ -30,11 +30,9 @@ local GameControl = Class { __includes = SignalObject,
     self.player = nil
     local w = GameConfig.window.displayConfig.gameWidth
     local h = GameConfig.window.displayConfig.gameHeight - Consts.GRID_SIZE
-    self.camera = Camera(w/2,h/2, w, h)
     self.map = nil
     self.roomControl = nil
     self.gameStateStack = GameStateStack(self)
-    Singletons.camera = self.camera
   end
 }
 
@@ -72,22 +70,12 @@ function GameControl:setMap(map)
   self.map = map
 end
 
----@return any
-function GameControl:getCamera()
-  return self.camera
-end
-
----@param camera any
-function GameControl:setCamera(camera)
-  self.camera = camera
-end
-
 --- creates the initial room control state. called when game starts
 ---@param room Room
 ---@param spawnIndexX integer?
 ---@param spawnIndexY integer?
 function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
-  self.roomControl = RoomControl(self:getMap(), self:getPlayer(), self:getCamera())
+  self.roomControl = RoomControl(self:getMap(), self:getPlayer())
   self:getPlayer():setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
   self:getPlayer():markRespawn()
   self.roomControl.player:setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
@@ -104,7 +92,8 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   y1 = y1 - 1
   x1, y1 = vector.mul(Consts.GRID_SIZE, x1, y1)
   x2, y2 = vector.mul(Consts.GRID_SIZE, x2, y2)
-  self:getCamera():setBounds(x1, y1, x2 - x1, y2 - y1)
+  Camera.setFollowTarget(self:getPlayer())
+  Camera.setBounds(x1, y1, x2 - x1, y2 - y1)
 
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)

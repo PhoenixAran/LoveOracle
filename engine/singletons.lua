@@ -4,13 +4,11 @@
 ---@class Singletons
 ---@field input any
 ---@field screenManager any
----@field camera any
 ---@field gameControl GameControl
 ---@field roomControl RoomControl
 local singletons = {
   input = nil,
   screenManager = { },
-  camera = { },
   gameControl = { },
   roomControl = { }
 }

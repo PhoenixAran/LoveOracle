@@ -18,10 +18,9 @@ local RoomTransitionState = require 'engine.control.game_states.room_states.room
 ---@field allowRoomTransition boolean
 ---@field roomStateStack GameStateStack
 local RoomControl = Class { __includes = GameState,
-  init = function(self, map, player, camera)
+  init = function(self, map, player)
     GameState.init(self)
     self.player = player
-    self.camera = camera
     self.map = map
 
     self.entities = Entities()
@@ -40,10 +39,6 @@ end
 
 function RoomControl:getMap()
   return self.map
-end
-
-function RoomControl:getCamera()
-  return self.camera
 end
 
 function RoomControl:getPlayer()

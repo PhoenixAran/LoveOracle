@@ -22,7 +22,7 @@ function rectMethods.union(x1, y1, w1, h1,  x2, y2, w2, h2)
   local resultY = min(y1, y2)
   local resultW = max(x1 + w1, x2 + w2)
   local resultH = max(y1 + h1, y2 + h2)
-  
+
   return resultX, resultY, resultW, resultH
 end
 

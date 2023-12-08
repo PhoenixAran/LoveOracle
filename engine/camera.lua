@@ -4,10 +4,12 @@ local vec2 = require 'lib.vector'
 --- static camera instance
 ---@class Camera
 local Camera = {
+  -- NOTE: Refers to top left position, not the center
   x = 0,
   y = 0,
   smoothedX = 0,
   smoothedY = 0,
+
   offsetX = 0,
   offsetY = 0,
 
@@ -34,11 +36,16 @@ function Camera.setPosition(x, y)
   Camera.y = y - h / 2
 end
 
-function Camera.setLimits(limitTop, limitBottom, limitLeft, limitRight)
-  Camera.limitTop = limitTop
-  Camera.limitBottom = limitBottom
+function Camera.setLimits(limitLeft, limitRight, limitTop, limitBottom)
   Camera.limitLeft = limitLeft
   Camera.limitRight = limitRight
+  Camera.limitTop = limitTop
+  Camera.limitBottom = limitBottom
+end
+
+function Camera.setBounds(x,y,w,h)
+  error(love.inspect({x,y,w,h}))
+  Camera.setLimits(x,x+w,y,y+h)
 end
 
 function Camera.setFollowTarget(target, followTargetPositionGetter)
@@ -89,7 +96,7 @@ function Camera.push()
   end
 
   love.graphics.push()
-  love.graphics.translate(gameW / 2, gameH / 2)
+  love.graphics.translate(gameW/2, gameH/2)
   love.graphics.scale(Camera.scale)
   love.graphics.translate(-retX, -retY)
 end

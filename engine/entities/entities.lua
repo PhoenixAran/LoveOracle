@@ -21,7 +21,7 @@ end
 ---@field mapHeight integer
 ---@field tileEntities table<integer, Tile[]>
 local Entities = Class { __includes = SignalObject,
-  init = function(self, gameScreen, camera, player)
+  init = function(self, gameScreen, player)
     SignalObject.init(self)
     self:signal('entityAdded')
     self:signal('entityRemoved')
