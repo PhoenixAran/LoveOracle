@@ -414,12 +414,14 @@ function MapEntity:hurt(damageInfo)
     -- apply intangible time if it is set
     if damageInfo.intangibilityTime then
       self:setIntangibility(damageInfo.intangibilityTime)
+      self:flashSprite(damageInfo.intangibilityTime)
     else
       -- apply default intangibility time
       self:setIntangibility(damageInfo.hitstunTime + 8)
+      self:flashSprite(damageInfo.hitstunTime + 8)
     end
 
-    self:flashSprite(damageInfo.hitstunTime)
+
   end
   if damageInfo:applyKnockback() then
     self:setKnockback(damageInfo.knockbackTime)
