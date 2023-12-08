@@ -45,6 +45,10 @@ function DisplayHandler.pop()
   love.graphics.draw(gameCanvas)
 end
 
+function DisplayHandler.getGameSize()
+  return rs.get_game_size()
+end
+
 function DisplayHandler.debugInfo()
   rs.debug_info(0, 0)
 end
