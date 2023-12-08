@@ -38,11 +38,11 @@ function BaseGameplayScreen:enter(prev, ...)
   self.gameControl:setMap(map)
   -- TODO implement designated player spawn from Tiled editor
   --local mapIndexX, mapIndexY = vector.div(16, self.gameControl:getPlayer().x, self.gameControl:getPlayer().y)
-  local mapIndexX, mapIndexY = 27, 7
+  local mapIndexX, mapIndexY = 40, 3
   mapIndexX, mapIndexY = math.floor(mapIndexX), math.floor(mapIndexY)
   local initialRoom = map:getRoomContainingIndex(mapIndexX, mapIndexY)
   assert(initialRoom, 'Initial player position not in room')
-  self.gameControl:setInitialRoomControlState(initialRoom, 27, 7)
+  self.gameControl:setInitialRoomControlState(initialRoom, mapIndexX, mapIndexY)
   Singletons.gameControl = self.gameControl
 end
 

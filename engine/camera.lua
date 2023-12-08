@@ -1,5 +1,6 @@
 local DisplayHandler = require 'engine.display_handler'
 local vec2 = require 'lib.vector'
+local Consts = require 'constants'
 
 --- static camera instance
 ---@class Camera
@@ -18,8 +19,8 @@ local Camera = {
   limitRight = 10000000,
   limitTop = -10000000,
 
-  positionSmoothingEnabled = false,
-  positionSmoothingSpeed = 5.0,
+  positionSmoothingEnabled = true,
+  positionSmoothingSpeed = 5,
   scale = 1,
 
   followTarget = nil,
@@ -44,7 +45,6 @@ function Camera.setLimits(limitLeft, limitRight, limitTop, limitBottom)
 end
 
 function Camera.setBounds(x,y,w,h)
-  error(love.inspect({x,y,w,h}))
   Camera.setLimits(x,x+w,y,y+h)
 end
 
@@ -57,10 +57,45 @@ function Camera.setFollowTarget(target, followTargetPositionGetter)
 end
 
 function Camera.update(dt)
+  -- update follow target if it exists
   if Camera.followTarget then
-    Camera.x, Camera.y = Camera.followTargetPositionGetter(Camera.followTarget)
+    local w, h = DisplayHandler.getGameSize()
+    local tx, ty = Camera.followTargetPositionGetter(Camera.followTarget)
+    Camera.x, Camera.y = tx-w/2, ty-h/2
   end
 
+
+  -- stay within limits
+  local retX, retY = Camera.x, Camera.y
+  local gameW, gameH = DisplayHandler.getGameSize()
+  if Camera.positionSmoothingEnabled then
+    retX, retY = Camera.smoothedX, Camera.smoothedY
+  end
+
+  local screenRectX,screenRectY,screenRectW,screenRectH =  retX, retY, vec2.mul(Camera.scale, gameW, gameH)
+  screenRectH = screenRectH - Consts.HUD_HEIGHT
+
+  if screenRectX < Camera.limitLeft then
+    screenRectX = Camera.limitLeft
+  end
+
+  if screenRectX + screenRectW > Camera.limitRight then
+    screenRectX = Camera.limitRight - screenRectW
+  end
+
+  if screenRectY + screenRectH > Camera.limitBottom then
+    screenRectY = Camera.limitBottom - screenRectH
+  end
+
+  if screenRectY < Camera.limitTop then
+    screenRectY = Camera.limitTop
+  end
+
+  -- set x, y position incase we have to clamp
+  Camera.x = screenRectX
+  Camera.y = screenRectY
+
+  -- update smoothing position
   if Camera.positionSmoothingEnabled then
     local c = Camera.positionSmoothingSpeed * dt
     Camera.smoothedX, Camera.smoothedY = vec2.add(Camera.smoothedX, Camera.smoothedY, vec2.mul(c, vec2.sub(Camera.x, Camera.y, Camera.smoothedX, Camera.smoothedY)))
@@ -70,35 +105,13 @@ function Camera.update(dt)
 end
 
 function Camera.push()
-  local retX, retY = Camera.x, Camera.y
-  local gameW, gameH = DisplayHandler.getGameSize()
+  local x, y = Camera.x, Camera.y
   if Camera.positionSmoothingEnabled then
-    retX, retY = Camera.smoothedX, Camera.smoothedY
+    x, y = Camera.smoothedX, Camera.smoothedY
   end
-
-  local screenRectX,screenRectY,screenRectW,screenRectH =  retX, retY, vec2.mul(Camera.scale, gameW, gameH)
-  if not Camera.positionSmoothingEnabled then
-    if screenRectX < Camera.limitLeft then
-      screenRectX = Camera.limitLeft
-    end
-
-    if screenRectX + screenRectW > Camera.limitRight then
-      screenRectX = Camera.limitRight + screenRectW
-    end
-
-    if screenRectY + screenRectH > Camera.limitBottom then
-      screenRectY = Camera.limitRight + screenRectH
-    end
-
-    if screenRectY < Camera.limitTop then
-      screenRectY = Camera.limitTop
-    end
-  end
-
   love.graphics.push()
-  love.graphics.translate(gameW/2, gameH/2)
   love.graphics.scale(Camera.scale)
-  love.graphics.translate(-retX, -retY)
+  love.graphics.translate(-x, -y)
 end
 
 function Camera.pop()

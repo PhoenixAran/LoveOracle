@@ -21,7 +21,6 @@ function RoomNormalState:update(dt)
   local room = self.control.currentRoom
   entities:update(dt)
   Camera.update(dt)
-  print(Camera.x, Camera.y)
   room:updateAnimatedTiles(dt)
 end
 
@@ -29,11 +28,11 @@ function RoomNormalState:draw()
   local entities = self.control.entities
   Camera.push()
     local gameW, gameH = DisplayHandler.getGameSize()
-    local cullX = Camera.x - gameW / 2
-    local cullY = Camera.y - gameH / 2
+    local cullX = Camera.x
+    local cullY = Camera.y
     local cullW = gameW
-    local cullY = gameH
-    entities:drawTileEntities(cullX, cullY, cullW, cullY)
+    local cullH = gameH
+    entities:drawTileEntities(cullX, cullY, cullW, cullH)
     entities:drawEntities()
   Camera.pop()
 
