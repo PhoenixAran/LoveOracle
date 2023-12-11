@@ -19,7 +19,7 @@ local Camera = {
   limitRight = 10000000,
   limitTop = -10000000,
 
-  positionSmoothingEnabled = true,
+  positionSmoothingEnabled = false,
   positionSmoothingSpeed = 5,
   scale = 1,
 
@@ -119,9 +119,3 @@ function Camera.pop()
 end
 
 return Camera
-
-
-
-
-
-

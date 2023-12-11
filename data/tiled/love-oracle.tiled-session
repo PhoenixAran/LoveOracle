@@ -5,8 +5,8 @@
     },
     "activeFile": "maps/test_map_1.tmj",
     "expandedProjectPaths": [
-        "maps",
-        "tilesets"
+        "tilesets",
+        "maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -65,7 +65,7 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 315.3333333333333,
+                "x": 314.66666666666663,
                 "y": 209.33333333333337
             }
         },

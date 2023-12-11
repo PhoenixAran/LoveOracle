@@ -4,7 +4,6 @@ local ContentControl = require 'engine.utils.content_control'
 local AssetManager = require 'engine.utils.asset_manager'
 local tick = require 'lib.tick'
 local DisplayHandler = require 'engine.display_handler'
-
 love.inspect = require 'lib.inspect'
 -- singletons
 local Singletons = require 'engine.singletons'
