@@ -88,7 +88,7 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
 
   local x1, y1 = room:getTopLeftPosition()
   local x2, y2 = room:getBottomRightPosition()
-  
+
   x1 = x1 - 1
   y1 = y1 - 1
   x1, y1 = vector.mul(Consts.GRID_SIZE, x1, y1)

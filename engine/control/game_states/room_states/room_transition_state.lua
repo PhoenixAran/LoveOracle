@@ -8,7 +8,7 @@ local Physics = require 'engine.physics'
 local Consts = require 'constants'
 local Camera = require 'engine.camera'
 
-local ROOM_TRANSITION_PANNING_DURATION = 1
+local ROOM_TRANSITION_PANNING_DURATION = .80
 local ROOM_TRANSITION_TWEEN_STYLE = 'inOutCubic'
 
 ---@class RoomTransitionState : GameState

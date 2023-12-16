@@ -17,8 +17,6 @@ local RespawnState = {
 ---@field camera any
 ---@field cameraSubject any
 ---@field cameraTween any
----@field originalCameraFollowStyle string
----@field originalCameraFollowLerp number
 ---@field lastCameraX number
 ---@field lastCameraY number
 ---@field respawnDamageInfo DamageInfo
@@ -36,9 +34,6 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
 
     self.camera = nil
     self.cameraSubject = { }
-    self.originalCameraFollowStyle = nil
-    self.originalCameraFollowLerp = nil
-    self.lastCameraX, self.lastCameraY = 0, 0
 
     self.respawnDamageInfo = DamageInfo({
       damage = 2,
@@ -59,14 +54,12 @@ function PlayerRespawnDeathState:startViewPanningState()
   self.player:respawn()
   self.player:setVisible(true)
   self.respawnState = RespawnState.ViewPanning
-  self.camera:setFollowLerp(.2)
-  self.lastCameraX = self.camera.x
-  self.lastCameraY = self.camera.y
+
+  -- calculate what position the camera needs to Pan to?
+  
 end
 
 function PlayerRespawnDeathState:endViewPanningState()
-  self.camera:setFollowStyle(self.originalCameraFollowLerp)
-  self.camera:setFollowLerp(self.originalCameraFollowStyle)
   self.respawnState = RespawnState.Delay
 end
 
@@ -109,10 +102,6 @@ function PlayerRespawnDeathState:onBegin(previousState)
   self.stateParameters.canControlInAir = false
   self.stateParameters.canJump = false
   self.player:setVisible(false)
-
-  self.camera = Singletons.camera
-  self.originalCameraFollowLerp = self.camera.follow_lerp_x
-  self.originalCameraFollowStyle = self.camera.follow_style
 end
 
 function PlayerRespawnDeathState:onEnd(newState)
