@@ -67,13 +67,12 @@ function Camera.update(dt)
 
   -- stay within limits
   local retX, retY = Camera.x, Camera.y
-  local gameW, gameH = Camera.getSize()
+  local w, h = Camera.getSize()
   if Camera.positionSmoothingEnabled then
     retX, retY = Camera.smoothedX, Camera.smoothedY
   end
 
-  local screenRectX,screenRectY,screenRectW,screenRectH =  retX, retY, vec2.mul(Camera.scale, gameW, gameH)
-  screenRectH = screenRectH - Consts.HUD_HEIGHT
+  local screenRectX,screenRectY,screenRectW,screenRectH =  retX, retY, vec2.mul(Camera.scale, w, h)
 
   if screenRectX < Camera.limitLeft then
     screenRectX = Camera.limitLeft
