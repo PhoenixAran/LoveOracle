@@ -60,9 +60,29 @@ local function resetUnusedTileDataAnimations(oldRoom, newRoom)
   end)
 end
 
+---@param direction4 integer
+---@return integer targetCamX
+---@return integer targetCamY
+local function calculatePushTransitionTargetCameraPosition(direction4)
+  local camX, camY = Camera.x, Camera.y
+  local camW, camH = Camera.getSize()
+  if direction4 == Direction4.up then
+    return camX, camY - camH
+  elseif direction4 == Direction4.down then
+    return camX, camY + camH
+  elseif direction4 == Direction4.left then
+    return camX - camW, camY
+  elseif direction4 == Direction4.right then
+    return camX + camW, camY
+  end
+  error('Direction required to calculate push transition target camera position')
+end
+
 function RoomTransitionState:onBegin()
-  -- unset follow target for now
+  -- unbound camera so it can move freely during the push transition
   Camera.setFollowTarget()
+  Camera.setLimits(-10000000, 10000000, -10000000, 10000000)
+
   self.control.allowRoomTransition = false
   self.player = self.control:getPlayer()
 
@@ -93,15 +113,8 @@ function RoomTransitionState:onBegin()
   end
 
   -- setup camera tween
-  local x,y = vec2.mul(Consts.GRID_SIZE, vec2.add(-1, -1, self.newRoom:getTopLeftPosition()))
-  local w,h = vec2.mul(Consts.GRID_SIZE, self.newRoom:getWidth(), self.newRoom:getHeight())
-  self.cameraTarget = {
-    limitLeft = x,
-    limitRight = x + w,
-    limitTop = y,
-    limitBottom = y + h
-  }
-  self.cameraTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, Camera, self.cameraTarget, ROOM_TRANSITION_TWEEN_STYLE)
+  local targetCamX, targetCamY = calculatePushTransitionTargetCameraPosition(self.direction4)
+  self.cameraTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, Camera, { x = targetCamX, y = targetCamY}, ROOM_TRANSITION_TWEEN_STYLE)
   self.newRoom:load(self.control:getEntities())
 end
 
@@ -113,23 +126,35 @@ function RoomTransitionState:update(dt)
   Camera.update(dt)
 
   if self.playerTweenCompleted and self.cameraTweenCompleted then
-    local x,y = vec2.mul(Consts.GRID_SIZE, vec2.add(-1, -1, self.newRoom:getTopLeftPosition()))
-    local w,h = vec2.mul(Consts.GRID_SIZE, self.newRoom:getWidth(), self.newRoom:getHeight())
-    Camera.setBounds(x,y,w,h)
-    self.currentRoom:unload(self.control:getEntities())
-    self.control:setCurrentRoom(self.newRoom)
     self.control:popState()
-    -- update player position or else they have one frame where they are considered in the last position between room transitons
-    -- which can cause them to hit a room edge loading zone
-    Physics:update(self.player, self.player.x, self.player.y, self.player.w, self.player.h)
   end
 end
 
 
 function RoomTransitionState:onEnd()
-  Camera.setFollowTarget(self.player)
+  self.currentRoom:unload(self.control:getEntities())
+
   resetUnusedTileDataAnimations(self.currentRoom, self.newRoom)
+
+  -- reclamp camera to the room
+  local x1, y1 = self.newRoom:getTopLeftPosition()
+  local x2, y2 = self.newRoom:getBottomRightPosition()
+  x1 = x1 - 1
+  y1 = y1 - 1
+  x1, y1 = vec2.mul(Consts.GRID_SIZE, x1, y1)
+  x2, y2 = vec2.mul(Consts.GRID_SIZE, x2, y2)
+  Camera.setLimits(x1, x2, y1, y2)
+  -- set camera to follow player again
+  Camera.setFollowTarget(self.player)
+
+  -- player
   self.player:markRespawn()
+  -- update player position or else they have one frame where they are considered in the last position between room transitons
+  -- which can cause them to hit a room edge loading zone
+  Physics:update(self.player, self.player.x, self.player.y, self.player.w, self.player.h)
+
+  -- game state
+  self.control:setCurrentRoom(self.newRoom)
   self.control.allowRoomTransition = true
 end
 

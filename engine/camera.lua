@@ -1,5 +1,6 @@
 local vec2 = require 'lib.vector'
 local Consts = require 'constants'
+local DisplayHandler = require 'engine.display_handler'
 
 --- static camera instance
 ---@class Camera
@@ -114,7 +115,9 @@ function Camera.push()
 end
 
 function Camera.getSize()
-  return require('engine.display_handler').getGameSize()
+  local w,h = DisplayHandler.getGameSize()
+  h = h - Consts.HUD_HEIGHT
+  return w,h
 end
 
 function Camera.pop()
