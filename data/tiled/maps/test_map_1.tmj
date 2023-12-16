@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3ZPU\/cMAAGYEMpEqUg9Qr8nw7t0gEWhnbp0oWF\/8LQiYGJof+yPmErVnqXj8YJPXge6ZUg+KLgl3PO5CCE8PY\/yGHMQeVxu+h9zF7M\/oScpPSN+5bSPv4m5nTAtZTj7mMeO3Jac5IWtP7djmLeTUjuo338a8pl+v46Zf31p5TPMcehmeeuaynH\/Q76mLOP4wHXsR6T3yuvpY9ybT4M0\/oYmjF9rFLKPu5SXmIfZzHnKRehbh8\/UrrWIevV9jk4aaVmH+v78U14+rsu5\/lDzznyuK4u7oI+hvRxGZp7yU34u4\/yvbktFyPG7aIl++hbh6j\/+eohpfz5aq+JPro9Vx9fYr7HXAV9lGr38StlUxdlH7fhqZOfQR+lOfeDXX1YrzZ7rj7KY\/poLN3HpuijMXcfQ6KPRt4TryYk9\/Gvr\/8Y9JEN2evm5HkfOn7MuXZ1P72UTc\/g8hzWeO7XPteuPs9bSo3nhmOf+7Fdjfv82P+js92cfbQ\/j+mjX60+8tzrY5o5+7BejVdjX5L3FX3nsv\/oN2Zf8pqf5wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjT9c0CZzQJwAAA==",
+         "data":"H4sIAAAAAAAACu3ZsU7DMBSF4VsolaC0QIGICXgVBlgYysIACwtLF96lAxMDEwNviaPGimuS2G6cgOH\/pCOVyETBhzp1MxSRnV+Qkcow8rgU7asMVLZaZFLENe6hiH18W2XqcS3muDeVj4ZMY05Sj\/K\/bVdlr0V0H\/bx2WCVufWz+fpavR5LOc9N12KO+xT66LKPscd15GP0e+W\/9GGuzSNp14dvQvqYFTH7WBb5i32cqJwWySRuH+b7o24dYr2qn4OJlZh95Pfjhaz+r815PnKcQ49r6mIp9OHTx1zKe8lCvvdhvjfrklWM0z3b41LUZx+udcjXVM39gRF9HvPY4WCj6fhxsT9fvRepWqeq7h2b9JGp81zJeu6tnNFHUB83Ko8qd0Ifpth9vBap6sLs40VWnTwLfZi63A829dF2vbqV9TxZoY+wPsxj9FHqu4+q0Eep6z58EtrHuZrrC0cuE+4j3xPPWkT3senvH0u6++nYfPbEOnrefceHnCvV\/XRfqp7B6TmM8dzPPleqz\/P6EuO5YehzP9SLcZ8P\/R4d9brsw\/48Rh9usfrQc08f7XTZB+tVuBj7Er2vcJ2L\/YdbyL4k9Hle3TgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAafsCwoMwQ0CcAAA=",
          "encoding":"base64",
          "height":100,
          "id":1,
@@ -18,7 +18,7 @@
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3TIQ6DQBCG0b0apgZTg6muwWB6kmp0RW\/Jki7JhkBSxYh9L\/n8JH8mJSBCX9oMpVVX4jr2gP\/t\/4VY9R5zbsy9486hMiZ7wOpVRbyjPW65e+4RclG7vrs2z\/TbYoo4qmFnexDjbI9PFdexBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0KoFpwY8JECcAAA=",
+         "data":"H4sIAAAAAAAACu3YIQ4CMRRF0W4Ng8FgMBgMZgyGlaDRCHZJJ7TJD4FkGGAK4Zzk+iZP\/aYEtLAoVatSb1ZiOvaA4TYlvkPc45jrcod2zyHokj2gtw\/R3r095rllbt3kRf\/rfFO1Tdctdi0e9ePq7RbvuaEe7cF4n9jjFOI59d9jzD1nj\/d7ZQ8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGA6Fz2Zc4hAnAAA",
          "encoding":"base64",
          "height":100,
          "id":4,
@@ -107,15 +107,34 @@
                  "template":"..\/templates\/single_room_template.tj",
                  "x":720,
                  "y":0
+                }, 
+                {
+                 "id":20,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":720,
+                 "y":128
                 }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":5,
+         "name":"entities",
+         "objects":[],
+         "offsetx":16,
+         "offsety":0,
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":5,
- "nextobjectid":20,
+ "nextlayerid":6,
+ "nextobjectid":35,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

@@ -1,16 +1,8 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local lume = require 'lib.lume'
-local TILE_SIZE = 16
-
-local function drawEntity(ent)
-  if ent.isVisible == nil then
-    ent:draw()
-  end
-  if ent:isVisible() then
-    ent:draw()
-  end
-end
+local Consts = require 'constants'
+local rect = require 'engine.utils.rectangle'
 
 ---@class Entities : SignalObject
 ---@field player Player
@@ -27,7 +19,6 @@ local Entities = Class { __includes = SignalObject,
     self:signal('entityRemoved')
     self:signal('tileEntityAdded')
     self:signal('tileEntityRemoved')
-
     self.player = player
     self.entities = { }
     self.entitiesHash = { }
@@ -47,6 +38,16 @@ local function ySort(entityA, entityB)
   local _, ay = entityA:getPosition()
   local _, by = entityB:getPosition()
   return by < ay
+end
+
+
+local function drawEntity(ent)
+  if ent.isVisible == nil then
+    ent:draw()
+  end
+  if ent:isVisible() then
+    ent:draw()
+  end
 end
 
 --- sets player
@@ -213,10 +214,10 @@ function Entities:drawTileEntities(x, y, w, h)
       end
     end
   else
-    x = math.floor(x / TILE_SIZE)
-    y = math.floor(y / TILE_SIZE)
-    w = math.ceil(w / TILE_SIZE)
-    h = math.ceil(h / TILE_SIZE)
+    x = math.floor(x / Consts.GRID_SIZE)
+    y = math.floor(y / Consts.GRID_SIZE)
+    w = math.ceil(w / Consts.GRID_SIZE)
+    h = math.ceil(h / Consts.GRID_SIZE)
     for i = x, x + w, 1 do
       for j = y, y + h, 1 do
         for layerIndex , layer in ipairs(self.tileEntities) do
@@ -231,10 +232,20 @@ function Entities:drawTileEntities(x, y, w, h)
 end
 
 -- draws all the non tile entities
-function Entities:drawEntities()
+function Entities:drawEntities(x,y,w,h)
   lume.sort(self.entitiesDraw, ySort)
-  lume.each(self.entitiesDraw, drawEntity)
+  local shouldCull = x ~= nil
+  if shouldCull then
+    for _, entity in ipairs(self.entitiesDraw) do
+      if rect.isIntersecting(x,y,w,h, entity.x, entity.y, entity.w, entity.h) then
+        drawEntity(entity)
+      end
+    end
+  else
+    lume.each(self.entities, drawEntity)
+  end
 end
+
 
 -- signal callbacks
 

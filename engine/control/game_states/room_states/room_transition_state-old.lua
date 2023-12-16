@@ -3,14 +3,12 @@ local GameState = require 'engine.control.game_state'
 local Direction4 = require 'engine.enums.direction4'
 local Tween = require 'lib.tween'
 local lume = require 'lib.lume'
-local vec2 = require 'lib.vector'
+local vector = require 'lib.vector'
 local Physics = require 'engine.physics'
-local Consts = require 'constants'
-local Camera = require 'engine.camera'
 
-local ROOM_TRANSITION_PANNING_DURATION = 1
+local GRID_SIZE = require('constants').GRID_SIZE
 
----@class RoomTransitionState : GameState
+---@class RoomTransitionState_old : GameState
 ---@field transitionStyle string
 ---@field currentRoom Room
 ---@field newRoom Room
@@ -24,6 +22,7 @@ local ROOM_TRANSITION_PANNING_DURATION = 1
 ---@field direction4 integer
 local RoomTransitionState = Class { __includes = GameState,
   init = function(self, currentRoom, newRoom, transitionStyle, direction4)
+    assert(transitionStyle == 'push', 'Only Push transitions are supported for now')
     GameState.init(self)
     self.transitionStyle = transitionStyle
     self.currentRoom = currentRoom
@@ -31,7 +30,7 @@ local RoomTransitionState = Class { __includes = GameState,
     self.direction4 = direction4
 
     self.player = nil
-    self.playerSubject = { }
+    self.playerSubject = { x = 0, y = 0 }
     self.cameraTarget = { }
     self.playerTween = nil
     self.cameraTween = nil
@@ -39,10 +38,6 @@ local RoomTransitionState = Class { __includes = GameState,
     self.cameraTweenCompleted = false
   end
 }
-
-function RoomTransitionState.getType()
-  return 'room_transition_state'
-end
 
 ---@param oldRoom Room
 ---@param newRoom Room
@@ -60,12 +55,18 @@ local function resetUnusedTileDataAnimations(oldRoom, newRoom)
   end)
 end
 
+function RoomTransitionState:getType()
+  return 'room_transition_state'
+end
+
 function RoomTransitionState:onBegin()
-  Camera.setFollowTarget()
-  Camera.setLimits(-10000000, 10000000, -10000000, 10000000)
+  local TWEEN_DURATION = 1
+
   self.control.allowRoomTransition = false
   self.player = self.control:getPlayer()
 
+  -- TODO look into using flux library instead of kikito's tween
+  -- get target player position
   local tx, ty = 0, 0
   if self.direction4 == Direction4.up then
     tx, ty = self.newRoom:getBottomRightPosition()
@@ -82,59 +83,64 @@ function RoomTransitionState:onBegin()
   end
   tx = tx - 1
   ty = ty - 1
-  tx, ty = vec2.mul(Consts.GRID_SIZE, tx, ty)
+  tx, ty = vector.mul(GRID_SIZE, tx, ty)
 
-  -- setup player tween
-  self.playerSubject = { }
   -- setup player tween
   self.playerSubject.x, self.playerSubject.y = self.player:getPosition()
   if self.direction4 == Direction4.left or self.direction4 == Direction4.right then
-    self.playerTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, self.playerSubject, { x = tx, y = self.playerSubject.y }, 'inOutCubic')
+    self.playerTween = Tween.new(TWEEN_DURATION, self.playerSubject, { x = tx, y = self.playerSubject.y }, 'inOutCubic')
   elseif self.direction4 == Direction4.up or self.direction4 == Direction4.down then
-    self.playerTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, self.playerSubject, { x = self.playerSubject.x, y = ty}, 'inOutCubic')
+    self.playerTween = Tween.new(TWEEN_DURATION, self.playerSubject, { x = self.playerSubject.x, y = ty}, 'inOutCubic')
   end
-
-  -- setup camera tween
   local x1, y1 = self.newRoom:getTopLeftPosition()
   x1 = x1 - 1
-  y1 = y1 - 1
+  y1 = y1 - 1  
   local x2, y2 = self.newRoom:getBottomRightPosition()
-  x1, y1 = vec2.mul(Consts.GRID_SIZE, x1, y1)
-  x2, y2 = vec2.mul(Consts.GRID_SIZE, x2, y2)
+  x1, y1 = vector.mul(GRID_SIZE, x1, y1)
+  x2, y2 = vector.mul(GRID_SIZE, x2, y2)
 
-  self.cameraTarget = { }
-  self.cameraTarget.x = Camera.x
-  self.cameraTarget.y = Camera.y
-  local cameraW,cameraH = Camera.getSize()
+  -- setup camera tween
+  -- set camera target so it doesnt flicker position for one frame during transition
+  self.camera.target_x = self.camera.x
+  self.camera.target_y = self.camera.y
+  self.cameraSubject = {
+    x = self.camera.x,
+    y = self.camera.y
+  }
+  self.cameraTarget = {
+    x = self.camera.x,
+    y = self.camera.y
+  }
   if self.direction4 == Direction4.up then
-    self.cameraTarget.y = y1
+    self.cameraTarget.y = y2 - self.camera.h / 2
   elseif self.direction4 == Direction4.down then
-    self.cameraTarget.y = y1
+    self.cameraTarget.y = y1 + self.camera.h / 2
   elseif self.direction4 == Direction4.left then
-    self.cameraTarget.x = x1
+    self.cameraTarget.x = x2 - self.camera.w / 2
   elseif self.direction4 == Direction4.right then
-    self.cameraTarget.x = x1
+    self.cameraTarget.x = x1 + self.camera.w / 2
   end
-
-  self.cameraTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, Camera, self.cameraTarget, 'inOutCubic')
+  self.cameraTween = Tween.new(TWEEN_DURATION, self.cameraSubject, self.cameraTarget, 'inOutCubic')
   self.newRoom:load(self.control:getEntities())
 end
 
 function RoomTransitionState:update(dt)
   self.playerTweenCompleted = self.playerTween:update(dt)
   self.cameraTweenCompleted = self.cameraTween:update(dt)
-
   self.player:setPosition(self.playerSubject.x, self.playerSubject.y)
-  Camera.update(dt)
-
+  self.camera:update(dt)
+  self.camera:follow(self.cameraSubject.x, self.cameraSubject.y)
+  -- camera needs to have a call to update with new target values
+  -- before setting bound to false
+  self.camera.bound = false
   if self.playerTweenCompleted and self.cameraTweenCompleted then
     local x1, y1 = self.newRoom:getTopLeftPosition()
     x1 = x1 - 1
     y1 = y1 - 1
     local x2, y2 = self.newRoom:getBottomRightPosition()
-    x1, y1 = vec2.mul(Consts.GRID_SIZE, x1, y1)
-    x2, y2 = vec2.mul(Consts.GRID_SIZE, x2, y2)
-    Camera.setBounds(x1, y1, x2-x1, y2-y1)
+    x1, y1 = vector.mul(GRID_SIZE, x1, y1)
+    x2, y2 = vector.mul(GRID_SIZE, x2, y2)
+    self.camera:setBounds(x1, y1, x2 - x1, y2 - y1)
     self.currentRoom:unload(self.control:getEntities())
     self.control:setCurrentRoom(self.newRoom)
     self.control:popState()
@@ -144,23 +150,24 @@ function RoomTransitionState:update(dt)
   end
 end
 
-
 function RoomTransitionState:onEnd()
-  Camera.setFollowTarget(self.player)
-  resetUnusedTileDataAnimations(self.currentRoom, self.newRoom)
   self.player:markRespawn()
+  resetUnusedTileDataAnimations(self.currentRoom, self.newRoom)
   self.control.allowRoomTransition = true
 end
 
 function RoomTransitionState:draw()
-  local entities = self.control:getEntities()
-  local w,h = Camera.getSize()
-  Camera.push()
-    local x = Camera.x
-    local y = Camera.y
-    entities:drawTileEntities(x,y,w,h)
-    entities:drawEntities(x,y,w,h)
-  Camera.pop()
+  local camera = self.control.camera
+  local entities = self.control.entities
+
+  camera:attach()
+    local x = camera.x - camera.w / 2
+    local y = camera.y - camera.h / 2
+    local w = camera.w
+    local h = camera.h
+    entities:drawTileEntities(x, y, w, h)
+    entities:drawEntities()
+  camera:detach()
 
   -- HUD placeholder
   love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)

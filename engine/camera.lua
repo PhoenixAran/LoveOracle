@@ -1,4 +1,3 @@
-local DisplayHandler = require 'engine.display_handler'
 local vec2 = require 'lib.vector'
 local Consts = require 'constants'
 
@@ -32,7 +31,7 @@ local function defaultFollowTargetPositionGetter(obj)
 end
 
 function Camera.setPosition(x, y)
-  local w, h = DisplayHandler.getGameSize()
+  local w, h = Camera.getSize()
   Camera.x = x - w / 2
   Camera.y = y - h / 2
 end
@@ -59,7 +58,7 @@ end
 function Camera.update(dt)
   -- update follow target if it exists
   if Camera.followTarget then
-    local w, h = DisplayHandler.getGameSize()
+    local w, h = Camera.getSize()
     local tx, ty = Camera.followTargetPositionGetter(Camera.followTarget)
     Camera.x, Camera.y = tx-w/2, ty-h/2
   end
@@ -67,7 +66,7 @@ function Camera.update(dt)
 
   -- stay within limits
   local retX, retY = Camera.x, Camera.y
-  local gameW, gameH = DisplayHandler.getGameSize()
+  local gameW, gameH = Camera.getSize()
   if Camera.positionSmoothingEnabled then
     retX, retY = Camera.smoothedX, Camera.smoothedY
   end
@@ -112,6 +111,10 @@ function Camera.push()
   love.graphics.push()
   love.graphics.scale(Camera.scale)
   love.graphics.translate(-x, -y)
+end
+
+function Camera.getSize()
+  return require('engine.display_handler').getGameSize()
 end
 
 function Camera.pop()

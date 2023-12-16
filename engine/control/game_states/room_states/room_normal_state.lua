@@ -33,7 +33,7 @@ function RoomNormalState:draw()
     local cullW = gameW
     local cullH = gameH
     entities:drawTileEntities(cullX, cullY, cullW, cullH)
-    entities:drawEntities()
+    entities:drawEntities(cullX, cullY, cullW, cullH)
   Camera.pop()
 
   -- HUD placeholder
