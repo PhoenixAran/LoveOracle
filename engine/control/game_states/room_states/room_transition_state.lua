@@ -9,6 +9,7 @@ local Consts = require 'constants'
 local Camera = require 'engine.camera'
 
 local ROOM_TRANSITION_PANNING_DURATION = 1
+local ROOM_TRANSITION_TWEEN_STYLE = 'inOutCubic'
 
 ---@class RoomTransitionState : GameState
 ---@field transitionStyle string
@@ -32,7 +33,6 @@ local RoomTransitionState = Class { __includes = GameState,
 
     self.player = nil
     self.playerSubject = { }
-    self.cameraTarget = { }
     self.playerTween = nil
     self.cameraTween = nil
     self.playerTweenCompleted = false
@@ -61,11 +61,12 @@ local function resetUnusedTileDataAnimations(oldRoom, newRoom)
 end
 
 function RoomTransitionState:onBegin()
+  -- unset follow target for now
   Camera.setFollowTarget()
-  Camera.setLimits(-10000000, 10000000, -10000000, 10000000)
   self.control.allowRoomTransition = false
   self.player = self.control:getPlayer()
 
+  -- setup player tween
   local tx, ty = 0, 0
   if self.direction4 == Direction4.up then
     tx, ty = self.newRoom:getBottomRightPosition()
@@ -83,40 +84,24 @@ function RoomTransitionState:onBegin()
   tx = tx - 1
   ty = ty - 1
   tx, ty = vec2.mul(Consts.GRID_SIZE, tx, ty)
-
-  -- setup player tween
   self.playerSubject = { }
-  -- setup player tween
   self.playerSubject.x, self.playerSubject.y = self.player:getPosition()
   if self.direction4 == Direction4.left or self.direction4 == Direction4.right then
-    self.playerTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, self.playerSubject, { x = tx, y = self.playerSubject.y }, 'inOutCubic')
+    self.playerTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, self.playerSubject, { x = tx, y = self.playerSubject.y }, ROOM_TRANSITION_TWEEN_STYLE)
   elseif self.direction4 == Direction4.up or self.direction4 == Direction4.down then
-    self.playerTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, self.playerSubject, { x = self.playerSubject.x, y = ty}, 'inOutCubic')
+    self.playerTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, self.playerSubject, { x = self.playerSubject.x, y = ty}, ROOM_TRANSITION_TWEEN_STYLE)
   end
 
   -- setup camera tween
-  local x1, y1 = self.newRoom:getTopLeftPosition()
-  x1 = x1 - 1
-  y1 = y1 - 1
-  local x2, y2 = self.newRoom:getBottomRightPosition()
-  x1, y1 = vec2.mul(Consts.GRID_SIZE, x1, y1)
-  x2, y2 = vec2.mul(Consts.GRID_SIZE, x2, y2)
-
-  self.cameraTarget = { }
-  self.cameraTarget.x = Camera.x
-  self.cameraTarget.y = Camera.y
-  local cameraW,cameraH = Camera.getSize()
-  if self.direction4 == Direction4.up then
-    self.cameraTarget.y = y1
-  elseif self.direction4 == Direction4.down then
-    self.cameraTarget.y = y1
-  elseif self.direction4 == Direction4.left then
-    self.cameraTarget.x = x1
-  elseif self.direction4 == Direction4.right then
-    self.cameraTarget.x = x1
-  end
-
-  self.cameraTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, Camera, self.cameraTarget, 'inOutCubic')
+  local x,y = vec2.mul(Consts.GRID_SIZE, vec2.add(-1, -1, self.newRoom:getTopLeftPosition()))
+  local w,h = vec2.mul(Consts.GRID_SIZE, self.newRoom:getWidth(), self.newRoom:getHeight())
+  self.cameraTarget = {
+    limitLeft = x,
+    limitRight = x + w,
+    limitTop = y,
+    limitBottom = y + h
+  }
+  self.cameraTween = Tween.new(ROOM_TRANSITION_PANNING_DURATION, Camera, self.cameraTarget, ROOM_TRANSITION_TWEEN_STYLE)
   self.newRoom:load(self.control:getEntities())
 end
 
@@ -128,13 +113,9 @@ function RoomTransitionState:update(dt)
   Camera.update(dt)
 
   if self.playerTweenCompleted and self.cameraTweenCompleted then
-    local x1, y1 = self.newRoom:getTopLeftPosition()
-    x1 = x1 - 1
-    y1 = y1 - 1
-    local x2, y2 = self.newRoom:getBottomRightPosition()
-    x1, y1 = vec2.mul(Consts.GRID_SIZE, x1, y1)
-    x2, y2 = vec2.mul(Consts.GRID_SIZE, x2, y2)
-    Camera.setBounds(x1, y1, x2-x1, y2-y1)
+    local x,y = vec2.mul(Consts.GRID_SIZE, vec2.add(-1, -1, self.newRoom:getTopLeftPosition()))
+    local w,h = vec2.mul(Consts.GRID_SIZE, self.newRoom:getWidth(), self.newRoom:getHeight())
+    Camera.setBounds(x,y,w,h)
     self.currentRoom:unload(self.control:getEntities())
     self.control:setCurrentRoom(self.newRoom)
     self.control:popState()
