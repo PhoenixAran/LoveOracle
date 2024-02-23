@@ -28,10 +28,11 @@ end
 
 ---@param previousState PlayerState
 function PlayerHitstunState:onBegin(previousState)
+  assert(self.player.combat, 'Player does not have combat component')
+
   self.combat = self.player.combat
   self.player:interruptItems()
   self.player.sprite:play('idle')
-  assert(self.player.combat, 'Player does not have combat component')
 end
 
 function PlayerHitstunState:update(dt)

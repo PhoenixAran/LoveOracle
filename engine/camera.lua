@@ -4,6 +4,23 @@ local DisplayHandler = require 'engine.display_handler'
 
 --- static camera instance
 ---@class Camera
+---@field x number
+---@field y number
+---@field smoothedX number
+---@field smoothedY number
+---@field offsetX number
+---@field offsetY number
+---@field limitSmoothing boolean
+---@field limitBottom number
+---@field limitLeft number
+---@field limitRight number
+---@field limitTop number
+---@field positionSmoothingEnabled boolean
+---@field positionSmothingSpeed number
+---@field scale number
+---@field followTarget any
+---@field followTargetPositionGetter function?
+---@field _first boolean
 local Camera = {
   -- NOTE: Refers to top left position, not the center
   x = 0,
@@ -14,12 +31,13 @@ local Camera = {
   offsetX = 0,
   offsetY = 0,
 
+  limitSmoothing = false,
   limitBottom = 10000000,
   limitLeft = -10000000,
   limitRight = 10000000,
   limitTop = -10000000,
 
-  positionSmoothingEnabled = false,
+  positionSmoothingEnabled = true,
   positionSmoothingSpeed = 5,
   scale = 1,
 
@@ -35,6 +53,11 @@ function Camera.setPosition(x, y)
   local w, h = Camera.getSize()
   Camera.x = x - w / 2
   Camera.y = y - h / 2
+end
+
+function Camera.syncSmoothingPositionWithActualPosition()
+  Camera.smoothedX = Camera.x
+  Camera.smoothedY = Camera.y
 end
 
 function Camera.setLimits(limitLeft, limitRight, limitTop, limitBottom)
@@ -57,50 +80,60 @@ function Camera.setFollowTarget(target, followTargetPositionGetter)
 end
 
 function Camera.update(dt)
+  local w, h = Camera.getSize()
+
   -- update follow target if it exists
   if Camera.followTarget then
-    local w, h = Camera.getSize()
     local tx, ty = Camera.followTargetPositionGetter(Camera.followTarget)
     Camera.x, Camera.y = tx-w/2, ty-h/2
   end
 
-
-  -- stay within limits
   local retX, retY = Camera.x, Camera.y
-  local w, h = Camera.getSize()
   if Camera.positionSmoothingEnabled then
     retX, retY = Camera.smoothedX, Camera.smoothedY
   end
 
-  local screenRectX,screenRectY,screenRectW,screenRectH =  retX, retY, vec2.mul(Camera.scale, w, h)
-
+  local screenRectX,screenRectY,screenRectW,screenRectH = retX, retY, vec2.mul(Camera.scale, w, h)
   if screenRectX < Camera.limitLeft then
     screenRectX = Camera.limitLeft
   end
-
   if screenRectX + screenRectW > Camera.limitRight then
     screenRectX = Camera.limitRight - screenRectW
   end
-
   if screenRectY + screenRectH > Camera.limitBottom then
     screenRectY = Camera.limitBottom - screenRectH
   end
-
   if screenRectY < Camera.limitTop then
     screenRectY = Camera.limitTop
   end
 
   -- set x, y position incase we have to clamp
-  Camera.x = screenRectX
-  Camera.y = screenRectY
+  local oldX, oldY = Camera.x, Camera.y
+  Camera.x, Camera.y = screenRectX, screenRectY
 
   -- update smoothing position
   if Camera.positionSmoothingEnabled then
     local c = Camera.positionSmoothingSpeed * dt
-    Camera.smoothedX, Camera.smoothedY = vec2.add(Camera.smoothedX, Camera.smoothedY, vec2.mul(c, vec2.sub(Camera.x, Camera.y, Camera.smoothedX, Camera.smoothedY)))
+    Camera.smoothedX, Camera.smoothedY = vec2.add(Camera.smoothedX, Camera.smoothedY, vec2.mul(c, vec2.sub(oldX, oldY, Camera.smoothedX, Camera.smoothedY)))
+    retX, retY = Camera.smoothedX, Camera.smoothedY
+    if retX < Camera.limitLeft then
+      retX = Camera.limitLeft
+    end
+    if retX + screenRectW > Camera.limitRight then
+      retX = Camera.limitRight - screenRectW
+    end
+    if retY + screenRectH > Camera.limitBottom then
+      retY = Camera.limitBottom - screenRectH
+    end
+    if retY < Camera.limitTop then
+      retY = Camera.limitTop
+    end
+    Camera.smoothedX, Camera.smoothedY = retX, retY
   else
     Camera.smoothedX, Camera.smoothedY = Camera.x, Camera.y
   end
+
+
 end
 
 function Camera.push()

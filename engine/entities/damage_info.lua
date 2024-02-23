@@ -1,4 +1,6 @@
 local Class = require 'lib.class'
+local EMPTY_TABLE = { }
+
 
 ---@class DamageInfo
 ---@field sourceX number
@@ -10,6 +12,7 @@ local Class = require 'lib.class'
 ---@field intangibilityTime integer|nil
 local DamageInfo = Class {
   init = function(self, args)
+    args = args or EMPTY_TABLE
     self.sourceX = args.sourceX or 0
     self.sourceY = args.sourceY or 0
 

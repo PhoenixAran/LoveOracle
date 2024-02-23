@@ -147,17 +147,17 @@ local Player = Class { __includes = MapEntity,
       self:actionUseItem('b')
     end)
     self:addPressInteraction('y', function(player)
-      -- local damageInfo = require('engine.entities.damage_info')()
-      -- damageInfo.damage = 1
-      -- damageInfo.hitstunTime = 8
-      -- damageInfo.knockbackTime = 8
-      -- damageInfo.knockbackSpeed = 80
-      -- damageInfo.sourceX, damageInfo.sourceY = player:getPosition()
-      -- local rx = lume.random(-20, 20)
-      -- local ry = lume.random(-20, 20)
-      -- damageInfo.sourceX = damageInfo.sourceX + rx
-      -- damageInfo.sourceY = damageInfo.sourceY + ry
-      -- player:hurt(damageInfo)
+      local damageInfo = require('engine.entities.damage_info')()
+      --damageInfo.damage = 1
+      --damageInfo.hitstunTime = 8
+      --damageInfo.knockbackTime = 8
+      --damageInfo.knockbackSpeed = 80
+      --damageInfo.sourceX, damageInfo.sourceY = player:getPosition()
+      --local rx = lume.random(-20, 20)
+      --local ry = lume.random(-20, 20)
+      --damageInfo.sourceX = damageInfo.sourceX + rx
+      --damageInfo.sourceY = damageInfo.sourceY + ry
+      --player:hurt(damageInfo)
       player:startRespawnControlState()
     end)
 

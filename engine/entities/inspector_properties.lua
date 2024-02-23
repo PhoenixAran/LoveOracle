@@ -24,7 +24,7 @@ local PropertyMode = {
 ---@field label string
 ---@field propType string
 ---@field readOnly boolean
----@field mode integer
+---@field mode string
 ---@field isObjectFuncs boolean
 ---@field getFunc function
 ---@field setFunc function
