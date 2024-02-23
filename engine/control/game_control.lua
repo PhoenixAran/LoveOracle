@@ -95,6 +95,8 @@ function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
   x2, y2 = vector.mul(Consts.GRID_SIZE, x2, y2)
   Camera.setFollowTarget(self:getPlayer())
   Camera.setLimits(x1, x2, y1, y2)
+  Camera.update(0)
+  Camera.syncSmoothingPositionWithActualPosition()
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
 

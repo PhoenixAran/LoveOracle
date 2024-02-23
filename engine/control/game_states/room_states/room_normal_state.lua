@@ -27,9 +27,9 @@ end
 function RoomNormalState:draw()
   local entities = self.control.entities
   Camera.push()
-    local gameW, gameH = DisplayHandler.getGameSize()
-    local cullX = Camera.x
-    local cullY = Camera.y
+    local gameW, gameH = Camera.getSize()
+    local cullX = Camera.positionSmoothingEnabled and Camera.smoothedX or Camera.x
+    local cullY = Camera.positionSmoothingEnabled and Camera.smoothedY or Camera.y
     local cullW = gameW
     local cullH = gameH
     entities:drawTileEntities(cullX, cullY, cullW, cullH)

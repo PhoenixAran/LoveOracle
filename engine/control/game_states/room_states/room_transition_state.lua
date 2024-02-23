@@ -23,6 +23,7 @@ local ROOM_TRANSITION_TWEEN_STYLE = 'inOutCubic'
 ---@field playerTweenCompleted boolean
 ---@field cameraTweenCompleted boolean
 ---@field direction4 integer
+---@field previousPositionSmoothingEnabledValue boolean
 local RoomTransitionState = Class { __includes = GameState,
   init = function(self, currentRoom, newRoom, transitionStyle, direction4)
     GameState.init(self)
@@ -30,6 +31,7 @@ local RoomTransitionState = Class { __includes = GameState,
     self.currentRoom = currentRoom
     self.newRoom = newRoom
     self.direction4 = direction4
+    self.previousPositionSmoothingEnabledValue = Camera.positionSmoothingEnabled
 
     self.player = nil
     self.playerSubject = { }
@@ -82,6 +84,10 @@ function RoomTransitionState:onBegin()
   -- unbound camera so it can move freely during the push transition
   Camera.setFollowTarget()
   Camera.setLimits(-10000000, 10000000, -10000000, 10000000)
+  
+  -- disable positional smoothing if it is enabled \
+  self.previousPositionSmoothingEnabledValue = Camera.positionSmoothingEnabled
+  Camera.positionSmoothingEnabled = false
 
   self.control.allowRoomTransition = false
   self.player = self.control:getPlayer()
@@ -147,6 +153,8 @@ function RoomTransitionState:onEnd()
   -- set camera to follow player again
   Camera.setFollowTarget(self.player)
 
+  -- re enable position smoothing if it was enabled before
+  Camera.positionSmoothingEnabled = self.previousPositionSmoothingEnabledValue
   -- player
   self.player:markRespawn()
   -- update player position or else they have one frame where they are considered in the last position between room transitons
@@ -162,8 +170,8 @@ function RoomTransitionState:draw()
   local entities = self.control:getEntities()
   local w,h = Camera.getSize()
   Camera.push()
-    local x = Camera.x
-    local y = Camera.y
+    local x = Camera.positionSmoothingEnabled and Camera.smoothedX or Camera.x
+    local y = Camera.positionSmoothingEnabled and Camera.smoothedY or Camera.y
     entities:drawTileEntities(x,y,w,h)
     entities:drawEntities(x,y,w,h)
   Camera.pop()
