@@ -70,7 +70,7 @@ function PlayerSwimEnvironmentState:drown()
   if self.player:isInLava() then
     self.player.spriteFlasher:flash(24)
   end
-  self.player:respawnDeath()
+  self.player:respawn()
 end
 
 ---@param previousState PlayerState
