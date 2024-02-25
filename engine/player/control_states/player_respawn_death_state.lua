@@ -4,6 +4,7 @@ local Singletons = require 'engine.singletons'
 local Tween = require 'lib.tween'
 local rect = require 'engine.utils.rectangle'
 local DamageInfo = require 'engine.entities.damage_info'
+local Camera = require 'engine.camera'
 
 local RespawnState = {
   DeathAnimation = 0,
@@ -14,7 +15,6 @@ local RespawnState = {
 ---@class PlayerRespawnDeathState : PlayerState
 ---@field waitForAnimation boolean
 ---@field respawnState integer
----@field camera any
 ---@field cameraSubject any
 ---@field cameraTween any
 ---@field lastCameraX number
@@ -31,9 +31,6 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
     self.stateParameters.canControlOnGround = false
     self.stateParameters.canControlInAir = false
     self.stateParameters.hitboxCollisions = false
-
-    self.camera = nil
-    self.cameraSubject = { }
 
     self.respawnDamageInfo = DamageInfo({
       damage = 2,
@@ -54,9 +51,6 @@ function PlayerRespawnDeathState:startViewPanningState()
   self.player:respawn()
   self.player:setVisible(true)
   self.respawnState = RespawnState.ViewPanning
-
-  -- calculate what position the camera needs to Pan to?
-  
 end
 
 function PlayerRespawnDeathState:endViewPanningState()
@@ -80,13 +74,8 @@ function PlayerRespawnDeathState:update(dt)
       self:startViewPanningState()
     end
   elseif self.respawnState == RespawnState.ViewPanning then
-    if self.lastCameraX == self.camera.x and self.lastCameraY == self.camera.y then
-      self:endViewPanningState()
-      self:startDelayState()
-    else
-      self.lastCameraX = self.camera.x
-      self.lastCameraY = self.camera.y
-    end
+    self:endViewPanningState()
+    self:startDelayState()
   elseif self.respawnState == RespawnState.Delay then
     if not self.player:inHitstun() then
       self:endDelayState()

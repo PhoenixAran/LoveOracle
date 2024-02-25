@@ -5,8 +5,15 @@ local AssetManager = require 'engine.utils.asset_manager'
 local tick = require 'lib.tick'
 local DisplayHandler = require 'engine.display_handler'
 love.inspect = require 'lib.inspect'
+
 -- singletons
 local Singletons = require 'engine.singletons'
+
+-- logger
+love.log = require 'lib.log'
+love.log.usecolor = false
+love.log.trace('Game Initialization')
+
 
 -- init quake console
 require 'lib.console'
@@ -23,9 +30,9 @@ print('    <_|      <_|')
 
 print()
 
-print("OS: " .. love.system.getOS())
-print(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
-print('Save Directory: ' .. love.filesystem.getSaveDirectory())
+love.log.trace("OS: " .. love.system.getOS())
+love.log.trace(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
+love.log.trace('Save Directory: ' .. love.filesystem.getSaveDirectory())
 
 print()
 
@@ -77,7 +84,6 @@ function love.load(args)
   Singletons.input = input
 
   -- set up display handler
-
   DisplayHandler.init({
     -- display handler arguments
     canvasWidth = gameConfig.window.displayConfig.virtualWidth,
@@ -93,7 +99,7 @@ function love.load(args)
   --console.font = AssetManager.getFont('debugConsole')
 
   -- setup startup screen
-  print('Startup Screen: ' .. gameConfig.startupScreen)
+  love.log.trace('Startup Screen: ' .. gameConfig.startupScreen)
   screenManager:enter(require(gameConfig.startupScreen)())
 end
 

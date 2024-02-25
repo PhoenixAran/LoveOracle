@@ -43,7 +43,7 @@ function BaseScreen:drawVersion()
 end
 
 if GameConfig.enableQuakeConsole then
-  print 'Debug console enabled in basescreen'
+  love.log.trace 'Debug console enabled in basescreen'
   function BaseScreen:keypressed(keycode, scancode, isrepeat)
     console.keypressed(keycode)
   end

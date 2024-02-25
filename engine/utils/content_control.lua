@@ -42,6 +42,7 @@ local function loadSpriteSheets(directory)
 end
 
 function ContentControl.buildContent()
+  love.log.trace('Content Control building asset content')
   local startTime = love.timer.getTime()
   loadFonts('data/assets/fonts')
   loadImages('data/assets/images')
@@ -51,7 +52,7 @@ function ContentControl.buildContent()
   TiledMapLoader.initializeTilesets()
   TiledMapLoader.initializeTemplates()
   local runTime = love.timer.getTime() - startTime
-  print('Asset load time: ' .. tostring(runTime * 1000) .. ' ms')
+  love.log.trace('Asset load time: ' .. tostring(runTime * 1000) .. ' ms')
 end
 
 function ContentControl.unloadContent()

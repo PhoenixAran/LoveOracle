@@ -85,7 +85,7 @@ local Player = Class { __includes = MapEntity,
       w = 12,
       h = 13,
       offsetX = 0,
-      offsetY = -2
+      offsetY = -2 
     })
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     self:setCollidesWithLayer('tile')

@@ -12,6 +12,7 @@ Requires [LOVE 11.4](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch
 - [inspect](http://github.com/kikito/inspect.lua)
 - [JSON](https://github.com/rxi/json.lua)
 - [HUMP](https://github.com/vrld/hump)
+- [log](https://github.com/rxi/log.lua)
 - [love-imgui](https://github.com/MikuAuahDark/love-imgui)
 - [love-quakeconsole](https://github.com/pfirsich/love-quakeconsole)
 - [lume](https://github.com/rxi/lume/)
