@@ -214,8 +214,7 @@ local function loadTemplate(path)
   local tiledTemplate = { }
   for k, v in pairs(jTemplate.object) do
     -- tiled likes to save the id of the object intance when you save it as a template
-    -- dont know why it does this. We ignore the property so it doesnt override template instances' id
-    -- see parseObject function
+    -- dont know why it does this. We ignore the property
     if k ~= 'id' then
       -- note that we leave the property dictionary in it's array form [{type = <value>, name = 'name', value = <value>}, ...]
       -- This is due to us having to account for an object having it's own instance of properties that we have to parse

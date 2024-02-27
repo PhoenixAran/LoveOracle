@@ -56,6 +56,7 @@ function ContentControl.buildContent()
 end
 
 function ContentControl.unloadContent()
+  love.log.trace('Unloading content')
   SpriteBank.unload()
   PaletteBank.unload()
   AssetManager.unload()

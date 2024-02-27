@@ -59,6 +59,7 @@ function love.load(args)
   love.window.setTitle(gameConfig.window.title)
 
   -- build content here (need it for font)
+
   ContentControl.buildContent()
   love.graphics.setFont(AssetManager.getFont('baseScreenDebug'))
 
@@ -74,6 +75,7 @@ function love.load(args)
     Singleton Inits
   ]]
   -- set up screen manager
+
   screenManager = require('lib.roomy').new()
   screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
   Singletons.screenManager = screenManager

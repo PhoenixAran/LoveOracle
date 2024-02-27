@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tilesets/environment.tsj",
+    "activeFile": "maps/movement_test.tmj",
     "expandedProjectPaths": [
         "templates",
         "maps",
@@ -56,10 +56,10 @@
         },
         "maps/movement_test.tmj": {
             "scale": 1.5,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 613.3333333333333,
-                "y": 183.33333333333334
+                "x": 206.66666666666669,
+                "y": 96
             }
         },
         "maps/test_map_1.json": {
@@ -140,9 +140,9 @@
     "project": "love-oracle.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "maps/movement_test.tmj",
         "tilesets/proto_dungeon_2.tsj",
         "tilesets/environment.tsj",
+        "maps/movement_test.tmj",
         "tilesets/proto_dungeon.tsj",
         "tilesets/proto_environment.tsj",
         "maps/test_map_1.tmj",
