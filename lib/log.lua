@@ -8,6 +8,7 @@
 --
 
 
+
 ---@class Logger
 ---@field usecolor boolean
 ---@field outfile string

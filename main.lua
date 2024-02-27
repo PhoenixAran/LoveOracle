@@ -11,7 +11,6 @@ local Singletons = require 'engine.singletons'
 
 -- logger
 love.log = require 'lib.log'
-love.log.outfile = love.filesystem.getSaveDirectory() .. '/' .. string.format('loveoracle_log_%s.txt', os.date('%Y-%m-%d'))
 love.log.usecolor = false
 love.log.trace('Game Initialization')
 
