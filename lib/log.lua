@@ -8,13 +8,16 @@
 --
 
 
----@class Log
+---@class Logger
 ---@field usecolor boolean
 ---@field outfile string
 ---@field level string
 ---@field trace function
 ---@field debug function
 ---@field info function
+---@field warn function
+---@field error function
+---@field fatal function
 local log = { _version = "0.1.0" }
 
 log.usecolor = true

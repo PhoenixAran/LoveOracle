@@ -7,7 +7,7 @@ TileTypeFlags:makeTags {
   'stairs',
   'ladder',
   'ice',
-  'puddle',
+  'puddle', -- water level that player can walk in
   'grass',
   'hole',
   'water',

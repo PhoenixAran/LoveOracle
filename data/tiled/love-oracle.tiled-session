@@ -3,11 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/test_map_1.tmj",
+    "activeFile": "maps/movement_test.tmj",
     "expandedProjectPaths": [
+        "templates",
         "maps",
-        "tilesets",
-        "templates"
+        "tilesets"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -54,6 +54,14 @@
                 "y": 257
             }
         },
+        "maps/movement_test.tmj": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 8264,
+                "y": 7992
+            }
+        },
         "maps/test_map_1.json": {
             "scale": 0.5,
             "selectedLayer": 0,
@@ -63,11 +71,11 @@
             }
         },
         "maps/test_map_1.tmj": {
-            "scale": 0.5,
-            "selectedLayer": 2,
+            "scale": 0.33,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 618,
-                "y": 418
+                "x": 159.09090909090912,
+                "y": -139.3939393939395
             }
         },
         "maps/test_map_1_debug.json": {
@@ -80,6 +88,10 @@
                 "x": 257,
                 "y": 742
             }
+        },
+        "tilesets/environment.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 3
         },
         "tilesets/proto_dungeon.json": {
             "scaleInDock": 1,
@@ -102,7 +114,7 @@
             "scaleInEditor": 5.5
         }
     },
-    "frame.defaultDuration": 1800,
+    "frame.defaultDuration": 480,
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
     "last.externalTilesetPath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/tiled/tilesets",
     "last.imagePath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/assets/images/tiles",
@@ -112,25 +124,26 @@
         "C:/Users/phoen/test.world"
     ],
     "map.fixedSize": true,
-    "map.height": 16,
+    "map.height": 1000,
     "map.lastUsedExportFilter": "JSON map files (*.json)",
     "map.lastUsedFormat": "json",
     "map.orientation": 1,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 16,
+    "map.width": 1000,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "tilesets/proto_dungeon.tsj",
         "tilesets/proto_dungeon_2.tsj",
-        "tilesets/proto_environment.tsj",
-        "maps/test_map_1.tmj"
+        "maps/movement_test.tmj",
+        "tilesets/environment.tsj"
     ],
     "project": "love-oracle.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "tilesets/proto_dungeon.tsj",
         "tilesets/proto_dungeon_2.tsj",
+        "tilesets/environment.tsj",
+        "maps/movement_test.tmj",
+        "tilesets/proto_dungeon.tsj",
         "tilesets/proto_environment.tsj",
         "maps/test_map_1.tmj",
         "maps/test_map_1_debug.json",
@@ -138,9 +151,7 @@
         "tilesets/proto_dungeon_2.json",
         "tilesets/proto_dungeon.json",
         "C:/Users/phoen/Downloads/test_tileset/test.json",
-        "C:/Users/phoen/Downloads/desert_tsx.json",
-        "C:/Users/phoen/Downloads/desert_map.json",
-        "C:/Users/phoen/Downloads/desert.json"
+        "C:/Users/phoen/Downloads/desert_tsx.json"
     ],
     "tileset.embedInMap": false,
     "tileset.lastUsedExportFilter": "Lua files (*.lua)",

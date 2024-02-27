@@ -11,15 +11,15 @@ local Singletons = require 'engine.singletons'
 
 -- logger
 love.log = require 'lib.log'
+love.log.outfile = love.filesystem.getSaveDirectory() .. '/' .. string.format('loveoracle_log_%s.txt', os.date('%Y-%m-%d'))
 love.log.usecolor = false
 love.log.trace('Game Initialization')
-
 
 -- init quake console
 require 'lib.console'
 require 'engine.console_commands'
 
-print('Ziggy Engine ' .. gameConfig.version)
+love.log.debug('Ziggy Engine ' .. gameConfig.version)
 print('   |\\|\\')
 print('  ..    \\       .')
 print('o--     \\\\    / @)')
@@ -30,9 +30,9 @@ print('    <_|      <_|')
 
 print()
 
-love.log.trace("OS: " .. love.system.getOS())
-love.log.trace(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
-love.log.trace('Save Directory: ' .. love.filesystem.getSaveDirectory())
+love.log.debug("OS: " .. love.system.getOS())
+love.log.debug(('Renderer: %s %s\nVendor: %s\nGPU: %s'):format(love.graphics.getRendererInfo()))
+love.log.debug('Save Directory: ' .. love.filesystem.getSaveDirectory())
 
 print()
 
@@ -115,4 +115,8 @@ end
 function love.resize(w, h)
   screenManager:emit('resize', w, h)
   DisplayHandler.resize(w, h)
+end
+
+function love.quit()
+  love.log.trace('Game Closed')
 end
