@@ -35,7 +35,7 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
     self.respawnDamageInfo = DamageInfo({
       damage = 2,
       hitstunTime = 15,
-      intangibilityTime = 44
+      intangibilityTime = 44,
     })
   end
 }
@@ -85,12 +85,14 @@ end
 
 ---@param previousState PlayerState
 function PlayerRespawnDeathState:onBegin(previousState)
+  
   self.respawnState = RespawnState.DeathAnimation
   self.stateParameters.canStrafe = true
   self.stateParameters.canControlOnGround = false
   self.stateParameters.canControlInAir = false
   self.stateParameters.canJump = false
   self.player:setVisible(false)
+
 end
 
 function PlayerRespawnDeathState:onEnd(newState)

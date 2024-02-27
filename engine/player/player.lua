@@ -159,6 +159,7 @@ local Player = Class { __includes = MapEntity,
       --damageInfo.sourceY = damageInfo.sourceY + ry
       --player:hurt(damageInfo)
       player:startRespawnControlState()
+      error('test')
     end)
 
     self.items = {
@@ -314,6 +315,9 @@ end
 function Player:respawn()
   self:setPosition(self.respawnPositionX, self.respawnPositionY)
   self:setAnimationDirection4(self.respawnDirection4)
+  self:setVector(0, 0)
+  self:setZPosition(0)
+  self:setZVelocity(0)
   self:emit('respawn')
 end
 

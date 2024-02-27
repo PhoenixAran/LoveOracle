@@ -10,14 +10,14 @@ love.inspect = require 'lib.inspect'
 local Singletons = require 'engine.singletons'
 
 -- logger
-love.log = require 'lib.log'
-love.log.usecolor = false
-love.log.trace('Game Initialization')
+require 'engine.logger'
+love.log.outFile = string.format('love-oracle_%s_log.txt', os.date('%Y-%m-%d'))
 
 -- init quake console
 require 'lib.console'
 require 'engine.console_commands'
 
+love.log.trace('Game Init')
 love.log.debug('Ziggy Engine ' .. gameConfig.version)
 print('   |\\|\\')
 print('  ..    \\       .')

@@ -249,6 +249,10 @@ function MapEntity:setVector(x, y)
   return self.movement:setVector(x, y)
 end
 
+function MapEntity:setZVelocity(zVelocity)
+  self.movement:setZVelocity(zVelocity)
+end
+
 function MapEntity:getDirection4()
   return self.movement:getDirection4()
 end
