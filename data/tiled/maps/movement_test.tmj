@@ -48,14 +48,6 @@
                  "y":0
                 }, 
                 {
-                 "height":288,
-                 "id":3,
-                 "template":"..\/templates\/single_room_template.tj",
-                 "width":432,
-                 "x":320,
-                 "y":0
-                }, 
-                {
                  "id":4,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":592,
@@ -78,6 +70,14 @@
                  "template":"..\/templates\/single_room_template.tj",
                  "x":432,
                  "y":416
+                }, 
+                {
+                 "height":288,
+                 "id":8,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "width":432,
+                 "x":320,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -97,7 +97,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":8,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

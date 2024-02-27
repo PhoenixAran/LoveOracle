@@ -45,19 +45,6 @@ local function parseObject(jObject)
   local tiledObject = TiledObject()
 
   local templateProperties = nil
-  if jObject.template then
-    -- if this is a templated object, inject the template object value properties into our json object
-    local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
-    local template = tiledTemplates[templateKey]
-    for k, v in pairs(template) do
-      if k == 'properties' then
-        -- handle this later
-        templateProperties = parsePropertyDict(v)
-      else
-        jObject[k] = v
-      end
-    end
-  end
 
   tiledObject.id = jObject.id
   tiledObject.name = jObject.name
@@ -67,6 +54,24 @@ local function parseObject(jObject)
   tiledObject.height = jObject.height
   tiledObject.type = jObject.type
   tiledObject.rotation = jObject.rotation
+
+  if jObject.template then
+    -- if this is a templated object, inject the template object value properties into our json object
+    local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
+    local template = tiledTemplates[templateKey]
+    for k, v in pairs(template) do
+      if k == 'properties' then
+        -- handle this later
+        templateProperties = parsePropertyDict(v)
+      elseif tiledObject[k] == nil then
+        -- inject value from template into tiled object if instance does not have data for given field
+        tiledObject[k] = template[k]
+      end
+    end
+  end
+
+
+  print(tiledObject.width)
 
   if jObject.gid ~= nil then
     tiledObject.gid = jObject.gid

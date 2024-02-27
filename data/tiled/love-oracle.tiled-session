@@ -56,10 +56,10 @@
         },
         "maps/movement_test.tmj": {
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 77.99999999999997,
-                "y": 149.33333333333334
+                "x": 613.3333333333333,
+                "y": 183.33333333333334
             }
         },
         "maps/test_map_1.json": {
