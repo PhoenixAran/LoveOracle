@@ -1,4 +1,4 @@
 # argument examples below
 # <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 1)
-"proto_dungeon_2", "proto_dungeon_2", 16, 16, 1, 3
-"environment", "environment", 16, 16, 1, 3
+"proto_dungeon_2", "proto_dungeon_2", 16, 16
+"environment", "environment", 16, 16

@@ -239,7 +239,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -273,7 +273,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -307,7 +307,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -341,7 +341,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -375,7 +375,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -613,7 +613,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -647,7 +647,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -681,7 +681,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -715,7 +715,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -749,7 +749,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -790,7 +790,7 @@
                 {
                  "name":"conveyorVector",
                  "type":"string",
-                 "value":"1,-1"
+                 "value":"-1,-1"
                 }, 
                 {
                  "name":"hurtBox",
@@ -987,7 +987,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1021,7 +1021,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1055,7 +1055,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1089,7 +1089,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1123,7 +1123,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1361,7 +1361,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1395,7 +1395,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1429,7 +1429,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1463,7 +1463,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1497,7 +1497,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1735,7 +1735,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1769,7 +1769,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1803,7 +1803,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1837,7 +1837,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"laval"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",
@@ -1871,7 +1871,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"lava"
                 }, 
                 {
                  "name":"zRange",

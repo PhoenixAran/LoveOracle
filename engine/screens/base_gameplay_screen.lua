@@ -34,7 +34,7 @@ function BaseGameplayScreen:enter(prev, ...)
   local player = Player({name = 'player', x = 30, y = 30, w = 16, h = 16 })
   player:initTransform()
   self.gameControl:setPlayer(player)
-  local map = Map('test_map_1.tmj')
+  local map = Map('movement_test.tmj')
   self.gameControl:setMap(map)
   -- TODO implement designated player spawn from Tiled editor
   --local mapIndexX, mapIndexY = vector.div(16, self.gameControl:getPlayer().x, self.gameControl:getPlayer().y)

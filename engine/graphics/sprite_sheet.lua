@@ -11,7 +11,7 @@ local SpriteSheet = Class {
   init = function(self, image, width, height, margin, spacing)
     self.textures = { }
     if spacing == nil then
-      spacing = 1
+      spacing = 3
     end
     if margin == nil then
       margin = 1

@@ -90,6 +90,12 @@ function GroundObserver:getType()
   return 'ground_observer'
 end
 
+function GroundObserver:onTransformChanged()
+  local ex, ey = self.entity:getPosition()
+  self.x = ex + self.pointOffsetX
+  self.y = ey + self.pointOffsetY
+end
+
 ---@param x number
 ---@param y number
 function GroundObserver:setOffset(x, y)
@@ -97,6 +103,19 @@ function GroundObserver:setOffset(x, y)
   self.pointOffsetY = y
 end
 
+function GroundObserver:reset()
+  self.inLava = false
+  self.inGrass = false
+  self.inPuddle = false
+  self.onStairs = false
+  self.onLadder = false
+  self.onIce = false
+  self.onConveyor = false
+  self.inWater = false
+  self.inHole = false
+  self.inOcean = false
+  lume.clear(self.visitedTileIndices)
+end
 
 function GroundObserver:update(dt)
   self:reset()
@@ -150,18 +169,14 @@ function GroundObserver:update(dt)
   Physics.freeTable(items)
 end
 
-function GroundObserver:reset()
-  self.inLava = false
-  self.inGrass = false
-  self.inPuddle = false
-  self.onStairs = false
-  self.onLadder = false
-  self.onIce = false
-  self.onConveyor = false
-  self.inWater = false
-  self.inHole = false
-  self.inOcean = false
-  lume.clear(self.visitedTileIndices)
+function GroundObserver:debugDraw()
+  local ex, ey = self.entity:getPosition()
+  ex = ex + self.pointOffsetX
+  ey = ey + self.pointOffsetY
+  love.graphics.setColor(20 / 255, 219 / 255, 189 / 255, 150 / 255)
+  love.graphics.points(ex, ey)
+  love.graphics.setColor(1, 1, 1, 1)
 end
+
 
 return GroundObserver

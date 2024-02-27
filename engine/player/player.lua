@@ -772,6 +772,8 @@ function Player:draw()
       item:drawAbove()
     end
   end
+
+  self.groundObserver:debugDraw()
 end
 
 function Player:debugDraw()
