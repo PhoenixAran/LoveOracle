@@ -58,11 +58,6 @@ function love.load(args)
   love.graphics.setDefaultFilter('nearest', 'nearest')
   love.window.setTitle(gameConfig.window.title)
 
-  -- build content here (need it for font)
-
-  ContentControl.buildContent()
-  love.graphics.setFont(AssetManager.getFont('baseScreenDebug'))
-
   -- set up tick rate
   tick.rate = 1 / 60
   tick.framerate = 60
@@ -70,19 +65,6 @@ function love.load(args)
   if windowFlags.refreshrate then
     tick.framerate = math.max(tick.framerate, windowFlags.refreshrate)
   end
-
-  --[[
-    Singleton Inits
-  ]]
-  -- set up screen manager
-
-  screenManager = require('lib.roomy').new()
-  screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
-  Singletons.screenManager = screenManager
-
-  -- set up input
-  input = require('lib.baton').new(gameConfig.controls)
-  Singletons.input = input
 
   -- set up display handler
   DisplayHandler.init({
@@ -95,9 +77,29 @@ function love.load(args)
     game_height = gameConfig.window.displayConfig.gameHeight,
     scale_mode = 1
   })
+  
+  -- build content here (need it for font)
+  ContentControl.buildContent()
+  love.graphics.setFont(AssetManager.getFont('baseScreenDebug'))
+
+  --[[
+    Singleton Inits
+  ]]
+  -- set up screen manager
+  screenManager = require('lib.roomy').new()
+  screenManager:hook({ exclude = {'update','draw', 'resize', 'load'} })
+  Singletons.screenManager = screenManager
+
+  -- set up input
+  input = require('lib.baton').new(gameConfig.controls)
+  Singletons.input = input
+
+
   -- set up console
   love.keyboard.setKeyRepeat(true)
   --console.font = AssetManager.getFont('debugConsole')
+
+  love.log.debug(string.format('Launch args: %s', love.inspect(args)))
 
   -- setup startup screen
   love.log.trace('Startup Screen: ' .. gameConfig.startupScreen)

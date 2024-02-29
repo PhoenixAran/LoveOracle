@@ -47,8 +47,8 @@ return makeModuleFunction(function(spriteBank)
   ab:addSpriteFrame(5, 1)
   ab:buildSubstrip('left')
   -- #substrip right
-  ab:addSpriteFrame(1, 1)
   ab:addSpriteFrame(2, 1)
+  ab:addSpriteFrame(1, 1)
   ab:buildSubstrip('right')
   -- BUILD walk
   sb:addAnimation('walk', ab:build())

@@ -15,6 +15,7 @@ local gameCanvas
 local DisplayHandler = { }
 
 function DisplayHandler.init(args)
+  love.log.trace('DisplayHandler init')
 ---@diagnostic disable-next-line: duplicate-set-field
   rs.resize_callback = function()
     if gameCanvas then

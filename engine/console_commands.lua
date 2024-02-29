@@ -32,3 +32,12 @@ console.help.fullscreen = {
   section = 'Graphics',
   'Toggles fullscreen'
 }
+
+function console.commands.dumplog()
+  love.log.trace('Log dumped via console command')
+  love.log.dump()
+end
+console.help.dumplog = {
+  section = 'Debug',
+  'Dumps log to file'
+}

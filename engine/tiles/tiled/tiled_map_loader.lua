@@ -70,9 +70,6 @@ local function parseObject(jObject)
     end
   end
 
-
-  print(tiledObject.width)
-
   if jObject.gid ~= nil then
     tiledObject.gid = jObject.gid
   end

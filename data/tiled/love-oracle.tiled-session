@@ -3,11 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tilesets/environment.tsj",
+    "activeFile": "maps/movement_test.tmj",
     "expandedProjectPaths": [
-        "tilesets",
-        "maps",
-        "templates"
+        "templates",
+        "maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -56,10 +55,10 @@
         },
         "maps/movement_test.tmj": {
             "scale": 0.75,
-            "selectedLayer": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 452,
-                "y": 417.33333333333337
+                "x": 274,
+                "y": 242.66666666666669
             }
         },
         "maps/test_map_1.json": {
@@ -115,10 +114,12 @@
         }
     },
     "frame.defaultDuration": 480,
+    "last.executablePath": "C:/Program Files/LOVE/lovec.exe",
     "last.exportedFilePath": "C:/Users/phoen/Downloads",
     "last.externalTilesetPath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/tiled/tilesets",
     "last.imagePath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/assets/images/tiles",
     "last.objectTemplatePath": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle/data/tiled/templates",
+    "last.workingDirectory": "C:/Users/phoen/OneDrive/Documents/programming-projects/love-oracle/love-oracle",
     "last.worldFilePath": "C:/Users/phoen",
     "loadedWorlds": [
         "C:/Users/phoen/test.world"
@@ -140,9 +141,9 @@
     "project": "love-oracle.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "maps/movement_test.tmj",
         "tilesets/proto_dungeon_2.tsj",
         "tilesets/environment.tsj",
+        "maps/movement_test.tmj",
         "tilesets/proto_dungeon.tsj",
         "tilesets/proto_environment.tsj",
         "maps/test_map_1.tmj",

@@ -13,7 +13,7 @@ local lume = require 'lib.lume'
 ---@field error function
 ---@field fatal function
 local Logger = { 
-  useColor = false,
+  useColor = true,
   level = 'trace',
   outFile = nil
 }

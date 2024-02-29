@@ -8,6 +8,8 @@
         "templates",
         "tilesets"
     ],
+    "properties": [
+    ],
     "propertyTypes": [
     ]
 }
