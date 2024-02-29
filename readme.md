@@ -30,3 +30,4 @@ Requires [LOVE 11.5](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch
 - [Solarus](https://gitlab.com/solarus-games/solarus)
 - [Nez Framework](https://github.com/prime31/Nez)
 - [Zabuyaki](https://github.com/thomasgoldstein/zabuyaki)
+- [rxi](https://github.com/rxi)

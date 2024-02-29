@@ -14,12 +14,12 @@ local input = Singletons.input
 ---@field init function
 local BaseScreen = Class {
   init = function(self)
-    self.drawVersionText = love.graphics.newText(AssetManager.getFont('baseScreenDebug'), 'Ver ' .. GameConfig.version)
+    self.drawVersionText = love.graphics.newText(AssetManager.getFont('base_screen_debug'), 'Ver ' .. GameConfig.version)
   end
 }
 
 function BaseScreen:drawFPS()
-  local monogram = AssetManager.getFont('baseScreenDebug')
+  local monogram = AssetManager.getFont('base_screen_debug')
   love.graphics.setFont(monogram)
   local fps = ("%d fps"):format(love.timer.getFPS())
   love.graphics.setColor(1, 1, 1)
@@ -27,7 +27,7 @@ function BaseScreen:drawFPS()
 end
 
 function BaseScreen:drawMemory()
-  local monogram = AssetManager.getFont('baseScreenDebug')
+  local monogram = AssetManager.getFont('base_screen_debug')
   love.graphics.setFont(monogram)
 ---@diagnostic disable-next-line: redundant-parameter
   local memory = ("%d kbs"):format(collectgarbage("count", 10, 10))
@@ -36,7 +36,7 @@ function BaseScreen:drawMemory()
 end
 
 function BaseScreen:drawVersion()
-  local monogram = AssetManager.getFont('baseScreenDebug')
+  local monogram = AssetManager.getFont('base_screen_debug')
   love.graphics.setFont(monogram)
   love.graphics.setColor(1, 1, 1)
   love.graphics.draw(self.drawVersionText, 160 - self.drawVersionText:getWidth(), 132)

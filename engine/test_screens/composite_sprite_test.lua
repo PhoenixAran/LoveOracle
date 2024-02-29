@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local BaseScreen = require 'engine.screens.base_screen'
-local TestEntity = require 'engine.test_game_entity'
+local TestEntity = require 'engine.test_screens.test_game_entity'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local Sprite = require 'engine.graphics.sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'

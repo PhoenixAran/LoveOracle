@@ -34,8 +34,13 @@ console.help.fullscreen = {
 }
 
 function console.commands.dumplog()
-  love.log.trace('Log dumped via console command')
-  love.log.dump()
+  if love.log.outFile then
+    love.log.trace('Log dumped via console command')
+    love.log.dump()
+    console.print(string.format('Log dumped to %s/%s', love.filesystem.getSaveDirectory(), tostring(love.log.outFile)))
+  else
+    console.print('No output file configured for logger')
+  end
 end
 console.help.dumplog = {
   section = 'Debug',

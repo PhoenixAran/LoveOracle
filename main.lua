@@ -63,6 +63,7 @@ function love.load(args)
   tick.framerate = 60
   local _, _, windowFlags = love.window.getMode()
   if windowFlags.refreshrate then
+    love.log.debug('Matching display refresh rate: %d', windowFlags.refreshrate)
     tick.framerate = math.max(tick.framerate, windowFlags.refreshrate)
   end
 
@@ -80,7 +81,7 @@ function love.load(args)
   
   -- build content here (need it for font)
   ContentControl.buildContent()
-  love.graphics.setFont(AssetManager.getFont('baseScreenDebug'))
+  love.graphics.setFont(AssetManager.getFont('base_screen_debug'))
 
   --[[
     Singleton Inits
