@@ -51,4 +51,4 @@ luac.out
 **/.history
 
 # Tiled Session
-!.tiled-session
+*.tiled-session
