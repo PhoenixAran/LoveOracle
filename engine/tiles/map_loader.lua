@@ -79,6 +79,8 @@ function MapLoader.loadMapData(path)
         end
       elseif layer.name:lower() == 'entities' then
         -- todo parse entities
+      elseif layer.name:lower() == 'playerspawn' then
+        
       else
         error('Unsupported object layer name: ' .. layer.name:lower())
       end

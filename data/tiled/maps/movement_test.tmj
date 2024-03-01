@@ -95,9 +95,32 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":7,
+         "name":"playerspawn",
+         "objects":[
+                {
+                 "id":11,
+                 "template":"..\/templates\/test_spawn.tj",
+                 "x":96,
+                 "y":32
+                }, 
+                {
+                 "id":12,
+                 "template":"..\/templates\/game_spawn.tj",
+                 "x":192,
+                 "y":80
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":7,
- "nextobjectid":9,
+ "nextlayerid":8,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
@@ -110,6 +133,10 @@
         {
          "firstgid":65,
          "source":"..\/tilesets\/environment.tsj"
+        }, 
+        {
+         "firstgid":265,
+         "source":"..\/tilesets\/template_sources\/spawn.tsj"
         }],
  "tilewidth":16,
  "type":"map",

@@ -1,0 +1,18 @@
+{ "object":
+    {
+     "gid":2,
+     "height":16,
+     "id":12,
+     "name":"",
+     "rotation":0,
+     "type":"",
+     "visible":true,
+     "width":16
+    },
+ "tileset":
+    {
+     "firstgid":1,
+     "source":"..\/tilesets\/template_sources\/spawn.tsj"
+    },
+ "type":"template"
+}
