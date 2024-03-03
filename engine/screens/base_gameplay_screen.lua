@@ -11,6 +11,7 @@ local Input = require('engine.singletons').input
 local Singletons = require 'engine.singletons'
 local console = require 'lib.console'
 local Consts = require 'constants'
+local FileHelper = require 'engine.utils.file_helper'
 
 -- base screen will set up the game control class for you
 ---@class BaseGameplayScreen : BaseScreen
@@ -20,7 +21,7 @@ local BaseGameplayScreen = Class { __includes = BaseScreen,
   init = function(self)
     BaseScreen.init(self)
     self.gameControl = nil
-    self.initialMap = 'test_map_1.json'
+    self.initialRoom = 'initial_room.tmj'
   end
 }
 
@@ -32,6 +33,11 @@ function BaseGameplayScreen:enter(prev, ...)
   -- TODO stop hardcoding the positions and map
   -- TODO remove me
   local args = {...}
+  local mapName = nil
+  if args[1] then
+    self.initialRoom = FileHelper.getFileNameWithoutPath(args[1])
+    love.log.trace(('Testing map %s'):format(self.initialRoom))
+  end
   print(love.inspect(args))
   self.gameControl = GameControl()
 
@@ -42,8 +48,6 @@ function BaseGameplayScreen:enter(prev, ...)
   self.gameControl:setPlayer(player)
   local map = Map('movement_test.tmj')
   self.gameControl:setMap(map)
-  -- TODO implement designated player spawn from Tiled editor
-  --local mapIndexX, mapIndexY = vector.div(16, self.gameControl:getPlayer().x, self.gameControl:getPlayer().y)
   local spawnX, spawnY = 0,0
   if args[1] then
     -- map file was specified, indicating that we are in a test run

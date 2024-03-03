@@ -85,7 +85,8 @@ function MapLoader.loadMapData(path)
         assert(lume.count(layer.objects) < 2, 'Too many test_spawn instances')
         if lume.count(layer.objects) == 1 then
           mapData.testSpawnPositionX = layer.objects[1].x
-          mapData.testSpawnPositionY = layer.objects[1].y
+          -- Tiled uses bottom left, so we convert to top left coordinates
+          mapData.testSpawnPositionY = layer.objects[1].y - GRID_SIZE
         end
       else
         error('Unsupported object layer name: ' .. layer.name:lower())

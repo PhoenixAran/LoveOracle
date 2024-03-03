@@ -2,7 +2,7 @@
     "automappingRulesFile": "",
     "commands": [
         {
-            "arguments": " . %mappath",
+            "arguments": " . %mapfile",
             "command": "love",
             "enabled": true,
             "name": "test_map",

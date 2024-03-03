@@ -26,4 +26,9 @@ function FileHelper.getFileNameWithoutExtension(file)
   return name
 end
 
+function FileHelper.getFileNameWithoutPath(path)
+  local strSplit = split(path, '/')
+  return strSplit[#strSplit]
+end
+
 return FileHelper
