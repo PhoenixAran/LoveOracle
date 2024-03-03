@@ -38,7 +38,6 @@ function BaseGameplayScreen:enter(prev, ...)
     self.initialRoom = FileHelper.getFileNameWithoutPath(args[1])
     love.log.trace(('Testing map %s'):format(self.initialRoom))
   end
-  print(love.inspect(args))
   self.gameControl = GameControl()
 
   -- TODO init player based off save file and actual spawn point
@@ -52,7 +51,6 @@ function BaseGameplayScreen:enter(prev, ...)
   if args[1] then
     -- map file was specified, indicating that we are in a test run
     spawnX, spawnY = map:getTestSpawnPosition()
-    print(spawnX, spawnY)
   else
     -- TODO when game save is done. Retrieve the player's save file spawn point
     -- love.window.showMessageBox('Warning', 'Game launched without given testmap file location. Use tilededitor to launch game')
