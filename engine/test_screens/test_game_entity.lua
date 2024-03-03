@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Vector = require 'lib.vector'
+local Vector = require 'engine.math.vector'
 local MapEntity = require 'engine.entities.map_entity'
 local input = require('engine.singletons').input
 

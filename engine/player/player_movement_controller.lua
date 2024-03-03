@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local PlayerMotionType = require 'engine.player.player_motion_type'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local Movement = require 'engine.components.movement'
 local Direction4 = require 'engine.enums.direction4'
 local Input = require('engine.singletons').input

@@ -1,4 +1,4 @@
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local lume = require 'lib.lume'
 
 -- values determined by angleindex + 1

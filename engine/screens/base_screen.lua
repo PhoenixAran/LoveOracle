@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local GameConfig = require 'game_config'
-local rect = require 'engine.utils.rectangle'
-local AssetManager = require 'engine.utils.asset_manager'
+local rect = require 'engine.math.rectangle'
+local AssetManager = require 'engine.asset_manager'
 local lume = require 'lib.lume'
 local console = require 'lib.console'
 

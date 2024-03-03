@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Vector = require 'lib.vector'
+local Vector = require 'engine.math.vector'
 local SignalObject = require 'engine.signal_object'
 
 ---@class Component : SignalObject

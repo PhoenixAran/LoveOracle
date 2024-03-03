@@ -1,16 +1,16 @@
 { "object":
     {
-     "class":"",
      "height":128,
      "id":13,
      "name":"",
      "properties":[
             {
-             "name":"testProp",
+             "name":"description",
              "type":"string",
-             "value":"testValue"
+             "value":"Easy tiled editor access to a room thats the size of the game screen"
             }],
      "rotation":0,
+     "type":"",
      "visible":true,
      "width":160
     },

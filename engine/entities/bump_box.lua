@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local bit = require 'bit'
-local rect = require 'engine.utils.rectangle'
+local rect = require 'engine.math.rectangle'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 
 --- ZRange

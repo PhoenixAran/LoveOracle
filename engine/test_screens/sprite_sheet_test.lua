@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
-local AssetManager = require 'engine.utils.asset_manager'
+local AssetManager = require 'engine.asset_manager'
 local Singletons = require 'engine.singletons'
 local DisplayHandler = require 'engine.display_handler'
 local SpriteSheetTest = Class {

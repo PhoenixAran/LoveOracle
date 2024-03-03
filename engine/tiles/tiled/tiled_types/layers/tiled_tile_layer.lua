@@ -5,7 +5,7 @@ local Class = require 'lib.class'
 ---@field properties table
 ---@field width integer
 ---@field height integer
----@field tiles integer[]
+---@field tiles TiledTileLayerTile[]
 local TiledTileLayer = Class {
   init = function(self)
     self.name = nil

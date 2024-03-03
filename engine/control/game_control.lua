@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local SignalObject = require 'engine.signal_object'
 local Entities = require 'engine.entities.entities'
 local Inventory = require 'engine.control.inventory'
@@ -72,13 +72,12 @@ end
 
 --- creates the initial room control state. called when game starts
 ---@param room Room
----@param spawnIndexX integer?
----@param spawnIndexY integer?
-function GameControl:setInitialRoomControlState(room, spawnIndexX, spawnIndexY)
+---@param spawnPositionX integer?
+---@param spawnPositionY integer?
+function GameControl:setInitialRoomControlState(room, spawnPositionX, spawnPositionY)
   self.roomControl = RoomControl(self:getMap(), self:getPlayer())
-  self:getPlayer():setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
+  self:getPlayer():setPosition(spawnPositionX, spawnPositionY)
   self:getPlayer():markRespawn()
-  self.roomControl.player:setPosition(spawnIndexX * Consts.GRID_SIZE, spawnIndexY * Consts.GRID_SIZE)
   -- man handle room control for initial startup
   self.roomControl.currentRoom = room
 

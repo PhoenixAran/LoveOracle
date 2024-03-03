@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local Collider = require 'engine.components.collider'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local Entity = require 'engine.entities.entity'

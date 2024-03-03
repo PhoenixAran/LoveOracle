@@ -5,7 +5,7 @@ local Component = require 'engine.entities.component'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local TileTypes = TileTypeFlags.enumMap
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 
 local QUERY_RECT_LENGTH = 1.5
 

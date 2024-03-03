@@ -8,6 +8,8 @@ local lume = require 'lib.lume'
 ---@field layerTilesets LayerTileset[]
 ---@field tileLayers TileLayer[]
 ---@field rooms Room[]
+---@field testSpawnPositionX number
+---@field testSpawnPositionY number
 local MapData = Class {
   init = function(self)
     self.name = nil
@@ -19,6 +21,10 @@ local MapData = Class {
     self.tileLayers = { }
     -- array of room data
     self.rooms = { }
+
+    -- used for testing
+    self.testSpawnPositionX = nil
+    self.testSpawnPositionY = nil
   end
 }
 

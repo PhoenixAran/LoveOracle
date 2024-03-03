@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local lume = require 'lib.lume'
 local Consts = require 'constants'
-local rect = require 'engine.utils.rectangle'
+local rect = require 'engine.math.rectangle'
 
 ---@class Entities : SignalObject
 ---@field player Player

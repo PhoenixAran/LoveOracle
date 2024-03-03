@@ -1,4 +1,4 @@
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local bit = require 'bit'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'

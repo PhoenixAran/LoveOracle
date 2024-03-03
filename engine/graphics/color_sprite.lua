@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local AssetManager = require 'engine.utils.asset_manager'
+local AssetManager = require 'engine.asset_manager'
 local PaletteBank = require 'engine.banks.palette_bank'
 
 -- Acts as a sprite.

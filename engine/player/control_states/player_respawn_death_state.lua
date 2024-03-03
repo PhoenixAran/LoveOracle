@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local PlayerState = require 'engine.player.player_state'
 local Singletons = require 'engine.singletons'
 local Tween = require 'lib.tween'
-local rect = require 'engine.utils.rectangle'
+local rect = require 'engine.math.rectangle'
 local DamageInfo = require 'engine.entities.damage_info'
 local Camera = require 'engine.camera'
 

@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local lume = require 'lib.lume'
 local BumpBox = require 'engine.entities.bump_box'
 local Component = require 'engine.entities.component'

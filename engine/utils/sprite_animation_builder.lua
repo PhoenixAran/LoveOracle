@@ -9,7 +9,7 @@ local SpriteFrame = require 'engine.graphics.sprite_frame'
 local SpriteAnimation = require 'engine.graphics.sprite_animation'
 local Direction4 = require 'engine.enums.direction4'
 
-local assetManager = require 'engine.utils.asset_manager'
+local assetManager = require 'engine.asset_manager'
 
 local DEFAULT_KEY = 'default'
 

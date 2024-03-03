@@ -3,7 +3,7 @@ local json = require 'lib.json'
 local ffi = require 'ffi'
 local FileHelper = require 'engine.utils.file_helper'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
-local AssetManager = require 'engine.utils.asset_manager'
+local AssetManager = require 'engine.asset_manager'
 local TiledMapData = require 'engine.tiles.tiled.tiled_types.tiled_map_data'
 local TiledLayerTileset = require 'engine.tiles.tiled.tiled_types.tiled_tile_layer_tileset'
 local TiledTileset = require 'engine.tiles.tiled.tiled_types.tiled_tileset'
@@ -59,14 +59,24 @@ local function parseObject(jObject)
     -- if this is a templated object, inject the template object value properties into our json object
     local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
     local template = tiledTemplates[templateKey]
-    for k, v in pairs(template) do
+    for k, v in pairs(template.object) do
       if k == 'properties' then
         -- handle this later
         templateProperties = parsePropertyDict(v)
       elseif tiledObject[k] == nil then
         -- inject value from template into tiled object if instance does not have data for given field
-        tiledObject[k] = template[k]
+        tiledObject[k] = template.object[k]
       end
+    end
+    if template.tileset then
+      -- get the tile custom properties from the tileset
+      assert(tilesetCacheCreated, 'Tileset cache not before parsing map object layers')
+      local tiledTileset = tiledTilesetCache[FileHelper.getFileNameWithoutExtension(template.tileset.source)]
+      local tiledTilesetTile = tiledTileset:getTile(template.object.gid - template.tileset.firstgid)
+      if templateProperties == nil then
+        templateProperties = { }
+      end
+      templateProperties = lume.merge(parsePropertyDict(tiledTilesetTile.properties), tiledTilesetTile.properties)
     end
   end
 
@@ -77,16 +87,17 @@ local function parseObject(jObject)
     error('MapLoader does not support text object type yet')
   end
   if jObject.points then
-    error('Need to implement point parsing')
+    error('Point parsing not supported')
   end
 
   if templateProperties then
     tiledObject.properties = templateProperties
     local jObjectProperties = parsePropertyDict(jObject.properties)
     -- override template properties and/or add additional properties from object instance
-    for k, v in pairs(jObjectProperties) do
-      tiledObject.properties[k] = v
-    end
+    -- for k, v in pairs(jObjectProperties) do
+    --   tiledObject.properties[k] = v
+    -- end
+    tiledObject.properties = lume.merge(tiledObject.properties, jObjectProperties)
   else
     -- no properties for template, just assign directly
     tiledObject.properties = parsePropertyDict(jObject.properties)
@@ -206,9 +217,11 @@ local function loadTemplate(path)
   end
 
   local jTemplate = json.decode(love.filesystem.read(path))
+  
   assert(jTemplate.type == 'template', 'Cannot parse template form non-template tiled object')
 
   local tiledTemplate = { }
+  tiledTemplate.object = { }
   for k, v in pairs(jTemplate.object) do
     -- tiled likes to save the id of the object intance when you save it as a template
     -- dont know why it does this. We ignore the property
@@ -216,11 +229,17 @@ local function loadTemplate(path)
       -- note that we leave the property dictionary in it's array form [{type = <value>, name = 'name', value = <value>}, ...]
       -- This is due to us having to account for an object having it's own instance of properties that we have to parse
       -- see parseObject function
-      tiledTemplate[k] = v
+      tiledTemplate.object[k] = v
+    end
+  end
+  if jTemplate.tileset then
+    tiledTemplate.tileset = { }
+    for k, v in pairs(jTemplate.tileset) do
+      tiledTemplate.tileset[k] = v
     end
   end
   tiledTemplates[key] = tiledTemplate
-  return jTemplate
+  return tiledTemplate
 end
 
 

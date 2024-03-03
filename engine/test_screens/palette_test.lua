@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local Slab = require 'lib.slab'
 local inspect = require 'lib.inspect'
-local assetManager = require 'engine.utils.asset_manager'
+local assetManager = require 'engine.asset_manager'
 local DisplayHandler = require 'engine.display_handler'
 
 local PaletteTest = Class {

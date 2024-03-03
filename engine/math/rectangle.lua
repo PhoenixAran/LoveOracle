@@ -1,6 +1,6 @@
 -- methods for rectangle collisions
 local lume = require 'lib.lume'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 
 -- floating-point margin of error
 local DELTA = 1e-10

@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local bit = require 'bit'
 local Component = require 'engine.entities.component'
 local Physics = require 'engine.physics'

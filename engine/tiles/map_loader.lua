@@ -41,8 +41,10 @@ end
 ---@return MapData
 function MapLoader.loadMapData(path)
   if mapCache[path] then
+    love.log.trace(string.format('Loading map %s from cache'), path)
     return mapCache[path]
   end
+  love.log.trace(string.format('Loading map %s from disk', path))
   local tiledMapData = TiledMapLoader.loadMapData(path)
   local mapData = MapData()
   mapData.width = tiledMapData.width
@@ -80,7 +82,11 @@ function MapLoader.loadMapData(path)
       elseif layer.name:lower() == 'entities' then
         -- todo parse entities
       elseif layer.name:lower() == 'playerspawn' then
-        
+        assert(lume.count(layer.objects) < 2, 'Too many test_spawn instances')
+        if lume.count(layer.objects) == 1 then
+          mapData.testSpawnPositionX = layer.objects[1].x
+          mapData.testSpawnPositionY = layer.objects[1].y
+        end
       else
         error('Unsupported object layer name: ' .. layer.name:lower())
       end

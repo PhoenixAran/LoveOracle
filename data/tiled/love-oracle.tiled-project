@@ -1,6 +1,26 @@
 {
     "automappingRulesFile": "",
     "commands": [
+        {
+            "arguments": " . %mappath",
+            "command": "love",
+            "enabled": true,
+            "name": "test_map",
+            "saveBeforeExecute": true,
+            "shortcut": null,
+            "showOutput": true,
+            "workingDirectory": "%projectpath../../../"
+        },
+        {
+            "arguments": ".",
+            "command": "love",
+            "enabled": true,
+            "name": "run_game",
+            "saveBeforeExecute": true,
+            "shortcut": null,
+            "showOutput": true,
+            "workingDirectory": "%projectpath../../../"
+        }
     ],
     "extensionsPath": "extensions",
     "folders": [

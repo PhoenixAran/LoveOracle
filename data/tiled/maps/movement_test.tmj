@@ -106,12 +106,6 @@
                  "template":"..\/templates\/test_spawn.tj",
                  "x":96,
                  "y":32
-                }, 
-                {
-                 "id":12,
-                 "template":"..\/templates\/game_spawn.tj",
-                 "x":192,
-                 "y":80
                 }],
          "opacity":1,
          "type":"objectgroup",

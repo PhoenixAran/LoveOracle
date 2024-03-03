@@ -1,7 +1,7 @@
 local lume = require 'lib.lume'
 local gameConfig = require 'game_config'
-local ContentControl = require 'engine.utils.content_control'
-local AssetManager = require 'engine.utils.asset_manager'
+local ContentControl = require 'engine.content_control'
+local AssetManager = require 'engine.asset_manager'
 local tick = require 'lib.tick'
 local DisplayHandler = require 'engine.display_handler'
 love.inspect = require 'lib.inspect'
@@ -105,7 +105,7 @@ function love.load(args)
 
   -- setup startup screen
   love.log.trace('Startup Screen: ' .. gameConfig.startupScreen)
-  screenManager:enter(require(gameConfig.startupScreen)())
+  screenManager:enter(require(gameConfig.startupScreen)(), unpack(args))
 end
 
 function love.update(dt)

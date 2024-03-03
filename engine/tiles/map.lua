@@ -113,4 +113,8 @@ function Map:getRoomContainingIndex(x, y)
   return nil
 end
 
+function Map:getTestSpawnPosition()
+  return self.mapData.testSpawnPositionX, self.mapData.testSpawnPositionY
+end
+
 return Map

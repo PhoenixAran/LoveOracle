@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 
 ---handles updating of combat variables
 ---@class Combat : Component

@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local Component = require 'engine.entities.component'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 

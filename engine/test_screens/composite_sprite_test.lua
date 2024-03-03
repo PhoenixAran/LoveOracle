@@ -15,7 +15,7 @@ local CompositeSpriteTest = Class { __includes = BaseScreen,
 }
 
 function CompositeSpriteTest:enter(previous, ...)
-  local assetManager = require 'engine.utils.asset_manager'
+  local assetManager = require 'engine.asset_manager'
   local spriteSheet = assetManager.getSpriteSheet('player')
   local sprites = { }
   sprites[#sprites + 1] = Sprite(spriteSheet:getTexture(6, 21), 0, 0)

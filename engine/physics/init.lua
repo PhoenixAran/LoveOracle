@@ -1,7 +1,7 @@
 local cellSize = 32
-print('Initializing physics world with cellsize ' .. cellSize)
+love.log.trace('Initializing physics world with cellsize ' .. cellSize)
 local World =  require('lib.bump').newWorld(cellSize)
-print 'Registering custom bump responses'
+love.log.trace('Registering custom bump responses')
 local path = ...
 require (path .. '.bump_responses')(World)
 return World

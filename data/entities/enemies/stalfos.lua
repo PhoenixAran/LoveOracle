@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local Enemy = require 'engine.entities.enemy'
 local Direction4 = require 'engine.enums.direction4'
 local SpriteBank = require 'engine.banks.sprite_bank'

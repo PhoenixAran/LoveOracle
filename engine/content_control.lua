@@ -1,4 +1,4 @@
-local AssetManager = require 'engine.utils.asset_manager'
+local AssetManager = require 'engine.asset_manager'
 local GameConfig = require 'game_config'
 local PaletteBank = require 'engine.banks.palette_bank'
 local SpriteBank = require 'engine.banks.sprite_bank'

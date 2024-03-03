@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local GameConfig = require 'game_config'
 local lume = require 'lib.lume'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local GameControl = require 'engine.control.game_control'
 local Map = require 'engine.tiles.map'
 local BaseScreen = require 'engine.screens.base_screen'
@@ -10,6 +10,7 @@ local Player = require 'engine.player.player'
 local Input = require('engine.singletons').input
 local Singletons = require 'engine.singletons'
 local console = require 'lib.console'
+local Consts = require 'constants'
 
 -- base screen will set up the game control class for you
 ---@class BaseGameplayScreen : BaseScreen
@@ -29,20 +30,34 @@ end
 
 function BaseGameplayScreen:enter(prev, ...)
   -- TODO stop hardcoding the positions and map
+  -- TODO remove me
+  local args = {...}
+  print(love.inspect(args))
   self.gameControl = GameControl()
+
   -- TODO init player based off save file and actual spawn point
-  local player = Player({name = 'player', x = 30, y = 30, w = 16, h = 16 })
+  local player = Player({name = 'player'})
   player:initTransform()
+
   self.gameControl:setPlayer(player)
   local map = Map('movement_test.tmj')
   self.gameControl:setMap(map)
   -- TODO implement designated player spawn from Tiled editor
   --local mapIndexX, mapIndexY = vector.div(16, self.gameControl:getPlayer().x, self.gameControl:getPlayer().y)
-  local mapIndexX, mapIndexY = 8, 2
-  mapIndexX, mapIndexY = math.floor(mapIndexX), math.floor(mapIndexY)
-  local initialRoom = map:getRoomContainingIndex(mapIndexX, mapIndexY)
-  assert(initialRoom, 'Initial player position not in room')
-  self.gameControl:setInitialRoomControlState(initialRoom, mapIndexX, mapIndexY)
+  local spawnX, spawnY = 0,0
+  if args[1] then
+    -- map file was specified, indicating that we are in a test run
+    spawnX, spawnY = map:getTestSpawnPosition()
+    print(spawnX, spawnY)
+  else
+    -- TODO when game save is done. Retrieve the player's save file spawn point
+    -- love.window.showMessageBox('Warning', 'Game launched without given testmap file location. Use tilededitor to launch game')
+    -- love.event.quit()
+  end
+
+  local initialRoom = map:getRoomContainingIndex(vector.add(1, 1, vector.div(Consts.GRID_SIZE, spawnX, spawnY)))
+  assert(initialRoom, string.format('Initial player map position (%d,%d) not in room', spawnX, spawnY))
+  self.gameControl:setInitialRoomControlState(initialRoom, spawnX, spawnY)
   Singletons.gameControl = self.gameControl
 end
 

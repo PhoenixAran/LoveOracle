@@ -1,4 +1,4 @@
-local vec2 = require 'lib.vector'
+local vec2 = require 'engine.math.vector'
 local Consts = require 'constants'
 local DisplayHandler = require 'engine.display_handler'
 

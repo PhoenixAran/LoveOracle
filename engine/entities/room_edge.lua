@@ -3,7 +3,7 @@ local Entity = require 'engine.entities.entity'
 local Physics = require 'engine.physics'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TablePool = require 'engine.utils.table_pool'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local lume = require 'lib.lume'
 
 local Direction4 = require 'engine.enums.direction4'

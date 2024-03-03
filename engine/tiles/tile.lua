@@ -6,7 +6,7 @@ local TileType = require('engine.enums.flags.tile_type_flags').enumMap
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local GRID_SIZE = require('constants').GRID_SIZE
 local Singletons = require 'engine.singletons'
-local vec2 = require 'lib.vector'
+local vec2 = require 'engine.math.vector'
 
 local function makeTileEntityName(tileIndexX, tileIndexY, layer)
   return tostring(tileIndexX) .. '_' .. tostring(tileIndexY) .. '-' .. tostring(layer)

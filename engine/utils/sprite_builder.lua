@@ -6,7 +6,7 @@ local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'
 local ColorSprite = require 'engine.graphics.color_sprite'
 
-local AssetManager = require 'engine.utils.asset_manager'
+local AssetManager = require 'engine.asset_manager'
 
 ---Builds singular sprite instances
 ---This is just convenient access to all the different Sprite type constructors

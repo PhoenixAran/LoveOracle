@@ -1,6 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
-local vector = require 'lib.vector'
+local vector = require 'engine.math.vector'
 local GameControl = require 'engine.control.game_control'
 local Map = require 'engine.tiles.map'
 local BaseGameplayScreen = require 'engine.screens.base_gameplay_screen'
