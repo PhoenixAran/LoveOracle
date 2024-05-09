@@ -6,7 +6,7 @@ local Class = require 'lib.class'
 local PlayerSkills = Class {
   init = function(self, args)
     args = args or { }
-    self.canSwimInWater = args.canSwimInWater or false
+    self.canSwimInWater = args.canSwimInWater or true
     self.canSwimInLava = args.canSwimInLava or false
   end
 }
