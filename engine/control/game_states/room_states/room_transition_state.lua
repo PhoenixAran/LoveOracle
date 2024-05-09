@@ -155,7 +155,6 @@ function RoomTransitionState:onEnd()
 
   -- re enable position smoothing if it was enabled before
   Camera.positionSmoothingEnabled = self.previousPositionSmoothingEnabledValue
-  -- player
   self.player:markRespawn()
   -- update player position or else they have one frame where they are considered in the last position between room transitons
   -- which can cause them to hit a room edge loading zone

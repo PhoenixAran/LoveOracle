@@ -45,7 +45,7 @@ function PlayerStateMachine:canTransitionTo(newState)
   if newState ~= nil then
     -- lazy initialize
     newState.player = self.player
-    newState.controller = self
+    newState.stateMachine = self
   end
   if self.currentState ~= nil and not self.currentState:canTransitionToState(newState) then
     return false

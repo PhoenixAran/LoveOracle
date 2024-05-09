@@ -16,12 +16,10 @@ local FileHelper = require 'engine.utils.file_helper'
 -- base screen will set up the game control class for you
 ---@class BaseGameplayScreen : BaseScreen
 ---@field gameControl GameControl
----@field initialMap string
 local BaseGameplayScreen = Class { __includes = BaseScreen,
   init = function(self)
     BaseScreen.init(self)
     self.gameControl = nil
-    self.initialRoom = 'initial_room.tmj'
   end
 }
 
@@ -29,14 +27,17 @@ function BaseGameplayScreen:getType()
   return 'base_gameplay_screen'
 end
 
+---enter callback for the base gameplay screen
+---@param prev any
+---@param ... unknown vardict args for gameplay screen. first element should be the map name
 function BaseGameplayScreen:enter(prev, ...)
   -- TODO stop hardcoding the positions and map
   -- TODO remove me
   local args = {...}
-  local mapName = nil
+  local mapFile = 'movement_test.tmj'
   if args[1] then
-    self.initialRoom = FileHelper.getFileNameWithoutPath(args[1])
-    love.log.trace(('Testing map %s'):format(self.initialRoom))
+    mapFile = FileHelper.getFileNameWithoutPath(args[1])
+    love.log.debug(('Testing map %s'):format(mapFile))
   end
   self.gameControl = GameControl()
 
@@ -45,9 +46,9 @@ function BaseGameplayScreen:enter(prev, ...)
   player:initTransform()
 
   self.gameControl:setPlayer(player)
-  local map = Map('movement_test.tmj')
+  local map = Map(mapFile)
   self.gameControl:setMap(map)
-  local spawnX, spawnY = 0,0
+  local spawnX, spawnY = 24,24
   if args[1] then
     -- map file was specified, indicating that we are in a test run
     spawnX, spawnY = map:getTestSpawnPosition()

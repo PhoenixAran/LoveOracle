@@ -1,6 +1,4 @@
 local Class = require 'lib.class'
-local PlayerState = require 'engine.player.player_state'
-local PlayerMotionType = require 'engine.player.player_motion_type'
 local PlayerEnvironmentState = require 'engine.player.environment_states.player_environment_state'
 
 local function createSplashEffect()
@@ -13,6 +11,7 @@ end
 ---@field submergedTimer integer
 ---@field submergedDuration integer
 ---@field silentBeginning boolean
+---@field isDrowning boolean State will still be active when playersprite is playing the drown animation, so we need to keep track
 local PlayerSwimEnvironmentState = Class { __includes = PlayerEnvironmentState,
   ---@param self PlayerSwimEnvironmentState
   init = function(self)
@@ -22,6 +21,7 @@ local PlayerSwimEnvironmentState = Class { __includes = PlayerEnvironmentState,
     self.isSubmerged = false
     self.submergedTimer = 0
     self.silentBeginning = false
+    self.isDrowning = false
 
     self.stateParameters.canJump = false
     self.stateParameters.canPush = false
@@ -66,11 +66,14 @@ function PlayerSwimEnvironmentState:resurface()
 end
 
 function PlayerSwimEnvironmentState:drown()
-  self.player.sprite:play('drown')
-  if self.player:isInLava() then
-    self.player.spriteFlasher:flash(24)
+  if not self.isDrowning then
+    self.isDrowning = true
+    self.player.sprite:play('drown')
+    if self.player:isInLava() then
+      self.player.spriteFlasher:flash(24)
+    end
+    self.player:startRespawnControlState(false)
   end
-  self.player:respawn()
 end
 
 ---@param previousState PlayerState
@@ -79,6 +82,7 @@ function PlayerSwimEnvironmentState:onBegin(previousState)
   self.stateParameters.interactionCollisions = true
   self.player:interruptItems()
   self.isSubmerged = false
+  self.isDrowning = false
 
   if not self.silentBeginning then
     createSplashEffect()
@@ -94,6 +98,7 @@ end
 ---@param newState PlayerState
 function PlayerSwimEnvironmentState:onEnd(newState)
   self.isSubmerged = false
+  self.isDrowning = false
 end
 
 function PlayerSwimEnvironmentState:update()

@@ -34,7 +34,7 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
 
     self.respawnDamageInfo = DamageInfo({
       damage = 2,
-      hitstunTime = 15,
+      hitstunTime = 12,
       intangibilityTime = 44,
     })
   end
@@ -68,8 +68,10 @@ function PlayerRespawnDeathState:endDelayState()
 end
 
 function PlayerRespawnDeathState:update(dt)
+  print(self.respawnState)
   if self.respawnState == RespawnState.DeathAnimation then
     if (not self.waitForAnimation) or self.player.sprite:isCompleted() then
+      self.player:setVisible(false)
       self:endDeathAnimationState()
       self:startViewPanningState()
     end
@@ -85,14 +87,11 @@ end
 
 ---@param previousState PlayerState
 function PlayerRespawnDeathState:onBegin(previousState)
-  
   self.respawnState = RespawnState.DeathAnimation
   self.stateParameters.canStrafe = true
   self.stateParameters.canControlOnGround = false
   self.stateParameters.canControlInAir = false
   self.stateParameters.canJump = false
-  self.player:setVisible(false)
-
 end
 
 function PlayerRespawnDeathState:onEnd(newState)

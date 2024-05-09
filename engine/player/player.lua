@@ -308,7 +308,7 @@ function Player:startRespawnControlState(instant)
     instant = false
   end
   local respawnDeathState = self:getStateFromCollection('player_respawn_death_state')
-  respawnDeathState['waitForAnimation'] = instant
+  respawnDeathState['waitForAnimation'] = not instant
   self:beginControlState(respawnDeathState)
 end
 
@@ -362,6 +362,16 @@ function Player:updateUseDirections()
     self.useDirectionY = y
     self.useDirection4 = direction4
   end
+end
+
+-- player specific state stuff
+
+function Player:isSwimming()
+  local enviromentState = self.environmentStateMachine:getCurrentState()
+  if enviromentState then
+    return enviromentState:getType() == 'player_swim_environment_state'
+  end
+  return false
 end
 
 --- return use Direction4 enum value
@@ -504,8 +514,8 @@ function Player:getDesiredNaturalState()
   elseif self:isInAir() then
     return self:getStateFromCollection('player_jump_environment_state')
   elseif go.inLava then
-    return nil -- TODO lava thing
-  elseif go.inDeepWater then
+    return nil
+  elseif go.inWater then
     return self:getStateFromCollection('player_swim_environment_state')
   end
   -- TODO implement rest of environment states

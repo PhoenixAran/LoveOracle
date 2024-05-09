@@ -142,9 +142,16 @@ function PlayerMovementController:chooseAnimation()
   end
 end
 
+function PlayerMovementController:updateStroking()
+  if self.player:isSwimming() then
+    
+  end
+end
+
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
     local currentEnvironmentState = self.player.environmentStateMachine:getCurrentState()
+---@diagnostic disable-next-line: need-check-nil
     self:setMode(currentEnvironmentState.motionSettings)
   else
     self:setMode(self.moveNormalMode)
@@ -189,6 +196,7 @@ end
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
   self:updateMoveControls()
+  self:updateStroking()
   if self.allowMovementControl then
     if self.player:getStateParameters().alwaysFaceUp then
       if self.player.animationDirection4 ~= Direction4.up then

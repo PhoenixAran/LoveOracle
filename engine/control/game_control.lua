@@ -78,9 +78,9 @@ function GameControl:setInitialRoomControlState(room, spawnPositionX, spawnPosit
   self.roomControl = RoomControl(self:getMap(), self:getPlayer())
   self:getPlayer():setPositionWithBumpCoords(spawnPositionX, spawnPositionY)
   self:getPlayer():markRespawn()
+  
   -- man handle room control for initial startup
   self.roomControl.currentRoom = room
-
   self.roomControl.currentRoom:load(self.roomControl.entities)
   self.roomControl:connectToRoomSignals(room)
   self.roomControl:pushState(RoomNormalState())
