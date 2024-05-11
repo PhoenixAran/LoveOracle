@@ -71,9 +71,6 @@ function PlayerSwimEnvironmentState:drown()
   if not self.isDrowning then
     self.isDrowning = true
     self.player.sprite:play('drown')
-    if self.player:isInLava() then
-      self.player.spriteFlasher:flash(24)
-    end
     self.player:startRespawnControlState(false)
   end
 end

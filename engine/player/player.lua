@@ -502,7 +502,7 @@ function Player:getDesiredNaturalState()
   elseif self:isInAir() then
     return self:getStateFromCollection('player_jump_environment_state')
   elseif go.inLava then
-    return nil
+    return self:getStateFromCollection('player_swim_environment_state')
   elseif go.inWater then
     return self:getStateFromCollection('player_swim_environment_state')
   end

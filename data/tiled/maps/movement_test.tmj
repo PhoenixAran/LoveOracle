@@ -102,10 +102,12 @@
          "name":"playerspawn",
          "objects":[
                 {
+                 "gid":2147483913,
                  "id":11,
+                 "rotation":0,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":528.909090909091,
-                 "y":469.386363636364
+                 "x":395.439393939394,
+                 "y":108.734848484849
                 }],
          "opacity":1,
          "type":"objectgroup",
