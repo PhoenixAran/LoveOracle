@@ -104,8 +104,8 @@
                 {
                  "id":11,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":558.909090909091,
-                 "y":481.386363636364
+                 "x":528.909090909091,
+                 "y":469.386363636364
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -114,7 +114,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":13,
+ "nextobjectid":15,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

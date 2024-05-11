@@ -26,8 +26,9 @@ local PlayerSwimEnvironmentState = Class { __includes = PlayerEnvironmentState,
     self.stateParameters.canJump = false
     self.stateParameters.canPush = false
     self.stateParameters.canUseWeapons = false
+    self.stateParameters.animations.move = 'swim'
 
-    self.motionSettings.speed = .085
+    self.motionSettings.speed = 30
     self.motionSettings.slippery = true
     self.motionSettings.acceleration = .33
     self.motionSettings.deceleration = .05
@@ -43,10 +44,9 @@ function PlayerSwimEnvironmentState:canSwimInCurrentLiquid()
   local skills = self.player:getSkills()
   if self.player:isInLava() then
     return skills.canSwimInLava
-  elseif self.player:isInDeepWater() then
+  elseif self.player:isInWater() then
     return skills.canSwimInWater
   end
-
   return false
 end
 
@@ -57,12 +57,14 @@ function PlayerSwimEnvironmentState:submerge()
   self.submergedTimer = self.submergedDuration
   self.stateParameters.interactionCollisions = false
   self.stateParameters.animations.default = 'submerged'
+  self.stateParameters.animations.move = 'submerged'
 end
 
 function PlayerSwimEnvironmentState:resurface()
   self.isSubmerged = false
   self.stateParameters.interactionCollisions = true
   self.stateParameters.animations.default = 'swim'
+  self.stateParameters.animations.move = 'swim'
 end
 
 function PlayerSwimEnvironmentState:drown()
@@ -102,16 +104,18 @@ function PlayerSwimEnvironmentState:onEnd(newState)
 end
 
 function PlayerSwimEnvironmentState:update()
-  if self.isSubmerged then
-    self.submergedTimed = self.submergedTimer - 1
-    if self.submergedTimer <= 0 then
-      self:resurface()
+  if not self.isDrowning then
+    if self.isSubmerged then
+      self.submergedTimed = self.submergedTimer - 1
+      if self.submergedTimer <= 0 then
+        self:resurface()
+      end
     end
-  end
 
-  if not self:canSwimInCurrentLiquid() then
-    createSplashEffect()
-    self:drown()
+    if not self:canSwimInCurrentLiquid() then
+      createSplashEffect()
+      self:drown()
+    end
   end
 end
 

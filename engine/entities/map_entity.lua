@@ -278,6 +278,10 @@ function MapEntity:setSpeed(value)
   self.movement:setSpeed(value)
 end
 
+function MapEntity:setSpeedScale(value)
+  self.movement:setSpeedScale(value)
+end
+
 function MapEntity:isInAir()
   if self.movement and self.movement:isEnabled() then
     return self.movement:isInAir()
@@ -393,8 +397,8 @@ function MapEntity:onPlatform()
   return self.groundObserver.onPlatform
 end
 
-function MapEntity:isInDeepWater()
-  return self.groundObserver.inDeepWater
+function MapEntity:isInWater()
+  return self.groundObserver.inWater
 end
 
 function MapEntity:isInLava()

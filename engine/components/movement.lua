@@ -7,6 +7,7 @@ local Direction8 = require 'engine.enums.direction8'
 ---component that manages an entity's movement
 ---@class Movement : Component
 ---@field speed number
+---@field speedScale number
 ---@field minSpeed number
 ---@field acceleration number
 ---@field deceleration number
@@ -31,7 +32,9 @@ local Movement = Class { __includes = Component,
     self:signal('landed')
     self:signal('bounced')
 
+
     if args.speed == nil then args.speed = 60 end
+    if args.speedScale == nil then args.speedScale = 1.0 end
     if args.minSpeed == nil then args.minSpeed = 0 end  --todo dont know if 0 is a good value
     if args.acceleration == nil then args.acceleration = 1 end
     if args.deceleration == nil then args.deceleration = 1 end
@@ -83,66 +86,112 @@ function Movement:setVector(x, y)
   self.vectorX, self.vectorY = x, y
 end
 
+-- TODO set vector via setDirection4 and setDirection8?
+
+--- get Direction4 value
+---@return integer
 function Movement:getDirection4()
   return Direction4.getDirection(self:getVector())
 end
 
+--- get direction8 value
+---@return integer
 function Movement:getDirection8()
   return Direction8.getDirection(self:getVector())
 end
 
+--- get speed. Note that this does not take into account the speed scale
+---@return number
 function Movement:getSpeed()
   return self.speed
 end
 
+---set speed
+---@param value number
 function Movement:setSpeed(value)
   self.speed = value
 end
 
-function Movement:setMinSpeed(value)
-  self.minSpeed = value
+---get speed scale
+---@return number
+function Movement:getSpeedScale()
+  return self.speedScale
 end
 
+---set speed scale
+---@param value number
+function Movement:setSpeedScale(value)
+  self.speedScale = value
+end
+
+---get min speed
+---@return number
 function Movement:getMinSpeed()
   return self.minSpeed
 end
 
+---set min speed
+---@param value number
+function Movement:setMinSpeed(value)
+  self.minSpeed = value
+end
+
+--- get acceleration
+---@return number
 function Movement:getAcceleration()
   return self.acceleration
 end
 
+---set acceleration
+---@param value any
 function Movement:setAcceleration(value)
   self.acceleration = value
 end
 
+---get deceleration
+---@return number
 function Movement:getDeceleration()
   return self.deceleration
 end
 
+---set deceleration
+---@param value number
 function Movement:setDeceleration(value)
   self.deceleration = value
 end
 
+---if movement should be slippery
+---@return boolean
 function Movement:isSlippery()
   return self.slippery
 end
 
+---toggle slippery movement
+---@param value boolean
 function Movement:setSlippery(value)
   self.slippery = value
 end
 
+---get max fall speed
+---@return number
 function Movement:getMaxFallSpeed()
   return self.maxFallSpeed
 end
 
+---set max fall speeed
+---@param value number
 function Movement:setMaxFallSpeed(value)
   self.maxFallSpeed = value
 end
 
+---get z velocity
+---@return number
 function Movement:getZVelocity()
   return self.zVelocity
 end
 
+---set z velocity
+---@param value number
 function Movement:setZVelocity(value)
   self.zVelocity = value
 end
@@ -178,7 +227,7 @@ function Movement:getLinearVelocity(dt)
   else
     if self.slippery then
       -- get velocity without acceleration
-      local velocityX, velocityY = vector.mul(dt * self.speed, vector.normalize(self:getVector()))
+      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(self:getVector()))
       local maxLength = vector.len(velocityX, velocityY)
 
       -- add accelerated velocity to our cached motionX and motionY values
@@ -189,7 +238,7 @@ function Movement:getLinearVelocity(dt)
       end
     else
       -- simple velocity calculation
-      local velocityX, velocityY = vector.mul(dt * self.speed, vector.normalize(self:getVector()))
+      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(self:getVector()))
       self.motionX, self.motionY = velocityX, velocityY
     end
   end
@@ -230,9 +279,9 @@ function Movement:land()
   self:emit('landed')
 end
 
--- this is only here because i want entities to know they are in the air
--- the frame they jump lol
+-- if entity is in air
 function Movement:isInAir()
+  -- check zvelocity as well incase we want to know if entity jumped this exact frame
   return self.entity:getZPosition() > 0 or self:getZVelocity() > 0
 end
 

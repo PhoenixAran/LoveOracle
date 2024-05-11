@@ -144,8 +144,32 @@ end
 
 function PlayerMovementController:updateStroking()
   if self.player:isSwimming() then
-    
+    -- slow down movement over time from strokes
+    if self.strokeSpeedScale > 1.0 then
+      self.strokeSpeedScale = self.strokeSpeedScale - 0.025
+    end
+
+    -- auto accelerate during the beginning of a stroke
+    self.stroking = self.strokeSpeedScale > 1.3
+  else
+    self.strokeSpeedScale = 1.0
+    self.stroking = false
   end
+
+  self.player:setSpeedScale(self.strokeSpeedScale)
+end
+
+--- if we can stroke in the water
+---@return boolean
+function PlayerMovementController:canStroke()
+  return self.player:isSwimming() and self.strokeSpeedScale <= 1.4 and self.allowMovementControl
+end
+
+function PlayerMovementController:stroke()
+  self.strokeSpeedScale = 2.0
+  self.player:setSpeedScale(self.strokeSpeedScale)
+  -- TODO play audio
+  self.stroking = true
 end
 
 function PlayerMovementController:updateMoveMode()
@@ -171,7 +195,6 @@ function PlayerMovementController:updateMoveControls()
     self.allowMovementControl = not self.player:inHitstun() and not self.player:inKnockback()
                                 and self.player:getStateParameters().canControlOnGround
   end
-
   local inputX, inputY = self:pollMovementControls(self.allowMovementControl)
   local canUpdateDirection = false
   if self.player:getStateParameters().alwaysFaceUp then

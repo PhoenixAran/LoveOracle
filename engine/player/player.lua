@@ -141,25 +141,13 @@ local Player = Class { __includes = MapEntity,
       self.playerMovementController:jump()
     end)
     self:addPressInteraction('a', function(player)
-      self:actionUseItem('a') 
+      self:actionUseItem('a')
     end)
     self:addPressInteraction('b', function(player)
       self:actionUseItem('b')
     end)
     self:addPressInteraction('y', function(player)
-      local damageInfo = require('engine.entities.damage_info')()
-      --damageInfo.damage = 1
-      --damageInfo.hitstunTime = 8
-      --damageInfo.knockbackTime = 8
-      --damageInfo.knockbackSpeed = 80
-      --damageInfo.sourceX, damageInfo.sourceY = player:getPosition()
-      --local rx = lume.random(-20, 20)
-      --local ry = lume.random(-20, 20)
-      --damageInfo.sourceX = damageInfo.sourceX + rx
-      --damageInfo.sourceY = damageInfo.sourceY + ry
-      --player:hurt(damageInfo)
-      player:startRespawnControlState()
-      error('test')
+      self:actionStroke('y')
     end)
 
     self.items = {
@@ -620,12 +608,22 @@ function Player:updateEquippedItems(dt)
   end
 end
 
+-- actions
+
 --- calls the item:onButtonPress callback for the given mapped button
 ---@param button string
 function Player:actionUseItem(button)
   local item = self.items[button]
   if item ~= nil and item:isUsable() then
     return item:onButtonPressed()
+  end
+  return false
+end
+
+function Player:actionStroke(button)
+  if self:isSwimming() and self.playerMovementController:canStroke() then
+    self.playerMovementController:stroke()
+    return true
   end
   return false
 end
