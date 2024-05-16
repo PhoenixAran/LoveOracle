@@ -28,10 +28,11 @@ local PlayerSwimEnvironmentState = Class { __includes = PlayerEnvironmentState,
     self.stateParameters.canUseWeapons = false
     self.stateParameters.animations.move = 'swim'
 
-    self.motionSettings.speed = 30
+    self.motionSettings.speed = 32
     self.motionSettings.slippery = true
-    self.motionSettings.acceleration = .33
+    self.motionSettings.acceleration = .05
     self.motionSettings.deceleration = .05
+    self.motionSettings.minSpeed = .5
     self.motionSettings.directionSnapCount = 32
   end
 }

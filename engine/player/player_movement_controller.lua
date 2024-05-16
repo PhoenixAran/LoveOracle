@@ -3,6 +3,7 @@ local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'engine.math.vector'
 local Movement = require 'engine.components.movement'
 local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
 local Input = require('engine.singletons').input
 
 -- some class constants
@@ -16,6 +17,8 @@ local DIRECTION_SNAP = 40
 ---@field movement Movement
 ---@field allowMovementControl boolean
 ---@field strokeSpeedScale number
+---@field lastStrokeVectorX number
+---@field lastStrokeVectorY number
 ---@field directionX number
 ---@field directionY number
 ---@field stroking boolean
@@ -40,6 +43,8 @@ local PlayerMovementController = Class {
     self.directionX, self.directionY = 0, 0
     self.moving = false
     self.stroking = false
+    self.lastStrokeVectorX = 0
+    self.lastStrokeVectorY = 0
     self.capeDeployed = false
     self.holeTile = nil
     self.holeDoomTimer = 0
@@ -151,10 +156,21 @@ function PlayerMovementController:updateStroking()
 
     -- auto accelerate during the beginning of a stroke
     self.stroking = self.strokeSpeedScale > 1.3
+
+    if self.stroking then
+      -- player still needs to move if they stroke even if they dont have a direction held down
+      local x, y = self.player:getVector()
+      if x == 0 and y == 0 then
+        self.player:setVector(self.lastStrokeVectorX, self.lastStrokeVectorY)
+      end
+    end
   else
     self.strokeSpeedScale = 1.0
     self.stroking = false
+    self.lastStrokeVectorX, self.lastStrokeVectorY = 0, 0
   end
+
+
 
   self.player:setSpeedScale(self.strokeSpeedScale)
 end
@@ -170,6 +186,14 @@ function PlayerMovementController:stroke()
   self.player:setSpeedScale(self.strokeSpeedScale)
   -- TODO play audio
   self.stroking = true
+
+  local x, y = self.player:getVector()
+  if x == 0 and y == 0 then
+    self.lastStrokeVectorX, self.lastStrokeVectorY = Direction4.getVector(self.player:getAnimationDirection4())
+  else
+    self.lastStrokeVectorX = x
+    self.lastStrokeVectorY = y
+  end
 end
 
 function PlayerMovementController:updateMoveMode()

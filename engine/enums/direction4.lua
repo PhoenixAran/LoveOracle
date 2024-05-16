@@ -11,6 +11,18 @@ local Direction4 = {
   up = 4
 }
 
+local direction4VectorMap = {
+  [Direction4.none] = { x = 0, y = 0 },
+  [Direction4.right] = { x = 1, y = 0 },
+  [Direction4.down] = { x = 0, y = 1 },
+  [Direction4.left] = { x = -1, y = 0 },
+  [Direction4.up] = { x = 0, y = -1  }
+}
+
+---get Direction4 enum value from vector or string name
+---@param x number|string
+---@param y number
+---@return integer
 function Direction4.getDirection(x, y)
   if type(x) == 'string' then
     local direction = Direction4[x]
@@ -32,11 +44,25 @@ function Direction4.getDirection(x, y)
   end
 end
 
+---get the opposite direction4 given a direction
+---@param direction integer
+---@return integer
 function Direction4.getOpposite(direction)
   if direction == Direction4.none then
     return Direction4.none
   end
   return (((direction - 1) + 2) % 4) + 1
+end
+
+---get vector from Direction4 value
+---@param dir4 integer
+---@return integer, integer
+function Direction4.getVector(dir4)
+  local vectorTable = direction4VectorMap[dir4]
+  if direction4VectorMap[dir4] then
+    return vectorTable.x, vectorTable.y
+  end
+  error('Direction4 out of range')
 end
 
 return Direction4

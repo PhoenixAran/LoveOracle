@@ -3486,7 +3486,7 @@
                 {
                  "name":"tileType",
                  "type":"string",
-                 "value":"normal"
+                 "value":"hole"
                 }, 
                 {
                  "name":"zRange",

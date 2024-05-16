@@ -15,6 +15,18 @@ local Direction8 = {
   upRight = 8
 }
 
+local direction8VectorMap = {
+  [Direction8.none] = { x = 0, y = 0 },
+  [Direction8.right] = { x = 1, y = 0 },
+  [Direction8.downRight] = { x = 1, y = 1},
+  [Direction8.down] = { x = 0, y = 1 },
+  [Direction8.downLeft] = { x = -1, y = 1 },
+  [Direction8.left] = { x = -1, y = 0 },
+  [Direction8.upLeft] = { x = -1, y = -1 },
+  [Direction8.up] = { x = 0, y = -1 },
+  [Direction8.upRight] = { x = 1, y = -1 }
+}
+
 function Direction8.getDirection(x, y)
   if type(x) == 'string' then
     local direction = Direction8[x]
@@ -34,6 +46,17 @@ function Direction8.getDirection(x, y)
     local angleIndex = math.floor((theta / angleInterval) + 0.5)
     return (angleIndex - (math.floor(angleIndex / 8) * 8)) + 1
   end
+end
+
+---get vector from Direction8 value
+---@param dir8 integer
+---@return integer, integer
+function Direction8.getVector(dir8)
+  local vectorTable = direction8VectorMap[dir8]
+  if direction8VectorMap[dir8] then
+    return vectorTable.x, vectorTable.y
+  end
+  error('Direction8 out of range')
 end
 
 return Direction8

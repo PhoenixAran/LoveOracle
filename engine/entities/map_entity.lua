@@ -119,7 +119,7 @@ local MapEntity = Class { __includes = Entity,
     self.persistant = false
     self.syncDirectionWithAnimation = true  -- if this is set to true, self.sprite will be assumed to be an AnimatedSpriteRenderer
     self.animationDirection4 = args.direction -- will be used as substrip key if syncDirectionWithAnimation is true
-    
+
     -- effect sprite animations configurations
     self.shadowVisible = true
     self.shadowOffsetX, self.shadowOffsetY = 0, 0
@@ -300,7 +300,8 @@ function MapEntity:move(dt)
   lume.clear(self.moveCollisions)
   local oldX, oldY = self:getPosition()
   local posX, posY = self:getBumpPosition()
-  local velX, velY = self.movement:getLinearVelocity(dt)
+  local velX, velY = self:getLinearVelocity(dt)
+  print(velX, velY)
   velX, velY = vector.add(velX, velY, self:getKnockbackVelocity(dt))
   if self:movesWithConveyors() and self:onConveyor() then
     velX, velY = vector.add(velX, velY, self.groundObserver.conveyorVelocityX, self.groundObserver.conveyorVelocityY)
