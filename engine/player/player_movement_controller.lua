@@ -162,6 +162,8 @@ function PlayerMovementController:updateStroking()
       local x, y = self.player:getVector()
       if x == 0 and y == 0 then
         self.player:setVector(self.lastStrokeVectorX, self.lastStrokeVectorY)
+      else
+        self.lastStrokeVectorX, self.lastStrokeVectorY = x, y
       end
     end
   else
@@ -169,9 +171,7 @@ function PlayerMovementController:updateStroking()
     self.stroking = false
     self.lastStrokeVectorX, self.lastStrokeVectorY = 0, 0
   end
-
-
-
+  
   self.player:setSpeedScale(self.strokeSpeedScale)
 end
 
