@@ -2,10 +2,10 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local ph = require 'engine.utils.parse_helpers'
-
 local Sprite = require 'engine.graphics.sprite'
 local SpriteFrame = require 'engine.graphics.sprite_frame'
 local TileSpriteRenderer = require 'engine.tiles.tile_sprite_renderer'
+local dir8 = require 'engine.enums.direction8'
 
 -- used to validate tile types
 local TileTypeInverse = lume.invert(TileTypeFlags.enumMap)
@@ -31,79 +31,22 @@ local function parseTileType(tileType)
   return TileTypeFlags:get(tileType).value
 end
 
-local function parseRect(dimensions)
-  local x, y, w, h = 0, 0, 0, 0
-  if dimensions ~= nil then
-    local args = ph.split(dimensions, ',')
-    assert(lume.count(args) == 4)
-    lume.each(args, ph.argIsNumber)
-    x, y, w, h = tonumber(args[1]), tonumber(args[2]), tonumber(args[3]), tonumber(args[4])
-  end
-  return x, y, w, h
-end
-
-local function parseCollisionBox(dimensions)
-  if dimensions == nil then
-    return 0, 0, 16, 16
-  end
-  return parseRect(dimensions)
-end
-
-local function parseHitBox(dimensions)
-  if dimensions == nil then
-    return 0, 0, 0, 0
-  end
-  return parseRect(dimensions)
-end
-
-local function parseZRange(zRange)
-  if zRange == nil then
-    return { min = 0, max = 1 }
-  end
-  zRange = ph.trim(zRange)
-  if zRange == '' then
-    return { min = 0, max = 1 }
-  end
-  local args = ph.split(zRange, ',')
-  assert(lume.count(args) == 2)
-  lume.each(args, ph.argIsNumber)
-  return { min = tonumber(args[1]), max = tonumber(args[2]) }
-end
-
 local function parseConveyorVector(conveyorVector)
-  if conveyorVector == nil then
-    return 0, 0
-  end
-  if conveyorVector == '' then
-    return 0, 0
-  end
-  local args = ph.split(conveyorVector, ',')
-  assert(lume.count(args) == 2, love.inspect(args))
-  lume.each(args, ph.argIsNumber)
-  return tonumber(args[1]), tonumber(args[2])
-end
-
-local function parseConveyorSpeed(conveyorSpeed)
-  if conveyorSpeed == nil then
-    return 0
-  end
-  if conveyorSpeed == '' then
-    return 0
-  end
-  ph.argIsNumber(conveyorSpeed)
-  return tonumber(conveyorSpeed)
+  return dir8.getVector(conveyorVector)
 end
 
 local InstanceId = 0
+
+local function newInstanceId()
+  local id = InstanceId
+  InstanceId = InstanceId + 1
+  return id
+end
 
 ---@class TileData
 ---@field tilesetTileId integer
 ---@field sprite TileSpriteRenderer
 ---@field tileType integer
----@field x integer
----@field y integer
----@field w integer
----@field h integer
 ---@field hitX integer
 ---@field hitY integer
 ---@field hitW integer
@@ -123,13 +66,18 @@ local TileData = Class {
     self.tilesetTileId = tilesetTile.id
     self.sprite = makeTileSprite(tilesetTile)
     self.tileType = parseTileType(properties.tileType)
-    self.x, self.y, self.w, self.h = parseCollisionBox(properties.collisionBox)
-    self.hitX, self.hitY, self.hitW, self.hitH = parseHitBox(properties.hitBox)
+    self.hitX, self.hitY, self.hitW, self.hitH = 0,0,0,0
+    if properties.hasHitBox then
+      self.hitX, self.hitY, self.hitW, self.hitH = properties.hitX, properties.hitY, properties.hitW, properties.hitH
+    end
+    error(love.inspect(properties))
     self.conveyorVectorX, self.conveyorVectorY = parseConveyorVector(properties.conveyorVector)
-    self.conveyorSpeed = parseConveyorSpeed(properties.conveyorSpeed)
-    self.zRange = parseZRange(properties.zRange)
+    self.conveyorSpeed = properties.conveyorSpeed
+    assert(properties.zRangeMin <= properties.zRangeMax, 'Invalid Z Range')
+    self.zRange.min = properties.zRangeMin
+    self.zRange.max = properties.zRangeMax
     -- used in Room.animatedTiles, Tileset.animatedTiles
-    InstanceId = InstanceId + 1
+    InstanceId = newInstanceId()
     self.instanceId = InstanceId
 
     -- interact vars

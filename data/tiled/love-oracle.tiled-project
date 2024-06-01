@@ -31,5 +31,146 @@
     "properties": [
     ],
     "propertyTypes": [
+        {
+            "id": 6,
+            "name": "test",
+            "storageType": "int",
+            "type": "enum",
+            "values": [
+                "x",
+                "y"
+            ],
+            "valuesAsFlags": true
+        },
+        {
+            "color": "#ff00aaff",
+            "drawFill": true,
+            "id": 3,
+            "members": [
+                {
+                    "name": "conveyorSpeed",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "conveyorVector",
+                    "propertyType": "TileConveyorVector",
+                    "type": "string",
+                    "value": "none"
+                },
+                {
+                    "name": "hasHitBox",
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "name": "hitH",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "hitW",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "hitX",
+                    "type": "int",
+                    "value": 16
+                },
+                {
+                    "name": "hitY",
+                    "type": "int",
+                    "value": 16
+                },
+                {
+                    "name": "tileInteract",
+                    "propertyType": "TileInteractFlags",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "tileType",
+                    "propertyType": "TileTypeFlags",
+                    "type": "string",
+                    "value": "normal"
+                },
+                {
+                    "name": "zRangeMax",
+                    "type": "int",
+                    "value": 1
+                },
+                {
+                    "name": "zRangeMin",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "Tile",
+            "type": "class",
+            "useAs": [
+                "property",
+                "tile",
+                "project"
+            ]
+        },
+        {
+            "id": 5,
+            "name": "TileConveyorVector",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "none",
+                "right",
+                "downRight",
+                "down",
+                "downLeft",
+                "left",
+                "upLeft",
+                "up",
+                "upRight"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 2,
+            "name": "TileInteractFlags",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "bombable",
+                "boomerangable",
+                "burnable",
+                "coverable",
+                "cuttable",
+                "clingOnStab",
+                "pickupable"
+            ],
+            "valuesAsFlags": true
+        },
+        {
+            "id": 1,
+            "name": "TileTypeFlags",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "normal",
+                "wall",
+                "stairs",
+                "ice",
+                "puddle",
+                "grass",
+                "hole",
+                "water",
+                "deep_water",
+                "ocean",
+                "waterfall",
+                "lava",
+                "lavafall",
+                "whirlpool",
+                "conveyor"
+            ],
+            "valuesAsFlags": false
+        }
     ]
 }

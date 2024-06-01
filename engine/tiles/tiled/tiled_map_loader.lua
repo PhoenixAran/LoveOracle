@@ -293,6 +293,25 @@ function TiledMapLoader.getTileset(name)
 end
 
 -- called in ContentControl
+-- order: 1
+
+---called in content control.
+---sets up the classes and custom types that are defined in our tiled project
+---@param directory string
+function TiledMapLoader.initializeTiledProject(directory)
+  local files = love.filesystem.getDirectoryItems(directory)
+  local tiledProjectExtension = 'tiled-project'
+  for _, file in files do
+    if file:sub(#tiledProjectExtension) == tiledProjectExtension then
+      local projectJson = json.decode(love.filesystem.read(file))
+      
+    end
+  end
+  error('Could not find tiled-project file in ' .. directory)
+end
+
+-- called in ContentControl
+-- order: 2
 function TiledMapLoader.initializeTilesets(directory)
   if directory == nil then
     directory = 'data/tiled/tilesets'
@@ -309,6 +328,8 @@ function TiledMapLoader.initializeTilesets(directory)
   tilesetCacheCreated = true
 end
 
+-- called in ContentControl
+-- order: 3
 function TiledMapLoader.initializeTemplates(directory)
   if directory == nil then
     directory = 'data/tiled/templates'
