@@ -179,7 +179,7 @@ local function loadTileset(path)
   tileset.properties = parsePropertyDict(jTileset.properties)
   -- load tiles with custom property definition
   if jTileset.tiles then
-    for _, jTile in ipairs(jTileset.tiles) do
+    for _, jTile in pairs(jTileset.tiles) do
       local tilesetTile = TiledTilesetTile()
       tilesetTile.id = jTile.id
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
@@ -189,18 +189,15 @@ local function loadTileset(path)
           lume.push(tilesetTile.durations, jObj.duration)
         end
       end
-      if jTile.type then
-        local tiledClass = tiledClasses[jTile.type]
-        for k, v in pairs(tiledClass) do
-          tilesetTile.properties[k] = v
-        end
-      end
+      assert(jTile.type == 'tile', 'Tiles should have the tile class  ')
+      tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[jTile.type])
       -- override values that are unique from tiled class default
       tilesetTile.properties = lume.merge(tilesetTile.properties, parsePropertyDict(jTile.properties))
       -- register tiled_tile in tileset
       tileset.tiles[tilesetTile.id] = tilesetTile
     end
   end
+
   -- load the basic tiles (tiles without any property definitions dont get in cluded in the jTile array)
   for i = 0, tileset.spriteSheet:size() - 1 do
     if not tileset.tiles[i] then
@@ -209,7 +206,9 @@ local function loadTileset(path)
       tilesetTile.id = i
       -- add one because spritesheet uses lua indexing
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
-      tilesetTile.properties = parsePropertyDict(jTileset.properties)
+      tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses['tile'])
+      tilesetTile.properties = lume.merge(tilesetTile.properties, parsePropertyDict(jTileset.properties))
+
       tileset.tiles[tilesetTile.id] = tilesetTile
     end
   end

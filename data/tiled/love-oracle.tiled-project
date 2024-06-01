@@ -95,7 +95,7 @@
                     "value": 0
                 }
             ],
-            "name": "Tile",
+            "name": "tile",
             "type": "class",
             "useAs": [
                 "property",

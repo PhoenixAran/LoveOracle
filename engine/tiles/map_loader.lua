@@ -19,7 +19,6 @@ local MapLoader = { }
 ---@param name string
 ---@return Tileset
 function MapLoader.getTileset(name)
-  love.log.trace('Loading tileset ' .. name)
   if tilesetCache[name] then
     return tilesetCache[name]
   end
@@ -33,6 +32,7 @@ function MapLoader.getTileset(name)
       lume.push(tileset.animatedTiles, tileData)
     end
   end
+
   tilesetCache[name] = tileset
   return tileset
 end

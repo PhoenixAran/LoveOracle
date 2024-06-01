@@ -102,15 +102,13 @@
          "name":"playerspawn",
          "objects":[
                 {
-                 "gid":2147483913,
-                 "height":19.3333333333333,
-                 "id":11,
-                 "rotation":0,
+                 "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "width":18.3333333333333,
-                 "x":412.272727272727,
-                 "y":92.068181818182
+                 "x":383.613636363636,
+                 "y":138.738636363636
                 }],
+         "offsetx":4.75,
+         "offsety":-4.375,
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -118,7 +116,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":15,
+ "nextobjectid":17,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

@@ -11,15 +11,15 @@
  "tiles":[
         {
          "id":0,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":1,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":2,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":3,
@@ -30,7 +30,7 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":4,
@@ -41,7 +41,7 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":5,
@@ -52,27 +52,27 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":6,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":7,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":8,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":9,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":10,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":11,
@@ -83,7 +83,7 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":12,
@@ -94,7 +94,7 @@
                  "type":"string",
                  "value":"normal"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":13,
@@ -105,27 +105,27 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":14,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":15,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":16,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":17,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":18,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":19,
@@ -136,7 +136,7 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":20,
@@ -147,7 +147,7 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":21,
@@ -158,175 +158,175 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":22,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":23,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":24,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":25,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":26,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":27,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":28,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":29,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":30,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":31,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":32,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":33,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":34,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":35,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":36,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":37,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":38,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":39,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":40,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":41,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":42,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":43,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":44,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":45,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":46,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":47,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":48,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":49,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":50,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":51,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":52,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":53,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":54,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":55,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":56,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":57,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":58,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":59,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":60,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":61,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":62,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":63,
-         "type":"Tile"
+         "type":"tile"
         }],
  "tilewidth":16,
  "type":"tileset",

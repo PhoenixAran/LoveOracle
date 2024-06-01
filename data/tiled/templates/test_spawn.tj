@@ -2,8 +2,14 @@
     {
      "gid":1,
      "height":16,
-     "id":11,
+     "id":16,
      "name":"",
+     "properties":[
+            {
+             "name":"spawn_type",
+             "type":"string",
+             "value":"test_spawn"
+            }],
      "rotation":0,
      "type":"",
      "visible":true,

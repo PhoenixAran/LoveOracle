@@ -52,23 +52,23 @@
                  "type":"string",
                  "value":"conveyor"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":1,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":2,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":3,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":4,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -96,23 +96,23 @@
                  "type":"string",
                  "value":"lava"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":6,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":7,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":8,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":9,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -162,23 +162,23 @@
                  "type":"string",
                  "value":"conveyor"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":11,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":12,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":13,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":14,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -206,23 +206,23 @@
                  "type":"string",
                  "value":"lava"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":16,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":17,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":18,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":19,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -261,23 +261,23 @@
                  "type":"string",
                  "value":"conveyor"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":21,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":22,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":23,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":24,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -305,23 +305,23 @@
                  "type":"string",
                  "value":"lava"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":26,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":27,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":28,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":29,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -360,23 +360,23 @@
                  "type":"string",
                  "value":"conveyor"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":31,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":32,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":33,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":34,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -404,23 +404,23 @@
                  "type":"string",
                  "value":"lava"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":36,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":37,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":38,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":39,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -448,23 +448,23 @@
                  "type":"string",
                  "value":"puddle"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":41,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":42,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":43,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":44,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -492,23 +492,23 @@
                  "type":"string",
                  "value":"lava"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":46,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":47,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":48,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":49,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -536,43 +536,43 @@
                  "type":"string",
                  "value":"puddle"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":51,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":52,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":53,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":54,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":55,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":56,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":57,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":58,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":59,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -600,43 +600,43 @@
                  "type":"string",
                  "value":"puddle"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":61,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":62,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":63,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":64,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":65,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":66,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":67,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":68,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":69,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -664,43 +664,43 @@
                  "type":"string",
                  "value":"puddle"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":71,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":72,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":73,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":74,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":75,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":76,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":77,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":78,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":79,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -728,43 +728,43 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":81,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":82,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":83,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":84,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":85,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":86,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":87,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":88,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":89,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -792,43 +792,43 @@
                  "type":"string",
                  "value":"wall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":91,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":92,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":93,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":94,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":95,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":96,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":97,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":98,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":99,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -856,43 +856,43 @@
                  "type":"string",
                  "value":"puddle"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":101,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":102,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":103,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":104,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":105,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":106,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":107,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":108,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":109,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -920,43 +920,43 @@
                  "type":"string",
                  "value":"water"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":111,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":112,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":113,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":114,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":115,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":116,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":117,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":118,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":119,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -984,43 +984,43 @@
                  "type":"string",
                  "value":"puddle"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":121,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":122,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":123,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":124,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":125,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":126,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":127,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":128,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":129,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -1048,43 +1048,43 @@
                  "type":"string",
                  "value":"ocean"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":131,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":132,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":133,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":134,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":135,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":136,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":137,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":138,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":139,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -1112,43 +1112,43 @@
                  "type":"string",
                  "value":"waterfall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":141,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":142,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":143,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":144,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":145,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":146,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":147,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":148,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":149,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -1176,43 +1176,43 @@
                  "type":"string",
                  "value":"waterfall"
                 }],
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":151,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":152,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":153,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":154,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":155,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":156,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":157,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":158,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":159,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -1233,43 +1233,43 @@
                  "tileid":163
                 }],
          "id":160,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":161,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":162,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":163,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":164,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":165,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":166,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":167,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":168,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":169,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -1290,43 +1290,43 @@
                  "tileid":173
                 }],
          "id":170,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":171,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":172,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":173,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":174,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":175,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":176,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":177,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":178,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":179,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "animation":[
@@ -1347,83 +1347,83 @@
                  "tileid":183
                 }],
          "id":180,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":181,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":182,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":183,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":184,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":185,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":186,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":187,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":188,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":189,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":190,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":191,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":192,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":193,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":194,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":195,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":196,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":197,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":198,
-         "type":"Tile"
+         "type":"tile"
         }, 
         {
          "id":199,
-         "type":"Tile"
+         "type":"tile"
         }],
  "tilewidth":16,
  "type":"tileset",
