@@ -32,17 +32,6 @@
     ],
     "propertyTypes": [
         {
-            "id": 6,
-            "name": "test",
-            "storageType": "int",
-            "type": "enum",
-            "values": [
-                "x",
-                "y"
-            ],
-            "valuesAsFlags": true
-        },
-        {
             "color": "#ff00aaff",
             "drawFill": true,
             "id": 3,

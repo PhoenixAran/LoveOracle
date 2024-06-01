@@ -49,12 +49,12 @@ function ContentControl.buildContent()
   loadSpriteSheets('data/assets/spritesheets')
   PaletteBank.initialize('data.palettes')
   SpriteBank.initialize('data.sprites')
-  TiledMapLoader.initializeTilesets()
-  TiledMapLoader.initializeTemplates()
+  TiledMapLoader.initialize()
   local runTime = love.timer.getTime() - startTime
   love.log.trace('Asset load time: ' .. tostring(runTime * 1000) .. ' ms')
 end
 
+---@deprecated
 function ContentControl.unloadContent()
   love.log.trace('Unloading content')
   SpriteBank.unload()

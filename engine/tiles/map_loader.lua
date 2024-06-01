@@ -19,6 +19,7 @@ local MapLoader = { }
 ---@param name string
 ---@return Tileset
 function MapLoader.getTileset(name)
+  love.log.trace('Loading tileset ' .. name)
   if tilesetCache[name] then
     return tilesetCache[name]
   end

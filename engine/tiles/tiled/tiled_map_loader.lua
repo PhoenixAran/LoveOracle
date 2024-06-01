@@ -13,12 +13,10 @@ local TiledTileLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_tile
 local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_object_layer'
 
 
+local tiledMapLoaderInitialized = false
+local tiledClasses = { }
 local tiledTilesetCache = { }
-local tilesetCacheCreated = false
-
 local tiledTemplates = { }
-local templateCacheCreated = false
-
 local tiledMapDataCache  = { }
 
 -- export type
@@ -54,7 +52,9 @@ local function parseObject(jObject)
   tiledObject.height = jObject.height
   tiledObject.type = jObject.type
   tiledObject.rotation = jObject.rotation
-
+  if jObject.type then
+    -- TODO
+  end
   if jObject.template then
     -- if this is a templated object, inject the template object value properties into our json object
     local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
@@ -70,7 +70,6 @@ local function parseObject(jObject)
     end
     if template.tileset then
       -- get the tile custom properties from the tileset
-      assert(tilesetCacheCreated, 'Tileset cache not before parsing map object layers')
       local tiledTileset = tiledTilesetCache[FileHelper.getFileNameWithoutExtension(template.tileset.source)]
       local tiledTilesetTile = tiledTileset:getTile(template.object.gid - template.tileset.firstgid)
       if templateProperties == nil then
@@ -190,11 +189,19 @@ local function loadTileset(path)
           lume.push(tilesetTile.durations, jObj.duration)
         end
       end
-      tilesetTile.properties = parsePropertyDict(jTile.properties)
+      if jTile.type then
+        local tiledClass = tiledClasses[jTile.type]
+        for k, v in pairs(tiledClass) do
+          tilesetTile.properties[k] = v
+        end
+      end
+      -- override values that are unique from tiled class default
+      tilesetTile.properties = lume.merge(tilesetTile.properties, parsePropertyDict(jTile.properties))
+      -- register tiled_tile in tileset
       tileset.tiles[tilesetTile.id] = tilesetTile
     end
   end
-  -- load the basic tiles (tiles without any property definitions dont get included in the jTile array)
+  -- load the basic tiles (tiles without any property definitions dont get in cluded in the jTile array)
   for i = 0, tileset.spriteSheet:size() - 1 do
     if not tileset.tiles[i] then
       -- NB: basic tiles are never animated
@@ -217,7 +224,7 @@ local function loadTemplate(path)
   end
 
   local jTemplate = json.decode(love.filesystem.read(path))
-  
+
   assert(jTemplate.type == 'template', 'Cannot parse template form non-template tiled object')
 
   local tiledTemplate = { }
@@ -243,12 +250,92 @@ local function loadTemplate(path)
 end
 
 
+---called in initialize order: 1
+---gets any custom classes so we can inject properties into it's tiled object instances
+---@param directory string
+local function initializeTiledProject(directory)
+  if directory == nil then
+    directory = 'data/tiled/'
+  end
+  local files = love.filesystem.getDirectoryItems(directory)
+  local tiledProjectExtension = 'tiled-project'
+  local foundTiledProjectFile = false
+  for _, file in ipairs(files) do
+    if file:sub(#tiledProjectExtension) == tiledProjectExtension then
+      foundTiledProjectFile = true
+      local path = directory .. '/' .. file
+      local projectJson = json.decode(love.filesystem.read(path))
+      if projectJson.propertyTypes then
+        for _, jProperties in ipairs(projectJson.propertyTypes) do
+          if jProperties.type == 'class' then
+            local tiledClassDefaultValues = { }
+            for _, jMember in ipairs(jProperties.members) do
+              tiledClassDefaultValues[jMember.name] = jMember.value
+            end
+            tiledClasses[jProperties.name] = tiledClassDefaultValues
+          end
+        end
+      end
+      break
+    end
+  end
+  assert(foundTiledProjectFile, 'Could not find tiled-project file in ' .. directory)
+end
+
+-- called in initialize
+-- order: 2
+local function initializeTilesets(directory)
+  if directory == nil then
+    directory = 'data/tiled/tilesets'
+  end
+  local tilesetFiles = love.filesystem.getDirectoryItems(directory)
+  for _, file in ipairs(tilesetFiles) do
+    local path = directory .. '/' .. file
+    if love.filesystem.getInfo(path).type == 'directory' then
+      initializeTilesets(path)
+    else
+      loadTileset(path)
+    end
+  end
+end
+
+-- called in initialize
+-- order: 3
+local function initializeTemplates(directory)
+  if directory == nil then
+    directory = 'data/tiled/templates'
+  end
+  local templateFiles = love.filesystem.getDirectoryItems(directory)
+  for _, file in ipairs(templateFiles) do
+    local path = directory .. '/' .. file
+    if love.filesystem.getInfo(path).type == 'directory' then
+      initializeTemplates(path)
+    else
+      loadTemplate(path)
+    end
+  end
+end
+
+function TiledMapLoader.initialize(directory)
+  tiledMapLoaderInitialized = true
+  initializeTiledProject(directory)
+  initializeTilesets(directory)
+  initializeTemplates(directory)
+end
+
+
+function TiledMapLoader.unload()
+  tiledMapDataCache = { }
+  tiledTilesetCache = { }
+  tiledClasses = { }
+  tiledMapLoaderInitialized = false
+end
+
 -- NB: path will be relative to data/tiled/maps
 ---@param path string
 ---@return TiledMapData
 function TiledMapLoader.loadMapData(path)
-  assert(tilesetCacheCreated, 'Call TiledMapLoader.initTilesets before you load maps')
-  assert(templateCacheCreated, 'Call TiledMapLoader.initTemplates before you load maps')
+  assert(tiledMapLoaderInitialized, 'Make sure you initialize TiledMapLoader before loading maps')
   local pathPrefix = 'data/tiled/maps/'
   path = pathPrefix .. path
   -- map data is indexed by filepath
@@ -286,70 +373,11 @@ function TiledMapLoader.loadMapData(path)
   return mapData
 end
 
+--- TODO not sure if this should be public
 ---@return TiledTileset
 function TiledMapLoader.getTileset(name)
   assert(tiledTilesetCache[name], 'Tileset with name ' .. name .. ' does not exist')
   return tiledTilesetCache[name]
-end
-
--- called in ContentControl
--- order: 1
-
----called in content control.
----sets up the classes and custom types that are defined in our tiled project
----@param directory string
-function TiledMapLoader.initializeTiledProject(directory)
-  local files = love.filesystem.getDirectoryItems(directory)
-  local tiledProjectExtension = 'tiled-project'
-  for _, file in files do
-    if file:sub(#tiledProjectExtension) == tiledProjectExtension then
-      local projectJson = json.decode(love.filesystem.read(file))
-      
-    end
-  end
-  error('Could not find tiled-project file in ' .. directory)
-end
-
--- called in ContentControl
--- order: 2
-function TiledMapLoader.initializeTilesets(directory)
-  if directory == nil then
-    directory = 'data/tiled/tilesets'
-  end
-  local tilesetFiles = love.filesystem.getDirectoryItems(directory)
-  for _, file in ipairs(tilesetFiles) do
-    local path = directory .. '/' .. file
-    if love.filesystem.getInfo(path).type == 'directory' then
-      TiledMapLoader.initializeTilesets(path)
-    else
-      loadTileset(path)
-    end
-  end
-  tilesetCacheCreated = true
-end
-
--- called in ContentControl
--- order: 3
-function TiledMapLoader.initializeTemplates(directory)
-  if directory == nil then
-    directory = 'data/tiled/templates'
-  end
-  local templateFiles = love.filesystem.getDirectoryItems(directory)
-  for _, file in ipairs(templateFiles) do
-    local path = directory .. '/' .. file
-    if love.filesystem.getInfo(path).type == 'directory' then
-      TiledMapLoader.initializeTemplates(path)
-    else
-      loadTemplate(path)
-    end
-  end
-  templateCacheCreated = true
-end
-
-function TiledMapLoader.unload()
-  tiledMapDataCache = { }
-  tiledTilesetCache = { }
-  tilesetCacheCreated = false
 end
 
 return TiledMapLoader
