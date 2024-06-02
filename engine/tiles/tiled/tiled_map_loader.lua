@@ -13,6 +13,7 @@ local TiledTileLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_tile
 local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_object_layer'
 
 
+local TILE_CLASS_NAME = 'tile'
 local tiledMapLoaderInitialized = false
 local tiledClasses = { }
 local tiledTilesetCache = { }
@@ -182,6 +183,7 @@ local function loadTileset(path)
     for _, jTile in pairs(jTileset.tiles) do
       local tilesetTile = TiledTilesetTile()
       tilesetTile.id = jTile.id
+      print(tilesetTile.id)
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
       if jTile.animation then
         for _, jObj in ipairs(jTile.animation) do
@@ -189,8 +191,8 @@ local function loadTileset(path)
           lume.push(tilesetTile.durations, jObj.duration)
         end
       end
-      assert(jTile.type == 'tile', 'Tiles should have the tile class  ')
-      tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[jTile.type])
+      assert(jTile.type == 'tile', 'Tiles should have the ' .. TILE_CLASS_NAME ..  ' class  ')
+      tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[TILE_CLASS_NAME])
       -- override values that are unique from tiled class default
       tilesetTile.properties = lume.merge(tilesetTile.properties, parsePropertyDict(jTile.properties))
       -- register tiled_tile in tileset
@@ -206,7 +208,7 @@ local function loadTileset(path)
       tilesetTile.id = i
       -- add one because spritesheet uses lua indexing
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
-      tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses['tile'])
+      tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[TILE_CLASS_NAME])
       tilesetTile.properties = lume.merge(tilesetTile.properties, parsePropertyDict(jTileset.properties))
 
       tileset.tiles[tilesetTile.id] = tilesetTile
@@ -279,6 +281,7 @@ local function initializeTiledProject(directory)
     end
   end
   assert(foundTiledProjectFile, 'Could not find tiled-project file in ' .. directory)
+  assert(tiledClasses[TILE_CLASS_NAME], 'Could not find tiled editor class ' .. TILE_CLASS_NAME)
 end
 
 -- called in initialize

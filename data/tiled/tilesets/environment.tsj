@@ -352,7 +352,7 @@
                  "name":"conveyorVector",
                  "propertytype":"TileConveyorVector",
                  "type":"string",
-                 "value":"upRight"
+                 "value":"upLeft"
                 }, 
                 {
                  "name":"tileType",
@@ -872,6 +872,13 @@
         }, 
         {
          "id":104,
+         "properties":[
+                {
+                 "name":"tileType",
+                 "propertytype":"TileTypeFlags",
+                 "type":"string",
+                 "value":"grass"
+                }],
          "type":"tile"
         }, 
         {
