@@ -180,10 +180,9 @@ local function loadTileset(path)
   tileset.properties = parsePropertyDict(jTileset.properties)
   -- load tiles with custom property definition
   if jTileset.tiles then
-    for _, jTile in pairs(jTileset.tiles) do
+    for _, jTile in ipairs(jTileset.tiles) do
       local tilesetTile = TiledTilesetTile()
       tilesetTile.id = jTile.id
-      print(tilesetTile.id)
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
       if jTile.animation then
         for _, jObj in ipairs(jTile.animation) do

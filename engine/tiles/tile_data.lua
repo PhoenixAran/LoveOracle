@@ -38,12 +38,11 @@ local function parseConveyorVector(conveyorVector)
   return dir8.getVector(dir8[conveyorVector])
 end
 
+-- DO NOT EDIT THE INITIAL INSTANCE ID. IT IS STARTED AT 0 FOR A REASON
 local InstanceId = 0
-
 local function newInstanceId()
-  local id = InstanceId
   InstanceId = InstanceId + 1
-  return id
+  return InstanceId
 end
 
 ---@class TileData
