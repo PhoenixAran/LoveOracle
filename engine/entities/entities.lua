@@ -180,7 +180,7 @@ end
 function Entities:isTopTile(tile)
   local topLayer = lume.count(self.tileEntities)
   local tileIndex = (tile.tileIndexY - 1) * self.mapWidth + (tile.tileIndexX)
-  for layer = lume.count(self.tileEntities), 1, -1 do
+  for layer = topLayer, 1, -1 do
     local tileEntity = self.tileEntities[layer][tileIndex]
     if tileEntity then
       return tile == tileEntity

@@ -32,6 +32,7 @@ function MapLoader.getTileset(name)
       lume.push(tileset.animatedTiles, tileData)
     end
   end
+
   tilesetCache[name] = tileset
   return tileset
 end

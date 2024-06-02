@@ -78,12 +78,6 @@ local GroundObserver = Class { __includes = {Component},
   end
 }
 
-local function zRangeMaxSort(a, b)
-  local aMax = a.zRange.max
-  local bMax = b.zRange.max
-  return aMax > bMax
-end
-
 function GroundObserver:getType()
   return 'ground_observer'
 end

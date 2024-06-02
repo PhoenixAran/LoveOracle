@@ -28,8 +28,8 @@ local Tile = Class { __includes = Entity,
       name = makeTileEntityName(layer, tileIndexX, tileIndexY),
       x = (tileIndexX - 1) * GRID_SIZE,
       y = (tileIndexY - 1) * GRID_SIZE,
-      w = tileData.w,
-      h = tileData.h,
+      w = GRID_SIZE,
+      h = GRID_SIZE,
       zMin = zMin,
       zMax = zMax
     })
@@ -120,7 +120,7 @@ end
 ---@param swordItem Item
 function Tile:onSwordHit(swordItem)
   if self.tileData.minSwordLevel < swordItem.level then
-    
+    -- TODO
   end
 end
 

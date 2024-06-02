@@ -11,2179 +11,322 @@
  "tiles":[
         {
          "id":0,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":1,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":2,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":3,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"wall"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":4,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"wall"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":5,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"wall"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":6,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":7,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":8,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":9,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":10,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":11,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"wall"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":12,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":13,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"wall"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":14,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":15,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":16,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":17,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":18,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":19,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"wall"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":20,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"wall"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":21,
          "properties":[
                 {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
                  "name":"tileType",
+                 "propertytype":"TileTypeFlags",
                  "type":"string",
                  "value":"wall"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+                }],
+         "type":"tile"
         }, 
         {
          "id":22,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":23,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":24,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":25,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":26,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":27,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":28,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":29,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":30,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":31,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":32,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":33,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":34,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":35,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":36,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":37,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":38,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":39,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":40,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":41,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":42,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":43,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":44,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":45,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":46,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":47,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":48,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":49,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":50,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":51,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":52,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":53,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":54,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":55,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":56,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":57,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":58,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":59,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":60,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":61,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":62,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }, 
         {
          "id":63,
-         "properties":[
-                {
-                 "name":"bumpBox",
-                 "type":"string",
-                 "value":"0,0,16,16"
-                }, 
-                {
-                 "name":"conveyorSpeed",
-                 "type":"string",
-                 "value":"0"
-                }, 
-                {
-                 "name":"conveyorVector",
-                 "type":"string",
-                 "value":"0,0"
-                }, 
-                {
-                 "name":"hurtBox",
-                 "type":"string",
-                 "value":"0,0,0,0"
-                }, 
-                {
-                 "name":"tileType",
-                 "type":"string",
-                 "value":"normal"
-                }, 
-                {
-                 "name":"zRange",
-                 "type":"string",
-                 "value":"0,1"
-                }]
+         "type":"tile"
         }],
  "tilewidth":16,
  "type":"tileset",
