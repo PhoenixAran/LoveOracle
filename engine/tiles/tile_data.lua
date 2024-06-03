@@ -38,11 +38,10 @@ local function parseConveyorVector(conveyorVector)
   return dir8.getVector(dir8[conveyorVector])
 end
 
--- DO NOT EDIT THE INITIAL INSTANCE ID. IT IS STARTED AT 0 FOR A REASON
 local InstanceId = 0
 local function newInstanceId()
   InstanceId = InstanceId + 1
-  return InstanceId
+  return InstanceId - 1
 end
 
 ---@class TileData
@@ -79,8 +78,7 @@ local TileData = Class {
     self.zRange.min = properties.zRangeMin
     self.zRange.max = properties.zRangeMax
     -- used in Room.animatedTiles, Tileset.animatedTiles
-    InstanceId = newInstanceId()
-    self.instanceId = InstanceId
+    self.instanceId = newInstanceId()
 
     -- interact vars
     self.minSwordLevel = properties.minSwordLevel
