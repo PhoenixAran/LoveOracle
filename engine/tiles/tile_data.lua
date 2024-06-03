@@ -32,7 +32,7 @@ local function parseTileType(tileType)
 end
 
 local function parseConveyorVector(conveyorVector)
-  if conveyorVector == '' then
+  if conveyorVector == '' or conveyorVector == nil then
     return 0, 0
   end
   return dir8.getVector(dir8[conveyorVector])
@@ -73,10 +73,10 @@ local TileData = Class {
     end
     self.conveyorVectorX, self.conveyorVectorY = parseConveyorVector(properties.conveyorVector)
     self.conveyorSpeed = properties.conveyorSpeed
-    assert(properties.zRangeMin <= properties.zRangeMax, 'Invalid Z Range')
     self.zRange = { min = 0, max = 1 }
-    self.zRange.min = properties.zRangeMin
-    self.zRange.max = properties.zRangeMax
+    self.zRange.min = properties.zRangeMin or 0
+    self.zRange.max = properties.zRangeMax or 1
+    assert(self.zRange.min <= self.zRange.max, 'Invalid Z Range')
     -- used in Room.animatedTiles, Tileset.animatedTiles
     self.instanceId = newInstanceId()
 

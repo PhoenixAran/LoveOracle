@@ -190,8 +190,9 @@ local function loadTileset(path)
           lume.push(tilesetTile.durations, jObj.duration)
         end
       end
-      assert(jTile.type == 'tile', 'Tiles should have the ' .. TILE_CLASS_NAME ..  ' class  ')
-      tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[TILE_CLASS_NAME])
+      if jTile.type then
+        tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[jTile.type])
+      end
       -- override values that are unique from tiled class default
       tilesetTile.properties = lume.merge(tilesetTile.properties, parsePropertyDict(jTile.properties))
       -- register tiled_tile in tileset
@@ -200,6 +201,8 @@ local function loadTileset(path)
   end
 
   -- load the basic tiles (tiles without any property definitions dont get in cluded in the jTile array)
+  -- as of right now this really only loads in the template tilesets. Tiles that get the tile class get a dedicated json value
+  -- that gets parsed in the for loop above
   for i = 0, tileset.spriteSheet:size() - 1 do
     if not tileset.tiles[i] then
       -- NB: basic tiles are never animated
@@ -207,7 +210,6 @@ local function loadTileset(path)
       tilesetTile.id = i
       -- add one because spritesheet uses lua indexing
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
-      tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[TILE_CLASS_NAME])
       tilesetTile.properties = lume.merge(tilesetTile.properties, parsePropertyDict(jTileset.properties))
 
       tileset.tiles[tilesetTile.id] = tilesetTile

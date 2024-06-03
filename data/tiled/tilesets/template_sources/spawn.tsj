@@ -8,15 +8,6 @@
  "tilecount":2,
  "tiledversion":"1.10.2",
  "tileheight":16,
- "tiles":[
-        {
-         "id":0,
-         "type":"tile"
-        }, 
-        {
-         "id":1,
-         "type":"tile"
-        }],
  "tilewidth":16,
  "type":"tileset",
  "version":"1.10"
