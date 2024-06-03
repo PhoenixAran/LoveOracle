@@ -210,8 +210,6 @@ local function loadTileset(path)
       tilesetTile.id = i
       -- add one because spritesheet uses lua indexing
       tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
-      tilesetTile.properties = lume.merge(tilesetTile.properties, parsePropertyDict(jTileset.properties))
-
       tileset.tiles[tilesetTile.id] = tilesetTile
     end
   end

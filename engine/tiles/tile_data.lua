@@ -69,10 +69,13 @@ local TileData = Class {
     self.tileType = parseTileType(properties.tileType)
     self.hitX, self.hitY, self.hitW, self.hitH = 0,0,0,0
     if properties.hasHitBox then
-      self.hitX, self.hitY, self.hitW, self.hitH = properties.hitX, properties.hitY, properties.hitW, properties.hitH
+      self.hitX = properties.hitX or 0
+      self.hitY = properties.hitY or 0
+      self.hitW = properties.hitW or 0
+      self.hitH = properties.hitH or 0
     end
     self.conveyorVectorX, self.conveyorVectorY = parseConveyorVector(properties.conveyorVector)
-    self.conveyorSpeed = properties.conveyorSpeed
+    self.conveyorSpeed = properties.conveyorSpeed or 0.0
     self.zRange = { min = 0, max = 1 }
     self.zRange.min = properties.zRangeMin or 0
     self.zRange.max = properties.zRangeMax or 1
