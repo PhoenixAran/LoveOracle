@@ -13,6 +13,7 @@ local Input = require('engine.singletons').input
 local JUMP_Z_VELOCITY = 2
 local JUMP_GRAVITY = 8
 local HOLE_DOOM_TIMER = 10
+local HOLE_PULL_MAGNITUDE = .30
 local DISTANCE_TRIGGER_HOLE_FALL = 1.0
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
 local DIRECTION_SNAP = 40
@@ -83,8 +84,12 @@ function PlayerMovementController:setMode(mode)
   end
 end
 
+
 function PlayerMovementController:jump()
-  if self.player:isOnGround() and self.player:getStateParameters().canJump then
+  if self.player:isOnGround() 
+     and self.player:getStateParameters().canJump 
+     and not self.player.groundObserver.inHole 
+     and self.player.skills.jumpSkill > 0 then
     if self.player:getStateParameters().canControlOnGround then
       local x, y = self:pollMovementControls(true)
       if self:isMoving() then
@@ -269,7 +274,10 @@ function PlayerMovementController:updateFallingInHole()
       -- which dooms them to fall in the hole
       local newHoleTile = self:getCurrentHoleTile()
       local newQuadrantX, newQuadrantY = vector.div(8, self.player:getPosition())
+      newQuadrantX = math.floor(newQuadrantX)
+      newQuadrantY = math.floor(newQuadrantY)
       if newQuadrantX ~= self.holeQuadrantX or newQuadrantY ~= self.holeQuadrantY then
+        love.log.debug('New hole quads: ' .. newQuadrantX .. ' ' .. newQuadrantY .. ' now Dooomed')
         self.doomedToFallInHole = true
         self.holeTile = newHoleTile
       end
@@ -279,7 +287,7 @@ function PlayerMovementController:updateFallingInHole()
     local px, py = self.player:getPosition()
     local tx, ty = self.holeTile:getPosition()
 
-    local pullMagnitude = 0.25
+    local pullMagnitude = HOLE_PULL_MAGNITUDE
     local diffX, diffY = vector.sub(tx, ty, px, py)
     local pullX, pullY = vector.mul(pullMagnitude, vector.normalize(diffX, diffY))
 
@@ -301,6 +309,8 @@ function PlayerMovementController:updateFallingInHole()
       -- start falling in a hole
       self.holeTile = self:getCurrentHoleTile()
       self.holeQuadrantX, self.holeQuadrantY = vector.div(8, self.player:getPosition())
+      self.holeQuadrantX = math.floor(self.holeQuadrantX)
+      self.holeQuadrantY = math.floor(self.holeQuadrantY)
       self.doomedToFallInHole = false
       self.fallingInHole = true
       self.holeDoomTimer = HOLE_DOOM_TIMER
