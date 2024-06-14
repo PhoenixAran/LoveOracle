@@ -353,13 +353,19 @@ function Player:updateUseDirections()
 end
 
 -- player specific state stuff
-
 function Player:isSwimming()
   local enviromentState = self.environmentStateMachine:getCurrentState()
   if enviromentState then
     return enviromentState:getType() == 'player_swim_environment_state'
   end
   return false
+end
+
+function Player:onHazardTile()
+  return self.groundObserver.inHole 
+         or (self.groundObserver.inWater and not self.skills.canSwimInWater)
+         or (self.groundObserver.inLava and not self.skills.canSwimInLava)
+         -- TODO ocean swimming check?
 end
 
 --- return use Direction4 enum value
@@ -657,7 +663,7 @@ function Player:onHurt(damageInfo)
 end
 
 function Player:checkRoomTransitions()
-  if self:getStateParameters().canRoomTransition then
+  if self:getStateParameters().canRoomTransition and not self:onHazardTile() then
     for _, other in ipairs(self.moveCollisions) do
       if other:getType() == 'room_edge' then
         ---@type RoomEdge

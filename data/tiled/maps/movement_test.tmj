@@ -33,6 +33,7 @@
         {
          "draworder":"topdown",
          "id":4,
+         "locked":true,
          "name":"rooms",
          "objects":[
                 {
@@ -104,11 +105,9 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":123.238636363636,
-                 "y":50.738636363636
+                 "x":472.238636363636,
+                 "y":232.738636363636
                 }],
-         "offsetx":4.75,
-         "offsety":-4.375,
          "opacity":1,
          "type":"objectgroup",
          "visible":true,

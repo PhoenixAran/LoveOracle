@@ -29,6 +29,7 @@ local QUERY_RECT_LENGTH = 1.5
 ---@field queryFilter function
 ---@field bumpSorter function
 ---@field visitedTileIndices table<integer, boolean>
+---@field tiles Tile[] Tiles that this ground observer is on top on
 local GroundObserver = Class { __includes = {Component},
   init = function(self, entity, args)
     if args == nil then
@@ -75,6 +76,7 @@ local GroundObserver = Class { __includes = {Component},
       return distanceA <= distanceB
     end
     self.visitedTileIndices = { }
+    self.tiles = { }
   end
 }
 
@@ -107,6 +109,7 @@ function GroundObserver:reset()
   self.inHole = false
   self.inOcean = false
   lume.clear(self.visitedTileIndices)
+  lume.clear(self.tiles)
 end
 
 function GroundObserver:update(dt)
@@ -121,12 +124,12 @@ function GroundObserver:update(dt)
   ey = ey + self.pointOffsetY
   local items, len = Physics:queryRect(ex - QUERY_RECT_LENGTH / 2, ey - QUERY_RECT_LENGTH / 2, QUERY_RECT_LENGTH, QUERY_RECT_LENGTH, self.queryFilter)
   lume.sort(items, self.bumpSorter)
-
   if 0 < len then
     for _, item in ipairs(items) do
       if item:isTile() then
         if not self.visitedTileIndices[item.index] then
           self.visitedTileIndices[item.index] = true
+          lume.push(self.tiles, item)
           local tileType = item:getTileType()
           if tileType == TileTypes.Lava or tileType == TileTypes.Lavafall then
             self.inLava = true
@@ -146,6 +149,8 @@ function GroundObserver:update(dt)
           elseif tileType == TileTypes.Conveyor then
             self.conveyorVelocityX, self.conveyorVelocityY = item:getConveyorVelocity()
             self.onConveyor = true
+          elseif tileType == TileTypes.Hole then
+            self.inHole = true
           end
         end
       else  -- its a platform
@@ -155,6 +160,10 @@ function GroundObserver:update(dt)
   end
 
   Physics.freeTable(items)
+end
+
+function GroundObserver:getVisitedTiles()
+  return self.tiles
 end
 
 function GroundObserver:debugDraw()

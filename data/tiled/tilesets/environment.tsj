@@ -808,6 +808,13 @@
         }, 
         {
          "id":94,
+         "properties":[
+                {
+                 "name":"tileType",
+                 "propertytype":"TileTypeFlags",
+                 "type":"string",
+                 "value":"hole"
+                }],
          "type":"tile"
         }, 
         {

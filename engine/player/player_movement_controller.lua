@@ -1,14 +1,18 @@
 local Class = require 'lib.class'
+local lume  = require('lib.lume')
 local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'engine.math.vector'
 local Movement = require 'engine.components.movement'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
+local TileTypes = TileTypeFlags.enumMap
 local Input = require('engine.singletons').input
 
 -- some class constants
 local JUMP_Z_VELOCITY = 2
 local JUMP_GRAVITY = 8
+local HOLE_DOOM_TIMER = 10
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
 local DIRECTION_SNAP = 40
 
@@ -24,9 +28,12 @@ local DIRECTION_SNAP = 40
 ---@field stroking boolean
 ---@field capeDeployed boolean
 ---@field holeTile Tile?
+---@field doomedToFallInHole boolean
 ---@field holeDoomTimer number
 ---@field holeSlipVelocityX number
 ---@field holeSlipVelocityY number
+---@field holeQuadrantX number
+---@field holeQuadrantY number
 ---@field fallingInHole boolean
 ---@field moveNormalMode PlayerMotionType
 ---@field mode PlayerMotionType
@@ -46,8 +53,11 @@ local PlayerMovementController = Class {
     self.lastStrokeVectorX = 0
     self.lastStrokeVectorY = 0
     self.capeDeployed = false
+
     self.holeTile = nil
+    self.doomedToFallInHole = false
     self.holeDoomTimer = 0
+    self.holeQuadrantX, self.holeQuadrantY = 0, 0
     self.holeSlipVelocityX, self.holeSlipVelocityY = 0, 0
     self.fallingInHole = false
 
@@ -98,6 +108,10 @@ function PlayerMovementController:jump()
     end
     -- TODO self.player:onJump()
   end
+end
+
+function PlayerMovementController:isDoomedToFallInHole()
+  return self.fallingInHole and self.doomedToFallInHole
 end
 
 ---@param allowMovementControl boolean
@@ -196,6 +210,82 @@ function PlayerMovementController:stroke()
   end
 end
 
+function PlayerMovementController:stayInsideHole()
+  local px, py = self.player:getPosition()
+  local vx, vy = self.player:getVector()
+  local tx, ty, tw, th = self.holeTile:getBounds()
+  if px < tx then
+    self.player:setPosition(px - tx, py)
+    self.player:setVector(0, vy)
+  elseif px > tx + tw then
+    self.player:setPosition(px - (tx + tw), py)
+    self.player:setVector(0, vy)
+  end
+  vx, vy = self.player:getVector() 
+  px, py = self.player:getPosition()
+
+  if py < ty then
+    self.player:setPosition(px, py - ty)
+    self.player:setVector(vx, 0)
+  elseif py > ty + th then
+    self.player:setPosition(px, py - (ty + th))
+    self.player:setVector(vx, 0)
+  end 
+end
+
+---@return Tile
+function PlayerMovementController:getCurrentHoleTile()
+  local holeTile
+  for k, v in ipairs(self.player.groundObserver:getVisitedTiles()) do
+    if v:getTileType() == TileTypes.Hole then
+      holeTile = v
+      break
+    end
+  end
+  return holeTile
+end
+
+function PlayerMovementController:updateFallingInHole()
+  if self.fallingInHole then
+    self.holeDoomTimer = self.holeDoomTimer - 1
+
+    -- after delay, disable player motion
+    if self.holeDoomTimer < 0 then
+      self.player:setVector(0, 0)
+    end
+
+    if not self.player.groundObserver.inHole then
+      -- stop falling in hole
+      self.fallingInHole = false
+      self.doomedToFallInHole = false
+      self.holeTile = nil
+      return
+    elseif self.doomedToFallInHole then
+      self:stayInsideHole()
+    else
+      -- check if the player has changed quadrants
+      -- which dooms them to fall in the hole
+      local newHoleTile = self:getCurrentHoleTile()
+      local newQuadrantX, newQuadrantY = vector.div(8, self.player:getPosition())
+      if newQuadrantX ~= self.holeQuadrantX or newQuadrantY ~= self.holeQuadrantY then
+        self.doomedToFallInHole = true
+        self.holeTile = newHoleTile
+      end
+    end
+
+    -- move towards the hole's center
+
+
+  elseif self.player.groundObserver.inHole then
+    -- start falling in a hole
+    self.holeTile = self:getCurrentHoleTile()
+    self.holeQuadrantX, self.holeQuadrantY = vector.div(8, self.player:getPosition())
+    self.doomedToFallInHole = false
+    self.fallingInHole = true
+    self.holeDoomTimer = HOLE_DOOM_TIMER
+  end
+end
+
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
     local currentEnvironmentState = self.player.environmentStateMachine:getCurrentState()
@@ -243,6 +333,7 @@ end
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
   self:updateMoveControls()
+  self:updateFallingInHole()
   self:updateStroking()
   if self.allowMovementControl then
     if self.player:getStateParameters().alwaysFaceUp then
