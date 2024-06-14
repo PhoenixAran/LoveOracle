@@ -13,6 +13,7 @@ local Input = require('engine.singletons').input
 local JUMP_Z_VELOCITY = 2
 local JUMP_GRAVITY = 8
 local HOLE_DOOM_TIMER = 10
+local DISTANCE_TRIGGER_HOLE_FALL = 1.0
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
 local DIRECTION_SNAP = 40
 
@@ -215,22 +216,23 @@ function PlayerMovementController:stayInsideHole()
   local vx, vy = self.player:getVector()
   local tx, ty, tw, th = self.holeTile:getBounds()
   if px < tx then
-    self.player:setPosition(px - tx, py)
+    self.player:setPosition(tx, py) -- Set to the left boundary
     self.player:setVector(0, vy)
   elseif px > tx + tw then
-    self.player:setPosition(px - (tx + tw), py)
+    self.player:setPosition(tx + tw, py) -- Set to the right boundary
     self.player:setVector(0, vy)
   end
+  
   vx, vy = self.player:getVector() 
   px, py = self.player:getPosition()
-
+  
   if py < ty then
-    self.player:setPosition(px, py - ty)
+    self.player:setPosition(px, ty) -- Set to the top boundary
     self.player:setVector(vx, 0)
   elseif py > ty + th then
-    self.player:setPosition(px, py - (ty + th))
+    self.player:setPosition(px, ty + th) -- Set to the bottom boundary
     self.player:setVector(vx, 0)
-  end 
+  end
 end
 
 ---@return Tile
@@ -274,15 +276,35 @@ function PlayerMovementController:updateFallingInHole()
     end
 
     -- move towards the hole's center
+    local px, py = self.player:getPosition()
+    local tx, ty = self.holeTile:getPosition()
 
+    local pullMagnitude = 0.25
+    local diffX, diffY = vector.sub(tx, ty, px, py)
+    local pullX, pullY = vector.mul(pullMagnitude, vector.normalize(diffX, diffY))
 
+    self.player:setPosition(px + pullX, py + pullY)
+
+    -- fall in hole when too close to center
+    if vector.dist(tx, ty, self.player:getPosition()) <= DISTANCE_TRIGGER_HOLE_FALL then
+      self.player:setPosition(tx, ty)
+      self.player.sprite:play('fall')
+      self.player:startRespawnControlState(false)
+      self.holeTile = nil
+      self.fallingInHole = false
+      self.doomedToFallInHole = false
+    end
   elseif self.player.groundObserver.inHole then
-    -- start falling in a hole
-    self.holeTile = self:getCurrentHoleTile()
-    self.holeQuadrantX, self.holeQuadrantY = vector.div(8, self.player:getPosition())
-    self.doomedToFallInHole = false
-    self.fallingInHole = true
-    self.holeDoomTimer = HOLE_DOOM_TIMER
+    -- check if we are in a respawn death state. This prevents infinite falling loop
+    local currentControlState = self.player.controlStateMachine:getCurrentState()
+    if not (currentControlState ~= nil and currentControlState:getType() == 'player_respawn_death_state') then
+      -- start falling in a hole
+      self.holeTile = self:getCurrentHoleTile()
+      self.holeQuadrantX, self.holeQuadrantY = vector.div(8, self.player:getPosition())
+      self.doomedToFallInHole = false
+      self.fallingInHole = true
+      self.holeDoomTimer = HOLE_DOOM_TIMER
+    end
   end
 end
 
