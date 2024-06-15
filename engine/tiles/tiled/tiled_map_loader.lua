@@ -153,18 +153,36 @@ local function parseLayer(jLayer)
   return parser(jLayer)
 end
 
-local function makeSpriteSheetTileset(key, jTileset)
- ---@type TiledTileset
+-- not exposed to public API.
+-- They will need to call TiledMapLoader.initTilesets() to load all the tilesets into memory
+---@param path string
+---@return TiledTileset
+local function loadTileset(path)
+  -- tileset is indexed by name
+  local key = FileHelper.getFileNameWithoutExtension(path)
+  if tiledTilesetCache[key] then
+    return tiledTilesetCache[key]
+  end
+  ---@type table
+  local jTileset = json.decode(love.filesystem.read(path))
+  ---@type TiledTileset
   local tileset = TiledTileset()
   tileset.name = key
+  local spriteSheetKey = nil
 
-  -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
-  local spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
-  if not AssetManager.spriteSheetCache[spriteSheetKey] then
-    local spriteSheet = SpriteSheet(AssetManager.getImage(spriteSheetKey), jTileset.tilewidth, jTileset.tileheight, jTileset.margin, jTileset.spacing)
-    AssetManager.spriteSheetCache[spriteSheetKey] = spriteSheet
+  -- check if tileset is from a singualr image or a collectin of imgages.
+  -- we don't care about loading images from singular images since they are only used
+  -- in the tiled editor, and don't show up in game
+  if jTileset.image then
+    -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
+    spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
+    if not AssetManager.spriteSheetCache[spriteSheetKey] then
+      local spriteSheet = SpriteSheet(AssetManager.getImage(spriteSheetKey), jTileset.tilewidth, jTileset.tileheight, jTileset.margin, jTileset.spacing)
+      AssetManager.spriteSheetCache[spriteSheetKey] = spriteSheet
+    end
+    tileset.spriteSheet = AssetManager.getSpriteSheet(spriteSheetKey)
   end
-  tileset.spriteSheet = AssetManager.getSpriteSheet(spriteSheetKey)
+
   tileset.tileWidth = jTileset.tilewidth
   tileset.tileHeight = jTileset.tileheight
   tileset.properties = parsePropertyDict(jTileset.properties)
@@ -173,13 +191,16 @@ local function makeSpriteSheetTileset(key, jTileset)
     for _, jTile in ipairs(jTileset.tiles) do
       local tilesetTile = TiledTilesetTile()
       tilesetTile.id = jTile.id
-      tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
-      if jTile.animation then
-        for _, jObj in ipairs(jTile.animation) do
-          lume.push(tilesetTile.animatedTextures, tileset.spriteSheet:getTexture(jObj.tileid + 1))
-          lume.push(tilesetTile.durations, jObj.duration)
+      if jTileset.image then
+        tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
+        if jTile.animation then
+          for _, jObj in ipairs(jTile.animation) do
+            lume.push(tilesetTile.animatedTextures, tileset.spriteSheet:getTexture(jObj.tileid + 1))
+            lume.push(tilesetTile.durations, jObj.duration)
+          end
         end
       end
+
       if jTile.type then
         tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[jTile.type])
       end
@@ -193,45 +214,18 @@ local function makeSpriteSheetTileset(key, jTileset)
   -- load the basic tiles (tiles without any property definitions dont get in cluded in the jTile array)
   -- as of right now this really only loads in the template tilesets. Tiles that get the tile class get a dedicated json value
   -- that gets parsed in the for loop above
-  for i = 0, tileset.spriteSheet:size() - 1 do
-    if not tileset.tiles[i] then
-      -- NB: basic tiles are never animated
-      local tilesetTile = TiledTilesetTile()
-      tilesetTile.id = i
-      -- add one because spritesheet uses lua indexing
-      tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
-      tileset.tiles[tilesetTile.id] = tilesetTile
+  if jTileset.image then   
+    for i = 0, tileset.spriteSheet:size() - 1 do
+      if not tileset.tiles[i] then
+        -- NB: basic tiles are never animated
+        local tilesetTile = TiledTilesetTile()
+        tilesetTile.id = i
+        -- add one because spritesheet uses lua indexing
+        tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
+        tileset.tiles[tilesetTile.id] = tilesetTile
+      end
     end
   end
-
-  return tileset
-end
-
-local function makeImageCollectionTileset(key, jTileset)
-  -- TODO
-end
-
-
--- not exposed to public API.
--- They will need to call TiledMapLoader.initTilesets() to load all the tilesets into memory
----@param path string
----@return TiledTileset
-local function loadTileset(path)
-  -- tileset is indexed by name
-  local key = FileHelper.getFileNameWithoutExtension(path)
-  if tiledTilesetCache[key] then
-    return tiledTilesetCache[key]
-  end
-  ---@type table
-  local jTileset = json.decode(love.filesystem.read(path))
-  ---@type TiledTileset?
-  local tileset = nil
-  if jTileset.image then
-    tileset = makeSpriteSheetTileset(key, jTileset)
-  else
-    tileset = makeImageCollectionTileset(key, jTileset)
-  end
- 
   tiledTilesetCache[key] = tileset
   return tileset
 end
