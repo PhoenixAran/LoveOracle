@@ -170,9 +170,9 @@ local function loadTileset(path)
   tileset.name = key
   local spriteSheetKey = nil
 
-  -- check if tileset is from a singualr image or a collectin of imgages.
-  -- we don't care about loading images from singular images since they are only used
-  -- in the tiled editor, and don't show up in game
+  -- check if tileset is from a singualr image or a collection of images.
+  -- we don't care about loading images from collection image tilesets since they are only used
+  -- in the tiled editor and don't show up in game
   if jTileset.image then
     -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
     spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
