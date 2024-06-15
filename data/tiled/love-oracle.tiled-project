@@ -2,6 +2,16 @@
     "automappingRulesFile": "",
     "commands": [
         {
+            "arguments": ". %mapfile",
+            "command": "love",
+            "enabled": true,
+            "name": "test_map_linux",
+            "saveBeforeExecute": true,
+            "shortcut": null,
+            "showOutput": true,
+            "workingDirectory": "%projectpath/../../"
+        },
+        {
             "arguments": " . %mapfile",
             "command": "love",
             "enabled": true,

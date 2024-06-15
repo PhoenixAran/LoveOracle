@@ -1,32 +1,32 @@
 { "compressionlevel":-1,
- "height":200,
+ "height":64,
  "infinite":false,
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3c0U6DQBAF0FWrSasxUav\/\/6lC4oYGnTIIPGw5J5m3CbzsJZBh91BKeZyop0RP7Tske5dWfy\/Y2ktXd13dB\/XQ1euKfWtUvRdsrV\/Px65OQT2XYd0fr9S4L7reGlXvBVvLrOf63D6V6xm57JMPbkEmH+8\/NZWPyz754BZ4v4JYv57fyvDsH9dHGdZ9tk8+uBXnrj4n6mtGn3xATD4gJh8Qkw+IyQfE5ANi8gEx+YCYfEBsas6+RtVZPbQmM2efW\/X\/rvGsHvZovAex5sP+Qfi9B7F+d9g\/CPl\/7mGP5ANi8gEx+YDYeIZSc3E5A5EP9mo8QzH\/YA8yZyv+dQZjNP\/IXg9a8N8zGKP5R\/Z60IK5Zwld+0cx0+c7npbMPatxaZ980JK5ZzUu7ZMPWuL9CmJbnNWY6YMWrH1WY7YPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgj74BDlAdiwBxAgA=",
+         "data":"H4sIAAAAAAAAA+2ZbQuCMBRGrSzQIuj1\/\/\/UJnRpjOaueY1tngPPtwflqOXcbZum2SdyUHSk1yq7czOcy4KTy8ZlG8nO5WzYs4icy8q\/c+kjOXpe3UjCXux4FpFz\/cN\/iFz3PnEN\/F5N\/td3Uv5+rxb\/NTz\/l+Zz78LcPC9tryT\/u8sjkeeEXmn+1uCPP\/74448\/\/uv0H1snWkTWmjmiWSdOjXxfhGvNWgn3kMR\/if2fHAn3kOR3v8T+T45ov8lrBX\/81+7vryHE218D1OwfriFqef9rZkPfZkix97\/2eLnw6wwp9v7XHi8Xpu61j30DaXq5\/U9OnTXN7ZXor50haXql+a\/h+beeNWl6uWA9a9L2AAAAAAAAAAAAAAAAAACgfl4Ad1t3AEAAAA==",
          "encoding":"base64",
-         "height":200,
+         "height":64,
          "id":1,
          "name":"bottom",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
-         "width":200,
+         "width":64,
          "x":0,
          "y":0
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3cIW\/CQBzG4ftqCGYQYBCbQVCDmZmeRqMnpiZQ+4q7C\/9mS9ejgYQuo8+T\/JKaS868OdeUgHOOuXn0GPXZDQT3qOxiFq2jvo3scx\/RW9R+v4xyUxhfbR\/HqPVzH93sg3u1zC2iTbRN9gFFbR9d7T4O6XsXh+iafTS5h9wq93TFeRhDeSOW0Tb1b6N4HehSTfScTjsBAAAAAOB\/eI+A3+wDAAAAAAAAAAAAAG6r9v+sNpiysoHPSvbB1NkH1NkH1NkHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8Ne+AP6yAegAcQIA",
+         "data":"H4sIAAAAAAAAA+3ZoQ7CMBhF4b4aAgxiGAQYxGYwGDQaPY1AIaZ4Rf6G27AsbRYWRrL1fMlJZpbstnLOobGWaqdijj1Nld+9UFsVO4Or9VA3FZ7Pf\/nScaT2Nypo7+825f2FtVYHVTr2d4X9tfvsrtWQ\/ZW1sjbWfsD7v+LvuFCli2\/3Lj19q1In9z4HAABycFe5yn0\/AAAAAMxZ6v9BaO78xmci9s8f+\/PeDwAAAAAAAAAAAADAGF65cnQWAEAAAA==",
          "encoding":"base64",
-         "height":200,
+         "height":64,
          "id":2,
          "name":"top",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
-         "width":200,
+         "width":64,
          "x":0,
          "y":0
         }, 
@@ -136,5 +136,5 @@
  "tilewidth":16,
  "type":"map",
  "version":"1.10",
- "width":200
+ "width":64
 }
