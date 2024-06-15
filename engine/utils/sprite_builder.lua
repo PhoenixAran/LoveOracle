@@ -7,6 +7,7 @@ local CompositeSprite = require 'engine.graphics.composite_sprite'
 local ColorSprite = require 'engine.graphics.color_sprite'
 
 local AssetManager = require 'engine.asset_manager'
+local Subtexture = require 'engine.graphics.subtexture'
 
 ---Builds singular sprite instances
 ---This is just convenient access to all the different Sprite type constructors
@@ -47,6 +48,19 @@ function SpriteBuilder:buildSprite(x, y, offsetX, offsetY)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
   local subtexture = self.spriteSheet:getTexture(x, y)
+  local sprite = Sprite(subtexture, offsetX, offsetY)
+  return sprite
+end
+
+---builds a basic sprite from a given image
+---@param imageKey string
+---@param offsetX number?
+---@param offsetY number?
+function SpriteBuilder:buildSpriteFromImage(imageKey, offsetX, offsetY)
+  if offsetX == nil then offsetX = 0 end
+  if offsetY == nil then offsetY = 0 end
+  local image = AssetManager.getImage(imageKey)
+  local subtexture = Subtexture(image, love.graphics.newQuad(0, 0, image:getWidth(), image:getHeight(), 0, 0))
   local sprite = Sprite(subtexture, offsetX, offsetY)
   return sprite
 end
