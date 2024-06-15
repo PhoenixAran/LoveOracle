@@ -153,21 +153,11 @@ local function parseLayer(jLayer)
   return parser(jLayer)
 end
 
--- not exposed to public API.
--- They will need to call TiledMapLoader.initTilesets() to load all the tilesets into memory
----@param path string
----@return TiledTileset
-local function loadTileset(path)
-  -- tileset is indexed by name
-  local key = FileHelper.getFileNameWithoutExtension(path)
-  if tiledTilesetCache[key] then
-    return tiledTilesetCache[key]
-  end
-  ---@type table
-  local jTileset = json.decode(love.filesystem.read(path))
-  ---@type TiledTileset
+local function makeSpriteSheetTileset(key, jTileset)
+ ---@type TiledTileset
   local tileset = TiledTileset()
   tileset.name = key
+
   -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
   local spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
   if not AssetManager.spriteSheetCache[spriteSheetKey] then
@@ -213,9 +203,39 @@ local function loadTileset(path)
       tileset.tiles[tilesetTile.id] = tilesetTile
     end
   end
+
+  return tileset
+end
+
+local function makeImageCollectionTileset(key, jTileset)
+  -- TODO
+end
+
+
+-- not exposed to public API.
+-- They will need to call TiledMapLoader.initTilesets() to load all the tilesets into memory
+---@param path string
+---@return TiledTileset
+local function loadTileset(path)
+  -- tileset is indexed by name
+  local key = FileHelper.getFileNameWithoutExtension(path)
+  if tiledTilesetCache[key] then
+    return tiledTilesetCache[key]
+  end
+  ---@type table
+  local jTileset = json.decode(love.filesystem.read(path))
+  ---@type TiledTileset?
+  local tileset = nil
+  if jTileset.image then
+    tileset = makeSpriteSheetTileset(key, jTileset)
+  else
+    tileset = makeImageCollectionTileset(key, jTileset)
+  end
+ 
   tiledTilesetCache[key] = tileset
   return tileset
 end
+
 
 local function loadTemplate(path)
   local key = FileHelper.getFileNameWithoutExtension(path)
@@ -295,6 +315,7 @@ local function initializeTilesets(directory)
     if love.filesystem.getInfo(path).type == 'directory' then
       initializeTilesets(path)
     else
+      love.log.debug('Loading tileset from ' .. path)
       loadTileset(path)
     end
   end
