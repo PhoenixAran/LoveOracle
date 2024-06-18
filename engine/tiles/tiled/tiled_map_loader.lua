@@ -103,7 +103,6 @@ local function parseObject(jObject)
   end
   -- finally, inject the jObject's instance properties
   tiledObject.properties = lume.merge(tiledObject.properties, parsePropertyDict(jObject.properties))
-  print(love.inspect(tiledObject))
   return tiledObject
 end
 
