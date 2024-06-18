@@ -90,7 +90,32 @@
          "draworder":"topdown",
          "id":5,
          "name":"entities",
-         "objects":[],
+         "objects":[
+                {
+                 "id":18,
+                 "properties":[
+                        {
+                         "name":"pathScript",
+                         "type":"string",
+                         "value":"move 5, 0;\nmove 0, 5;\npause 40;\nmove 3, 5;"
+                        }],
+                 "template":"..\/templates\/1x2_platform.tj",
+                 "type":"moving_platform",
+                 "x":384,
+                 "y":64
+                }, 
+                {
+                 "height":0,
+                 "id":21,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":392,
+                 "y":48
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -121,7 +146,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":18,
+ "nextobjectid":24,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
@@ -138,6 +163,10 @@
         {
          "firstgid":265,
          "source":"..\/tilesets\/template_sources\/spawn.tsj"
+        }, 
+        {
+         "firstgid":267,
+         "source":"..\/tilesets\/template_sources\/platforms.tsj"
         }],
  "tilewidth":16,
  "type":"map",

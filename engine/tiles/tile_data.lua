@@ -7,9 +7,6 @@ local SpriteFrame = require 'engine.graphics.sprite_frame'
 local TileSpriteRenderer = require 'engine.tiles.tile_sprite_renderer'
 local dir8 = require 'engine.enums.direction8'
 
--- used to validate tile types
-local TileTypeInverse = lume.invert(TileTypeFlags.enumMap)
-
 local function makeTileSprite(tilesetTile)
   if tilesetTile:isAnimated() then
     local spriteFrames = { }

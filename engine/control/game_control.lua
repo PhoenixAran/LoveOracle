@@ -76,7 +76,6 @@ end
 ---@param spawnPositionY integer?
 function GameControl:setInitialRoomControlState(room, spawnPositionX, spawnPositionY)
   self.roomControl = RoomControl(self:getMap(), self:getPlayer())
-  print('SPAWN POINT ' .. spawnPositionX .. ' , ' .. spawnPositionY)
   self:getPlayer():setPosition(spawnPositionX, spawnPositionY)
   self:getPlayer():markRespawn()
   

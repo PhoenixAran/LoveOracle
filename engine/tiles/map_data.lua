@@ -34,16 +34,6 @@ local MapData = Class {
   end
 }
 
-function MapData:setTestSpawnPosition(x, y)
-  self.testSpawnPositionX = x + Consts.GRID_SIZE / 2
-  self.testSpawnPositionY = y - Consts.GRID_SIZE / 2
-end
-
-function MapData:setInitialSpawnPosition(x, y)
-  self.initialSpawnPositionX = x + Consts.GRID_SIZE / 2
-  self.initialSpawnPositionY = y - Consts.GRID_SIZE / 2
-end
-
 function MapData:getType()
   return 'map_data'
 end

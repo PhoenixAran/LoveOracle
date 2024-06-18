@@ -1,7 +1,7 @@
 -- Parse Helpers Module
 
-local function split(str, inSplitPattern)
-  local outResults = { }
+local function split(str, inSplitPattern, array)
+  local outResults = array or { }
   local theStart = 1
   local theSplitStart, theSplitEnd = string.find( str, inSplitPattern, theStart )
   while theSplitStart do

@@ -32,6 +32,47 @@
     ],
     "propertyTypes": [
         {
+            "id": 7,
+            "name": "LoopType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Cycle",
+                "PingPong"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 6,
+            "members": [
+                {
+                    "name": "includeStartingPointAsPathPoint",
+                    "type": "bool",
+                    "value": true
+                },
+                {
+                    "name": "loopType",
+                    "propertyType": "LoopType",
+                    "type": "string",
+                    "value": "Cycle"
+                },
+                {
+                    "name": "pathScript",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "moving_platform",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
+        },
+        {
             "color": "#ff00aaff",
             "drawFill": true,
             "id": 3,

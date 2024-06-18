@@ -11,7 +11,7 @@ local TiledTilesetTile = require 'engine.tiles.tiled.tiled_types.tiled_tileset_t
 local TiledObject = require 'engine.tiles.tiled.tiled_types.tiled_object'
 local TiledTileLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_tile_layer'
 local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_object_layer'
-
+local EmptySprite = require 'engine.graphics.empty_sprite'
 
 local TILE_CLASS_NAME = 'tile'
 local tiledMapLoaderInitialized = false
@@ -44,7 +44,7 @@ local function parseObject(jObject)
   local tiledObject = TiledObject()
 
   local templateProperties = nil
-
+  local classProperties = nil
   tiledObject.id = jObject.id
   tiledObject.name = jObject.name
   tiledObject.x = jObject.x
@@ -53,9 +53,11 @@ local function parseObject(jObject)
   tiledObject.height = jObject.height
   tiledObject.type = jObject.type
   tiledObject.rotation = jObject.rotation
-  if jObject.type then
-    love.log.warn('Parsing tiled object utilising the "Type" field is currently unsupported')
+
+  if jObject.type and jObject.type ~= '' then
+    classProperties = tiledClasses[jObject.type]
   end
+
   if jObject.template then
     -- if this is a templated object, inject the template object value properties into our json object
     local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
@@ -84,24 +86,24 @@ local function parseObject(jObject)
     tiledObject.gid = jObject.gid
   end
   if jObject.text then
-    error('MapLoader does not support text object type yet')
+    love.log.warn('MapLoader does not support text object type yet')
   end
   if jObject.points then
-    error('Point parsing not supported')
+    love.log.warn('Point parsing not supported')
   end
 
-  if templateProperties then
-    tiledObject.properties = templateProperties
-    local jObjectProperties = parsePropertyDict(jObject.properties)
-    -- override template properties and/or add additional properties from object instance
-    -- for k, v in pairs(jObjectProperties) do
-    --   tiledObject.properties[k] = v
-    -- end
-    tiledObject.properties = lume.merge(tiledObject.properties, jObjectProperties)
-  else
-    -- no properties for template, just assign directly
-    tiledObject.properties = parsePropertyDict(jObject.properties)
+  if classProperties then
+    -- assign class properties first
+    tiledObject.properties = lume.merge(tiledObject.properties, classProperties)
   end
+  if templateProperties then
+    -- overrides class defaults (if it exists) with template properties
+    -- provides properties from templates as well
+    tiledObject.properties = lume.merge(tiledObject.properties, templateProperties)
+  end
+  -- finally, inject the jObject's instance properties
+  tiledObject.properties = lume.merge(tiledObject.properties, parsePropertyDict(jObject.properties))
+  print(love.inspect(tiledObject))
   return tiledObject
 end
 
@@ -170,7 +172,8 @@ local function loadTileset(path)
   tileset.name = key
   local spriteSheetKey = nil
 
-  -- check if tileset is from a singualr image or a collection of images.
+  -- TODO reevaluate supporting collection of images
+  -- check if tileset is from a singualar image or a collection of images.
   -- we don't care about loading images from collection image tilesets since they are only used
   -- in the tiled editor and don't show up in game
   if jTileset.image then
@@ -199,6 +202,9 @@ local function loadTileset(path)
             lume.push(tilesetTile.durations, jObj.duration)
           end
         end
+      else
+        -- tileset is used for template icons. just assign an empty sprite
+        tilesetTile.subtexture = EmptySprite()
       end
 
       if jTile.type then

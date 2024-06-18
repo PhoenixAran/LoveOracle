@@ -49,5 +49,4 @@ end
 function EmptySprite:release()
 end
 
-
 return EmptySprite
