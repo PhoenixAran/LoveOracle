@@ -6,6 +6,7 @@ local TileLayer = require 'engine.tiles.tile_layer'
 local MapData = require 'engine.tiles.map_data'
 local LayerTileset = require 'engine.tiles.layer_tileset'
 local RoomData = require 'engine.tiles.room_data'
+local Constants = require 'constants'
 
 ---@type table<string, Tileset>
 local tilesetCache = { }
@@ -83,11 +84,14 @@ function MapLoader.loadMapData(path)
       elseif layer.name:lower() == 'entities' then
         -- todo parse entities
       elseif layer.name:lower() == 'playerspawn' then
-        assert(lume.count(layer.objects) < 2, 'Too many test_spawn instances')
-        if lume.count(layer.objects) == 1 then
-          mapData.testSpawnPositionX = layer.objects[1].x
-          -- Tiled uses bottom left, so we convert to top left coordinates
-          mapData.testSpawnPositionY = layer.objects[1].y - GRID_SIZE
+        assert(lume.count(layer.objects) <= 2, 'Too many test_spawn instances')
+        local testSpawn = lume.first(lume.filter(layer.objects, function(x) return x.properties.spawnType == 'test' end))
+        local gameSpawn = lume.first(lume.filter(layer.objects, function(x) return x.properties.spawnType == 'game' end))
+        if testSpawn then
+          mapData.testSpawnPositionX, mapData.testSpawnPositionY = testSpawn.x  + Constants.GRID_SIZE / 2, testSpawn.y - Constants.GRID_SIZE / 2
+        end
+        if gameSpawn then
+          mapData.initialSpawnPositionX, mapData.initialSpawnPositionY = gameSpawn.x, gameSpawn.y
         end
       else
         error('Unsupported object layer name: ' .. layer.name:lower())

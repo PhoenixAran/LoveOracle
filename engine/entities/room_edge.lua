@@ -52,7 +52,7 @@ function RoomEdge:canRoomTransition(dir8)
     return dir8 == Direction8.right or dir8 == Direction8.upRight or dir8 == Direction8.downRight
       or dir8 == Direction8.up or dir8 == Direction8.down
   else
-    error()
+    error('Invalid room transition direction')
   end
 end
 

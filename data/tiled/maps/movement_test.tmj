@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAAA+2ZbQuCMBRGrSzQIuj1\/\/\/UJnRpjOaueY1tngPPtwflqOXcbZum2SdyUHSk1yq7czOcy4KTy8ZlG8nO5WzYs4icy8q\/c+kjOXpe3UjCXux4FpFz\/cN\/iFz3PnEN\/F5N\/td3Uv5+rxb\/NTz\/l+Zz78LcPC9tryT\/u8sjkeeEXmn+1uCPP\/74448\/\/uv0H1snWkTWmjmiWSdOjXxfhGvNWgn3kMR\/if2fHAn3kOR3v8T+T45ov8lrBX\/81+7vryHE218D1OwfriFqef9rZkPfZkix97\/2eLnw6wwp9v7XHi8Xpu61j30DaXq5\/U9OnTXN7ZXor50haXql+a\/h+beeNWl6uWA9a9L2AAAAAAAAAAAAAAAAAACgfl4Ad1t3AEAAAA==",
+         "data":"H4sIAAAAAAAACu2ZbQuCMBRGrSzQIuj1\/\/\/UJnRpjOaueY1tngPPtwflqOXcbZum2SdyUHSk1yq7czOcy4KTy8ZlG8nO5WzYs4icy8q\/c+kjOXpe3UjCXux4FpFz\/cN\/iFz3PnEN\/F5N\/td3Uv5+rxb\/NTz\/l+Zz78LcPC9tryT\/u8sjkeeEXmn+1uCPP\/74448\/\/uv0H1snWkTWmjmiWSdOjXxfhGvNWgn3kMR\/if2fHAn3kOR3v8T+T45ov8lrBX\/81+7vryHE218D1OwfriFqef9rZkPfZkix97\/2eLnw6wwp9v7XHi8Xpu61j30DaXq5\/U9OnTXN7ZXor50haXql+a\/h+beeNWl6uWA9a9L2AAAAAAAAAAAAAAAAAACgfl4Ad1t3AEAAAA==",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -18,7 +18,7 @@
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAAA+3ZoQ7CMBhF4b4aAgxiGAQYxGYwGDQaPY1AIaZ4Rf6G27AsbRYWRrL1fMlJZpbstnLOobGWaqdijj1Nld+9UFsVO4Or9VA3FZ7Pf\/nScaT2Nypo7+825f2FtVYHVTr2d4X9tfvsrtWQ\/ZW1sjbWfsD7v+LvuFCli2\/3Lj19q1In9z4HAABycFe5yn0\/AAAAAMxZ6v9BaO78xmci9s8f+\/PeDwAAAAAAAAAAAADAGF65cnQWAEAAAA==",
+         "data":"H4sIAAAAAAAACu3ZoQ7CMBhF4b4aAgxiGAQYxGYwGDQaPY1AIaZ4Rf6G27AsbRYWRrL1fMlJZpbstnLOobGWaqdijj1Nld+9UFsVO4Or9VA3FZ7Pf\/nScaT2Nypo7+825f2FtVYHVTr2d4X9tfvsrtWQ\/ZW1sjbWfsD7v+LvuFCli2\/3Lj19q1In9z4HAABycFe5yn0\/AAAAAMxZ6v9BaO78xmci9s8f+\/PeDwAAAAAAAAAAAADAGF65cnQWAEAAAA==",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -105,8 +105,14 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":472.238636363636,
-                 "y":232.738636363636
+                 "x":96,
+                 "y":96
+                }, 
+                {
+                 "id":17,
+                 "template":"..\/templates\/spawn.tj",
+                 "x":32,
+                 "y":31
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -115,7 +121,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":17,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local Consts = require 'constants'
 
 ---@class MapData
 ---@field name string
@@ -10,6 +11,8 @@ local lume = require 'lib.lume'
 ---@field rooms Room[]
 ---@field testSpawnPositionX number
 ---@field testSpawnPositionY number
+---@field initialSpawnPositionX number
+---@field initialSpawnPositionY number
 local MapData = Class {
   init = function(self)
     self.name = nil
@@ -25,8 +28,21 @@ local MapData = Class {
     -- used for testing
     self.testSpawnPositionX = nil
     self.testSpawnPositionY = nil
+
+    self.initialSpawnPositionX = nil
+    self.initialSpawnPositionY = nil
   end
 }
+
+function MapData:setTestSpawnPosition(x, y)
+  self.testSpawnPositionX = x + Consts.GRID_SIZE / 2
+  self.testSpawnPositionY = y - Consts.GRID_SIZE / 2
+end
+
+function MapData:setInitialSpawnPosition(x, y)
+  self.initialSpawnPositionX = x + Consts.GRID_SIZE / 2
+  self.initialSpawnPositionY = y - Consts.GRID_SIZE / 2
+end
 
 function MapData:getType()
   return 'map_data'

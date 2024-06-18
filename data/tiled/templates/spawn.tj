@@ -1,14 +1,14 @@
 { "object":
     {
-     "gid":1,
+     "gid":2,
      "height":16,
-     "id":16,
+     "id":17,
      "name":"",
      "properties":[
             {
              "name":"spawnType",
              "type":"string",
-             "value":"test"
+             "value":"game"
             }],
      "rotation":0,
      "type":"",

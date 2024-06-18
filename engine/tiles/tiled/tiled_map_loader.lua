@@ -54,7 +54,7 @@ local function parseObject(jObject)
   tiledObject.type = jObject.type
   tiledObject.rotation = jObject.rotation
   if jObject.type then
-    -- TODO
+    love.log.warn('Parsing tiled object utilising the "Type" field is currently unsupported')
   end
   if jObject.template then
     -- if this is a templated object, inject the template object value properties into our json object
@@ -76,7 +76,7 @@ local function parseObject(jObject)
       if templateProperties == nil then
         templateProperties = { }
       end
-      templateProperties = lume.merge(parsePropertyDict(tiledTilesetTile.properties), tiledTilesetTile.properties)
+      templateProperties = lume.merge(parsePropertyDict(tiledTilesetTile.properties), templateProperties)
     end
   end
 

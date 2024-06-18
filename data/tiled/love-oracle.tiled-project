@@ -5,21 +5,11 @@
             "arguments": ". %mapfile",
             "command": "love",
             "enabled": true,
-            "name": "test_map_linux",
-            "saveBeforeExecute": true,
-            "shortcut": null,
-            "showOutput": true,
-            "workingDirectory": "%projectpath/../../"
-        },
-        {
-            "arguments": " . %mapfile",
-            "command": "love",
-            "enabled": true,
             "name": "test_map",
             "saveBeforeExecute": true,
             "shortcut": null,
             "showOutput": true,
-            "workingDirectory": "%projectpath../../../"
+            "workingDirectory": "%projectpath/../../"
         },
         {
             "arguments": ".",
@@ -29,7 +19,7 @@
             "saveBeforeExecute": true,
             "shortcut": null,
             "showOutput": true,
-            "workingDirectory": "%projectpath../../../"
+            "workingDirectory": "%projectpath/../../"
         }
     ],
     "extensionsPath": "extensions",
