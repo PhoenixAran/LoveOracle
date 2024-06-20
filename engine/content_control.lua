@@ -3,6 +3,7 @@ local GameConfig = require 'game_config'
 local PaletteBank = require 'engine.banks.palette_bank'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local TiledMapLoader = require 'engine.tiles.tiled.tiled_map_loader'
+local EntityDb = require 'engine.banks.entity_bank'
 local lume = require 'lib.lume'
 
 --[[
@@ -49,6 +50,7 @@ function ContentControl.buildContent()
   loadSpriteSheets('data/assets/spritesheets')
   PaletteBank.initialize('data.palettes')
   SpriteBank.initialize('data.sprites')
+  EntityDb.initialize()
   TiledMapLoader.initialize()
   local runTime = love.timer.getTime() - startTime
   love.log.trace('Asset load time: ' .. tostring(runTime * 1000) .. ' ms')

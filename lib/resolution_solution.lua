@@ -123,7 +123,6 @@ rs.resize = function()
   local x_offset, y_offset = 0, 0
   local game_width, game_height = rs.game_width, rs.game_height
   local scale_mode = rs.scale_mode
-  
   -- If we in stretch scaling mode.
   if scale_mode == 2 then
     -- We only need to update width and height scale.

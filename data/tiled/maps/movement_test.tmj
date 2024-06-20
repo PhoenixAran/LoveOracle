@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu2ZbQuCMBRGrSzQIuj1\/\/\/UJnRpjOaueY1tngPPtwflqOXcbZum2SdyUHSk1yq7czOcy4KTy8ZlG8nO5WzYs4icy8q\/c+kjOXpe3UjCXux4FpFz\/cN\/iFz3PnEN\/F5N\/td3Uv5+rxb\/NTz\/l+Zz78LcPC9tryT\/u8sjkeeEXmn+1uCPP\/74448\/\/uv0H1snWkTWmjmiWSdOjXxfhGvNWgn3kMR\/if2fHAn3kOR3v8T+T45ov8lrBX\/81+7vryHE218D1OwfriFqef9rZkPfZkix97\/2eLnw6wwp9v7XHi8Xpu61j30DaXq5\/U9OnTXN7ZXor50haXql+a\/h+beeNWl6uWA9a9L2AAAAAAAAAAAAAAAAAACgfl4Ad1t3AEAAAA==",
+         "data":"H4sIAAAAAAAACu2Z6QrDIBAG7QlJS6Hn+z9qDVQqgnFNN8VjBr5\/izJJWlfdG2MOiRxt9op1Gpnm0uBss7HZRrKzuSjWacTNpeU\/2IyRnDyvYSZhXWw8jbi5\/uE\/xT33MfEM\/LqW\/G+fpPz9ulb8e\/j+r+b77sLcPS9pXU3+D5tnIq+Mutr8tcEff\/zxxx9\/\/Pv0n+sTNeJ6zRKR9Im5cfuLsNdslfAMyfmvcf5TIuEZkvvdr3H+UyLSPXmr4I9\/7\/5+D+G8\/R6gZf+wh2hl\/V96hxRb\/6XjlcLSO6TY+i8drxRyz9rn9kCSutL+J3Pvmn6tq9FfeockqavNv4fvX\/uuSVJXCtp3TdI6AAAAAAAAAAAAAAAAAABonze23YKjAEAAAA==",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -130,8 +130,8 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":96,
-                 "y":96
+                 "x":496,
+                 "y":464
                 }, 
                 {
                  "id":17,

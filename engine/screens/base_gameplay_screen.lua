@@ -52,8 +52,6 @@ function BaseGameplayScreen:enter(prev, ...)
   if args[1] then
     -- map file was specified, indicating that we are in a test run
     spawnX, spawnY = map:getTestSpawnPosition()
-  elseif args.newGame then
-    -- TODO
   else
     -- TODO when game save is done. Retrieve the player's save file spawn point
     -- love.window.showMessageBox('Warning', 'Game launched without given testmap file location. Use tilededitor to launch game')

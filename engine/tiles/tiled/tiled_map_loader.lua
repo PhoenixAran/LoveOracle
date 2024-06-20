@@ -314,7 +314,6 @@ local function initializeTilesets(directory)
     if love.filesystem.getInfo(path).type == 'directory' then
       initializeTilesets(path)
     else
-      love.log.debug('Loading tileset from ' .. path)
       loadTileset(path)
     end
   end
