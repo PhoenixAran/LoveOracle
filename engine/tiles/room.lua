@@ -198,8 +198,8 @@ function Room:unload(entities)
 end
 
 function Room:indexInRoom(x, y)
-  return self:getTopLeftPositionX() <= x and x <= self:getBottomRightPositionX() + 1
-  and self:getTopLeftPositionY() <= y and y <= self:getBottomRightPositionY() + 1
+  return self:getTopLeftPositionX() <= x and x <= self:getBottomRightPositionX()
+  and self:getTopLeftPositionY() <= y and y <= self:getBottomRightPositionY()
 end
 
 function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, playerY)
@@ -223,6 +223,7 @@ function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, play
       x = self:getBottomRightPositionX() + 1
     end
     newRoom = self.map:getRoomContainingIndex(x, playerY)
+    print(('(%d, %d) = '):format(x, playerY) .. ' = ' .. tostring(newRoom))
   else
     error()
   end

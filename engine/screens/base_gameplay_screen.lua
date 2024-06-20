@@ -57,9 +57,10 @@ function BaseGameplayScreen:enter(prev, ...)
     -- love.window.showMessageBox('Warning', 'Game launched without given testmap file location. Use tilededitor to launch game')
     -- love.event.quit()
   end
-
-  local initialRoom = map:getRoomContainingIndex(vector.add(1, 1, vector.div(Consts.GRID_SIZE, spawnX, spawnY)))
-  assert(initialRoom, string.format('Initial player map position (%d,%d) not in room', spawnX, spawnY))
+  local spawnIndexX, spawnIndexY = vector.add(1, 1, vector.div(Consts.GRID_SIZE, spawnX, spawnY))
+  spawnIndexX, spawnIndexY = math.floor(spawnIndexX), math.floor(spawnIndexY)
+  local initialRoom = map:getRoomContainingIndex(spawnIndexX, spawnIndexY)
+  assert(initialRoom, string.format('Initial player map position (%d,%d) not in room', spawnIndexX, spawnIndexY))
   self.gameControl:setInitialRoomControlState(initialRoom, spawnX, spawnY)
   Singletons.gameControl = self.gameControl
 end
