@@ -67,11 +67,11 @@ function Room:getBottomRightPosition()
 end
 
 function Room:getBottomRightPositionX()
-  return self.topLeftPosX + self.width
+  return self.topLeftPosX + self.width - 1
 end
 
 function Room:getBottomRightPositionY()
-  return self.topLeftPosY + self.height
+  return self.topLeftPosY + self.height - 1
 end
 
 function Room:getWidth()
@@ -198,8 +198,8 @@ function Room:unload(entities)
 end
 
 function Room:indexInRoom(x, y)
-  return self:getTopLeftPositionX() <= x and x <= self:getBottomRightPositionX()
-  and self:getTopLeftPositionY() <= y and y <= self:getBottomRightPositionY()
+  return self:getTopLeftPositionX() <= x and x <= self:getBottomRightPositionX() + 1
+  and self:getTopLeftPositionY() <= y and y <= self:getBottomRightPositionY() + 1
 end
 
 function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, playerY)
