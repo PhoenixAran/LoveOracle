@@ -223,7 +223,6 @@ function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, play
       x = self:getBottomRightPositionX() + 1
     end
     newRoom = self.map:getRoomContainingIndex(x, playerY)
-    print(('(%d, %d) = '):format(x, playerY) .. ' = ' .. tostring(newRoom))
   else
     error()
   end

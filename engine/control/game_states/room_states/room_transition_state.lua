@@ -7,6 +7,7 @@ local vec2 = require 'engine.math.vector'
 local Physics = require 'engine.physics'
 local Consts = require 'constants'
 local Camera = require 'engine.camera'
+local AssetManager = require 'engine.asset_manager'
 
 local ROOM_TRANSITION_PANNING_DURATION = .80
 local ROOM_TRANSITION_TWEEN_STYLE = 'inOutCubic'
@@ -176,9 +177,12 @@ function RoomTransitionState:draw()
   Camera.pop()
 
   -- HUD placeholder
+  -- HUD placeholder
   love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
   love.graphics.rectangle('fill', 0, 144 - 16, 160, 16)
   love.graphics.setColor(1,1,1)
+  love.graphics.setFont(AssetManager.getFont('game_font'))
+  love.graphics.print('HUD Placeholder', 8, 130)
 end
 
 return RoomTransitionState

@@ -8,7 +8,7 @@ local Consts = require 'constants'
 ---@field width integer
 ---@field layerTilesets LayerTileset[]
 ---@field tileLayers TileLayer[]
----@field rooms Room[]
+---@field rooms RoomData[]
 ---@field testSpawnPositionX number
 ---@field testSpawnPositionY number
 ---@field initialSpawnPositionX number

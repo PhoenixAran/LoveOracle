@@ -277,7 +277,6 @@ function PlayerMovementController:updateFallingInHole()
       newQuadrantX = math.floor(newQuadrantX)
       newQuadrantY = math.floor(newQuadrantY)
       if newQuadrantX ~= self.holeQuadrantX or newQuadrantY ~= self.holeQuadrantY then
-        love.log.debug('New hole quads: ' .. newQuadrantX .. ' ' .. newQuadrantY .. ' now Dooomed')
         self.doomedToFallInHole = true
         self.holeTile = newHoleTile
       end

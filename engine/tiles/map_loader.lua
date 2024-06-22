@@ -8,6 +8,8 @@ local LayerTileset = require 'engine.tiles.layer_tileset'
 local RoomData = require 'engine.tiles.room_data'
 local Constants = require 'constants'
 
+
+
 ---@type table<string, Tileset>
 local tilesetCache = { }
 ---@type table<string, MapData>
@@ -16,6 +18,52 @@ local GRID_SIZE = require('constants').GRID_SIZE
 
 ---@class MapLoader
 local MapLoader = { }
+
+---@param mapData MapData
+---@param tiledMapLayer TiledTileLayer
+local function makeTileLayer(mapData, tiledMapLayer)
+  local tileLayer = TileLayer()
+  tileLayer.width = tiledMapLayer.width
+  tileLayer.height = tiledMapLayer.height
+  for _, gid in ipairs(tiledMapLayer.tiles) do
+    lume.push(tileLayer.tiles, gid)
+  end
+  lume.push(mapData.tileLayers, tileLayer)
+end
+
+---@param mapData MapData
+---@param tiledMapLayer TiledObjectLayer
+local function makeRooms(mapData, tiledMapLayer)
+  local roomDatas = { }
+  for _, tiledObj in ipairs(tiledMapLayer.objects) do
+    local roomData = RoomData()
+    assert(tiledObj.x ~= nil and tiledObj.y ~= nil and tiledObj.width ~= nil
+          and tiledObj.height ~= nil, 'Could not find values for x, y, width, height')
+    -- lua index
+    roomData.topLeftPosX = math.floor(tiledObj.x / GRID_SIZE) + 1
+    roomData.topLeftPosY = math.floor(tiledObj.y / GRID_SIZE) + 1
+    roomData.width = tiledObj.width / GRID_SIZE
+    roomData.height = tiledObj.height / GRID_SIZE
+    lume.push(mapData.rooms, roomData)
+  end
+  return roomDatas
+end
+
+local function makePlayerSpawns(mapData, tiledMapLayer)
+  assert(lume.count(tiledMapLayer.objects) <= 2, 'Too many test_spawn instances')
+  local testSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'test' end))
+  local gameSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'game' end))
+  if testSpawn then
+    mapData.testSpawnPositionX, mapData.testSpawnPositionY = testSpawn.x  + Constants.GRID_SIZE / 2, testSpawn.y - Constants.GRID_SIZE / 2
+  end
+  if gameSpawn then
+    mapData.initialSpawnPositionX, mapData.initialSpawnPositionY = gameSpawn.x, gameSpawn.y
+  end
+end
+
+local function makeEntitySpawners(mapData, tiledMapLayer)
+  
+end
 
 ---@param name string
 ---@return Tileset
@@ -51,6 +99,8 @@ function MapLoader.loadMapData(path)
   local mapData = MapData()
   mapData.width = tiledMapData.width
   mapData.height = tiledMapData.height
+
+  -- parse layer tilesets
   for _, tiledTileLayerTileset in ipairs(tiledMapData.tilesets) do
     local tileset = MapLoader.getTileset(tiledTileLayerTileset.tileset.name)
     local layerTileset = LayerTileset()
@@ -58,49 +108,44 @@ function MapLoader.loadMapData(path)
     layerTileset.firstGid = tiledTileLayerTileset.firstGid
     lume.push(mapData.layerTilesets, layerTileset)
   end
-  for _, layer in ipairs(tiledMapData.layers) do
-    if layer:getType() == 'tiled_tile_layer' then
-      local tileLayer = TileLayer()
-      tileLayer.width = layer.width
-      tileLayer.height = layer.height
-      for _, gid in ipairs(layer.tiles) do
-        lume.push(tileLayer.tiles, gid)
-      end
-      lume.push(mapData.tileLayers, tileLayer)
-    elseif layer:getType() == 'tiled_object_layer' then
-      if layer.name:lower() == 'rooms' then
-        -- parse room data
-        for _, tiledObj in ipairs(layer.objects) do
-          local roomData = RoomData()
-          assert(tiledObj.x ~= nil and tiledObj.y ~= nil and tiledObj.width ~= nil
-                and tiledObj.height ~= nil, 'Could not find values for x, y, width, height')
-          -- lua index
-          roomData.topLeftPosX = math.floor(tiledObj.x / GRID_SIZE) + 1
-          roomData.topLeftPosY = math.floor(tiledObj.y / GRID_SIZE) + 1
-          roomData.width = tiledObj.width / GRID_SIZE
-          roomData.height = tiledObj.height / GRID_SIZE
-          lume.push(mapData.rooms, roomData)
-        end
-      elseif layer.name:lower() == 'entities' then
-        -- todo parse entities
-      elseif layer.name:lower() == 'playerspawn' then
-        assert(lume.count(layer.objects) <= 2, 'Too many test_spawn instances')
-        local testSpawn = lume.first(lume.filter(layer.objects, function(x) return x.properties.spawnType == 'test' end))
-        local gameSpawn = lume.first(lume.filter(layer.objects, function(x) return x.properties.spawnType == 'game' end))
-        if testSpawn then
-          mapData.testSpawnPositionX, mapData.testSpawnPositionY = testSpawn.x  + Constants.GRID_SIZE / 2, testSpawn.y - Constants.GRID_SIZE / 2
-        end
-        if gameSpawn then
-          mapData.initialSpawnPositionX, mapData.initialSpawnPositionY = gameSpawn.x, gameSpawn.y
-        end
-      else
-        error('Unsupported object layer name: ' .. layer.name:lower())
-      end
-    else
-      error('Unsupported layer type: ' .. layer:getType())
-    end
-  end
+
+  -- parse layers
+  --[[ 
+    Expected map format:
+      1.playerspawn
+      2.entities
+      3.rooms
+      4.top
+      5.bottom
+  ]]
+  assert(lume.count(tiledMapData.layers) == 5, 'Unexpected layer count in ' .. path .. '.Expected 5, receieved mapdata with ' .. lume.count(tiledMapData.layers) .. ' layers')
+
+  -- get tile layers
+  local bottomTiledTileLayer = lume.first(lume.filter(tiledMapData.layers, function(x) return x:getType() == 'tiled_tile_layer' and x.name:lower() == 'bottom' end))
+  assert(bottomTiledTileLayer, 'Bottom tile layer cannot be found')
+  local topTiledTileLayer = lume.first(lume.filter(tiledMapData.layers, function(x) return x:getType() == 'tiled_tile_layer' and x.name:lower() == 'top' end))
+  assert(topTiledTileLayer, 'Top tile layer cannot be found')
+
+  -- get room layer
+  local roomTiledLayer = lume.first(lume.filter(tiledMapData.layers, function(x) return x:getType() == 'tiled_object_layer' and x.name:lower() == 'rooms' end))
+  assert(roomTiledLayer, 'Room object layer cannot be found')
+
+  -- get entities layer
+  local entitiesTiledLayer = lume.first(lume.filter(tiledMapData.layers, function(x) return x:getType() == 'tiled_object_layer' and x.name:lower() == 'entities' end))
+  assert(entitiesTiledLayer, 'Entities object layer cannot be found')
+
+  -- get playersspawn layer
+  local playerSpawnTiledLayer = lume.first(lume.filter(tiledMapData.layers, function(x) return x:getType() == 'tiled_object_layer' and x.name:lower() == 'playerspawn' end))
+  assert(playerSpawnTiledLayer, 'PlayerSpawn object layer cannot be found')
   mapCache[path] = mapData
+
+  -- parse layers
+  makeTileLayer(mapData, bottomTiledTileLayer)
+  makeTileLayer(mapData, topTiledTileLayer)
+  makeRooms(mapData, roomTiledLayer)
+  makeEntitySpawners(mapData, entitiesTiledLayer)
+  makePlayerSpawns(mapData, playerSpawnTiledLayer)
+
   return mapData
 end
 
