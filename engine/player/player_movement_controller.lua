@@ -13,7 +13,7 @@ local Input = require('engine.singletons').input
 local JUMP_Z_VELOCITY = 2
 local JUMP_GRAVITY = 8
 local HOLE_DOOM_TIMER = 10
-local HOLE_PULL_MAGNITUDE = .30
+local HOLE_PULL_MAGNITUDE = .25
 local DISTANCE_TRIGGER_HOLE_FALL = 1.0
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
 local DIRECTION_SNAP = 40
@@ -227,10 +227,10 @@ function PlayerMovementController:stayInsideHole()
     self.player:setPosition(tx + tw, py) -- Set to the right boundary
     self.player:setVector(0, vy)
   end
-  
+
   vx, vy = self.player:getVector() 
   px, py = self.player:getPosition()
-  
+
   if py < ty then
     self.player:setPosition(px, ty) -- Set to the top boundary
     self.player:setVector(vx, 0)
@@ -258,6 +258,7 @@ function PlayerMovementController:updateFallingInHole()
 
     -- after delay, disable player motion
     if self.holeDoomTimer < 0 then
+      print('0!')
       self.player:setVector(0, 0)
     end
 
@@ -287,9 +288,20 @@ function PlayerMovementController:updateFallingInHole()
     local tx, ty = self.holeTile:getPosition()
 
     local pullMagnitude = HOLE_PULL_MAGNITUDE
-    local diffX, diffY = vector.sub(tx, ty, px, py)
-    local pullX, pullY = vector.mul(pullMagnitude, vector.normalize(diffX, diffY))
 
+    -- increase pull magnitude if player is trying to move away from hole
+    local pdx, pdy = vector.normalize(self.player:getVector())
+    local diffX, diffY = vector.sub(tx, ty, px, py)
+    local normDiffX, normDiffY = vector.normalize(diffX, diffY)
+    local dotProduct = vector.dot(pdx, pdy, normDiffX, normDiffY)
+    -- check if the dot product is between PI/2 AND 3PI/2
+    if 0 > dotProduct then
+      pullMagnitude = pullMagnitude * 2
+    end
+
+    local pullX, pullY = vector.mul(pullMagnitude, normDiffX, normDiffY)
+
+    -- pull player towards hole
     self.player:setPosition(px + pullX, py + pullY)
 
     -- fall in hole when too close to center

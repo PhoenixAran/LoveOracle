@@ -10,7 +10,7 @@ local Class = require 'lib.class'
 local PlayerMotionType = Class {
   init = function(self)
     -- movement component modifiers
-    self.speed = 60
+    self.speed = 50
     self.acceleration = 1
     self.deceleration = 1
     self.minSpeed = 0.05

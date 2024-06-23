@@ -17,10 +17,11 @@ local function flattenArgs(args)
 end
 
 ---@class EntitySpawner
+---@field entityClass string
 ---@field constructorArgs table
 local EntitySpawner = Class {
   init = function(self, args)
-    self.entityType = args.class
+    self.entityClass = args.class
     self.constructorArgs = flattenArgs(args)
   end
 }
@@ -31,7 +32,7 @@ end
 
 ---@return Entity
 function EntitySpawner:spawnEntity()
-  return EntityBank.makeEntity(self.entityType, self.constructorArgs)
+  return EntityBank.makeEntity(self.entityClass, self.constructorArgs)
 end
 
 return EntitySpawner
