@@ -14,6 +14,19 @@ local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_ob
 local EmptySprite = require 'engine.graphics.empty_sprite'
 
 local TILE_CLASS_NAME = 'tile'
+-- custom properties to ignore since we flatten tiled objects for entity constructors
+local PROTECTED_CUSTOM_PROPERTY_NAMES = {
+  ['gid'] = true,
+  ['height'] = true,
+  ['id'] = true,
+  ['name'] = true,
+  ['rotation'] = true,
+  ['type'] = true,
+  ['visible'] = true,
+  ['width'] = true,
+  ['x'] = true,
+  ['y'] = true
+}
 local tiledMapLoaderInitialized = false
 local tiledClasses = { }
 local tiledTilesetCache = { }
@@ -25,6 +38,13 @@ local tiledMapDataCache  = { }
 local TiledMapLoader = { }
 
 
+local function validateCustomPropertyKeys(propertyDict, objectPath)
+  for k, v in pairs(propertyDict) do
+    if PROTECTED_CUSTOM_PROPERTY_NAMES[v.name] then
+      error('Cannot have custom property "' .. v.name .. '" in tiled object ' .. objectPath)
+    end
+  end
+end
 ---@param jProperties table
 ---@return table
 local function parsePropertyDict(jProperties)
@@ -256,6 +276,9 @@ local function loadTemplate(path)
       -- This is due to us having to account for an object having it's own instance of properties that we have to parse
       -- see parseObject function
       tiledTemplate.object[k] = v
+    end
+    if k == 'properties' then
+      validateCustomPropertyKeys(v, path)
     end
   end
   if jTemplate.tileset then
