@@ -56,7 +56,7 @@ function EntityBank.initialize(path)
   loadEntities('data/entities')
 end
 
-function EntityBank.makeEntity(entityKey, args)
+function EntityBank.createEntity(entityKey, args)
   local entityConstructor = EntityBank.entities[entityKey]
   assert(entityConstructor, 'Entity ' .. entityKey ' not in entity bank')
   return entityConstructor(args)

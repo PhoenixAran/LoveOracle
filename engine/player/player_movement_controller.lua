@@ -258,7 +258,6 @@ function PlayerMovementController:updateFallingInHole()
 
     -- after delay, disable player motion
     if self.holeDoomTimer < 0 then
-      print('0!')
       self.player:setVector(0, 0)
     end
 

@@ -6,12 +6,14 @@ local lume = require 'lib.lume'
 ---@field topLeftPosY integer
 ---@field width integer
 ---@field height integer
+---@field entitySpawners EntitySpawner[]
 local RoomData = Class {
   init = function(self)
     self.topLeftPosX = -1
     self.topLeftPosY = -1
     self.width = -1
     self.height = -1
+    self.entitySpawners = { }
   end
 }
 

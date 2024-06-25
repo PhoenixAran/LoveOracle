@@ -61,7 +61,8 @@ local function makePlayerSpawns(mapData, tiledMapLayer)
   end
 end
 
-local function makeEntitySpawners(mapData, tiledMapLayer)
+-- this requires the rooms to have been made
+local function makeEntitySpawnersInRooms(mapData, tiledMapLayer)
   
 end
 
@@ -118,7 +119,7 @@ function MapLoader.loadMapData(path)
       4.top
       5.bottom
   ]]
-  assert(lume.count(tiledMapData.layers) == 5, 'Unexpected layer count in ' .. path .. '.Expected 5, receieved mapdata with ' .. lume.count(tiledMapData.layers) .. ' layers')
+  assert(lume.count(tiledMapData.layers) == 5, 'Unexpected layer count in ' .. path .. '. Expected 5, receieved mapdata with ' .. lume.count(tiledMapData.layers) .. ' layers')
 
   -- get tile layers
   local bottomTiledTileLayer = lume.first(lume.filter(tiledMapData.layers, function(x) return x:getType() == 'tiled_tile_layer' and x.name:lower() == 'bottom' end))
@@ -143,7 +144,7 @@ function MapLoader.loadMapData(path)
   makeTileLayer(mapData, bottomTiledTileLayer)
   makeTileLayer(mapData, topTiledTileLayer)
   makeRooms(mapData, roomTiledLayer)
-  makeEntitySpawners(mapData, entitiesTiledLayer)
+  makeEntitySpawnersInRooms(mapData, entitiesTiledLayer)
   makePlayerSpawns(mapData, playerSpawnTiledLayer)
 
   return mapData

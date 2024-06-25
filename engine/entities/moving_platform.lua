@@ -38,15 +38,22 @@ local SEMICOLON_TOKEN = ';'
 local function parsePathScript(script)
   local commands = { }
   local scriptLines = parse.split(script, SEMICOLON_TOKEN)
+  local parts = { }
   for _, line in ipairs(scriptLines) do
-    local commandType = line[1]
+    print(line)
+    lume.clear(parts)
+    for _, part in string.gmatch(line, '([^ ,]+)') do
+      lume.push(parts, part)
+      print(part)
+    end
+    local commandType = parts[1]
     if commandType == PlatformPathCommandType.Move then
-      assert(parse.argIsInteger(line[2]), 'Expected integer argument 1 in move command. Error script: ' .. script)
-      assert(parse.argIsInteger(line[3]), 'Expected integer argument 2 in move command. Error script: ' .. script)
-      lume.push(commands, PlatformPathCommand(commandType, line[1], line[2]))
+      assert(parse.argIsInteger(parts[2]), 'Expected integer argument 1 in move command. Error script: ' .. script)
+      assert(parse.argIsInteger(parts[3]), 'Expected integer argument 2 in move command. Error script: ' .. script)
+      lume.push(commands, PlatformPathCommand(commandType, parts[1], parts[2]))
     elseif commandType == PlatformPathCommandType.Pause then
-      assert(parse.argIsInteger(line[2]), 'Expected integer argument 1 in pause command. Error script: ' .. script)
-      lume.push(commands, PlatformPathCommand(commandType, line[1]))
+      assert(parse.argIsInteger(parts[2]), 'Expected integer argument 1 in pause command. Error script: ' .. script)
+      lume.push(commands, PlatformPathCommand(commandType, parts[1]))
     else
       error('Invalid path command given: ' .. line)
     end

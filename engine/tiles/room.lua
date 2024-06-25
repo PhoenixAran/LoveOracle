@@ -8,6 +8,7 @@ local Tile = require 'engine.tiles.tile'
 local GRID_SIZE = require('constants').GRID_SIZE
 
 ---@class Room : SignalObject
+---@field roomData RoomData
 ---@field map Map
 ---@field topLeftPosX integer
 ---@field topLeftPosY integer
@@ -27,6 +28,7 @@ local Room = Class { __includes = SignalObject,
     self:signal('roomTransitionRequest')
     self:signal('mapTransitionRequest')
 
+    self.roomData = roomData
     self.map = map
     self.topLeftPosX = roomData.topLeftPosX
     self.topLeftPosY = roomData.topLeftPosY
@@ -84,7 +86,13 @@ end
 
 ---@param entities Entities
 function Room:load(entities)
-  -- add tiles
+  --[[
+    Connect to entities signals
+  ]]
+
+  --[[
+    STEP 2: Add Tiles
+  ]]
   for layerIndex, tileLayer in ipairs(self.map:getTileLayers()) do
     for x = self:getTopLeftPositionX(), self:getBottomRightPositionX() do
       for y = self:getTopLeftPositionY(), self:getBottomRightPositionY() do
@@ -102,79 +110,38 @@ function Room:load(entities)
   end
 
   self.animatedTilesCollectionCreated = true
-  -- add room edges
-  -- make left room edge
-  local roomRect = {
-    useBumpCoords = true,
-    x = (self.topLeftPosX - 2)* GRID_SIZE,
-    y = (self.topLeftPosY - 1) * GRID_SIZE,
-    w = GRID_SIZE,
-    h = self.height * GRID_SIZE
-  }
-  -- make the left room edge
-  local roomEdge = RoomEdge {
-    name = 'roomEdgeLeft',
-    useBumpCoords = true,
-    x = roomRect.x,
-    y = roomRect.y,
-    w = roomRect.w,
-    h = roomRect.h,
-    direction4 = Direction4.left,
-    transitionStyle = 'push'
-  }
-  roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
-  entities:addEntity(roomEdge)
-  lume.push(self.entities, roomEdge)
-  -- make right room edge
-  roomRect.x = (self:getBottomRightPositionX()) * GRID_SIZE
-  roomRect.y = (self.topLeftPosY - 1) * GRID_SIZE
-  roomEdge = RoomEdge {
-    name = 'roomEdgeRight',
-    useBumpCoords = true,
-    x = roomRect.x,
-    y = roomRect.y,
-    w = roomRect.w,
-    h = roomRect.h,
-    direction4 = Direction4.right,
-    transitionStyle = 'push'
-  }
-  roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
-  entities:addEntity(roomEdge)
-  lume.push(self.entities, roomEdge)
-  -- make top room edge
-  roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
-  roomRect.y = (self.topLeftPosY - 2) * GRID_SIZE
-  roomRect.w = self.width * GRID_SIZE
-  roomRect.h = GRID_SIZE
-  roomEdge = RoomEdge {
-    name = 'roomEdgeUp',
-    useBumpCoords = true,
-    x = roomRect.x,
-    y = roomRect.y,
-    w = roomRect.w,
-    h = roomRect.h,
-    direction4 = Direction4.up,
-    transitionStyle = 'push'
-  }
-  roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
-  entities:addEntity(roomEdge)
-  lume.push(self.entities, roomEdge)
-  -- make bottom room edge
-  roomRect.x = (self.topLeftPosX - 1) * GRID_SIZE
-  roomRect.y = (self:getBottomRightPositionY()) * GRID_SIZE
-  roomEdge = RoomEdge {
-    name = 'roomEdgeDown',
-    useBumpCoords = true,
-    x = roomRect.x,
-    y = roomRect.y,
-    w = roomRect.w,
-    h = roomRect.h,
-    direction4 = Direction4.down,
-    transitionStyle = 'push'
-  }
-  roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
-  entities:addEntity(roomEdge)
-  lume.push(self.entities, roomEdge)
+
+  --[[
+    STEP 3: Make room edges
+  ]]
+  -- helper function
+  local function createRoomEdge(name, x, y, w, h, direction)
+    local roomEdge = RoomEdge {
+      name = name,
+      useBumpCoords = true,
+      x = x,
+      y = y,
+      w = w,
+      h = h,
+      direction4 = direction,
+      transitionStyle = 'push'  -- TODO support other styles
+    }
+    roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
+    entities:addEntity(roomEdge)
+    lume.push(self.entities, roomEdge)
+  end
+
+  createRoomEdge('roomEdgeLeft', (self.topLeftPosX - 2) * GRID_SIZE, (self.topLeftPosY - 1) * GRID_SIZE, GRID_SIZE, self.height * GRID_SIZE, Direction4.left)
+  createRoomEdge('roomEdgeRight', self:getBottomRightPositionX() * GRID_SIZE, (self.topLeftPosY - 1) * GRID_SIZE, GRID_SIZE, self.height * GRID_SIZE, Direction4.right)
+  createRoomEdge('roomEdgeUp', (self.topLeftPosX - 1) * GRID_SIZE, (self.topLeftPosY - 2) * GRID_SIZE, self.width * GRID_SIZE, GRID_SIZE, Direction4.up)
+  createRoomEdge('roomEdgeDown', (self.topLeftPosX - 1) * GRID_SIZE, self:getBottomRightPositionY() * GRID_SIZE, self.width * GRID_SIZE, GRID_SIZE, Direction4.down)
+
+  --[[
+    STEP 4: Make room edges
+  ]]
+  for _, entitySpawner in ipairs(self.roomData.entitySpawners) do
+    local entity = entitySpawner:createEntity()
+  end
 end
 
 ---@param entities Entities
