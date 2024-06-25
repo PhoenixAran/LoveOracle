@@ -31,6 +31,7 @@ local showSplash = false
 
 local startupScreen = 'engine.test_screens.game_control_test'
 --local startupScreen = 'engine.screens.content_viewer'
+--local startupScreen = 'engine.test_screens.signal_test'
 
 local enableQuakeConsole = true
 return {

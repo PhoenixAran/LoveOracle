@@ -36,6 +36,7 @@ function SignalTest:enter(prev, ...)
 end
 
 function SignalTest:update(dt)
+  input:update(dt)
   if input:pressed('left') then
     print('a:emit()')
     self.a:emit('APressed', 'arg1', 'arg2', 'arg3')
@@ -52,7 +53,8 @@ function SignalTest:update(dt)
   end
   if self.disconnected and input:pressed('up') then
     print('a:connect()')
-    self.a:connect('APressed', self.b, '_onAPressed', { 'bindArg' })
+    -- one shot test
+    self.a:connect('APressed', self.b, '_onAPressed', 1, { 'bindArg' })
     self.disconnected = false
   end
 end
