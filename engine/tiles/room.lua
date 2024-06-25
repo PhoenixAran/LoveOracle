@@ -25,8 +25,8 @@ local Room = Class { __includes = SignalObject,
   ---@param roomData RoomData
   init = function(self, map, roomData)
     SignalObject.init(self)
-    self:signal('roomTransitionRequest')
-    self:signal('mapTransitionRequest')
+    self:signal('room_transition_request')
+    self:signal('map_transition_request')
 
     self.roomData = roomData
     self.map = map
@@ -126,7 +126,7 @@ function Room:load(entities)
       direction4 = direction,
       transitionStyle = 'push'  -- TODO support other styles
     }
-    roomEdge:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
+    roomEdge:connect('room_transition_request', self, 'onRoomTransitionRequest')
     entities:addEntity(roomEdge)
     lume.push(self.entities, roomEdge)
   end
@@ -194,7 +194,7 @@ function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, play
     error()
   end
   if newRoom ~= nil and newRoom ~= self then
-    self:emit('roomTransitionRequest', newRoom, transitionStyle, direction4)
+    self:emit('room_transition_request', newRoom, transitionStyle, direction4)
   end
 end
 

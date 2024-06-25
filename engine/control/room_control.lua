@@ -84,12 +84,12 @@ end
 
 ---@param room Room
 function RoomControl:connectToRoomSignals(room)
-  room:connect('roomTransitionRequest', self, 'onRoomTransitionRequest')
+  room:connect('room_transition_request', self, 'onRoomTransitionRequest')
 end
 
 ---@param room Room
 function RoomControl:disconnectFromRoomSignals(room)
-  room:disconnect('roomTransitionRequest', self, 'onRoomTransitionRequest')
+  room:disconnect('room_transition_request', self, 'onRoomTransitionRequest')
 end
 
 function RoomControl:onBegin()

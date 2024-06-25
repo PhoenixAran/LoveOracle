@@ -160,7 +160,7 @@ local Player = Class { __includes = MapEntity,
     self.shadowVisible = true
 
     -- signal connections
-    self.health:connect('healthDepleted', self, '_onHealthDepleted')
+    self.health:connect('health_depleted', self, '_onHealthDepleted')
 
     self.tileQueryRect = {
       x = 0,

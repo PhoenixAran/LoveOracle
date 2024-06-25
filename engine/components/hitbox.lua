@@ -35,8 +35,8 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     BumpBox.init(self, args)
     Component.init(self, entity, args)
 
-    self:signal('hitboxEntered')
-    self:signal('damagedOther')
+    self:signal('hitbox_entered')
+    self:signal('damaged_other')
     self:signal('resisted')
 
     if args.offsetX == nil then args.offsetX = 0 end
@@ -178,20 +178,20 @@ end
 ---raise the hitbox hitboxEntered signal
 ---@param hitbox Hitbox
 function Hitbox:reportCollision(hitbox)
-  self:emit('hitboxEntered', hitbox)
+  self:emit('hitbox_entered', hitbox)
 end
 
 ---notify that this hitbox inflicted damage
 ---@param hitbox Hitbox
 function Hitbox:notifyDidDamage(hitbox)
-  self:emit('damagedOther', hitbox)
+  self:emit('damaged_other', hitbox)
 end
 
 ---notify that this hitbox has been resisted
 ---used to let the owner know to stop the attack or something
 ---@param hitbox Hitbox
 function Hitbox:notifyResisted(hitbox)
-  self:emit('notifyResisted', hitbox)
+  self:emit('notify_resisted', hitbox)
 end
 
 function Hitbox:debugDraw()
