@@ -157,7 +157,7 @@ function RoomTransitionState:onEnd()
   -- re enable position smoothing if it was enabled before
   Camera.positionSmoothingEnabled = self.previousPositionSmoothingEnabledValue
   self.player:markRespawn()
-  -- update player position or else they have one frame where they are considered in the last position between room transitons
+  -- update player position or else they have one frame where they are considered in the last position between room transitions
   -- which can cause them to hit a room edge loading zone
   Physics:update(self.player, self.player.x, self.player.y, self.player.w, self.player.h)
 
@@ -176,7 +176,6 @@ function RoomTransitionState:draw()
     entities:drawEntities(x,y,w,h)
   Camera.pop()
 
-  -- HUD placeholder
   -- HUD placeholder
   love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
   love.graphics.rectangle('fill', 0, 144 - 16, 160, 16)

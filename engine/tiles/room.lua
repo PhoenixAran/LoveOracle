@@ -34,7 +34,8 @@ local Room = Class { __includes = SignalObject,
     self.topLeftPosY = roomData.topLeftPosY
     self.width = roomData.width
     self.height = roomData.height
-    -- entities that were spawned
+
+    -- entities that were spawned by the room
     self.entities = { }
     -- ids of entities that were killed
     self.destroyedEntities = { }
@@ -84,11 +85,30 @@ function Room:getHeight()
   return self.height
 end
 
+-- helper function
+local function createRoomEdge(name, x, y, w, h, direction, room, entities)
+  local roomEdge = RoomEdge {
+    name = name,
+    useBumpCoords = true,
+    x = x,
+    y = y,
+    w = w,
+    h = h,
+    direction4 = direction,
+    transitionStyle = 'push'  -- TODO support other styles
+  }
+  roomEdge:connect('room_transition_request', room, 'onRoomTransitionRequest')
+  entities:addEntity(roomEdge)
+  lume.push(room.entities, roomEdge)
+end
+
+
 ---@param entities Entities
 function Room:load(entities)
   --[[
-    Connect to entities signals
+    STEP 1: Connect to entities signals
   ]]
+  entities:connect('entity_removed', self, '_onEntityRemoved')
 
   --[[
     STEP 2: Add Tiles
@@ -114,44 +134,40 @@ function Room:load(entities)
   --[[
     STEP 3: Make room edges
   ]]
-  -- helper function
-  local function createRoomEdge(name, x, y, w, h, direction)
-    local roomEdge = RoomEdge {
-      name = name,
-      useBumpCoords = true,
-      x = x,
-      y = y,
-      w = w,
-      h = h,
-      direction4 = direction,
-      transitionStyle = 'push'  -- TODO support other styles
-    }
-    roomEdge:connect('room_transition_request', self, 'onRoomTransitionRequest')
-    entities:addEntity(roomEdge)
-    lume.push(self.entities, roomEdge)
-  end
-
-  createRoomEdge('roomEdgeLeft', (self.topLeftPosX - 2) * GRID_SIZE, (self.topLeftPosY - 1) * GRID_SIZE, GRID_SIZE, self.height * GRID_SIZE, Direction4.left)
-  createRoomEdge('roomEdgeRight', self:getBottomRightPositionX() * GRID_SIZE, (self.topLeftPosY - 1) * GRID_SIZE, GRID_SIZE, self.height * GRID_SIZE, Direction4.right)
-  createRoomEdge('roomEdgeUp', (self.topLeftPosX - 1) * GRID_SIZE, (self.topLeftPosY - 2) * GRID_SIZE, self.width * GRID_SIZE, GRID_SIZE, Direction4.up)
-  createRoomEdge('roomEdgeDown', (self.topLeftPosX - 1) * GRID_SIZE, self:getBottomRightPositionY() * GRID_SIZE, self.width * GRID_SIZE, GRID_SIZE, Direction4.down)
+  createRoomEdge('roomEdgeLeft', (self.topLeftPosX - 2) * GRID_SIZE, (self.topLeftPosY - 1) * GRID_SIZE, GRID_SIZE, self.height * GRID_SIZE, Direction4.left, self, entities)
+  createRoomEdge('roomEdgeRight', self:getBottomRightPositionX() * GRID_SIZE, (self.topLeftPosY - 1) * GRID_SIZE, GRID_SIZE, self.height * GRID_SIZE, Direction4.right, self, entities)
+  createRoomEdge('roomEdgeUp', (self.topLeftPosX - 1) * GRID_SIZE, (self.topLeftPosY - 2) * GRID_SIZE, self.width * GRID_SIZE, GRID_SIZE, Direction4.up, self, entities)
+  createRoomEdge('roomEdgeDown', (self.topLeftPosX - 1) * GRID_SIZE, self:getBottomRightPositionY() * GRID_SIZE, self.width * GRID_SIZE, GRID_SIZE, Direction4.down, self, entities)
 
   --[[
-    STEP 4: Make room edges
+    STEP 4: Spawn room entities
+    TODO:
   ]]
-  for _, entitySpawner in ipairs(self.roomData.entitySpawners) do
-    local entity = entitySpawner:createEntity()
-  end
+  -- for _, entitySpawner in ipairs(self.roomData.entitySpawners) do
+  --   local entity = entitySpawner:createEntity()
+    
+  -- end
 end
 
 ---@param entities Entities
 function Room:unload(entities)
+  --[[
+    STEP 1. Disconnect from signals
+  ]]
+  entities:disconnect('entity_removed', self, '_onEntityRemoved')
+
+  --[[
+    STEP 2. Remove Entities
+  ]]
   -- remove entities
   lume.each(self.entities, function(entity)
     entities:removeEntity(entity)
   end)
-  self.entities = { }
-  -- remove tile entities
+  lume.clear(self.entities)
+  
+  --[[
+    STEP 3. Remove Tile Entities
+  ]]
   for layerIndex, tileLayer in ipairs(self.map:getTileLayers()) do
     for x = self:getTopLeftPositionX(), self:getBottomRightPositionX() do
       for y = self:getTopLeftPositionY(), self:getBottomRightPositionY() do
@@ -202,6 +218,10 @@ function Room:updateAnimatedTiles(dt)
   for _, tile in pairs(self.animatedTiles) do
     tile.sprite:update(dt)
   end
+end
+
+function Room:_onEntityRemoved(entity)
+  lume.remove(self.entities, entity)
 end
 
 return Room
