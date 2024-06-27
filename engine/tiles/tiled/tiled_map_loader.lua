@@ -11,9 +11,22 @@ local TiledTilesetTile = require 'engine.tiles.tiled.tiled_types.tiled_tileset_t
 local TiledObject = require 'engine.tiles.tiled.tiled_types.tiled_object'
 local TiledTileLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_tile_layer'
 local TiledObjectLayer = require 'engine.tiles.tiled.tiled_types.layers.tiled_object_layer'
-
+local EmptySprite = require 'engine.graphics.empty_sprite'
 
 local TILE_CLASS_NAME = 'tile'
+-- custom properties to ignore since we flatten tiled objects for entity constructors
+local PROTECTED_CUSTOM_PROPERTY_NAMES = {
+  ['gid'] = true,
+  ['height'] = true,
+  ['id'] = true,
+  ['name'] = true,
+  ['rotation'] = true,
+  ['type'] = true,
+  ['visible'] = true,
+  ['width'] = true,
+  ['x'] = true,
+  ['y'] = true
+}
 local tiledMapLoaderInitialized = false
 local tiledClasses = { }
 local tiledTilesetCache = { }
@@ -25,6 +38,13 @@ local tiledMapDataCache  = { }
 local TiledMapLoader = { }
 
 
+local function validateCustomPropertyKeys(propertyDict, objectPath)
+  for k, v in pairs(propertyDict) do
+    if PROTECTED_CUSTOM_PROPERTY_NAMES[v.name] then
+      error('Cannot have custom property "' .. v.name .. '" in tiled object ' .. objectPath)
+    end
+  end
+end
 ---@param jProperties table
 ---@return table
 local function parsePropertyDict(jProperties)
@@ -44,7 +64,7 @@ local function parseObject(jObject)
   local tiledObject = TiledObject()
 
   local templateProperties = nil
-
+  local classProperties = nil
   tiledObject.id = jObject.id
   tiledObject.name = jObject.name
   tiledObject.x = jObject.x
@@ -53,9 +73,11 @@ local function parseObject(jObject)
   tiledObject.height = jObject.height
   tiledObject.type = jObject.type
   tiledObject.rotation = jObject.rotation
-  if jObject.type then
-    -- TODO
+
+  if jObject.type and jObject.type ~= '' then
+    classProperties = tiledClasses[jObject.type]
   end
+
   if jObject.template then
     -- if this is a templated object, inject the template object value properties into our json object
     local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
@@ -76,7 +98,7 @@ local function parseObject(jObject)
       if templateProperties == nil then
         templateProperties = { }
       end
-      templateProperties = lume.merge(parsePropertyDict(tiledTilesetTile.properties), tiledTilesetTile.properties)
+      templateProperties = lume.merge(parsePropertyDict(tiledTilesetTile.properties), templateProperties)
     end
   end
 
@@ -84,24 +106,23 @@ local function parseObject(jObject)
     tiledObject.gid = jObject.gid
   end
   if jObject.text then
-    error('MapLoader does not support text object type yet')
+    love.log.warn('MapLoader does not support text object type yet')
   end
   if jObject.points then
-    error('Point parsing not supported')
+    love.log.warn('Point parsing not supported')
   end
 
-  if templateProperties then
-    tiledObject.properties = templateProperties
-    local jObjectProperties = parsePropertyDict(jObject.properties)
-    -- override template properties and/or add additional properties from object instance
-    -- for k, v in pairs(jObjectProperties) do
-    --   tiledObject.properties[k] = v
-    -- end
-    tiledObject.properties = lume.merge(tiledObject.properties, jObjectProperties)
-  else
-    -- no properties for template, just assign directly
-    tiledObject.properties = parsePropertyDict(jObject.properties)
+  if classProperties then
+    -- assign class properties first
+    tiledObject.properties = lume.merge(tiledObject.properties, classProperties)
   end
+  if templateProperties then
+    -- overrides class defaults (if it exists) with template properties
+    -- provides properties from templates as well
+    tiledObject.properties = lume.merge(tiledObject.properties, templateProperties)
+  end
+  -- finally, inject the jObject's instance properties
+  tiledObject.properties = lume.merge(tiledObject.properties, parsePropertyDict(jObject.properties))
   return tiledObject
 end
 
@@ -168,13 +189,22 @@ local function loadTileset(path)
   ---@type TiledTileset
   local tileset = TiledTileset()
   tileset.name = key
-  -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
-  local spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
-  if not AssetManager.spriteSheetCache[spriteSheetKey] then
-    local spriteSheet = SpriteSheet(AssetManager.getImage(spriteSheetKey), jTileset.tilewidth, jTileset.tileheight, jTileset.margin, jTileset.spacing)
-    AssetManager.spriteSheetCache[spriteSheetKey] = spriteSheet
+  local spriteSheetKey = nil
+
+  -- TODO reevaluate supporting collection of images
+  -- check if tileset is from a singualar image or a collection of images.
+  -- we don't care about loading images from collection image tilesets since they are only used
+  -- in the tiled editor and don't show up in game
+  if jTileset.image then
+    -- man handle spritesheet caching. Dont want to have to define spritesheets in a .spritesheet file for every tileset if we can avoid it
+    spriteSheetKey = FileHelper.getFileNameWithoutExtension(jTileset.image)
+    if not AssetManager.spriteSheetCache[spriteSheetKey] then
+      local spriteSheet = SpriteSheet(AssetManager.getImage(spriteSheetKey), jTileset.tilewidth, jTileset.tileheight, jTileset.margin, jTileset.spacing)
+      AssetManager.spriteSheetCache[spriteSheetKey] = spriteSheet
+    end
+    tileset.spriteSheet = AssetManager.getSpriteSheet(spriteSheetKey)
   end
-  tileset.spriteSheet = AssetManager.getSpriteSheet(spriteSheetKey)
+
   tileset.tileWidth = jTileset.tilewidth
   tileset.tileHeight = jTileset.tileheight
   tileset.properties = parsePropertyDict(jTileset.properties)
@@ -183,13 +213,19 @@ local function loadTileset(path)
     for _, jTile in ipairs(jTileset.tiles) do
       local tilesetTile = TiledTilesetTile()
       tilesetTile.id = jTile.id
-      tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
-      if jTile.animation then
-        for _, jObj in ipairs(jTile.animation) do
-          lume.push(tilesetTile.animatedTextures, tileset.spriteSheet:getTexture(jObj.tileid + 1))
-          lume.push(tilesetTile.durations, jObj.duration)
+      if jTileset.image then
+        tilesetTile.subtexture = tileset.spriteSheet:getTexture(tilesetTile.id + 1)
+        if jTile.animation then
+          for _, jObj in ipairs(jTile.animation) do
+            lume.push(tilesetTile.animatedTextures, tileset.spriteSheet:getTexture(jObj.tileid + 1))
+            lume.push(tilesetTile.durations, jObj.duration)
+          end
         end
+      else
+        -- tileset is used for template icons. just assign an empty sprite
+        tilesetTile.subtexture = EmptySprite()
       end
+
       if jTile.type then
         tilesetTile.properties = lume.merge(tilesetTile.properties, tiledClasses[jTile.type])
       end
@@ -203,19 +239,22 @@ local function loadTileset(path)
   -- load the basic tiles (tiles without any property definitions dont get in cluded in the jTile array)
   -- as of right now this really only loads in the template tilesets. Tiles that get the tile class get a dedicated json value
   -- that gets parsed in the for loop above
-  for i = 0, tileset.spriteSheet:size() - 1 do
-    if not tileset.tiles[i] then
-      -- NB: basic tiles are never animated
-      local tilesetTile = TiledTilesetTile()
-      tilesetTile.id = i
-      -- add one because spritesheet uses lua indexing
-      tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
-      tileset.tiles[tilesetTile.id] = tilesetTile
+  if jTileset.image then   
+    for i = 0, tileset.spriteSheet:size() - 1 do
+      if not tileset.tiles[i] then
+        -- NB: basic tiles are never animated
+        local tilesetTile = TiledTilesetTile()
+        tilesetTile.id = i
+        -- add one because spritesheet uses lua indexing
+        tilesetTile.subtexture = tileset.spriteSheet:getTexture(i + 1)
+        tileset.tiles[tilesetTile.id] = tilesetTile
+      end
     end
   end
   tiledTilesetCache[key] = tileset
   return tileset
 end
+
 
 local function loadTemplate(path)
   local key = FileHelper.getFileNameWithoutExtension(path)
@@ -237,6 +276,9 @@ local function loadTemplate(path)
       -- This is due to us having to account for an object having it's own instance of properties that we have to parse
       -- see parseObject function
       tiledTemplate.object[k] = v
+    end
+    if k == 'properties' then
+      validateCustomPropertyKeys(v, path)
     end
   end
   if jTemplate.tileset then

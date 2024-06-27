@@ -7,6 +7,7 @@ local vec2 = require 'engine.math.vector'
 local Physics = require 'engine.physics'
 local Consts = require 'constants'
 local Camera = require 'engine.camera'
+local AssetManager = require 'engine.asset_manager'
 
 local ROOM_TRANSITION_PANNING_DURATION = .80
 local ROOM_TRANSITION_TWEEN_STYLE = 'inOutCubic'
@@ -156,7 +157,7 @@ function RoomTransitionState:onEnd()
   -- re enable position smoothing if it was enabled before
   Camera.positionSmoothingEnabled = self.previousPositionSmoothingEnabledValue
   self.player:markRespawn()
-  -- update player position or else they have one frame where they are considered in the last position between room transitons
+  -- update player position or else they have one frame where they are considered in the last position between room transitions
   -- which can cause them to hit a room edge loading zone
   Physics:update(self.player, self.player.x, self.player.y, self.player.w, self.player.h)
 
@@ -179,6 +180,8 @@ function RoomTransitionState:draw()
   love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
   love.graphics.rectangle('fill', 0, 144 - 16, 160, 16)
   love.graphics.setColor(1,1,1)
+  love.graphics.setFont(AssetManager.getFont('game_font'))
+  love.graphics.print('HUD Placeholder', 8, 130)
 end
 
 return RoomTransitionState

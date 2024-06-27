@@ -12,10 +12,10 @@ local Health = Class { __includes = Component,
       args = { }
     end
     Component.init(self, entity, args)
-    self:signal('maxHealthChanged')
-    self:signal('damageTaken')
-    self:signal('healthChanged')
-    self:signal('healthDepleted')
+    self:signal('max_health_changed')
+    self:signal('damage_taken')
+    self:signal('health_changed')
+    self:signal('health_depleted')
     args.maxHealth = nil or 1
     args.health = args.health or args.maxHealth
     args.armor = args.armor or 0
@@ -38,12 +38,12 @@ end
 ---@param setCurrentHealthAlso boolean if the current health should also be set to max value
 function Health:setMaxHealth(value, setCurrentHealthAlso)
   self.maxHealth = value
-  self:emit('maxHealthChanged', self.maxHealth)
+  self:emit('max_health_changed', self.maxHealth)
   if value < self.maxHealth then
     local oldHealth = self.health
     if setCurrentHealthAlso then
       self.health = value
-      self:emit('healthChanged', self.health, oldHealth)
+      self:emit('max_health_changed', self.health, oldHealth)
     end
   end
 end
@@ -56,9 +56,9 @@ end
 function Health:setHealth(value)
   local oldHealth = self.health
   self.health = value
-  self:emit('healthChanged', self.health, oldHealth)
+  self:emit('health_changed', self.health, oldHealth)
   if self:isDepleted() then
-    self:emit('healthDepleted')
+    self:emit('health_depleted')
   end
 end
 
@@ -69,10 +69,10 @@ function Health:takeDamage(damage)
     local actualDamage = damage - self.armor
     if 0 < actualDamage then
       self.health = self.health - actualDamage
-      self:emit('healthChanged', self.health, oldHealth)
+      self:emit('health_changed', self.health, oldHealth)
     end
     if self:isDepleted() then
-      self:emit('healthDepleted')
+      self:emit('health_depleted')
     end
   end
 end
@@ -80,7 +80,7 @@ end
 ---@param amount integer
 function Health:heal(amount)
   self.health = lume.clamp(self.health + amount, 0, self.maxHealth)
-  self:emit('healthChanged', self.health)
+  self:emit('health_changed', self.health)
 end
 
 ---@param value integer

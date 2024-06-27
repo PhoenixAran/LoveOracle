@@ -1,19 +1,22 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
+local SignalConnectType = require 'engine.enums.signal_connect_type'
 
 --- FriendType signal connection
 ---@class SignalConnection
 ---@field signal Signal
 ---@field targetObject SignalObject
+---@field connectType SignalConnectType
 ---@field bindingArgs table
 ---@field argumentHolder table
 ---@field targetMethod string
 ---@field init function
 local SignalConnection = Class {
-  init = function(self, signal, targetObject, targetMethod, bindingArgs)
+  init = function(self, signal, targetObject, targetMethod, connectType, bindingArgs)
     self.signal = signal
     self.targetObject = targetObject
     self.targetMethod = targetMethod
+    self.connectType = connectType
     self.bindingArgs = bindingArgs
     self.argumentHolder = { }
   end
@@ -30,6 +33,10 @@ function SignalConnection:emit(...)
   lume.push(self.argumentHolder, ...)
   self.targetObject[self.targetMethod](self.targetObject, unpack(self.argumentHolder))
   lume.clear(self.argumentHolder)
+
+  if self.connectType  == SignalConnectType.oneShot then
+    self:disconnect()
+  end
 end
 
 --- Disconnect signal from listener
@@ -61,9 +68,14 @@ end
 --- Connect object to signal
 ---@param targetObject SignalObject
 ---@param targetMethod string
+---@param connectType SignalConnectType|any[] ConnectType or just bind args. This allows for signal:connect(targetObj, targetMethod, connectType, bindArgs) and signal:connect(targetObj, targetMethod, bindArgs)
 ---@param bindArgs any[]?
-function Signal:connect(targetObject, targetMethod, bindArgs)
-  local connection = SignalConnection(self, targetObject, targetMethod, bindArgs)
+function Signal:connect(targetObject, targetMethod, connectType, bindArgs)
+  if type(connectType) == 'table' then
+    bindArgs = connectType
+    connectType = SignalConnectType.default
+  end
+  local connection = SignalConnection(self, targetObject, targetMethod, connectType, bindArgs)
   self.connections[#self.connections + 1] = connection
   targetObject.connections[#targetObject.connections + 1] = connection
 end

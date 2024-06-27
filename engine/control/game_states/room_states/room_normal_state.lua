@@ -3,6 +3,7 @@ local GameState = require 'engine.control.game_state'
 local GRID_SIZE = require('constants').GRID_SIZE
 local Camera = require 'engine.camera'
 local DisplayHandler = require 'engine.display_handler'
+local AssetManager = require 'engine.asset_manager'
 
 ---@class RoomNormalState : GameState
 local RoomNormalState = Class { __includes = GameState,
@@ -40,6 +41,8 @@ function RoomNormalState:draw()
   love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
   love.graphics.rectangle('fill', 0, 144 - 16, 160, 16)
   love.graphics.setColor(1,1,1)
+  love.graphics.setFont(AssetManager.getFont('game_font'))
+  love.graphics.print('HUD Placeholder', 8, 130)
 end
 
 

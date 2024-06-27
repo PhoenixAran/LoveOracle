@@ -82,4 +82,10 @@ function SpriteRendererBuilder:setFollowZ(value)
   self.followZ = value
 end
 
+--- set sprite
+---@param sprite Sprite|CompositeSprite|ColorSprite|EmptySprite|PrototypeSprite
+function SpriteRendererBuilder:setSprite(sprite)
+  self.sprite = sprite
+end
+
 return SpriteRendererBuilder

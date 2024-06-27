@@ -64,7 +64,7 @@ function love.load(args)
   tick.framerate = 60
   local _, _, windowFlags = love.window.getMode()
   if windowFlags.refreshrate then
-    love.log.debug('Matching display refresh rate: %d', windowFlags.refreshrate)
+    love.log.debug(('Matching display refresh rate: %d'):format(windowFlags.refreshrate))
     tick.framerate = math.max(tick.framerate, windowFlags.refreshrate)
   end
 

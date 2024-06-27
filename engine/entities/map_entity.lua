@@ -88,12 +88,12 @@ local MapEntity = Class { __includes = Entity,
     end
 
     -- signals
-    self:signal('entityDestroyed')
-    self:signal('entityCreated')
-    self:signal('entityHit')
-    self:signal('entityBumped')
-    self:signal('entityImmobolized')
-    self:signal('entityMarkedDead')
+    self:signal('entity_destroyed')
+    self:signal('entity_created')
+    self:signal('entity_hit')
+    self:signal('entity_bumped')
+    self:signal('entity_immobolized')
+    self:signal('entity_marked_dead')
 
     self.health = Health(self)
     self.movement = Movement(self)
@@ -216,7 +216,7 @@ end
 
 function MapEntity:die()
   self:release()
-  self:emit('entityDestroyed', self)
+  self:emit('entity_destroyed', self)
 end
 
 -- health component pass throughs
@@ -441,7 +441,7 @@ function MapEntity:hurt(damageInfo)
   if self.onHurt then
     self:onHurt(damageInfo)
   end
-  self:signal('entityHit')
+  self:signal('entity_hit')
 end
 
 ---TODO bump this entity
@@ -454,7 +454,7 @@ function MapEntity:bump(sourcePositionX, sourcePositionY, duration, speed)
   if self.onBump then
     self:onBump(sourcePositionX, sourcePositionY, duration, speed)
   end
-  self:signal('entityBumped')
+  self:signal('entity_bumped')
 end
 
 -- sprite flash

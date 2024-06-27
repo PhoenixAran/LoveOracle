@@ -28,6 +28,10 @@ local function argIsNumber(arg)
   return tonumber(arg) ~= nil
 end
 
+local function argIsInteger(arg)
+  return arg:match("^%-?%d+$")
+end
+
 local function parseStringArg(arg)
   -- strip the quotation marks aroudn string
   arg = trim(arg)
@@ -39,5 +43,6 @@ return {
   trim = trim,
   argIsString = argIsString,
   argIsNumber = argIsNumber,
+  argIsInteger = argIsInteger,
   parseStringArg = parseStringArg
 }

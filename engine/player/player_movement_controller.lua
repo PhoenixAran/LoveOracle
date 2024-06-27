@@ -1,14 +1,20 @@
 local Class = require 'lib.class'
+local lume  = require('lib.lume')
 local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'engine.math.vector'
 local Movement = require 'engine.components.movement'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
+local TileTypes = TileTypeFlags.enumMap
 local Input = require('engine.singletons').input
 
 -- some class constants
 local JUMP_Z_VELOCITY = 2
 local JUMP_GRAVITY = 8
+local HOLE_DOOM_TIMER = 10
+local HOLE_PULL_MAGNITUDE = .25
+local DISTANCE_TRIGGER_HOLE_FALL = 1.0
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
 local DIRECTION_SNAP = 40
 
@@ -24,9 +30,12 @@ local DIRECTION_SNAP = 40
 ---@field stroking boolean
 ---@field capeDeployed boolean
 ---@field holeTile Tile?
+---@field doomedToFallInHole boolean
 ---@field holeDoomTimer number
 ---@field holeSlipVelocityX number
 ---@field holeSlipVelocityY number
+---@field holeQuadrantX number
+---@field holeQuadrantY number
 ---@field fallingInHole boolean
 ---@field moveNormalMode PlayerMotionType
 ---@field mode PlayerMotionType
@@ -46,8 +55,11 @@ local PlayerMovementController = Class {
     self.lastStrokeVectorX = 0
     self.lastStrokeVectorY = 0
     self.capeDeployed = false
+
     self.holeTile = nil
+    self.doomedToFallInHole = false
     self.holeDoomTimer = 0
+    self.holeQuadrantX, self.holeQuadrantY = 0, 0
     self.holeSlipVelocityX, self.holeSlipVelocityY = 0, 0
     self.fallingInHole = false
 
@@ -72,8 +84,12 @@ function PlayerMovementController:setMode(mode)
   end
 end
 
+
 function PlayerMovementController:jump()
-  if self.player:isOnGround() and self.player:getStateParameters().canJump then
+  if self.player:isOnGround() 
+     and self.player:getStateParameters().canJump 
+     and not self.player.groundObserver.inHole 
+     and self.player.skills.jumpSkill > 0 then
     if self.player:getStateParameters().canControlOnGround then
       local x, y = self:pollMovementControls(true)
       if self:isMoving() then
@@ -98,6 +114,10 @@ function PlayerMovementController:jump()
     end
     -- TODO self.player:onJump()
   end
+end
+
+function PlayerMovementController:isDoomedToFallInHole()
+  return self.fallingInHole and self.doomedToFallInHole
 end
 
 ---@param allowMovementControl boolean
@@ -196,6 +216,118 @@ function PlayerMovementController:stroke()
   end
 end
 
+function PlayerMovementController:stayInsideHole()
+  local px, py = self.player:getPosition()
+  local vx, vy = self.player:getVector()
+  local tx, ty, tw, th = self.holeTile:getBounds()
+  if px < tx then
+    self.player:setPosition(tx, py) -- Set to the left boundary
+    self.player:setVector(0, vy)
+  elseif px > tx + tw then
+    self.player:setPosition(tx + tw, py) -- Set to the right boundary
+    self.player:setVector(0, vy)
+  end
+
+  vx, vy = self.player:getVector() 
+  px, py = self.player:getPosition()
+
+  if py < ty then
+    self.player:setPosition(px, ty) -- Set to the top boundary
+    self.player:setVector(vx, 0)
+  elseif py > ty + th then
+    self.player:setPosition(px, ty + th) -- Set to the bottom boundary
+    self.player:setVector(vx, 0)
+  end
+end
+
+---@return Tile
+function PlayerMovementController:getCurrentHoleTile()
+  local holeTile
+  for k, v in ipairs(self.player.groundObserver:getVisitedTiles()) do
+    if v:getTileType() == TileTypes.Hole then
+      holeTile = v
+      break
+    end
+  end
+  return holeTile
+end
+
+function PlayerMovementController:updateFallingInHole()
+  if self.fallingInHole then
+    self.holeDoomTimer = self.holeDoomTimer - 1
+
+    -- after delay, disable player motion
+    if self.holeDoomTimer < 0 then
+      self.player:setVector(0, 0)
+    end
+
+    if not self.player.groundObserver.inHole then
+      -- stop falling in hole
+      self.fallingInHole = false
+      self.doomedToFallInHole = false
+      self.holeTile = nil
+      return
+    elseif self.doomedToFallInHole then
+      self:stayInsideHole()
+    else
+      -- check if the player has changed quadrants
+      -- which dooms them to fall in the hole
+      local newHoleTile = self:getCurrentHoleTile()
+      local newQuadrantX, newQuadrantY = vector.div(8, self.player:getPosition())
+      newQuadrantX = math.floor(newQuadrantX)
+      newQuadrantY = math.floor(newQuadrantY)
+      if newQuadrantX ~= self.holeQuadrantX or newQuadrantY ~= self.holeQuadrantY then
+        self.doomedToFallInHole = true
+        self.holeTile = newHoleTile
+      end
+    end
+
+    -- move towards the hole's center
+    local px, py = self.player:getPosition()
+    local tx, ty = self.holeTile:getPosition()
+
+    local pullMagnitude = HOLE_PULL_MAGNITUDE
+
+    -- increase pull magnitude if player is trying to move away from hole
+    local pdx, pdy = vector.normalize(self.player:getVector())
+    local diffX, diffY = vector.sub(tx, ty, px, py)
+    local normDiffX, normDiffY = vector.normalize(diffX, diffY)
+    local dotProduct = vector.dot(pdx, pdy, normDiffX, normDiffY)
+    -- check if the dot product is between PI/2 AND 3PI/2
+    if 0 > dotProduct then
+      pullMagnitude = pullMagnitude * 2
+    end
+
+    local pullX, pullY = vector.mul(pullMagnitude, normDiffX, normDiffY)
+
+    -- pull player towards hole
+    self.player:setPosition(px + pullX, py + pullY)
+
+    -- fall in hole when too close to center
+    if vector.dist(tx, ty, self.player:getPosition()) <= DISTANCE_TRIGGER_HOLE_FALL then
+      self.player:setPosition(tx, ty)
+      self.player.sprite:play('fall')
+      self.player:startRespawnControlState(false)
+      self.holeTile = nil
+      self.fallingInHole = false
+      self.doomedToFallInHole = false
+    end
+  elseif self.player.groundObserver.inHole then
+    -- check if we are in a respawn death state. This prevents infinite falling loop
+    local currentControlState = self.player.controlStateMachine:getCurrentState()
+    if not (currentControlState ~= nil and currentControlState:getType() == 'player_respawn_death_state') then
+      -- start falling in a hole
+      self.holeTile = self:getCurrentHoleTile()
+      self.holeQuadrantX, self.holeQuadrantY = vector.div(8, self.player:getPosition())
+      self.holeQuadrantX = math.floor(self.holeQuadrantX)
+      self.holeQuadrantY = math.floor(self.holeQuadrantY)
+      self.doomedToFallInHole = false
+      self.fallingInHole = true
+      self.holeDoomTimer = HOLE_DOOM_TIMER
+    end
+  end
+end
+
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
     local currentEnvironmentState = self.player.environmentStateMachine:getCurrentState()
@@ -243,6 +375,7 @@ end
 function PlayerMovementController:update(dt)
   self:updateMoveMode()
   self:updateMoveControls()
+  self:updateFallingInHole()
   self:updateStroking()
   if self.allowMovementControl then
     if self.player:getStateParameters().alwaysFaceUp then

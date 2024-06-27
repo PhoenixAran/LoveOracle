@@ -50,8 +50,8 @@ local Tile = Class { __includes = Entity,
     self.minSwordLevel = 0
 
     -- signals
-    self:signal('tileDestroyed')
-    self:signal('entityCreated')
+    self:signal('tile_destroyed')
+    self:signal('entity_created')
   end
 }
 

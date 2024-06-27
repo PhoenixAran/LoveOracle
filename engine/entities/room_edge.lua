@@ -21,7 +21,7 @@ local RoomEdge = Class { __includes = Entity,
     -- mainly used for rooms ad the edge of you dont put a wall there for whatever reason
     self.canTransition = false
     self.transitionStyle = args.transitionStyle or 'push'
-    self:signal('roomTransitionRequest')
+    self:signal('room_transition_request')
     self:setPhysicsLayer('room_edge')
     self:setCollidesWithLayer('player')
   end
@@ -52,14 +52,14 @@ function RoomEdge:canRoomTransition(dir8)
     return dir8 == Direction8.right or dir8 == Direction8.upRight or dir8 == Direction8.downRight
       or dir8 == Direction8.up or dir8 == Direction8.down
   else
-    error()
+    error('Invalid room transition direction')
   end
 end
 
 ---@param playerX number
 ---@param playerY number
 function RoomEdge:requestRoomTransition(playerX, playerY)
-  self:emit('roomTransitionRequest', self.transitionStyle, self.direction4, playerX, playerY)
+  self:emit('room_transition_request', self.transitionStyle, self.direction4, playerX, playerY)
 end
 
 function RoomEdge:debugDraw()

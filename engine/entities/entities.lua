@@ -15,10 +15,10 @@ local rect = require 'engine.math.rectangle'
 local Entities = Class { __includes = SignalObject,
   init = function(self, gameScreen, player)
     SignalObject.init(self)
-    self:signal('entityAdded')
-    self:signal('entityRemoved')
-    self:signal('tileEntityAdded')
-    self:signal('tileEntityRemoved')
+    self:signal('entity_added')
+    self:signal('entity_removed')
+    self:signal('tile_entity_added')
+    self:signal('tile_entity_removed')
     self.player = player
     self.entities = { }
     self.entitiesHash = { }
@@ -84,7 +84,7 @@ function Entities:addEntity(entity, awakeEntity)
   if awakeEntity then
     entity:awake()
   end
-  self:emit('entityAdded', entity)
+  self:emit('entity_added', entity)
 end
 
 ---removes entity
@@ -95,7 +95,7 @@ function Entities:removeEntity(entity)
   lume.remove(self.entitiesHash, entity)
   lume.remove(self.entitiesDraw, entity)
   entity:removed()
-  self:emit('entityRemoved', entity)
+  self:emit('entity_removed', entity)
   entity:release()
 end
 
@@ -122,7 +122,7 @@ function Entities:addTileEntity(tileEntity)
   local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX
   self.tileEntities[tileEntity.layer][tileIndex] = tileEntity
   tileEntity:awake()
-  self:emit('tileEntityAdded', tileEntity)
+  self:emit('tile_entity_added', tileEntity)
 end
 
 ---remove tile entity by map index
@@ -135,7 +135,7 @@ function Entities:removeTileEntity(x, y, layer)
   if tileEntity then
     self.tileEntities[layer][tileIndex] = nil
     tileEntity:removed()
-    self:emit('tileEntityRemoved', tileEntity)
+    self:emit('tile_entity_removed', tileEntity)
     tileEntity:release()
   end
 end
