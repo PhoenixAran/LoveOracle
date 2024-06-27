@@ -143,10 +143,9 @@ function Room:load(entities)
     STEP 4: Spawn room entities
     TODO:
   ]]
-  -- for _, entitySpawner in ipairs(self.roomData.entitySpawners) do
-  --   local entity = entitySpawner:createEntity()
-    
-  -- end
+  for _, entitySpawner in ipairs(self.roomData.entitySpawners) do
+    local entity = entitySpawner:createEntity()
+  end
 end
 
 ---@param entities Entities

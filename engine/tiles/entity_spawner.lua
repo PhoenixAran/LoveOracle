@@ -17,7 +17,7 @@ local function flattenArgs(args)
   if customProperties then
     flattenedArgs.properties = nil
     for k, v in pairs(customProperties) do
-      if k ~= 'class' then
+      if k ~= 'type' then
         flattenedArgs[k] = v
       end
     end
@@ -32,7 +32,7 @@ end
 local EntitySpawner = Class {
   init = function(self, args)
     self.id = getInstanceId()
-    self.entityClass = args.class
+    self.entityClass = args.type
     self.constructorArgs = flattenArgs(args)
   end
 }

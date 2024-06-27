@@ -39,12 +39,13 @@ local function parsePathScript(script)
   local commands = { }
   local scriptLines = parse.split(script, SEMICOLON_TOKEN)
   local parts = { }
-  for _, line in ipairs(scriptLines) do
-    print(line)
+  for i, line in ipairs(scriptLines) do
+    if i == lume.count(scriptLines) then
+      break
+    end
     lume.clear(parts)
-    for _, part in string.gmatch(line, '([^ ,]+)') do
+    for part in string.gmatch(line, '([^,%s]+)') do
       lume.push(parts, part)
-      print(part)
     end
     local commandType = parts[1]
     if commandType == PlatformPathCommandType.Move then
@@ -76,7 +77,8 @@ local MovingPlatform = Class { __includes = Entity,
     if args.loopType ~= 'Cycle' and args.loopType ~= 'PingPong' then
       error('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object')
     end
-    self.pathCommands = parsePathScript(args.script)
+    self.pathCommands = parsePathScript(args.pathScript)
+    print(love.inspect(self.pathCommands))
     self.loopType = LoopType[args.loopType]
   end
 }

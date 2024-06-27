@@ -22,8 +22,8 @@ local EntityBank = {
 }
 
 local function registerEntity(requirePath)
-  local strSplit = parse.split(requirePath, ',')
-  local entityKey = strSplit[lume.count(strSplit)]
+  local strSplit = parse.split(requirePath, '%.')
+  local entityKey = strSplit[lume.count(strSplit)]:sub(1, -1) -- remove the % from the escaped character
   assert(EntityBank.entities[entityKey] == nil, 'Entity "' .. entityKey .. '" already registered')
   EntityBank.entities[entityKey] = require(requirePath)
 end
@@ -58,7 +58,7 @@ end
 
 function EntityBank.createEntity(entityKey, args)
   local entityConstructor = EntityBank.entities[entityKey]
-  assert(entityConstructor, 'Entity ' .. entityKey ' not in entity bank')
+  assert(entityConstructor ~= nil, 'Entity ' .. entityKey .. ' not in entity bank')
   return entityConstructor(args)
 end
 

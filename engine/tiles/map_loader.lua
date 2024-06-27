@@ -7,6 +7,7 @@ local MapData = require 'engine.tiles.map_data'
 local LayerTileset = require 'engine.tiles.layer_tileset'
 local RoomData = require 'engine.tiles.room_data'
 local Constants = require 'constants'
+local EntitySpawner = require 'engine.tiles.entity_spawner'
 
 
 
@@ -49,6 +50,8 @@ local function makeRooms(mapData, tiledMapLayer)
   return roomDatas
 end
 
+---@param mapData MapData
+---@param tiledMapLayer TiledObjectLayer
 local function makePlayerSpawns(mapData, tiledMapLayer)
   assert(lume.count(tiledMapLayer.objects) <= 2, 'Too many test_spawn instances')
   local testSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'test' end))
@@ -61,9 +64,32 @@ local function makePlayerSpawns(mapData, tiledMapLayer)
   end
 end
 
--- this requires the rooms to have been made
+---@param map MapData
+---@param x number
+---@param y number
+---@return RoomData?
+local function getRoomDataContainingPosition(map, x, y)
+  local tileIndexX = math.floor(x / GRID_SIZE) + 1
+  local tileIndexY = math.floor(y / GRID_SIZE) + 1
+  for _, roomData in ipairs(map.rooms) do
+    if roomData.topLeftPosX <= tileIndexX and tileIndexX <= roomData.topLeftPosX + roomData.width
+       and roomData.topLeftPosY <= tileIndexY and tileIndexY <= roomData.topLeftPosY + roomData.height then
+        return roomData
+      end
+  end
+  return nil
+end
+
+--- NB: this requires the rooms to have been made
+---@param mapData MapData
+---@param tiledMapLayer TiledObjectLayer
 local function makeEntitySpawnersInRooms(mapData, tiledMapLayer)
-  
+  for _, obj in ipairs(tiledMapLayer.objects) do
+    local roomData = getRoomDataContainingPosition(mapData, obj.x, obj.y)
+    if roomData then
+      lume.push(roomData.entitySpawners, EntitySpawner(obj))
+    end
+  end
 end
 
 ---@param name string
