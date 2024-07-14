@@ -48,6 +48,11 @@
             "id": 6,
             "members": [
                 {
+                    "name": "h",
+                    "type": "int",
+                    "value": 0
+                },
+                {
                     "name": "includeStartingPointAsPathPoint",
                     "type": "bool",
                     "value": true
@@ -62,6 +67,11 @@
                     "name": "pathScript",
                     "type": "string",
                     "value": ""
+                },
+                {
+                    "name": "w",
+                    "type": "int",
+                    "value": 0
                 }
             ],
             "name": "moving_platform",

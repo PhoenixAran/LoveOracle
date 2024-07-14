@@ -145,6 +145,9 @@ function Room:load(entities)
   ]]
   for _, entitySpawner in ipairs(self.roomData.entitySpawners) do
     local entity = entitySpawner:createEntity()
+    entity:initTransform()
+    entities:addEntity(entity)
+    lume.push(self.entities, entity)
   end
 end
 

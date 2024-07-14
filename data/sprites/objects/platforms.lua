@@ -18,8 +18,8 @@ return function(spriteBank)
     --2x1 platform
     srb = spriteBank.createSpriteRendererBuilder()
     srb.type = 'sprite_renderer' -- platforms just use static sprites
-    srb:setSprite(sb:buildSpriteFromImage('2x2_platform'))
-    spriteBank.registerSpriteRendererBuilder('2x2_platform', srb)
+    srb:setSprite(sb:buildSpriteFromImage('2x1_platform'))
+    spriteBank.registerSpriteRendererBuilder('2x1_platform', srb)
 
     --2x2 platform
     srb = spriteBank.createSpriteRendererBuilder()

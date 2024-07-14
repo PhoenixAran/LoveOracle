@@ -60,7 +60,7 @@ function SpriteBuilder:buildSpriteFromImage(imageKey, offsetX, offsetY)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
   local image = AssetManager.getImage(imageKey)
-  local subtexture = Subtexture(image, love.graphics.newQuad(0, 0, image:getWidth(), image:getHeight(), 0, 0))
+  local subtexture = Subtexture(image, love.graphics.newQuad(0, 0, image:getWidth(), image:getHeight(), image:getWidth(), image:getHeight()))
   local sprite = Sprite(subtexture, offsetX, offsetY)
   return sprite
 end

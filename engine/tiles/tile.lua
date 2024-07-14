@@ -7,10 +7,7 @@ local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local GRID_SIZE = require('constants').GRID_SIZE
 local Singletons = require 'engine.singletons'
 local vec2 = require 'engine.math.vector'
-
-local function makeTileEntityName(tileIndexX, tileIndexY, layer)
-  return tostring(tileIndexX) .. '_' .. tostring(tileIndexY) .. '-' .. tostring(layer)
-end
+local uuid = require 'engine.utils.uuid'
 
 ---@class Tile : Entity
 ---@field tileData TileData
@@ -25,7 +22,7 @@ local Tile = Class { __includes = Entity,
     local zMin, zMax = tileData:getCollisionZRange()
     Entity.init(self, {
       useBumpCoords = true,
-      name = makeTileEntityName(layer, tileIndexX, tileIndexY),
+      name = uuid(),
       x = (tileIndexX - 1) * GRID_SIZE,
       y = (tileIndexY - 1) * GRID_SIZE,
       w = GRID_SIZE,

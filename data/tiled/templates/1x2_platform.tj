@@ -4,6 +4,17 @@
      "height":32,
      "id":18,
      "name":"",
+     "properties":[
+            {
+             "name":"h",
+             "type":"int",
+             "value":32
+            }, 
+            {
+             "name":"w",
+             "type":"int",
+             "value":16
+            }],
      "rotation":0,
      "type":"moving_platform",
      "visible":true,

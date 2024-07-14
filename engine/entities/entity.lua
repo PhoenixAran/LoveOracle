@@ -5,6 +5,7 @@ local Transform = require 'engine.entities.transform'
 local Vector = require 'engine.math.vector'
 local rect = require 'engine.math.rectangle'
 local InspectorProperties = require 'engine.entities.inspector_properties'
+local uuid = require 'engine.utils.uuid'
 
 local Physics = require 'engine.physics'
 
@@ -38,7 +39,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.enabled = args.enabled
     self.visible = args.visible
     self.transform = Transform:new(self)
-    self.name = args.name
+    self.name = args.name or uuid()
   end
 }
 
