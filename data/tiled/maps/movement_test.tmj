@@ -95,6 +95,12 @@
                  "id":18,
                  "properties":[
                         {
+                         "name":"loopType",
+                         "propertytype":"LoopType",
+                         "type":"string",
+                         "value":"Cycle"
+                        }, 
+                        {
                          "name":"pathScript",
                          "type":"string",
                          "value":"move 5, 0;\nmove 0, 5;\npause 40;\nmove 3, 5;"
