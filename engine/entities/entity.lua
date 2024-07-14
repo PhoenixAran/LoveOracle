@@ -5,6 +5,7 @@ local Transform = require 'engine.entities.transform'
 local Vector = require 'engine.math.vector'
 local rect = require 'engine.math.rectangle'
 local InspectorProperties = require 'engine.entities.inspector_properties'
+local EntityDrawType = require 'engine.enums.entity_draw_type'
 local uuid = require 'engine.utils.uuid'
 
 local Physics = require 'engine.physics'
@@ -17,6 +18,7 @@ local Physics = require 'engine.physics'
 ---@field onTransformChanged function
 ---@field onAwake function
 ---@field onRemoved function
+---@field drawType EntityDrawType
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, args)
     if args == nil then
@@ -29,6 +31,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     if args.y == nil then args.y = 0 end
     if args.w == nil then args.w = 1 end
     if args.h == nil then args.h = 1 end
+    if args.drawType == nil then args.drawType = EntityDrawType.ySort end
     if args.useBumpCoords then
       BumpBox.init(self, args)
     else
@@ -38,6 +41,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     end
     self.enabled = args.enabled
     self.visible = args.visible
+    self.drawType = args.drawType
     self.transform = Transform:new(self)
     self.name = args.name or uuid()
   end
@@ -87,7 +91,7 @@ function Entity:transformChanged()
   end
 end
 
----position of the trasnform relative to the parnet transform. If the transform has no parent, it is the same as the Transform
+---position of the transform relative to the parnet transform. If the transform has no parent, it is the same as the Transform
 ---@return number x
 ---@return number y
 function Entity:getLocalPosition()
@@ -178,6 +182,11 @@ function Entity:awake()
   if self.onAwake then
     self:onAwake()
   end
+end
+
+---@return EntityDrawType
+function Entity:getDrawType()
+  return self.drawType
 end
 
 ---called every frame interval

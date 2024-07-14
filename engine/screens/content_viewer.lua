@@ -13,7 +13,7 @@ local function getKeyList(t)
     keyset[n] = k
     n = n + 1
   end
-  lume.sort(keyset)
+  table.sort(keyset)
   return keyset
 end
 

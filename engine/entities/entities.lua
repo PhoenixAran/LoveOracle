@@ -3,12 +3,14 @@ local SignalObject = require 'engine.signal_object'
 local lume = require 'lib.lume'
 local Consts = require 'constants'
 local rect = require 'engine.math.rectangle'
+local EntityDrawType = require 'engine.enums.entity_draw_type'
 
 ---@class Entities : SignalObject
 ---@field player Player
 ---@field entities Entity[]
 ---@field entitiesHash table<string, Entity>
----@field entitiesDraw Entity[]
+---@field entitiesYSort Entity[]
+---@field entitiesBackgroundDraw Entity[]
 ---@field mapWidth integer
 ---@field mapHeight integer
 ---@field tileEntities table<integer, Tile[]>
@@ -22,7 +24,8 @@ local Entities = Class { __includes = SignalObject,
     self.player = player
     self.entities = { }
     self.entitiesHash = { }
-    self.entitiesDraw = { }
+    self.entitiesBackgroundDraw = { }
+    self.entitiesYSort = { }
 
     self.mapWidth = nil
     self.mapHeight = nil
@@ -59,7 +62,7 @@ function Entities:setPlayer(player, awakeEntity)
   self.player = player
   lume.push(self.entities, player)
   self.entitiesHash[self.player:getName()] = player
-  lume.push(self.entitiesDraw, player)
+  lume.push(self.entitiesYSort, player)
   if awakeEntity then
     player:awake()
   end
@@ -76,10 +79,19 @@ end
 ---@param awakeEntity boolean? default true
 function Entities:addEntity(entity, awakeEntity)
   assert(entity:getName(), 'Entity requires name')
+  assert(not entity:isTile(), 'Tile Entity should be added via Entities:addTileEntity')
   if awakeEntity == nil then awakeEntity = true end
   lume.push(self.entities, entity)
   self.entitiesHash[entity:getName()] = entity
-  lume.push(self.entitiesDraw, entity)
+
+  -- determine entity draw type
+  local drawType = entity:getDrawType()
+  if drawType == EntityDrawType.ySort then
+    lume.push(self.entitiesYSort, entity)
+  elseif drawType == EntityDrawType.background then
+    lume.push(self.entitiesBackgroundDraw, entity)
+  end
+
   entity:added()
   if awakeEntity then
     entity:awake()
@@ -93,7 +105,8 @@ function Entities:removeEntity(entity)
   assert(self.entitiesHash[entity:getName()], 'Attempting to remove entity that is not in entities collection')
   lume.remove(self.entities, entity)
   lume.remove(self.entitiesHash, entity)
-  lume.remove(self.entitiesDraw, entity)
+  lume.remove(self.entitiesYSort, entity)
+  lume.remove(self.entitiesBackgroundDraw, entity)
   entity:removed()
   self:emit('entity_removed', entity)
   entity:release()
@@ -118,7 +131,7 @@ end
 ---add tile entity
 ---@param tileEntity Tile
 function Entities:addTileEntity(tileEntity)
-  assert(tileEntity:isTile())
+  assert(tileEntity:isTile(), 'Non tile entities should be added via Entities:addEntity')
   local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX
   self.tileEntities[tileEntity.layer][tileIndex] = tileEntity
   tileEntity:awake()
@@ -233,16 +246,28 @@ end
 
 -- draws all the non tile entities
 function Entities:drawEntities(x,y,w,h)
-  lume.sort(self.entitiesDraw, ySort)
   local shouldCull = x ~= nil
+  -- draw the background entities first
   if shouldCull then
-    for _, entity in ipairs(self.entitiesDraw) do
+    for _, entity in ipairs(self.entitiesBackgroundDraw) do
+      if rect.isIntersecting(x,y,w,h,  entity.x, entity.y, entity.w, entity.h) then
+        drawEntity(entity)
+      end
+    end
+  else
+    lume.each(self.entitiesBackgroundDraw, drawEntity)
+  end
+
+  -- draw the ysort entitites
+  table.sort(self.entitiesYSort, ySort)
+  if shouldCull then
+    for _, entity in ipairs(self.entitiesYSort) do
       if rect.isIntersecting(x,y,w,h, entity.x, entity.y, entity.w, entity.h) then
         drawEntity(entity)
       end
     end
   else
-    lume.each(self.entities, drawEntity)
+    lume.each(self.entitiesYSort, drawEntity)
   end
 end
 

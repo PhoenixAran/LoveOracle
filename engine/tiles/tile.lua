@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local bit = require 'bit'
 local Entity = require 'engine.entities.entity'
+local EntityDrawType = require 'engine.enums.entity_draw_type'
 local TileType = require('engine.enums.flags.tile_type_flags').enumMap
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local GRID_SIZE = require('constants').GRID_SIZE
@@ -28,7 +29,8 @@ local Tile = Class { __includes = Entity,
       w = GRID_SIZE,
       h = GRID_SIZE,
       zMin = zMin,
-      zMax = zMax
+      zMax = zMax,
+      entityDrawType = EntityDrawType.background
     })
     -- TODO: check if it has a hurtbox
     -- TODO: make hurtbox

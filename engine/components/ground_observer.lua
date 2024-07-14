@@ -123,7 +123,7 @@ function GroundObserver:update(dt)
   ex = ex + self.pointOffsetX
   ey = ey + self.pointOffsetY
   local items, len = Physics:queryRect(ex - QUERY_RECT_LENGTH / 2, ey - QUERY_RECT_LENGTH / 2, QUERY_RECT_LENGTH, QUERY_RECT_LENGTH, self.queryFilter)
-  lume.sort(items, self.bumpSorter)
+  table.sort(items, self.bumpSorter)
   if 0 < len then
     for _, item in ipairs(items) do
       if item:isTile() then

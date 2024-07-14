@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
+local EntityDrawType = require 'engine.enums.entity_draw_type'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 local parse = require 'engine.utils.parse_helpers'
@@ -76,12 +77,13 @@ end
 ---@field loopType integer
 local MovingPlatform = Class { __includes = Entity,
   init = function(self, args)
+    args.drawType = EntityDrawType.background
     Entity.init(self, args)
     if args.loopType ~= 'Cycle' and args.loopType ~= 'PingPong' then
-      error('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object')
+      love.log.warn('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object. Defaulting to Cycle loopType')
+      args.loopType = 'Cycle'
     end
     self.pathCommands = parsePathScript(args.pathScript)
-    print(love.inspect(self.pathCommands))
     self.loopType = LoopType[args.loopType]
     self.spriteRenderer = SpriteBank.build('1x2_platform', self)
   end
