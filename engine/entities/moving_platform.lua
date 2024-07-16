@@ -78,6 +78,7 @@ local function parsePathScript(script, initialX, initialY)
       error('Invalid path command given: ' .. line)
     end
   end
+  -- TODO if looptype is pingpong, you have to get the iterate backwards to the command list and make inverse commands
   if lume.count(commands) == 0 then
     love.log.warn('Spawning platform without path script')
   end
@@ -111,7 +112,7 @@ local MovingPlatform = Class { __includes = Entity,
       love.log.warn('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object. Defaulting to Cycle loopType')
       args.loopType = 'Cycle'
     end
-    self.pathCommands = parsePathScript(args.pathScript, args.x + (args.w / 2), args.y + (args.y / 2))
+    self.pathCommands = parsePathScript(args.pathScript, args.x + (args.w / 2), args.y + (args.h / 2))
     self.loopType = LoopType[args.loopType]
     -- TODO add via tiled args
     self.spriteRenderer = SpriteBank.build('1x2_platform', self)
