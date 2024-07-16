@@ -302,6 +302,7 @@ end
 
 function Player:respawn()
   self:setPosition(self.respawnPositionX, self.respawnPositionY)
+  Physics:update(self, self.x, self.y)
   self:setAnimationDirection4(self.respawnDirection4)
   self:setVector(0, 0)
   self:setZPosition(0)

@@ -8,6 +8,7 @@ local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local TileTypes = TileTypeFlags.enumMap
 local Input = require('engine.singletons').input
+local Physics = require 'engine.physics'
 
 -- some class constants
 local JUMP_Z_VELOCITY = 2
@@ -238,6 +239,7 @@ function PlayerMovementController:stayInsideHole()
     self.player:setPosition(px, ty + th) -- Set to the bottom boundary
     self.player:setVector(vx, 0)
   end
+  Physics:update(self.player, self.player.x, self.player.y)
 end
 
 ---@return Tile
