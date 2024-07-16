@@ -92,21 +92,14 @@
          "name":"entities",
          "objects":[
                 {
-                 "id":18,
+                 "id":24,
                  "properties":[
-                        {
-                         "name":"loopType",
-                         "propertytype":"LoopType",
-                         "type":"string",
-                         "value":"Cycle"
-                        }, 
                         {
                          "name":"pathScript",
                          "type":"string",
-                         "value":"move 0, -4;\npause 1;\ninitial_position;\npause 3;\n"
+                         "value":"move 5, 0;\npause 2;\nmove 0, -4;\npause 2;\ninitial_position;\npause 2;"
                         }],
                  "template":"..\/templates\/1x2_platform.tj",
-                 "type":"moving_platform",
                  "x":480,
                  "y":112
                 }],
@@ -140,7 +133,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":24,
+ "nextobjectid":25,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

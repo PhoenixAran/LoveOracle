@@ -12,6 +12,7 @@ local Physics = require 'engine.physics'
 local PlatformPathCommandType = {
   Move = 'move',
   Pause = 'pause',
+  -- this is just a helper for Move command
   ReturnToInitialPosition = 'initial_position'
 }
 
@@ -31,8 +32,6 @@ local PingPongState = {
 ---@field moveX integer grid units to move by horizontally
 ---@field moveY integer grid units to move by vertically
 ---@field pauseTime integer amount of ticks this platform should stay still for
----@field retX integer x position moving platform must return to
----@field retY integer y position moving platform must return to
 local PlatformPathCommand = Class {
   init = function(self, commandType, arg1, arg2)
     self.commandType = commandType
@@ -41,18 +40,46 @@ local PlatformPathCommand = Class {
       self.moveY = tonumber(arg2)
     elseif commandType == PlatformPathCommandType.Pause then
       self.pauseTime = tonumber(arg1)
-    elseif commandType == PlatformPathCommandType.ReturnToInitialPosition then
-      self.retX = tonumber(arg1)
-      self.retY = tonumber(arg2)
     end
   end
 }
+
+function PlatformPathCommandType:getType()
+  return 'platform_path_command_type'
+end
+
+function PlatformPathCommand:getInverse()
+  if self.commandType == PlatformPathCommandType.Move then
+    return PlatformPathCommand(self.commandType, -self.moveX, -self.moveY)
+  else
+    return PlatformPathCommand(self.commandType, self.pauseTime)
+  end
+end
+
+
+---this helps implement the ReturnToInitialPosition path command
+---this gets all the movements, to help determine how much to move platform to get to it's initial spawn position
+---@param commands PlatformPathCommand[]
+---@param startIndex integer
+---@param endIndex integer
+---@return integer sumX
+---@return integer sumY
+local function sumAllGridUnitMovements(commands, startIndex, endIndex)
+  local x, y  = 0, 0
+  for i = startIndex, endIndex - 1, 1 do
+    if commands[i].commandType == PlatformPathCommandType.Move then
+      x = x + commands[i].moveX
+      y = y + commands[i].moveY
+    end
+  end
+  return x, y
+end
 
 local SEMICOLON_TOKEN = ';'
 --- compiles script path into array of PlatformPathCommand objects
 ---@param script string
 ---@return PlatformPathCommand[]
-local function parsePathScript(script, initialX, initialY)
+local function parsePathScript(loopType, script, initialX, initialY)
   local commands = { }
   local scriptLines = parse.split(script, SEMICOLON_TOKEN)
   local parts = { }
@@ -73,12 +100,23 @@ local function parsePathScript(script, initialX, initialY)
       assert(parse.argIsInteger(parts[2]), 'Expected integer argument 1 in pause command. Error script: ' .. script)
       lume.push(commands, PlatformPathCommand(commandType, parts[2]))
     elseif commandType == PlatformPathCommandType.ReturnToInitialPosition then
-      lume.push(commands, PlatformPathCommand(commandType, initialX, initialY))
+      local x, y = sumAllGridUnitMovements(commands, 1, i)
+      lume.push(commands, PlatformPathCommand(PlatformPathCommandType.Move, -x, -y))
     else
       error('Invalid path command given: ' .. line)
     end
   end
-  -- TODO if looptype is pingpong, you have to get the iterate backwards to the command list and make inverse commands
+  if loopType == LoopType.PingPong then
+    local cnt = lume.count(commands)
+    local inverseCommands = { }
+    for i = cnt, 1, -1 do
+      lume.push(inverseCommands, commands[i]:getInverse())
+    end
+
+    for _, cmd in ipairs(inverseCommands) do
+      lume.push(commands, cmd)
+    end
+  end
   if lume.count(commands) == 0 then
     love.log.warn('Spawning platform without path script')
   end
@@ -90,7 +128,6 @@ end
 ---@class MovingPlatform : Entity
 ---@field pathCommands PlatformPathCommand[]
 ---@field spriteRenderer SpriteRenderer
----@field loopType integer
 ---@field speed number
 ---@field idleDuration number
 ---@field commandIndex number
@@ -112,8 +149,7 @@ local MovingPlatform = Class { __includes = Entity,
       love.log.warn('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object. Defaulting to Cycle loopType')
       args.loopType = 'Cycle'
     end
-    self.pathCommands = parsePathScript(args.pathScript, args.x + (args.w / 2), args.y + (args.h / 2))
-    self.loopType = LoopType[args.loopType]
+    self.pathCommands = parsePathScript(LoopType[args.loopType], args.pathScript, args.x + (args.w / 2), args.y + (args.h / 2))
     -- TODO add via tiled args
     self.spriteRenderer = SpriteBank.build('1x2_platform', self)
     self.speed = 25
@@ -151,41 +187,13 @@ function MovingPlatform:update(dt)
         end
         self.currentPauseTime = self.currentPauseTime + dt
         self.currentCommandComplete = self.currentPauseTime >= currentCommand.pauseTime
-      elseif currentCommand.commandType == PlatformPathCommandType.ReturnToInitialPosition then
-        if not self.currentCommandSetUp then
-          local x, y = self:getPosition()
-          self.targetX, self.targetY = currentCommand.retX, currentCommand.retY
-          self.currentCommandSetUp = true
-          self.horizontalClamp = x < self.targetX and math.min or math.max
-          self.verticalClamp = y < self.targetY and math.min or math.max
-        end
-        self.currentCommandComplete = self:moveTowards(dt, self.targetX, self.targetY)
       end
     end
 
     if self.currentCommandComplete then
       self.currentCommandSetUp = false
       self.currentCommandComplete = false
-      -- change current command index if required
-      if self.loopType == LoopType.Cycle then
-        self.commandIndex = (self.commandIndex % lume.count(self.pathCommands)) + 1
-      elseif self.loopType == LoopType.PingPong then
-        if self.pingPongState == PingPongState.Forwards then
-          if self.commandIndex < lume.count(self.pathCommands) then
-            self.commandIndex = self.commandIndex + 1
-          elseif self.commandIndex == lume.count(self.pathCommands) then
-            self.commandIndex = self.commandIndex - 1
-            self.pingPongState = PingPongState.Backwards
-          end
-        else
-          if self.commandIndex > 1 then
-            self.commandIndex = self.commandIndex - 1
-          else
-            self.commandIndex = 1
-            self.pingPongState = PingPongState.Forwards
-          end
-        end
-      end
+      self.commandIndex = (self.commandIndex % lume.count(self.pathCommands)) + 1
     end
   end
 end

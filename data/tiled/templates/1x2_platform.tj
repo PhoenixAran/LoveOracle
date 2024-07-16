@@ -11,6 +11,17 @@
              "value":32
             }, 
             {
+             "name":"loopType",
+             "propertytype":"LoopType",
+             "type":"string",
+             "value":"PingPong"
+            }, 
+            {
+             "name":"pathScript",
+             "type":"string",
+             "value":""
+            }, 
+            {
              "name":"w",
              "type":"int",
              "value":16
