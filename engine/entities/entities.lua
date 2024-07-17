@@ -202,11 +202,11 @@ function Entities:isTopTile(tile)
   return false
 end
 
-function Entities:update(dt)
-  self.player:update(dt)
+function Entities:update()
+  self.player:update()
   for _, entity in ipairs(self.entities) do
     if entity ~= self.player then
-      entity:update(dt)
+      entity:update()
     end
   end
 end

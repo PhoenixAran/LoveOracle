@@ -18,7 +18,7 @@ function DrawTilemapTest:enter(prev, ...)
   self.map = Map('test_map_1.json')
 end
 
-function DrawTilemapTest:update(dt)
+function DrawTilemapTest:update()
   self.x, self.y = love.mouse.getPosition()
   if love.mouse.isDown(1) then
     local dx = self.lastX - self.x

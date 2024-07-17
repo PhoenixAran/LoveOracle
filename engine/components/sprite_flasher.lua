@@ -60,7 +60,7 @@ function SpriteFlasher:stop()
   lume.each(self.sprites, 'setAlpha', 1)
 end
 
-function SpriteFlasher:update(dt)
+function SpriteFlasher:update()
   if self.isActive then
     if self.tick <= self.duration then
       self.tick = self.tick + 1

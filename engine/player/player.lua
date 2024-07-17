@@ -560,21 +560,21 @@ function Player:integrateStateParameters()
   self.stateParameters:integrateParameters(self.weaponStateMachine:getStateParameters())
 end
 
-function Player:updateStates(dt)
+function Player:updateStates()
   self:integrateStateParameters()
 
   -- update weapon state
-  self.weaponStateMachine:update(dt)
+  self.weaponStateMachine:update()
   -- update environment state
-  self.environmentStateMachine:update(dt)
+  self.environmentStateMachine:update()
   self:requestNaturalState()
 
   -- update control state
-  self.controlStateMachine:update(dt)
+  self.controlStateMachine:update()
 
   -- update condition states
   for i = lume.count(self.conditionStateMachines), 1, -1 do
-    self.conditionStateMachines[i]:update(dt)
+    self.conditionStateMachines[i]:update()
     if not self.conditionStateMachines[i]:isActive() then
       table.remove(self.conditionStateMachines, i)
     end
@@ -604,9 +604,9 @@ function Player:equipItem(item)
   end
 end
 
-function Player:updateEquippedItems(dt)
+function Player:updateEquippedItems()
   for key, item in pairs(self.items) do
-    item:update(dt)
+    item:update()
     if item:isUsable() then
       if item:isButtonDown() then
         item:onButtonDown()
@@ -713,12 +713,12 @@ function Player:onAwake()
   self.roomEdgeCollisionBox:entityAwake()
 end
 
-function Player:update(dt)
+function Player:update()
   self.previousPositionX, self.previousPositionY = self.x, self.y
   -- pre-state update
-  self.groundObserver:update(dt)
+  self.groundObserver:update()
   self:requestNaturalState()
-  self.playerMovementController:update(dt)
+  self.playerMovementController:update()
   self:updateUseDirections()
 
   self.pressedActionButtons['a'] = false
@@ -745,15 +745,15 @@ function Player:update(dt)
   -- update states
   self:updateStates()
 
-  self:updateEquippedItems(dt)
-  self:updateEntityEffectSprite(dt)
+  self:updateEquippedItems()
+  self:updateEntityEffectSprite()
 
-  self.spriteFlasher:update(dt)
-  self.sprite:update(dt)
-  self.combat:update(dt)
-  self.movement:update(dt)
+  self.spriteFlasher:update()
+  self.sprite:update()
+  self.combat:update()
+  self.movement:update()
 
-  local tvx, tvy = self:move(dt)
+  local tvx, tvy = self:move()
   --check if we are pushing a tile
   local EPSILON = 0.001
   if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then

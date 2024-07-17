@@ -109,7 +109,7 @@ function Hitbox:onDisabled()
   end
 end
 
-function Hitbox:update(dt)
+function Hitbox:update()
   if not self.detectOnly then
     Physics:update(self, self.x, self.y, self.w, self.h)
     --TODO update to new physics API

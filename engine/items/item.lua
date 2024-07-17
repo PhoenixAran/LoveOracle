@@ -98,7 +98,7 @@ function Item:onButtonPressed()
   return false
 end
 
-function Item:update(dt)
+function Item:update()
 end
 
 function Item:draw()

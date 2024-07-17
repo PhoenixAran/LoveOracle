@@ -79,7 +79,8 @@ function Camera.setFollowTarget(target, followTargetPositionGetter)
   Camera.followTargetPositionGetter = followTargetPositionGetter
 end
 
-function Camera.update(dt)
+function Camera.update()
+  local dt = love.time.dt
   local w, h = Camera.getSize()
 
   -- update follow target if it exists

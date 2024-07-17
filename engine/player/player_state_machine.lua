@@ -89,9 +89,9 @@ function PlayerStateMachine:forceBeginState(newState)
   end
 end
 
-function PlayerStateMachine:update(dt)
+function PlayerStateMachine:update()
   if self.currentState ~= nil then
-    self.currentState:update(dt)
+    self.currentState:update()
     if not self.currentState.active then
       self.currentState = nil
     end

@@ -109,7 +109,7 @@ function ContentViewer:enter(prev, ...)
 
 end
 
-function ContentViewer:update(dt)
+function ContentViewer:update()
   imgui.NewFrame()
 
   if imgui.BeginMainMenuBar() then

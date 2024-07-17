@@ -12,7 +12,7 @@ function TestEnemy:getType()
   return 'test_enemy'
 end
 
-function TestEnemy:update(dt)
+function TestEnemy:update()
   
 end
 

@@ -102,10 +102,10 @@ function RoomControl:onEnd()
   self:release()
 end
 
-function RoomControl:update(dt)
+function RoomControl:update()
   local roomState = self.roomStateStack:getCurrentState()
   if roomState then
-    roomState:update(dt)
+    roomState:update()
   end
 end
 

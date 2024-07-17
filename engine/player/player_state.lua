@@ -40,7 +40,7 @@ function PlayerState:onHurt() end
 
 function PlayerState:onInterruptItems() end
 
-function PlayerState:update(dt) end
+function PlayerState:update() end
 
 ---@param state PlayerState
 ---@return boolean

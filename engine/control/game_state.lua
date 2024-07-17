@@ -45,7 +45,7 @@ function GameState:endState()
   end
 end
 
-function GameState:update(dt)
+function GameState:update()
 end
 
 function GameState:draw()

@@ -170,7 +170,8 @@ function MovingPlatform:getType()
   return 'moving_platform'
 end
 
-function MovingPlatform:update(dt)
+function MovingPlatform:update()
+  local dt = love.time.dt
   -- execute current command
   if lume.any(self.pathCommands) then
     local currentCommand = self.pathCommands[self.commandIndex]
@@ -218,13 +219,13 @@ function MovingPlatform:moveTowards(dt, targetX, targetY)
   return math.abs(targetX - x) <= EPSILON and math.abs(targetY - y) <= EPSILON
 end
 
-function MovingPlatform:getPlatformVelocity(dt)
+function MovingPlatform:getPlatformVelocity()
   if not lume.any(self.pathCommands) then
     return 0, 0
   end
   local currentCommand = self.pathCommands[self.commandIndex]
   if currentCommand.commandType == PlatformPathCommandType.Move then
-    return self:calculateVelocity(dt, self.targetX, self.targetY)
+    return self:calculateVelocity(love.time.dt, self.targetX, self.targetY)
   end
   return 0, 0
 end

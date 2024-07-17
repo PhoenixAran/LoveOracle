@@ -33,9 +33,9 @@ function ItemSword:onButtonPressed()
   return true
 end
 
-function ItemSword:update(dt)
-  self.hitbox:update(dt)
-  self.sprite:update(dt)
+function ItemSword:update()
+  self.hitbox:update()
+  self.sprite:update()
 end
 
 function ItemSword:drawAbove()

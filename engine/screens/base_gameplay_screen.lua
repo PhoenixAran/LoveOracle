@@ -65,12 +65,13 @@ function BaseGameplayScreen:enter(prev, ...)
   Singletons.gameControl = self.gameControl
 end
 
-function BaseGameplayScreen:update(dt)
+function BaseGameplayScreen:update()
+  local dt = love.time.dt
   if console.active then
     console.update(dt)
   else
     Input:update(dt)
-    self.gameControl:update(dt)
+    self.gameControl:update()
   end
 end
 

@@ -29,8 +29,8 @@ function CompositeSpriteTest:enter(previous, ...)
   self.testEntity:awake()
 end
 
-function CompositeSpriteTest:update(dt)
-  self.testEntity:update(dt)
+function CompositeSpriteTest:update()
+  self.testEntity:update()
 end
 
 function CompositeSpriteTest:draw()

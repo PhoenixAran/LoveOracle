@@ -39,7 +39,7 @@ function PlayerPushState:getType()
   return 'player_push_state'
 end
 
-function PlayerPushState:update(dt)
+function PlayerPushState:update()
   local px, py = self.player:getVector()
   if px == 0 and py == 0 then
     self:endState()

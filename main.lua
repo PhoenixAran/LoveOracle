@@ -14,6 +14,10 @@ require 'engine.logger'
 love.log.useColor = love.system.getOS() ~= 'Windows'
 love.log.outFile = string.format('love-oracle_%s_log.txt', os.date('%Y-%m-%d'))
 
+
+-- time
+require 'engine.time'
+
 -- init quake console
 require 'lib.console'
 require 'engine.console_commands'
@@ -109,6 +113,7 @@ function love.load(args)
 end
 
 function love.update(dt)
+  love.time.update(dt)
   screenManager:emit('update', dt)
 end
 

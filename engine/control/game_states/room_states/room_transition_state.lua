@@ -125,12 +125,12 @@ function RoomTransitionState:onBegin()
   self.newRoom:load(self.control:getEntities())
 end
 
-function RoomTransitionState:update(dt)
-  self.playerTweenCompleted = self.playerTween:update(dt)
-  self.cameraTweenCompleted = self.cameraTween:update(dt)
+function RoomTransitionState:update()
+  self.playerTweenCompleted = self.playerTween:update(love.time.dt)
+  self.cameraTweenCompleted = self.cameraTween:update(love.time.dt)
 
   self.player:setPosition(self.playerSubject.x, self.playerSubject.y)
-  Camera.update(dt)
+  Camera.update()
 
   if self.playerTweenCompleted and self.cameraTweenCompleted then
     self.control:popState()

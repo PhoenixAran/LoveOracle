@@ -35,8 +35,8 @@ function SignalTest:enter(prev, ...)
   self.a:connect('APressed', self.b, '_onAPressed', { 'bindArg' })
 end
 
-function SignalTest:update(dt)
-  input:update(dt)
+function SignalTest:update()
+  input:update(love.time.dt)
   if input:pressed('left') then
     print('a:emit()')
     self.a:emit('APressed', 'arg1', 'arg2', 'arg3')

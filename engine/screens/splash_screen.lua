@@ -11,7 +11,7 @@ function SplashScreen:enter(prev, ...)
 
 end
 
-function SplashScreen:update(dt)
+function SplashScreen:update()
 end
 
 function SplashScreen:draw()

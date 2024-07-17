@@ -216,9 +216,9 @@ function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, play
   end
 end
 
-function Room:updateAnimatedTiles(dt)
+function Room:updateAnimatedTiles()
   for _, tile in pairs(self.animatedTiles) do
-    tile.sprite:update(dt)
+    tile.sprite:update()
   end
 end
 

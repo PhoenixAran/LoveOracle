@@ -68,7 +68,7 @@ function AnimatedSpriteRendererTest:enter(previous, ...)
   self.entity:setPosition(144 / 2 + 8, 160 / 2)
 end
 
-function AnimatedSpriteRendererTest:update(dt)
+function AnimatedSpriteRendererTest:update()
   -- dark times before Slab library lol
   local changed = false
   if input:pressed('up') then
@@ -88,7 +88,7 @@ function AnimatedSpriteRendererTest:update(dt)
       self.sprite:play(animation)
     end
   end
-  self.sprite:update(dt)
+  self.sprite:update()
 end
 
 function AnimatedSpriteRendererTest:draw()

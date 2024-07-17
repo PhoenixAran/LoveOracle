@@ -266,8 +266,8 @@ function MapEntity:setVectorAwayFrom(x, y)
   self.movement:setVector(vector.sub(mx, my, x, y))
 end
 
-function MapEntity:getLinearVelocity(dt)
-  return self.movement:getLinearVelocity(dt)
+function MapEntity:getLinearVelocity()
+  return self.movement:getLinearVelocity()
 end
 
 function MapEntity:getSpeed()
@@ -297,15 +297,14 @@ function MapEntity:movesWithPlatforms()
   return self.movement.movesWithPlatforms
 end
 
----@param dt number delta time
 ---@return number tvx translation vector x
 ---@return number tvy translation vector y
-function MapEntity:move(dt)
+function MapEntity:move()
   lume.clear(self.moveCollisions)
   local oldX, oldY = self:getPosition()
   local posX, posY = self:getBumpPosition()
-  local velX, velY = self:getLinearVelocity(dt)
-  velX, velY = vector.add(velX, velY, self:getKnockbackVelocity(dt))
+  local velX, velY = self:getLinearVelocity()
+  velX, velY = vector.add(velX, velY, self:getKnockbackVelocity())
 
   -- movement due to environment
   if self:movesWithConveyors() and self:onConveyor() then
@@ -393,8 +392,8 @@ function MapEntity:getKnockbackSpeed()
   return self.combat:getKnockbackSpeed()
 end
 
-function MapEntity:getKnockbackVelocity(dt)
-  return self.combat:getKnockbackVelocity(dt)
+function MapEntity:getKnockbackVelocity()
+  return self.combat:getKnockbackVelocity()
 end
 
 -- ground observer pass throughs
@@ -475,7 +474,7 @@ function MapEntity:stopSpriteFlash()
 end
 
 -- entity effect sprite update
-function MapEntity:updateEntityEffectSprite(dt)
+function MapEntity:updateEntityEffectSprite()
   if self.shadowVisible and self:isInAir() then
     if self.effectSprite:getCurrentAnimationKey() ~= 'shadow' or not self.effectSprite:isVisible() then
       self.effectSprite:setOffset(self.shadowOffsetX, self.shadowOffsetY)
@@ -483,7 +482,7 @@ function MapEntity:updateEntityEffectSprite(dt)
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = .5
     end
-    self.effectSprite:update(dt)
+    self.effectSprite:update()
   elseif self.rippleVisible and self.groundObserver.inPuddle then
     if self.effectSprite:getCurrentAnimationKey() ~= 'ripple' or not self.effectSprite:isVisible() then
       self.effectSprite:setOffset(self.rippleOffsetX, self.shadowOffsetY)
@@ -491,7 +490,7 @@ function MapEntity:updateEntityEffectSprite(dt)
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = 1
     end
-    self.effectSprite:update(dt)
+    self.effectSprite:update()
   elseif self.grassVisible and self.groundObserver.inGrass then
     if self.effectSprite:getCurrentAnimationKey() ~= 'grass' or not self.effectSprite:isVisible() then
       self.effectSprite:setOffset(self.grassOffsetX, self.grassOffsetY)
@@ -500,14 +499,14 @@ function MapEntity:updateEntityEffectSprite(dt)
       self.effectSprite.alpha = 1
       self.grassMovementTick = 0
       -- initial update when playing the grass animation
-      self.effectSprite:update(dt)
+      self.effectSprite:update()
     end
     
     if self.movement.vectorX ~= 0 or self.movement.vectorY ~= 0 then
       self.grassMovementTick = self.grassMovementTick + 1
       if self.grassMovementTick > GRASS_ANIMATION_UPDATE_INTERVAL then
         self.grassMovementTick = 0
-        self.effectSprite:update(dt)
+        self.effectSprite:update()
       end
     end
   elseif self.effectSprite:isVisible() then

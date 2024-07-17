@@ -67,7 +67,7 @@ function PlayerRespawnDeathState:endDelayState()
   self:endState()
 end
 
-function PlayerRespawnDeathState:update(dt)
+function PlayerRespawnDeathState:update()
   if self.respawnState == RespawnState.DeathAnimation then
     if (not self.waitForAnimation) or self.player.sprite:isCompleted() then
       self.player:setVisible(false)

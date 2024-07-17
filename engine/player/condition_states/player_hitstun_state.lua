@@ -35,7 +35,7 @@ function PlayerHitstunState:onBegin(previousState)
   self.player.sprite:play('idle')
 end
 
-function PlayerHitstunState:update(dt)
+function PlayerHitstunState:update()
   if not self.combat:inHitstun() then
     self:endState()
   end

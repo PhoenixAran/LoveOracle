@@ -16,13 +16,13 @@ function RoomNormalState:getType()
   return 'room_normal_state'
 end
 
-function RoomNormalState:update(dt)
+function RoomNormalState:update()
   local entities = self.control.entities
   local player = self.control.player
   local room = self.control.currentRoom
-  entities:update(dt)
-  Camera.update(dt)
-  room:updateAnimatedTiles(dt)
+  entities:update()
+  Camera.update()
+  room:updateAnimatedTiles()
 end
 
 function RoomNormalState:draw()

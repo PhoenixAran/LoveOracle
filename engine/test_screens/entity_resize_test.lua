@@ -31,7 +31,7 @@ function Screen:enter(prev, ...)
   self.testBoxes[#self.testBoxes]:awake()
 end
 
-function Screen:update(dt)
+function Screen:update()
   if love.keyboard.isDown('i') then
     self.testEntity:resize(32, 32)
   end  
@@ -48,9 +48,9 @@ function Screen:update(dt)
     self.testEntity:resize(16, 16)
   end
   for _, b in ipairs(self.testBoxes) do
-    b:update(dt)
+    b:update()
   end
-  self.testEntity:update(dt)
+  self.testEntity:update()
 end
 
 function Screen:draw()

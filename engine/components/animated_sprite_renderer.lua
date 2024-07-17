@@ -118,7 +118,7 @@ function AnimatedSpriteRenderer:stop()
   self.state = States.None
 end
 
-function AnimatedSpriteRenderer:update(dt)
+function AnimatedSpriteRenderer:update()
   if not self:isPlaying() then
     return
   end

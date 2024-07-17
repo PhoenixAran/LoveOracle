@@ -27,10 +27,10 @@ function EntityInspectorTest:enter(prev, ...)
   self.entities:setPlayer(self.player)
 end
 
-function EntityInspectorTest:update(dt)
-  Slab.Update(dt)
-  self.entities:update(dt)
-  self.entityInspector:update(dt)
+function EntityInspectorTest:update()
+  Slab.Update(love.time.dt)
+  self.entities:update()
+  self.entityInspector:update()
 end
 
 function EntityInspectorTest:draw()

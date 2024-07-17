@@ -27,9 +27,9 @@ function PlayerPlayground:enter(prev, ...)
   self.sword:setVisible(false)
 end
 
-function PlayerPlayground:update(dt)
-  Input:update(dt)
-  self.player:update(dt)
+function PlayerPlayground:update()
+  Input:update(love.time.dt)
+  self.player:update()
 end
 
 function PlayerPlayground:draw()

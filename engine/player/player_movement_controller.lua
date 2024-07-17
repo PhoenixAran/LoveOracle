@@ -374,7 +374,7 @@ function PlayerMovementController:updateMoveControls()
   self:chooseAnimation()
 end
 
-function PlayerMovementController:update(dt)
+function PlayerMovementController:update()
   self:updateMoveMode()
   self:updateMoveControls()
   self:updateFallingInHole()

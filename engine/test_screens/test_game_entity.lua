@@ -10,10 +10,10 @@ local TestPlayer = Class { __includes = MapEntity,
   end
 }
 
-function TestPlayer:update(dt)
+function TestPlayer:update()
   local inputX, inputY = input:get('move')
   self:setVector(inputX, inputY)
-  self:move(dt)
+  self:move()
 end
 
 return TestPlayer

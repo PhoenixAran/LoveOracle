@@ -200,10 +200,10 @@ function Movement:setZVelocity(value)
 end
 
 --- calculate linear velocity for this frame
----@param dt number
 ---@return number linearVelocityX
 ---@return number linearVelocityY
-function Movement:getLinearVelocity(dt)
+function Movement:getLinearVelocity()
+  local dt = love.time.dt
   self.prevMotionX = self.motionX
   self.prevMotionY = self.motionY
   if self.vectorX == 0 and self.vectorY == 0 then
@@ -248,18 +248,19 @@ function Movement:getLinearVelocity(dt)
   return self.motionX, self.motionY
 end
 
----@param dt any
 ---@param newX any
 ---@param newY any
 ---@return number, number
-function Movement:recalculateLinearVelocity(dt, newX, newY)
+function Movement:recalculateLinearVelocity(newX, newY)
+  local dt = love.time.dt
   self.motionX, self.motionY = self.prevMotionX, self.prevMotionY
   self.vectorX, self.vectorY = newX, newY
-  return self:getLinearVelocity(dt)
+  return self:getLinearVelocity()
 end
 
 -- update z position
-function Movement:update(dt)
+function Movement:update()
+  local dt = love.time.dt
   if self.entity:getZPosition() > 0 or self.zVelocity ~= 0 then
     self.zVelocity = self.zVelocity - (self.gravity * dt)
     if self.maxFallSpeed >= 0 and self.zVelocity < -self.maxFallSpeed then

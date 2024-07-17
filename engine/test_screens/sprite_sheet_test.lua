@@ -19,7 +19,7 @@ function SpriteSheetTest:enter(previous, ...)
   self.maxIndex = self.spriteSheet:size()
 end
 
-function SpriteSheetTest:update(dt)  
+function SpriteSheetTest:update()  
   if love.keyboard.isDown("up") and self.upKeyReleased then
     if self.currentIndex < self.maxIndex then
       self.currentIndex = self.currentIndex + 1

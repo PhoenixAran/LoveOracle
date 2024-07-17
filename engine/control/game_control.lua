@@ -103,10 +103,10 @@ function GameControl:setInitialRoomControlState(room, spawnPositionX, spawnPosit
   Singletons.roomControl = self.roomControl
 end
 
-function GameControl:update(dt)
+function GameControl:update()
   local gameState = self.gameStateStack:getCurrentState()
   if gameState then
-    gameState:update(dt)
+    gameState:update()
   end
 end
 

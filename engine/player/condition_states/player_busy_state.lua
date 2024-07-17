@@ -72,7 +72,7 @@ function PlayerBusyState:onEnd(newState)
   end
 end
 
-function PlayerBusyState:update(dt)
+function PlayerBusyState:update()
   PlayerState.update(self)
   if self.timedActions[self.timer] then
     self.timedActions[self.timer](self)

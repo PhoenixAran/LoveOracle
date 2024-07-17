@@ -17,8 +17,8 @@ function TestEnemyScene:enter(prev, ...)
   self.testEnemy:initTransform()
 end
 
-function TestEnemyScene:update(dt)
-  self.testEnemy:update(dt)
+function TestEnemyScene:update()
+  self.testEnemy:update()
 end
 
 function TestEnemyScene:draw()

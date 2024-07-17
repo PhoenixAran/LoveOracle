@@ -117,7 +117,7 @@ function GroundObserver:reset()
   lume.clear(self.tiles)
 end
 
-function GroundObserver:update(dt)
+function GroundObserver:update()
   self:reset()
 
   if self.entity:isInAir() then
@@ -163,7 +163,7 @@ function GroundObserver:update(dt)
         -- this stops entities from falling into water even though they are on a platform
         -- TODO: if we make this engine more advanced we have to determine what collision takes priority through zRange value
         self:reset()
-        self.movingPlatformX, self.movingPlatformY = item:getPlatformVelocity(dt)
+        self.movingPlatformX, self.movingPlatformY = item:getPlatformVelocity()
         self.onPlatform = true
         break
       end

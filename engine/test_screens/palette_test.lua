@@ -36,8 +36,8 @@ function PaletteTest:enter(prev, ...)
   self.shader:sendColor('alternateColors', self.color )
 end
 
-function PaletteTest:update(dt)
-  Slab.Update(dt)
+function PaletteTest:update()
+  Slab.Update(love.time.dt)
   local result  = Slab.ColorPicker(self.color)
   if result.Color then
     self.color = result.Color

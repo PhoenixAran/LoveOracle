@@ -34,7 +34,7 @@ function Combat:getType()
   return 'combat'
 end
 
-function Combat:update(dt)
+function Combat:update()
   if self:isIntangible() then
     self.currentIntangibilityTime = self.currentIntangibilityTime + 1
   else
@@ -130,11 +130,10 @@ function Combat:getKnockbackSpeed()
   return self.knockbackSpeed
 end
 
----@param dt number
 ---@return number knockbackVelocityX
 ---@return number knockbackVelocityY
-function Combat:getKnockbackVelocity(dt)
-  return vector.mul(dt * self.knockbackSpeed, vector.normalize(self.knockbackDirectionX, self.knockbackDirectionY))
+function Combat:getKnockbackVelocity()
+  return vector.mul(love.time.dt * self.knockbackSpeed, vector.normalize(self.knockbackDirectionX, self.knockbackDirectionY))
 end
 
 return Combat

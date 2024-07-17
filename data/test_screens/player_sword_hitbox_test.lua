@@ -27,11 +27,11 @@ function PlayerSwordHitboxTest:enter(prev, ...)
   self.sword:setVisible(false)
 end
 
-function PlayerSwordHitboxTest:update(dt)
-  console.update(dt)
+function PlayerSwordHitboxTest:update()
+  console.update(love.time.dt)
   if not console.active then
-    Input:update(dt)
-    self.player:update(dt)
+    Input:update(love.time.dt)
+    self.player:update()
   end
 end
 

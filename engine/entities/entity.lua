@@ -190,8 +190,7 @@ function Entity:getDrawType()
 end
 
 ---called every frame interval
----@param dt number
-function Entity:update(dt)
+function Entity:update()
 
 end
 
