@@ -7,7 +7,7 @@ local HelloWorldTest = Class {
   end
 }
 
-function HelloWorldTest:update(dt)
+function HelloWorldTest:update()
 end
 
 function HelloWorldTest:draw()

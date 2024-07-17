@@ -47,13 +47,13 @@ function Screen:enter(prev, ...)
   lume.each(self.testBoxes, 'awake')
 end
 
-function Screen:update(dt)
+function Screen:update()
   local s = require 'engine.singletons'
-  s.input:update(dt)
+  s.input:update()
   for _, b in ipairs(self.testBoxes) do
-    b:update(dt)
+    b:update()
   end
-  self.testEntity:update(dt)
+  self.testEntity:update()
 end
 
 function Screen:draw()

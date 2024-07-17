@@ -49,7 +49,7 @@ function PlayerSwingState:onBegin(previousState)
   self:swing()
 end
 
-function PlayerSwingState:update(dt)
+function PlayerSwingState:update()
   if self.isReswingable and self.weapon:isButtonPressed() then
     self:swing()
   end

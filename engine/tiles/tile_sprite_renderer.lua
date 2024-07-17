@@ -32,7 +32,7 @@ function TileSpriteRenderer:resetSpriteAnimation()
 end
 
 -- This should only be called if this sprite is animated
-function TileSpriteRenderer:update(dt)
+function TileSpriteRenderer:update()
   if self.animated then
     local currentFrame = self.sprite[self.currentFrameIndex]
     local spriteFrames = self.sprite
