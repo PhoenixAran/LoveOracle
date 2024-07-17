@@ -1,5 +1,10 @@
 local MAX_DT = 3+38
 
+---Not to be confused with love.timer
+---@class Time
+---@field dt number delta time
+---@field unscaledDt number unscaled delta time
+---@field timeScale number
 local Time = { 
   dt = 0,
   unscaledDt = 0,

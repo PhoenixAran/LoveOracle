@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu2ZbQuCMBRGV1mhRdDr3++vNqHRGM3d2TXmPAeebw\/KUcvr1hhjtonsbBrFnkb6c2lwtFnZrL\/kabOxOSV664yeRty5tPxbmy6Sg+fVDiTsxY6nEXeuf\/j3cde9S1wDv1eT\/+WdlL\/fq8V\/Cc\/\/2XzuXZir5yXtzcn\/ZnNP5JHRm5u\/Nvjjjz\/++OOP\/zL9h+ZEjbhZs0Qkc2Ju3PdFOGvWSriG5PynWP8pkXANyf3up1j\/KRHpN3mt4I\/\/0v39GcJ5+zNAzf7hDFHL+3\/sHlLs\/S89XimM3UOKvf+lxyuF3LX2oW8gSa+0\/8ncvaZfe3P0l+4hxXp7M1\/\/JTz\/2ntNkl4paO81SXsAAAAAAAAAAAAAAAAAAFA\/L8V650wAQAAA",
+         "data":"H4sIAAAAAAAACu2Z2QrCMBBF405VBNff768awWAIppnoKFnOgft2aTlttdNkaYxZJbK2WSr2NPI4lwZ7m5nN\/E1Gm4XNIdGbZ\/Q04s6l5T\/YbCPZeV7DRMJe7Hgacef6h\/8j7rpvE9fA77Xkf3om5e\/3WvHv4fk\/mte9C3P2vKS9mvwvNtdEbhm92vy1wR9\/Df8xCP59+ff+\/OOPf63+U3OiRtysWSKSOTE37vsinDVbJVxDcv6\/WP8pkXANyf3uf7H+UyLSb\/JWwR\/\/3v39GcJ5+zNAy\/7hDNHK+\/\/TPaTY+196vFL4dA8p9v6XHq8Uctfap76BJL3S\/idz95q+7dXoL91DivU2pl7\/Hp5\/7b0mSa8UtPeapD0AAAAAAAAAAAAAAAAAAGifO7LeOF8AQAAA",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -102,6 +102,18 @@
                  "template":"..\/templates\/1x2_platform.tj",
                  "x":480,
                  "y":112
+                }, 
+                {
+                 "id":25,
+                 "properties":[
+                        {
+                         "name":"pathScript",
+                         "type":"string",
+                         "value":"move 5, 0;\npause 2;\ninitial_position;"
+                        }],
+                 "template":"..\/templates\/1x2_platform.tj",
+                 "x":592,
+                 "y":192
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -117,8 +129,8 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":444,
-                 "y":108
+                 "x":592,
+                 "y":176
                 }, 
                 {
                  "id":17,
@@ -133,7 +145,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":25,
+ "nextobjectid":26,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

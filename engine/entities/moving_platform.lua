@@ -157,11 +157,14 @@ local MovingPlatform = Class { __includes = Entity,
     self.speed = 25
     self.pingPongState = PingPongState.Forwards
 
+
     self.commandIndex = 1
     self.currentCommandSetUp = false
     self.currentCommandComplete = false
+    self.targetX = 0
+    self.targetY = 0
+    self.horizontalClamp, self.verticalClamp = math.max, math.max
     self.currentPauseTime = 0
-
     self:setPhysicsLayer('moving_platform')
   end
 }

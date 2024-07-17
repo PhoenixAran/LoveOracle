@@ -14,7 +14,7 @@
              "name":"loopType",
              "propertytype":"LoopType",
              "type":"string",
-             "value":"PingPong"
+             "value":"Cycle"
             }, 
             {
              "name":"pathScript",

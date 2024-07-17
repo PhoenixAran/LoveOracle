@@ -1,14 +1,12 @@
 local console = require 'lib.console'
 
-
 --- Console Command. Sets or Gets timescale
 ---@param args table
 function console.commands.timescale(args)
-  local tick  = require 'lib.tick'
   if tonumber(args) then
-    tick.timescale = tonumber(args)
+    love.timer.timeScale = tonumber(args)
   else
-    console.print('Current timescale: ' .. tick.timescale)
+    console.print('Current timescale: ' .. tostring(love.timer.timeScale))
   end
 end
 console.help.timescale = {
