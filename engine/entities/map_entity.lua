@@ -293,6 +293,10 @@ function MapEntity:movesWithConveyors()
   return self.movement.movesWithConveyors
 end
 
+function MapEntity:movesWithPlatforms()
+  return self.movement.movesWithPlatforms
+end
+
 ---@param dt number delta time
 ---@return number tvx translation vector x
 ---@return number tvy translation vector y
@@ -302,8 +306,13 @@ function MapEntity:move(dt)
   local posX, posY = self:getBumpPosition()
   local velX, velY = self:getLinearVelocity(dt)
   velX, velY = vector.add(velX, velY, self:getKnockbackVelocity(dt))
+
+  -- movement due to environment
   if self:movesWithConveyors() and self:onConveyor() then
     velX, velY = vector.add(velX, velY, self.groundObserver.conveyorVelocityX, self.groundObserver.conveyorVelocityY)
+  end
+  if self:movesWithPlatforms() and self:onPlatform() then
+    velX, velY = vector.add(velX, velY, self.groundObserver.movingPlatformX, self.groundObserver.movingPlatformY)
   end
 
   local goalX, goalY = vector.add(posX, posY, velX, velY)
@@ -404,8 +413,6 @@ end
 function MapEntity:isInLava()
   return self.groundObserver.inLava
 end
-
-
 
 --- hurt this entity
 ---@param damageInfo DamageInfo|integer

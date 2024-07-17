@@ -6,7 +6,7 @@ PhysicsFlags:makeTags {
   'player',
   'enemy',
   'npc',
-  'platform',
+  'moving_platform',
   'tile', 
   'room_edge',
   'push_block',
@@ -16,7 +16,7 @@ PhysicsFlags:makeEnumMap {
   Player = 'player',
   Enemy = 'enemy',
   NPC = 'npc',
-  Platform = 'platform',
+  MovingPlatform = 'moving_platform',
   Tile = 'tile',
   RoomEdge = 'room_edge',
   PushBlock = 'push_block'

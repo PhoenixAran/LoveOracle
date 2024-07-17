@@ -145,10 +145,12 @@ local MovingPlatform = Class { __includes = Entity,
     args.drawType = EntityDrawType.background
     args.useBumpCoords = true
     Entity.init(self, args)
+
     if args.loopType ~= 'Cycle' and args.loopType ~= 'PingPong' then
       love.log.warn('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object. Defaulting to Cycle loopType')
       args.loopType = 'Cycle'
     end
+
     self.pathCommands = parsePathScript(LoopType[args.loopType], args.pathScript, args.x + (args.w / 2), args.y + (args.h / 2))
     -- TODO add via tiled args
     self.spriteRenderer = SpriteBank.build('1x2_platform', self)
@@ -159,6 +161,8 @@ local MovingPlatform = Class { __includes = Entity,
     self.currentCommandSetUp = false
     self.currentCommandComplete = false
     self.currentPauseTime = 0
+
+    self:setPhysicsLayer('moving_platform')
   end
 }
 
@@ -198,18 +202,33 @@ function MovingPlatform:update(dt)
   end
 end
 
-function MovingPlatform:moveTowards(dt, targetX, targetY)
+function MovingPlatform:calculateVelocity(dt, targetX, targetY)
   local diffX, diffY = vector.sub(targetX, targetY, self:getPosition())
   local normX, normY = vector.normalize(diffX, diffY)
   local velX, velY = vector.mul(self.speed * dt, normX, normY)
   velX, velY = self.horizontalClamp(velX, diffX), self.verticalClamp(velY, diffY)
+  return velX, velY
+end
 
+function MovingPlatform:moveTowards(dt, targetX, targetY)
+  local velX, velY = self:calculateVelocity(dt, targetX, targetY)
   local x, y = self:getPosition()
   self:setPosition(x + velX, y + velY)
-  Physics:update(self, self.x, self.y)
-
+  Physics:update(self, self.x, self.y) 
   return math.abs(targetX - x) <= EPSILON and math.abs(targetY - y) <= EPSILON
 end
+
+function MovingPlatform:getPlatformVelocity(dt)
+  if not lume.any(self.pathCommands) then
+    return 0, 0
+  end
+  local currentCommand = self.pathCommands[self.commandIndex]
+  if currentCommand.commandType == PlatformPathCommandType.Move then
+    return self:calculateVelocity(dt, self.targetX, self.targetY)
+  end
+  return 0, 0
+end
+
 
 function MovingPlatform:draw()
   self.spriteRenderer:draw()

@@ -26,6 +26,8 @@ local QUERY_RECT_LENGTH = 1.5
 ---@field onPlatform boolean
 ---@field conveyorVelocityX number
 ---@field conveyorVelocityY number
+---@field movingPlatformX number
+---@field movingPlatformY number
 ---@field queryFilter function
 ---@field bumpSorter function
 ---@field visitedTileIndices table<integer, boolean>
@@ -38,7 +40,6 @@ local GroundObserver = Class { __includes = {Component},
     Component.init(self, entity, args)
     self.pointOffsetX = args.pointOffsetX or 0
     self.pointOffsetY = args.pointOffsetY or 0
-    self.layerMask = PhysicsFlags:get('tile').value
     self.inLava = false
     self.inGrass = false
     self.onStairs = false
@@ -54,9 +55,11 @@ local GroundObserver = Class { __includes = {Component},
 
     self.conveyorVelocityX = 0
     self.conveyorVelocityY = 0
+    self.movingPlatformX = 0
+    self.movingPlatformY = 0
 
     self.queryFilter = function(item)
-      if (item.isTile and item:isTile()) or (item.getType and item:getType() == 'platform') then
+      if (item.isTile and item:isTile()) or (item.getType and item:getType() == 'moving_platform') then
         if item.isTopTile and not item:isTopTile() then
           return false
         end
@@ -108,6 +111,8 @@ function GroundObserver:reset()
   self.inWater = false
   self.inHole = false
   self.inOcean = false
+
+  self.onPlatform = false
   lume.clear(self.visitedTileIndices)
   lume.clear(self.tiles)
 end
@@ -154,7 +159,13 @@ function GroundObserver:update(dt)
           end
         end
       else  -- its a platform
+        -- override the others since we are on a platform
+        -- this stops entities from falling into water even though they are on a platform
+        -- TODO: if we make this engine more advanced we have to determine what collision takes priority through zRange value
+        self:reset()
+        self.movingPlatformX, self.movingPlatformY = item:getPlatformVelocity(dt)
         self.onPlatform = true
+        break
       end
     end
   end

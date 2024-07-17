@@ -13,6 +13,7 @@ local Direction8 = require 'engine.enums.direction8'
 ---@field deceleration number
 ---@field slippery boolean
 ---@field movesWithConveyors boolean
+---@field movesWithPlatforms boolean
 ---@field gravity number
 ---@field maxFallSpeed number
 ---@field vectorX number
@@ -43,8 +44,10 @@ local Movement = Class { __includes = Component,
     if args.maxFallSpeed == nil then args.maxFallSpeed = 4 end
 
     if self.movesWithConveyors == nil then args.movesWithConveyors = true end
+    if self.movesWithPlatforms == nil then args.movesWithPlatforms = true end
     -- declarations
     self.movesWithConveyors = args.movesWithConveyors
+    self.movesWithPlatforms = args.movesWithPlatforms
 
     self.speed = args.speed
     self.minSpeed = args.minSpeed
