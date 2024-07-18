@@ -95,25 +95,19 @@
                  "id":24,
                  "properties":[
                         {
+                         "name":"loopType",
+                         "propertytype":"LoopType",
+                         "type":"string",
+                         "value":"PingPong"
+                        }, 
+                        {
                          "name":"pathScript",
                          "type":"string",
-                         "value":"move 5, 0;\npause 2;\nmove 0, -4;\npause 2;\ninitial_position;\npause 2;"
+                         "value":"move 5, 0;\npause 1;\nmove 0, -4;\npause 1;\ninitial_position;\npause 1;"
                         }],
                  "template":"..\/templates\/1x2_platform.tj",
                  "x":480,
                  "y":112
-                }, 
-                {
-                 "id":25,
-                 "properties":[
-                        {
-                         "name":"pathScript",
-                         "type":"string",
-                         "value":"move 5, 0;\npause 2;\ninitial_position;"
-                        }],
-                 "template":"..\/templates\/1x2_platform.tj",
-                 "x":592,
-                 "y":192
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -129,8 +123,8 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":592,
-                 "y":176
+                 "x":480,
+                 "y":104
                 }, 
                 {
                  "id":17,
