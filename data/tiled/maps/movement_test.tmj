@@ -92,18 +92,12 @@
          "name":"entities",
          "objects":[
                 {
-                 "id":24,
+                 "id":26,
                  "properties":[
-                        {
-                         "name":"loopType",
-                         "propertytype":"LoopType",
-                         "type":"string",
-                         "value":"PingPong"
-                        }, 
                         {
                          "name":"pathScript",
                          "type":"string",
-                         "value":"move 5, 0;\npause 1;\nmove 0, -4;\npause 1;\ninitial_position;\npause 1;"
+                         "value":"move 5, 0;\ninitial_position;"
                         }],
                  "template":"..\/templates\/1x2_platform.tj",
                  "x":480,
@@ -139,7 +133,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":26,
+ "nextobjectid":27,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

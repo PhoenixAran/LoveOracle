@@ -14,12 +14,13 @@
              "name":"loopType",
              "propertytype":"LoopType",
              "type":"string",
-             "value":"PingPong"
+             "value":"Cycle"
             }, 
             {
-             "name":"pathScript",
+             "name":"movingPlatformType",
+             "propertytype":"MovingPlatformType",
              "type":"string",
-             "value":""
+             "value":"1x2"
             }, 
             {
              "name":"w",

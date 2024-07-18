@@ -53,20 +53,26 @@
                     "value": 0
                 },
                 {
-                    "name": "includeStartingPointAsPathPoint",
-                    "type": "bool",
-                    "value": true
-                },
-                {
                     "name": "loopType",
                     "propertyType": "LoopType",
                     "type": "string",
                     "value": "Cycle"
                 },
                 {
+                    "name": "movingPlatformType",
+                    "propertyType": "MovingPlatformType",
+                    "type": "string",
+                    "value": "1x1"
+                },
+                {
                     "name": "pathScript",
                     "type": "string",
                     "value": ""
+                },
+                {
+                    "name": "speed",
+                    "type": "float",
+                    "value": 25
                 },
                 {
                     "name": "w",
@@ -81,6 +87,19 @@
                 "object",
                 "project"
             ]
+        },
+        {
+            "id": 8,
+            "name": "MovingPlatformType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "1x1",
+                "1x2",
+                "2x1",
+                "2x2"
+            ],
+            "valuesAsFlags": false
         },
         {
             "color": "#ff00aaff",

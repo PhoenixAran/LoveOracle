@@ -109,7 +109,6 @@ local function parsePathScript(script, initialX, initialY)
   if lume.count(commands) == 0 then
     love.log.warn('Spawning platform without path script')
   end
-  print(love.inspect(commands))
   return commands
 end
 
@@ -142,14 +141,15 @@ local MovingPlatform = Class { __includes = Entity,
       love.log.warn('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object. Defaulting to Cycle loopType')
       args.loopType = 'Cycle'
     end
-
+    print(love.inspect(args))
+    -- vars set by tiled editor
+    self.spriteRenderer = SpriteBank.build(args.movingPlatformType .. '_platform', self)
     self.pathCommands = parsePathScript(args.pathScript, args.x + (args.w / 2), args.y + (args.h / 2))
-    -- TODO add via tiled args
-    self.spriteRenderer = SpriteBank.build('1x2_platform', self)
-    self.speed = 25
-    self.pingPongState = PingPongState.Forwards
+    self.speed = args.speed
     self.loopType = LoopType[args.loopType]
 
+
+    self.pingPongState = PingPongState.Forwards
     self.commandIndex = 1
     self.currentCommandSetUp = false
     self.currentCommandComplete = false
