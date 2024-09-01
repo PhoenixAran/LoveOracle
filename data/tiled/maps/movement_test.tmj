@@ -18,7 +18,7 @@
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3ZoQ7CMBhF4b4aAgxiGAQYxGYwGDQaPY1AIaZ4Rf6G27AsbRYWRrL1fMlJZpbstnLOobGWaqdijj1Nld+9UFsVO4Or9VA3FZ7Pf\/nScaT2Nypo7+825f2FtVYHVTr2d4X9tfvsrtWQ\/ZW1sjbWfsD7v+LvuFCli2\/3Lj19q1In9z4HAABycFe5yn0\/AAAAAMxZ6v9BaO78xmci9s8f+\/PeDwAAAAAAAAAAAADAGF65cnQWAEAAAA==",
+         "data":"H4sIAAAAAAAACu3ZoQ7CMABF0Ro+DAEGMQwCDGIzGAwajZ5GoBBT\/CJt9hqWpc3CwkjW3pPcZGbJXitnDBrbSu1VyGmguXK7l2qnQmdwsz3VXfnny1++dBqx\/Y3yuvv7zXl\/YduooyoN+\/v8\/tp8dtdqzP7KtrZtbYcR7\/+Ku+NClSa83bkO9K1KnU17DkjPohMAoPVQucp9PwAAAACkLPb\/wJc6t\/EVif3pY3\/e+wEAAAAAAAAAAAAAmMIblJZi9ABAAAA=",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -102,6 +102,14 @@
                  "template":"..\/templates\/1x2_platform.tj",
                  "x":480,
                  "y":112
+                }, 
+                {
+                 "height":16,
+                 "id":33,
+                 "template":"..\/templates\/ledge_jump.tj",
+                 "width":48,
+                 "x":384,
+                 "y":128
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -117,8 +125,8 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":480,
-                 "y":104
+                 "x":196,
+                 "y":68
                 }, 
                 {
                  "id":17,
@@ -133,7 +141,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":27,
+ "nextobjectid":34,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

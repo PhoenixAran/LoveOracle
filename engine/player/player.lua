@@ -679,6 +679,11 @@ function Player:checkRoomTransitions()
   end
 end
 
+--- will start a ledge jump state if the player is able to
+function Player:updateLedgeJumpState()
+
+end
+
 ---query physics world with push tile rect
 ---@return any[] items
 ---@return integer len
@@ -754,6 +759,8 @@ function Player:update()
   self.movement:update()
 
   local tvx, tvy = self:move()
+  --check if we can ledge jump
+  self:updateLedgeJumpState()
   --check if we are pushing a tile
   local EPSILON = 0.001
   if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then

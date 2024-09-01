@@ -1,0 +1,12 @@
+{ "object":
+    {
+     "height":48,
+     "id":29,
+     "name":"",
+     "rotation":0,
+     "type":"ledge_jump",
+     "visible":true,
+     "width":16
+    },
+ "type":"template"
+}

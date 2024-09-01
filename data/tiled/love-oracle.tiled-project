@@ -32,6 +32,44 @@
     ],
     "propertyTypes": [
         {
+            "id": 11,
+            "name": "Direction4",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "up",
+                "down",
+                "left",
+                "right"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ffaaaaff",
+            "drawFill": true,
+            "id": 10,
+            "members": [
+                {
+                    "name": "direction",
+                    "propertyType": "Direction4",
+                    "type": "string",
+                    "value": "up"
+                },
+                {
+                    "name": "move",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "ledge_jump",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
+        },
+        {
             "id": 7,
             "name": "LoopType",
             "storageType": "string",

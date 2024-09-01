@@ -141,7 +141,6 @@ local MovingPlatform = Class { __includes = Entity,
       love.log.warn('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object. Defaulting to Cycle loopType')
       args.loopType = 'Cycle'
     end
-    print(love.inspect(args))
     -- vars set by tiled editor
     self.spriteRenderer = SpriteBank.build(args.movingPlatformType .. '_platform', self)
     self.pathCommands = parsePathScript(args.pathScript, args.x + (args.w / 2), args.y + (args.h / 2))

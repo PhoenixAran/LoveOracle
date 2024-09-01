@@ -51,6 +51,7 @@ function EntityBank.initialize(path)
 
   -- load entities from our core engine
   registerEntity('engine.entities.moving_platform')
+  registerEntity('engine.entities.ledge_jump')
 
   -- load entities from our data folder
   loadEntities('data/entities')
