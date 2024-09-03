@@ -63,6 +63,9 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field tileQueryRect table
 ---@field tileQueryRectTargets table
 ---@field tileQueryRectFilter function
+---@field ledgeJumpQueryRect table
+---@field ledgeJumpQueryRectTargets table
+---@field ledgeJumpQueryRectFilter function
 local Player = Class { __includes = MapEntity,
   ---@param self Player
   ---@param args table
@@ -85,10 +88,10 @@ local Player = Class { __includes = MapEntity,
       w = 12,
       h = 13,
       offsetX = 0,
-      offsetY = -2 
+      offsetY = -2
     })
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
-    self:setCollidesWithLayer('tile')
+    self:setCollidesWithLayer({'tile', 'ledge_jump'})
     -- tile collision
     self:setCollisionTile('wall')
     
@@ -119,7 +122,7 @@ local Player = Class { __includes = MapEntity,
       ['player_swing_state'] = PlayerSwingState(self),
       ['player_push_state'] = PlayerPushState(self),
     }
-    
+
     -- use direction variables are useful for finding what way player
     -- is holding dpad when they are not allowed to move (like during a sword swing)
     -- if the player can move, it will match the direction they are moving in
@@ -187,6 +190,32 @@ local Player = Class { __includes = MapEntity,
       }
     }
 
+    self.ledgeJumpQueryRect = {
+      x = 0,
+      y = 0,
+      w = 2,
+      h = 2
+    }
+
+    self.ledgeJumpQueryRectTargets = {
+      [Direction4.left] = {
+        x = -5 - self.ledgeJumpQueryRect.w / 2,
+        y = 0 - self.ledgeJumpQueryRect.h / 2
+      },
+      [Direction4.right] = {
+        x = 5 - self.ledgeJumpQueryRect.w / 2,
+        y = 0 - self.ledgeJumpQueryRect.h / 2,
+      },
+      [Direction4.up] = {
+        x = 0 - self.ledgeJumpQueryRect.w / 2,
+        y = -6 - self.ledgeJumpQueryRect.h / 2
+      },
+      [Direction4.down] = {
+        x = 0 - self.ledgeJumpQueryRect.w / 2,
+        y = 6 - self.ledgeJumpQueryRect.h / 2
+      }
+    }
+
     -- declarations
     self.previousPositionX = 0
     self.previousPositionY = 0
@@ -235,7 +264,15 @@ local Player = Class { __includes = MapEntity,
         if item.isTile and item:isTile() then
           return bit.band(playerInstance.collisionTiles, item.tileData.tileType) ~= 0
         end
-        return bit.band(PhysicsFlags:get('push_block').value, item.physicsLayer)
+        return bit.band(PhysicsFlags:get('push_block').value, item.physicsLayer) ~= 0
+      end
+      return false
+    end
+
+    -- set up ledge jump query filter
+    self.ledgeJumpQueryRectFilter = function(item)
+      if canCollide(playerInstance, item) then
+        return item.getType and item:getType() == 'ledge_jump'
       end
       return false
     end
@@ -681,7 +718,10 @@ end
 
 --- will start a ledge jump state if the player is able to
 function Player:updateLedgeJumpState()
-
+  if self:getStateParameters().canPush then
+    local movementDirection4 = self.movement:getDirection4()
+    local animDirection = self.animationDirection4
+  end
 end
 
 ---query physics world with push tile rect

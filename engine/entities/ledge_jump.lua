@@ -13,19 +13,25 @@ local Direction4 = require 'engine.enums.direction4'
 ---@field moveX integer
 local LedgeJump = Class { __includes = Entity,
   init = function(self, args)
-    Entity.init(self)
-    self.direction4 = args.direction
+    args.w = args.width
+    args.h = args.height
+    Entity.init(self, args)
     self:setPhysicsLayer('ledge_jump')
-    self:setCollidesWithLayer('player')
   end
 }
 
 function LedgeJump:getType()
-  return 'ledge_leap'
+  return 'ledge_jump'
 end
 
 function LedgeJump:getCollisionTag()
   return 'ledge_jump'
+end
+
+function LedgeJump:draw()
+  love.graphics.setColor(1, 0, 0)
+  love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
+  love.graphics.setColor(1, 1, 1)
 end
 
 return LedgeJump

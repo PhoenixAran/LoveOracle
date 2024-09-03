@@ -23,4 +23,5 @@ PhysicsFlags:makeEnumMap {
   PushBlock = 'push_block',
   LedgeJump = 'ledge_jump'
 }
+
 return PhysicsFlags
