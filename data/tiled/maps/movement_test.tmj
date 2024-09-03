@@ -92,6 +92,7 @@
          "name":"entities",
          "objects":[
                 {
+                 "height":32,
                  "id":26,
                  "properties":[
                         {
@@ -100,6 +101,7 @@
                          "value":"move 5, 0;\ninitial_position;"
                         }],
                  "template":"..\/templates\/1x2_platform.tj",
+                 "width":16,
                  "x":480,
                  "y":112
                 }, 
@@ -108,8 +110,8 @@
                  "id":33,
                  "template":"..\/templates\/ledge_jump.tj",
                  "width":48,
-                 "x":648,
-                 "y":284
+                 "x":384,
+                 "y":112
                 }],
          "opacity":1,
          "type":"objectgroup",

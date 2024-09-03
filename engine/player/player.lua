@@ -800,7 +800,9 @@ function Player:update()
 
   local tvx, tvy = self:move()
   --check if we can ledge jump
+  -- TODO complete this checl
   self:updateLedgeJumpState()
+
   --check if we are pushing a tile
   local EPSILON = 0.001
   if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then

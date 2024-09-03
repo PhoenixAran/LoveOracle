@@ -8,17 +8,6 @@ local function getInstanceId()
   return InstanceId - 1
 end
 
----convert bottomleft coordinate to topleft
-local function convertTileCoordsToBumpCoords(x,y,w,h)
-  if x == nil then
-    return nil, nil
-  end
-  if w == nil then
-    return x, y
-  end
-  return x, y - h
-end
-
 --- flattens the properties field in tiled objects and makes it part of the main table
 --- this is so game code does not have to know how Tiled editor lays out it's json format
 --- { x = 20, y = 33, properties : { customX : 5}} -> { x = 20, y = 33, customX : 5}
@@ -33,7 +22,6 @@ local function flattenArgs(args)
       end
     end
   end
-  flattenedArgs.x, flattenedArgs.y = convertTileCoordsToBumpCoords(args.x, args.y, args.width, args.height)
   return flattenedArgs
 end
 

@@ -15,6 +15,7 @@ local LedgeJump = Class { __includes = Entity,
   init = function(self, args)
     args.w = args.width
     args.h = args.height
+    args.useBumpCoords = true
     Entity.init(self, args)
     self:setPhysicsLayer('ledge_jump')
   end

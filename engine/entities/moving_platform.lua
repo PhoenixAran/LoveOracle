@@ -8,6 +8,7 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local GRID_SIZE = require('constants').GRID_SIZE
 local EPSILON = require('constants').EPSILON
 local Physics = require 'engine.physics'
+local CoordHelpers = require 'engine.utils.coord_helpers'
 
 local PlatformPathCommandType = {
   Move = 'move',
@@ -135,6 +136,7 @@ local MovingPlatform = Class { __includes = Entity,
   init = function(self, args)
     args.drawType = EntityDrawType.background
     args.useBumpCoords = true
+    args.x, args.y = CoordHelpers.convertBottomLeftToTopLeft(args.x, args.y, args.w, args.h)
     Entity.init(self, args)
 
     if args.loopType ~= 'Cycle' and args.loopType ~= 'PingPong' then
@@ -179,7 +181,7 @@ function MovingPlatform:update()
             moveY = -moveY
           end
           self.targetX, self.targetY = vector.add(x, y, vector.mul(GRID_SIZE, moveX, moveY))
-          
+      
           self.horizontalClamp = x < self.targetX and math.min or math.max
           self.verticalClamp = y < self.targetY and math.min or math.max
           self.currentCommandSetUp = true
