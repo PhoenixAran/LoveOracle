@@ -26,10 +26,13 @@ local canCollide = require('engine.entities.bump_box').canCollide
 ---@return string?
 local function defaultMoveFilter(item, other)
   if canCollide(item, other) then
-    if other:isTile() then
-      if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
-        return nil
+    if other.isTile and other:isTile() then
+      if other:isTopTile() then
+        if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
+          return nil
+        end
       end
+      return nil
     end
     return 'slide'
   end

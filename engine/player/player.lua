@@ -236,14 +236,19 @@ local Player = Class { __includes = MapEntity,
       end
       if canCollide(item, other) then
         if other.isTile and other:isTile() then
-          if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
-            return nil
+          if other:isTopTile() then
+            if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
+              return nil
+            end
+            return responseName
           end
+          return nil
         end
         return responseName
       end
       return nil
     end
+
     -- set up queryRect filter that is used when the response is slide_and_corner_correct
     self.slideAndCornerCorrectQueryRectFilter = function(item)
       if item == playerInstance or item == self.roomEdgeCollisionBox then
@@ -251,7 +256,10 @@ local Player = Class { __includes = MapEntity,
       end
       if canCollide(playerInstance, item) then
         if item.isTile and item:isTile() then
-          return bit.band(playerInstance.collisionTiles, item.tileData.tileType) ~= 0
+          if item:isTopTile() then
+            return bit.band(playerInstance.collisionTiles, item.tileData.tileType) ~= 0
+          end
+          return false
         end
         return true
       end
@@ -261,7 +269,7 @@ local Player = Class { __includes = MapEntity,
     -- set up tile query rect filter that is used when determining if the player is pushing a tile
     self.tileQueryRectFilter = function(item)
       if canCollide(playerInstance, item) then
-        if item.isTile and item:isTile() then
+        if item.isTile and item:isTile() and item:isTopTile() then
           return bit.band(playerInstance.collisionTiles, item.tileData.tileType) ~= 0
         end
         return bit.band(PhysicsFlags:get('push_block').value, item.physicsLayer) ~= 0
@@ -716,11 +724,32 @@ function Player:checkRoomTransitions()
   end
 end
 
+---query physics world with ledge jump rect
+---@return any[] items
+---@return integer len
+function Player:queryLedgeJumpRect()
+  local x,y,w,h = self.ledgeJumpQueryRect.x, self.ledgeJumpQueryRect.y, self.ledgeJumpQueryRect.w, self.ledgeJumpQueryRect.h
+  x, y = vector.add(x, y, self:getPosition())
+  local items, len = Physics:queryRect(x,y,w,h, self.ledgeJumpQueryRectFilter)
+  return items, len
+end
+
+-- TODO make the ledgejump and tilepush detection stuff into a component
 --- will start a ledge jump state if the player is able to
 function Player:updateLedgeJumpState()
-  if self:getStateParameters().canPush then
+  if self:getStateParameters().canLedgeJump then
     local movementDirection4 = self.movement:getDirection4()
     local animDirection = self.animationDirection4
+    local vectorTable = self.ledgeJumpQueryRectTargets[animDirection]
+    self.ledgeJumpQueryRect.x, self.ledgeJumpQueryRect.y = vectorTable.x, vectorTable.y
+    if movementDirection4 == animDirection then
+      local items, len = self:queryLedgeJumpRect()
+      if len > 0 then
+        local ledgeJumpEntity = lume.first(items)
+        -- TODO start ledgejump state if we are approaching it from the right direction
+      end
+      Physics.freeTable(items)
+    end
   end
 end
 
@@ -743,11 +772,13 @@ function Player:updatePushTileState()
     self.tileQueryRect.x, self.tileQueryRect.y = vectorTable.x, vectorTable.y
     if movementDirection4 == animDirection then
       local items, len = self:queryPushTileRect()
-      if len > 0 then
-        local pushTile = lume.first(items)
-        local playerPushState = self:getStateFromCollection('player_push_state')
-        playerPushState.pushTile = pushTile
-        self:beginWeaponState(playerPushState)
+      for _, pushTile in ipairs(items) do
+        if pushTile:isTopTile() then
+          local playerPushState = self:getStateFromCollection('player_push_state')
+          playerPushState.pushTile = pushTile
+          self:beginWeaponState(playerPushState)
+          break
+        end
       end
       Physics.freeTable(items)
     end
