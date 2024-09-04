@@ -54,13 +54,18 @@ function PlayerLedgeJumpState:getLandingPosition(posX, posY)
     landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
   end
   landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
-  print(landingPositionX, landingPositionY)
   return landingPositionX, landingPositionY
 end
 
 function PlayerLedgeJumpState:canLandAtPosition(x, y)
+  local INFLATE_AMOUNT = 3
   local player = self.player
-  local items, len = Physics:queryRect(player.x + x, player.y + y, player.w, player.h, queryTileFilter)
+  local pw, ph = player.w, player.h
+  local px = x - (pw / 2)
+  local py = y - (ph / 2)
+  pw = pw + (INFLATE_AMOUNT * 2)
+  ph = ph + (INFLATE_AMOUNT * 2)
+  local items, len = Physics:queryRect(px,py,pw,ph,queryTileFilter)
   for _, tile in ipairs(items) do
     -- we cannot land on hazard tiles or tiles that player considers solid
     if bit.band(tile:getTileData().tileType, player.collisionTiles) ~= 0 then
