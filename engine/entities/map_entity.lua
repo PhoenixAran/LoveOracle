@@ -76,6 +76,7 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field onHurt function
 ---@field onBump function
 ---@field moveFilter function filter for move function in Physics:move()\
+---@field roomEdgeCollisionBoxMoveFilter function
 local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -116,7 +117,7 @@ local MapEntity = Class { __includes = Entity,
     -- tile types this entity reports collisions with
     self.collisionTiles = 0
     self.moveFilter = defaultMoveFilter
-
+    self.roomEdgeCollisionBoxMoveFilter = roomEdgeCollisionBoxMoveFilter
     -- declarations
     self.deathMarked = false
     self.persistant = false
@@ -328,7 +329,7 @@ function MapEntity:move()
     -- create goal vector value for room edge collision box
     local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y)
     local goalX2, goalY2 = vector.sub(actualX, actualY, diffX, diffY)
-    local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, roomEdgeCollisionBoxMoveFilter)
+    local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, self.roomEdgeCollisionBoxMoveFilter)
     for i, col in ipairs(cols2) do
       local shouldAddToMoveCollisions = true
       for j, moveCollision in ipairs(self.moveCollisions) do

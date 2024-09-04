@@ -11,6 +11,7 @@ local Input = require('engine.singletons').input
 local Physics = require 'engine.physics'
 
 -- some class constants
+-- TODO move this to Constants
 local JUMP_Z_VELOCITY = 2
 local JUMP_GRAVITY = 8
 local HOLE_DOOM_TIMER = 10

@@ -23,6 +23,8 @@ end
 ---@field landingPositionY number
 ---@field ledgeJumpExtendsToNextRoom boolean
 ---@field _playerBumpBox table
+---@field _playerMoveFilter function
+---@field _playerRoomEdgeCollisionBoxMoveFilter function
 local PlayerLedgeJumpState = Class { __includes = PlayerState,
   init = function(self)
     PlayerState.init(self)
@@ -32,6 +34,7 @@ local PlayerLedgeJumpState = Class { __includes = PlayerState,
     self.stateParameters.canStrafe = true
 
     self.stateParameters.canWarp = false
+    self.stateParameters.canJump = false
     self.stateParameters.canControlOnGround = false
     self.stateParameters.canControlInAir = false
     self.stateParameters.canUseWeapons = false
@@ -58,13 +61,10 @@ function PlayerLedgeJumpState:getLandingPosition(posX, posY)
 end
 
 function PlayerLedgeJumpState:canLandAtPosition(x, y)
-  local INFLATE_AMOUNT = 3
   local player = self.player
   local pw, ph = player.w, player.h
   local px = x - (pw / 2)
   local py = y - (ph / 2)
-  pw = pw + (INFLATE_AMOUNT * 2)
-  ph = ph + (INFLATE_AMOUNT * 2)
   local items, len = Physics:queryRect(px,py,pw,ph,queryTileFilter)
   for _, tile in ipairs(items) do
     -- we cannot land on hazard tiles or tiles that player considers solid
@@ -80,9 +80,12 @@ end
 function PlayerLedgeJumpState:onBegin(previousState)
   -- cancel pushing since ledges are usually inline with walls
   self.player:stopPushing()
-  --temporarily disable solid collisions
-  self.oldCollisionLayer = self.player:getPhysicsLayer()
-  self.player:setPhysicsLayerExplicit(0)
+  --temporarily disable solid collisions by niling out moveFilter and roomEdgeCollisionBoxMoveFilter
+  self._playerMoveFilter = self.player.moveFilter
+  self._playerRoomEdgeCollisionBoxMoveFilter = self.player.roomEdgeCollisionBoxMoveFilter
+  local tempMoveFilter = function(item) return false end
+  self.player.moveFilter = tempMoveFilter
+  self.player.roomEdgeCollisionBoxMoveFilter = tempMoveFilter
 
   if not self.player.stateParameters.canStrafe then
     self.player:setAnimationDirection4(self.direction4)
@@ -125,6 +128,7 @@ function PlayerLedgeJumpState:onBegin(previousState)
     end
 
     self.velocityX, self.velocityY = vector.mul(speed, direction4VectorX, direction4VectorY)
+    self.player.movement.gravity = 8  -- TODO remove this magic number
     self.player:setZVelocity(jumpSpeed)
     self.ledgeJumpExtendsToNextRoom = false
   end
@@ -135,8 +139,8 @@ end
 
 function PlayerLedgeJumpState:onEnd(newState)
   --reenable collisions
-  self.player:setPhysicsLayerExplicit(self.oldCollisionLayer)
-  self.oldCollisionLayer = 0
+  self.player.moveFilter = self._playerMoveFilter
+  self.player.roomEdgeCollisionBoxMoveFilter = self._playerRoomEdgeCollisionBoxMoveFilter 
 
   self.player:setVector(0, 0)
   -- todo player:landOnSurface()
