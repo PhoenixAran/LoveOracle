@@ -762,6 +762,7 @@ function Player:updateLedgeJumpState()
         if movementDirection4 == dir4 then
           local playerLedgeJumpState = self:getStateFromCollection('player_ledge_jump_state')
           playerLedgeJumpState.direction4 = ledgeJumpEntity:getDirection4()
+          self:beginControlState(playerLedgeJumpState)
         end
       end
       Physics.freeTable(items)
@@ -803,7 +804,7 @@ end
 
 function Player:stopPushing()
   local weaponState = self:getWeaponState()
-  if weaponState == self:getStateFromSelection('player_push_state') then
+  if weaponState == self:getStateFromCollection('player_push_state') then
     weaponState:endState()
   end
   self:integrateStateParameters()
@@ -891,8 +892,8 @@ function Player:update()
       --check if we are pushing a tile or we are pushing against a ledge jump
       local currentWeaponState = self:getWeaponState()
       if currentWeaponState == nil then
-        self:updateLedgeJumpState()
         self:updatePushTileState()
+        self:updateLedgeJumpState()
       end
     end
   end

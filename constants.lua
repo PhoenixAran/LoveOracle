@@ -1,6 +1,6 @@
 return {
   EPSILON = 0.001,
-
+  DEFAULT_GRAVITY = 0.125,
   GRID_SIZE = 16,
-  HUD_HEIGHT = 16
+  HUD_HEIGHT = 16,
 }
