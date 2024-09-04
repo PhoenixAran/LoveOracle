@@ -1,3 +1,4 @@
+---@diagnostic disable: inject-field
 local vector = require 'engine.math.vector'
 local lume = require 'lib.lume'
 

@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu2Z2QrCMBBFo1bFBcH19\/1VIxgMwTSTOkqWc+C+XVpOW+00GYwxy0RWNoNiTyPPc2mwt5nZzD\/kbrOwOSR684yeRty5tPw3NttIdp7XZiRhL3Y8jbhz\/cP\/GXfdt4lr4Pda8j+9kvL3e7EMlfn38PwfzfvehTl7XtJeTf4Xm2sit4xebf7a4I+\/hv89CP59+ff+\/OOPf63+Y3OiRtysWSKSOTE37vsinDVbJVxDcv6\/WP8pkXANyf3uf7H+UyLSb\/JWwR\/\/3v39GcJ5+zNAy\/7hDNHK+3\/qHlLs\/S89XilM3UOKvf+lxyuF3LX2sW8gSa+0\/8ncvaZvezX6S\/aQxnprU69\/D8+\/9l6TpFcK2ntN0h4AAAAAAAAAAAAAAAAAALTPA56XaQ4AQAAA",
+         "data":"H4sIAAAAAAAACu2Z2QrCMBBF405VBNff768awWAIppnoKFnOgft2aTlttdNkaYxZJbK2WSr2NPI4lwZ7m5nN\/E1Gm4XNIdGbZ\/Q04s6l5T\/YbCPZeV7DRMJe7Hgacef6h\/8j7rpvE9fA77Xkf3om5e\/3WvHv4fk\/mte9C3P2vKS9mvwvNtdEbhm92vy1wR9\/Df8xCP59+ff+\/OOPf63+U3OiRtysWSKSOTE37vsinDVbJVxDcv6\/WP8pkXANyf3uf7H+UyLSb\/JWwR\/\/3v39GcJ5+zNAy\/7hDNHK+\/\/TPaTY+196vFL4dA8p9v6XHq8Uctfap76BJL3S\/idz95q+7dXoL91DivU2pl7\/Hp5\/7b0mSa8UtPeapD0AAAAAAAAAAAAAAAAAAGifO7LeOF8AQAAA",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -25,7 +25,7 @@
          "name":"top",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":64,
          "x":0,
          "y":0
@@ -108,10 +108,17 @@
                 {
                  "height":16,
                  "id":33,
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "propertytype":"Direction4",
+                         "type":"string",
+                         "value":"down"
+                        }],
                  "template":"..\/templates\/ledge_jump.tj",
                  "width":48,
                  "x":384,
-                 "y":112
+                 "y":128
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -127,8 +134,8 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":408,
-                 "y":76
+                 "x":432,
+                 "y":84
                 }, 
                 {
                  "id":17,

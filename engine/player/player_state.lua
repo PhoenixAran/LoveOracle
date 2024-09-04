@@ -36,7 +36,7 @@ function PlayerState:onEnterRoom() end
 
 function PlayerState:onLeaveRoom() end
 
-function PlayerState:onHurt() end
+function PlayerState:onHurt(damageInfo) end
 
 function PlayerState:onInterruptItems() end
 

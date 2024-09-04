@@ -9,15 +9,16 @@ local lume = require 'lib.lume'
 local Direction4 = require 'engine.enums.direction4'
 
 ---@class LedgeJump : Entity
----@field direction integer
----@field moveX integer
+---@field direction4 integer
 local LedgeJump = Class { __includes = Entity,
   init = function(self, args)
     args.w = args.width
     args.h = args.height
     args.useBumpCoords = true
     Entity.init(self, args)
+
     self:setPhysicsLayer('ledge_jump')
+    self.direction4 = Direction4[args.direction]
   end
 }
 
@@ -29,9 +30,15 @@ function LedgeJump:getCollisionTag()
   return 'ledge_jump'
 end
 
+function LedgeJump:getDirection4()
+  return self.direction4
+end
+
 function LedgeJump:draw()
-  love.graphics.setColor(1, 0, 0)
+  love.graphics.setColor(1, 0, 0, .25)
   love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
+  love.graphics.setColor(1, 0, 0, .45)
+  love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
   love.graphics.setColor(1, 1, 1)
 end
 

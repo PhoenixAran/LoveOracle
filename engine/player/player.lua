@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
 local lume = require 'lib.lume'
+local TablePool = require 'engine.utils.table_pool'
 local Input = require('engine.singletons').input
 local vector = require 'engine.math.vector'
 local BumpBox = require 'engine.entities.bump_box'
@@ -21,15 +22,19 @@ local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Physics = require 'engine.physics'
 local Consts = require 'constants'
-local PlayerSwimEnvironmentState = require 'engine.player.environment_states.player_swim_environment_state'
-local PlayerRespawnDeathState = require 'engine.player.control_states.player_respawn_death_state'
 local PlayerSkills = require 'engine.player.player_skills'
+
+
 -- ### STATES ###
+-- control states
+local PlayerLedgeJumpState = require 'engine.player.control_states.player_ledge_jump_state'
+local PlayerRespawnDeathState = require 'engine.player.control_states.player_respawn_death_state'
 -- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
 local PlayerHitstunState = require 'engine.player.condition_states.player_hitstun_state'
 -- environment states
 local PlayerGrassEnvironmentState = require 'engine.player.environment_states.player_grass_environment_state'
+local PlayerSwimEnvironmentState = require 'engine.player.environment_states.player_swim_environment_state'
 local PlayerJumpEnvironmentState = require 'engine.player.environment_states.player_jump_environment_state'
 -- weapon states
 local PlayerSwingState = require 'engine.player.weapon_states.swing_states.player_swing_state'
@@ -113,6 +118,7 @@ local Player = Class { __includes = MapEntity,
     self.stateCollection = {
       -- condition states
       -- control states
+      ['player_ledge_jump_state'] = PlayerLedgeJumpState(self),
       ['player_respawn_death_state'] = PlayerRespawnDeathState(self),
       -- environment states
       ['player_grass_environment_state'] = PlayerGrassEnvironmentState(self),
@@ -705,6 +711,12 @@ function Player:interruptItems()
 end
 
 function Player:onHurt(damageInfo)
+  -- TODO play sound
+  local activeStates = self:getActiveStates()
+  for _, state in ipairs(activeStates) do
+    state:onHurt(damageInfo)
+  end
+  TablePool.free(activeStates)
   self:beginConditionState(PlayerHitstunState())
 end
 
@@ -746,7 +758,11 @@ function Player:updateLedgeJumpState()
       local items, len = self:queryLedgeJumpRect()
       if len > 0 then
         local ledgeJumpEntity = lume.first(items)
-        -- TODO start ledgejump state if we are approaching it from the right direction
+        local dir4 = ledgeJumpEntity:getDirection4()
+        if movementDirection4 == dir4 then
+          local playerLedgeJumpState = self:getStateFromCollection('player_ledge_jump_state')
+          playerLedgeJumpState.direction4 = ledgeJumpEntity:getDirection4()
+        end
       end
       Physics.freeTable(items)
     end
@@ -785,8 +801,44 @@ function Player:updatePushTileState()
   end
 end
 
+function Player:stopPushing()
+  local weaponState = self:getWeaponState()
+  if weaponState == self:getStateFromSelection('player_push_state') then
+    weaponState:endState()
+  end
+  self:integrateStateParameters()
+  self:setVector(0, 0)
+  self.playerMovementController:chooseAnimation()
+  if self:isOnGround() and not self.stateParameters.canControlOnGround then
+    self.sprite:play(self.stateParameters.animations.default)
+  end
+end
+
 function Player:onAwake()
   self.roomEdgeCollisionBox:entityAwake()
+end
+
+---gets active states. Be sure to return table to table pool when you are done with it
+---@return PlayerState[]
+function Player:getActiveStates()
+  local activeStates = TablePool.obtain()
+
+  if self.controlStateMachine:isActive() then
+    lume.push(activeStates, self.controlStateMachine:getCurrentState())
+  end
+  if self.weaponStateMachine:isActive() then
+    lume.push(activeStates, self.weaponStateMachine:getCurrentState())
+  end
+  if self.environmentStateMachine:isActive() then
+    lume.push(activeStates, self.environmentStateMachine:getCurrentState())
+  end
+  for _, stateMachine in ipairs(self.conditionStateMachines) do
+    if stateMachine:isActive() then
+      lume.push(activeStates, stateMachine:getCurrentState())
+    end
+  end
+
+  return activeStates
 end
 
 function Player:update()
@@ -830,18 +882,16 @@ function Player:update()
   self.movement:update()
 
   local tvx, tvy = self:move()
-  --check if we can ledge jump
-  -- TODO complete this checl
-  self:updateLedgeJumpState()
 
-  --check if we are pushing a tile
   local EPSILON = 0.001
   if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then
     local movementDir8 = self.movement:getDirection8()
     if movementDir8 == Direction8.up or movementDir8 == Direction8.down
-    or movementDir8 == Direction8.left or movementDir8 == Direction8.right then
+      or movementDir8 == Direction8.left or movementDir8 == Direction8.right then
+      --check if we are pushing a tile or we are pushing against a ledge jump
       local currentWeaponState = self:getWeaponState()
       if currentWeaponState == nil then
+        self:updateLedgeJumpState()
         self:updatePushTileState()
       end
     end
@@ -871,6 +921,24 @@ function Player:draw()
       item:drawAbove()
     end
   end
+end
+
+function Player:onEnterRoom()
+  local activeStates = self:getActiveStates()
+  for _, state in ipairs(activeStates) do
+    state:onEnterRoom()
+  end
+  TablePool.free(activeStates)
+end
+
+function Player:onLeaveRoom()
+  local activeStates = self:getActiveStates()
+  for _, state in ipairs(activeStates) do
+    state:onLeaveRoom()
+  end
+  TablePool.free(activeStates)
+
+  -- TODO jump and land events
 end
 
 function Player:debugDraw()
