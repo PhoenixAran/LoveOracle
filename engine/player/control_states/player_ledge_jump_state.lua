@@ -6,6 +6,7 @@ local Physics = require 'engine.physics'
 local bit = require 'bit'
 local Singletons = require 'engine.singletons'
 local Constants = require 'constants'
+local tick = require 'lib.tick'
 
 local function queryTileFilter(item)
   if item.isTile and item:isTile() and item:isTopTile() then
@@ -117,7 +118,7 @@ function PlayerLedgeJumpState:onBegin(previousState)
     end
 
     -- calculate the movement speed based on jump speed
-    local jumpTime = (2.0 / jumpSpeed) / Constants.DEFAULT_GRAVITY
+    local jumpTime = (2.0 / jumpSpeed) / Constants.DEFAULT_GRAVITY / tick.rate
     local speed = distance / jumpTime
 
     -- for longer ledge distances, calculate the speed so that both
@@ -159,7 +160,7 @@ function PlayerLedgeJumpState:onEnterRoom()
     -- so that it falls onto the landing spot
     local px, py = self.player:getPosition()
     self.player:setZPosition(self.landingPositionY - py)
-    self.player:setPosition(self.landingPositionX, self.getLandingPosition)
+    self.player:setPosition(self.landingPositionX, self.landingPositionY)
     self.player:setZVelocity(-self.velocityY)
     self.player:setVector(0, 0)
 
@@ -184,12 +185,13 @@ function PlayerLedgeJumpState:update(dt)
     local x, y = vector.add(self.velocityX, self.velocityY, self.player:getPosition())
     self.player:setPosition(x, y)
     Physics:update(self.player, self.player:getBumpPosition())
-
     x, y = self.player:getPosition()
     x, y = vector.add(x, y, self.velocityX, self.velocityY)
     x, y = vector.sub(x, y, self.landingPositionX, self.landingPositionY)
     local dot = vector.dot(x, y, Direction4.getVector(self.direction4))
     if dot >= 0 then
+      self.player:setZVelocity(0)
+      self.player:setZPosition(0)
       self.player:setPosition(self.landingPositionX, self.landingPositionY)
       Physics:update(self.player, self.player:getBumpPosition())
       self:endState()

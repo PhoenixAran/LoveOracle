@@ -897,7 +897,7 @@ function Player:update()
       end
     end
   end
-  
+
   self:checkRoomTransitions()
 end
 

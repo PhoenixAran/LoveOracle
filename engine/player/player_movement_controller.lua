@@ -9,14 +9,8 @@ local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local TileTypes = TileTypeFlags.enumMap
 local Input = require('engine.singletons').input
 local Physics = require 'engine.physics'
+local Constants = require 'constants'
 
--- some class constants
--- TODO move this to Constants
-local JUMP_Z_VELOCITY = 2
-local JUMP_GRAVITY = 8
-local HOLE_DOOM_TIMER = 10
-local HOLE_PULL_MAGNITUDE = .25
-local DISTANCE_TRIGGER_HOLE_FALL = 1.0
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
 local DIRECTION_SNAP = 40
 
@@ -102,8 +96,8 @@ function PlayerMovementController:jump()
     end
     -- jump!
     self.capeDeployed = false
-    self.movement.gravity = JUMP_GRAVITY
-    self.movement:setZVelocity(JUMP_Z_VELOCITY)
+    self.movement.gravity = Constants.PLAYER_JUMP_GRAVITY
+    self.movement:setZVelocity(Constants.PLAYER_JUMP_Z_VELOCITY)
     self.player:requestNaturalState()
     self.player:integrateStateParameters()
     if self.player:getWeaponState() ~= nil and self.player:getWeaponState():getType() == 'player_push_state' then
@@ -289,7 +283,7 @@ function PlayerMovementController:updateFallingInHole()
     local px, py = self.player:getPosition()
     local tx, ty = self.holeTile:getPosition()
 
-    local pullMagnitude = HOLE_PULL_MAGNITUDE
+    local pullMagnitude = Constants.PLAYER_HOLE_PULL_MAGNITUDE
 
     -- increase pull magnitude if player is trying to move away from hole
     local pdx, pdy = vector.normalize(self.player:getVector())
@@ -307,7 +301,7 @@ function PlayerMovementController:updateFallingInHole()
     self.player:setPosition(px + pullX, py + pullY)
 
     -- fall in hole when too close to center
-    if vector.dist(tx, ty, self.player:getPosition()) <= DISTANCE_TRIGGER_HOLE_FALL then
+    if vector.dist(tx, ty, self.player:getPosition()) <= Constants.PLAYER_DISTANCE_TRIGGER_HOLE_FALL then
       self.player:setPosition(tx, ty)
       self.player.sprite:play('fall')
       self.player:startRespawnControlState(false)
@@ -326,7 +320,7 @@ function PlayerMovementController:updateFallingInHole()
       self.holeQuadrantY = math.floor(self.holeQuadrantY)
       self.doomedToFallInHole = false
       self.fallingInHole = true
-      self.holeDoomTimer = HOLE_DOOM_TIMER
+      self.holeDoomTimer = Constants.PLAYER_HOLE_DOOM_TIMER
     end
   end
 end
