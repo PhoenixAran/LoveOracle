@@ -118,7 +118,7 @@ function PlayerLedgeJumpState:onBegin(previousState)
     end
 
     -- calculate the movement speed based on jump speed
-    local jumpTime = (2.0 / jumpSpeed) / Constants.DEFAULT_GRAVITY / tick.rate
+    local jumpTime = (2.0 / jumpSpeed) / Constants.DEFAULT_GRAVITY
     local speed = distance / jumpTime
 
     -- for longer ledge distances, calculate the speed so that both
@@ -128,8 +128,8 @@ function PlayerLedgeJumpState:onBegin(previousState)
       jumpSpeed = speed
     end
 
-    self.velocityX, self.velocityY = vector.mul(speed, direction4VectorX, direction4VectorY)
-    self.player.movement.gravity = 8  -- TODO remove this magic number
+    self.velocityX, self.velocityY = vector.mul(speed, direction4VectorX, direction4VectorY) 
+    self.player.movement.gravity = Constants.PLAYER_JUMP_GRAVITY
     self.player:setZVelocity(jumpSpeed)
     self.ledgeJumpExtendsToNextRoom = false
   end

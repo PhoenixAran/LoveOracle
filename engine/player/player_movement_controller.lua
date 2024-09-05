@@ -295,7 +295,7 @@ function PlayerMovementController:updateFallingInHole()
       pullMagnitude = pullMagnitude * 2
     end
 
-    local pullX, pullY = vector.mul(pullMagnitude, normDiffX, normDiffY)
+    local pullX, pullY = vector.mul(pullMagnitude * love.time.dt, normDiffX, normDiffY)
 
     -- pull player towards hole
     self.player:setPosition(px + pullX, py + pullY)
