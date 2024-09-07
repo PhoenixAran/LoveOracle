@@ -88,11 +88,17 @@ function PlayerLedgeJumpState:onBegin(previousState)
   self.player.moveFilter = tempMoveFilter
   self.player.roomEdgeCollisionBoxMoveFilter = tempMoveFilter
 
+
   if not self.player.stateParameters.canStrafe then
     self.player:setAnimationDirection4(self.direction4)
   end
 
-  self.player.sprite:play('jump')
+  if self.player:getWeaponState() == nil then
+    self.player.sprite:play('jump')
+  else
+    self.player.sprite:play(self.player:getStateParameters().animations.default)
+  end
+ 
 
   local px, py = self.player:getPosition()
   self.landingPositionX, self.landingPositionY = self:getLandingPosition(px, py)
