@@ -170,6 +170,7 @@ local Player = Class { __includes = MapEntity,
 
     -- signal connections
     self.health:connect('health_depleted', self, '_onHealthDepleted')
+    self.movement:connect('landed', self, '_onLanded')
 
     self.tileQueryRect = {
       x = 0,
@@ -718,6 +719,10 @@ function Player:onHurt(damageInfo)
   end
   TablePool.free(activeStates)
   self:beginConditionState(PlayerHitstunState())
+end
+
+function Player:_onLanded()
+  print('player landed')
 end
 
 function Player:checkRoomTransitions()

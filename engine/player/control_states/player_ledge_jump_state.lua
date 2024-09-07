@@ -117,12 +117,11 @@ function PlayerLedgeJumpState:onBegin(previousState)
     elseif distance >= 20 then
       jumpSpeed = 1.75
     end
-
     local jumpTime = (2 / jumpSpeed) / (Constants.DEFAULT_GRAVITY * tick.rate)
     local speed = distance / jumpTime
-    print(jumpTime, speed)
-    if speed > 90  then
-      speed = math.sqrt((distance / 2) * Constants.DEFAULT_GRAVITY * tick.rate)
+    if speed >= 7 then
+      -- TODO make faster
+      speed = math.sqrt((distance / 2) * Constants.DEFAULT_GRAVITY * tick.rate) / tick.rate
     end
 
     self.speed = speed
@@ -155,7 +154,7 @@ function PlayerLedgeJumpState:update()
     px, py = vector.add(px, py, velX, velY)
     self.player:setPositionWithBumpCoords(px, py)
     Physics:update(self.player, px, py)
-    
+
     local x, y = self.player:getPosition()
     x, y = vector.sub(x, y, self.landingPositionX, self.landingPositionY)
     local dot = vector.dot(x, y, vecX, vecY)
