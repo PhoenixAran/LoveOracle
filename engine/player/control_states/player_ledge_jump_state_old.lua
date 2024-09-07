@@ -1,11 +1,11 @@
 local Class = require 'lib.class'
 local PlayerState = require 'engine.player.player_state'
 local vector = require 'engine.math.vector'
-local Direction4 = require 'engine.enums.direction4'
+local Direction4  = require 'engine.enums.direction4'
+local Physics = require 'engine.physics'
 local bit = require 'bit'
 local Singletons = require 'engine.singletons'
 local Constants = require 'constants'
-local Physics = require 'engine.physics'
 local tick = require 'lib.tick'
 
 local function queryTileFilter(item)
@@ -15,8 +15,9 @@ local function queryTileFilter(item)
   return false
 end
 
----@class PlayerLedgeJumpState : PlayerState
----@field speed number
+---@class PlayerLedgeJumpStateOld : PlayerState
+---@field velocityX number
+---@field velocityY number
 ---@field hasRoomChanged boolean
 ---@field direction4 Direction4
 ---@field landingPositionX number
@@ -28,10 +29,13 @@ end
 local PlayerLedgeJumpState = Class { __includes = PlayerState,
   init = function(self)
     PlayerState.init(self)
-    
+
+
     self.stateParameters.canAutoRoomTransition = true
     self.stateParameters.canStrafe = true
+
     self.stateParameters.canWarp = false
+    self.stateParameters.canJump = false
     self.stateParameters.canControlOnGround = false
     self.stateParameters.canControlInAir = false
     self.stateParameters.canUseWeapons = false
@@ -44,6 +48,16 @@ local PlayerLedgeJumpState = Class { __includes = PlayerState,
 
 function PlayerLedgeJumpState:getType()
   return 'player_ledge_jump_state'
+end
+
+function PlayerLedgeJumpState:getLandingPosition(posX, posY)
+  local moveVectorX, moveVectorY = Direction4.getVector(self.direction4)
+  local landingPositionX, landingPositionY = vector.add(posX, posY, vector.mul(4, moveVectorX, moveVectorY))
+  while not self:canLandAtPosition(landingPositionX, landingPositionY) do
+    landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
+  end
+  landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
+  return landingPositionX, landingPositionY
 end
 
 function PlayerLedgeJumpState:canLandAtPosition(x, y)
@@ -62,17 +76,6 @@ function PlayerLedgeJumpState:canLandAtPosition(x, y)
   Physics.freeTable(items)
   return true
 end
-
-function PlayerLedgeJumpState:getLandingPosition(posX, posY)
-  local moveVectorX, moveVectorY = Direction4.getVector(self.direction4)
-  local landingPositionX, landingPositionY = vector.add(posX, posY, vector.mul(4, moveVectorX, moveVectorY))
-  while not self:canLandAtPosition(landingPositionX, landingPositionY) do
-    landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
-  end
-  landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
-  return landingPositionX, landingPositionY
-end
-
 
 function PlayerLedgeJumpState:onBegin(previousState)
   -- cancel pushing since ledges are usually inline with walls
@@ -94,23 +97,24 @@ function PlayerLedgeJumpState:onBegin(previousState)
   else
     self.player.sprite:play(self.player:getStateParameters().animations.default)
   end
+ 
 
   local px, py = self.player:getPosition()
   self.landingPositionX, self.landingPositionY = self:getLandingPosition(px, py)
 
   local roomControl = Singletons.gameControl:getRoomControl()
   if not roomControl:inRoomBounds(px, py) then
-    -- TODO ledge jump into next room stuff
     self.ledgeJumpExtendsToNextRoom = true
     self.hasRoomChanged = false
-  
+    self.velocityX = 0
+    self.velocityY = -1
+    self.player:setZVelocity(0)
   else
-    -- determine jump speed based on the distance needed to move
-    -- smaller ledge distances have slower jump speeds
+    --Determine the jump speed based on the distance needed to move
+    --Smaller ledge distances have slower jump speeds
     local direction4VectorX, direction4VectorY = Direction4.getVector(self.direction4)
     local tx, ty = vector.sub(self.landingPositionX, self.landingPositionY, px, py)
     local distance = vector.dot(tx, ty, direction4VectorX, direction4VectorY)
-
     local jumpSpeed = 1.5
     if distance >= 28 then
       jumpSpeed = 2.0
@@ -118,47 +122,78 @@ function PlayerLedgeJumpState:onBegin(previousState)
       jumpSpeed = 1.75
     end
 
-    local jumpTime = (2 / jumpSpeed) / (Constants.DEFAULT_GRAVITY * tick.rate)
+    -- calculate the movement speed based on jump speed
+    local jumpTime = (2.0 / jumpSpeed) / Constants.DEFAULT_GRAVITY
     local speed = distance / jumpTime
-    print(jumpTime, speed)
-    if speed > 90  then
-      speed = math.sqrt((distance / 2) * Constants.DEFAULT_GRAVITY * tick.rate)
+
+    -- for longer ledge distances, calculate the speed so that both
+    -- the movement speed and the jump speed equal eachother
+    if speed > 1.5 then
+      speed = math.sqrt(0.5 * distance * Constants.DEFAULT_GRAVITY)
+      jumpSpeed = speed
     end
 
-    self.speed = speed
-    self.ledgeJumpExtendsToNextRoom = false
+    self.velocityX, self.velocityY = vector.mul(speed, direction4VectorX, direction4VectorY) 
+    self.player.movement.gravity = Constants.PLAYER_JUMP_GRAVITY
     self.player:setZVelocity(jumpSpeed)
+    self.ledgeJumpExtendsToNextRoom = false
   end
+  local newX, newY = vector.add(self.velocityX, self.velocityY, self.player:getPosition())
+  self.player:setPosition(newX, newY)
+  Physics:update(self.player, self.player:getBumpPosition())
 end
 
 function PlayerLedgeJumpState:onEnd(newState)
-  -- reenable collisions by giving back bump filters
+  --reenable collisions
   self.player.moveFilter = self._playerMoveFilter
   self.player.roomEdgeCollisionBoxMoveFilter = self._playerRoomEdgeCollisionBoxMoveFilter
 
+  self.player:setVector(0, 0)
+  -- todo player:landOnSurface()
   if self.ledgeJumpExtendsToNextRoom then
     self.player:markRespawn()
   end
 end
 
 function PlayerLedgeJumpState:onEnterRoom()
-  -- TODO
+  if self.ledgeJumpExtendsToNextRoom then
+    self.hasRoomChanged = true
+
+    self.landingPositionX, self.landingPositionY = self:getLandingPosition(self.player:getPosition())
+
+    -- move the player to be at the landing spot, and raise it's z position
+    -- so that it falls onto the landing spot
+    local px, py = self.player:getPosition()
+    self.player:setZPosition(self.landingPositionY - py)
+    self.player:setPosition(self.landingPositionX, self.landingPositionY)
+    self.player:setZVelocity(-self.velocityY)
+    self.player:setVector(0, 0)
+
+    Physics:update(self.player, self.player:getBumpPosition())
+  end
 end
 
 function PlayerLedgeJumpState:update()
   if self.ledgeJumpExtendsToNextRoom then
-    -- TODO
+    if self.hasRoomChanged then
+      if self.player:isOnGround() then
+        self:endState()
+      end
+    else
+      local x, y = self.player:getPosition()
+      self.velocityY = self.velocityY + Constants.DEFAULT_GRAVITY
+      y = y + self.velocityY
+      self.player:setPosition(x, y)
+      Physics:update(self.player, self.player:getBumpPosition())
+    end
   else
-    local vecX, vecY = Direction4.getVector(self.direction4)
-    local px, py = self.player:getBumpPosition()
-    local velX, velY = vector.mul(self.speed * love.time.dt, vecX, vecY)
-    px, py = vector.add(px, py, velX, velY)
-    self.player:setPositionWithBumpCoords(px, py)
-    Physics:update(self.player, px, py)
-    
-    local x, y = self.player:getPosition()
+    local x, y = vector.add(self.velocityX, self.velocityY, self.player:getPosition())
+    self.player:setPosition(x, y)
+    Physics:update(self.player, self.player:getBumpPosition())
+    x, y = self.player:getPosition()
+    x, y = vector.add(x, y, self.velocityX, self.velocityY)
     x, y = vector.sub(x, y, self.landingPositionX, self.landingPositionY)
-    local dot = vector.dot(x, y, vecX, vecY)
+    local dot = vector.dot(x, y, Direction4.getVector(self.direction4))
     if dot >= 0 then
       self.player:setZVelocity(0)
       self.player:setZPosition(0)
