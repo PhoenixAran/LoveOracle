@@ -135,11 +135,12 @@ function PlayerLedgeJumpState:onBegin(previousState)
       jumpSpeed = 2
     elseif distance >= 20 then
       jumpSpeed = 1.75
+    elseif distance >= 36 then
+      jumpSpeed = 3
     end
-    -- local timeUp = jumpSpeed / gravity
-    -- local timeDown = 2 * (jumpSpeed / Constants.DEFAULT_GRAVITY)
-    -- local time = timeUp + timeDown
-    local speedScale = distance / (jumpState.motionSettings.speed) * 2
+
+    local timeDown = 2 * (jumpSpeed / Constants.DEFAULT_GRAVITY)
+    local speedScale = distance / (jumpState.motionSettings.speed * timeDown)
 
     self.player:setZVelocity(jumpSpeed)
     self.originalSpeedScale = self.player.movement:getSpeedScale()
