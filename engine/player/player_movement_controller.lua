@@ -18,6 +18,7 @@ local DIRECTION_SNAP = 40
 ---@field player Player
 ---@field movement Movement
 ---@field allowMovementControl boolean
+---@field preStrokeSpeedScale number
 ---@field strokeSpeedScale number
 ---@field lastStrokeVectorX number
 ---@field lastStrokeVectorY number
@@ -165,6 +166,10 @@ end
 
 function PlayerMovementController:updateStroking()
   if self.player:isSwimming() then
+    -- remember the speedscale before going into the water
+    if self.preStrokeSpeedScale == nil then
+      self.preStrokeSpeedScale = self.player.movement:getSpeedScale()
+    end
     -- slow down movement over time from strokes
     if self.strokeSpeedScale > 1.0 then
       self.strokeSpeedScale = self.strokeSpeedScale - 0.025
@@ -182,13 +187,18 @@ function PlayerMovementController:updateStroking()
         self.lastStrokeVectorX, self.lastStrokeVectorY = x, y
       end
     end
+    self.player:setSpeedScale(self.strokeSpeedScale)
   else
     self.strokeSpeedScale = 1.0
     self.stroking = false
     self.lastStrokeVectorX, self.lastStrokeVectorY = 0, 0
   end
-  
-  self.player:setSpeedScale(self.strokeSpeedScale)
+
+  -- set the speedscale back to what it was before swimming
+  if not self.player:isSwimming() and self.preStrokeSpeedScale ~= nil then
+    self.player:setSpeedScale(self.preStrokeSpeedScale)
+    self.preStrokeSpeedScale = nil
+  end
 end
 
 --- if we can stroke in the water

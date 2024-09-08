@@ -50,6 +50,7 @@ local Movement = Class { __includes = Component,
     self.movesWithPlatforms = args.movesWithPlatforms
 
     self.speed = args.speed
+    self.speedScale = args.speedScale
     self.minSpeed = args.minSpeed
     self.acceleration = args.acceleration
     self.deceleration = args.deceleration

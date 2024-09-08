@@ -16,12 +16,16 @@ local function queryTileFilter(item)
 end
 
 ---@class PlayerLedgeJumpState : PlayerState
----@field speed number
----@field hasRoomChanged boolean
 ---@field direction4 Direction4
+---@field ledgeJumpExtendsToNextRoom boolean
+---@field hasRoomChanged boolean
 ---@field landingPositionX number
 ---@field landingPositionY number
----@field ledgeJumpExtendsToNextRoom boolean
+---@field originalSpeedScale number
+---@field jumpSpeed number
+---@field fakeZVelocity number
+---@field spriteOffsetY number
+---@field originalSpriteOffsetY number
 ---@field _playerBumpBox table
 ---@field _playerMoveFilter function
 ---@field _playerRoomEdgeCollisionBoxMoveFilter function
@@ -37,6 +41,8 @@ local PlayerLedgeJumpState = Class { __includes = PlayerState,
     self.stateParameters.canUseWeapons = false
     self.stateParameters.canReleaseSword = false
     self.stateParameters.canUseWeapons = false
+
+    self.speedScale = 1
 
     self._playerBumpBox = { }
   end
@@ -77,6 +83,8 @@ end
 function PlayerLedgeJumpState:onBegin(previousState)
   -- cancel pushing since ledges are usually inline with walls
   self.player:stopPushing()
+  self.originalSpriteOffsetY = self.player.sprite:getOffsetY()
+  self.spriteOffsetY = self.originalSpriteOffsetY
   --temporarily disable solid collisions by niling out moveFilter and roomEdgeCollisionBoxMoveFilter
   self._playerMoveFilter = self.player.moveFilter
   self._playerRoomEdgeCollisionBoxMoveFilter = self.player.roomEdgeCollisionBoxMoveFilter
@@ -84,17 +92,17 @@ function PlayerLedgeJumpState:onBegin(previousState)
   self.player.moveFilter = tempMoveFilter
   self.player.roomEdgeCollisionBoxMoveFilter = tempMoveFilter
 
-
+  -- animation stuff
   if not self.player.stateParameters.canStrafe then
     self.player:setAnimationDirection4(self.direction4)
   end
-
   if self.player:getWeaponState() == nil then
     self.player.sprite:play('jump')
   else
     self.player.sprite:play(self.player:getStateParameters().animations.default)
   end
 
+  -- NB:we don't actually jump in the physics system. We fake it by messing with the sprite offset y
   local px, py = self.player:getPosition()
   self.landingPositionX, self.landingPositionY = self:getLandingPosition(px, py)
 
@@ -105,28 +113,37 @@ function PlayerLedgeJumpState:onBegin(previousState)
     self.hasRoomChanged = false
   
   else
-    -- determine jump speed based on the distance needed to move
-    -- smaller ledge distances have slower jump speeds
+    --Determine the jump speed based on the distance needed to move
+    --Smaller ledge distances have slower jump speeds
     local direction4VectorX, direction4VectorY = Direction4.getVector(self.direction4)
-    local tx, ty = vector.sub(self.landingPositionX, self.landingPositionY, px, py)
-    local distance = vector.dot(tx, ty, direction4VectorX, direction4VectorY)
-
+    local diffX, diffY = vector.sub(self.landingPositionX, self.landingPositionY, px, py)
+    local distance = vector.dot(diffX, diffY, direction4VectorX, direction4VectorY)
+    
+    -- when we jump, it will use the speed from player_environment_jump_state
+    local jumpState = self.player:getStateFromCollection('player_jump_environment_state')
+    local gravity = Constants.DEFAULT_GRAVITY
+    -- local speedScale = 1
+    -- if distance >= 28 then
+    --   speedScale = 80 / 60
+    -- elseif distance >= 20 then
+    --   speedScale = 40 / 60
+    -- end
+    -- local speed = jumpState.motionSettings.speed * speedScale
+    -- local time = distance / speed
     local jumpSpeed = 1.5
     if distance >= 28 then
-      jumpSpeed = 2.0
+      jumpSpeed = 2
     elseif distance >= 20 then
       jumpSpeed = 1.75
     end
-    local jumpTime = (2 / jumpSpeed) / (Constants.DEFAULT_GRAVITY * tick.rate)
-    local speed = distance / jumpTime
-    if speed >= 7 then
-      -- TODO make faster
-      speed = math.sqrt((distance / 2) * Constants.DEFAULT_GRAVITY * tick.rate) / tick.rate
-    end
+    -- local timeUp = jumpSpeed / gravity
+    -- local timeDown = 2 * (jumpSpeed / Constants.DEFAULT_GRAVITY)
+    -- local time = timeUp + timeDown
+    local speedScale = distance / (jumpState.motionSettings.speed) * 2
 
-    self.speed = speed
-    self.ledgeJumpExtendsToNextRoom = false
     self.player:setZVelocity(jumpSpeed)
+    self.originalSpeedScale = self.player.movement:getSpeedScale()
+    self.player:setSpeedScale(speedScale)
   end
 end
 
@@ -134,7 +151,8 @@ function PlayerLedgeJumpState:onEnd(newState)
   -- reenable collisions by giving back bump filters
   self.player.moveFilter = self._playerMoveFilter
   self.player.roomEdgeCollisionBoxMoveFilter = self._playerRoomEdgeCollisionBoxMoveFilter
-
+  -- give back it's original speed scale
+  self.player:setSpeedScale(self.originalSpeedScale)
   if self.ledgeJumpExtendsToNextRoom then
     self.player:markRespawn()
   end
@@ -148,19 +166,12 @@ function PlayerLedgeJumpState:update()
   if self.ledgeJumpExtendsToNextRoom then
     -- TODO
   else
-    local vecX, vecY = Direction4.getVector(self.direction4)
-    local px, py = self.player:getBumpPosition()
-    local velX, velY = vector.mul(self.speed * love.time.dt, vecX, vecY)
-    px, py = vector.add(px, py, velX, velY)
-    self.player:setPositionWithBumpCoords(px, py)
-    Physics:update(self.player, px, py)
+    self.player:setVector(Direction4.getVector(self.direction4))
 
     local x, y = self.player:getPosition()
     x, y = vector.sub(x, y, self.landingPositionX, self.landingPositionY)
-    local dot = vector.dot(x, y, vecX, vecY)
+    local dot = vector.dot(x, y, Direction4.getVector(self.direction4))
     if dot >= 0 then
-      self.player:setZVelocity(0)
-      self.player:setZPosition(0)
       self.player:setPosition(self.landingPositionX, self.landingPositionY)
       Physics:update(self.player, self.player:getBumpPosition())
       self:endState()
