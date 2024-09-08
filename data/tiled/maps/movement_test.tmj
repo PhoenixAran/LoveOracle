@@ -18,7 +18,7 @@
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAAA+3ZoQ7CMBRG4WswPADvgwCDGAYBBrEZDAaNRk8jUIgpXpE23IZlWbOwtCRrz5ecZGZJ\/1VOBI1ppe21PqeBpsruXmo7re8b3ExP7a6558tfThqHb3+jOe393aa8vzBttKNWSpz98zBHDsq3v8vtr+W7u9bG3H9lWpu2psOI90Oxd1xopfRvt64D\/arSzvL5DkjPrFWO7O6FsD\/3\/bnKfb\/l2\/\/QUsd+AAAAAMiP7\/+BK3V248sT+9PH\/rz3AwAAAAAAAAAAAAAQwxsjY0yHAEAAAA==",
+         "data":"H4sIAAAAAAAAA+3ZIQ+CQBiH8SsWv5VBiwGKQYsBisViNpvJBpOB5Ff03vneZIwbk4Eb9z6\/7ZkUN\/4HDedQ+9baXuty6mmuZPdK22ldZ3DzPbW7Fq4vf7nTacT211rQ3N9uzvsz31Y7aoWbZv9ynFseVWx\/W9hfue\/uShvy\/Evfxpf7DgP+PxZ5xplWuO7t4trTr0rt7D7ngHQsekpdrr+WzyCwvl9Y3y+s7xfN\/Q\/NGuv7hdX3HwAAAIAdse8HodTJxlck9qeP\/bb3AwAAAAAAAAAAAAAwhTd1NZfZAEAAAA==",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -116,8 +116,8 @@
                          "value":"down"
                         }],
                  "template":"..\/templates\/ledge_jump.tj",
-                 "width":48,
-                 "x":384,
+                 "width":144,
+                 "x":352,
                  "y":128
                 }],
          "opacity":1,

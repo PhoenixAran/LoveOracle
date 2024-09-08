@@ -131,6 +131,7 @@ function PlayerLedgeJumpState:onBegin(previousState)
     -- local speed = jumpState.motionSettings.speed * speedScale
     -- local time = distance / speed
     local jumpSpeed = 1.5
+    print(distance)
     if distance >= 28 then
       jumpSpeed = 2
     elseif distance >= 20 then
