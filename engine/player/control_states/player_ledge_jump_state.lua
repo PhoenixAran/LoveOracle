@@ -129,15 +129,15 @@ function PlayerLedgeJumpState:onBegin(previousState)
     --   speedScale = 40 / 60
     -- end
     -- local speed = jumpState.motionSettings.speed * speedScale
-    -- local time = distance / speed
+    -- local time = distance / speed'
+
+    -- maybe max out the y offset of the sprite so it doesnt look stupid when ledge jumping long distances
     local jumpSpeed = 1.5
     print(distance)
-    if distance >= 28 then
+    if distance >= 27 then
       jumpSpeed = 2
-    elseif distance >= 20 then
+    elseif distance >= 43 then
       jumpSpeed = 1.75
-    elseif distance >= 36 then
-      jumpSpeed = 3
     end
 
     local timeDown = 2 * (jumpSpeed / Constants.DEFAULT_GRAVITY)
