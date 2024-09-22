@@ -6,7 +6,6 @@ local bit = require 'bit'
 local Singletons = require 'engine.singletons'
 local Constants = require 'constants'
 local Physics = require 'engine.physics'
-local tick = require 'lib.tick'
 
 local function queryTileFilter(item)
   if item.isTile and item:isTile() and item:isTopTile() then
@@ -85,12 +84,16 @@ function PlayerLedgeJumpState:onBegin(previousState)
   self.player:stopPushing()
   self.originalSpriteOffsetY = self.player.sprite:getOffsetY()
   self.spriteOffsetY = self.originalSpriteOffsetY
-  --temporarily disable solid collisions by niling out moveFilter and roomEdgeCollisionBoxMoveFilter
+  --temporarily disable solid collisions by replacing moveFilter and roomEdgeCollisionBoxMoveFilter
   self._playerMoveFilter = self.player.moveFilter
   self._playerRoomEdgeCollisionBoxMoveFilter = self.player.roomEdgeCollisionBoxMoveFilter
-  local tempMoveFilter = function(item) return false end
-  self.player.moveFilter = tempMoveFilter
-  self.player.roomEdgeCollisionBoxMoveFilter = tempMoveFilter
+  self.player.moveFilter = function(item) return false end
+  self.player.roomEdgeCollisionBoxMoveFilter = function(item) 
+    if item.getType and item:getType() == 'room_edge' then
+      print 'ROOM EDGE!!!!'
+    end
+    return item.getType and item:getType() == 'room_edge'
+  end
 
   -- animation stuff
   if not self.player.stateParameters.canStrafe then
@@ -102,16 +105,14 @@ function PlayerLedgeJumpState:onBegin(previousState)
     self.player.sprite:play(self.player:getStateParameters().animations.default)
   end
 
-  -- NB:we don't actually jump in the physics system. We fake it by messing with the sprite offset y
   local px, py = self.player:getPosition()
   self.landingPositionX, self.landingPositionY = self:getLandingPosition(px, py)
 
   local roomControl = Singletons.gameControl:getRoomControl()
-  if not roomControl:inRoomBounds(px, py) then
+  if not roomControl:inRoomBounds(self.landingPositionX, self.landingPositionY) then
     -- TODO ledge jump into next room stuff
     self.ledgeJumpExtendsToNextRoom = true
     self.hasRoomChanged = false
-  
   else
     --Determine the jump speed based on the distance needed to move
     --Smaller ledge distances have slower jump speeds
@@ -121,25 +122,16 @@ function PlayerLedgeJumpState:onBegin(previousState)
     
     -- when we jump, it will use the speed from player_environment_jump_state
     local jumpState = self.player:getStateFromCollection('player_jump_environment_state')
-    local gravity = Constants.DEFAULT_GRAVITY
-    -- local speedScale = 1
-    -- if distance >= 28 then
-    --   speedScale = 80 / 60
-    -- elseif distance >= 20 then
-    --   speedScale = 40 / 60
-    -- end
-    -- local speed = jumpState.motionSettings.speed * speedScale
-    -- local time = distance / speed'
 
-    -- maybe max out the y offset of the sprite so it doesnt look stupid when ledge jumping long distances
+    -- TODO maybe max out the y offset of the sprite so it doesnt look stupid when ledge jumping long distances
     local jumpSpeed = 1.5
-    print(distance)
     if distance >= 27 then
       jumpSpeed = 2
     elseif distance >= 43 then
       jumpSpeed = 1.75
     end
 
+    -- determine time it takes to drop back to ground
     local timeDown = 2 * (jumpSpeed / Constants.DEFAULT_GRAVITY)
     local speedScale = distance / (jumpState.motionSettings.speed * timeDown)
 
@@ -161,12 +153,27 @@ function PlayerLedgeJumpState:onEnd(newState)
 end
 
 function PlayerLedgeJumpState:onEnterRoom()
-  -- TODO
+  if self.ledgeJumpExtendsToNextRoom then
+    self.hasRoomChanged = true
+    local px, py = self.player:getPosition()
+    self.landingPositionX, self.landingPositionY = self:getLandingPosition(px, py)
+    -- move the player to the landing spot, and raise it's z position
+    -- so that it falls onto the landing spot
+    self.player:setZPosition(self.landingPositionY - py)
+    self.player:setPosition(self.landingPositionX, self.landingPositionY)
+    Physics:update(self.player, self.player:getBumpPosition())
+  end
 end
 
 function PlayerLedgeJumpState:update()
   if self.ledgeJumpExtendsToNextRoom then
-    -- TODO
+    if self.hasRoomChanged then
+      if self.player:isOnGround() then
+        self:endState()
+      end
+    else 
+      self.player:setVector(Direction4.getVector(self.direction4))
+    end
   else
     self.player:setVector(Direction4.getVector(self.direction4))
 

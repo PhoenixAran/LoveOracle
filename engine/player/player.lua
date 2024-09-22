@@ -722,9 +722,10 @@ function Player:onHurt(damageInfo)
 end
 
 function Player:_onLanded()
-  print('player landed')
+  -- TODO play sound
 end
 
+local testcounter = 1
 function Player:checkRoomTransitions()
   if self:getStateParameters().canRoomTransition and not self:onHazardTile() then
     for _, other in ipairs(self.moveCollisions) do
