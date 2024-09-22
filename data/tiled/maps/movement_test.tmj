@@ -155,8 +155,8 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":656,
-                 "y":512
+                 "x":400,
+                 "y":128
                 }, 
                 {
                  "id":17,

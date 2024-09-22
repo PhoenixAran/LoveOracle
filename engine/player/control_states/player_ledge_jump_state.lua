@@ -181,6 +181,7 @@ function PlayerLedgeJumpState:update()
     end
   else
     self.player:setVector(Direction4.getVector(self.direction4))
+    
     local x, y = self.player:getPosition()
     x, y = vector.sub(x, y, self.landingPositionX, self.landingPositionY)
     local dot = vector.dot(x, y, Direction4.getVector(self.direction4))
