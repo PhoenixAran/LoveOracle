@@ -304,7 +304,6 @@ end
 ---@return number tvx translation vector x
 ---@return number tvy translation vector y
 function MapEntity:move()
-  print 'map_entity:move()'
   lume.clear(self.moveCollisions)
   local oldX, oldY = self:getPosition()
   local posX, posY = self:getBumpPosition()

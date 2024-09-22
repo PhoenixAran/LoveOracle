@@ -167,11 +167,12 @@ function PlayerLedgeJumpState:onEnterRoom()
 end
 
 function PlayerLedgeJumpState:update()
-  print 'player_ledge_jump_state:update()'
   if self.ledgeJumpExtendsToNextRoom then
     if self.hasRoomChanged then
-      self.player:setPosition(self.landingPositionX, self.landingPositionY)
-      Physics:update(self.player, self.player:getBumpPosition())
+      -- stop slippery movement from moving player off original target set in onEnterRoom if 
+      -- landing position is in next room
+      self.player.movement.motionX = 0
+      self.player.movement.motionY = 0
       if self.player:isOnGround() then
         self:endState()
       end
@@ -180,11 +181,11 @@ function PlayerLedgeJumpState:update()
     end
   else
     self.player:setVector(Direction4.getVector(self.direction4))
-
     local x, y = self.player:getPosition()
     x, y = vector.sub(x, y, self.landingPositionX, self.landingPositionY)
     local dot = vector.dot(x, y, Direction4.getVector(self.direction4))
     if dot >= 0 then
+      -- set to it's exact landing position
       self.player:setPosition(self.landingPositionX, self.landingPositionY)
       Physics:update(self.player, self.player:getBumpPosition())
       self:endState()
