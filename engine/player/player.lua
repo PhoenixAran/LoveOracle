@@ -725,14 +725,15 @@ function Player:_onLanded()
   -- TODO play sound
 end
 
-local testcounter = 1
 function Player:checkRoomTransitions()
-  if self:getStateParameters().canRoomTransition and not self:onHazardTile() then
+  if (self:getStateParameters().canRoomTransition or self:getStateParameters().canAutoRoomTransition) and not self:onHazardTile() then
     for _, other in ipairs(self.moveCollisions) do
       if other:getType() == 'room_edge' then
         ---@type RoomEdge
         local roomEdge = other
-        if roomEdge.canRoomTransition then
+        if self:getStateParameters().canAutoRoomTransition then
+          roomEdge:requestRoomTransition(self:getPosition())
+        elseif roomEdge.canRoomTransition then
           if roomEdge:canRoomTransition(self:getDirection8()) then
             roomEdge:requestRoomTransition(self:getPosition())
           end

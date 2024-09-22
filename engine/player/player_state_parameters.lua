@@ -110,7 +110,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.alwaysFaceLeft = self.alwaysFaceLeft or other.alwaysFaceLeft
   self.alwaysFaceRight = self.alwaysFaceRight or other.alwaysFaceRight
   self.canStrafe = self.canStrafe or other.canStrafe
-  self.canAutoRoomTransition = self.canAutoRoomTransition or self.canAutoRoomTransition
+  self.canAutoRoomTransition = self.canAutoRoomTransition or other.canAutoRoomTransition
 
   -- prefer the other animations if they are non null
   for k, v in pairs(self.animations) do
