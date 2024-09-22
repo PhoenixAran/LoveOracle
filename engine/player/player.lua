@@ -10,7 +10,6 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local MapEntity = require 'engine.entities.map_entity'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local Collider = require 'engine.components.collider'
-local Raycast = require 'engine.components.raycast'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
 local PlayerStateMachine = require 'engine.player.player_state_machine'
@@ -723,6 +722,7 @@ end
 
 function Player:_onLanded()
   -- TODO play sound
+  print 'player landed!'
 end
 
 function Player:checkRoomTransitions()

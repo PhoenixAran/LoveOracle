@@ -14,6 +14,10 @@ local function queryTileFilter(item)
   return false
 end
 
+local function dummyMoveFilter(item, other)
+  return nil
+end
+
 ---@class PlayerLedgeJumpState : PlayerState
 ---@field direction4 Direction4
 ---@field ledgeJumpExtendsToNextRoom boolean
@@ -69,11 +73,15 @@ function PlayerLedgeJumpState:canLandAtPosition(x, y)
 end
 
 function PlayerLedgeJumpState:getLandingPosition(posX, posY)
+  --print('==============')
+  --print('Starting coords:  ' .. posX .. ' ' .. posY)
   local moveVectorX, moveVectorY = Direction4.getVector(self.direction4)
   local landingPositionX, landingPositionY = vector.add(posX, posY, vector.mul(4, moveVectorX, moveVectorY))
   while not self:canLandAtPosition(landingPositionX, landingPositionY) do
     landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
+    --print('iterating on ' .. landingPositionX .. ' ' .. landingPositionY)
   end
+  --print('Finalizing on ' .. landingPositionX .. ' ' .. landingPositionY)
   landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
   return landingPositionX, landingPositionY
 end
@@ -83,17 +91,11 @@ function PlayerLedgeJumpState:onBegin(previousState)
   -- cancel pushing since ledges are usually inline with walls
   self.player:stopPushing()
   self.originalSpriteOffsetY = self.player.sprite:getOffsetY()
+  self.originalSpeedScale = self.player.movement:getSpeedScale()
   self.spriteOffsetY = self.originalSpriteOffsetY
-  --temporarily disable solid collisions by replacing moveFilter and roomEdgeCollisionBoxMoveFilter
+  --temporarily disable solid collisions by replacing moveFilter
   self._playerMoveFilter = self.player.moveFilter
-  self._playerRoomEdgeCollisionBoxMoveFilter = self.player.roomEdgeCollisionBoxMoveFilter
-  self.player.moveFilter = function(item) return false end
-  self.player.roomEdgeCollisionBoxMoveFilter = function(item) 
-    if item.getType and item:getType() == 'room_edge' then
-      print 'ROOM EDGE!!!!'
-    end
-    return item.getType and item:getType() == 'room_edge'
-  end
+  self.player.moveFilter = dummyMoveFilter
 
   -- animation stuff
   if not self.player.stateParameters.canStrafe then
@@ -136,15 +138,13 @@ function PlayerLedgeJumpState:onBegin(previousState)
     local speedScale = distance / (jumpState.motionSettings.speed * timeDown)
 
     self.player:setZVelocity(jumpSpeed)
-    self.originalSpeedScale = self.player.movement:getSpeedScale()
     self.player:setSpeedScale(speedScale)
   end
 end
 
 function PlayerLedgeJumpState:onEnd(newState)
-  -- reenable collisions by giving back bump filters
+  -- reenable collisions by giving back bump filter
   self.player.moveFilter = self._playerMoveFilter
-  self.player.roomEdgeCollisionBoxMoveFilter = self._playerRoomEdgeCollisionBoxMoveFilter
   -- give back it's original speed scale
   self.player:setSpeedScale(self.originalSpeedScale)
   if self.ledgeJumpExtendsToNextRoom then
@@ -153,6 +153,7 @@ function PlayerLedgeJumpState:onEnd(newState)
 end
 
 function PlayerLedgeJumpState:onEnterRoom()
+  print 'player_ledge_jump_state::onEnterRoom'
   if self.ledgeJumpExtendsToNextRoom then
     self.hasRoomChanged = true
     local px, py = self.player:getPosition()
@@ -166,8 +167,11 @@ function PlayerLedgeJumpState:onEnterRoom()
 end
 
 function PlayerLedgeJumpState:update()
+  print 'player_ledge_jump_state:update()'
   if self.ledgeJumpExtendsToNextRoom then
     if self.hasRoomChanged then
+      self.player:setPosition(self.landingPositionX, self.landingPositionY)
+      Physics:update(self.player, self.player:getBumpPosition())
       if self.player:isOnGround() then
         self:endState()
       end
