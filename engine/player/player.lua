@@ -740,6 +740,8 @@ function Player:checkRoomTransitions()
         end
       end
     end
+  else
+    print 'No'
   end
 end
 

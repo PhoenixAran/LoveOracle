@@ -137,6 +137,7 @@ function PlayerStateParameters:reset()
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false
     self.alwaysFaceRight = false
+    self.canAutoRoomTransition = false
 
     self.movementSpeedScale = 1.0
 
