@@ -2,7 +2,6 @@ local Class = require 'lib.class'
 local lume  = require('lib.lume')
 local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'engine.math.vector'
-local Movement = require 'engine.components.movement'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
@@ -338,7 +337,7 @@ end
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
     local currentEnvironmentState = self.player.environmentStateMachine:getCurrentState()
----@diagnostic disable-next-line: need-check-nil
+---@diagnostic disable-next-line: need-check-nil, undefined-field
     self:setMode(currentEnvironmentState.motionSettings)
   else
     self:setMode(self.moveNormalMode)

@@ -3,6 +3,7 @@ local fh = require 'engine.utils.file_helper'
 local parse = require 'engine.utils.parse_helpers'
 -- we don't want to register any entity base classes or any non entity classes into the db
 local excludedEntities = {
+  -- skip core files
   'bump_box',
   'component',
   'damage_info',
@@ -11,8 +12,10 @@ local excludedEntities = {
   'entity',
   'inspector_properties',
   'map_entity',
-  'room_edge', -- we manually create this in map loader
-  'transform'
+  'transform',
+
+  -- skip entities that get manually created map_loader.lua
+  'room_edge'
 }
 ---database of entity constructors. used in the maploader class
 ---@class EntityBank

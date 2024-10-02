@@ -88,6 +88,8 @@ local function makeEntitySpawnersInRooms(mapData, tiledMapLayer)
     local roomData = getRoomDataContainingPosition(mapData, obj.x, obj.y)
     if roomData then
       lume.push(roomData.entitySpawners, EntitySpawner(obj))
+    else
+      love.log.error('Entity Spawner at (' .. tostring(obj.x) .. ', ' .. tostring(obj.y) .. ') not in a room')
     end
   end
 end
