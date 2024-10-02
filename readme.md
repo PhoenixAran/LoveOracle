@@ -19,6 +19,7 @@ Requires [LOVE 11.5](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch
 - [lurker](https://github.com/rxi/lurker)
 - [profile](https://github.com/2dengine/profile.lua)
 - [ripple](https://github.com/tesselode/ripple)
+- [resolution_solution](https://github.com/Vovkiv/resolution_solution)
 - [roomy](https://github.com/tesselode/roomy)
 - [talkies](https://github.com/tanema/talkies)
 - [tick](https://github.com/bjornbytes/tick)
