@@ -26,9 +26,7 @@ end
 ---@field landingPositionY number
 ---@field originalSpeedScale number
 ---@field jumpSpeed number
----@field fakeZVelocity number
----@field spriteOffsetY number
----@field originalSpriteOffsetY number
+---@field originalGravity number
 ---@field _playerBumpBox table
 ---@field _playerMoveFilter function
 ---@field _playerRoomEdgeCollisionBoxMoveFilter function
@@ -90,9 +88,8 @@ end
 function PlayerLedgeJumpState:onBegin(previousState)
   -- cancel pushing since ledges are usually inline with walls
   self.player:stopPushing()
-  self.originalSpriteOffsetY = self.player.sprite:getOffsetY()
   self.originalSpeedScale = self.player.movement:getSpeedScale()
-  self.spriteOffsetY = self.originalSpriteOffsetY
+  self.originalGravity = self.player.movement.gravity
   --temporarily disable solid collisions by replacing moveFilter
   self._playerMoveFilter = self.player.moveFilter
   self.player.moveFilter = dummyMoveFilter
@@ -128,15 +125,19 @@ function PlayerLedgeJumpState:onBegin(previousState)
     -- TODO maybe max out the y offset of the sprite so it doesnt look stupid when ledge jumping long distances
     local jumpSpeed = 1.5
     if distance >= 71 then
-      jumpSpeed = 5
+      jumpSpeed = 2.5
     elseif distance >= 43 then
       jumpSpeed = 1.75
     elseif distance >= 27 then
       jumpSpeed = 2
     end
 
+    -- TODO: for really long jump distances to look good, we need to implemment 
+    -- suspending an entity in the apex of their jump in the air
+    -- then unsuspending them when they get closer
+
     -- determine time it takes to drop back to ground
-    local timeDown = 2 * (jumpSpeed / Constants.DEFAULT_GRAVITY)
+    local timeDown = 2 * (jumpSpeed / self.originalGravity)
     local speedScale = distance / (jumpState.motionSettings.speed * timeDown)
   
     self.player:setZVelocity(jumpSpeed)
@@ -149,14 +150,16 @@ function PlayerLedgeJumpState:onEnd(newState)
   self.player.moveFilter = self._playerMoveFilter
   -- give back it's original speed scale
   self.player:setSpeedScale(self.originalSpeedScale)
+  -- give back it's gravity
+  self.player.movement.gravity = self.originalGravity
+
+  -- restart this state
   if self.ledgeJumpExtendsToNextRoom then
     self.player:markRespawn()
   end
-  self.player.sprite:setMaxOffsetY(nil)
 end
 
 function PlayerLedgeJumpState:onEnterRoom()
-  print 'player_ledge_jump_state::onEnterRoom'
   if self.ledgeJumpExtendsToNextRoom then
     self.hasRoomChanged = true
     local px, py = self.player:getPosition()

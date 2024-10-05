@@ -722,7 +722,7 @@ end
 
 function Player:_onLanded()
   -- TODO play sound
-  --print 'player landed!'
+  -- print 'player landed!'
 end
 
 function Player:checkRoomTransitions()
