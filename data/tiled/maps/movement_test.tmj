@@ -106,7 +106,7 @@
                          "type":"string",
                          "value":"move 5, 0;\ninitial_position;"
                         }],
-                 "template":"..\/templates\/1x2_platform.tj",
+                 "template":"..\/templates\/objects\/1x2_platform.tj",
                  "width":16,
                  "x":480,
                  "y":112
@@ -174,7 +174,7 @@
  "nextobjectid":38,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.10.2",
+ "tiledversion":"1.11.0",
  "tileheight":16,
  "tilesets":[
         {
@@ -195,6 +195,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":"1.10",
+ "version":"1.11",
  "width":64
 }

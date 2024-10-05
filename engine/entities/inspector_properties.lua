@@ -24,7 +24,7 @@ local PropertyMode = {
 ---@field label string
 ---@field propType string
 ---@field readOnly boolean
----@field mode string
+---@field mode integer
 ---@field isObjectFuncs boolean
 ---@field getFunc function
 ---@field setFunc function
@@ -73,13 +73,13 @@ function Property:setPropName(name)
 end
 
 function Property:setFloatRange(min, max)
-  self.mode = PropertyType.FloatRange
+  self.propType = PropertyType.FloatRange
   self.min = min
   self.max = max
 end
 
 function Property:setIntRange(min, max)
-  self.mode = PropertyType.IntRange
+  self.propType = PropertyType.IntRange
   self.min = min
   self.max = max
 end

@@ -32,7 +32,11 @@ end
 local EntitySpawner = Class {
   init = function(self, args)
     self.id = getInstanceId()
-    self.entityClass = args.type
+    if not (args.properties and args.properties.scriptType) then
+      love.log.error('Cannot find spawnType property in ' .. love.inspect(args, {depth = 2}))
+      error('Could not create entity spawner for object without "spawnType" field')
+    end
+    self.entityClass = args.properties.scriptType
     self.constructorArgs = flattenArgs(args)
   end
 }

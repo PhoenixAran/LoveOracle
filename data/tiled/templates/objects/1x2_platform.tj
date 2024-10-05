@@ -23,6 +23,11 @@
              "value":"1x2"
             }, 
             {
+             "name":"scriptType",
+             "type":"string",
+             "value":"moving_platform"
+            }, 
+            {
              "name":"w",
              "type":"int",
              "value":16
@@ -35,7 +40,7 @@
  "tileset":
     {
      "firstgid":1,
-     "source":"..\/tilesets\/template_sources\/platforms.tsj"
+     "source":"..\/..\/tilesets\/template_sources\/platforms.tsj"
     },
  "type":"template"
 }
