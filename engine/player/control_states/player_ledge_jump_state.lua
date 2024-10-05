@@ -127,16 +127,18 @@ function PlayerLedgeJumpState:onBegin(previousState)
 
     -- TODO maybe max out the y offset of the sprite so it doesnt look stupid when ledge jumping long distances
     local jumpSpeed = 1.5
-    if distance >= 27 then
-      jumpSpeed = 2
+    if distance >= 71 then
+      jumpSpeed = 5
     elseif distance >= 43 then
       jumpSpeed = 1.75
+    elseif distance >= 27 then
+      jumpSpeed = 2
     end
 
     -- determine time it takes to drop back to ground
     local timeDown = 2 * (jumpSpeed / Constants.DEFAULT_GRAVITY)
     local speedScale = distance / (jumpState.motionSettings.speed * timeDown)
-
+  
     self.player:setZVelocity(jumpSpeed)
     self.player:setSpeedScale(speedScale)
   end
@@ -150,6 +152,7 @@ function PlayerLedgeJumpState:onEnd(newState)
   if self.ledgeJumpExtendsToNextRoom then
     self.player:markRespawn()
   end
+  self.player.sprite:setMaxOffsetY(nil)
 end
 
 function PlayerLedgeJumpState:onEnterRoom()

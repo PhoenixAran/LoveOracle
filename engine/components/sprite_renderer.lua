@@ -99,20 +99,21 @@ function SpriteRenderer:draw()
   local x, y = self.entity:getPosition()
   local z = self.entity:getZPosition()
   x = x + self.offsetX
-  local offsetY = self.offsetY
-  y = y + self.offsetY
-  if self.followZ then
-    y = y - z
-  end
-  
+
   -- clamp y offset
-  if self.maxOffsetY ~= nil and math.abs(y) > self.maxOffsetY then
-    if y < 0 then
-      y = -self.maxOffsetY
+  local totalYOffset = self.offsetY
+  if self.followZ then
+    totalYOffset = totalYOffset - z
+  end
+  if self.maxOffsetY ~= nil and math.abs(totalYOffset) > self.maxOffsetY then
+    print('here')
+    if totalYOffset < 0 then
+      totalYOffset = -self.maxOffsetY
     else
-      y = self.maxOffsetY
+      totalYOffset = self.maxOffsetY
     end
   end
+  y = y + totalYOffset
 
   if self.palette == nil then
     self.sprite:draw(x, y, self.alpha)
