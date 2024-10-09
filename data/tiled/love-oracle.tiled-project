@@ -97,6 +97,20 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 13,
+            "members": [
+            ],
+            "name": "monster",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 6,
             "members": [
                 {

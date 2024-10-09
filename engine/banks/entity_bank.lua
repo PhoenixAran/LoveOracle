@@ -61,6 +61,7 @@ function EntityBank.initialize(path)
 end
 
 function EntityBank.createEntity(entityKey, args)
+  args = lume.clone(args)
   local entityConstructor = EntityBank.entities[entityKey]
   assert(entityConstructor ~= nil, 'Entity ' .. entityKey .. ' not in entity bank')
   return entityConstructor(args)

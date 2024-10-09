@@ -155,8 +155,8 @@
                 {
                  "id":16,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":460,
-                 "y":128
+                 "x":368,
+                 "y":52
                 }, 
                 {
                  "id":17,
@@ -171,7 +171,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":38,
+ "nextobjectid":39,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",
@@ -192,6 +192,10 @@
         {
          "firstgid":267,
          "source":"..\/tilesets\/template_sources\/platforms.tsj"
+        }, 
+        {
+         "firstgid":271,
+         "source":"..\/tilesets\/template_sources\/monsters.tsj"
         }],
  "tilewidth":16,
  "type":"map",

@@ -132,7 +132,7 @@ function PlayerLedgeJumpState:onBegin(previousState)
       jumpSpeed = 2
     end
 
-    -- TODO: for really long jump distances to look good, we need to implemment 
+    -- TODO: for really long jump distances to look good, we need to implement 
     -- suspending an entity in the apex of their jump in the air
     -- then unsuspending them when they get closer
 
@@ -182,7 +182,7 @@ function PlayerLedgeJumpState:update()
       if self.player:isOnGround() then
         self:endState()
       end
-    else 
+    else
       self.player:setVector(Direction4.getVector(self.direction4))
     end
   else

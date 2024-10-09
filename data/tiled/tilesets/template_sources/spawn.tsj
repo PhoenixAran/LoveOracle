@@ -1,14 +1,14 @@
 { "columns":2,
- "image":"..\/..\/..\/assets\/images\/templates\/spawn.png",
+ "image":"..\/..\/..\/assets\/images\/tiled_icons\/spawn_icons.png",
  "imageheight":16,
  "imagewidth":32,
  "margin":0,
  "name":"spawn",
  "spacing":0,
  "tilecount":2,
- "tiledversion":"1.10.2",
+ "tiledversion":"1.11.0",
  "tileheight":16,
  "tilewidth":16,
  "type":"tileset",
- "version":"1.10"
+ "version":"1.11"
 }
