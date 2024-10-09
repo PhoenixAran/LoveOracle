@@ -766,7 +766,24 @@ function Player:updateLedgeJumpState()
       if len > 0 then
         local ledgeJumpEntity = lume.first(items)
         local dir4 = ledgeJumpEntity:getDirection4()
-        if movementDirection4 == dir4 then
+        local dir8 = self:getDirection8()
+        local doLedgeJump = false
+        if dir4 == Direction4.up then
+          doLedgeJump = dir8 == Direction8.up or dir8 == Direction8.upLeft or dir8 == Direction8.upRight
+            or dir8 == Direction8.left or dir8 == Direction8.right -- allow these for slight angles on analogs
+        elseif dir4 == Direction4.down then
+          doLedgeJump = dir8 == Direction8.down or dir8 == Direction8.downLeft or dir8 == Direction8.downRight
+            or dir8 == Direction8.left or dir8 == Direction8.right
+        elseif dir4 == Direction4.left then
+          doLedgeJump = dir8 == Direction8.left or dir8 == Direction8.upLeft or dir8 == Direction8.downLeft
+            or dir8 == Direction8.up or dir8 == Direction8.down
+        elseif dir4 == Direction4.right then
+          doLedgeJump = dir8 == Direction8.right or dir8 == Direction8.upRight or dir8 == Direction8.downRight
+            or dir8 == Direction8.up or dir8 == Direction8.down
+        else
+          error('Invalid ledge jump direction')
+        end
+        if doLedgeJump then
           local playerLedgeJumpState = self:getStateFromCollection('player_ledge_jump_state')
           playerLedgeJumpState.direction4 = ledgeJumpEntity:getDirection4()
           self:beginControlState(playerLedgeJumpState)
@@ -900,10 +917,15 @@ function Player:update()
       local currentWeaponState = self:getWeaponState()
       if currentWeaponState == nil then
         self:updatePushTileState()
-        self:updateLedgeJumpState()
       end
     end
   end
+
+  if self:getWeaponState() == nil then
+    self:updateLedgeJumpState()
+  end
+
+
   self:checkRoomTransitions()
 end
 
