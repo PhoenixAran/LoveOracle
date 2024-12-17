@@ -147,7 +147,6 @@ local function angleTo(x,y, u,v)
 	return atan2(y, x)
 end
 
--- Additions by PhoenixAran
 local FULL_ANGLE = math.pi * 2
 local function snapDirection(x, y, angleSnapInterval)
 	local theta = atan2(y, x)
@@ -163,6 +162,7 @@ local function snapDirectionByCount(x, y, intervalCount)
 	return snapDirection(x, y, FULL_ANGLE / math.floor(intervalCount))
 end
 
+
 -- the module
 return {
 	str = str,
@@ -174,6 +174,7 @@ return {
 	-- arithmetic
 	mul    = mul,
 	div    = div,
+	idiv   = idiv,
 	add    = add,
 	sub    = sub,
 	permul = permul,
@@ -199,7 +200,7 @@ return {
 	trim          = trim,
 	angleTo       = angleTo,
 
-	-- additional operations by PhoenixAran
-	snapDirection = snapDirection,
-	snapDirectionByCount = snapDirectionByCount
+		-- additional operations by PhoenixAran
+		snapDirection = snapDirection,
+		snapDirectionByCount = snapDirectionByCount
 }

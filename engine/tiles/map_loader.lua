@@ -53,7 +53,6 @@ end
 ---@param mapData MapData
 ---@param tiledMapLayer TiledObjectLayer
 local function makePlayerSpawns(mapData, tiledMapLayer)
-  print(lume.count(tiledMapLayer.objects))
   assert(lume.count(tiledMapLayer.objects) <= 2, 'Too many test_spawn instances')
   local testSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'test' end))
   local gameSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'game' end))
