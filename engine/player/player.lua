@@ -747,7 +747,7 @@ end
 ---@return any[] items
 ---@return integer len
 function Player:queryLedgeJumpRect()
-  local x,y,w,h = self.ledgeJumpQueryRect.x, self.ledgeJumpQueryRect.y, self.ledgeJumpQueryRect.w, self.ledgeJumpQueryRect.h
+  local x,y,w,h = self.ledgeJumpQueryRect. x, self.ledgeJumpQueryRect.y, self.ledgeJumpQueryRect.w, self.ledgeJumpQueryRect.h
   x, y = vector.add(x, y, self:getPosition())
   local items, len = Physics:queryRect(x,y,w,h, self.ledgeJumpQueryRectFilter)
   return items, len

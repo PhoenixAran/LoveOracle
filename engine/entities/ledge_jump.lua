@@ -5,9 +5,13 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TablePool = require 'engine.utils.table_pool'
 local vector = require 'engine.math.vector'
 local lume = require 'lib.lume'
+local Rect = require 'engine.math.rectangle'
+
 
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
+
+local Consts = require('constants').GRID_SIZE
 
 ---@class LedgeJump : Entity
 ---@field direction4 integer
@@ -38,7 +42,7 @@ end
 ---comment
 ---@param x number xposition of ledge jumper
 ---@param y number yposition of ledge jumper
----@param dir8 Direction8
+---@param dir8 Direction8 animation direction
 function LedgeJump:canLedgeJump(x, y, dir8)
   -- check if they are coming from the same direction
   if self:_validApproach(x, y) then
@@ -73,12 +77,18 @@ end
 ---@param y any
 ---@return boolean
 function LedgeJump:_validApproach(x, y)
-  print(x, y, self:getPosition())
-  local ex, ey = self:getPosition()
-  local diffX, diffY = vector.sub(x, y, ex, ey)
-  local approachDir4 = Direction4.getDirection(diffX, diffY)
-  print(Direction4.debugString(approachDir4))
-  return true
+  local dir4 = self:getDirection4()
+  local ljx, ljy = self:getPosition()
+  if dir4 == Direction4.up then
+    return ljy < self.y and x < self.x + self.w and x >= self.x
+  elseif dir4 == Direction4.down then
+    return ljy > self.y and x < self.x + self.w and x >= self.x
+  elseif dir4 == Direction4.left then
+    return ljx < self.x and y < self.y + self.h and y >= self.y
+  elseif dir4 == Direction4.right then
+    return ljx > self.x and y < self.y + self.h and y >= self.y
+  end
+  return false
 end
 
 function LedgeJump:draw()
