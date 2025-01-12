@@ -11,6 +11,9 @@ local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 
+local Direction8Values = {Direction8.up, Direction8.upRight, Direction8.right, Direction8.downRight, Direction8.down, Direction8.downLeft, Direction8.left, Direction8.upLeft}
+local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Direction4.left}
+
 ---@class Enemy : MapEntity
 ---@field canFallInHole boolean
 ---@field canSwimInLava boolean
@@ -46,36 +49,46 @@ end
 function Enemy:jump()
   self.movement.gravity = self.jumpGravity
   self.movement:setZVelocity(self.jumpZVelocity)
+  self:onJump()
+end
+
+-- implements basic callbacks for basic enemies
+-- override these if you want more custom behavior
+function Enemy:onAwake()
+  if self.roomEdgeCollisionBox then
+    self.roomEdgeCollisionBox:entityAwake()
+  end
+end
+
+function Enemy:onJump()
+  -- TODO play sound
+end
+---@param damageInfo DamageInfo
+function Enemy:onHurt(damageInfo)
+  -- TODO play sound
+end
+
+function Enemy:onDeath()
+  -- TODO spawn sprite death effect
 end
 
 -- some helper functions for classes that inherit Enemy
 function Enemy:canMoveInDirection(x, y)
   local canMove = true
-  if y == nil then
-    -- x is radian value
-    x, y = math.cos(x), math.sin(x)
-  end
-  x, y = vector.normalize(x, y)
+  error('not implemented')
 end
 
+---@return Direction4
 function Enemy:getRandomDirection4()
-  
+  return lume.randomchoice(Direction4Values)
 end
 
 function Enemy:getRandomDirection8()
-
+  return lume.randomchoice(Direction8Values)
 end
 
-function Enemy:getRandomVector2(normalized)
-
+function Enemy:getRandomVector2()
+  return lume.vector2(love.math.random() * 2 * math.pi, 1)
 end
-
-
-
-
-
-
-
-
 
 return Enemy

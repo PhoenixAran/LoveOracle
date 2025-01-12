@@ -105,12 +105,21 @@ local MapEntity = Class { __includes = Entity,
     self.combat = Combat(self)
     self.effectSprite = SpriteBank.build('entity_effects', self)
     self.spriteFlasher = SpriteFlasher(self)
-    self.sprite = nil   -- declare this yourself
+    if args.sprite then
+      assert(args.sprite:getType() == 'sprite_renderer' or args.sprite:getType() == 'animated_sprite_renderer', 'Wrong component type provided for sprite')
+      self.sprite = args.sprite
+    end
 
-    -- this collision box will NOT actually exist in the Physics system
+    -- component configuration
+    self.health:connect('health_depleted', self, 'onHealthDepleted')
+
+    -- NB: this collision box will NOT actually exist in the Physics system
     -- if this is not null, it will only be used to collide with room edges if you want the room edge collider
     -- to be different
-    self.roomEdgeCollisionBox = nil
+    if args.roomEdgeCollisionBox then 
+      assert(args.roomEdgeCollisionBox:getType() == 'collider', 'Wrong component type provided for collider')
+      self.roomEdgeCollisionBox = args.roomEdgeCollisionBox
+    end
 
     -- table to store collisions that occur when MapEntity:move() is called
     self.moveCollisions = { }

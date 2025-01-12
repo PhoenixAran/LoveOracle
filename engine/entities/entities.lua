@@ -40,7 +40,7 @@ local Entities = Class { __includes = SignalObject,
 local function ySort(entityA, entityB)
   local _, ay = entityA:getPosition()
   local _, by = entityB:getPosition()
-  return by < ay
+  return by > ay
 end
 
 

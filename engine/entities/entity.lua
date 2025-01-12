@@ -177,7 +177,6 @@ end
 function Entity:awake()
   if not self.registeredWithPhysics then
     Physics:add(self, self.x, self.y, self.w, self.h)
-    self.registeredWithPhysics = true
   end
   if self.onAwake then
     self:onAwake()

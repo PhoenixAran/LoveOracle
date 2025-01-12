@@ -6,6 +6,7 @@ local Direction4 = require 'engine.enums.direction4'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local Collider = require 'engine.components.collider'
 local Hitbox = require 'engine.components.hitbox'
+local Direction8 = require 'engine.enums.direction8'
 
 
 local MOVING = 1
@@ -21,28 +22,30 @@ local Stalfos = Class { __includes = Enemy,
     end
     args.w, args.h = 8, 9
     args.direction = args.direction or Direction4.down
-    Enemy.init(self, args)
-    self.sprite = SpriteBank.build('stalfos', self)
-    self.spriteFlasher:addSprite(self.sprite)
-    self.roomEdgeCollisionBox = Collider(self, {
+    args.sprite = SpriteBank.build('stalfos', self)
+    args.roomEdgeCollisionBox = Collider(self, {
       x = -12 / 2,
       y = -13 / 2,
       w = 12,
       h = 16,
       offsetX = 0,
-      offsetY = 0,
-      detectOnly = true
+      offsetY = 0
     })
-    self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
+    args.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
+    Enemy.init(self, args)
+
+
+    self.spriteFlasher:addSprite(self.sprite)
+
     self:setCollidesWithLayer('tile')
     self:setCollisionTile({'wall'})
 
     self.state = MOVING
     self.moveDirection4 = Direction4.down
     self.moveTimer = 0
-
-
-    self.health:connect('health_depleted', self, 'onHealthDepleted')
+    self.changeDirectionTimer = 0
+    self.currentJumpDelay = 70
+    self.currentDirectionDelay = 70
   end
 }
 
@@ -54,14 +57,12 @@ function Stalfos:prepForMoveState()
   self:resetCombatVariables()
   self:setVector(0, 0)
   self.moveDirection4 = self:getRandomDirection4()
+  self.moveTimer = 0
+  self.changeDirectionTimer = 0
+  self.currentJumpDelay = math.floor(love.math.random(70, 121))
+  self.currentDirectionDelay = math.floor(love.math.random(70, 121))
 end
 
-function Stalfos:jump()
-  Enemy.jump(self)
-  self.sprite:play('jump')
-  self.state = JUMP
-  self.moveTimer = 0
-end
 
 function Stalfos:land()
   self:prepForMoveState()
@@ -77,8 +78,19 @@ function Stalfos:update()
 
   if self.state == MOVING then
     self.moveTimer = self.moveTimer + 1
-    if self.moveTimer > 60 then
+    self.changeDirectionTimer = self.changeDirectionTimer + 1
+    if self.moveTimer > self.currentJumpDelay then
       self:jump()
+    else
+      if self.changeDirectionTimer > self.currentDirectionDelay then
+        self.moveDirection4 = self:getRandomDirection8()
+        self.changeDirectionTimer = 0
+        self.currentDirectionDelay = math.floor(love.math.random(70, 121))
+      end
+      local x, y = Direction8.getVector(self.moveDirection4)
+      x, y = vector.normalize(x, y)
+      self:setVector(x, y)
+      self:move()
     end
   elseif self.state == JUMP then
     if self:isOnGround() then
@@ -96,14 +108,10 @@ function Stalfos:update()
   end
 end
 
----callback for MapEntity:hurt()
----@param damageInfo DamageInfo
-function Stalfos:onHurt(damageInfo)
-  -- TODO play sound
-end
-
-function Stalfos:onDeath()
-  -- TODO spawn sprite death effect
+-- callbacks
+function Stalfos:onJump()
+  Enemy.onJump(self)
+  self.state = JUMP
 end
 
 function Stalfos:onHealthDepleted()

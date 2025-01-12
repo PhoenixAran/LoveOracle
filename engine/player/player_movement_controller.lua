@@ -108,7 +108,9 @@ function PlayerMovementController:jump()
     if self.player:getWeaponState() == nil then
       self.player.sprite:play('jump')
     end
-    -- TODO self.player:onJump()
+    if self.player.onJump then
+      self.player:onJump()
+    end
   end
 end
 
