@@ -33,7 +33,7 @@ local Enemy = Class { __includes = MapEntity,
 
     -- jump behaviour configuration
     self.jumpGravity = args.jumpZGravity or 8
-    self.jumpZVelocity = args.jumpZVelocity or 2
+    self.jumpZVelocity = args.jumpZVelocity or 2.8
   end
 }
 
@@ -60,9 +60,6 @@ function Enemy:onAwake()
   end
 end
 
-function Enemy:onJump()
-  -- TODO play sound
-end
 ---@param damageInfo DamageInfo
 function Enemy:onHurt(damageInfo)
   -- TODO play sound

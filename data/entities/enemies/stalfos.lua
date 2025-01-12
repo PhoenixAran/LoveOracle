@@ -82,15 +82,31 @@ function Stalfos:update()
     if self.moveTimer > self.currentJumpDelay then
       self:jump()
     else
-      if self.changeDirectionTimer > self.currentDirectionDelay then
-        self.moveDirection4 = self:getRandomDirection8()
-        self.changeDirectionTimer = 0
-        self.currentDirectionDelay = math.floor(love.math.random(70, 121))
-      end
+      local shouldChangeDirection = false
+      shouldChangeDirection = self.currentDirectionDelay > self.currentDirectionDelay
+
       local x, y = Direction8.getVector(self.moveDirection4)
       x, y = vector.normalize(x, y)
       self:setVector(x, y)
       self:move()
+      self.sprite:play('move')
+
+      local collidedWithWall = false
+      for _, collision in ipairs(self.moveCollisions) do
+        if collision.isTile and collision:isTile() then
+          if collision:isWall() then
+            collidedWithWall = true
+            break
+          end
+        end
+      end
+      
+      shouldChangeDirection = shouldChangeDirection or collidedWithWall
+      if shouldChangeDirection then
+        self.moveDirection4 = self:getRandomDirection8()
+        self.changeDirectionTimer = 0
+        self.currentDirectionDelay = math.floor(love.math.random(70, 121))
+      end
     end
   elseif self.state == JUMP then
     if self:isOnGround() then
@@ -110,17 +126,12 @@ end
 
 -- callbacks
 function Stalfos:onJump()
-  Enemy.onJump(self)
   self.state = JUMP
+  self.sprite:play('jump')
 end
 
 function Stalfos:onHealthDepleted()
   self.state = MARKED_DEAD
-end
-
-function Stalfos:draw()
-  Enemy.draw(self)
-  Enemy.debugDraw(self)
 end
 
 return Stalfos
