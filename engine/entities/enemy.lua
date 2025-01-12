@@ -15,14 +15,22 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 ---@field canFallInHole boolean
 ---@field canSwimInLava boolean
 ---@field canSwimInWater boolean
+---@field jumpGravity number
+---@field jumpZVelocity number
 local Enemy = Class { __includes = MapEntity,
+  ---@param self Enemy
+  ---@param args table
   init = function(self, args)
     MapEntity.init(self, args)
 
-    -- environment stuff
+    -- environment configuration
     self.canFallInHole = true
     self.canSwimInLava = false
     self.canSwimInWater = false -- note this is only for deep water
+
+    -- jump behaviour configuration
+    self.jumpGravity = args.jumpZGravity or 8
+    self.jumpZVelocity = args.jumpZVelocity or 2
   end
 }
 
@@ -34,37 +42,40 @@ function Enemy:getCollisionTag()
   return 'enemy'
 end
 
--- -- some utility functions for enemy scripts
--- function Enemy:canMoveInDirection(x, y)
---   local canMove = true
---   if y == nil then
---     -- x is radian value
---     x, y = math.cos(x), math.sin(x)
---   end
---   x, y = vector.normalize(x, y)
---   local hits = TablePool.obtain()
---   -- check for any tiles in the way
---   local tileLayer = PhysicsFlags:get('tile')
---   local ex, ey = self:getPosition()
---   local velx, vely = vector.mul(x, y, self.movement:getSpeed())
---   local potentialx, potentialy = ex + velx, ey + vely
---   -- check for anything the entity can collide with is in the way
---   if Physics.rectcast(potentialx, potentialy, self.w, self.h, self.physicsLayer, self.zRange.min, self.zRange.max) then
---     for _, otherBox in ipairs(hits) do
---       if otherBox:isTile() and self.collisionTiles[otherBox:getTileType()] then
---         canMove = false
---         break
---       else
---         canMove = false
---         break
---       end
---     end
---   end
---   -- check for any hazard tiles
---   -- TODO Singletons.entities.getTopTile(vecx, vecy):isHazardTile() or something along these lines
---   TablePool.free(hits)
---   return canMove
--- end
+-- in game behavior action helper functions
+function Enemy:jump()
+  self.movement.gravity = self.jumpGravity
+  self.movement:setZVelocity(self.jumpZVelocity)
+end
+
+-- some helper functions for classes that inherit Enemy
+function Enemy:canMoveInDirection(x, y)
+  local canMove = true
+  if y == nil then
+    -- x is radian value
+    x, y = math.cos(x), math.sin(x)
+  end
+  x, y = vector.normalize(x, y)
+end
+
+function Enemy:getRandomDirection4()
+  
+end
+
+function Enemy:getRandomDirection8()
+
+end
+
+function Enemy:getRandomVector2(normalized)
+
+end
+
+
+
+
+
+
+
 
 
 return Enemy

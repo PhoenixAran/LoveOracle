@@ -220,6 +220,10 @@ end
 
 function MapEntity:die()
   self:release()
+  -- notify entity script so they can play their death sound
+  if self.onDeath then
+    self:onDeath()
+  end
   self:emit('entity_destroyed', self)
 end
 
@@ -420,6 +424,9 @@ end
 --- hurt this entity
 ---@param damageInfo DamageInfo|integer
 function MapEntity:hurt(damageInfo)
+  if self:isIntangible() then
+    return
+  end
   if type(damageInfo) == 'number' then
     local damage = damageInfo
     damageInfo = DamageInfo()
@@ -520,9 +527,26 @@ function MapEntity:updateEntityEffectSprite()
   end
 end
 
+function MapEntity:draw()
+  local grassEffectPlaying = self.effectSprite:getCurrentAnimationKey() == 'grass'
+  if self.effectSprite:isVisible() and not grassEffectPlaying then
+    self.effectSprite:draw()
+  end
+  if self.sprite:isVisible() then
+    self.sprite:draw()
+  end
+  if self.effectSprite:isVisible() and grassEffectPlaying then
+    self.effectSprite:draw()
+  end
+end
+
 -- signal callbacks
 function MapEntity:_onHealthDepleted()
   self.deathMarked = true
+  -- notify entity script
+  if self.onHealthDepleted then
+    self:onHealthDepleted()
+  end
 end
 
 return MapEntity

@@ -47,3 +47,4 @@ function Inventory:unequipItem(itemId, slot)
 end
 
 return Inventory
+

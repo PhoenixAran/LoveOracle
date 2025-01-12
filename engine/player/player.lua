@@ -656,7 +656,7 @@ function Player:equipItem(item)
 end
 
 function Player:updateEquippedItems()
-  for key, item in pairs(self.items) do
+  for _, item in pairs(self.items) do
     item:update()
     if item:isUsable() then
       if item:isButtonDown() then
@@ -687,7 +687,7 @@ function Player:actionStroke(button)
 end
 
 function Player:interruptItems()
-  for k, item in pairs(self.items) do
+  for _, item in pairs(self.items) do
     item:interrupt()
   end
   if self.controlStateMachine:isActive() then
@@ -913,7 +913,6 @@ function Player:update()
     end
   end
 
-
   self:checkRoomTransitions()
 end
 
@@ -923,16 +922,9 @@ function Player:draw()
       item:drawBelow()
     end
   end
-  local grassEffectPlaying = self.effectSprite:getCurrentAnimationKey() == 'grass'
-  if self.effectSprite:isVisible() and not grassEffectPlaying then
-    self.effectSprite:draw()
-  end
-  if self.sprite:isVisible() then
-    self.sprite:draw()
-  end
-  if self.effectSprite:isVisible() and grassEffectPlaying then
-    self.effectSprite:draw()
-  end
+
+  MapEntity.draw(self)
+
   for _, item in pairs(self.items) do
     if item.drawAbove and item:isVisible() then
       item:drawAbove()
