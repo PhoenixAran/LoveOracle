@@ -16,15 +16,11 @@ end
 ---@class Collider : BumpBox, Component
 ---@field offsetX number
 ---@field offsetY number
----@field detectOnly number
 ---@field moveFilter function
 local Collider = Class { __includes = { BumpBox, Component },
   init = function(self, entity, args)
     if args == nil then
       args = { }
-    end
-    if args.detectOnly == nil then
-      args.detectOnly = false
     end
     self.offsetX = args.offsetX or 0
     self.offsetY = args.offsetY or 0
@@ -33,7 +29,6 @@ local Collider = Class { __includes = { BumpBox, Component },
     BumpBox.init(self, args)
     Component.init(self, entity, args)
     self.moveFilter = defaultColliderMoveFilter
-    self.detectOnly = args.detectOnly
   end
 }
 
@@ -45,13 +40,13 @@ function Collider:onTransformChanged()
   local ex, ey = self.entity:getPosition()
   self.x = ex + self.offsetX - self.w / 2
   self.y = ey + self.offsetY - self.h / 2
-  if not self.detectOnly and self.registeredWithPhysics then
+  if self.registeredWithPhysics then
     Physics:update(self, self.x, self.y, self.w, self.h)
   end
 end
 
 function Collider:entityAwake()
-  if not self.detectOnly and not self.registeredWithPhysics then
+  if not self.registeredWithPhysics then
     Physics:add(self, self.x, self.y, self.w, self.h)
     self.registeredWithPhysics = true
   end

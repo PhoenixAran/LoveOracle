@@ -20,7 +20,7 @@ local Pool = require 'engine.utils.pool'
 
 local canCollide = require('engine.entities.bump_box').canCollide
 
---- default filter for move function in Physics module
+--- default filter for move function in Map_Entities in Physics module
 ---@param item MapEntity
 ---@param other any
 ---@return string?
@@ -31,6 +31,7 @@ local function defaultMoveFilter(item, other)
         if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
           return nil
         end
+        return 'slide'
       end
       return nil
     end
@@ -230,7 +231,9 @@ end
 function MapEntity:die()
   self:release()
   -- notify entity script so they can play their death sound
+---@diagnostic disable-next-line: undefined-field
   if self.onDeath then
+---@diagnostic disable-next-line: undefined-field
     self:onDeath()
   end
   self:emit('entity_destroyed', self)
@@ -553,7 +556,9 @@ end
 function MapEntity:_onHealthDepleted()
   self.deathMarked = true
   -- notify entity script
+---@diagnostic disable-next-line: undefined-field
   if self.onHealthDepleted then
+---@diagnostic disable-next-line: undefined-field
     self:onHealthDepleted()
   end
 end

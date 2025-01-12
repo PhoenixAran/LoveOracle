@@ -32,20 +32,20 @@ local Stalfos = Class { __includes = Enemy,
       offsetY = 0
     })
     args.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
-    Enemy.init(self, args)
 
+    Enemy.init(self, args)
+    self:setCollidesWithLayer({'tile', 'ledge_jump'})
+    self:setCollisionTile('wall')
 
     self.spriteFlasher:addSprite(self.sprite)
-
-    self:setCollidesWithLayer('tile')
-    self:setCollisionTile({'wall'})
+    self.movement:setSpeed(40)
 
     self.state = MOVING
     self.moveDirection4 = Direction4.down
     self.moveTimer = 0
     self.changeDirectionTimer = 0
     self.currentJumpDelay = 70
-    self.currentDirectionDelay = 70
+    self.currentDirectionDelay = 30
   end
 }
 
@@ -56,11 +56,11 @@ end
 function Stalfos:prepForMoveState()
   self:resetCombatVariables()
   self:setVector(0, 0)
-  self.moveDirection4 = self:getRandomDirection4()
+  self.moveDirection4 = self:getRandomDirection8()
   self.moveTimer = 0
   self.changeDirectionTimer = 0
   self.currentJumpDelay = math.floor(love.math.random(70, 121))
-  self.currentDirectionDelay = math.floor(love.math.random(70, 121))
+  self.currentDirectionDelay = math.floor(love.math.random(30, 71))
 end
 
 
@@ -116,6 +116,11 @@ end
 
 function Stalfos:onHealthDepleted()
   self.state = MARKED_DEAD
+end
+
+function Stalfos:draw()
+  Enemy.draw(self)
+  Enemy.debugDraw(self)
 end
 
 return Stalfos
