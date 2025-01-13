@@ -45,11 +45,45 @@ function Enemy:getCollisionTag()
   return 'enemy'
 end
 
+-- some helper functions for classes that inherit Enemy
+function Enemy:canMoveInDirection(x, y)
+  local canMove = true
+  error('not implemented')
+end
+
+---@return Direction4
+function Enemy:getRandomDirection4()
+  return lume.randomchoice(Direction4Values)
+end
+
+function Enemy:getRandomDirection8()
+  return lume.randomchoice(Direction8Values)
+end
+
+function Enemy:getRandomVector2()
+  return vector.normalize(lume.vector(love.math.random() * 2 * math.pi, 1))
+end
+
+function Enemy:updateComponents()
+  self.groundObserver:update()
+  self.spriteFlasher:update()
+  if self.sprite then
+    self.sprite:update()
+  end
+  self.combat:update()
+  self.movement:update()
+  self:updateEntityEffectSprite()
+end
+
 -- in game behavior action helper functions
 function Enemy:jump()
   self.movement.gravity = self.jumpGravity
   self.movement:setZVelocity(self.jumpZVelocity)
-  self:onJump()
+---@diagnostic disable-next-line: undefined-field
+  if self.onJump then
+---@diagnostic disable-next-line: undefined-field
+    self:onJump()
+  end
 end
 
 -- implements basic callbacks for basic enemies
@@ -67,25 +101,6 @@ end
 
 function Enemy:onDeath()
   -- TODO spawn sprite death effect
-end
-
--- some helper functions for classes that inherit Enemy
-function Enemy:canMoveInDirection(x, y)
-  local canMove = true
-  error('not implemented')
-end
-
----@return Direction4
-function Enemy:getRandomDirection4()
-  return lume.randomchoice(Direction4Values)
-end
-
-function Enemy:getRandomDirection8()
-  return lume.randomchoice(Direction8Values)
-end
-
-function Enemy:getRandomVector2()
-  return lume.vector2(love.math.random() * 2 * math.pi, 1)
 end
 
 return Enemy

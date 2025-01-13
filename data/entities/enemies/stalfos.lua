@@ -39,9 +39,9 @@ local Stalfos = Class { __includes = Enemy,
 
     self.spriteFlasher:addSprite(self.sprite)
     self.movement:setSpeed(40)
+    self.movement:setVector(self:getRandomVector2())
 
     self.state = MOVING
-    self.moveDirection4 = Direction4.down
     self.moveTimer = 0
     self.changeDirectionTimer = 0
     self.currentJumpDelay = 70
@@ -55,8 +55,7 @@ end
 
 function Stalfos:prepForMoveState()
   self:resetCombatVariables()
-  self:setVector(0, 0)
-  self.moveDirection4 = self:getRandomDirection8()
+  self:setVector(self:getRandomVector2())
   self.moveTimer = 0
   self.changeDirectionTimer = 0
   self.currentJumpDelay = math.floor(love.math.random(70, 121))
@@ -70,12 +69,7 @@ function Stalfos:land()
 end
 
 function Stalfos:update()
-  self:updateEntityEffectSprite()
-  self.spriteFlasher:update()
-  self.sprite:update()
-  self.combat:update()
-  self.movement:update()
-
+  self:updateComponents()
   if self.state == MOVING then
     self.moveTimer = self.moveTimer + 1
     self.changeDirectionTimer = self.changeDirectionTimer + 1
@@ -83,11 +77,7 @@ function Stalfos:update()
       self:jump()
     else
       local shouldChangeDirection = false
-      shouldChangeDirection = self.currentDirectionDelay > self.currentDirectionDelay
-
-      local x, y = Direction8.getVector(self.moveDirection4)
-      x, y = vector.normalize(x, y)
-      self:setVector(x, y)
+      shouldChangeDirection = self.changeDirectionTimer > self.currentDirectionDelay
       self:move()
       self.sprite:play('move')
 
@@ -100,10 +90,10 @@ function Stalfos:update()
           end
         end
       end
-      
       shouldChangeDirection = shouldChangeDirection or collidedWithWall
+
       if shouldChangeDirection then
-        self.moveDirection4 = self:getRandomDirection8()
+        self:setVector(self:getRandomVector2())
         self.changeDirectionTimer = 0
         self.currentDirectionDelay = math.floor(love.math.random(70, 121))
       end
