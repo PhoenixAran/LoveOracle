@@ -46,6 +46,10 @@ local Stalfos = Class { __includes = Enemy,
     self.changeDirectionTimer = 0
     self.currentJumpDelay = 70
     self.currentDirectionDelay = 30
+
+    self.shadowOffsetY =6
+    self.rippleOffsetY = 6
+    
   end
 }
 

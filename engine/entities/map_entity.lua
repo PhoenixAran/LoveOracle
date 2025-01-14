@@ -508,7 +508,7 @@ function MapEntity:updateEntityEffectSprite()
     self.effectSprite:update()
   elseif self.rippleVisible and self.groundObserver.inPuddle then
     if self.effectSprite:getCurrentAnimationKey() ~= 'ripple' or not self.effectSprite:isVisible() then
-      self.effectSprite:setOffset(self.rippleOffsetX, self.shadowOffsetY)
+      self.effectSprite:setOffset(self.rippleOffsetX, self.rippleOffsetY)
       self.effectSprite:play('ripple')
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = 1
