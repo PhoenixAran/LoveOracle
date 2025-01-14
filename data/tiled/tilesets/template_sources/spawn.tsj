@@ -4,6 +4,7 @@
  "imagewidth":32,
  "margin":0,
  "name":"spawn",
+ "objectalignment":"topleft",
  "spacing":0,
  "tilecount":2,
  "tiledversion":"1.11.0",

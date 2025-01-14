@@ -19,7 +19,7 @@ local LedgeJump = Class { __includes = Entity,
   init = function(self, args)
     args.w = args.width
     args.h = args.height
-    args.useBumpCoords = true
+    args.useBumpCoords = false
     Entity.init(self, args)
 
     self:setPhysicsLayer('ledge_jump')
@@ -92,11 +92,11 @@ function LedgeJump:_validApproach(x, y)
 end
 
 function LedgeJump:draw()
-  -- love.graphics.setColor(1, 0, 0, .25)
-  -- love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
-  -- love.graphics.setColor(1, 0, 0, .45)
-  -- love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
-  -- love.graphics.setColor(1, 1, 1)
+  love.graphics.setColor(1, 0, 0, .25)
+  love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
+  love.graphics.setColor(1, 0, 0, .45)
+  love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
+  love.graphics.setColor(1, 1, 1)
 end
 
 return LedgeJump

@@ -31,8 +31,8 @@ local Stalfos = Class { __includes = Enemy,
       offsetX = 0,
       offsetY = 0
     })
+    args.useBumpCoords = false
     args.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
-
     Enemy.init(self, args)
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
     self:setCollisionTile('wall')
@@ -61,7 +61,6 @@ function Stalfos:prepForMoveState()
   self.currentJumpDelay = math.floor(love.math.random(70, 121))
   self.currentDirectionDelay = math.floor(love.math.random(30, 71))
 end
-
 
 function Stalfos:land()
   self:prepForMoveState()
@@ -122,6 +121,10 @@ end
 
 function Stalfos:onHealthDepleted()
   self.state = MARKED_DEAD
+end
+
+function Stalfos:draw()
+  self:debugDraw()
 end
 
 return Stalfos

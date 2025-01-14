@@ -135,8 +135,7 @@ end
 local MovingPlatform = Class { __includes = Entity,
   init = function(self, args)
     args.drawType = EntityDrawType.background
-    args.useBumpCoords = true
-    args.x, args.y = CoordHelpers.convertBottomLeftToTopLeft(args.x, args.y, args.w, args.h)
+    args.useBumpCoords = false
     Entity.init(self, args)
 
     if args.loopType ~= 'Cycle' and args.loopType ~= 'PingPong' then

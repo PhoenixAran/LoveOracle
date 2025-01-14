@@ -36,55 +36,54 @@
          "name":"rooms",
          "objects":[
                 {
-                 "id":1,
+                 "id":45,
                  "template":"..\/templates\/single_room_template.tj",
-                 "visible":true,
                  "x":0,
                  "y":0
                 }, 
                 {
-                 "id":2,
+                 "id":46,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":160,
                  "y":0
                 }, 
                 {
-                 "id":4,
+                 "id":47,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":592,
                  "y":288
                 }, 
                 {
-                 "id":5,
-                 "template":"..\/templates\/single_room_template.tj",
-                 "x":592,
-                 "y":416
-                }, 
-                {
-                 "id":6,
+                 "id":48,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":752,
                  "y":416
                 }, 
                 {
-                 "id":7,
+                 "id":49,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":592,
+                 "y":416
+                }, 
+                {
+                 "id":50,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":432,
                  "y":416
                 }, 
                 {
+                 "id":51,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":592,
+                 "y":544
+                }, 
+                {
                  "height":288,
-                 "id":8,
+                 "id":52,
                  "template":"..\/templates\/single_room_template.tj",
                  "width":432,
                  "x":320,
                  "y":0
-                }, 
-                {
-                 "id":35,
-                 "template":"..\/templates\/single_room_template.tj",
-                 "x":592,
-                 "y":544
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -109,7 +108,7 @@
                  "template":"..\/templates\/objects\/1x2_platform.tj",
                  "width":16,
                  "x":480,
-                 "y":112
+                 "y":80
                 }, 
                 {
                  "height":16,
@@ -140,12 +139,6 @@
                  "width":96,
                  "x":608,
                  "y":528
-                }, 
-                {
-                 "id":39,
-                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":692,
-                 "y":348
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -159,16 +152,10 @@
          "name":"playerspawn",
          "objects":[
                 {
-                 "id":16,
+                 "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":640,
-                 "y":340
-                }, 
-                {
-                 "id":17,
-                 "template":"..\/templates\/spawn.tj",
-                 "x":104,
-                 "y":56
+                 "x":576,
+                 "y":204
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -177,7 +164,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":40,
+ "nextobjectid":53,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

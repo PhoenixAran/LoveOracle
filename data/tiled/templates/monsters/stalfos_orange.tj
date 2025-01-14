@@ -9,6 +9,11 @@
              "name":"scriptType",
              "type":"string",
              "value":"stalfos"
+            }, 
+            {
+             "name":"useBumpCoords",
+             "type":"bool",
+             "value":true
             }],
      "rotation":0,
      "type":"",

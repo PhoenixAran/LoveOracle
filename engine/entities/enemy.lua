@@ -25,7 +25,6 @@ local Enemy = Class { __includes = MapEntity,
   ---@param args table
   init = function(self, args)
     MapEntity.init(self, args)
-
     -- environment configuration
     self.canFallInHole = true
     self.canSwimInLava = false
@@ -61,7 +60,8 @@ function Enemy:getRandomDirection8()
 end
 
 function Enemy:getRandomVector2()
-  return vector.normalize(lume.vector(love.math.random() * 2 * math.pi, 1))
+  return 0, 0
+  --return vector.normalize(lume.vector(love.math.random() * 2 * math.pi, 1))
 end
 
 function Enemy:updateComponents()

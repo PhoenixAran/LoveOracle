@@ -4,6 +4,7 @@
  "imagewidth":189,
  "margin":1,
  "name":"environment",
+ "objectalignment":"topleft",
  "spacing":3,
  "tilecount":200,
  "tiledversion":"1.11.0",

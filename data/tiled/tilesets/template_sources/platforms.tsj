@@ -7,9 +7,10 @@
     },
  "margin":0,
  "name":"platforms",
+ "objectalignment":"topleft",
  "spacing":0,
  "tilecount":4,
- "tiledversion":"1.10.2",
+ "tiledversion":"1.11.0",
  "tileheight":32,
  "tiles":[
         {
@@ -38,5 +39,5 @@
         }],
  "tilewidth":32,
  "type":"tileset",
- "version":"1.10"
+ "version":"1.11"
 }

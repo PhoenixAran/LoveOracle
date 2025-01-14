@@ -74,6 +74,11 @@ local function parseObject(jObject)
   tiledObject.type = jObject.type
   tiledObject.rotation = jObject.rotation
 
+  if tiledObject.width ~= nil and tiledObject.height ~= nil then
+    tiledObject.x = tiledObject.x + tiledObject.width / 2
+    tiledObject.y = tiledObject.y + tiledObject.height / 2
+  end
+
   if jObject.template then
     -- if this is a templated object, inject the template object value properties into our json object
     local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
