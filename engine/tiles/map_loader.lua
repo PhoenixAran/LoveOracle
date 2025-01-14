@@ -42,8 +42,8 @@ local function makeRooms(mapData, tiledMapLayer)
           and tiledObj.height ~= nil, 'Could not find values for x, y, width, height')
     -- lua index
     print(tiledObj.id, tiledObj.x, tiledObj.y, tiledObj.width, tiledObj.height)
-    roomData.topLeftPosX = math.floor(tiledObj.x / GRID_SIZE) + 1
-    roomData.topLeftPosY = math.floor(tiledObj.y / GRID_SIZE) + 1
+    roomData.topLeftPosX = math.floor((tiledObj.x - tiledObj.width / 2) / GRID_SIZE) + 1
+    roomData.topLeftPosY = math.floor((tiledObj.y - tiledObj.height / 2) / GRID_SIZE) + 1
     roomData.width = tiledObj.width / GRID_SIZE
     roomData.height = tiledObj.height / GRID_SIZE
     lume.push(mapData.rooms, roomData)
@@ -58,7 +58,7 @@ local function makePlayerSpawns(mapData, tiledMapLayer)
   local testSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'test' end))
   local gameSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'game' end))
   if testSpawn then
-    mapData.testSpawnPositionX, mapData.testSpawnPositionY = testSpawn.x + GRID_SIZE / 2, testSpawn.y + GRID_SIZE / 2
+    mapData.testSpawnPositionX, mapData.testSpawnPositionY = testSpawn.x, testSpawn.y
   end
   if gameSpawn then
     mapData.initialSpawnPositionX, mapData.initialSpawnPositionY = gameSpawn.x, gameSpawn.y
