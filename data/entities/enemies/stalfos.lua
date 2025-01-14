@@ -124,6 +124,7 @@ function Stalfos:onHealthDepleted()
 end
 
 function Stalfos:draw()
+  Enemy.draw(self)
   self:debugDraw()
 end
 
