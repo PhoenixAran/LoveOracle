@@ -1,12 +1,10 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
-local Enemy = require 'engine.entities.enemy'
+local BasicEnemy = require 'engine.entities.enemy.basic_enemy'
 local Direction4 = require 'engine.enums.direction4'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local Collider = require 'engine.components.collider'
-local Hitbox = require 'engine.components.hitbox'
-local Direction8 = require 'engine.enums.direction8'
 
 
 local MOVING = 1
@@ -16,7 +14,7 @@ local MARKED_DEAD = 4
 local FALLING = 5
 
 ---@class Stalfos : Enemy
-local Stalfos = Class { __includes = Enemy,
+local Stalfos = Class { __includes = BasicEnemy,
   init = function(self, args)
     if args == nil then
       args = { }
@@ -34,7 +32,7 @@ local Stalfos = Class { __includes = Enemy,
     })
     args.useBumpCoords = false
     args.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
-    Enemy.init(self, args)
+    BasicEnemy.init(self, args)
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
     self:setCollisionTile('wall')
 
@@ -138,7 +136,7 @@ function Stalfos:onHealthDepleted()
 end
 
 function Stalfos:draw()
-  Enemy.draw(self)
+  BasicEnemy.draw(self)
   self:debugDraw()
 end
 
