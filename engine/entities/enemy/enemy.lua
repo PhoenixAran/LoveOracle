@@ -25,11 +25,6 @@ local Enemy = Class { __includes = MapEntity,
   ---@param args table
   init = function(self, args)
     MapEntity.init(self, args)
-    -- -- environment configuration
-    -- self.canFallInHole = true
-    -- self.canSwimInLava = false
-    -- self.canSwimInWater = false -- note this is only for deep water
-
     -- jump behaviour configuration
     self.jumpGravity = args.jumpZGravity or 8
     self.jumpZVelocity = args.jumpZVelocity or 2.8

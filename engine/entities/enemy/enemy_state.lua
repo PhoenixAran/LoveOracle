@@ -11,6 +11,12 @@ function EnemyState:update()
   
 end
 
+function EnemyState:endState()
+
+end
+
 function EnemyState:getType()
   return 'enemy_state'
 end
+
+return EnemyState

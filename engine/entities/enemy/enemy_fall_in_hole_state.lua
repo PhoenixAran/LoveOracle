@@ -1,6 +1,5 @@
+local Pool = require 'engine.utils.pool'
 local Class = require 'lib.class'
-local vec2 = require 'lib.vector'
-local lume = require 'lib.lume'
 
 local EnemyFallInHoleState = Class {
   init = function(self, enemy)
@@ -15,5 +14,7 @@ end
 function EnemyFallInHoleState:update()
   
 end
+
+Pool.register('enemy_fall_in_hole_state', EnemyFallInHoleState)
 
 return EnemyFallInHoleState

@@ -1,6 +1,4 @@
 local Class = require 'lib.class'
-local vec2 = require 'lib.vector'
-local lume = require 'lib.lume'
 
 local Enemy = require 'engine.entities.enemy'
 
@@ -9,12 +7,27 @@ local Enemy = require 'engine.entities.enemy'
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
     Enemy.init(self, args)
+
+    -- inner state machine 
     self.state = nil
+
+    -- environment configuration
+    self.canFallInHole = false
+    self.canSwimInLava = false
+    self.canSwimInWater = false -- note this is only for deep water
   end
 }
 
 function BasicEnemy:getType()
   return 'basic_enemy'
+end
+
+function BasicEnemy:changeState(state)
+  if self.state then
+    self:onStateEnd(state)
+    state:endState()
+  end
+  self:onStateBegin(state)
 end
 
 function BasicEnemy:update()
@@ -25,7 +38,20 @@ function BasicEnemy:update()
   end
 end
 
+-- callbacks for enemy scripts
 function BasicEnemy:onUpdate()
+
+end
+
+function BasicEnemy:onStateEnd(state)
+
+end
+
+function BasicEnemy:onStateBegin(state)
+
+end
+
+function BasicEnemy:onStateUpdate(state)
 
 end
 
