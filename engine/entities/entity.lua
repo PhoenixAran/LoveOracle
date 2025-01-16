@@ -7,8 +7,11 @@ local rect = require 'engine.math.rectangle'
 local InspectorProperties = require 'engine.entities.inspector_properties'
 local EntityDrawType = require 'engine.enums.entity_draw_type'
 local uuid = require 'engine.utils.uuid'
-
+local Consts = require 'constants'
 local Physics = require 'engine.physics'
+
+
+local TILE_SIZE = Consts.TILE_SIZE
 
 ---@class Entity : SignalObject, BumpBox
 ---@field enabled boolean
@@ -104,6 +107,14 @@ end
 function Entity:getZPosition()
   local x, y, z = self.transform:getPosition()
   return z
+end
+
+---returns tile index this entity is on
+---@return integer x
+---@return integer y
+function Entity:getTileIndex()
+  local x, y = self:getPosition()
+  return math.floor(x / TILE_SIZE), math.floor(y / TILE_SIZE)
 end
 
 ---sets z position

@@ -1,7 +1,10 @@
 local Class = require 'lib.class'
-
 local Enemy = require 'engine.entities.enemy'
 
+--- Class with built in behaviour for enemies.
+--- This class automatically handles entities:
+--- >falling in hole, lava, and/or water
+--- >Stun State
 ---@class BasicEnemy : Enemy
 ---@field state EnemyState?
 local BasicEnemy = Class { __includes = Enemy,
@@ -22,6 +25,7 @@ function BasicEnemy:getType()
   return 'basic_enemy'
 end
 
+---@param state EnemyState
 function BasicEnemy:changeState(state)
   if self.state then
     self:onStateEnd(state)
@@ -34,23 +38,30 @@ function BasicEnemy:update()
   if self.state then
     self.state:update()
   else
-    self:onUpdate()
+    self:updateAi()
   end
 end
 
--- callbacks for enemy scripts
-function BasicEnemy:onUpdate()
+function BasicEnemy:beginNormalState()
+  self.state = nil
+end
+
+-- this is where custom enemy code should be implemented in child classes
+function BasicEnemy:updateAi()
 
 end
 
+---@param state EnemyState
 function BasicEnemy:onStateEnd(state)
 
 end
 
+---@param state EnemyState
 function BasicEnemy:onStateBegin(state)
 
 end
 
+---@param state EnemyState
 function BasicEnemy:onStateUpdate(state)
 
 end

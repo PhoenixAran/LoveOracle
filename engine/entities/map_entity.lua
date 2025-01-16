@@ -17,6 +17,7 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 local Pool = require 'engine.utils.pool'
+local Consts = require 'constants'
 
 local canCollide = require('engine.entities.bump_box').canCollide
 
@@ -431,6 +432,10 @@ end
 
 function MapEntity:isInLava()
   return self.groundObserver.inLava
+end
+
+function MapEntity:isInHole()
+  return self.groundObserver.inHole
 end
 
 --- hurt this entity
