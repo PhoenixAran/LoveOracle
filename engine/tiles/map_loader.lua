@@ -41,7 +41,6 @@ local function makeRooms(mapData, tiledMapLayer)
     assert(tiledObj.x ~= nil and tiledObj.y ~= nil and tiledObj.width ~= nil
           and tiledObj.height ~= nil, 'Could not find values for x, y, width, height')
     -- lua index
-    print(tiledObj.id, tiledObj.x, tiledObj.y, tiledObj.width, tiledObj.height)
     roomData.topLeftPosX = math.floor((tiledObj.x - tiledObj.width / 2) / GRID_SIZE) + 1
     roomData.topLeftPosY = math.floor((tiledObj.y - tiledObj.height / 2) / GRID_SIZE) + 1
     roomData.width = tiledObj.width / GRID_SIZE

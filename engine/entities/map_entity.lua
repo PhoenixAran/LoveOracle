@@ -112,7 +112,7 @@ local MapEntity = Class { __includes = Entity,
     end
 
     -- component configuration
-    self.health:connect('health_depleted', self, 'onHealthDepleted')
+    self.health:connect('health_depleted', self, '_onHealthDepleted')
 
     -- NB: this collision box will NOT actually exist in the Physics system
     -- if this is not null, it will only be used to collide with room edges if you want the room edge collider

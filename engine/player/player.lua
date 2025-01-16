@@ -165,10 +165,10 @@ local Player = Class { __includes = MapEntity,
 
     -- entity sprite effect configuration
     self.shadowOffsetY = 6
+    self.rippleOffsetY = 6
     self.shadowVisible = true
 
     -- signal connections
-    self.health:connect('health_depleted', self, '_onHealthDepleted')
     self.movement:connect('landed', self, '_onLanded')
 
     self.tileQueryRect = {
