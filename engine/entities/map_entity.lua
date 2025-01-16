@@ -346,9 +346,9 @@ function MapEntity:move()
     local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y)
     local goalX2, goalY2 = vector.sub(actualX, actualY, diffX, diffY)
     local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, self.roomEdgeCollisionBoxMoveFilter)
-    for i, col in ipairs(cols2) do
+    for _, col in ipairs(cols2) do
       local shouldAddToMoveCollisions = true
-      for j, moveCollision in ipairs(self.moveCollisions) do
+      for _, moveCollision in ipairs(self.moveCollisions) do
         if col.other == moveCollision then
           shouldAddToMoveCollisions = false
           break
@@ -553,13 +553,13 @@ function MapEntity:draw()
 end
 
 -- signal callbacks
-function MapEntity:_onHealthDepleted()
+function MapEntity:_onHealthReduced()
   self.deathMarked = true
   -- notify entity script
 ---@diagnostic disable-next-line: undefined-field
-  if self.onHealthDepleted then
+  if self.onHealthReduced then
 ---@diagnostic disable-next-line: undefined-field
-    self:onHealthDepleted()
+    self:onHealthReduced()
   end
 end
 

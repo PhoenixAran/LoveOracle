@@ -25,10 +25,10 @@ local Enemy = Class { __includes = MapEntity,
   ---@param args table
   init = function(self, args)
     MapEntity.init(self, args)
-    -- environment configuration
-    self.canFallInHole = true
-    self.canSwimInLava = false
-    self.canSwimInWater = false -- note this is only for deep water
+    -- -- environment configuration
+    -- self.canFallInHole = true
+    -- self.canSwimInLava = false
+    -- self.canSwimInWater = false -- note this is only for deep water
 
     -- jump behaviour configuration
     self.jumpGravity = args.jumpZGravity or 8
@@ -101,6 +101,18 @@ end
 
 function Enemy:onDeath()
   -- TODO spawn sprite death effect
+end
+
+function Enemy:fall()
+  if self.sprite then
+    self.sprite:play('fall')
+    self.deathMarked = true
+  end
+---@diagnostic disable-next-line: undefined-field
+  if self.onFall then
+---@diagnostic disable-next-line: undefined-field
+    self:onFall()
+  end
 end
 
 return Enemy

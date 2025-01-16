@@ -13,6 +13,7 @@ local MOVING = 1
 local HURT = 2
 local JUMP = 3
 local MARKED_DEAD = 4
+local FALLING = 5
 
 ---@class Stalfos : Enemy
 local Stalfos = Class { __includes = Enemy,
@@ -73,6 +74,11 @@ end
 
 function Stalfos:update()
   self:updateComponents()
+
+  if self.groundObserver.inHole then
+    self.state = FALLING
+  end
+
   if self.state == MOVING then
     self.moveTimer = self.moveTimer + 1
     self.changeDirectionTimer = self.changeDirectionTimer + 1
@@ -112,6 +118,10 @@ function Stalfos:update()
     end
   elseif self.state == MARKED_DEAD then
     if not self.combat:inHitstun() then
+      self:die()
+    end
+  elseif self.state == FALLING then
+    if self.sprite:isCompleted() then
       self:die()
     end
   end
