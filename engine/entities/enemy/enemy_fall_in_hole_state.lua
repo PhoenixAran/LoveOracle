@@ -34,10 +34,10 @@ function EnemyFallInHoleState:update()
   local tx = i * GRID_SIZE + GRID_SIZE / 2
   local ty = j * GRID_SIZE + GRID_SIZE / 2
 
-  local holeRectX, holeRectY, holeRectW, holeRectH = 
-    (i * GRID_SIZE) + (0.375 * GRID_SIZE), 
-    (j * GRID_SIZE) + (0.5 * GRID_SIZE), 
-    GRID_SIZE * 0.25, 
+  local holeRectX, holeRectY, holeRectW, holeRectH =
+    (i * GRID_SIZE) + (0.375 * GRID_SIZE),
+    (j * GRID_SIZE) + (0.5 * GRID_SIZE),
+    GRID_SIZE * 0.25,
     GRID_SIZE * .375
 
   local fallInHole = Rect.containsPoint(holeRectX, holeRectY, holeRectW, holeRectH, self.enemy:getPosition())
@@ -52,12 +52,16 @@ function EnemyFallInHoleState:update()
       Physics:update(self.enemy, self.enemy:getPosition())
     end
   end
-  
+
   if fallInHole then
     -- TODO spawn falling particles
     -- TODO play sound
     self.enemy:die()
   end
+end
+
+function EnemyFallInHoleState:free()
+  EnemyState.free(self)
 end
 
 Pool.register('enemy_fall_in_hole_state', EnemyFallInHoleState)

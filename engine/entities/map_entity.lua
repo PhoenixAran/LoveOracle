@@ -434,6 +434,10 @@ function MapEntity:isInLava()
   return self.groundObserver.inLava
 end
 
+function MapEntity:isInPuddle()
+  return self.groundObserver.inPuddle
+end
+
 function MapEntity:isInHole()
   return self.groundObserver.inHole
 end
@@ -558,13 +562,13 @@ function MapEntity:draw()
 end
 
 -- signal callbacks
-function MapEntity:_onHealthReduced()
+function MapEntity:_onHealthDepleted()
   self.deathMarked = true
   -- notify entity script
 ---@diagnostic disable-next-line: undefined-field
   if self.onHealthReduced then
 ---@diagnostic disable-next-line: undefined-field
-    self:onHealthReduced()
+    self:onHealthDepleted()
   end
 end
 

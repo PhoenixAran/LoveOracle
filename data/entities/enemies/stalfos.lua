@@ -6,12 +6,10 @@ local Direction4 = require 'engine.enums.direction4'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local Collider = require 'engine.components.collider'
 
-
 local MOVING = 1
 local HURT = 2
 local JUMP = 3
 local MARKED_DEAD = 4
-local FALLING = 5
 
 ---@class Stalfos : Enemy
 local Stalfos = Class { __includes = BasicEnemy,
@@ -70,13 +68,7 @@ function Stalfos:land()
   self.state = MOVING
 end
 
-function Stalfos:update()
-  self:updateComponents()
-
-  if self.groundObserver.inHole then
-    self.state = FALLING
-  end
-
+function Stalfos:updateAi()
   if self.state == MOVING then
     self.moveTimer = self.moveTimer + 1
     self.changeDirectionTimer = self.changeDirectionTimer + 1
@@ -118,10 +110,6 @@ function Stalfos:update()
     if not self.combat:inHitstun() then
       self:die()
     end
-  elseif self.state == FALLING then
-    if self.sprite:isCompleted() then
-      self:die()
-    end
   end
 end
 
@@ -133,6 +121,10 @@ end
 
 function Stalfos:onHealthDepleted()
   self.state = MARKED_DEAD
+end
+
+function Stalfos:onFall()
+
 end
 
 function Stalfos:draw()

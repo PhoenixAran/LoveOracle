@@ -11,7 +11,7 @@ local Consts = require 'constants'
 local Physics = require 'engine.physics'
 
 
-local TILE_SIZE = Consts.TILE_SIZE
+local GRID_SIZE = Consts.GRID_SIZE
 
 ---@class Entity : SignalObject, BumpBox
 ---@field enabled boolean
@@ -114,7 +114,7 @@ end
 ---@return integer y
 function Entity:getTileIndex()
   local x, y = self:getPosition()
-  return math.floor(x / TILE_SIZE), math.floor(y / TILE_SIZE)
+  return math.floor(x / GRID_SIZE), math.floor(y / GRID_SIZE)
 end
 
 ---sets z position

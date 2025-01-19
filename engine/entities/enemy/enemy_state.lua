@@ -4,9 +4,7 @@ local Class = require 'lib.class'
 ---@field enemy BasicEnemy
 ---@field slipSpeed number
 local EnemyState = Class {
-  init = function(self, enemy)
-    self.enemy = enemy
-
+  init = function(self)
     self.slipSpeed = 20
   end
 }
@@ -15,6 +13,9 @@ function EnemyState:getType()
   return 'enemy_state'
 end
 
+function EnemyState:setEnemy(enemy)
+  self.enemy = enemy
+end
 
 function EnemyState:beginState()
   local sprite = self.enemy.sprite
@@ -35,5 +36,9 @@ function EnemyState:endState()
 
 end
 
+function EnemyState:free()
+  self.enemy = nil
+  self.slipSpeed = 20
+end
 
 return EnemyState

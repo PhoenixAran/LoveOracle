@@ -6,7 +6,8 @@ local oldX, oldY, oldW, oldH = 0,0,0,0
 
 ---@type love.Canvas
 local gameCanvas
-
+---@type love.Shader
+local shader
 
 
 --- module that handles graphics scaling and shader application
@@ -28,7 +29,6 @@ function DisplayHandler.init(args)
   rs.conf(args)
 end
 
-
 function DisplayHandler.push()
   love.graphics.setCanvas(gameCanvas)
   love.graphics.clear(0, 0, 0, 1)
@@ -43,7 +43,11 @@ function DisplayHandler.pop()
   rs.pop()
   love.graphics.setCanvas()
   love.graphics.setBlendMode('alpha')
+  if shader then
+    love.graphics.setShader(shader)
+  end
   love.graphics.draw(gameCanvas)
+  love.graphics.setShader()
 end
 
 function DisplayHandler.getGameSize()
@@ -52,6 +56,14 @@ end
 
 function DisplayHandler.debugInfo()
   rs.debug_info(0, 0)
+end
+
+function DisplayHandler.getShader()
+  return shader
+end
+
+function DisplayHandler.setShader(newShader)
+  shader = newShader
 end
 
 -- love callback
