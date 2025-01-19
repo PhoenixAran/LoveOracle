@@ -407,33 +407,4 @@ function ContentViewer:updateAnimationViewerSource(forceUpdate)
   end
 end
 
--- imgui hooks
-function ContentViewer:textinput(t)
-  imgui.TextInput(t)
-end
-
-function ContentViewer:keypressed(key)
-  imgui.KeyPressed(key)
-end
-
-function ContentViewer:keyreleased(key)
-  imgui.KeyReleased(key)
-end
-
-function ContentViewer:mousemoved(x, y)
-  imgui.MouseMoved(x, y)
-end
-
-function ContentViewer:mousepressed(x, y, button)
-  imgui.MousePressed(button)
-end
-
-function ContentViewer:mousereleased(x, y, button)
-  imgui.MouseReleased(button)
-end
-
-function ContentViewer:wheelmoved(x, y)
-  imgui.WheelMoved(y)
-end
-
 return ContentViewer

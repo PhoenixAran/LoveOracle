@@ -1,4 +1,9 @@
 local console = require 'lib.console'
+local lume = require 'lib.lume'
+local IMGUI_EXISTS = pcall(require, 'imgui')
+local function trim(s)
+
+end
 
 --- Console Command. Sets or Gets timescale
 ---@param args table
@@ -43,4 +48,32 @@ end
 console.help.dumplog = {
   section = 'Debug',
   'Dumps log to file'
+}
+
+function console.commands.inspect(entityId)
+  if entityId == nil  then
+    console.print('Entity Id required')
+    return
+  end
+  if not IMGUI_EXISTS then
+    console.print('You must have a debug build to use this command')
+    return
+  end
+  local singleton = require 'engine.singletons'
+  local module = require 'engine.imgui_modules.runtime_inspector'
+  local entities = singleton.roomControl:getEntities()
+  entityId = entityId:gsub('%s+', '')
+  local entity = entities:getByName(entityId)
+  if entity then
+    module.setup(entity)
+    if not lume.find(singleton.imguiModules) then
+      lume.push(singleton.imguiModules, module)
+    end
+  else
+    console.print(('Could not find entity with id value %s'):format(entityId))
+  end
+end
+console.help.inspect = {
+  section = 'Gameplay Debug',
+  'Shows debug menu for altering Entity properties during runtime'
 }

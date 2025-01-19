@@ -11,7 +11,11 @@ local PropertyType = {
   Vector2I = 'vector2i',
   Rect = 'rect',
 
-  Vector2iList = 'vector2i_list'
+  -- TODO
+  Vector2iList = 'vector2i_list',
+
+  -- used to organize properties in entity inspector
+  Separator = 'separator',
 }
 
 local PropertyMode = {
@@ -161,6 +165,16 @@ local function setReadOnlyAccessor(property, getFunc, isObjectFuncs)
   end
 end
 
+function InspectorProperties:getProperties()
+  return lume.sort(self.properties, function(a, b)
+    if a.group ~= b.group then
+        return a.group < b.group
+    else
+        return a.name < b.name
+    end
+  end) -- Add the missing closing parenthesis here
+end
+
 function InspectorProperties:addInt(label, getFunc, setFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Int)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)
@@ -236,6 +250,11 @@ end
 function InspectorProperties:addReadOnlyRect(label, getFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Rect, true)
   setReadOnlyAccessor(property, getFunc, isObjectFuncs)
+  addProperty(self, property)
+end
+
+function InspectorProperties:addSeparator(name)
+  local property = Property(self.source, name, PropertyType.Seperator, true)
   addProperty(self, property)
 end
 

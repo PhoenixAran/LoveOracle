@@ -38,6 +38,11 @@ local EntitySpawner = Class {
     end
     self.entityClass = args.properties.scriptType
     self.constructorArgs = flattenArgs(args)
+    -- this messes with our entity constructor. 
+    -- we nil this out so our constructor knows to generate one for an entity with an empty name provided
+    if self.constructorArgs.name == "" then
+      self.constructorArgs.name = nil
+    end
   end
 }
 

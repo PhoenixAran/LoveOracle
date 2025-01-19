@@ -78,7 +78,10 @@ end
 ---@param entity Entity
 ---@param awakeEntity boolean? default true
 function Entities:addEntity(entity, awakeEntity)
-  assert(entity:getName(), 'Entity requires name')
+  if entity:getName() == "" then
+    error(entity:getType())
+  end
+  assert(entity:getName() and entity:getName() ~= "", 'Entity requires name')
   assert(not entity:isTile(), 'Tile Entity should be added via Entities:addTileEntity')
   if awakeEntity == nil then awakeEntity = true end
   lume.push(self.entities, entity)

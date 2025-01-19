@@ -16,7 +16,6 @@ Requires [LOVE 11.5](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch
 - [love-imgui](https://github.com/MikuAuahDark/love-imgui)
 - [love-quakeconsole](https://github.com/pfirsich/love-quakeconsole)
 - [lume](https://github.com/rxi/lume/)
-- [lurker](https://github.com/rxi/lurker)
 - [profile](https://github.com/2dengine/profile.lua)
 - [ripple](https://github.com/tesselode/ripple)
 - [roomy](https://github.com/tesselode/roomy)
