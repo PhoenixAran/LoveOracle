@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
 local lume = require 'lib.lume'
+local InspectorProperties = require 'engine.entities.inspector_properties'
 local TablePool = require 'engine.utils.table_pool'
 local Input = require('engine.singletons').input
 local vector = require 'engine.math.vector'
@@ -956,15 +957,15 @@ function Player:debugDraw()
 end
 
 function Player:getInspectorProperties()
-  local props = MapEntity.getInspectorProperties(self)
-  props:addReadOnlyString('Animated Sprite Key', function()
-    local textValue = self.sprite:getCurrentAnimationKey()
-    if self.sprite:getSubstripKey() ~= nil then
-      textValue = textValue .. '[' .. self.sprite:getSubstripKey() .. ']'
-    end
-    return textValue
-  end, false)
-  return props
+  -- local props = InspectorProperties(self)
+
+  -- props:addSeparator('Entity')
+  -- props:addReadOnlyString('Id', 'name')
+  local props = InspectorProperties(self)
+  props:addSeparator('Entity')
+  props:addReadOnlyString('Name', 'name')
+  --props:addVector2('Position', self.getPosition, self.setPosition)
+  return props:getInspectorProperties()
 end
 
 return Player

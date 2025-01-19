@@ -15,6 +15,7 @@ function RuntimeInspector.draw()
   local MAX_LENGTH = 10000
   assert(entity ~= nil and cachedProps ~= nil, 'Runtime inspector draw called without valid setup')
   imgui.NewFrame()
+  print(love.inspect(cachedProps.properties, {depth = 1}))
   imgui.Begin(('Entity Inspector %s'):format(entity.name))
   for _, property in ipairs(cachedProps.properties) do
     local propType = property:getPropertyType()
@@ -33,64 +34,29 @@ function RuntimeInspector.draw()
           property:setValue(value)
         end
       elseif propType == PropertyType.Int then
-        if readOnlyFlags then
-          imgui.BeginDisabled()
-        end
         local value = imgui.InputInt(property:getLabel(), property:getValue())
-        if readOnlyFlags then
-          imgui.EndDisabled()
-        else
+        if readOnlyFlags == nil then
           property:setValue(value)
         end
       elseif propType == PropertyType.Float then
-        if readOnlyFlags then
-          imgui.BeginDisabled()
-        end
         local value = imgui.InputFloat(property:getLabel(), property:getValue())
-        if readOnlyFlags then
-          imgui.EndDisabled()
-        else
+        if readOnlyFlags == nil then
           property:setValue(value)
         end
       elseif propType == PropertyType.Vector2 then
         local x, y = property:getValue()
-        if readOnlyFlags then
-          imgui.BeginDisabled()
-        end
-        local valueX = imgui.InputFloat(property:getLabel(), x)
-
-        if readOnlyFlags then
-          imgui.EndDisabled()
-          imgui.BeginDisabled()
-        end
-        imgui.PushItemWidth(-1)
-        local valueY = imgui.InputFloat('', y)
-        imgui.PopItemWidth()
-
-        if readOnlyFlags then
-          imgui.EndDisabled()
-        else
-          property:setValue(valueX, valueY)
+        local newX = imgui.InputFloat(property:getLabel() .. 'X', x)
+        local newY = imgui.InputFloat(property:getLabel() .. 'Y', y)
+        if readOnlyFlags == nil then
+          property:setValue(newX, newY)
         end
       elseif propType == PropertyType.Vector2i then
         local x, y = property:getValue()
-        if readOnlyFlags then
-          imgui.BeginDisabled()
-        end
-        local valueX = imgui.InputInt(property:getLabel(), x)
-
-        if readOnlyFlags then
-          imgui.EndDisabled()
-          imgui.BeginDisabled()
-        end
-        imgui.PushItemWidth(-1)
-        local valueY = imgui.InputInt('', property:getLabel(), y)
-        imgui.PopItemWidth()
-
-        if readOnlyFlags then
-          imgui.EndDisabled()
-        else
-          property:setValue(valueX, valueY)
+        print(x, y)
+        local newX = imgui.InputInt(property:getLabel() .. 'X', x)
+        local newY = imgui.InputInt(property:getLabel() .. 'Y', y)
+        if readOnlyFlags == nil then
+          property:setValue(newX, newY)
         end
       end
     end
