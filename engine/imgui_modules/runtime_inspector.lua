@@ -15,10 +15,10 @@ function RuntimeInspector.draw()
   local MAX_LENGTH = 10000
   assert(entity ~= nil and cachedProps ~= nil, 'Runtime inspector draw called without valid setup')
   imgui.NewFrame()
-  print(love.inspect(cachedProps.properties, {depth = 1}))
   imgui.Begin(('Entity Inspector %s'):format(entity.name))
   for _, property in ipairs(cachedProps.properties) do
     local propType = property:getPropertyType()
+    print(propType)
     if propType == PropertyType.Separator then
       -- separator. just for visual organization
       imgui.Seperator(property:getLabel())
@@ -52,7 +52,6 @@ function RuntimeInspector.draw()
         end
       elseif propType == PropertyType.Vector2i then
         local x, y = property:getValue()
-        print(x, y)
         local newX = imgui.InputInt(property:getLabel() .. 'X', x)
         local newY = imgui.InputInt(property:getLabel() .. 'Y', y)
         if readOnlyFlags == nil then
@@ -60,7 +59,6 @@ function RuntimeInspector.draw()
         end
       end
     end
-
   end
 end
 

@@ -165,16 +165,6 @@ local function setReadOnlyAccessor(property, getFunc, isObjectFuncs)
   end
 end
 
-function InspectorProperties:getProperties()
-  return lume.sort(self.properties, function(a, b)
-    if a.group ~= b.group then
-        return a.group < b.group
-    else
-        return a.name < b.name
-    end
-  end) -- Add the missing closing parenthesis here
-end
-
 function InspectorProperties:addInt(label, getFunc, setFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Int)
   setAccessors(property, getFunc, setFunc, isObjectFuncs)

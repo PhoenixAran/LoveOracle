@@ -965,7 +965,7 @@ function Player:getInspectorProperties()
   props:addSeparator('Entity')
   props:addReadOnlyString('Name', 'name')
   --props:addVector2('Position', self.getPosition, self.setPosition)
-  return props:getInspectorProperties()
+  return props
 end
 
 return Player
