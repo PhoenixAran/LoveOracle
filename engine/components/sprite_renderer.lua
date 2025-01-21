@@ -6,6 +6,7 @@ local PaletteBank = require 'engine.banks.palette_bank'
 ---@field palette Palette
 ---@field offsetX number
 ---@field offsetY number
+---@field maxOffsetY number? this is only used for when jump speeds are high and we dont want the entity sprite to go too far up
 ---@field followZ boolean
 ---@field sprite Sprite|ColorSprite|CompositeSprite|PrototypeSprite
 local SpriteRenderer = Class { __includes = Component,
@@ -20,6 +21,7 @@ local SpriteRenderer = Class { __includes = Component,
     self.palette = args.palette
     self.offsetX = args.offsetX
     self.offsetY = args.offsetY
+    self.maxOffsetY = args.maxOffsetY
     self.sprite = args.sprite
     self.followZ = args.followZ
     self.alpha = args.alpha
@@ -42,6 +44,14 @@ end
 
 function SpriteRenderer:getOffsetY()
   return self.offsetY
+end
+
+function SpriteRenderer:getMaxOffsetY()
+  return self.maxOffsetY
+end
+
+function SpriteRenderer:setMaxOffsetY(value)
+  self.maxOffsetY = value
 end
 
 function SpriteRenderer:getOffset()
@@ -89,10 +99,22 @@ function SpriteRenderer:draw()
   local x, y = self.entity:getPosition()
   local z = self.entity:getZPosition()
   x = x + self.offsetX
-  y = y + self.offsetY
+
+  -- clamp y offset
+  local totalYOffset = self.offsetY
   if self.followZ then
-    y = y - z
+    totalYOffset = totalYOffset - z
   end
+  if self.maxOffsetY ~= nil and math.abs(totalYOffset) > self.maxOffsetY then
+    print('here')
+    if totalYOffset < 0 then
+      totalYOffset = -self.maxOffsetY
+    else
+      totalYOffset = self.maxOffsetY
+    end
+  end
+  y = y + totalYOffset
+
   if self.palette == nil then
     self.sprite:draw(x, y, self.alpha)
   else

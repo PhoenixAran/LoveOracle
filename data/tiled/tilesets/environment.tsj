@@ -4,9 +4,10 @@
  "imagewidth":189,
  "margin":1,
  "name":"environment",
+ "objectalignment":"topleft",
  "spacing":3,
  "tilecount":200,
- "tiledversion":"1.10.2",
+ "tiledversion":"1.11.0",
  "tileheight":16,
  "tiles":[
         {
@@ -254,6 +255,12 @@
                  "propertytype":"TileConveyorVector",
                  "type":"string",
                  "value":"downLeft"
+                }, 
+                {
+                 "name":"tileInteract",
+                 "propertytype":"TileInteractFlags",
+                 "type":"string",
+                 "value":""
                 }, 
                 {
                  "name":"tileType",
@@ -881,6 +888,12 @@
          "id":104,
          "properties":[
                 {
+                 "name":"tileInteract",
+                 "propertytype":"TileInteractFlags",
+                 "type":"string",
+                 "value":"burnable,cuttable"
+                }, 
+                {
                  "name":"tileType",
                  "propertytype":"TileTypeFlags",
                  "type":"string",
@@ -1441,5 +1454,5 @@
         }],
  "tilewidth":16,
  "type":"tileset",
- "version":"1.10"
+ "version":"1.11"
 }

@@ -17,19 +17,24 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 local Pool = require 'engine.utils.pool'
+local Consts = require 'constants'
 
 local canCollide = require('engine.entities.bump_box').canCollide
 
---- default filter for move function in Physics module
+--- default filter for move function in Map_Entities in Physics module
 ---@param item MapEntity
 ---@param other any
 ---@return string?
 local function defaultMoveFilter(item, other)
   if canCollide(item, other) then
-    if other:isTile() then
-      if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
-        return nil
+    if other.isTile and other:isTile() then
+      if other:isTopTile() then
+        if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
+          return nil
+        end
+        return 'slide'
       end
+      return nil
     end
     return 'slide'
   end
@@ -73,6 +78,7 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field onHurt function
 ---@field onBump function
 ---@field moveFilter function filter for move function in Physics:move()\
+---@field roomEdgeCollisionBoxMoveFilter function
 local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -101,19 +107,28 @@ local MapEntity = Class { __includes = Entity,
     self.combat = Combat(self)
     self.effectSprite = SpriteBank.build('entity_effects', self)
     self.spriteFlasher = SpriteFlasher(self)
-    self.sprite = nil   -- declare this yourself
+    if args.sprite then
+      assert(args.sprite:getType() == 'sprite_renderer' or args.sprite:getType() == 'animated_sprite_renderer', 'Wrong component type provided for sprite')
+      self.sprite = args.sprite
+    end
 
-    -- this collision box will NOT actually exist in the Physics system
+    -- component configuration
+    self.health:connect('health_depleted', self, '_onHealthDepleted')
+
+    -- NB: this collision box will NOT actually exist in the Physics system
     -- if this is not null, it will only be used to collide with room edges if you want the room edge collider
     -- to be different
-    self.roomEdgeCollisionBox = nil
+    if args.roomEdgeCollisionBox then 
+      assert(args.roomEdgeCollisionBox:getType() == 'collider', 'Wrong component type provided for collider')
+      self.roomEdgeCollisionBox = args.roomEdgeCollisionBox
+    end
 
     -- table to store collisions that occur when MapEntity:move() is called
     self.moveCollisions = { }
     -- tile types this entity reports collisions with
     self.collisionTiles = 0
     self.moveFilter = defaultMoveFilter
-
+    self.roomEdgeCollisionBoxMoveFilter = roomEdgeCollisionBoxMoveFilter
     -- declarations
     self.deathMarked = false
     self.persistant = false
@@ -216,6 +231,12 @@ end
 
 function MapEntity:die()
   self:release()
+  -- notify entity script so they can play their death sound
+---@diagnostic disable-next-line: undefined-field
+  if self.onDeath then
+---@diagnostic disable-next-line: undefined-field
+    self:onDeath()
+  end
   self:emit('entity_destroyed', self)
 end
 
@@ -325,10 +346,10 @@ function MapEntity:move()
     -- create goal vector value for room edge collision box
     local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y)
     local goalX2, goalY2 = vector.sub(actualX, actualY, diffX, diffY)
-    local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, roomEdgeCollisionBoxMoveFilter)
-    for i, col in ipairs(cols2) do
+    local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, self.roomEdgeCollisionBoxMoveFilter)
+    for _, col in ipairs(cols2) do
       local shouldAddToMoveCollisions = true
-      for j, moveCollision in ipairs(self.moveCollisions) do
+      for _, moveCollision in ipairs(self.moveCollisions) do
         if col.other == moveCollision then
           shouldAddToMoveCollisions = false
           break
@@ -413,9 +434,20 @@ function MapEntity:isInLava()
   return self.groundObserver.inLava
 end
 
+function MapEntity:isInPuddle()
+  return self.groundObserver.inPuddle
+end
+
+function MapEntity:isInHole()
+  return self.groundObserver.inHole
+end
+
 --- hurt this entity
 ---@param damageInfo DamageInfo|integer
 function MapEntity:hurt(damageInfo)
+  if self:isIntangible() then
+    return
+  end
   if type(damageInfo) == 'number' then
     local damage = damageInfo
     damageInfo = DamageInfo()
@@ -485,7 +517,7 @@ function MapEntity:updateEntityEffectSprite()
     self.effectSprite:update()
   elseif self.rippleVisible and self.groundObserver.inPuddle then
     if self.effectSprite:getCurrentAnimationKey() ~= 'ripple' or not self.effectSprite:isVisible() then
-      self.effectSprite:setOffset(self.rippleOffsetX, self.shadowOffsetY)
+      self.effectSprite:setOffset(self.rippleOffsetX, self.rippleOffsetY)
       self.effectSprite:play('ripple')
       self.effectSprite:setVisible(true)
       self.effectSprite.alpha = 1
@@ -516,9 +548,28 @@ function MapEntity:updateEntityEffectSprite()
   end
 end
 
+function MapEntity:draw()
+  local grassEffectPlaying = self.effectSprite:getCurrentAnimationKey() == 'grass'
+  if self.effectSprite:isVisible() and not grassEffectPlaying then
+    self.effectSprite:draw()
+  end
+  if self.sprite:isVisible() then
+    self.sprite:draw()
+  end
+  if self.effectSprite:isVisible() and grassEffectPlaying then
+    self.effectSprite:draw()
+  end
+end
+
 -- signal callbacks
 function MapEntity:_onHealthDepleted()
   self.deathMarked = true
+  -- notify entity script
+---@diagnostic disable-next-line: undefined-field
+  if self.onHealthReduced then
+---@diagnostic disable-next-line: undefined-field
+    self:onHealthDepleted()
+  end
 end
 
 return MapEntity

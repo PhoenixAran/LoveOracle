@@ -4,9 +4,10 @@
  "imagewidth":151,
  "margin":1,
  "name":"proto_dungeon_2",
+ "objectalignment":"topleft",
  "spacing":3,
  "tilecount":64,
- "tiledversion":"1.10.2",
+ "tiledversion":"1.11.0",
  "tileheight":16,
  "tiles":[
         {
@@ -330,5 +331,5 @@
         }],
  "tilewidth":16,
  "type":"tileset",
- "version":"1.10"
+ "version":"1.11"
 }

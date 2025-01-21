@@ -8,6 +8,7 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local GRID_SIZE = require('constants').GRID_SIZE
 local EPSILON = require('constants').EPSILON
 local Physics = require 'engine.physics'
+local CoordHelpers = require 'engine.utils.coord_helpers'
 
 local PlatformPathCommandType = {
   Move = 'move',
@@ -79,7 +80,7 @@ local SEMICOLON_TOKEN = ';'
 --- compiles script path into array of PlatformPathCommand objects
 ---@param script string
 ---@return PlatformPathCommand[]
-local function parsePathScript(loopType, script, initialX, initialY)
+local function parsePathScript(script, initialX, initialY)
   local commands = { }
   local scriptLines = parse.split(script, SEMICOLON_TOKEN)
   local parts = { }
@@ -106,17 +107,6 @@ local function parsePathScript(loopType, script, initialX, initialY)
       error('Invalid path command given: ' .. line)
     end
   end
-  if loopType == LoopType.PingPong then
-    local cnt = lume.count(commands)
-    local inverseCommands = { }
-    for i = cnt, 1, -1 do
-      lume.push(inverseCommands, commands[i]:getInverse())
-    end
-
-    for _, cmd in ipairs(inverseCommands) do
-      lume.push(commands, cmd)
-    end
-  end
   if lume.count(commands) == 0 then
     love.log.warn('Spawning platform without path script')
   end
@@ -126,7 +116,9 @@ end
 
 
 ---@class MovingPlatform : Entity
+---@field loopType integer
 ---@field pathCommands PlatformPathCommand[]
+---@field inversePathCommands PlatformPathCommand[] used when a pingpong type loop is selected
 ---@field spriteRenderer SpriteRenderer
 ---@field speed number
 ---@field idleDuration number
@@ -143,21 +135,21 @@ end
 local MovingPlatform = Class { __includes = Entity,
   init = function(self, args)
     args.drawType = EntityDrawType.background
-    args.useBumpCoords = true
+    args.useBumpCoords = false
     Entity.init(self, args)
 
     if args.loopType ~= 'Cycle' and args.loopType ~= 'PingPong' then
       love.log.warn('Invalid looptype "' .. args.loopType .. '" given to MovingPlatform object. Defaulting to Cycle loopType')
       args.loopType = 'Cycle'
     end
+    -- vars set by tiled editor
+    self.spriteRenderer = SpriteBank.build(args.movingPlatformType .. '_platform', self)
+    self.pathCommands = parsePathScript(args.pathScript, args.x + (args.w / 2), args.y + (args.h / 2))
+    self.speed = args.speed
+    self.loopType = LoopType[args.loopType]
 
-    self.pathCommands = parsePathScript(LoopType[args.loopType], args.pathScript, args.x + (args.w / 2), args.y + (args.h / 2))
-    -- TODO add via tiled args
-    self.spriteRenderer = SpriteBank.build('1x2_platform', self)
-    self.speed = 25
+
     self.pingPongState = PingPongState.Forwards
-
-
     self.commandIndex = 1
     self.currentCommandSetUp = false
     self.currentCommandComplete = false
@@ -182,7 +174,13 @@ function MovingPlatform:update()
       if currentCommand.commandType == PlatformPathCommandType.Move then
         if not self.currentCommandSetUp then
           local x, y = self:getPosition()
-          self.targetX, self.targetY = vector.add(x, y, vector.mul(GRID_SIZE, currentCommand.moveX, currentCommand.moveY))
+          local moveX, moveY = currentCommand.moveX, currentCommand.moveY
+          if self.loopType == LoopType.PingPong and self.pingPongState == PingPongState.Backwards then
+            moveX = -moveX
+            moveY = -moveY
+          end
+          self.targetX, self.targetY = vector.add(x, y, vector.mul(GRID_SIZE, moveX, moveY))
+      
           self.horizontalClamp = x < self.targetX and math.min or math.max
           self.verticalClamp = y < self.targetY and math.min or math.max
           self.currentCommandSetUp = true
@@ -201,7 +199,24 @@ function MovingPlatform:update()
     if self.currentCommandComplete then
       self.currentCommandSetUp = false
       self.currentCommandComplete = false
-      self.commandIndex = (self.commandIndex % lume.count(self.pathCommands)) + 1
+      -- change current command index if required
+      if self.loopType == LoopType.Cycle then
+        self.commandIndex = (self.commandIndex % lume.count(self.pathCommands)) + 1
+      elseif self.loopType == LoopType.PingPong then
+        if self.pingPongState == PingPongState.Forwards then
+          if self.commandIndex < lume.count(self.pathCommands) then
+            self.commandIndex = self.commandIndex + 1
+          elseif self.commandIndex == lume.count(self.pathCommands) then
+            self.pingPongState = PingPongState.Backwards
+          end
+        else
+          if self.commandIndex > 1 then
+            self.commandIndex = self.commandIndex - 1
+          else
+            self.pingPongState = PingPongState.Forwards
+          end
+        end
+      end
     end
   end
 end

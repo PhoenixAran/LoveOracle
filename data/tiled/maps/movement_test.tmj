@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu2Z2QrCMBBF405VBNff768awWAIppnoKFnOgft2aTlttdNkaYxZJbK2WSr2NPI4lwZ7m5nN\/E1Gm4XNIdGbZ\/Q04s6l5T\/YbCPZeV7DRMJe7Hgacef6h\/8j7rpvE9fA77Xkf3om5e\/3WvHv4fk\/mte9C3P2vKS9mvwvNtdEbhm92vy1wR9\/Df8xCP59+ff+\/OOPf63+U3OiRtysWSKSOTE37vsinDVbJVxDcv6\/WP8pkXANyf3uf7H+UyLSb\/JWwR\/\/3v39GcJ5+zNAy\/7hDNHK+\/\/TPaTY+196vFL4dA8p9v6XHq8Uctfap76BJL3S\/idz95q+7dXoL91DivU2pl7\/Hp5\/7b0mSa8UtPeapD0AAAAAAAAAAAAAAAAAAGifO7LeOF8AQAAA",
+         "data":"H4sIAAAAAAAACu2Z2QrCMBBF41JFLYLr7\/dXTaCDQzCbTmWS3AMX+zCknBpNmtkaY4ZEdjZbwTqJuHtJMNqsbNYfMtlsbM6JunVBnUToXlL+B5tjICfmdYjErwuNJxG61z\/8Xei5HxPPgNe15H+dk\/Lnda349zD\/L+b93fm5Ma\/cupr87zaPRJ4FdbX5SwN\/+Ev4T17g35d\/7\/Mf\/vCv1T+2T5QI7TU1krNPLA29X\/h7zVbxz5DIf4nzH434Z0j0u1\/i\/Ecjue\/krQJ\/+Pfuz\/cQ5M33AC37+3uIVtb\/b3tIofU\/dzwtfNtDCq3\/ueNpofSsPfYOlFOn7X+ytNf0a12N\/rk9pFDd3tTr38P8\/7XX5D+nnPG0INFrIv+SnlRtxNZ1h\/PXtK5LM86fMX9N81qakV337k\/07u8Y2HWP\/hz4t0ur6zoAAAAAAAAAAAAAAACA\/\/ECP\/RnKQBAAAA=",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -18,7 +18,7 @@
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3ZoQ7CMBhF4b4aAgxiGAQYxGYwGDQaPY1AIaZ4Rf6G27AsbRYWRrL1fMlJZpbstnLOobGWaqdijj1Nld+9UFsVO4Or9VA3FZ7Pf\/nScaT2Nypo7+825f2FtVYHVTr2d4X9tfvsrtWQ\/ZW1sjbWfsD7v+LvuFCli2\/3Lj19q1In9z4HAABycFe5yn0\/AAAAAMxZ6v9BaO78xmci9s8f+\/PeDwAAAAAAAAAAAADAGF65cnQWAEAAAA==",
+         "data":"H4sIAAAAAAAACu3ZrU4DQRhG4SEBASjgiirAIFqDAFPRmhoMGo2uRqAQq7hF5gvfhE07w4Zlf9i+50lO2jRpMu9ukyZtCKhi1969l7NpaKps98y783LX4CX27r166fnTICftR2l\/5SX1\/btNef88dustvVXoZ\/9ZN0fuVGn\/rrR\/G753b702938du4ktYg8t3t8Vu8dzbxXy281zQ7+19h7D13XA4Thp6Hi8ow1i4Y8\/XQMV6vuN+n6jvt\/U9795atT3G9XPPwC0Uf+9QZH6\/irs\/yalRH0\/gGkr\/X+g8r1mGz8Ksf\/wsV97P\/7mP\/5\/3Iejwusq+09Dfqva\/lSiuj\/ttsfzsQ41oNz+lML+i9hloasRzwUAAAAAAAAAwBR8Alv\/nAoAQAAA",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -33,52 +33,57 @@
         {
          "draworder":"topdown",
          "id":4,
-         "locked":true,
          "name":"rooms",
          "objects":[
                 {
-                 "id":1,
+                 "id":45,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":0,
                  "y":0
                 }, 
                 {
-                 "id":2,
+                 "id":46,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":160,
                  "y":0
                 }, 
                 {
-                 "id":4,
+                 "id":47,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":592,
                  "y":288
                 }, 
                 {
-                 "id":5,
-                 "template":"..\/templates\/single_room_template.tj",
-                 "x":592,
-                 "y":416
-                }, 
-                {
-                 "id":6,
+                 "id":48,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":752,
                  "y":416
                 }, 
                 {
-                 "id":7,
+                 "id":49,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":592,
+                 "y":416
+                }, 
+                {
+                 "id":50,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":432,
                  "y":416
                 }, 
                 {
+                 "id":51,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":592,
+                 "y":544
+                }, 
+                {
                  "height":288,
-                 "id":8,
+                 "id":52,
                  "template":"..\/templates\/single_room_template.tj",
                  "width":432,
-                 "x":320,
-                 "y":0
+                 "x":312,
+                 "y":4
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -92,28 +97,54 @@
          "name":"entities",
          "objects":[
                 {
-                 "id":24,
+                 "height":32,
+                 "id":26,
                  "properties":[
                         {
                          "name":"pathScript",
                          "type":"string",
-                         "value":"move 5, 0;\npause 2;\nmove 0, -4;\npause 2;\ninitial_position;\npause 2;"
+                         "value":"move 5, 0;\ninitial_position;"
                         }],
-                 "template":"..\/templates\/1x2_platform.tj",
+                 "template":"..\/templates\/objects\/1x2_platform.tj",
+                 "width":16,
                  "x":480,
-                 "y":112
+                 "y":80
                 }, 
                 {
-                 "id":25,
+                 "height":16,
+                 "id":33,
                  "properties":[
                         {
-                         "name":"pathScript",
+                         "name":"direction",
+                         "propertytype":"Direction4",
                          "type":"string",
-                         "value":"move 5, 0;\npause 2;\ninitial_position;"
+                         "value":"down"
                         }],
-                 "template":"..\/templates\/1x2_platform.tj",
-                 "x":592,
-                 "y":192
+                 "template":"..\/templates\/ledge_jump.tj",
+                 "width":144,
+                 "x":352,
+                 "y":128
+                }, 
+                {
+                 "height":16,
+                 "id":37,
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "propertytype":"Direction4",
+                         "type":"string",
+                         "value":"down"
+                        }],
+                 "template":"..\/templates\/ledge_jump.tj",
+                 "width":96,
+                 "x":608,
+                 "y":528
+                }, 
+                {
+                 "id":53,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":704,
+                 "y":328
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -127,16 +158,10 @@
          "name":"playerspawn",
          "objects":[
                 {
-                 "id":16,
+                 "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":592,
-                 "y":176
-                }, 
-                {
-                 "id":17,
-                 "template":"..\/templates\/spawn.tj",
-                 "x":104,
-                 "y":56
+                 "x":660,
+                 "y":328
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -145,10 +170,10 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":26,
+ "nextobjectid":54,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.10.2",
+ "tiledversion":"1.11.0",
  "tileheight":16,
  "tilesets":[
         {
@@ -166,9 +191,13 @@
         {
          "firstgid":267,
          "source":"..\/tilesets\/template_sources\/platforms.tsj"
+        }, 
+        {
+         "firstgid":271,
+         "source":"..\/tilesets\/template_sources\/monsters.tsj"
         }],
  "tilewidth":16,
  "type":"map",
- "version":"1.10",
+ "version":"1.11",
  "width":64
 }

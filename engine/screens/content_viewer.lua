@@ -101,6 +101,7 @@ local ContentViewer = Class {
 
 -- roomy callbacks
 function ContentViewer:enter(prev, ...)
+
   -- init animation viewer stuff
   -- man handle self.animViewerCurrentBuilder
   self.animViewerCurrentBuilder = SpriteBank.builders[lume.first(getKeyList(SpriteBank.builders))]
@@ -207,46 +208,21 @@ function ContentViewer:update()
         imgui.Text('No builders found')
       end
     end
+    if self.animViewerCurrentBuilder.type == 'animated_sprite_renderer' then
+        
+      if lume.count(self.animViewerAnimationSelect) > 0 then
+        if imgui.BeginCombo('Animation', self.animViewerAnimationSelect[self.animViewerAnimationSelectIdx]) then
+          for k, v in ipairs(self.animViewerAnimationSelect) do
+            local isSelected = self.animViewerAnimationSelectIdx == k
 
-    if lume.count(self.animViewerAnimationSelect) > 0 then
-      if imgui.BeginCombo('Animation', self.animViewerAnimationSelect[self.animViewerAnimationSelectIdx]) then
-        for k, v in ipairs(self.animViewerAnimationSelect) do
-          local isSelected = self.animViewerAnimationSelectIdx == k
-
-          if imgui.Selectable(self.animViewerAnimationSelect[k], isSelected) then
-            -- update animation select
-            self.animViewerAnimationSelectIdx = k
-            if self.animViewerCurrentSource == AnimationSource.Builder then
-              self.animViewerCurrentAnimation = self.animViewerCurrentBuilder.animations[v]
-            else  -- we are using animations straight from SpriteBank.animations
-              self.animViewerCurrentAnimation = SpriteBank.animations[v]
-            end
-
-            -- reset anim playing variables
-            self.animViewerTick = 1
-            self.animViewerFrameIndex = 1
-          end
-
-          if isSelected then
-            imgui.SetItemDefaultFocus()
-          end
-        end
-        imgui.EndCombo()
-      end
-    else
-      imgui.Text('No animations found')
-    end
-
-    if self.animViewerCurrentAnimation then
-      if self.animViewerCurrentAnimation:hasSubstrips() then
-        if imgui.BeginCombo('Substrip', self.animViewerDir4Select[self.animViewerDir4Idx]) then
-          for k, v in ipairs(self.animViewerDir4Select) do
-            local isSelected = self.animViewerDir4Idx == k
-
-            if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
-              -- update animation substrip selection
-              self.animViewerDir4Idx = k
-              self.animViewerCurrentDir4 = v
+            if imgui.Selectable(self.animViewerAnimationSelect[k], isSelected) then
+              -- update animation select
+              self.animViewerAnimationSelectIdx = k
+              if self.animViewerCurrentSource == AnimationSource.Builder then
+                self.animViewerCurrentAnimation = self.animViewerCurrentBuilder.animations[v]
+              else  -- we are using animations straight from SpriteBank.animations
+                self.animViewerCurrentAnimation = SpriteBank.animations[v]
+              end
 
               -- reset anim playing variables
               self.animViewerTick = 1
@@ -259,68 +235,102 @@ function ContentViewer:update()
           end
           imgui.EndCombo()
         end
+      else
+        imgui.Text('No animations found')
       end
-    end
 
-    -- animation tick state
-    imgui.Separator()
-    imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
-    assert(self.animViewerCurrentAnimation:getSpriteFrames(), 'Expected an animation instance. Did you forget to set a default substrip?')
-    local frameIndex = imgui.SliderInt('Frame', self.animViewerFrameIndex, 1, lume.count(self.animViewerCurrentAnimation:getSpriteFrames()))
-    if frameIndex ~= self.animViewerFrameIndex then
-      self.animViewerFrameIndex = frameIndex
-      self.animViewerPlaying = false
-      self.animViewerTick = 1
-    end
+      if self.animViewerCurrentAnimation then
+        if self.animViewerCurrentAnimation:hasSubstrips() then
+          if imgui.BeginCombo('Substrip', self.animViewerDir4Select[self.animViewerDir4Idx]) then
+            for k, v in ipairs(self.animViewerDir4Select) do
+              local isSelected = self.animViewerDir4Idx == k
 
-    if self.animViewerPlaying then
-      if imgui.Button('Pause') then
-        self.animViewerPlaying = false
-      end
-    else
-      if imgui.Button('Play') then
-        self.animViewerPlaying = true
-      end
-    end
-    imgui.SameLine()
-    if imgui.Button('Stop') then
-      self.animViewerPlaying = false
-      self.animViewerTick = 1
-      self.animViewerFrameIndex = 1
-    end
+              if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
+                -- update animation substrip selection
+                self.animViewerDir4Idx = k
+                self.animViewerCurrentDir4 = v
 
-    self.animViewerDrawCenterPoint = imgui.Checkbox('Draw Center', self.animViewerDrawCenterPoint)
+                -- reset anim playing variables
+                self.animViewerTick = 1
+                self.animViewerFrameIndex = 1
+              end
 
-    -- sprite animation logic below
-    ---@type any
-    local substripValue = nil
-    if self.animViewerCurrentDir4 == 'default' then
-      substripValue = self.animViewerCurrentDir4
-    else
-      substripValue = Direction4[self.animViewerCurrentDir4]
-    end
-
-    -- altered duped logic from AnimatedSpriteRenderer:update() function
-    --- @type SpriteFrame[]
-    local spriteFrames = self.animViewerCurrentAnimation:getSpriteFrames(substripValue)
-
-    if self.animViewerPlaying then
-      -- draw the animation on our canvas
-      if lume.count(spriteFrames) > 0 then
-        local currentFrame = spriteFrames[self.animViewerFrameIndex]
-        self.animViewerTick = self.animViewerTick + 1
-        if currentFrame:getDelay() < self.animViewerTick then
-          self.animViewerTick = 1
-          self.animViewerFrameIndex = self.animViewerFrameIndex + 1
-          if lume.count(spriteFrames) < self.animViewerFrameIndex then
-            self.animViewerFrameIndex = 1
+              if isSelected then
+                imgui.SetItemDefaultFocus()
+              end
+            end
+            imgui.EndCombo()
           end
         end
-        currentFrame = spriteFrames[self.animViewerFrameIndex]
-        self.animViewerCurrentSprite = currentFrame:getSprite()
       end
+      
+
+      -- animation tick state
+      imgui.Separator()
+      imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
+      assert(self.animViewerCurrentAnimation ~= nil and self.animViewerCurrentAnimation:getSpriteFrames(), 'Expected an animation instance. Did you forget to set a default substrip?')
+      local frameIndex = imgui.SliderInt('Frame', self.animViewerFrameIndex, 1, lume.count(self.animViewerCurrentAnimation:getSpriteFrames()))
+      if frameIndex ~= self.animViewerFrameIndex then
+        self.animViewerFrameIndex = frameIndex
+        self.animViewerPlaying = false
+        self.animViewerTick = 1
+      end
+
+      if self.animViewerPlaying then
+        if imgui.Button('Pause') then
+          self.animViewerPlaying = false
+        end
+      else
+        if imgui.Button('Play') then
+          self.animViewerPlaying = true
+        end
+      end
+      imgui.SameLine()
+      if imgui.Button('Stop') then
+        self.animViewerPlaying = false
+        self.animViewerTick = 1
+        self.animViewerFrameIndex = 1
+      end
+
+      self.animViewerDrawCenterPoint = imgui.Checkbox('Draw Center', self.animViewerDrawCenterPoint)
+
+
+      -- sprite animation logic below
+      ---@type any
+      local substripValue = nil
+      if self.animViewerCurrentDir4 == 'default' then
+        substripValue = self.animViewerCurrentDir4
+      else
+        substripValue = Direction4[self.animViewerCurrentDir4]
+      end
+  
+      -- altered duped logic from AnimatedSpriteRenderer:update() function
+      --- @type SpriteFrame[]
+      local spriteFrames = self.animViewerCurrentAnimation:getSpriteFrames(substripValue)
+  
+      if self.animViewerPlaying then
+        -- draw the animation on our canvas
+        if lume.count(spriteFrames) > 0 then
+          local currentFrame = spriteFrames[self.animViewerFrameIndex]
+          self.animViewerTick = self.animViewerTick + 1
+          if currentFrame:getDelay() < self.animViewerTick then
+            self.animViewerTick = 1
+            self.animViewerFrameIndex = self.animViewerFrameIndex + 1
+            if lume.count(spriteFrames) < self.animViewerFrameIndex then
+              self.animViewerFrameIndex = 1
+            end
+          end
+          currentFrame = spriteFrames[self.animViewerFrameIndex]
+          self.animViewerCurrentSprite = currentFrame:getSprite()
+        end
+      else
+        self.animViewerCurrentSprite = spriteFrames[self.animViewerFrameIndex]:getSprite()
+      end  
     else
-      self.animViewerCurrentSprite = spriteFrames[self.animViewerFrameIndex]:getSprite()
+      -- just draw the sprite for a SpriteRenderer
+      imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
+      self.animViewerDrawCenterPoint = imgui.Checkbox('Draw Center', self.animViewerDrawCenterPoint)
+      self.animViewerCurrentSprite = self.animViewerCurrentBuilder.sprite
     end
 
     imgui.End()
@@ -373,7 +383,6 @@ function ContentViewer:updateAnimationViewerSource(forceUpdate)
   if source == self.animViewerCurrentSource and not forceUpdate then
     return
   end
-
   lume.clear(self.animViewerBuilderSelect)
   self.animViewerBuilderIdx = 1
   lume.clear(self.animViewerAnimationSelect)
@@ -392,40 +401,10 @@ function ContentViewer:updateAnimationViewerSource(forceUpdate)
   else
     local animationKeys = getKeyList(SpriteBank.animations)
     lume.push(self.animViewerAnimationSelect, unpack(animationKeys))
-
     if lume.any(self.animViewerAnimationSelect) then
       self.animViewerCurrentAnimation = SpriteBank.animations[lume.first(self.animViewerAnimationSelect)]
     end
   end
-end
-
--- imgui hooks
-function ContentViewer:textinput(t)
-  imgui.TextInput(t)
-end
-
-function ContentViewer:keypressed(key)
-  imgui.KeyPressed(key)
-end
-
-function ContentViewer:keyreleased(key)
-  imgui.KeyReleased(key)
-end
-
-function ContentViewer:mousemoved(x, y)
-  imgui.MouseMoved(x, y)
-end
-
-function ContentViewer:mousepressed(x, y, button)
-  imgui.MousePressed(button)
-end
-
-function ContentViewer:mousereleased(x, y, button)
-  imgui.MouseReleased(button)
-end
-
-function ContentViewer:wheelmoved(x, y)
-  imgui.WheelMoved(y)
 end
 
 return ContentViewer

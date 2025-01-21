@@ -32,6 +32,58 @@
     ],
     "propertyTypes": [
         {
+            "id": 11,
+            "name": "Direction4",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "up",
+                "down",
+                "left",
+                "right"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 12,
+            "members": [
+            ],
+            "name": "entity_spawn",
+            "type": "class",
+            "useAs": [
+                "property",
+                "tile",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffaaaaff",
+            "drawFill": true,
+            "id": 10,
+            "members": [
+                {
+                    "name": "direction",
+                    "propertyType": "Direction4",
+                    "type": "string",
+                    "value": "up"
+                },
+                {
+                    "name": "move",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "ledge_jump",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
+        },
+        {
             "id": 7,
             "name": "LoopType",
             "storageType": "string",
@@ -45,6 +97,20 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 13,
+            "members": [
+            ],
+            "name": "monster",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 6,
             "members": [
                 {
@@ -53,20 +119,26 @@
                     "value": 0
                 },
                 {
-                    "name": "includeStartingPointAsPathPoint",
-                    "type": "bool",
-                    "value": true
-                },
-                {
                     "name": "loopType",
                     "propertyType": "LoopType",
                     "type": "string",
                     "value": "Cycle"
                 },
                 {
+                    "name": "movingPlatformType",
+                    "propertyType": "MovingPlatformType",
+                    "type": "string",
+                    "value": "1x1"
+                },
+                {
                     "name": "pathScript",
                     "type": "string",
                     "value": ""
+                },
+                {
+                    "name": "speed",
+                    "type": "float",
+                    "value": 25
                 },
                 {
                     "name": "w",
@@ -81,6 +153,19 @@
                 "object",
                 "project"
             ]
+        },
+        {
+            "id": 8,
+            "name": "MovingPlatformType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "1x1",
+                "1x2",
+                "2x1",
+                "2x2"
+            ],
+            "valuesAsFlags": false
         },
         {
             "color": "#ff00aaff",

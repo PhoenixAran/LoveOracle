@@ -41,8 +41,8 @@ local function makeRooms(mapData, tiledMapLayer)
     assert(tiledObj.x ~= nil and tiledObj.y ~= nil and tiledObj.width ~= nil
           and tiledObj.height ~= nil, 'Could not find values for x, y, width, height')
     -- lua index
-    roomData.topLeftPosX = math.floor(tiledObj.x / GRID_SIZE) + 1
-    roomData.topLeftPosY = math.floor(tiledObj.y / GRID_SIZE) + 1
+    roomData.topLeftPosX = math.floor((tiledObj.x - tiledObj.width / 2) / GRID_SIZE) + 1
+    roomData.topLeftPosY = math.floor((tiledObj.y - tiledObj.height / 2) / GRID_SIZE) + 1
     roomData.width = tiledObj.width / GRID_SIZE
     roomData.height = tiledObj.height / GRID_SIZE
     lume.push(mapData.rooms, roomData)
@@ -57,7 +57,7 @@ local function makePlayerSpawns(mapData, tiledMapLayer)
   local testSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'test' end))
   local gameSpawn = lume.first(lume.filter(tiledMapLayer.objects, function(x) return x.properties.spawnType == 'game' end))
   if testSpawn then
-    mapData.testSpawnPositionX, mapData.testSpawnPositionY = testSpawn.x  + Constants.GRID_SIZE / 2, testSpawn.y - Constants.GRID_SIZE / 2
+    mapData.testSpawnPositionX, mapData.testSpawnPositionY = testSpawn.x, testSpawn.y
   end
   if gameSpawn then
     mapData.initialSpawnPositionX, mapData.initialSpawnPositionY = gameSpawn.x, gameSpawn.y
@@ -88,6 +88,8 @@ local function makeEntitySpawnersInRooms(mapData, tiledMapLayer)
     local roomData = getRoomDataContainingPosition(mapData, obj.x, obj.y)
     if roomData then
       lume.push(roomData.entitySpawners, EntitySpawner(obj))
+    else
+      love.log.error('Entity Spawner at (' .. tostring(obj.x) .. ', ' .. tostring(obj.y) .. ') not in a room')
     end
   end
 end

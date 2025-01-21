@@ -20,6 +20,7 @@ function RoomNormalState:update()
   local entities = self.control.entities
   local player = self.control.player
   local room = self.control.currentRoom
+  assert(room)
   entities:update()
   Camera.update()
   room:updateAnimatedTiles()

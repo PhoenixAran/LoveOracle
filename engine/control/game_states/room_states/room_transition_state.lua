@@ -92,6 +92,8 @@ function RoomTransitionState:onBegin()
 
   self.control.allowRoomTransition = false
   self.player = self.control:getPlayer()
+  -- call player onLeaveRoom
+  self.player:onLeaveRoom()
 
   -- setup player tween
   local tx, ty = 0, 0
@@ -139,6 +141,9 @@ end
 
 
 function RoomTransitionState:onEnd()
+  -- call player:onEnterRoom
+  self.player:onEnterRoom()
+
   self.currentRoom:unload(self.control:getEntities())
 
   resetUnusedTileDataAnimations(self.currentRoom, self.newRoom)

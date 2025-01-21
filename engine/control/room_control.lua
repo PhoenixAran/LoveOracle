@@ -82,6 +82,13 @@ function RoomControl:setCurrentRoom(room)
   self:connectToRoomSignals(self.currentRoom)
 end
 
+function RoomControl:inRoomBounds(x, y)
+  if self.currentRoom then
+    return self.currentRoom:positionInRoom(x, y)
+  end
+  return false
+end
+
 ---@param room Room
 function RoomControl:connectToRoomSignals(room)
   room:connect('room_transition_request', self, 'onRoomTransitionRequest')

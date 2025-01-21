@@ -11,7 +11,7 @@ local SLOT_ITEM_2 = 3
 local Inventory = Class { __includes = SignalObject,
   init = function(self, gameControl)
     SignalObject.init(self)
-    
+
     self.items = { }
     self.equippedItems = { }
 
@@ -47,3 +47,4 @@ function Inventory:unequipItem(itemId, slot)
 end
 
 return Inventory
+

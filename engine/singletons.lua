@@ -6,11 +6,13 @@
 ---@field screenManager any
 ---@field gameControl GameControl
 ---@field roomControl RoomControl
+---@field imguiModules any[]
 local singletons = {
   input = nil,
   screenManager = { },
   gameControl = { },
-  roomControl = { }
+  roomControl = { },
+  imguiModules = { }
 }
 
 function singletons.getType()

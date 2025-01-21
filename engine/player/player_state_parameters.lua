@@ -10,10 +10,12 @@ local Pool = require 'engine.utils.pool'
 ---@field canControlInAir boolean
 ---@field canPush boolean
 ---@field canUseWeapons boolean
+---@field canReleaseSword boolean
 ---@field canRoomTransition boolean
 ---@field defaultAnimationWhenNotStill boolean
 ---@field interactionCollisions boolean
 ---@field hitboxCollisions boolean
+---@field canAutoRoomTransition boolean
 ---@field canStrafe boolean
 ---@field alwaysFaceUp boolean
 ---@field alwaysFaceDown boolean
@@ -48,6 +50,8 @@ local PlayerStateParameters = Class {
 
     self.canPush = true
     self.canUseWeapons = true
+    -- can release a sword charge
+    self.canReleaseSword = true
     self.canRoomTransition = true
 
     -- im not sure when this is used
@@ -56,6 +60,11 @@ local PlayerStateParameters = Class {
     -- if the player should be moved if they snag a corner
     self.autoCorrectMovement = true
 
+    -- params that are false by default
+
+    -- triggers room transition no matter how player collides with a room_edge (normally, we only trigger room 
+    -- transition if player is deliberately trying to move into it, and not when they get bumped by an enemy or something)
+    self.canAutoRoomTransition = false
     self.canStrafe = false
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
@@ -88,6 +97,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.canControlOnGround =  prioritizeFalse(self.canControlOnGround, other.canControlOnGround)
   self.canPush =  prioritizeFalse(self.canPush, other.canPush)
   self.canUseWeapons =  prioritizeFalse(self.canUseWeapons, other.canUseWeapons)
+  self.canReleaseSword = prioritizeFalse(self.canReleaseSword, other.canReleaseSword)
   self.canRoomTransition =  prioritizeFalse(self.canRoomTransition, other.canRoomTransition)
   self.defaultAnimationWhenNotMoving =  prioritizeFalse(self.defaultAnimationWhenNotMoving, other.defaultAnimationWhenNotMoving)
   self.autoCorrectMovement = prioritizeFalse(self.autoCorrectMovement, other.autoCorrectMovement)
@@ -100,6 +110,7 @@ function PlayerStateParameters:integrateParameters(other)
   self.alwaysFaceLeft = self.alwaysFaceLeft or other.alwaysFaceLeft
   self.alwaysFaceRight = self.alwaysFaceRight or other.alwaysFaceRight
   self.canStrafe = self.canStrafe or other.canStrafe
+  self.canAutoRoomTransition = self.canAutoRoomTransition or other.canAutoRoomTransition
 
   -- prefer the other animations if they are non null
   for k, v in pairs(self.animations) do
@@ -126,6 +137,7 @@ function PlayerStateParameters:reset()
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false
     self.alwaysFaceRight = false
+    self.canAutoRoomTransition = false
 
     self.movementSpeedScale = 1.0
 

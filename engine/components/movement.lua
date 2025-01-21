@@ -3,7 +3,7 @@ local Component = require 'engine.entities.component'
 local vector = require 'engine.math.vector'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
-
+local Constants = require 'constants'
 ---component that manages an entity's movement
 ---@class Movement : Component
 ---@field speed number
@@ -40,7 +40,7 @@ local Movement = Class { __includes = Component,
     if args.acceleration == nil then args.acceleration = 1 end
     if args.deceleration == nil then args.deceleration = 1 end
     if args.slippery == nil then args.slippery = false end
-    if args.gravity == nil then args.gravity = 9.8 end
+    if args.gravity == nil then args.gravity = Constants.DEFAULT_GRAVITY end
     if args.maxFallSpeed == nil then args.maxFallSpeed = 4 end
 
     if self.movesWithConveyors == nil then args.movesWithConveyors = true end
@@ -50,6 +50,7 @@ local Movement = Class { __includes = Component,
     self.movesWithPlatforms = args.movesWithPlatforms
 
     self.speed = args.speed
+    self.speedScale = args.speedScale
     self.minSpeed = args.minSpeed
     self.acceleration = args.acceleration
     self.deceleration = args.deceleration

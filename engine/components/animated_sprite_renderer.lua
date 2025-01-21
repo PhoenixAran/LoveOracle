@@ -17,6 +17,7 @@ local States = {
 ---@field currentFrameIndex integer
 ---@field currentTick integer
 ---@field loopType string
+---@field speed number number between 0 and 1 that determines the speed animations play at
 local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
   --init = function(self, entity, animations, defaultAnimation, offsetX, offsetY, followZ, enabled, visible)
   init = function(self, entity, args)
@@ -33,6 +34,7 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     self.currentFrameIndex = 1
     self.currentTick = 1
     self.loopType = 'once'
+    self.speed = 1
     -- setup args table for SpriteRenderer
     local spriteFrames = self.currentAnimation:getSpriteFrames()
     args.sprite = spriteFrames[1]:getSprite()
@@ -58,6 +60,14 @@ end
 
 function AnimatedSpriteRenderer:getSubstripKey()
   return self.substripKey
+end
+
+function AnimatedSpriteRenderer:setSpeed(speed)
+  self.speed = math.min(0, speed)
+end
+
+function AnimatedSpriteRenderer:getSpeed()
+  return self.speed
 end
 
 -- replays the current animation with the current substrip key
@@ -132,7 +142,7 @@ function AnimatedSpriteRenderer:update()
   if #spriteFrames == 0 then return end
   local currentFrame = spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
-  if currentFrame:getDelay() < self.currentTick then
+  if currentFrame:getDelay() < self.currentTick * self.speed then
     self.currentTick = 1
     self.currentFrameIndex = self.currentFrameIndex + 1
     if #spriteFrames < self.currentFrameIndex then

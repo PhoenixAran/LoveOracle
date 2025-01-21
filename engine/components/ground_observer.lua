@@ -169,7 +169,6 @@ function GroundObserver:update()
       end
     end
   end
-
   Physics.freeTable(items)
 end
 

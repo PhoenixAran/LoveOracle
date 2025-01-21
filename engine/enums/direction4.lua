@@ -1,3 +1,4 @@
+---@diagnostic disable: inject-field
 local vector = require 'engine.math.vector'
 local lume = require 'lib.lume'
 
@@ -63,6 +64,20 @@ function Direction4.getVector(dir4)
     return vectorTable.x, vectorTable.y
   end
   error('Direction4 out of range')
+end
+
+function Direction4.debugString(dir4)
+  if dir4 == 0 then
+    print 'none'
+  elseif dir4 == 1 then
+    print 'right'
+  elseif dir4 == 2 then
+    print 'down'
+  elseif dir4 == 3 then
+    print 'left'
+  elseif dir4 == 4 then
+    print 'up'
+  end
 end
 
 return Direction4

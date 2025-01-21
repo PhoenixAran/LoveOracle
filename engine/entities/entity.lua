@@ -7,8 +7,11 @@ local rect = require 'engine.math.rectangle'
 local InspectorProperties = require 'engine.entities.inspector_properties'
 local EntityDrawType = require 'engine.enums.entity_draw_type'
 local uuid = require 'engine.utils.uuid'
-
+local Consts = require 'constants'
 local Physics = require 'engine.physics'
+
+
+local GRID_SIZE = Consts.GRID_SIZE
 
 ---@class Entity : SignalObject, BumpBox
 ---@field enabled boolean
@@ -106,6 +109,14 @@ function Entity:getZPosition()
   return z
 end
 
+---returns tile index this entity is on
+---@return integer x
+---@return integer y
+function Entity:getTileIndex()
+  local x, y = self:getPosition()
+  return math.floor(x / GRID_SIZE), math.floor(y / GRID_SIZE)
+end
+
 ---sets z position
 ---@param z number
 function Entity:setZPosition(z)
@@ -177,7 +188,6 @@ end
 function Entity:awake()
   if not self.registeredWithPhysics then
     Physics:add(self, self.x, self.y, self.w, self.h)
-    self.registeredWithPhysics = true
   end
   if self.onAwake then
     self:onAwake()
@@ -232,9 +242,11 @@ end
 ---@return InspectorProperties
 function Entity:getInspectorProperties()
   local props = InspectorProperties(self)
+  props:setGroup('Entity')
   props:addReadOnlyString('Name', 'name')
   props:addVector2('Position', self.getPosition, self.setPosition)
   props:addVector2i('Size', self.getSize, self.resize)
+  props:setGroup()
   return props
 end
 

@@ -187,6 +187,16 @@ function Room:indexInRoom(x, y)
   and self:getTopLeftPositionY() <= y and y <= self:getBottomRightPositionY()
 end
 
+function Room:positionInRoom(x, y)
+  local rx1 = (self:getTopLeftPositionX() - 1) * GRID_SIZE
+  local ry1 = (self:getTopLeftPositionY() - 1) * GRID_SIZE
+  local rx2 = (self:getBottomRightPositionX() - 1) * GRID_SIZE
+  local ry2 = (self:getBottomRightPositionY() - 1) * GRID_SIZE
+
+  return rx1 <= x and x <= rx2
+        and ry1 <= y and y <= ry2
+end
+
 function Room:onRoomTransitionRequest(transitionStyle, direction4, playerX, playerY)
   playerX = math.floor(playerX / GRID_SIZE) + 1
   playerY = math.floor(playerY / GRID_SIZE) + 1

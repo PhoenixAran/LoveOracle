@@ -17,9 +17,15 @@
              "value":"Cycle"
             }, 
             {
-             "name":"pathScript",
+             "name":"movingPlatformType",
+             "propertytype":"MovingPlatformType",
              "type":"string",
-             "value":""
+             "value":"1x2"
+            }, 
+            {
+             "name":"scriptType",
+             "type":"string",
+             "value":"moving_platform"
             }, 
             {
              "name":"w",
@@ -34,7 +40,7 @@
  "tileset":
     {
      "firstgid":1,
-     "source":"..\/tilesets\/template_sources\/platforms.tsj"
+     "source":"..\/..\/tilesets\/template_sources\/platforms.tsj"
     },
  "type":"template"
 }

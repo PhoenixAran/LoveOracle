@@ -10,6 +10,7 @@ PhysicsFlags:makeTags {
   'tile', 
   'room_edge',
   'push_block',
+  'ledge_jump'
 }
 PhysicsFlags:makeEnumMap {
   Entity = 'entity',
@@ -19,6 +20,8 @@ PhysicsFlags:makeEnumMap {
   MovingPlatform = 'moving_platform',
   Tile = 'tile',
   RoomEdge = 'room_edge',
-  PushBlock = 'push_block'
+  PushBlock = 'push_block',
+  LedgeJump = 'ledge_jump'
 }
+
 return PhysicsFlags

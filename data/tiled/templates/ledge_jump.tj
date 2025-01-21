@@ -1,0 +1,18 @@
+{ "object":
+    {
+     "height":48,
+     "id":29,
+     "name":"",
+     "properties":[
+            {
+             "name":"scriptType",
+             "type":"string",
+             "value":"ledge_jump"
+            }],
+     "rotation":0,
+     "type":"ledge_jump",
+     "visible":true,
+     "width":16
+    },
+ "type":"template"
+}

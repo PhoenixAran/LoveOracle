@@ -59,4 +59,26 @@ function Direction8.getVector(dir8)
   error('Direction8 out of range')
 end
 
+function Direction8.debugString(dir8)
+  if dir8 == 0 then
+    print 'none'
+  elseif dir8 == 1 then
+    print 'right'
+  elseif dir8  == 2 then
+    print 'downRight'
+  elseif dir8 == 3 then
+    print 'down'
+  elseif dir8 == 4 then
+    print 'downLeft'
+  elseif dir8 == 5 then
+    print 'left'
+  elseif dir8 == 6 then
+    print 'upLeft'
+  elseif dir8 == 7 then
+    print 'up'
+  elseif dir8 == 8 then
+    print 'upRight'
+  end
+end
+
 return Direction8

@@ -636,15 +636,15 @@ return makeModuleFunction(function(spriteBank)
   -- #substrip down
   ab:addSpriteFrame(6, 1, 0, 0, 10)
   ab:addSpriteFrame(1, 21, 0, 0, 32)
-  ab:buildSubstrip('up', true)
+  ab:buildSubstrip('down', true)
   -- #substrip left
   ab:addSpriteFrame(4, 1, 0, 0, 10)
   ab:addSpriteFrame(1, 21, 0, 0, 32)
-  ab:buildSubstrip('up', false)
+  ab:buildSubstrip('left', false)
   -- #substrip right
   ab:addSpriteFrame(1, 1, 0, 0, 10)
   ab:addSpriteFrame(1, 21, 0, 0, 32)
-  ab:buildSubstrip('up', false)
+  ab:buildSubstrip('right', false)
   -- BUILD death
   sb:addAnimation('death', ab:build())
 

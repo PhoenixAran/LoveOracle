@@ -1,0 +1,25 @@
+{ "columns":0,
+ "grid":
+    {
+     "height":1,
+     "orientation":"orthogonal",
+     "width":1
+    },
+ "margin":0,
+ "name":"monsters",
+ "objectalignment":"topleft",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.11.0",
+ "tileheight":16,
+ "tiles":[
+        {
+         "id":0,
+         "image":"..\/..\/..\/assets\/images\/tiled_icons\/stalfos_icon.png",
+         "imageheight":16,
+         "imagewidth":16
+        }],
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.11"
+}

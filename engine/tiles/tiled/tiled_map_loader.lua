@@ -51,7 +51,7 @@ local function parsePropertyDict(jProperties)
   -- JSON converts quite nicely to lua, so we just select the key and value
   local properties = { }
   if jProperties then
-    for k, jProperty in ipairs(jProperties) do
+    for _, jProperty in ipairs(jProperties) do
       properties[jProperty.name] = jProperty.value
     end
   end
@@ -74,10 +74,6 @@ local function parseObject(jObject)
   tiledObject.type = jObject.type
   tiledObject.rotation = jObject.rotation
 
-  if jObject.type and jObject.type ~= '' then
-    classProperties = tiledClasses[jObject.type]
-  end
-
   if jObject.template then
     -- if this is a templated object, inject the template object value properties into our json object
     local templateKey = FileHelper.getFileNameWithoutExtension(jObject.template)
@@ -89,6 +85,10 @@ local function parseObject(jObject)
       elseif tiledObject[k] == nil then
         -- inject value from template into tiled object if instance does not have data for given field
         tiledObject[k] = template.object[k]
+      end
+
+      if k == 'type' and v ~= '' then
+        classProperties = tiledClasses[v]
       end
     end
     if template.tileset then
@@ -123,6 +123,13 @@ local function parseObject(jObject)
   end
   -- finally, inject the jObject's instance properties
   tiledObject.properties = lume.merge(tiledObject.properties, parsePropertyDict(jObject.properties))
+
+  -- convert top-left to center
+  if tiledObject.width ~= nil and tiledObject.height ~= nil then
+    tiledObject.x = tiledObject.x + tiledObject.width / 2
+    tiledObject.y = tiledObject.y + tiledObject.height / 2
+  end
+
   return tiledObject
 end
 
@@ -287,6 +294,7 @@ local function loadTemplate(path)
       tiledTemplate.tileset[k] = v
     end
   end
+  
   tiledTemplates[key] = tiledTemplate
   return tiledTemplate
 end

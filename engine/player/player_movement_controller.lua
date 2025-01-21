@@ -2,20 +2,14 @@ local Class = require 'lib.class'
 local lume  = require('lib.lume')
 local PlayerMotionType = require 'engine.player.player_motion_type'
 local vector = require 'engine.math.vector'
-local Movement = require 'engine.components.movement'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local TileTypes = TileTypeFlags.enumMap
 local Input = require('engine.singletons').input
 local Physics = require 'engine.physics'
+local Constants = require 'constants'
 
--- some class constants
-local JUMP_Z_VELOCITY = 2
-local JUMP_GRAVITY = 8
-local HOLE_DOOM_TIMER = 10
-local HOLE_PULL_MAGNITUDE = .25
-local DISTANCE_TRIGGER_HOLE_FALL = 1.0
 -- how many times to 'split the pie' when clamping joystick vector to certian radian values
 local DIRECTION_SNAP = 40
 
@@ -23,6 +17,7 @@ local DIRECTION_SNAP = 40
 ---@field player Player
 ---@field movement Movement
 ---@field allowMovementControl boolean
+---@field preStrokeSpeedScale number
 ---@field strokeSpeedScale number
 ---@field lastStrokeVectorX number
 ---@field lastStrokeVectorY number
@@ -101,8 +96,8 @@ function PlayerMovementController:jump()
     end
     -- jump!
     self.capeDeployed = false
-    self.movement.gravity = JUMP_GRAVITY
-    self.movement:setZVelocity(JUMP_Z_VELOCITY)
+    self.movement.gravity = Constants.PLAYER_JUMP_GRAVITY
+    self.movement:setZVelocity(Constants.PLAYER_JUMP_Z_VELOCITY)
     self.player:requestNaturalState()
     self.player:integrateStateParameters()
     if self.player:getWeaponState() ~= nil and self.player:getWeaponState():getType() == 'player_push_state' then
@@ -113,7 +108,9 @@ function PlayerMovementController:jump()
     if self.player:getWeaponState() == nil then
       self.player.sprite:play('jump')
     end
-    -- TODO self.player:onJump()
+    if self.player.onJump then
+      self.player:onJump()
+    end
   end
 end
 
@@ -170,6 +167,10 @@ end
 
 function PlayerMovementController:updateStroking()
   if self.player:isSwimming() then
+    -- remember the speedscale before going into the water
+    if self.preStrokeSpeedScale == nil then
+      self.preStrokeSpeedScale = self.player.movement:getSpeedScale()
+    end
     -- slow down movement over time from strokes
     if self.strokeSpeedScale > 1.0 then
       self.strokeSpeedScale = self.strokeSpeedScale - 0.025
@@ -187,13 +188,18 @@ function PlayerMovementController:updateStroking()
         self.lastStrokeVectorX, self.lastStrokeVectorY = x, y
       end
     end
+    self.player:setSpeedScale(self.strokeSpeedScale)
   else
     self.strokeSpeedScale = 1.0
     self.stroking = false
     self.lastStrokeVectorX, self.lastStrokeVectorY = 0, 0
   end
-  
-  self.player:setSpeedScale(self.strokeSpeedScale)
+
+  -- set the speedscale back to what it was before swimming
+  if not self.player:isSwimming() and self.preStrokeSpeedScale ~= nil then
+    self.player:setSpeedScale(self.preStrokeSpeedScale)
+    self.preStrokeSpeedScale = nil
+  end
 end
 
 --- if we can stroke in the water
@@ -288,7 +294,7 @@ function PlayerMovementController:updateFallingInHole()
     local px, py = self.player:getPosition()
     local tx, ty = self.holeTile:getPosition()
 
-    local pullMagnitude = HOLE_PULL_MAGNITUDE
+    local pullMagnitude = Constants.PLAYER_HOLE_PULL_MAGNITUDE
 
     -- increase pull magnitude if player is trying to move away from hole
     local pdx, pdy = vector.normalize(self.player:getVector())
@@ -300,13 +306,13 @@ function PlayerMovementController:updateFallingInHole()
       pullMagnitude = pullMagnitude * 2
     end
 
-    local pullX, pullY = vector.mul(pullMagnitude, normDiffX, normDiffY)
+    local pullX, pullY = vector.mul(pullMagnitude * love.time.dt, normDiffX, normDiffY)
 
     -- pull player towards hole
     self.player:setPosition(px + pullX, py + pullY)
 
     -- fall in hole when too close to center
-    if vector.dist(tx, ty, self.player:getPosition()) <= DISTANCE_TRIGGER_HOLE_FALL then
+    if vector.dist(tx, ty, self.player:getPosition()) <= Constants.PLAYER_DISTANCE_TRIGGER_HOLE_FALL then
       self.player:setPosition(tx, ty)
       self.player.sprite:play('fall')
       self.player:startRespawnControlState(false)
@@ -325,7 +331,7 @@ function PlayerMovementController:updateFallingInHole()
       self.holeQuadrantY = math.floor(self.holeQuadrantY)
       self.doomedToFallInHole = false
       self.fallingInHole = true
-      self.holeDoomTimer = HOLE_DOOM_TIMER
+      self.holeDoomTimer = Constants.PLAYER_HOLE_DOOM_TIMER
     end
   end
 end
@@ -333,7 +339,7 @@ end
 function PlayerMovementController:updateMoveMode()
   if self.player.environmentStateMachine:isActive() then
     local currentEnvironmentState = self.player.environmentStateMachine:getCurrentState()
----@diagnostic disable-next-line: need-check-nil
+---@diagnostic disable-next-line: need-check-nil, undefined-field
     self:setMode(currentEnvironmentState.motionSettings)
   else
     self:setMode(self.moveNormalMode)
