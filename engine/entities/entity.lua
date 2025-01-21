@@ -242,9 +242,11 @@ end
 ---@return InspectorProperties
 function Entity:getInspectorProperties()
   local props = InspectorProperties(self)
+  props:setGroup('Entity')
   props:addReadOnlyString('Name', 'name')
   props:addVector2('Position', self.getPosition, self.setPosition)
   props:addVector2i('Size', self.getSize, self.resize)
+  props:setGroup()
   return props
 end
 

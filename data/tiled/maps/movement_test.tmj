@@ -143,8 +143,8 @@
                 {
                  "id":53,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":624,
-                 "y":168
+                 "x":704,
+                 "y":328
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -160,8 +160,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":544,
-                 "y":180
+                 "x":660,
+                 "y":328
                 }],
          "opacity":1,
          "type":"objectgroup",

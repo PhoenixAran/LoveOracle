@@ -56,6 +56,10 @@ local Property = Class {
   end
 }
 
+function Property:getType()
+  return 'property'
+end
+
 function Property:setAccessorFuncs(getFunc, setFunc, isObjectFuncs)
   if isObjectFuncs == nil then
     isObjectFuncs = true
@@ -132,15 +136,25 @@ end
 ---@class InspectorProperties
 ---@field source table
 ---@field properties Property[]
+---@field currentGroup string the next group the property will be added to
 local InspectorProperties = Class {
   init = function(self, source)
     self.source = source
     self.properties = { }
+    self.currentGroup = nil
   end
 }
 
 local function addProperty(inspectorProperties, property)
-  lume.push(inspectorProperties.properties, property)
+  local group = inspectorProperties.currentGroup
+  local targetCollection = inspectorProperties.properties
+  if group ~= nil then
+    if inspectorProperties.properties[group] == nil then
+      inspectorProperties.properties[group] = { }
+    end
+    targetCollection = inspectorProperties.properties[group]
+  end
+  lume.push(targetCollection, property)
 end
 
 local function setAccessors(property, getFunc, setFunc, isObjectFuncs)
@@ -171,7 +185,7 @@ function InspectorProperties:addInt(label, getFunc, setFunc, isObjectFuncs)
   addProperty(self, property)
 end
 
----
+--- readonly int
 function InspectorProperties:addReadOnlyInt(label, getFunc, isObjectFuncs)
   local property = Property(self.source, label, PropertyType.Int, true)
   setReadOnlyAccessor(property, getFunc, isObjectFuncs)
@@ -244,12 +258,25 @@ function InspectorProperties:addReadOnlyRect(label, getFunc, isObjectFuncs)
 end
 
 function InspectorProperties:addSeparator(name)
-  local property = Property(self.source, name, PropertyType.Seperator, true)
+  local property = Property(self.source, name, PropertyType.Separator, true)
   addProperty(self, property)
 end
 
+---@param group string?
+function InspectorProperties:setGroup(group)
+  self.currentGroup = group
+end
+
 function InspectorProperties:count()
-  return lume.count(self.properties)
+  local count = 0
+  for _, properties in pairs(self.properties) do
+    if properties.getType then
+      count = count + 1
+    else
+      count = count + lume.count(properties)
+    end
+  end
+  return count
 end
 
 -- export PropertyType enum

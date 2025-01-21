@@ -957,14 +957,50 @@ function Player:debugDraw()
 end
 
 function Player:getInspectorProperties()
-  -- local props = InspectorProperties(self)
-
-  -- props:addSeparator('Entity')
-  -- props:addReadOnlyString('Id', 'name')
-  local props = InspectorProperties(self)
-  props:addSeparator('Entity')
-  props:addReadOnlyString('Name', 'name')
-  --props:addVector2('Position', self.getPosition, self.setPosition)
+  local props = Entity.getInspectorProperties(self)
+  props:setGroup('States')
+  props:addReadOnlyString('Environment',
+    ---@param player Player
+    function(player)
+      if player.environmentStateMachine:isActive() then
+        return player.environmentStateMachine:getCurrentState():getType()
+      end
+      return ''
+    end, 
+    true
+  )
+  props:addReadOnlyString('Control',
+    function(player)
+      if player.controlStateMachine:isActive() then
+        return player.controlStateMachine:getCurrentState():getType()
+      end
+      return ''
+    end, 
+    true
+  )
+  props:addReadOnlyString('Weapon', 
+    function(player)
+      if player.weaponStateMachine:isActive() then
+        return player.weaponStateMachine:getCurrentState():getType()
+      end
+      return ''
+    end, 
+    true
+  )
+  props:addReadOnlyString('Conditions', 
+    function(player)
+      local str = ''
+      if lume.any(self.conditionStateMachines) then
+        for _, stateMachine in ipairs(player.conditionStateMachines) do
+          if stateMachine:isActive() then
+            str = str .. stateMachine:getCurrentState():getType() .. ','
+          end
+        end
+      end
+      return str
+    end,
+    true
+  )
   return props
 end
 
