@@ -85,7 +85,7 @@ function RuntimeInspector.draw()
           imgui.Separator()
         end
       end
-    end   
+    end
   end
 end
 

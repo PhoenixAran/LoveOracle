@@ -82,8 +82,8 @@
                  "id":52,
                  "template":"..\/templates\/single_room_template.tj",
                  "width":432,
-                 "x":312,
-                 "y":4
+                 "x":320,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",

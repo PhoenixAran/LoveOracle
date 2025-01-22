@@ -130,8 +130,8 @@ function Property:getPropertyType()
 end
 
 function Property:isReadOnly()
-  return self.readOnly
-end
+  return self.readOnly 
+end 
 
 ---@class InspectorProperties
 ---@field source table
