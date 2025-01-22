@@ -62,9 +62,9 @@ end
 
 function RuntimeInspector.draw()
   assert(entity ~= nil and cachedProps ~= nil, 'Runtime inspector draw called without valid setup')
-  imgui.NewFrame()
   isWindowOpen = imgui.Begin(('Entity Inspector - %s'):format(entity.name), true, "ImGuiWindowFlags_MenuBar")
   if not isWindowOpen then
+    imgui.End()
     close()
   end
   local firstGroup = true
@@ -87,6 +87,7 @@ function RuntimeInspector.draw()
       end
     end
   end
+  imgui.End()
 end
 
 return RuntimeInspector

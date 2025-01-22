@@ -129,6 +129,7 @@ function love.draw()
   screenManager:emit('draw')
   -- draw any imgui modules to support debugging/cheat menus
   if imgui and lume.any(Singletons.imguiModules) then
+    imgui.NewFrame()
     for _, module in ipairs(Singletons.imguiModules) do
       module:draw()
     end

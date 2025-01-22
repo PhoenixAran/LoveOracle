@@ -1,9 +1,6 @@
 local console = require 'lib.console'
 local lume = require 'lib.lume'
 local IMGUI_EXISTS = pcall(require, 'imgui')
-local function trim(s)
-
-end
 
 --- Console Command. Sets or Gets timescale
 ---@param args table
@@ -66,7 +63,7 @@ function console.commands.inspect(entityId)
   local entity = entities:getByName(entityId)
   if entity then
     module.setup(entity)
-    if not lume.find(singleton.imguiModules) then
+    if not lume.find(singleton.imguiModules, module) then
       lume.push(singleton.imguiModules, module)
     end
   else
@@ -77,3 +74,32 @@ console.help.inspect = {
   section = 'Gameplay Debug',
   'Shows debug menu for altering Entity properties during runtime'
 }
+
+function console.commands.memory()
+  if not IMGUI_EXISTS then
+    console.print('You must have a debug build to use this command')
+    return
+  end
+  local singleton = require 'engine.singletons'
+  local module = require 'engine.imgui_modules.memory_inspector'
+  module.setup()
+  if not lume.find(singleton.imguiModules, module) then
+    lume.push(singleton.imguiModules, module)
+  end
+end
+console.help.memory = {
+  section = 'Gameplay Debug',
+  'Shows debug menu for inspecting memory usage'
+}
+
+function console.commands.imguidemo()
+  if not IMGUI_EXISTS then
+    console.print('You must have a debug build to use this command')
+    return
+  end
+  local singleton = require 'engine.singletons'
+  local module = require 'engine.imgui_modules.imgui_demo'
+  if not lume.find(singleton.imguiModules, module) then
+    lume.push(singleton.imguiModules, module)
+  end
+end
