@@ -10,6 +10,7 @@ local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
+local CollisionTag = require 'engine.enums.collision_tag'
 
 local Direction8Values = {Direction8.up, Direction8.upRight, Direction8.right, Direction8.downRight, Direction8.down, Direction8.downLeft, Direction8.left, Direction8.upLeft}
 local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Direction4.left}
@@ -28,14 +29,13 @@ local Enemy = Class { __includes = MapEntity,
     -- jump behaviour configuration
     self.jumpGravity = args.jumpZGravity or 8
     self.jumpZVelocity = args.jumpZVelocity or 2.8
+
+    -- set default collision tag for Enemy 
+    self.collisionTag = CollisionTag.enemy
   end
 }
 
 function Enemy:getType()
-  return 'enemy'
-end
-
-function Enemy:getCollisionTag()
   return 'enemy'
 end
 

@@ -31,10 +31,6 @@ function RoomEdge:getType()
   return 'room_edge'
 end
 
-function RoomEdge:getCollisionTag()
-  return 'room_edge'
-end
-
 -- called by player in Player:checkRoomTransitions()
 -- todo should probably have method signature as (x, y) so we can measure the angle
 ---@param dir8 integer

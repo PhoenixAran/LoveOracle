@@ -17,7 +17,6 @@ local __ZRange = { }
 ---@field w integer
 ---@field h integer
 ---@field z number
----@field collisionTag string
 ---@field collidesWithLayer number layers this bumpbox should collide with
 ---@field physicsLayer number layer this bumpbox exists in
 ---@field registeredWithPhysics boolean flag to keep track if this bumpbox
@@ -38,7 +37,6 @@ local BumpBox = Class {
 
     assert(args.zMin <= args.zMax)
     self.zRange = { min = args.zMin, max = args.zMax }
-    if args.collisionTag == nil then args.collisionTag = 'bump_box' end
     self.x = args.x
     self.y = args.y
     self.w = args.w
@@ -58,10 +56,6 @@ local BumpBox = Class {
 
 function BumpBox:getType()
   return 'bump_box'
-end
-
-function BumpBox:getCollisionTag()
-  return self.collisionTag
 end
 
 ---Returns min and max zrange values this bumpbox can collide with

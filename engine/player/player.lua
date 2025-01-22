@@ -298,10 +298,6 @@ function Player:getType()
   return 'player'
 end
 
-function Player:getCollisionTag()
-  return 'player'
-end
-
 function Player:getSkills()
   return self.skills
 end

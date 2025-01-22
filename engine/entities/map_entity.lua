@@ -79,6 +79,7 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field onBump function
 ---@field moveFilter function filter for move function in Physics:move()\
 ---@field roomEdgeCollisionBoxMoveFilter function
+---@field collisionTag string
 local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -111,6 +112,8 @@ local MapEntity = Class { __includes = Entity,
       assert(args.sprite:getType() == 'sprite_renderer' or args.sprite:getType() == 'animated_sprite_renderer', 'Wrong component type provided for sprite')
       self.sprite = args.sprite
     end
+
+
 
     -- component configuration
     self.health:connect('health_depleted', self, '_onHealthDepleted')
@@ -151,7 +154,7 @@ function MapEntity:getType()
 end
 
 function MapEntity:getCollisionTag()
-  return 'map_entity'
+  return self.collisionTag
 end
 
 function MapEntity:onTransformChanged()

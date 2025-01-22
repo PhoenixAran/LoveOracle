@@ -62,10 +62,6 @@ function Entity:isTile()
   return false
 end
 
-function Entity:getCollisionTag()
-  return 'entity'
-end
-
 function Entity:setVisible(value)
   self.visible = value
 end

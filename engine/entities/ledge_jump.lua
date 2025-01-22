@@ -31,10 +31,6 @@ function LedgeJump:getType()
   return 'ledge_jump'
 end
 
-function LedgeJump:getCollisionTag()
-  return 'ledge_jump'
-end
-
 function LedgeJump:getDirection4()
   return self.direction4
 end

@@ -73,10 +73,6 @@ function Hitbox:getType()
   return 'hitbox'
 end
 
-function Hitbox:getCollisionTag()
-  return 'hitbox'
-end
-
 function Hitbox:onTransformChanged()
   setPositionRelativeToEntity(self)
   Physics:update(self, self.x, self.y, self.w, self.h)
