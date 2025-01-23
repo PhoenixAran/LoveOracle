@@ -16,6 +16,14 @@ local function setPositionRelativeToEntity(hitbox)
   hitbox.z = hitbox.entity:getZPosition()
 end
 
+local function filter(item, other)
+  if other.getType then
+    other.reportHitboxCollision(item)
+  end
+  -- don't report
+  return nil
+end
+
 ---@class Hitbox : BumpBox, Component
 ---@field offsetX integer
 ---@field offsetY integer
@@ -107,19 +115,12 @@ end
 
 function Hitbox:update()
   if not self.detectOnly then
+    -- TODO i think onTransformChanged makes this update call redunduant
     Physics:update(self, self.x, self.y, self.w, self.h)
-    --TODO update to new physics API
-    -- local neighbors = Physics.boxcastBroadphase(self, self.x, self.y, self.w, self.h)
-    -- if lume.count(neighbors) > 0 then
-    --   if self.canHitMultiple then
-    --     for _, neighbor in ipairs(neighbors) do
-    --       neighbor:reportCollision(self)
-    --     end
-    --   else
-    --     neighbors[1]:reportCollision(self)
-    --   end
-    -- end
-    -- TablePool.free(neighbors)
+    local len, cols = Physics:move(self, self.x, self.y, filter)
+    for _, v in ipairs(cols) do
+      v.reportHitboxCollision(self)
+    end
   end
 end
 
@@ -173,7 +174,7 @@ end
 
 ---raise the hitbox hitboxEntered signal
 ---@param hitbox Hitbox
-function Hitbox:reportCollision(hitbox)
+function Hitbox:reportHitboxCollision(hitbox)
   self:emit('hitbox_entered', hitbox)
 end
 

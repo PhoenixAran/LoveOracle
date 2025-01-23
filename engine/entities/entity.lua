@@ -22,6 +22,7 @@ local GRID_SIZE = Consts.GRID_SIZE
 ---@field onAwake function
 ---@field onRemoved function
 ---@field drawType EntityDrawType
+---@field collisionTag string
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, args)
     if args == nil then
@@ -47,6 +48,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.drawType = args.drawType
     self.transform = Transform:new(self)
     self.name = args.name or uuid()
+    self.collisionTag = args.collisionTag
   end
 }
 
@@ -56,6 +58,10 @@ end
 
 function Entity:getType()
   return 'entity'
+end
+
+function Entity:getCollisionTag()
+  return self.collisionTag
 end
 
 function Entity:isTile()

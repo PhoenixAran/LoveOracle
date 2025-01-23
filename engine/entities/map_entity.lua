@@ -9,6 +9,7 @@ local Health = require 'engine.components.health'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local SpriteFlasher = require 'engine.components.sprite_flasher'
+local InteractionResolver = require 'engine.components.interaction_resolver'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
@@ -18,6 +19,7 @@ local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 local Pool = require 'engine.utils.pool'
 local Consts = require 'constants'
+
 
 local canCollide = require('engine.entities.bump_box').canCollide
 
@@ -63,6 +65,7 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field grassOffsetX number offset x when effect sprite is playing grass animation
 ---@field grassOffsetY number offset y when effect sprite is playing grass animation
 ---@field grassMovementTick integer current number of frames entity has been moving when effect sprite is showing grass effect
+---@field interactionResolver InteractionResolver
 ---@field spriteFlasher SpriteFlasher
 ---@field sprite SpriteRenderer|AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
@@ -79,7 +82,6 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field onBump function
 ---@field moveFilter function filter for move function in Physics:move()\
 ---@field roomEdgeCollisionBoxMoveFilter function
----@field collisionTag string
 local MapEntity = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -112,7 +114,7 @@ local MapEntity = Class { __includes = Entity,
       assert(args.sprite:getType() == 'sprite_renderer' or args.sprite:getType() == 'animated_sprite_renderer', 'Wrong component type provided for sprite')
       self.sprite = args.sprite
     end
-
+    self.interactionResolver = InteractionResolver(self)
 
 
     -- component configuration
@@ -151,10 +153,6 @@ local MapEntity = Class { __includes = Entity,
 
 function MapEntity:getType()
   return 'map_entity'
-end
-
-function MapEntity:getCollisionTag()
-  return self.collisionTag
 end
 
 function MapEntity:onTransformChanged()
@@ -445,6 +443,23 @@ function MapEntity:isInHole()
   return self.groundObserver.inHole
 end
 
+-- interaction resolver pass throughs
+function MapEntity:setInteraction(tag, interaction)
+  self.interactionResolver:setInteraction(tag, interaction)
+end
+
+function MapEntity:removeInteraction(tag)
+  self.interactionResolver:removeInteraction(tag)
+end
+
+function MapEntity:resolveInteraction(receiver, sender)
+  self.interactionResolver:resolveInteraction(receiver, sender)
+end
+
+function MapEntity:reportCollsionWithHitbox(hitbox)
+  self.interactionResolver:reportCollisionWithHitbox(hitbox)
+end
+
 --- hurt this entity
 ---@param damageInfo DamageInfo|integer
 function MapEntity:hurt(damageInfo)
@@ -565,6 +580,7 @@ function MapEntity:draw()
 end
 
 -- signal callbacks
+
 function MapEntity:_onHealthDepleted()
   self.deathMarked = true
   -- notify entity script
@@ -573,6 +589,10 @@ function MapEntity:_onHealthDepleted()
 ---@diagnostic disable-next-line: undefined-field
     self:onHealthDepleted()
   end
+end
+
+function MapEntity:_onHitboxCollided(hitbox)
+  self:reportCollisionWithHitbox(hitbox)
 end
 
 return MapEntity
