@@ -3,6 +3,8 @@
 Fan made Zelda game.
 Requires [LOVE 11.5](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch.io/tiled).   
 
+![screenshot of game](readme_picture.png)
+
 [love-imgui](https://github.com/MikuAuahDark/love-imgui) binaries will be required for some screens. See given repository for build instructions.
 ## Libraries
 - [baton](https://github.com/tesselode/baton)
