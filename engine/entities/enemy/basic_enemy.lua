@@ -8,8 +8,8 @@ local Pool = require 'engine.utils.pool'
 
 --- Class with built in behaviour for enemies.
 --- This class automatically handles entities:
---- >falling in hole, lava, and/or water
---- >Stun State
+--- **falling in hole, lava, and/or water
+--- **Stun State
 ---@class BasicEnemy : Enemy
 ---@field enemyState EnemyState?
 local BasicEnemy = Class { __includes = Enemy,
@@ -64,10 +64,10 @@ function BasicEnemy:updateEnvironment()
     state = Pool.obtain('enemy_fall_in_hole_state')
     state:setEnemy(self)
   elseif self:isInWater() and not self.canSwimInWater and (self.enemyState == nil and self.enemyState:getType() ~= 'enemy_fall_in_water_state') then
-    state = Pool.obtain('enemy_fall_in_water_state')
+    state = Pool.obtain('enemy_drown_state')
     state:setEnemy(self)
   elseif self:isInLava() and not self.canSwimInLava and (self.enemyState == nil and self.enemyState:getType() ~= 'enemy_fall_in_lava_state') then
-    state = Pool.obtain('enemy_fall_in_lava_state')
+    state = Pool.obtain('enemy_drown_state')
     state:setEnemy(self)
   end
   if self.enemyState ~= state then

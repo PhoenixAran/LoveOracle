@@ -12,6 +12,7 @@ local Singletons = require 'engine.singletons'
 
 -- logger
 require 'engine.logger'
+-- windows doesnt support color out of the box
 love.log.useColor = love.system.getOS() ~= 'Windows'
 love.log.outFile = string.format('love-oracle_%s_log.txt', os.date('%Y-%m-%d'))
 
