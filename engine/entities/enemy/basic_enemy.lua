@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local Enemy = require 'engine.entities.enemy'
 -- require states so they register themslves in the pool
-require 'engine.entities.enemy.enemy_fall_in_hole_state'
+require 'engine.entities.enemy.states'
 
 local Pool = require 'engine.utils.pool'
 

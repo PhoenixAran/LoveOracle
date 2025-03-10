@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local EnemyState = require 'engine.entities.enemy.enemy_state'
+local EnemyState = require 'engine.entities.enemy.states.enemy_state'
 local Pool = require 'engine.utils.pool'
 
 local EnemyDrownState = Class { __includes = EnemyState,
