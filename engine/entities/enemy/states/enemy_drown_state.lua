@@ -5,6 +5,7 @@ local Pool = require 'engine.utils.pool'
 local EnemyDrownState = Class { __includes = EnemyState,
   init = function(self, enemy)
     EnemyState.init(self, enemy)
+    self.effect = nil
   end
 }
 
@@ -12,8 +13,9 @@ function EnemyDrownState:getType()
   return 'enemy_drown_state'
 end
 
-function EnemyDrownState:update()
 
+function EnemyDrownState:update()
+   
 end
 
 function EnemyDrownState:free()

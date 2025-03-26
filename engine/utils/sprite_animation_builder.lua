@@ -79,10 +79,10 @@ function SpriteAnimationBuilder:setSpriteSheet(spriteSheet)
 end
 
 ---adds a regular sprite frame using the current internal spritesheet
----@param x integer | Sprite
----@param y integer?
----@param offsetX number?
----@param offsetY number?
+---@param x integer | Sprite row number or sprite instance
+---@param y integer? column number OR offsetX depending on first argument
+---@param offsetX number? 
+---@param offsetY number? 
 ---@param delay integer?
 function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
   -- user is adding an explicit Sprite object
@@ -103,8 +103,8 @@ function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
 end
 
 ---add a sprite to the composite sprite table using the current internal spritesheet
----@param x integer
----@param y integer
+---@param x integer row number
+---@param y integer column number
 ---@param offsetX number
 ---@param offsetY number
 function SpriteAnimationBuilder:addCompositeSprite(x, y, offsetX, offsetY)
@@ -117,10 +117,10 @@ function SpriteAnimationBuilder:addCompositeSprite(x, y, offsetX, offsetY)
 end
 
 ---use the current stored sprite frames to make composite sprite frames
----@param originX number
----@param originY number
----@param offsetX number
----@param offsetY number
+---@param originX number origin x
+---@param originY number origin y
+---@param offsetX number offset x
+---@param offsetY number offset y
 ---@param delay integer
 function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, offsetY, delay)
   if offsetX == nil then offsetX = 0 end

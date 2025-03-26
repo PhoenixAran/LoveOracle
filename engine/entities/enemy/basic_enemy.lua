@@ -63,10 +63,10 @@ function BasicEnemy:updateEnvironment()
   if self:isInHole() and self.canFallInHole and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_hole_state') then
     state = Pool.obtain('enemy_fall_in_hole_state')
     state:setEnemy(self)
-  elseif self:isInWater() and not self.canSwimInWater and (self.enemyState == nil and self.enemyState:getType() ~= 'enemy_fall_in_water_state') then
+  elseif self:isInWater() and not self.canSwimInWater and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_water_state') then
     state = Pool.obtain('enemy_drown_state')
     state:setEnemy(self)
-  elseif self:isInLava() and not self.canSwimInLava and (self.enemyState == nil and self.enemyState:getType() ~= 'enemy_fall_in_lava_state') then
+  elseif self:isInLava() and not self.canSwimInLava and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_lava_state') then
     state = Pool.obtain('enemy_drown_state')
     state:setEnemy(self)
   end

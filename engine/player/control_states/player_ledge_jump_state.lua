@@ -32,7 +32,7 @@ end
 local PlayerLedgeJumpState = Class { __includes = PlayerState,
   init = function(self)
     PlayerState.init(self)
-    
+
     self.stateParameters.canAutoRoomTransition = true
     self.stateParameters.canStrafe = true
     self.stateParameters.canWarp = false
@@ -43,7 +43,6 @@ local PlayerLedgeJumpState = Class { __includes = PlayerState,
     self.stateParameters.canUseWeapons = false
 
     self.speedScale = 1
-
   end
 }
 
@@ -69,15 +68,15 @@ function PlayerLedgeJumpState:canLandAtPosition(x, y)
 end
 
 function PlayerLedgeJumpState:getLandingPosition(posX, posY)
-  print('==============')
-  print('Starting coords:  ' .. posX .. ' ' .. posY)
+  --print('==============')
+  --print('Starting coords:  ' .. posX .. ' ' .. posY)
   local moveVectorX, moveVectorY = Direction4.getVector(self.direction4)
   local landingPositionX, landingPositionY = vector.add(posX, posY, vector.mul(4, moveVectorX, moveVectorY))
   while not self:canLandAtPosition(landingPositionX, landingPositionY) do
     landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
-    print('iterating on ' .. landingPositionX .. ' ' .. landingPositionY)
+    --print('iterating on ' .. landingPositionX .. ' ' .. landingPositionY)
   end
-  print('Finalizing on ' .. landingPositionX .. ' ' .. landingPositionY)
+  --print('Finalizing on ' .. landingPositionX .. ' ' .. landingPositionY)
   landingPositionX, landingPositionY = vector.add(landingPositionX, landingPositionY, moveVectorX, moveVectorY)
   return landingPositionX, landingPositionY
 end
