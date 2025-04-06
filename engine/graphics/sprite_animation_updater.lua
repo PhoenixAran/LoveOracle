@@ -8,12 +8,10 @@ local States = {
   Completed = 3
 }
 
-
 ---helper class that keeps track of sprite animation indices for you
 ---This is used in many instances throughout the engine (AnimatedSpriteRenderer, Tiles with animations, Effect entities)
 ---@class SpriteAnimationUpdater
 ---@field state integer
----@field animations table<any, SpriteAnimation>
 ---@field substripKey integer
 ---@field currentAnimationKey string
 ---@field currentAnimation SpriteAnimation
@@ -24,9 +22,7 @@ local States = {
 local SpriteAnimationUpdater = Class {
   init = function(self)
     self.state = States.None
-    self.animations = nil
     self.substripKey = nil
-    self.currentAnimationKey = nil
     self.currentAnimation = nil
     self.currentFrameIndex = 1
     self.currentTick = 1
@@ -59,8 +55,20 @@ function SpriteAnimationUpdater:getCurrentAnimation()
   return self.currentAnimation
 end
 
+function SpriteAnimationUpdater:setCurrentAnimation(animation)
+  self.currentAnimation = animation
+end
+
 function SpriteAnimationUpdater:getCurrentTick()
   return self.currentTick
+end
+
+function SpriteAnimationUpdater:getAnimationState()
+  return self.state
+end
+
+function SpriteAnimationUpdater:getLoopType()
+  return self.loopType
 end
 
 function SpriteAnimationUpdater:setSpeed(speed)
@@ -79,15 +87,16 @@ function SpriteAnimationUpdater:getSubstripKey()
   return self.substripKey
 end
 
-
+---set animation the updater will use
+---@param animation SpriteAnimation
+---@param substripKey Direction4
+---@param forcePlayFromStart boolean? if true, the animation will be played from the start even if it was already playing
 function SpriteAnimationUpdater:play(animation, substripKey, forcePlayFromStart)
   if forcePlayFromStart == nil then forcePlayFromStart = false end
   local playFromStart = forcePlayFromStart
   if animation ~= nil then
-    playFromStart = playFromStart or self.currentAnimationKey ~= animation
-    self.currentAnimationKey = animation
-    self.currentAnimation = self.animations[animation]
-    assert(self.currentAnimation, 'Animation: ' .. animation .. ' does not exist')
+    playFromStart = playFromStart or self.currentAnimation ~= animation
+    self.currentAnimation = animation
   end
   if substripKey ~= nil then
     playFromStart = playFromStart or self.substripKey ~= substripKey
@@ -123,15 +132,21 @@ end
 ---@return SpriteFrame? currentFrame The current sprite frame, or nil if there are none.
 ---@return function? timedAction A timed action associated with the current frame, or nil. Function takes entity as argument
 function SpriteAnimationUpdater:update()
-  if self:isPlaying() then
-    return
+  if not self:isPlaying() then
+    return nil, nil
+  end
+  if self.currentAnimation == nil then
+    return nil, nil
   end
   local timedActions = self.currentAnimation:getTimedActions(self.substripKey)
   local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
   local timedAction = timedActions[self.currentFrameIndex]
 
   -- some animation can have no spriteframes and just action frames
-  if #spriteFrames == 0 then return nil, nil end
+  if #spriteFrames == 0 then
+    return nil, nil
+  end
+
   local currentFrame = spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
   if currentFrame:getDelay() < self.currentTick * self.speed then
@@ -147,9 +162,36 @@ function SpriteAnimationUpdater:update()
     end
     currentFrame = spriteFrames[self.currentFrameIndex]
   end
+
   return currentFrame, timedAction
 end
 
+--- depends on indices updated in SpriteAnimationUpdater:update()
+---@return SpriteFrame?
+function SpriteAnimationUpdater:getCurrentSprite()
+  if self:isPlaying() then
+    return nil
+  end
+
+  local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
+  if #spriteFrames == 0 then
+    return nil
+  end
+
+  return spriteFrames[self.currentFrameIndex]
+end
+
+--- depends on indices updated in SpriteAnimationUpdater:update()
+--- 
+--- Returned function takes entity as argument
+---@return function?
+function SpriteAnimationUpdater:getCurrentAction()
+  if self:isPlaying() then
+    return nil
+  end
+
+  return self.currentAnimation:getTimedActions(self.substripKey)[self.currentFrameIndex]
+end
 
 SpriteAnimationUpdater.States = States
 return SpriteAnimationUpdater
