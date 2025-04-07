@@ -130,11 +130,7 @@ end
 ---It will then play it if it was playing before.
 function SpriteAnimationUpdater:reset()
   self:stop()
-  if self.state == States.Running then
-    self.state = States.Running
-  else
-    self.state = States.None
-  end
+  self.state = States.Running
 end
 
 ---Updates the animation state and returns the current sprite frame and its associated action, if any.

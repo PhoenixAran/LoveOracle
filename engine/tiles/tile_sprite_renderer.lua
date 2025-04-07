@@ -31,7 +31,7 @@ end
 
 function TileSpriteRenderer:resetSpriteAnimation()
   assert(self.spriteAnimationUpdater, 'Cannot reset sprite animation on a non animated sprite')
-  self.spriteAnimationUpdater:stop()
+  self.spriteAnimationUpdater:reset()
 end
 
 -- This should only be called if this sprite is animated
