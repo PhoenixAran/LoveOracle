@@ -91,6 +91,10 @@ function AnimatedSpriteRenderer:stop()
   self.spriteAnimationUpdater:stop()
 end
 
+function AnimatedSpriteRenderer:reset()
+  self.spriteAnimationUpdater:reset()
+end
+
 function AnimatedSpriteRenderer:update()
   local spriteFrame, timedAction = self.spriteAnimationUpdater:update()
   if timedAction then

@@ -120,8 +120,22 @@ function SpriteAnimationUpdater:stop()
   self.currentFrameIndex = 1
   self.currentTick = 1
   self.state = States.None
+
+  if self.currentAnimation then
+    self.loopType = self.currentAnimation.loopType
+  end
 end
 
+---This function does not stop the animation, but resets the current frame index and tick count.
+---It will then play it if it was playing before.
+function SpriteAnimationUpdater:reset()
+  self:stop()
+  if self.state == States.Running then
+    self.state = States.Running
+  else
+    self.state = States.None
+  end
+end
 
 ---Updates the animation state and returns the current sprite frame and its associated action, if any.
 ---
@@ -169,7 +183,7 @@ end
 --- depends on indices updated in SpriteAnimationUpdater:update()
 ---@return SpriteFrame?
 function SpriteAnimationUpdater:getCurrentSprite()
-  if self:isPlaying() then
+  if not self:isPlaying() then
     return nil
   end
 
@@ -186,7 +200,7 @@ end
 --- Returned function takes entity as argument
 ---@return function?
 function SpriteAnimationUpdater:getCurrentAction()
-  if self:isPlaying() then
+  if not self:isPlaying() then
     return nil
   end
 

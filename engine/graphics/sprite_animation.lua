@@ -6,7 +6,7 @@ local DEFAULT_KEY = 'default'
 ---@class SpriteAnimation
 ---@field spriteFrames SpriteFrame[]
 ---@field timedActions function[]
----@field substrips boolean
+---@field substrips boolean if true, spriteFrames and timedActions are structured as a table of tables
 ---@field loopType string
 local SpriteAnimation = Class {
   init = function(self, spriteFrames, timedActions, loopType, substrips)
@@ -96,8 +96,8 @@ end
 function SpriteAnimation:release()
   self.timedActions = nil
   if self.substrips then
-    for i, frames in pairs(self.spriteFrames) do
-      for j, frame in pairs(frames) do
+    for _, frames in pairs(self.spriteFrames) do
+      for _, frame in pairs(frames) do
         frame:release()
       end
     end
