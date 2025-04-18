@@ -97,8 +97,6 @@ local MapEntity = Class { __includes = Entity,
     end
 
     -- signals
-    self:signal('entity_destroyed')
-    self:signal('entity_created')
     self:signal('entity_hit')
     self:signal('entity_bumped')
     self:signal('entity_immobolized')
@@ -231,14 +229,7 @@ function MapEntity:pollDeath()
 end
 
 function MapEntity:die()
-  self:release()
-  -- notify entity script so they can play their death sound
----@diagnostic disable-next-line: undefined-field
-  if self.onDeath then
----@diagnostic disable-next-line: undefined-field
-    self:onDeath()
-  end
-  self:emit('entity_destroyed', self)
+
 end
 
 -- health component pass throughs
@@ -457,7 +448,8 @@ function MapEntity:resolveInteraction(receiver, sender)
 end
 
 function MapEntity:reportCollsionWithHitbox(hitbox)
-  self.interactionResolver:reportCollisionWithHitbox(hitbox)
+  error('not implemented')
+  --self.interactionResolver:reportCollisionWithHitbox(hitbox)
 end
 
 --- hurt this entity
@@ -550,8 +542,7 @@ function MapEntity:updateEntityEffectSprite()
       self.grassMovementTick = 0
       -- initial update when playing the grass animation
       self.effectSprite:update()
-    end
-    
+    end 
     if self.movement.vectorX ~= 0 or self.movement.vectorY ~= 0 then
       self.grassMovementTick = self.grassMovementTick + 1
       if self.grassMovementTick > GRASS_ANIMATION_UPDATE_INTERVAL then
@@ -592,7 +583,8 @@ function MapEntity:_onHealthDepleted()
 end
 
 function MapEntity:_onHitboxCollided(hitbox)
-  self:reportCollisionWithHitbox(hitbox)
+  error('not implemented')
+  --self:reportCollisionWithHitbox(hitbox)
 end
 
 return MapEntity

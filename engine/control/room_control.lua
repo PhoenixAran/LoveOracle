@@ -96,7 +96,7 @@ end
 
 ---@param room Room
 function RoomControl:disconnectFromRoomSignals(room)
-  room:disconnect('room_transition_request', self, 'onRoomTransitionRequest')
+  room:disconnect('room_transition_request', self)
 end
 
 function RoomControl:onBegin()

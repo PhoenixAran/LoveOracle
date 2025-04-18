@@ -88,8 +88,8 @@ function SpriteAnimationUpdater:getSubstripKey()
 end
 
 ---set animation the updater will use
----@param animation SpriteAnimation
----@param substripKey Direction4
+---@param animation SpriteAnimation?
+---@param substripKey Direction4?
 ---@param forcePlayFromStart boolean? if true, the animation will be played from the start even if it was already playing
 function SpriteAnimationUpdater:play(animation, substripKey, forcePlayFromStart)
   if forcePlayFromStart == nil then forcePlayFromStart = false end

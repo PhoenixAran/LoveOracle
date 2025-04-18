@@ -28,7 +28,11 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     if args == nil then
       args = { }
     end
+
     SignalObject.init(self)
+    self:signal('entity_destroyed')
+    self:signal('spawned_entity')
+
     if args.enabled == nil then args.enabled = true end
     if args.visible == nil then args.visible = true end
     if args.x == nil then args.x = 0 end
@@ -220,6 +224,17 @@ function Entity:removed(scene)
   if self.onRemoved then
     self:onRemoved(scene)
   end
+end
+
+function Entity:destroy()
+  self:release()
+  -- notify entity script so they can play their death sound
+---@diagnostic disable-next-line: undefined-field
+  if self.onDeath then
+---@diagnostic disable-next-line: undefined-field
+    self:onDeath()
+  end
+  self:emit('entity_destroyed', self)
 end
 
 function Entity:isInAir()

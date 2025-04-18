@@ -95,6 +95,8 @@ function Entities:addEntity(entity, awakeEntity)
     lume.push(self.entitiesBackgroundDraw, entity)
   end
 
+  --connect to destroyed entity signals
+  entity:connect('entity_destroyed', self, 'onEntityDestroyed')
   entity:added()
   if awakeEntity then
     entity:awake()
@@ -110,6 +112,7 @@ function Entities:removeEntity(entity)
   lume.remove(self.entitiesHash, entity)
   lume.remove(self.entitiesYSort, entity)
   lume.remove(self.entitiesBackgroundDraw, entity)
+  entity:disconnect('entity_destroyed', self)
   entity:removed()
   self:emit('entity_removed', entity)
   entity:release()
@@ -137,15 +140,23 @@ function Entities:addTileEntity(tileEntity)
   assert(tileEntity:isTile(), 'Non tile entities should be added via Entities:addEntity')
   local tileIndex = (tileEntity.tileIndexY - 1) * self.mapWidth + tileEntity.tileIndexX
   self.tileEntities[tileEntity.layer][tileIndex] = tileEntity
+  tileEntity:connect('entity_destroyed', self, 'onTileEntityDestroyed')
   tileEntity:awake()
   self:emit('tile_entity_added', tileEntity)
 end
 
 ---remove tile entity by map index
----@param x integer
----@param y integer
----@param layer integer
+---@param x integer|Tile
+---@param y integer?
+---@param layer integer?
 function Entities:removeTileEntity(x, y, layer)
+  if type(x) == 'table' then
+    ---@type Tile
+    local tileEntity = x
+    x = tileEntity.tileIndexX
+    y = tileEntity.tileIndexY
+    layer =  tileEntity.layer
+  end
   local tileIndex = (y - 1) * self.mapWidth + x
   local tileEntity = self.tileEntities[layer][tileIndex]
   if tileEntity then

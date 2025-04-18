@@ -82,16 +82,16 @@ end
 
 --- Disconnect object from signal
 ---@param otherObject SignalObject
----@param targetMethod string
-function Signal:disconnect(otherObject, targetMethod)
+---@param signal string
+function Signal:disconnect(otherObject, signal)
   for i, connection in ipairs(self.connections) do
-    if connection.targetObject == otherObject and targetMethod == connection.targetMethod then
+    if connection.targetObject == otherObject and signal == connection.signal then
       table.remove(self.connections, i)
       break
     end
   end
   for i, connection in ipairs(otherObject.connections) do
-    if connection.targetMethod == targetMethod then
+    if connection.signal == signal then
       table.remove(otherObject.connections, i)
       break
     end
@@ -136,9 +136,8 @@ end
 ---Disconnect from specified signal
 ---@param signalName string
 ---@param otherObject SignalObject
----@param targetMethod string
-function SignalObject:disconnect(signalName, otherObject, targetMethod)
-  self.signals[signalName]:disconnect(otherObject, targetMethod)
+function SignalObject:disconnect(signalName, otherObject)
+  self.signals[signalName]:disconnect(otherObject, signalName)
 end
 
 ---Clears all connections this SingalObject is connected to

@@ -1,11 +1,13 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
+local SpriteAnimationUpdater = require 'engine.graphics.sprite_animation_updater'
 
 -- TODO handle sound when the time comes
 
 ---@class EffectEntity : Entity
----@field animation SpriteAnimation the effect animation
----@field sound any the effect sound
+---@field effectAnimation SpriteAnimation the effect animation
+---@field spriteAnimationUpdater SpriteAnimationUpdater the effect animation updater
+---@field effectSound any the effect sound
 local EffectEntity = Class{ __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -14,8 +16,24 @@ local EffectEntity = Class{ __includes = Entity,
   end
 }
 
-function EffectEntity:update()
+function EffectEntity:awake()
+  if self.effectAnimation then
+    self.spriteAnimationUpdater = SpriteAnimationUpdater()
+    self.spriteAnimationUpdater:play(self.effectAnimation)
+  end
+  if self.effectSound then
+    self.effectSound:play()
+  end
+end
 
+function EffectEntity:update()
+  if self.spriteAnimationUpdater then
+    self.spriteAnimationUpdater:update()
+    if self.spriteAnimationUpdater:isCompleted() then
+      -- TODO: remove the effect entity
+      self:destroy()
+    end
+  end
 end
 
 function EffectEntity:getType()
