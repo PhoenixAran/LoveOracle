@@ -12,6 +12,7 @@ local Singletons = require 'engine.singletons'
 
 -- logger
 require 'engine.logger'
+-- windows doesnt support color out of the box
 love.log.useColor = love.system.getOS() ~= 'Windows'
 love.log.outFile = string.format('love-oracle_%s_log.txt', os.date('%Y-%m-%d'))
 
@@ -129,6 +130,7 @@ function love.draw()
   screenManager:emit('draw')
   -- draw any imgui modules to support debugging/cheat menus
   if imgui and lume.any(Singletons.imguiModules) then
+    imgui.NewFrame()
     for _, module in ipairs(Singletons.imguiModules) do
       module:draw()
     end

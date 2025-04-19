@@ -156,16 +156,16 @@ function Room:unload(entities)
   --[[
     STEP 1. Disconnect from signals
   ]]
-  entities:disconnect('entity_removed', self, '_onEntityRemoved')
-
+  entities:disconnect('entity_removed', self)
   --[[
     STEP 2. Remove Entities
   ]]
   -- remove entities
-  lume.each(self.entities, function(entity)
-    entities:removeEntity(entity)
-  end)
-  lume.clear(self.entities)
+  for i = lume.count(self.entities), 1, -1 do
+    entities:removeEntity(self.entities[i])
+    lume.remove(self.entities, self.entities[i])
+  end
+  assert(lume.count(self.entities) == 0, 'Entities not removed from room')
   
   --[[
     STEP 3. Remove Tile Entities

@@ -1,15 +1,15 @@
 local Class = require 'lib.class'
 local Enemy = require 'engine.entities.enemy'
 -- require states so they register themslves in the pool
-require 'engine.entities.enemy.enemy_fall_in_hole_state'
+require 'engine.entities.enemy.states'
 
 local Pool = require 'engine.utils.pool'
 
 
 --- Class with built in behaviour for enemies.
 --- This class automatically handles entities:
---- >falling in hole, lava, and/or water
---- >Stun State
+--- **falling in hole, lava, and/or water
+--- **Stun State
 ---@class BasicEnemy : Enemy
 ---@field enemyState EnemyState?
 local BasicEnemy = Class { __includes = Enemy,
@@ -63,11 +63,11 @@ function BasicEnemy:updateEnvironment()
   if self:isInHole() and self.canFallInHole and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_hole_state') then
     state = Pool.obtain('enemy_fall_in_hole_state')
     state:setEnemy(self)
-  elseif self:isInWater() and not self.canSwimInWater and (self.enemyState == nil and self.enemyState:getType() ~= 'enemy_fall_in_water_state') then
-    state = Pool.obtain('enemy_fall_in_water_state')
+  elseif self:isInWater() and not self.canSwimInWater and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_water_state') then
+    state = Pool.obtain('enemy_drown_state')
     state:setEnemy(self)
-  elseif self:isInLava() and not self.canSwimInLava and (self.enemyState == nil and self.enemyState:getType() ~= 'enemy_fall_in_lava_state') then
-    state = Pool.obtain('enemy_fall_in_lava_state')
+  elseif self:isInLava() and not self.canSwimInLava and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_lava_state') then
+    state = Pool.obtain('enemy_drown_state')
     state:setEnemy(self)
   end
   if self.enemyState ~= state then

@@ -27,13 +27,12 @@ end
 ---@field originalSpeedScale number
 ---@field jumpSpeed number
 ---@field originalGravity number
----@field _playerBumpBox table
 ---@field _playerMoveFilter function
 ---@field _playerRoomEdgeCollisionBoxMoveFilter function
 local PlayerLedgeJumpState = Class { __includes = PlayerState,
   init = function(self)
     PlayerState.init(self)
-    
+
     self.stateParameters.canAutoRoomTransition = true
     self.stateParameters.canStrafe = true
     self.stateParameters.canWarp = false
@@ -44,8 +43,6 @@ local PlayerLedgeJumpState = Class { __includes = PlayerState,
     self.stateParameters.canUseWeapons = false
 
     self.speedScale = 1
-
-    self._playerBumpBox = { }
   end
 }
 
@@ -58,9 +55,9 @@ function PlayerLedgeJumpState:canLandAtPosition(x, y)
   local pw, ph = player.w, player.h
   local px = x - (pw / 2)
   local py = y - (ph / 2)
-  local items, len = Physics:queryRect(px,py,pw,ph,queryTileFilter)
+  local items, _ = Physics:queryRect(px,py,pw,ph,queryTileFilter)
   for _, tile in ipairs(items) do
-    -- we cannot land on hazard tiles or tiles that player considers solid
+    -- we cannot land on tiles that player considers solid
     if bit.band(tile:getTileData().tileType, player.collisionTiles) ~= 0 then
       -- TODO allow landing on solid tiles if we can break them? (idk)
       return false
@@ -118,9 +115,10 @@ function PlayerLedgeJumpState:onBegin(previousState)
     local direction4VectorX, direction4VectorY = Direction4.getVector(self.direction4)
     local diffX, diffY = vector.sub(self.landingPositionX, self.landingPositionY, px, py)
     local distance = vector.dot(diffX, diffY, direction4VectorX, direction4VectorY)
-    
+
     -- when we jump, it will use the speed from player_environment_jump_state
     local jumpState = self.player:getStateFromCollection('player_jump_environment_state')
+    local jumpStateMotionSettings = jumpState:getMotionSettings()
 
     -- TODO maybe max out the y offset of the sprite so it doesnt look stupid when ledge jumping long distances
     local jumpSpeed = 1.5
@@ -132,19 +130,16 @@ function PlayerLedgeJumpState:onBegin(previousState)
       jumpSpeed = 2
     end
 
-    -- TODO: for really long jump distances to look good, we need to implement 
-    -- suspending an entity in the apex of their jump in the air
-    -- then unsuspending them when they get closer
-
     -- determine time it takes to drop back to ground
     local timeDown = 2 * (jumpSpeed / self.originalGravity)
-    local speedScale = distance / (jumpState.motionSettings.speed * timeDown)
-  
+    local speedScale = distance / (jumpStateMotionSettings.speed * timeDown)
+
     self.player:setZVelocity(jumpSpeed)
     self.player:setSpeedScale(speedScale)
   end
 end
 
+-- restart this state
 function PlayerLedgeJumpState:onEnd(newState)
   -- reenable collisions by giving back bump filter
   self.player.moveFilter = self._playerMoveFilter
@@ -153,10 +148,13 @@ function PlayerLedgeJumpState:onEnd(newState)
   -- give back it's gravity
   self.player.movement.gravity = self.originalGravity
 
-  -- restart this state
+
   if self.ledgeJumpExtendsToNextRoom then
     self.player:markRespawn()
   end
+
+  self.ledgeJumpExtendsToNextRoom = false
+  self.hasRoomChanged = false
 end
 
 function PlayerLedgeJumpState:onEnterRoom()
@@ -187,7 +185,7 @@ function PlayerLedgeJumpState:update()
     end
   else
     self.player:setVector(Direction4.getVector(self.direction4))
-    
+
     local x, y = self.player:getPosition()
     x, y = vector.sub(x, y, self.landingPositionX, self.landingPositionY)
     local dot = vector.dot(x, y, Direction4.getVector(self.direction4))

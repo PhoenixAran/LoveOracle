@@ -15,7 +15,7 @@ return makeModuleFunction(
     sb:addSpriteFrame(1, 1)
     builder:addAnimation('shadow', sb:build())
 
-    -- @animation ripples
+    -- @effect animation ripples
     sb:addCompositeSprite(5, 3, -5 + 8, -5)
     sb:addCompositeSprite(6, 3, -11 + 8, -5)
     sb:addCompositeFrame(0, 0, 0, 0, 8)
@@ -31,10 +31,9 @@ return makeModuleFunction(
     sb:addCompositeSprite(5, 3, -8 + 8, -3)
     sb:addCompositeSprite(6, 3, -8 + 8, -3)
     sb:addCompositeFrame(0, 0, 0, 0, 8)
-    -- BUILD rippples
+    -- BUILD ripples
     builder:addAnimation('ripple', sb:build())
-    
-    
+
     --@animation grass movement
     sb:addCompositeSprite(7, 1, -4, 1)
     sb:addCompositeSprite(7, 1, 4, 1)
@@ -45,6 +44,7 @@ return makeModuleFunction(
     sb:addCompositeFrame(0, 0, 0, 0, 4)
     -- BUILD grass
     builder:addAnimation('grass', sb:build())
+
 
     -- register builder
     spriteBank.registerSpriteRendererBuilder('entity_effects', builder)

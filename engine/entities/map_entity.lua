@@ -9,6 +9,7 @@ local Health = require 'engine.components.health'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local SpriteFlasher = require 'engine.components.sprite_flasher'
+local InteractionResolver = require 'engine.components.interaction_resolver'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
@@ -18,6 +19,7 @@ local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
 local Pool = require 'engine.utils.pool'
 local Consts = require 'constants'
+
 
 local canCollide = require('engine.entities.bump_box').canCollide
 
@@ -63,6 +65,7 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field grassOffsetX number offset x when effect sprite is playing grass animation
 ---@field grassOffsetY number offset y when effect sprite is playing grass animation
 ---@field grassMovementTick integer current number of frames entity has been moving when effect sprite is showing grass effect
+---@field interactionResolver InteractionResolver
 ---@field spriteFlasher SpriteFlasher
 ---@field sprite SpriteRenderer|AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
@@ -94,8 +97,6 @@ local MapEntity = Class { __includes = Entity,
     end
 
     -- signals
-    self:signal('entity_destroyed')
-    self:signal('entity_created')
     self:signal('entity_hit')
     self:signal('entity_bumped')
     self:signal('entity_immobolized')
@@ -111,6 +112,8 @@ local MapEntity = Class { __includes = Entity,
       assert(args.sprite:getType() == 'sprite_renderer' or args.sprite:getType() == 'animated_sprite_renderer', 'Wrong component type provided for sprite')
       self.sprite = args.sprite
     end
+    self.interactionResolver = InteractionResolver(self)
+
 
     -- component configuration
     self.health:connect('health_depleted', self, '_onHealthDepleted')
@@ -147,10 +150,6 @@ local MapEntity = Class { __includes = Entity,
 }
 
 function MapEntity:getType()
-  return 'map_entity'
-end
-
-function MapEntity:getCollisionTag()
   return 'map_entity'
 end
 
@@ -225,19 +224,8 @@ end
 ---makes sure this entity should be dead. If it should, it marks this entity as death marked
 function MapEntity:pollDeath()
   if self.deathMarked and not (self:inHitstun() or self:inKnockback()) then
-    self:die()
+    self:destroy()
   end
-end
-
-function MapEntity:die()
-  self:release()
-  -- notify entity script so they can play their death sound
----@diagnostic disable-next-line: undefined-field
-  if self.onDeath then
----@diagnostic disable-next-line: undefined-field
-    self:onDeath()
-  end
-  self:emit('entity_destroyed', self)
 end
 
 -- health component pass throughs
@@ -337,7 +325,6 @@ function MapEntity:move()
 
   local goalX, goalY = vector.add(posX, posY, velX, velY)
   local actualX, actualY, cols, len = Physics:move(self, goalX, goalY, self.moveFilter)
-
   for _, v in ipairs(cols) do
     lume.push(self.moveCollisions, v.other)
   end
@@ -363,7 +350,7 @@ function MapEntity:move()
     actualX, actualY = vector.add(actualX2, actualY2, diffX, diffY)
   end
   self:setPositionWithBumpCoords(actualX, actualY)
-  local newX,newY = self:getPosition()
+  local newX, newY = self:getPosition()
   return vector.sub(oldX, oldY, newX, newY)
 end
 
@@ -440,6 +427,24 @@ end
 
 function MapEntity:isInHole()
   return self.groundObserver.inHole
+end
+
+-- interaction resolver pass throughs
+function MapEntity:setInteraction(tag, interaction)
+  self.interactionResolver:setInteraction(tag, interaction)
+end
+
+function MapEntity:removeInteraction(tag)
+  self.interactionResolver:removeInteraction(tag)
+end
+
+function MapEntity:resolveInteraction(receiver, sender)
+  self.interactionResolver:resolveInteraction(receiver, sender)
+end
+
+function MapEntity:reportCollsionWithHitbox(hitbox)
+  error('not implemented')
+  --self.interactionResolver:reportCollisionWithHitbox(hitbox)
 end
 
 --- hurt this entity
@@ -532,8 +537,7 @@ function MapEntity:updateEntityEffectSprite()
       self.grassMovementTick = 0
       -- initial update when playing the grass animation
       self.effectSprite:update()
-    end
-    
+    end 
     if self.movement.vectorX ~= 0 or self.movement.vectorY ~= 0 then
       self.grassMovementTick = self.grassMovementTick + 1
       if self.grassMovementTick > GRASS_ANIMATION_UPDATE_INTERVAL then
@@ -562,6 +566,7 @@ function MapEntity:draw()
 end
 
 -- signal callbacks
+
 function MapEntity:_onHealthDepleted()
   self.deathMarked = true
   -- notify entity script
@@ -570,6 +575,11 @@ function MapEntity:_onHealthDepleted()
 ---@diagnostic disable-next-line: undefined-field
     self:onHealthDepleted()
   end
+end
+
+function MapEntity:_onHitboxCollided(hitbox)
+  error('not implemented')
+  --self:reportCollisionWithHitbox(hitbox)
 end
 
 return MapEntity

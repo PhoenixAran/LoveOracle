@@ -1,23 +1,13 @@
 local Class = require 'lib.class'
 local SpriteRenderer = require 'engine.components.sprite_renderer'
+local SpriteAnimationUpdater = require 'engine.graphics.sprite_animation_updater'
+local States = SpriteAnimationUpdater.States
 
-local States = {
-  None = 0,
-  Running = 1,
-  Paused = 2,
-  Completed = 3
-}
 
 ---@class AnimatedSpriteRenderer : SpriteRenderer
----@field state integer
+---@field spriteAnimationUpdater SpriteAnimationUpdater
 ---@field animations table<any, SpriteAnimation>
----@field substripKey integer
 ---@field currentAnimationKey string
----@field currentAnimation SpriteAnimation
----@field currentFrameIndex integer
----@field currentTick integer
----@field loopType string
----@field speed number number between 0 and 1 that determines the speed animations play at
 local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
   --init = function(self, entity, animations, defaultAnimation, offsetX, offsetY, followZ, enabled, visible)
   init = function(self, entity, args)
@@ -26,17 +16,12 @@ local AnimatedSpriteRenderer = Class { __includes = SpriteRenderer,
     if args.followZ == nil then args.followZ = true end
     assert(args.animations)
     assert(args.defaultAnimation)
-    self.state = States.None
     self.animations = args.animations
-    self.substripKey = nil
     self.currentAnimationKey = args.defaultAnimation
-    self.currentAnimation = self.animations[args.defaultAnimation]
-    self.currentFrameIndex = 1
-    self.currentTick = 1
-    self.loopType = 'once'
-    self.speed = 1
+    self.spriteAnimationUpdater = SpriteAnimationUpdater()
+    self.spriteAnimationUpdater:setSubstripKey(args.substripKey)
     -- setup args table for SpriteRenderer
-    local spriteFrames = self.currentAnimation:getSpriteFrames()
+    local spriteFrames = self.animations[self.currentAnimationKey]:getSpriteFrames()
     args.sprite = spriteFrames[1]:getSprite()
     SpriteRenderer.init(self, entity, args)
   end
@@ -46,20 +31,20 @@ function AnimatedSpriteRenderer:getType()
   return 'animated_sprite_renderer'
 end
 
-function AnimatedSpriteRenderer:isPlaying()
-  return self.state == States.Running
-end
-
-function AnimatedSpriteRenderer:isCompleted()
-  return self.state == States.Completed
-end
-
 function AnimatedSpriteRenderer:getCurrentAnimationKey()
   return self.currentAnimationKey
 end
 
+function AnimatedSpriteRenderer:isPlaying()
+  return self.spriteAnimationUpdater:isPlaying()
+end
+
+function AnimatedSpriteRenderer:isCompleted()
+  return self.spriteAnimationUpdater:isCompleted()
+end
+
 function AnimatedSpriteRenderer:getSubstripKey()
-  return self.substripKey
+  return self.spriteAnimationUpdater:getSubstripKey()
 end
 
 function AnimatedSpriteRenderer:setSpeed(speed)
@@ -72,11 +57,9 @@ end
 
 -- replays the current animation with the current substrip key
 function AnimatedSpriteRenderer:setSubstripKey(value)
-  if self.substripKey ~= value then
-    self.substripKey = value
-    if self.state ~= States.Paused then
-      self:play(self.currentAnimationKey, value)
-    end
+  self.spriteAnimationUpdater:setSubstripKey(value)
+  if self:isPlaying() then
+    self:play(self.currentAnimationKey, value, true)
   end
 end
 
@@ -85,25 +68,15 @@ end
 ---@param substripKey integer?
 ---@param forcePlayFromStart boolean?
 function AnimatedSpriteRenderer:play(animation, substripKey, forcePlayFromStart)
-  if forcePlayFromStart == nil then forcePlayFromStart = false end
-  local playFromStart = forcePlayFromStart
+  if forcePlayFromStart == nil then
+     forcePlayFromStart = false
+  end
   if animation ~= nil then
-    playFromStart = playFromStart or self.currentAnimationKey ~= animation
     self.currentAnimationKey = animation
     self.currentAnimation = self.animations[animation]
     assert(self.currentAnimation, 'Animation: ' .. animation .. ' does not exist')
+    self.spriteAnimationUpdater:play(self.currentAnimation, substripKey, forcePlayFromStart)
   end
-  if substripKey ~= nil then
-    playFromStart = playFromStart or self.substripKey ~= substripKey
-    self.substripKey = substripKey
-  end
-  playFromStart = playFromStart or self.state == States.Completed
-  if playFromStart then
-    self.currentFrameIndex = 1
-    self.currentTick = 1
-  end
-  self.loopType = self.currentAnimation.loopType
-  self.state = States.Running
 end
 
 function AnimatedSpriteRenderer:isAnimationActive(name)
@@ -111,51 +84,25 @@ function AnimatedSpriteRenderer:isAnimationActive(name)
 end
 
 function AnimatedSpriteRenderer:pause()
-  self.state = States.Paused
-end
-
--- should probably make play method varidic to achieve this idk
-function AnimatedSpriteRenderer:unPause()
-  return self.state == States.Running
+  self.spriteAnimationUpdater:pause()
 end
 
 function AnimatedSpriteRenderer:stop()
-  -- no need to set these to nil im pretty sure?
-  --self.currentAnimation = nil
-  --self.currentAnimationKey = nil
-  self.currentFrameIndex = 1
-  self.currentTick = 1
-  self.state = States.None
+  self.spriteAnimationUpdater:stop()
+end
+
+function AnimatedSpriteRenderer:reset()
+  self.spriteAnimationUpdater:reset()
 end
 
 function AnimatedSpriteRenderer:update()
-  if not self:isPlaying() then
-    return
-  end
-  local timedActions = self.currentAnimation:getTimedActions(self.substripKey)
-  local spriteFrames = self.currentAnimation:getSpriteFrames(self.substripKey)
-  local timedAction = timedActions[self.currentFrameIndex]
+  local spriteFrame, timedAction = self.spriteAnimationUpdater:update()
   if timedAction then
     timedAction(self.entity)
   end
-  -- some animation can have no spriteframes and just action frames
-  if #spriteFrames == 0 then return end
-  local currentFrame = spriteFrames[self.currentFrameIndex]
-  self.currentTick = self.currentTick + 1
-  if currentFrame:getDelay() < self.currentTick * self.speed then
-    self.currentTick = 1
-    self.currentFrameIndex = self.currentFrameIndex + 1
-    if #spriteFrames < self.currentFrameIndex then
-      if self.loopType == 'once' then
-        self.state = States.Completed
-        self.currentFrameIndex = self.currentFrameIndex - 1
-      elseif self.loopType == 'cycle' then
-        self.currentFrameIndex = 1
-      end
-    end
-    currentFrame = spriteFrames[self.currentFrameIndex]
+  if spriteFrame then
+    self:setSprite(spriteFrame:getSprite())
   end
-  self:setSprite(currentFrame:getSprite())
 end
 
 return AnimatedSpriteRenderer

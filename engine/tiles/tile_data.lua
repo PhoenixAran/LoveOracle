@@ -4,18 +4,21 @@ local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local ph = require 'engine.utils.parse_helpers'
 local Sprite = require 'engine.graphics.sprite'
 local SpriteFrame = require 'engine.graphics.sprite_frame'
+local SpriteAnimation = require 'engine.graphics.sprite_animation'
 local TileSpriteRenderer = require 'engine.tiles.tile_sprite_renderer'
 local dir8 = require 'engine.enums.direction8'
+
+local TILED_ANIMATION_TICK_RATE = 60 -- Tiled uses 60 ticks per second for animation speed
 
 local function makeTileSprite(tilesetTile)
   if tilesetTile:isAnimated() then
     local spriteFrames = { }
     for i = 1, lume.count(tilesetTile.animatedTextures) do
       local subtexture = tilesetTile.animatedTextures[i]
-      local delay = math.floor(tilesetTile.durations[i] / 60) + 1
+      local delay = math.floor(tilesetTile.durations[i] / TILED_ANIMATION_TICK_RATE) + 1
       lume.push(spriteFrames, SpriteFrame(Sprite(subtexture), delay))
     end
-    return TileSpriteRenderer(spriteFrames, true)
+    return TileSpriteRenderer(SpriteAnimation(spriteFrames, {}, 'cycle', false), true)
   end
   return TileSpriteRenderer(Sprite(tilesetTile.subtexture), false)
 end

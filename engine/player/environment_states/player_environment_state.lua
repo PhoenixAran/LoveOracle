@@ -15,4 +15,8 @@ function PlayerEnvironmentState:getType()
   return 'player_environment_state'
 end
 
+function PlayerEnvironmentState:getMotionSettings()
+  return self.motionSettings
+end
+
 return PlayerEnvironmentState

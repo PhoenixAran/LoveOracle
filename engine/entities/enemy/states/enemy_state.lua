@@ -22,7 +22,7 @@ function EnemyState:beginState()
   if sprite.setSpeed then
     sprite:setSpeed(0.5)
   end
-
+  
   -- TODO make other entities not colide with this one
 end
 

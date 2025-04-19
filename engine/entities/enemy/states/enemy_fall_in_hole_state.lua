@@ -1,6 +1,6 @@
 local Pool = require 'engine.utils.pool'
 local Class = require 'lib.class'
-local EnemyState = require 'engine.entities.enemy.enemy_state'
+local EnemyState = require 'engine.entities.enemy.states.enemy_state'
 local Singletons = require 'engine.singletons'
 local Rect = require 'engine.math.rectangle'
 local vector = require 'engine.math.vector'

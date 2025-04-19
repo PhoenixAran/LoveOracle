@@ -22,12 +22,17 @@ local GRID_SIZE = Consts.GRID_SIZE
 ---@field onAwake function
 ---@field onRemoved function
 ---@field drawType EntityDrawType
+---@field collisionTag string
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, args)
     if args == nil then
       args = { }
     end
+
     SignalObject.init(self)
+    self:signal('entity_destroyed')
+    self:signal('spawned_entity')
+
     if args.enabled == nil then args.enabled = true end
     if args.visible == nil then args.visible = true end
     if args.x == nil then args.x = 0 end
@@ -47,6 +52,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.drawType = args.drawType
     self.transform = Transform:new(self)
     self.name = args.name or uuid()
+    self.collisionTag = args.collisionTag
   end
 }
 
@@ -58,12 +64,12 @@ function Entity:getType()
   return 'entity'
 end
 
-function Entity:isTile()
-  return false
+function Entity:getCollisionTag()
+  return self.collisionTag
 end
 
-function Entity:getCollisionTag()
-  return 'entity'
+function Entity:isTile()
+  return false
 end
 
 function Entity:setVisible(value)
@@ -218,6 +224,17 @@ function Entity:removed(scene)
   if self.onRemoved then
     self:onRemoved(scene)
   end
+end
+
+function Entity:destroy()
+  -- notify entity script so they can play their death sound
+---@diagnostic disable-next-line: undefined-field
+  if self.onDeath then
+---@diagnostic disable-next-line: undefined-field
+    self:onDeath()
+  end
+  self:emit('entity_destroyed', self)
+  self:release()
 end
 
 function Entity:isInAir()
