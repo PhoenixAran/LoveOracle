@@ -44,9 +44,8 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.currentJumpDelay = 70
     self.currentDirectionDelay = 30
 
-    self.shadowOffsetY =6
+    self.shadowOffsetY = 6
     self.rippleOffsetY = 6
-    
   end
 }
 
@@ -108,7 +107,7 @@ function Stalfos:updateAi()
     end
   elseif self.state == MARKED_DEAD then
     if not self.combat:inHitstun() then
-      self:die()
+      self:destroy()
     end
   end
 end

@@ -123,7 +123,4 @@ function Tile:onSwordHit(swordItem)
   end
 end
 
-
-
-
 return Tile

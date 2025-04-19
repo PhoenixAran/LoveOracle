@@ -84,7 +84,7 @@ function AnimatedSpriteRenderer:isAnimationActive(name)
 end
 
 function AnimatedSpriteRenderer:pause()
-  return self.spriteAnimationUpdater:pause()
+  self.spriteAnimationUpdater:pause()
 end
 
 function AnimatedSpriteRenderer:stop()

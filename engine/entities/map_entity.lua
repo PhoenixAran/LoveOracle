@@ -224,12 +224,8 @@ end
 ---makes sure this entity should be dead. If it should, it marks this entity as death marked
 function MapEntity:pollDeath()
   if self.deathMarked and not (self:inHitstun() or self:inKnockback()) then
-    self:die()
+    self:destroy()
   end
-end
-
-function MapEntity:die()
-
 end
 
 -- health component pass throughs
@@ -329,7 +325,6 @@ function MapEntity:move()
 
   local goalX, goalY = vector.add(posX, posY, velX, velY)
   local actualX, actualY, cols, len = Physics:move(self, goalX, goalY, self.moveFilter)
-
   for _, v in ipairs(cols) do
     lume.push(self.moveCollisions, v.other)
   end
@@ -355,7 +350,7 @@ function MapEntity:move()
     actualX, actualY = vector.add(actualX2, actualY2, diffX, diffY)
   end
   self:setPositionWithBumpCoords(actualX, actualY)
-  local newX,newY = self:getPosition()
+  local newX, newY = self:getPosition()
   return vector.sub(oldX, oldY, newX, newY)
 end
 

@@ -921,6 +921,7 @@ function Player:draw()
   end
 
   MapEntity.draw(self)
+  --self:debugDraw()
 
   for _, item in pairs(self.items) do
     if item.drawAbove and item:isVisible() then
@@ -974,7 +975,7 @@ function Player:getInspectorProperties()
     end, 
     true
   )
-  props:addReadOnlyString('Weapon', 
+  props:addReadOnlyString('Weapon',
     function(player)
       if player.weaponStateMachine:isActive() then
         return player.weaponStateMachine:getCurrentState():getType()
@@ -983,7 +984,7 @@ function Player:getInspectorProperties()
     end, 
     true
   )
-  props:addReadOnlyString('Conditions', 
+  props:addReadOnlyString('Conditions',
     function(player)
       local str = ''
       if lume.any(self.conditionStateMachines) then

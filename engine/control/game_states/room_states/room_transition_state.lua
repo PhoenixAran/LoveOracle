@@ -86,7 +86,7 @@ function RoomTransitionState:onBegin()
   Camera.setFollowTarget()
   Camera.setLimits(-10000000, 10000000, -10000000, 10000000)
   
-  -- disable positional smoothing if it is enabled \
+  -- disable positional smoothing if it is enabled
   self.previousPositionSmoothingEnabledValue = Camera.positionSmoothingEnabled
   Camera.positionSmoothingEnabled = false
 
