@@ -47,8 +47,7 @@ end
 local function drawEntity(ent)
   if ent.isVisible == nil then
     ent:draw()
-  end
-  if ent:isVisible() then
+  elseif ent:isVisible() then
     ent:draw()
   end
 end
@@ -66,6 +65,9 @@ function Entities:setPlayer(player, awakeEntity)
   if awakeEntity then
     player:awake()
   end
+
+  -- connect to player signals
+  player:connect('spawned_entity', self, 'onSpawnedEntity')
 end
 
 --- gets player
@@ -95,8 +97,9 @@ function Entities:addEntity(entity, awakeEntity)
     lume.push(self.entitiesBackgroundDraw, entity)
   end
 
-  --connect to destroyed entity signals
+  --connect to entity signals
   entity:connect('entity_destroyed', self, 'onEntityDestroyed')
+  entity:connect('spawned_entity', self, 'onSpawnedEntity')
   entity:added()
   if awakeEntity then
     entity:awake()
@@ -300,5 +303,9 @@ function Entities:onTileEntityDestroyed(tileEntity)
   self:removeTileEntity(tileEntity.tileIndexX, tileEntity.tileIndexY, tileEntity.layer)
 end
 
+---call back when an entity is spawned
+function Entities:onSpawnedEntity(entity)
+  self:addEntity(entity)
+end
 
 return Entities

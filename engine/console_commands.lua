@@ -6,9 +6,9 @@ local IMGUI_EXISTS = pcall(require, 'imgui')
 ---@param args table
 function console.commands.timescale(args)
   if tonumber(args) then
-    love.timer.timeScale = tonumber(args)
+    love.time.timeScale = tonumber(args)
   else
-    console.print('Current timescale: ' .. tostring(love.timer.timeScale))
+    console.print('Current timescale: ' .. tostring(love.time.timeScale))
   end
 end
 console.help.timescale = {

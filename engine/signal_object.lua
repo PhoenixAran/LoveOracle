@@ -25,6 +25,7 @@ local SignalConnection = Class {
 --- Emits signal to listener
 ---@param ... any
 function SignalConnection:emit(...)
+  assert(self.targetObject[self.targetMethod] ~= nil, 'Target method ' .. self.targetMethod .. ' does not exist on target object')
   if self.bindingArgs ~= nil and #self.bindingArgs > 0 then
     for i, v in ipairs(self.bindingArgs) do
       self.argumentHolder[#self.argumentHolder + 1] = v
@@ -120,6 +121,7 @@ end
 ---@param signalName string
 ---@param ... any
 function SignalObject:emit(signalName, ...)
+  assert(self.signals[signalName] ~= nil, 'Signal ' .. signalName .. ' does not exist')
   self.signals[signalName]:emit(...)
 end
 

@@ -195,9 +195,11 @@ function Entity:awake()
   if not self.registeredWithPhysics then
     Physics:add(self, self.x, self.y, self.w, self.h)
   end
-  if self.onAwake then
-    self:onAwake()
-  end
+  self:onAwake()
+end
+
+function Entity:onAwake()
+  
 end
 
 ---@return EntityDrawType

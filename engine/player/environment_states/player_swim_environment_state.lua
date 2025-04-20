@@ -1,9 +1,7 @@
 local Class = require 'lib.class'
 local PlayerEnvironmentState = require 'engine.player.environment_states.player_environment_state'
-
-local function createSplashEffect()
-  -- TODO
-end
+local EffectFactory = require 'engine.entities.effect_factory'
+local vec2 = require 'engine.math.vector'
 
 
 ---@class PlayerSwimEnvironmentState : PlayerEnvironmentState
@@ -53,7 +51,7 @@ end
 
 
 function PlayerSwimEnvironmentState:submerge()
-  createSplashEffect()
+  self:createSplashEffect()
   self.isSubmerged = true
   self.submergedTimer = self.submergedDuration
   self.stateParameters.interactionCollisions = false
@@ -85,7 +83,7 @@ function PlayerSwimEnvironmentState:onBegin(previousState)
   self.isDrowning = false
 
   if not self.silentBeginning then
-    createSplashEffect()
+    self:createSplashEffect()
 
     if not self:canSwimInCurrentLiquid() then
       self:drown()
@@ -111,11 +109,17 @@ function PlayerSwimEnvironmentState:update()
     end
 
     if not self:canSwimInCurrentLiquid() then
-      createSplashEffect()
+      self:createSplashEffect()
       self:drown()
     end
   end
 end
 
+function PlayerSwimEnvironmentState:createSplashEffect()
+  local x, y = vec2.add(0, 4, self.player:getPosition())
+  local effect = EffectFactory.createSplashEffect(x, y)
+  effect:initTransform()
+  self.player:emit('spawned_entity', effect)
+end
 
 return PlayerSwimEnvironmentState

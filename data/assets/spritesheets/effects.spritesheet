@@ -2,4 +2,4 @@
 # <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 3)
 
 # entity Spritesheet Declarations
-"effects", "effects", 16, 16,1,1
+"effects", "effects", 16, 16,1, 1
