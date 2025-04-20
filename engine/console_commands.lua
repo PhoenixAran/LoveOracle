@@ -5,10 +5,11 @@ local IMGUI_EXISTS = pcall(require, 'imgui')
 --- Console Command. Sets or Gets timescale
 ---@param args table
 function console.commands.timescale(args)
+  local tick = require 'lib.tick'
   if tonumber(args) then
-    love.time.timeScale = tonumber(args)
+    tick.timescale = tonumber(args)
   else
-    console.print('Current timescale: ' .. tostring(love.time.timeScale))
+    console.print('Current timescale: ' .. tostring(tick.timescale))
   end
 end
 console.help.timescale = {
