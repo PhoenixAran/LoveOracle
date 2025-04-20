@@ -7,6 +7,10 @@ local DisplayHandler = require 'engine.display_handler'
 love.inspect = require 'lib.inspect'
 local _, imgui = pcall(require, 'imgui')
 
+if type(imgui) == 'string' then
+  imgui = nil
+end
+
 -- singletons
 local Singletons = require 'engine.singletons'
 
