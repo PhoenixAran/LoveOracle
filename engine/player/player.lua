@@ -23,6 +23,8 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Physics = require 'engine.physics'
 local Consts = require 'constants'
 local PlayerSkills = require 'engine.player.player_skills'
+local bit = require 'bit'
+local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 
 
 -- ### STATES ###
@@ -951,7 +953,9 @@ end
 ---@param entDebugDrawFlags integer
 function Player:debugDraw(entDebugDrawFlags)
   Entity.debugDraw(self, entDebugDrawFlags)
-  self.roomEdgeCollisionBox:debugDraw()
+  if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 then
+    self.roomEdgeCollisionBox:debugDraw()
+  end
 end
 
 function Player:getInspectorProperties()

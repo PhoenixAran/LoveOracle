@@ -173,12 +173,17 @@ end
 
 function RoomTransitionState:draw()
   local entities = self.control:getEntities()
+  local entityDebugDrawFlags = self.control.control.entityDebugDrawFlags
   local w,h = Camera.getSize()
   Camera.push()
     local x = Camera.positionSmoothingEnabled and Camera.smoothedX or Camera.x
     local y = Camera.positionSmoothingEnabled and Camera.smoothedY or Camera.y
     entities:drawTileEntities(x,y,w,h)
     entities:drawEntities(x,y,w,h)
+
+    if self.control.control.entityDebugDrawFlags ~= 0 then
+      entities:debugDrawEntities(x,y,w,h, entityDebugDrawFlags)
+    end
   Camera.pop()
 
   -- HUD placeholder
