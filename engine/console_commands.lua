@@ -1,5 +1,6 @@
 local console = require 'lib.console'
 local lume = require 'lib.lume'
+local ParseHelpers = require 'engine.utils.parse_helpers'
 local IMGUI_EXISTS = pcall(require, 'imgui')
 
 --- Console Command. Sets or Gets timescale
@@ -104,3 +105,36 @@ function console.commands.imguidemo()
     lume.push(singleton.imguiModules, module)
   end
 end
+console.help.imguidemo = {
+  section = 'Gameplay Debug',
+  'Shows ImGui demo window'
+}
+
+function console.commands.debugdraw(flagsStr)
+  local singleton = require 'engine.singletons'
+  local gameControl = singleton.gameControl
+  local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
+  flagsStr = ParseHelpers.trim(flagsStr)
+  if flagsStr == '0' then
+    print('Disabling all debug drawing')
+    gameControl.entityDebugDrawFlags = 0
+  elseif flagsStr ~= nil or flagsStr ~= '' then
+    local flags = lume.split(flagsStr, ',')
+    for _, flag in ipairs(flags) do
+      flag = flag:lower()
+      if flag == 'bumpbox' then
+        gameControl.entityDebugDrawFlags = bit.bxor(gameControl.entityDebugDrawFlags, EntityDebugDrawFlags.BumpBox)
+      elseif flag == 'roombox' then
+        gameControl.entityDebugDrawFlags = bit.bxor(gameControl.entityDebugDrawFlags, EntityDebugDrawFlags.RoomBox)
+      elseif flag == 'hitbox' then
+        gameControl.entityDebugDrawFlags = bit.bxor(gameControl.entityDebugDrawFlags, EntityDebugDrawFlags.HitBox)
+      else
+        console.print(('Unknown debug draw flag: %s'):format(flag))
+      end
+    end
+  end
+end
+console.help.imguidemo = {
+  section = 'Gameplay Debug',
+  'Controls debug drawing. Optional flags are: "bumpbox", "roombox", "hitbox". Providing no flags will toggle all debug drawing.'
+}

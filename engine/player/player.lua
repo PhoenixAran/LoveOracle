@@ -921,7 +921,6 @@ function Player:draw()
   end
 
   MapEntity.draw(self)
-  --self:debugDraw()
 
   for _, item in pairs(self.items) do
     if item.drawAbove and item:isVisible() then
@@ -948,8 +947,10 @@ function Player:onLeaveRoom()
   -- TODO jump and land events
 end
 
-function Player:debugDraw()
-  Entity.debugDraw(self)
+--- debug draw
+---@param entDebugDrawFlags integer
+function Player:debugDraw(entDebugDrawFlags)
+  Entity.debugDraw(self, entDebugDrawFlags)
   self.roomEdgeCollisionBox:debugDraw()
 end
 

@@ -5,9 +5,9 @@ local AssetManager = require 'engine.asset_manager'
 local tick = require 'lib.tick'
 local DisplayHandler = require 'engine.display_handler'
 love.inspect = require 'lib.inspect'
-local _, imgui = pcall(require, 'imgui')
+local IMGUI_EXISTS, imgui = pcall(require, 'imgui')
 
-if type(imgui) == 'string' then
+if not IMGUI_EXISTS then
   imgui = nil
 end
 

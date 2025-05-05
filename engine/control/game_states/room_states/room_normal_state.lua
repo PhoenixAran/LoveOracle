@@ -28,6 +28,7 @@ end
 
 function RoomNormalState:draw()
   local entities = self.control.entities
+  local entityDebugDrawFlags = self.control.control.entityDebugDrawFlags
   Camera.push()
     local gameW, gameH = Camera.getSize()
     local cullX = Camera.positionSmoothingEnabled and Camera.smoothedX or Camera.x
@@ -36,6 +37,10 @@ function RoomNormalState:draw()
     local cullH = gameH
     entities:drawTileEntities(cullX, cullY, cullW, cullH)
     entities:drawEntities(cullX, cullY, cullW, cullH)
+    if self.control.control.entityDebugDrawFlags ~= 0 then
+      entities:debugDrawEntities(cullX, cullY, cullW, cullH, entityDebugDrawFlags)
+    end
+
   Camera.pop()
 
   -- HUD placeholder
@@ -45,6 +50,5 @@ function RoomNormalState:draw()
   love.graphics.setFont(AssetManager.getFont('game_font'))
   love.graphics.print('HUD Placeholder', 8, 130)
 end
-
 
 return RoomNormalState

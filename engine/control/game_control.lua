@@ -15,6 +15,9 @@ local RoomNormalState = require 'engine.control.game_states.room_states.room_nor
 local Singletons = require 'engine.singletons'
 local DisplayHandler = require 'engine.display_handler'
 
+local bit = require 'bit'
+local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
+
 local console = require 'lib.console'
 
 ---@class GameControl
@@ -24,6 +27,7 @@ local console = require 'lib.console'
 ---@field map Map
 ---@field roomControl RoomControl
 ---@field gameStateStack GameStateStack
+---@field entityDebugDrawFlags integer
 local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()
@@ -33,6 +37,8 @@ local GameControl = Class { __includes = SignalObject,
     self.map = nil
     self.roomControl = nil
     self.gameStateStack = GameStateStack(self)
+    self.entityDebugDrawFlags = 0
+    --self.entityDebugDrawFlags = bit.bor(EntityDebugDrawFlags.BumpBox, EntityDebugDrawFlags.RoomBox, EntityDebugDrawFlags.HitBox)
   end
 }
 

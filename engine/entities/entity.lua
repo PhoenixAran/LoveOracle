@@ -9,6 +9,8 @@ local EntityDrawType = require 'engine.enums.entity_draw_type'
 local uuid = require 'engine.utils.uuid'
 local Consts = require 'constants'
 local Physics = require 'engine.physics'
+local bit = require 'bit'
+local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 
 
 local GRID_SIZE = Consts.GRID_SIZE
@@ -248,13 +250,15 @@ function Entity:isOnGround()
 end
 
 ---debug draw
-function Entity:debugDraw()
-  --love draws from the upper left corner so we use our bump coordinates
-  local positionX, positionY = self:getBumpPosition()
-  love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
-  love.graphics.rectangle('line', positionX, positionY, self.w, self.h)
-  love.graphics.rectangle('fill',(positionX + self.w / 2) - .5, (positionY + self.h / 2) - .5, 1, 1)
-  love.graphics.setColor(1, 1, 1)
+---@param entDebugDrawFlags integer
+function Entity:debugDraw(entDebugDrawFlags)
+  if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.BumpBox) ~= 0 then
+    local positionX, positionY = self:getBumpPosition()
+    love.graphics.setColor(0, 0, 160 / 225, 180 / 255)
+    love.graphics.rectangle('line', positionX, positionY, self.w, self.h)
+    love.graphics.rectangle('fill',(positionX + self.w / 2) - .5, (positionY + self.h / 2) - .5, 1, 1)
+    love.graphics.setColor(1, 1, 1)
+  end
 end
 
 ---gets inspector properties object for entity inspector

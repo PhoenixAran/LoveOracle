@@ -288,6 +288,31 @@ function Entities:drawEntities(x,y,w,h)
   end
 end
 
+function Entities:debugDrawEntities(x,y,w,h, entDebugDrawFlags)
+  local shouldCull = x ~= nil
+  -- draw the background entities first
+  if shouldCull then
+    for _, entity in ipairs(self.entitiesBackgroundDraw) do
+      if rect.isIntersecting(x,y,w,h,  entity.x, entity.y, entity.w, entity.h) then
+        entity:debugDraw(entDebugDrawFlags)
+      end
+    end
+  else
+    lume.each(self.entitiesBackgroundDraw, function(entity) entity:debugDraw() end)
+  end
+
+  -- draw the ysort entitites
+  table.sort(self.entitiesYSort, ySort)
+  if shouldCull then
+    for _, entity in ipairs(self.entitiesYSort) do
+      if rect.isIntersecting(x,y,w,h, entity.x, entity.y, entity.w, entity.h) then
+        entity:debugDraw(entDebugDrawFlags)
+      end
+    end
+  else
+    lume.each(self.entitiesYSort, function(entity) entity:debugDraw() end)
+  end
+end
 
 -- signal callbacks
 

@@ -128,7 +128,6 @@ end
 
 function Stalfos:draw()
   BasicEnemy.draw(self)
-  self:debugDraw()
 end
 
 return Stalfos

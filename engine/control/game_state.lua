@@ -52,4 +52,8 @@ function GameState:draw()
 
 end
 
+---@param entDebugDrawFlags integer
+function GameState:debugDraw(entDebugDrawFlags)
+end
+
 return GameState

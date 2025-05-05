@@ -19,8 +19,15 @@ function MemoryInspector.draw()
   if not isWindowOpen then
     imgui.End()
     close()
+    return
   end
-  imgui.Text('Memory ' .. collectgarbage('count') .. ' KB')
+
+  imgui.Text('Lua: ' .. (collectgarbage('count') / 1024) .. ' MB')
+
+  local stats = love.graphics.getStats()
+  imgui.Text('VRAM: ' .. (stats.texturememory / (1024 * 1024)) .. ' MB')
+
+
   imgui.End()
 end
 
