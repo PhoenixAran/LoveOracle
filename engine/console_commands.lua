@@ -115,10 +115,15 @@ function console.commands.debugdraw(flagsStr)
   local gameControl = singleton.gameControl
   local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
   flagsStr = ParseHelpers.trim(flagsStr)
-  if flagsStr == '0' then
-    print('Disabling all debug drawing')
-    gameControl.entityDebugDrawFlags = 0
-  elseif flagsStr ~= nil or flagsStr ~= '' then
+  if flagsStr == '' then
+    if gameControl.entityDebugDrawFlags == 0 then
+      console.print('Enabling all debug draw flags')
+      gameControl.entityDebugDrawFlags = bit.bor(EntityDebugDrawFlags.BumpBox, EntityDebugDrawFlags.RoomBox, EntityDebugDrawFlags.HitBox)
+    else
+      console.print('Disabling all debug draw flags')
+      gameControl.entityDebugDrawFlags = 0
+    end
+  else
     local flags = lume.split(flagsStr, ',')
     for _, flag in ipairs(flags) do
       flag = flag:lower()
