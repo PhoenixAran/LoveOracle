@@ -6,6 +6,7 @@ local DisplayHandler = require 'engine.display_handler'
 local AssetManager = require 'engine.asset_manager'
 
 ---@class RoomNormalState : GameState
+---@field gameControl GameControl
 local RoomNormalState = Class { __includes = GameState,
   init = function(self)
     GameState.init(self)
@@ -18,7 +19,6 @@ end
 
 function RoomNormalState:update()
   local entities = self.control.entities
-  local player = self.control.player
   local room = self.control.currentRoom
   assert(room)
   entities:update()
@@ -28,7 +28,9 @@ end
 
 function RoomNormalState:draw()
   local entities = self.control.entities
-  local entityDebugDrawFlags = self.control.control.entityDebugDrawFlags
+  local gameControl = self.control.control
+  assert(gameControl:getType() == 'game_control', 'GameControl expected')
+  local entityDebugDrawFlags = gameControl.entityDebugDrawFlags
   Camera.push()
     local gameW, gameH = Camera.getSize()
     local cullX = Camera.positionSmoothingEnabled and Camera.smoothedX or Camera.x
@@ -40,7 +42,6 @@ function RoomNormalState:draw()
     if self.control.control.entityDebugDrawFlags ~= 0 then
       entities:debugDrawEntities(cullX, cullY, cullW, cullH, entityDebugDrawFlags)
     end
-
   Camera.pop()
 
   -- HUD placeholder
