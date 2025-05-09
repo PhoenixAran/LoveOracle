@@ -56,7 +56,7 @@ function EnemyFallInHoleState:update()
   if fallInHole then
     -- TODO spawn falling particles
     -- TODO play sound
-    self.enemy:die()
+    self.enemy:destroy()
   end
 end
 

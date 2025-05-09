@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local EnemyState = require 'engine.entities.enemy.states.enemy_state'
 local Pool = require 'engine.utils.pool'
+local EffectFactory = require 'engine.entities.effect_factory'
 
 local EnemyDrownState = Class { __includes = EnemyState,
   init = function(self, enemy)
@@ -11,11 +12,6 @@ local EnemyDrownState = Class { __includes = EnemyState,
 
 function EnemyDrownState:getType()
   return 'enemy_drown_state'
-end
-
-
-function EnemyDrownState:update()
-  
 end
 
 function EnemyDrownState:free()

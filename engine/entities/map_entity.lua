@@ -20,7 +20,7 @@ local DamageInfo = require 'engine.entities.damage_info'
 local Pool = require 'engine.utils.pool'
 local Consts = require 'constants'
 local bit = require 'bit'
-local EntityDebugDrawFlags = require 'engine.enums.flags.entity_debug_draw_flags'
+local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 
 
 local canCollide = require('engine.entities.bump_box').canCollide
@@ -572,11 +572,7 @@ end
 function MapEntity:debugDraw(entDebugDrawFlags)
   Entity.debugDraw(self, entDebugDrawFlags)
   if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 and self.roomEdgeCollisionBox then
-    local positionX, positionY = self.roomEdgeCollisionBox:getBumpPosition()
-    love.graphics.setColor(60 / 255, 255 / 255, 180 / 225, 180 / 255)
-    love.graphics.rectangle('line', positionX, positionY, self.roomEdgeCollisionBox.w, self.roomEdgeCollisionBox.h)
-    love.graphics.rectangle('fill',(positionX + self.roomEdgeCollisionBox.w / 2) - .5, (positionY + self.roomEdgeCollisionBox.h / 2) - .5, 1, 1)
-    love.graphics.setColor(1, 1, 1)
+    self.roomEdgeCollisionBox:debugDraw()
   end
   if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.HitBox) ~= 0 then
     -- TODO

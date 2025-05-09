@@ -952,7 +952,7 @@ end
 --- debug draw
 ---@param entDebugDrawFlags integer
 function Player:debugDraw(entDebugDrawFlags)
-  Entity.debugDraw(self, entDebugDrawFlags)
+  MapEntity.debugDraw(self, entDebugDrawFlags)
   if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 then
     self.roomEdgeCollisionBox:debugDraw()
   end

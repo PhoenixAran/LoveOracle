@@ -1,9 +1,9 @@
 local Class = require 'lib.class'
 local Enemy = require 'engine.entities.enemy'
+local Pool = require 'engine.utils.pool'
+
 -- require states so they register themslves in the pool
 require 'engine.entities.enemy.states'
-
-local Pool = require 'engine.utils.pool'
 
 
 --- Class with built in behaviour for enemies.
@@ -11,18 +11,18 @@ local Pool = require 'engine.utils.pool'
 --- **falling in hole, lava, and/or water
 --- **Stun State
 ---@class BasicEnemy : Enemy
----@field enemyState EnemyState?
+---@field enemyState EnemyState
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
-    Enemy.init(self, args)
-
-    -- inner state machine 
-    self.enemyState = nil
-
+    Enemy.init(self, args)  
     -- environment configuration
     self.canFallInHole = args.canFallInHole or true
     self.canSwimInLava = args.canSwimInLava or false
     self.canSwimInWater = args.canSwimInWater or false
+
+    self.enemyState = Pool.obtain('enemy_normal_state')
+    self.enemyState:setEnemy(self)
+    self:changeState(self.enemyState)
   end
 }
 
@@ -43,16 +43,14 @@ function BasicEnemy:changeState(state, forceUpdate)
   if forceUpdate == nil then
     forceUpdate = false
   end
-  if self.enemyState then
-    self:onStateEnd(state)
-    self.enemyState:endState()
-  end
+  self:onStateEnd(self.enemyState)
+  self.enemyState:endState()
   local oldState = self.enemyState
-  if oldState then
-    Pool.free(oldState)
-  end
   self.enemyState = state
   if (oldState ~= self.enemyState or forceUpdate) and state then
+    if self.enemyState then
+      Pool.free(self.enemyState)
+    end
     self.enemyState:beginState()
     self:onStateBegin(state)
   end
@@ -70,7 +68,7 @@ function BasicEnemy:updateEnvironment()
     state = Pool.obtain('enemy_drown_state')
     state:setEnemy(self)
   end
-  if self.enemyState ~= state then
+  if state ~= nil and self.enemyState ~= state then
     self:changeState(state)
   end
 end
@@ -78,11 +76,7 @@ end
 function BasicEnemy:update()
   self:updateComponents()
   self:updateEnvironment()
-  if self.enemyState then
-    self.enemyState:update()
-  else
-    self:updateAi()
-  end
+  self.enemyState:update()
 end
 
 function BasicEnemy:beginNormalState()

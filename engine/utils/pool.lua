@@ -12,6 +12,7 @@ function pool.register(key, class)
 end
 
 function pool.obtain(key)
+  ---@type table[]
   local pTable = pools[key]
   if 0 < counts[key] then
     local result = pTable[counts[key]]
