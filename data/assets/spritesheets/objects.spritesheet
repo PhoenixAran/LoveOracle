@@ -1,5 +1,5 @@
 # argument examples below
-# <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 1)
+# <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 3)
 
 # platforms
 "1x1_platform", "1x1_platform", 16, 16, 0, 0

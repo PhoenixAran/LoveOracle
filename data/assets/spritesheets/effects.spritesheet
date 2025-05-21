@@ -1,9 +1,9 @@
 # argument examples below
-# <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 1)
+# <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 3)
 
 "effects", "effects", 16, 16, 1, 1
-"color_effects_blue", 16, 16, 1, 1
-"color_effects_green", 16, 16, 1, 1
-"color_effects_inverse_red", 16, 16, 1, 1
-"color_effects_orange", 16, 16, 1, 1
-"color_effects_red", 16, 16, 1, 1
+"color_effects_blue", "color_effects_blue", 16, 16
+"color_effects_green", "color_effects_green",  16, 16
+"color_effects_inverse_red", "color_effects_inverse_red", 16, 16
+"color_effects_orange", "color_effects_orange", 16, 16
+"color_effects_red", "color_effects_red", 16, 16
