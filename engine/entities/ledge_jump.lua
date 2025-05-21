@@ -88,8 +88,6 @@ function LedgeJump:_validApproach(x, y)
 end
 
 function LedgeJump:draw()
-  love.graphics.setColor(1, 0, 0, .25)
-  love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
   love.graphics.setColor(1, 0, 0, .45)
   love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
   love.graphics.setColor(1, 1, 1)

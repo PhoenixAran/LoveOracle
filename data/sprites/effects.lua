@@ -2,7 +2,7 @@
 local function moduleFunction(spriteBank)
   local sb = spriteBank.createSpriteAnimationBuilder()
   sb:setSpriteSheet('effects')
-  sb:setDefaultLoopType('cycle')
+  sb:setDefaultLoopType('once')
 
   --@animation splash
   sb:addCompositeSprite(3, 3, 0, -11)
@@ -18,7 +18,10 @@ local function moduleFunction(spriteBank)
   sb:addCompositeFrame(0, 0, 0, 0, 4)
 
   local splashAnimation = sb:build()
-  spriteBank.registerAnimation('splash', splashAnimation)
+  spriteBank.registerAnimation('effect_splash', splashAnimation)
+
+  -- @animation object_fall
+  
 end
 
 return moduleFunction

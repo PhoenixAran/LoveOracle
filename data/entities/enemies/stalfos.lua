@@ -123,7 +123,7 @@ function Stalfos:onHealthDepleted()
 end
 
 function Stalfos:onFall()
-
+  
 end
 
 function Stalfos:draw()

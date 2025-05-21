@@ -38,7 +38,7 @@ function EffectFactory.createSplashEffect(x, y, time)
   local effect = EffectFactory.createEffectEntity({
     x = x,
     y = y,
-    effectAnimation = 'splash',
+    effectAnimation = 'effect_splash',
     time = time
   })
   effect:initTransform()

@@ -76,7 +76,7 @@ end
 function Collider:debugDraw()
   local positionX, positionY = self:getBumpPosition()
   love.graphics.setColor(20 / 255, 219 / 255, 189 / 255, 150 / 255)
-  love.graphics.rectangle('fill', positionX, positionY, self.w, self.h)
+  love.graphics.rectangle('line', positionX, positionY, self.w, self.h)
   love.graphics.setColor(1, 1, 1, 1)
 end
 
