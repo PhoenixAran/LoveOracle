@@ -45,6 +45,33 @@ return makeModuleFunction(
     -- BUILD grass
     builder:addAnimation('grass', sb:build())
 
+  
+    -- @animation dirt
+    sb:setSubstrips(true)
+    sb:setLoopType('once')
+    -- #substrip right
+    sb:addCompositeSprite(6, 1, -12 + 8, -9)
+    sb:addCompositeSprite(6, 1, -8 + 8, -3)
+    sb:addCompositeFrame(0, 0, 0, 0, 1)
+    sb:buildSubstrip('right')
+    -- #substrip up
+    sb:addCompositeSprite(5, 1, -8 + 8, -8)
+    sb:addCompositeSprite(6, 1, -8 + 8, -6)
+    sb:addCompositeFrame(0, 0, 0, 0, 1)
+    sb:buildSubstrip('up', true)
+    -- #substrip left
+    sb:addCompositeSprite(5, 1, -2 + 8, -9)
+    sb:addCompositeSprite(5, 1, 0 + 8, -2)
+    sb:addCompositeFrame(0, 0, 0, 0, 1)
+    sb:buildSubstrip('left')
+    -- #substrip down
+    sb:addCompositeSprite(5, 1, -8 + 8, -6)
+    sb:addCompositeSprite(6, 1, -8 + 8, -8)
+    sb:addCompositeFrame(0, 0, 0, 0, 1)
+    sb:buildSubstrip('down')
+    -- BUILD dirt
+    builder:addAnimation('dirt', sb:build())
+
 
     -- register builder
     spriteBank.registerSpriteRendererBuilder('entity_effects', builder)

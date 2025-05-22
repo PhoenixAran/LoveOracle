@@ -12,8 +12,9 @@ local Class = require 'lib.class'
 ---@field originY number
 ---@field offsetX number
 ---@field offsetY number
+---@field alpha number?
 local PrototypeSprite = Class {
-  init = function(self, r, g, b, width, height, offsetX, offsetY)
+  init = function(self, r, g, b, width, height, offsetX, offsetY, alpha)
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end
 
@@ -26,6 +27,12 @@ local PrototypeSprite = Class {
     self.h = height
     self.originX = self.w / 2
     self.originY = self.h / 2
+
+    if alpha == nil then
+      self.alpha = 1
+    else
+      self.alpha = alpha
+    end
   end
 }
 
@@ -71,6 +78,7 @@ function PrototypeSprite:draw(x, y, alpha)
   x = (x - self:getWidth() / 2) + self:getOffsetX()
   y = (y - self:getHeight() / 2) + self:getOffsetY()
   if alpha == nil then alpha = 1 end
+  alpha = math.min(alpha, self.alpha)
   love.graphics.setColor(self.r, self.g, self.b, alpha)
   love.graphics.rectangle('fill', x, y, self.w, self.h)
   love.graphics.setColor(1, 1, 1)

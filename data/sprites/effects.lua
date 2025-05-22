@@ -5,7 +5,11 @@ local function moduleFunction(spriteBank)
   sb:setDefaultLoopType('once')
   sb:setSubstrips(false)
 
-  --@animation splash
+
+  -- TODO idk what preview animations do in the original
+
+
+  --@animation effect_splash
   sb:addCompositeSprite(3, 3, 0, -11)
   sb:addCompositeSprite(4, 3, 0, -11)
   sb:addCompositeFrame(0, 0, 0, 0, 4)
@@ -21,7 +25,7 @@ local function moduleFunction(spriteBank)
   local splashAnimation = sb:build()
   spriteBank.registerAnimation('effect_splash', splashAnimation)
 
-  --@animation lava_splash
+  --@animation effect_lava_splash
   sb:setSpriteSheet('color_effects_red')
   sb:addCompositeSprite(5, 4, -7 + 7, -13)
   sb:addCompositeSprite(5, 4, -9 + 7, -13)
@@ -64,28 +68,23 @@ local function moduleFunction(spriteBank)
   sb:addCompositeFrame(0, 0, 0, 0, 2)
   spriteBank.registerAnimation('effect_lava_splash', sb:build())
 
-  --@animation bomb_explosion
+  --@animation effect_bomb_explosion
   sb:setSpriteSheet('color_effects_red')
   sb:addSpriteFrame(1, 1, 0, 0)
-
   sb:setSpriteSheet('color_effects_inverse_red')
   sb:addSpriteFrame(1, 1, 0, 0)
-
   sb:setSpriteSheet('color_effects_red')
   sb:addSpriteFrame(1, 1, 0, 0)
-
   sb:addCompositeSprite(1, 1, -6, -6)
   sb:addCompositeSprite(1, 1,  6, -6)
   sb:addCompositeSprite(1, 1, -6,  2)
   sb:addCompositeSprite(1, 1,  6,  2)
   sb:addCompositeFrame(0, 0, 0, 0, 7)
-
   sb:addCompositeSprite(7, 2, -8, -8)
   sb:addCompositeSprite(8, 2,  8, -8)
   sb:addCompositeSprite(7, 3, -8,  8)
   sb:addCompositeSprite(8, 3,  8,  8)
   sb:addCompositeFrame(0, 0, 0, 0, 8)
-
   sb:addCompositeSprite(2, 1, -8, -8)
   sb:addCompositeSprite(2, 1,  8, -8)
   sb:addCompositeSprite(2, 1, -8,  8)
@@ -93,38 +92,31 @@ local function moduleFunction(spriteBank)
   sb:addCompositeFrame(0, 0, 0, 0, 9)
   spriteBank.registerAnimation('effect_bomb_explosion', sb:build())
 
-  --@animation monster_explosion
+  --@animation effect_monster_explosion
   sb:setSpriteSheet('color_effects_red')
   sb:addCompositeSprite(1, 1, -4 + 8, -14 + 8)
   sb:addCompositeSprite(1, 1, -12 + 8, -2 + 8)
   sb:addCompositeFrame(0, 0, 0, 0, 5)
-
   sb:setSpriteSheet('color_effects_green')
   sb:addCompositeSprite(7, 1, -16 + 8, -16 + 8)
   sb:addCompositeSprite(7, 1, 0 + 8, 0 + 8)
   sb:addCompositeFrame(0, 0, 0, 0, 2)
-
   sb:setSpriteSheet('color_effects_blue')
   sb:addCompositeSprite(7, 1, -16 + 8, -16 + 8)
   sb:addCompositeSprite(7, 1, 0 + 8, 0 + 8)
   sb:addCompositeFrame(0, 0, 0, 0, 2)
-
   sb:setSpriteSheet('color_effects_green')
   sb:addCompositeSprite(7, 1, -16 + 8, -16 + 8)
   sb:addCompositeSprite(7, 1, 0 + 8, 0 + 8)
   sb:addCompositeFrame(0, 0, 0, 0, 2)
-
   sb:setSpriteSheet('color_effects_blue')
   sb:addCompositeSprite(7, 1, -16 + 8, -16 + 8)
   sb:addCompositeSprite(7, 1, 0 + 8, 0 + 8)
   sb:addCompositeFrame(0, 0, 0, 0, 2)
-
   sb:setSpriteSheet('color_effects_orange')
   sb:addSpriteFrame(7, 1, 0, 0, 2)
-
   sb:setSpriteSheet('color_effects_red')
   sb:addSpriteFrame(7, 1, 0, 0, 2)
-
   sb:setSpriteSheet('color_effects_orange')
   sb:addSpriteFrame(8, 1, 0, 0, 2)
   spriteBank.registerAnimation('effect_monster_explosion', sb:build())
@@ -170,7 +162,7 @@ local function moduleFunction(spriteBank)
   sb:addSpriteFrame(4, 3, 0, 0, 2)
   spriteBank.registerAnimation('effect_seed_ember', sb:build())
 
-  -- @animation seed_gale
+  -- @animation effect_seed_gale
   sb:setSpriteSheet('color_effects_blue')
   sb:addSpriteFrame(5, 2, 0, 0, 1)
   sb:setSpriteSheet('color_effects_red')
@@ -196,6 +188,32 @@ local function moduleFunction(spriteBank)
   sb:setSpriteSheet('color_effects_green')
   sb:addSpriteFrame(6, 2, 0, 0, 1)
   spriteBank.registerAnimation('effect_seed_gale', sb:build())
+
+
+  -- @animation effect_burn
+  sb:repeatBuild(3, function()
+    sb:setSpriteSheet('color_effects_red')
+    sb:addSpriteFrame(4, 3, 0, 0, 1)
+    sb:setSpriteSheet('color_effects_orange')
+    sb:addSpriteFrame(4, 3, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_inverse_red')
+    sb:addSpriteFrame(4, 3, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_red')
+    sb:addSpriteFrame(4, 2, 0, 0, 3)
+    sb:setSpriteSheet('color_effects_orange')
+    sb:addSpriteFrame(4, 2, 0, 0, 3)
+    sb:setSpriteSheet('color_effects_inverse_red')
+    sb:addSpriteFrame(4, 2, 0, 0, 2)
+  end)
+  spriteBank.registerAnimation('effect_burn', sb:build())
+
+  -- @animation effect_block_poof
+  sb:setSpriteSheet('color_effects_orange')
+  sb:setDefaultLoopType('once')
+  sb:addSpriteFrame(1, 1, 0, 0, 6)
+  sb:addSpriteFrame(2, 1, 0, 0, 8)
+  sb:addSpriteFrame(6, 1, 0, 0, 5)
+  spriteBank.registerAnimation('effect_block_poof', sb:build())
 
   -- @animation pegasus_dust
   sb:setSubstrips(false)
@@ -243,11 +261,47 @@ local function moduleFunction(spriteBank)
   sb:addSpriteFrame(4, 1, 0, 0, 2, 0.5)
   sb:addSpriteFrame(5, 1, 0, 0, 4, 0.5)
   sb:addSpriteFrame(6, 1, 0, 0, 3, 0.5)
-  -- Idk what flicker does in the original animation script
-  -- TODO if i feel like it
   spriteBank.registerAnimation('effect_sprint_puff', sb:build())
 
+  -- @animation effect_somaria_block_create
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addSpriteFrame(4, 1, 0, 0, 3)
+  sb:addSpriteFrame(1, 1, 0, 0, 3)
+  sb:addSpriteFrame(2, 1, 0, 0, 3)
+  spriteBank.registerAnimation('effect_somaria_block_create', sb:build())
+
+  -- @animation effect_somaria_block_destroy
+  sb:setSpriteSheet('color_effects_orange')
+  sb:setDefaultLoopType('once')
+  sb:addSpriteFrame(1, 1, 0, 0, 6)
+  sb:addSpriteFrame(2, 1, 0, 0, 8)
+  sb:addSpriteFrame(6, 1, 0, 0, 5)
+  spriteBank.registerAnimation('effect_somaria_block_destroy', sb:build())
+
+  --===========================================================
   -- Color Effects Below
+  --===========================================================
+  -- TODO projectile_tile_fire_shooter_small
+  -- TODO projectile_tile_fire_shooter_medium
+  -- TODO projectile_tile_fire_shooter_large
+
+  local function createColorEffectFlame(color)
+    -- @animation effect_color_flame
+    sb:setSpriteSheet('color_effects_' .. color)
+    sb:setDefaultLoopType('cycle')
+    sb:addSpriteFrame(6, 4, 0, 0, 8)
+    sb:addSpriteFrame(7, 4, 0, 0, 8)
+    sb:addSpriteFrame(8, 4, 0, 0, 8)
+    sb:addSpriteFrame(9, 4, 0, 0, 8)
+    spriteBank.registerAnimation('effect_color_flame_' .. color, sb:build())
+  end
+  createColorEffectFlame('blue')
+  createColorEffectFlame('green')
+  createColorEffectFlame('inverse_red')
+  createColorEffectFlame('orange')
+  createColorEffectFlame('red')
+
+
   local function createColorEffectOwlSparkle(color)
     -- @animation effect_owl_sparkle
     sb:setSpriteSheet('color_effects_' .. color)
@@ -296,7 +350,22 @@ local function moduleFunction(spriteBank)
   createColorEffectCling('inverse_red')
   createColorEffectCling('orange')
   createColorEffectCling('red')
-  
+
+  local function createColorEffectClingLight(color)
+    -- @animation effect_cling_light
+    sb:setSpriteSheet('color_effects_' .. color)
+    sb:setDefaultLoopType('once')
+    sb:addSpriteFrame(7, 1, 0, 0, 4)
+    sb:addSpriteFrame(8, 1, 0, 0, 5)
+    local animation = sb:build()
+    spriteBank.registerAnimation('effect_cling_light_' .. color, animation)
+  end
+  createColorEffectClingLight('blue')
+  createColorEffectClingLight('green')
+  createColorEffectClingLight('inverse_red')
+  createColorEffectClingLight('orange')
+  createColorEffectClingLight('red')
+
 end
 
 return moduleFunction

@@ -10,8 +10,9 @@ local Class = require 'lib.class'
 ---@field offsetY integer
 ---@field originX number
 ---@field originY number
+---@field alpha number?
 local CompositeSprite = Class {
-  init = function(self, sprites, originX, originY, offsetX, offsetY)
+  init = function(self, sprites, originX, originY, offsetX, offsetY, alpha)
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end
 
@@ -28,6 +29,11 @@ local CompositeSprite = Class {
     else
       self.originX = originX
       self.originY = originY
+    end
+    if alpha == nil then
+      self.alpha = 1
+    else
+      self.alpha = alpha
     end
   end
 }
@@ -130,6 +136,7 @@ end
 
 function CompositeSprite:draw(x, y, alpha)
   if alpha == nil then alpha = 1 end
+  alpha = math.min(alpha, self.alpha)
   for _, sprite in ipairs(self.sprites) do
     sprite:draw(x + self:getOffsetX(), y + self:getOffsetY(), alpha)
   end

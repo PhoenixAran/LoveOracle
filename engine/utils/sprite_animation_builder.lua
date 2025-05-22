@@ -128,7 +128,7 @@ function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, off
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
 
-  local compositeSprite = CompositeSprite(self.compositeSprites, originX, originY, offsetX, offsetY)
+  local compositeSprite = CompositeSprite(self.compositeSprites, originX, originY, offsetX, offsetY, alpha)
   local spriteFrame = SpriteFrame(compositeSprite, delay, alpha)
   lume.push(self.frames, spriteFrame)
   self.compositeSprites = { }
