@@ -240,9 +240,9 @@ local function moduleFunction(spriteBank)
   sb:setSubstrips(false)
   sb:setLoopType('once')
   sb:setSpriteSheet('color_effects_orange')
-  sb:addSpriteFrame(4, 1, 0, 0, 2)
-  sb:addSpriteFrame(5, 1, 0, 0, 4)
-  sb:addSpriteFrame(6, 1, 0, 0, 3)
+  sb:addSpriteFrame(4, 1, 0, 0, 2, 0.5)
+  sb:addSpriteFrame(5, 1, 0, 0, 4, 0.5)
+  sb:addSpriteFrame(6, 1, 0, 0, 3, 0.5)
   -- Idk what flicker does in the original animation script
   -- TODO if i feel like it
   spriteBank.registerAnimation('effect_sprint_puff', sb:build())

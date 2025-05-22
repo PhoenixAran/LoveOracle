@@ -9,8 +9,9 @@ local Class = require 'lib.class'
 ---@field h number
 ---@field originX number
 ---@field originY number
+---@field alpha number?
 local Sprite = Class {
-  init = function(self, subtexture, offsetX, offsetY)
+  init = function(self, subtexture, offsetX, offsetY, alpha)
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end
     self.subtexture = subtexture
@@ -21,6 +22,8 @@ local Sprite = Class {
     self.h = h
     self.originX = w / 2
     self.originY = h / 2
+    if alpha == nil then alpha = 1 end
+    self.alpha = alpha or 1
   end
 }
 
@@ -71,6 +74,7 @@ function Sprite:draw(x, y, alpha)
   x = (x - self.w / 2) + self.offsetX
   y = (y - self.h / 2) + self.offsetY
   if alpha == nil then alpha = 1 end
+  alpha = math.min(alpha, self.alpha)
   love.graphics.setColor(1, 1, 1, alpha)
   love.graphics.draw(self.subtexture.image, self.subtexture.quad, x, y)
   love.graphics.setColor(1, 1, 1)

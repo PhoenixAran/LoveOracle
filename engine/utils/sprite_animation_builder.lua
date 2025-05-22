@@ -84,7 +84,8 @@ end
 ---@param offsetX number? 
 ---@param offsetY number? 
 ---@param delay integer?
-function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
+---@param alpha number?
+function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay, alpha)
   -- user is adding an explicit Sprite object
   if type(x) == 'table' then
     -- x becomes a Sprite instance
@@ -97,7 +98,7 @@ function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay)
   if offsetY == nil then offsetY = 0 end
 
   local subtexture = self.spriteSheet:getTexture(x, y)
-  local sprite = Sprite(subtexture, offsetX, offsetY)
+  local sprite = Sprite(subtexture, offsetX, offsetY, alpha)
   local spriteFrame = SpriteFrame(sprite, delay)
   lume.push(self.frames, spriteFrame)
 end
@@ -122,12 +123,13 @@ end
 ---@param offsetX number offset x
 ---@param offsetY number offset y
 ---@param delay integer
-function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, offsetY, delay)
+---@param alpha number?
+function SpriteAnimationBuilder:addCompositeFrame(originX, originY, offsetX, offsetY, delay, alpha)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
 
   local compositeSprite = CompositeSprite(self.compositeSprites, originX, originY, offsetX, offsetY)
-  local spriteFrame = SpriteFrame(compositeSprite, delay)
+  local spriteFrame = SpriteFrame(compositeSprite, delay, alpha)
   lume.push(self.frames, spriteFrame)
   self.compositeSprites = { }
 end
@@ -141,9 +143,10 @@ end
 ---@param offsetX number
 ---@param offsetY number
 ---@param delay integer
-function SpriteAnimationBuilder:addPrototypeFrame(r, g, b, width, height, offsetX, offsetY, delay)
+---@param alpha number?
+function SpriteAnimationBuilder:addPrototypeFrame(r, g, b, width, height, offsetX, offsetY, delay, alpha)
   local sprite = PrototypeSprite(r, g, b, width, height, offsetX, offsetY)
-  local spriteFrame = SpriteFrame(sprite, delay)
+  local spriteFrame = SpriteFrame(sprite, delay, alpha)
   lume.push(self.frames, spriteFrame)
 end
 
