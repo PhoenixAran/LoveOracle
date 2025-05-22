@@ -20,7 +20,11 @@ local function moduleFunction(spriteBank)
   local splashAnimation = sb:build()
   spriteBank.registerAnimation('effect_splash', splashAnimation)
 
-  -- @animation object_fall
+  sb:setSpriteSheet('color_effects_blue') -- we will copy this to the other colors
+  sb:setDefaultLoopType('once')
+  
+
+
   
 end
 
