@@ -45,5 +45,19 @@ function EffectFactory.createSplashEffect(x, y, time)
   return effect
 end
 
+--- creates a lava splash effect entity
+--- @param x number the x position of the effect
+--- @param y number the y position of the effect
+--- @param time number? the time in ms the effect should last. This will override the effectAnimation duration if provided
+function EffectFactory.createLavaSplashEffect(x, y, time)
+  local effect = EffectFactory.createEffectEntity({
+    x = x,
+    y = y,
+    effectAnimation = 'effect_lava_splash',
+    time = time
+  })
+  effect:initTransform()
+  return effect
+end
 
 return EffectFactory

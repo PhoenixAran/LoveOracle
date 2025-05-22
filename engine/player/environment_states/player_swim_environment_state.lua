@@ -117,9 +117,15 @@ end
 
 function PlayerSwimEnvironmentState:createSplashEffect()
   local x, y = vec2.add(0, 4, self.player:getPosition())
-  local effect = EffectFactory.createSplashEffect(x, y)
-  effect:initTransform()
-  self.player:emit('spawned_entity', effect)
+  if self.player:isInLava() then
+    local lavaSplashEffect = EffectFactory.createLavaSplashEffect(x, y)
+    lavaSplashEffect:initTransform()
+    self.player:emit('spawned_entity', lavaSplashEffect)
+  else
+    local localSplashEffect = EffectFactory.createSplashEffect(x, y)
+    localSplashEffect:initTransform()
+    self.player:emit('spawned_entity', localSplashEffect)
+  end
 end
 
 return PlayerSwimEnvironmentState
