@@ -62,10 +62,193 @@ local function moduleFunction(spriteBank)
   sb:addCompositeSprite(5, 4, 1 + 7, -13)
   sb:addCompositeSprite(5, 4, -17 + 7, -13)
   sb:addCompositeFrame(0, 0, 0, 0, 2)
-
   spriteBank.registerAnimation('effect_lava_splash', sb:build())
 
-  local function createColorEffect(color)
+  --@animation bomb_explosion
+  sb:setSpriteSheet('color_effects_red')
+  sb:addSpriteFrame(1, 1, 0, 0)
+
+  sb:setSpriteSheet('color_effects_inverse_red')
+  sb:addSpriteFrame(1, 1, 0, 0)
+
+  sb:setSpriteSheet('color_effects_red')
+  sb:addSpriteFrame(1, 1, 0, 0)
+
+  sb:addCompositeSprite(1, 1, -6, -6)
+  sb:addCompositeSprite(1, 1,  6, -6)
+  sb:addCompositeSprite(1, 1, -6,  2)
+  sb:addCompositeSprite(1, 1,  6,  2)
+  sb:addCompositeFrame(0, 0, 0, 0, 7)
+
+  sb:addCompositeSprite(7, 2, -8, -8)
+  sb:addCompositeSprite(8, 2,  8, -8)
+  sb:addCompositeSprite(7, 3, -8,  8)
+  sb:addCompositeSprite(8, 3,  8,  8)
+  sb:addCompositeFrame(0, 0, 0, 0, 8)
+
+  sb:addCompositeSprite(2, 1, -8, -8)
+  sb:addCompositeSprite(2, 1,  8, -8)
+  sb:addCompositeSprite(2, 1, -8,  8)
+  sb:addCompositeSprite(2, 1,  8,  8)
+  sb:addCompositeFrame(0, 0, 0, 0, 9)
+  spriteBank.registerAnimation('effect_bomb_explosion', sb:build())
+
+  --@animation monster_explosion
+  sb:setSpriteSheet('color_effects_red')
+  sb:addCompositeSprite(1, 1, -4 + 8, -14 + 8)
+  sb:addCompositeSprite(1, 1, -12 + 8, -2 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 5)
+
+  sb:setSpriteSheet('color_effects_green')
+  sb:addCompositeSprite(7, 1, -16 + 8, -16 + 8)
+  sb:addCompositeSprite(7, 1, 0 + 8, 0 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 2)
+
+  sb:setSpriteSheet('color_effects_blue')
+  sb:addCompositeSprite(7, 1, -16 + 8, -16 + 8)
+  sb:addCompositeSprite(7, 1, 0 + 8, 0 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 2)
+
+  sb:setSpriteSheet('color_effects_green')
+  sb:addCompositeSprite(7, 1, -16 + 8, -16 + 8)
+  sb:addCompositeSprite(7, 1, 0 + 8, 0 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 2)
+
+  sb:setSpriteSheet('color_effects_blue')
+  sb:addCompositeSprite(7, 1, -16 + 8, -16 + 8)
+  sb:addCompositeSprite(7, 1, 0 + 8, 0 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 2)
+
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addSpriteFrame(7, 1, 0, 0, 2)
+
+  sb:setSpriteSheet('color_effects_red')
+  sb:addSpriteFrame(7, 1, 0, 0, 2)
+
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addSpriteFrame(8, 1, 0, 0, 2)
+  spriteBank.registerAnimation('effect_monster_explosion', sb:build())
+
+  -- TODO REPURPOSE THESE
+
+  --@animation effect_seed_scent
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addSpriteFrame(9, 1, 0, 0, 3)
+  sb:addSpriteFrame(7, 1, 0, 0, 3)
+  sb:addSpriteFrame(8, 1, 3)
+  spriteBank.registerAnimation('effect_seed_scent', sb:build())
+
+  --@animation effect_seed_pegasus
+  sb:setSpriteSheet('color_effects_blue')
+  sb:addSpriteFrame(4, 1, 0, 0, 3)
+  sb:addSpriteFrame(1, 1, 0, 0, 3)
+  sb:addSpriteFrame(2, 1, 0, 0, 3)
+  spriteBank.registerAnimation('effect_seed_pegasus', sb:build())
+
+  --@animation effect_seed_mystery
+  sb:setSpriteSheet('color_effects_green')
+  sb:addSpriteFrame(4, 1, 0, 0, 3)
+  sb:addSpriteFrame(1, 1, 0, 0, 3)
+  sb:addSpriteFrame(2, 1, 0, 0, 3)
+  spriteBank.registerAnimation('effect_seed_mystery', sb:build())
+
+  -- @animation seed_ember
+  sb:setSpriteSheet('color_effects_red')
+  sb:addSpriteFrame(4, 4, 0, 0, 2)
+  sb:addSpriteFrame(4, 3, 0, 0, 2)
+  sb:setSpriteSheet('color_effects_inverse_red')
+  sb:addSpriteFrame(4, 2, 0, 0, 2)
+  sb:setSpriteSheet('color_effects_red')
+  sb:addSpriteFrame(4, 2, 0, 0, 2)
+  sb:repeatBuild(3, function()
+    sb:addSpriteFrame(4, 3, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_inverse_red')
+    sb:addSpriteFrame(4, 2, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_red')
+    sb:addSpriteFrame(4, 2, 0, 0, 2)
+  end)
+  sb:addSpriteFrame(4, 3, 0, 0, 2)
+  spriteBank.registerAnimation('effect_seed_ember', sb:build())
+
+  -- @animation seed_gale
+  sb:setSpriteSheet('color_effects_blue')
+  sb:addSpriteFrame(5, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_red')
+  sb:addSpriteFrame(5, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addSpriteFrame(5, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_green')
+  sb:addSpriteFrame(6, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_blue')
+  sb:addSpriteFrame(6, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_red')
+  sb:addSpriteFrame(6, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addSpriteFrame(5, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_green')
+  sb:addSpriteFrame(5, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_blue')
+  sb:addSpriteFrame(5, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_red')
+  sb:addSpriteFrame(6, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addSpriteFrame(6, 2, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_green')
+  sb:addSpriteFrame(6, 2, 0, 0, 1)
+  spriteBank.registerAnimation('effect_seed_gale', sb:build())
+
+  -- @animation pegasus_dust
+  sb:setSubstrips(false)
+  sb:setLoopType('once')
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addCompositeSprite(6, 1, -12 + 8, -10 + 8)
+  sb:addCompositeSprite(6, 1, -4 + 8, -10 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_green')
+  sb:addCompositeSprite(9, 2, -14 + 8, -7 + 8)
+  sb:addCompositeSprite(9, 3, -10 + 8, -11 + 8)
+  sb:addCompositeSprite(9, 2, -1 + 8, -7 + 8)
+  sb:addCompositeSprite(9, 3, -5 + 8, -11 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_blue')
+  sb:addCompositeSprite(9, 3, -14 + 8, -7 + 8)
+  sb:addCompositeSprite(9, 2, -10 + 8, -11 + 8)
+  sb:addCompositeSprite(9, 3, -1 + 8, -7 + 8)
+  sb:addCompositeSprite(9, 2, -5 + 8, -11 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_red')
+  sb:addCompositeSprite(9, 2, -13 + 8, -7 + 8)
+  sb:addCompositeSprite(9, 3, -10 + 8, -11 + 8)
+  sb:addCompositeSprite(9, 2, -1 + 8, -7 + 8)
+  sb:addCompositeSprite(9, 3, -6 + 8, -11 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addCompositeSprite(9, 3, -17 + 8, -5 + 8)
+  sb:addCompositeSprite(9, 2, -12 + 8, -9 + 8)
+  sb:addCompositeSprite(9, 3, 2 + 8, -5 + 8)
+  sb:addCompositeSprite(9, 2, -3 + 8, -9 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 1)
+  sb:setSpriteSheet('color_effects_green')
+  sb:addCompositeSprite(9, 2, -17 + 8, -5 + 8)
+  sb:addCompositeSprite(9, 3, -12 + 8, -9 + 8)
+  sb:addCompositeSprite(9, 2, -4 + 8, -5 + 8)
+  sb:addCompositeSprite(9, 3, -3 + 8, -9 + 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 1)
+  spriteBank.registerAnimation('effect_pegasus_dust', sb:build())
+
+  -- @animation sprint_puff
+  sb:setSubstrips(false)
+  sb:setLoopType('once')
+  sb:setSpriteSheet('color_effects_orange')
+  sb:addSpriteFrame(4, 1, 0, 0, 2)
+  sb:addSpriteFrame(5, 1, 0, 0, 4)
+  sb:addSpriteFrame(6, 1, 0, 0, 3)
+  -- Idk what flicker does in the original animation script
+  -- TODO if i feel like it
+  spriteBank.registerAnimation('effect_sprint_puff', sb:build())
+
+  -- Color Effects Below
+  local function createColorEffectOwlSparkle(color)
     -- @animation effect_owl_sparkle
     sb:setSpriteSheet('color_effects_' .. color)
     sb:setDefaultLoopType('once')
@@ -76,11 +259,43 @@ local function moduleFunction(spriteBank)
     local animation = sb:build()
     spriteBank.registerAnimation('effect_owl_sparkle_' .. color, animation)
   end
-  createColorEffect('blue')
-  createColorEffect('green')
-  createColorEffect('inverse_red')
-  createColorEffect('orange')
-  createColorEffect('red')
+  createColorEffectOwlSparkle('blue')
+  createColorEffectOwlSparkle('green')
+  createColorEffectOwlSparkle('inverse_red')
+  createColorEffectOwlSparkle('orange')
+  createColorEffectOwlSparkle('red')
+
+  local function createColorEffectFallingObject(color)
+    -- @animation effect_falling_object
+    sb:setSpriteSheet('color_effects_' .. color)
+    sb:setDefaultLoopType('once')
+    sb:addSpriteFrame(4, 1, 0, 0, 8)
+    sb:addSpriteFrame(5, 1, 0, 0, 12)
+    sb:addSpriteFrame(6, 1, 0, 0, 13)
+    local animation = sb:build()
+    spriteBank.registerAnimation('effect_falling_object_' .. color, animation)
+  end
+
+  createColorEffectFallingObject('blue')
+  createColorEffectFallingObject('green')
+  createColorEffectFallingObject('inverse_red')
+  createColorEffectFallingObject('orange')
+  createColorEffectFallingObject('red')
+
+  local function createColorEffectCling(color)
+    -- @animation effect_cling
+    sb:setSpriteSheet('color_effects_' .. color)
+    sb:setDefaultLoopType('once')
+    sb:addSpriteFrame(7, 1, 0, 0, 4)
+    sb:addSpriteFrame(8, 1, 0, 0, 5)
+    local animation = sb:build()
+    spriteBank.registerAnimation('effect_cling_' .. color, animation)
+  end
+  createColorEffectCling('blue')
+  createColorEffectCling('green')
+  createColorEffectCling('inverse_red')
+  createColorEffectCling('orange')
+  createColorEffectCling('red')
   
 end
 
