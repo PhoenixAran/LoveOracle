@@ -46,7 +46,7 @@ return makeModuleFunction(
     builder:addAnimation('grass', sb:build())
 
   
-    -- @animation dirt
+    -- @animation effect_dirt
     sb:setSubstrips(true)
     sb:setLoopType('once')
     -- #substrip right
@@ -70,7 +70,9 @@ return makeModuleFunction(
     sb:addCompositeFrame(0, 0, 0, 0, 1)
     sb:buildSubstrip('down')
     -- BUILD dirt
-    builder:addAnimation('dirt', sb:build())
+    builder:addAnimation('effect_dirt', sb:build())
+
+    -- todo EFFECT MAGNET GLOVES ?
 
 
     -- register builder

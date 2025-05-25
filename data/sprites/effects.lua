@@ -6,8 +6,7 @@ local function moduleFunction(spriteBank)
   sb:setSubstrips(false)
 
 
-  -- TODO idk what preview animations do in the original
-
+  -- TODO idk what preview animations do in the original 
 
   --@animation effect_splash
   sb:addCompositeSprite(3, 3, 0, -11)
@@ -24,6 +23,190 @@ local function moduleFunction(spriteBank)
 
   local splashAnimation = sb:build()
   spriteBank.registerAnimation('effect_splash', splashAnimation)
+
+  --@animation effect_leaves
+  sb:setSubstrips(false)
+  sb:setLoopType('once')
+  sb:addCompositeSprite(3, 2, -8, -4)
+  sb:addCompositeSprite(4, 2, 6, -5)
+  sb:addCompositeSprite(2, 2, -1, -3)
+  sb:addCompositeSprite(3, 2, 2, -1)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(3, 2, -5, -5)
+  sb:addCompositeSprite(4, 2, 3, -4)
+  sb:addCompositeSprite(2, 2, 0, -5)
+  sb:addCompositeSprite(3, 2, 2, 2)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(4, 2, -4, -6)
+  sb:addCompositeSprite(4, 2, 0, -2)
+  sb:addCompositeSprite(2, 2, -2, -6)
+  sb:addCompositeSprite(4, 2, 3, 4)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(4, 2, -3, -8)
+  sb:addCompositeSprite(4, 2, 1, -2)
+  sb:addCompositeSprite(2, 2, -3, 6)
+  sb:addCompositeSprite(4, 2, 3, 6)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(4, 2, -4, -9)
+  sb:addCompositeSprite(4, 2, 4, 2)
+  sb:addCompositeSprite(2, 2, -6, 6)
+  sb:addCompositeSprite(4, 2, 5, 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(3, 2, -5, -10)
+  sb:addCompositeSprite(4, 2, 5, 2)
+  sb:addCompositeSprite(1, 2, -10, 6)
+  sb:addCompositeSprite(3, 2, 6, 9)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(3, 2, -6, -11)
+  sb:addCompositeSprite(3, 2, 8, 2)
+  sb:addCompositeSprite(1, 2, -11, 5)
+  sb:addCompositeSprite(3, 2, 7, 11)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(3, 2, -7, -12)
+  sb:addCompositeSprite(3, 2, 9, 3)
+  sb:addCompositeSprite(1, 2, -13, 3)
+  sb:addCompositeSprite(3, 2, 8, 9)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  spriteBank.registerAnimation('effect_leaves', sb:build())
+
+  --@animation effect_grass_leaves
+  sb:addCompositeSprite(3, 2, -8, -4)
+  sb:addCompositeSprite(4, 2, 6, -5)
+  sb:addCompositeSprite(2, 2, -1, -3)
+  sb:addCompositeSprite(3, 2, 2, -1)
+  sb:addCompositeFrame(0, 0, 0, 0, 4, 0.5)
+  sb:addCompositeSprite(3, 2, -5, -5)
+  sb:addCompositeSprite(4, 2, 3, -4)
+  sb:addCompositeSprite(2, 2, 0, -5)
+  sb:addCompositeSprite(3, 2, 2, 2)
+  sb:addCompositeFrame(0, 0, 0, 0, 4, 0.5)
+  sb:addCompositeSprite(4, 2, -4, -6)
+  sb:addCompositeSprite(4, 2, 0, -2)
+  sb:addCompositeSprite(2, 2, -2, -6)
+  sb:addCompositeSprite(4, 2, 3, 4)
+  sb:addCompositeFrame(0, 0, 0, 0, 4, 0.5)
+  sb:addCompositeSprite(4, 2, -3, -8)
+  sb:addCompositeSprite(4, 2, 1, -2)
+  sb:addCompositeSprite(2, 2, -3, 6)
+  sb:addCompositeSprite(4, 2, 3, 6)
+  sb:addCompositeFrame(0, 0, 0, 0, 4, 0.5)
+  sb:addCompositeSprite(4, 2, -4, -9)
+  sb:addCompositeSprite(4, 2, 4, 2)
+  sb:addCompositeSprite(2, 2, -6, 6)
+  sb:addCompositeSprite(4, 2, 5, 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 4, 0.5)
+  sb:addCompositeSprite(3, 2, -5, -10)
+  sb:addCompositeSprite(4, 2, 5, 2)
+  sb:addCompositeSprite(1, 2, -10, 6)
+  sb:addCompositeSprite(3, 2, 6, 9)
+  sb:addCompositeFrame(0, 0, 0, 0, 4, 0.5)
+  sb:addCompositeSprite(3, 2, -6, -11)
+  sb:addCompositeSprite(3, 2, 8, 2)
+  sb:addCompositeSprite(1, 2, -11, 5)
+  sb:addCompositeSprite(3, 2, 7, 11)
+  sb:addCompositeFrame(0, 0, 0, 0, 4, 0.5)
+  sb:addCompositeSprite(3, 2, -7, -12)
+  sb:addCompositeSprite(3, 2, 9, 3)
+  sb:addCompositeSprite(1, 2, -13, 3)
+  sb:addCompositeSprite(3, 2, 8, 9)
+  sb:addCompositeFrame(0, 0, 0, 0, 4, 0.5)
+  spriteBank.registerAnimation('effect_grass_leaves', sb:build())
+
+  --@animation item_scent_pod
+  sb:addSpriteFrame(1, 4, 0, 0, 8)
+  sb:addSpriteFrame(2, 4, 0, 0, 8)
+  spriteBank.registerAnimation('item_scent_pod', sb:build())
+
+  --@animation effect_leaves_red
+  sb:addCompositeSprite(7, 2, -8, -4)
+  sb:addCompositeSprite(8, 2, 6, -5)
+  sb:addCompositeSprite(6, 2, -1, -3)
+  sb:addCompositeSprite(7, 2, 2, -1)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(7, 2, -5, -5)
+  sb:addCompositeSprite(8, 2, 3, -4)
+  sb:addCompositeSprite(6, 2, 0, -5)
+  sb:addCompositeSprite(7, 2, 2, 2)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(8, 2, -4, -6)
+  sb:addCompositeSprite(8, 2, 0, -2)
+  sb:addCompositeSprite(6, 2, -2, -6)
+  sb:addCompositeSprite(8, 2, 3, 4)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(8, 2, -3, -8)
+  sb:addCompositeSprite(8, 2, 1, -2)
+  sb:addCompositeSprite(6, 2, -3, 6)
+  sb:addCompositeSprite(8, 2, 3, 6)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(8, 2, -4, -9)
+  sb:addCompositeSprite(8, 2, 4, 2)
+  sb:addCompositeSprite(6, 2, -6, 6)
+  sb:addCompositeSprite(8, 2, 5, 8)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(7, 2, -5, -10)
+  sb:addCompositeSprite(8, 2, 5, 2)
+  sb:addCompositeSprite(5, 2, -10, 6)
+  sb:addCompositeSprite(7, 2, 6, 9)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(7, 2, -6, -11)
+  sb:addCompositeSprite(7, 2, 8, 2)
+  sb:addCompositeSprite(5, 2, -11, 5)
+  sb:addCompositeSprite(7, 2, 7, 11)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(7, 2, -7, -12)
+  sb:addCompositeSprite(7, 2, 9, 3)
+  sb:addCompositeSprite(5, 2, -13, 3)
+  sb:addCompositeSprite(7, 2, 8, 9)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  spriteBank.registerAnimation('effect_leaves_red', sb:build())
+
+  --@animation effect_rock_break
+  sb:setLoopType('once')
+  sb:addCompositeSprite(3, 1, -4, -5)
+  sb:addCompositeSprite(3, 1, 5, -6)
+  sb:addCompositeSprite(3, 1, -6, 4)
+  sb:addCompositeSprite(3, 1, 4, 3)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(3, 1, -6, -6)
+  sb:addCompositeSprite(3, 1, 7, -7)
+  sb:addCompositeSprite(3, 1, -7, 5)
+  sb:addCompositeSprite(3, 1, 6, 4)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(3, 1, -7, -7)
+  sb:addCompositeSprite(3, 1, 9, -8)
+  sb:addCompositeSprite(3, 1, -9, 6)
+  sb:addCompositeSprite(3, 1, 8, 5)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(3, 1, -9, -5)
+  sb:addCompositeSprite(3, 1, 11, -6)
+  sb:addCompositeSprite(3, 1, -11, 8)
+  sb:addCompositeSprite(3, 1, 10, 7)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  spriteBank.registerAnimation('effect_rock_break', sb:build())
+
+  --@animation effect_red_brick_break
+  sb:setLoopType('once')
+  sb:addCompositeSprite(4, 1, -4, -5)
+  sb:addCompositeSprite(4, 1, 5, -6)
+  sb:addCompositeSprite(4, 1, -6, 4)
+  sb:addCompositeSprite(4, 1, 4, 3)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(4, 1, -6, -6)
+  sb:addCompositeSprite(4, 1, 7, -7)
+  sb:addCompositeSprite(4, 1, -7, 5)
+  sb:addCompositeSprite(4, 1, 6, 4)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(4, 1, -7, -7)
+  sb:addCompositeSprite(4, 1, 9, -8)
+  sb:addCompositeSprite(4, 1, -9, 6)
+  sb:addCompositeSprite(4, 1, 8, 5)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  sb:addCompositeSprite(4, 1, -9, -5)
+  sb:addCompositeSprite(4, 1, 11, -6)
+  sb:addCompositeSprite(4, 1, -11, 8)
+  sb:addCompositeSprite(4, 1, 10, 7)
+  sb:addCompositeFrame(0, 0, 0, 0, 4)
+  spriteBank.registerAnimation('effect_red_brick_break', sb:build())
 
   --@animation effect_lava_splash
   sb:setSpriteSheet('color_effects_red')
@@ -278,10 +461,82 @@ local function moduleFunction(spriteBank)
   sb:addSpriteFrame(6, 1, 0, 0, 5)
   spriteBank.registerAnimation('effect_somaria_block_destroy', sb:build())
 
+  -- @animation projectile_tile_fire_shooter_small
+  sb:setSubstrips(true)
+  sb:setLoopType('cycle')
+  local buildProjectileTileFireShooterSubstripSmall = function(substrip, default, columnOffset)
+    if default == nil then
+      default = false
+    end
+    if columnOffset == nil then
+      columnOffset = 0
+    end
+    sb:setSpriteSheet('color_effects_red')
+    sb:addSpriteFrame(1 + columnOffset, 4, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_orange')
+    sb:addSpriteFrame(1 + columnOffset, 4, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_inverse_red')
+    sb:addSpriteFrame(1 + columnOffset, 4, 0, 0, 2)
+    sb:buildSubstrip(substrip, default)
+  end
+  buildProjectileTileFireShooterSubstripSmall('up', false, 3)
+  buildProjectileTileFireShooterSubstripSmall('down', true, 1)
+  buildProjectileTileFireShooterSubstripSmall('left', false, 2)
+  buildProjectileTileFireShooterSubstripSmall('right', false, 0)
+  spriteBank.registerAnimation('projectile_tile_fire_shooter_small', sb:build())
+  
+  --@animation projectile_tile_fire_shooter_medium
+  sb:setSubstrips(true)
+  sb:setLoopType('cycle')
+  local buildProjectileTileFireShooterSubstripMedium = function(substrip, default, columnOffset)
+    if default == nil then
+      default = false
+    end
+    if columnOffset == nil then
+      columnOffset = 0
+    end
+    sb:setSpriteSheet('color_effects_red')
+    sb:addSpriteFrame(1 + columnOffset, 3, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_orange')
+    sb:addSpriteFrame(1 + columnOffset, 3, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_inverse_red')
+    sb:addSpriteFrame(1 + columnOffset, 3, 0, 0, 2)
+    sb:buildSubstrip(substrip, default)
+  end
+  buildProjectileTileFireShooterSubstripMedium('up', false, 3)
+  buildProjectileTileFireShooterSubstripMedium('down', true, 1)
+  buildProjectileTileFireShooterSubstripMedium('left', false, 2)
+  buildProjectileTileFireShooterSubstripMedium('right', false, 0)
+  spriteBank.registerAnimation('projectile_tile_fire_shooter_medium', sb:build())
+
+
+  --@animation projectile_tile_fiur_shooter_large
+  sb:setSubstrips(true)
+  sb:setLoopType('cycle')
+  local buildProjectileTileFireShooterSubstripLarge = function(substrip, default, columnOffset)
+    if default == nil then
+      default = false
+    end
+    if columnOffset == nil then
+      columnOffset = 0
+    end
+    sb:setSpriteSheet('color_effects_red')
+    sb:addSpriteFrame(1 + columnOffset, 2, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_orange')
+    sb:addSpriteFrame(1 + columnOffset, 2, 0, 0, 2)
+    sb:setSpriteSheet('color_effects_inverse_red')
+    sb:addSpriteFrame(1 + columnOffset, 2, 0, 0, 2)
+    sb:buildSubstrip(substrip, default)
+  end
+  buildProjectileTileFireShooterSubstripLarge('up', false, 3)
+  buildProjectileTileFireShooterSubstripLarge('down', true, 1)
+  buildProjectileTileFireShooterSubstripLarge('left', false, 2)
+  buildProjectileTileFireShooterSubstripLarge('right', false, 0)
+  spriteBank.registerAnimation('projectile_tile_fire_shooter_large', sb:build())
+
   --===========================================================
   -- Color Effects Below
   --===========================================================
-  -- TODO projectile_tile_fire_shooter_small
   -- TODO projectile_tile_fire_shooter_medium
   -- TODO projectile_tile_fire_shooter_large
 

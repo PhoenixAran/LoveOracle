@@ -348,6 +348,7 @@ function ContentViewer:update()
               self.animViewerAnimationSelectIdx = k
               self.animViewerCurrentAnimation = SpriteBank.animations[v]
 
+
               -- reset anim playing variables
               self.animViewerTick = 1
               self.animViewerFrameIndex = 1
@@ -360,7 +361,30 @@ function ContentViewer:update()
           imgui.EndCombo()
         end
 
+        -- select substrip
+        if self.animViewerCurrentAnimation:hasSubstrips() then
+          if imgui.BeginCombo('Substrip', self.animViewerDir4Select[self.animViewerDir4Idx]) then
+            for k, v in ipairs(self.animViewerDir4Select) do
+              local isSelected = self.animViewerDir4Idx == k
 
+              if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
+                -- update animation substrip selection
+                self.animViewerDir4Idx = k
+                self.animViewerCurrentDir4 = v
+
+                -- reset anim playing variables
+                self.animViewerTick = 1
+                self.animViewerFrameIndex = 1
+              end
+
+              if isSelected then
+                imgui.SetItemDefaultFocus()
+              end
+            end
+            imgui.EndCombo()
+          end
+        end
+      
         -- animation tick state
         imgui.Separator()
         imgui.Image(self.animViewerCanvas, self.animViewerCanvas:getWidth(), self.animViewerCanvas:getHeight())
@@ -381,6 +405,8 @@ function ContentViewer:update()
             self.animViewerPlaying = true
           end
         end
+
+        
 
         imgui.SameLine()
         if imgui.Button('Stop') then
@@ -422,6 +448,7 @@ function ContentViewer:update()
           self.animViewerCurrentSprite = spriteFrames[self.animViewerFrameIndex]:getSprite()
         end
 
+        self.animViewerDrawCenterPoint = imgui.Checkbox('Draw Center', self.animViewerDrawCenterPoint)
       else
         imgui.Text('No animations found')
       end
