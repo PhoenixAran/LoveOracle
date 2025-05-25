@@ -85,22 +85,18 @@ end
 
 -- this is where custom enemy code should be implemented in child classes
 function BasicEnemy:updateAi()
-
 end
 
 ---@param state EnemyState
 function BasicEnemy:onStateEnd(state)
-
 end
 
 ---@param state EnemyState
 function BasicEnemy:onStateBegin(state)
-
 end
 
 ---@param state EnemyState
 function BasicEnemy:onStateUpdate(state)
-
 end
 
 return BasicEnemy

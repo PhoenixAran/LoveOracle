@@ -94,7 +94,7 @@ function Enemy:onHurt(damageInfo)
   -- TODO play sound
 end
  
-function Enemy:onDeath__()
+function Enemy:onDie()
   local x, y = vector.add(0, 0, self:getPosition())
   local effect = EffectFactory.createMonsterExplosionEffect(x, y)
   effect:initTransform()
