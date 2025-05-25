@@ -11,6 +11,7 @@ local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local CollisionTag = require 'engine.enums.collision_tag'
+local EffectFactory = require 'engine.entities.effect_factory'
 
 local Direction8Values = {Direction8.up, Direction8.upRight, Direction8.right, Direction8.downRight, Direction8.down, Direction8.downLeft, Direction8.left, Direction8.upLeft}
 local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Direction4.left}
@@ -55,7 +56,6 @@ function Enemy:getRandomDirection8()
 end
 
 function Enemy:getRandomVector2()
-  --return 0, 0
   return vector.normalize(lume.vector(love.math.random() * 2 * math.pi, 1))
 end
 
@@ -93,9 +93,12 @@ end
 function Enemy:onHurt(damageInfo)
   -- TODO play sound
 end
-
-function Enemy:onDeath()
-  -- TODO spawn sprite death effect
+ 
+function Enemy:onDeath__()
+  local x, y = vector.add(0, 0, self:getPosition())
+  local effect = EffectFactory.createMonsterExplosionEffect(x, y)
+  effect:initTransform()
+  self:emit('spawned_entity', effect)
 end
 
 function Enemy:fall()

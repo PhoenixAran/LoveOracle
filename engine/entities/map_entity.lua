@@ -21,6 +21,7 @@ local Pool = require 'engine.utils.pool'
 local Consts = require 'constants'
 local bit = require 'bit'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
+local EffectFactory = require 'engine.entities.effect_factory'
 
 
 local canCollide = require('engine.entities.bump_box').canCollide
@@ -449,6 +450,18 @@ function MapEntity:reportCollsionWithHitbox(hitbox)
   --self.interactionResolver:reportCollisionWithHitbox(hitbox)
 end
 
+function MapEntity:onFallInWater()
+  local effect = EffectFactory.createSplashEffect(self:getPosition())
+  effect:initTransform()
+  self:emit('spawned_entity', effect)
+end
+
+function MapEntity:onFallInLava()
+  local effect = EffectFactory.createLavaSplashEffect(self:getPosition())
+  effect:initTransform()
+  self:emit('spawned_entity', effect)
+end
+
 --- hurt this entity
 ---@param damageInfo DamageInfo|integer
 function MapEntity:hurt(damageInfo)
@@ -500,6 +513,16 @@ function MapEntity:bump(sourcePositionX, sourcePositionY, duration, speed)
     self:onBump(sourcePositionX, sourcePositionY, duration, speed)
   end
   self:signal('entity_bumped')
+end
+
+function MapEntity:onDie()
+
+end
+
+--- calls self:onDie() and then destroys the entity via self:destroy()
+function MapEntity:die()
+  self:onDie()
+  self:destroy()
 end
 
 -- sprite flash
@@ -578,8 +601,8 @@ function MapEntity:debugDraw(entDebugDrawFlags)
     -- TODO
   end
 end
--- signal callbacks
 
+-- signal callbacks
 function MapEntity:_onHealthDepleted()
   self.deathMarked = true
   -- notify entity script

@@ -231,11 +231,10 @@ function Entity:removed(scene)
 end
 
 function Entity:destroy()
-  -- notify entity script so they can play their death sound
 ---@diagnostic disable-next-line: undefined-field
-  if self.onDeath then
+  if self.onDestroy then
 ---@diagnostic disable-next-line: undefined-field
-    self:onDeath()
+    self:onDestroy()
   end
   self:emit('entity_destroyed', self)
   self:release()

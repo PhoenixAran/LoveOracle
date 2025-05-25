@@ -60,4 +60,43 @@ function EffectFactory.createLavaSplashEffect(x, y, time)
   return effect
 end
 
+--- creates a monster explosion effect entity. used when a monster gets killed by hitbox
+---@param x number the x position of the effect
+---@param y number the y position of the effect
+---@param time number? the time in ms the effect should last. This will override the effectAnimation duration if provided
+---@return EffectEntity
+function EffectFactory.createMonsterExplosionEffect(x, y, time)
+  local effect = EffectFactory.createEffectEntity({
+    x = x,
+    y = y,
+    effectAnimation = 'effect_monster_explosion',
+    time = time
+  })
+  effect:initTransform()
+  return effect
+end
+
+--- creates a color monster falling effect entity. used when a monster falls in a hole
+---@param x number the x position of the effect
+---@param y number the y position of the effect
+---@param color string the color of the monster falling effect. for this instance it can be 'red', 'blue', 'green', 'orange', and 'inverse_red'
+---@param time number? the time in ms the effect should last. This will override the effectAnimation duration if provided
+---@return EffectEntity
+function EffectFactory.createFallingObjectEffect(x, y, color, time)
+  local effect = EffectFactory.createEffectEntity({
+    x = x,
+    y = y,
+    effectAnimation = 'effect_object_falling_' .. color,
+    time = time
+  })
+  effect:initTransform()
+  return effect
+end
+
+
+
+
+
+
+
 return EffectFactory
