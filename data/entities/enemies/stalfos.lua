@@ -11,7 +11,7 @@ local HURT = 2
 local JUMP = 3
 local MARKED_DEAD = 4
 
----@class Stalfos : Enemy
+---@class Stalfos : BasicEnemy
 local Stalfos = Class { __includes = BasicEnemy,
   init = function(self, args)
     if args == nil then
@@ -76,19 +76,24 @@ function Stalfos:updateAi()
     else
       local shouldChangeDirection = false
       shouldChangeDirection = self.changeDirectionTimer > self.currentDirectionDelay
-      self:move()
       self.sprite:play('move')
+      self:move()
 
       local collidedWithWall = false
+      local collidedWithHazardTile = false
       for _, collision in ipairs(self.moveCollisions) do
         if collision.isTile and collision:isTile() then
           if collision:isWall() then
             collidedWithWall = true
             break
           end
+          if self:isHazardTile(collision) then
+            collidedWithHazardTile = true
+            break
+          end
         end
       end
-      shouldChangeDirection = shouldChangeDirection or collidedWithWall
+      shouldChangeDirection = shouldChangeDirection or collidedWithWall or collidedWithHazardTile
 
       if shouldChangeDirection then
         self:setVector(self:getRandomVector2())

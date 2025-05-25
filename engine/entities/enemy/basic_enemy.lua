@@ -79,6 +79,26 @@ function BasicEnemy:update()
   self.enemyState:update()
 end
 
+function BasicEnemy:canMoveInDirection(x, y)
+  
+end
+
+--- returns if the given tile entity is considered a hazard tile by this basic_enemy instance
+--- @param tileEntity Tile
+--- @return boolean
+function BasicEnemy:isHazardTile(tileEntity)
+  if tileEntity:isHole() and self.canFallInHole then
+    return true
+  end
+  if tileEntity:isLava() and not self.canSwimInLava then
+    return true
+  end
+  if tileEntity:isDeepWater() and not self.canSwimInWater then
+    return true
+  end
+  return false
+end
+
 function BasicEnemy:beginNormalState()
   self.enemyState = nil
 end

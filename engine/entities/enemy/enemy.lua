@@ -40,12 +40,6 @@ function Enemy:getType()
   return 'enemy'
 end
 
--- some helper functions for classes that inherit Enemy
-function Enemy:canMoveInDirection(x, y)
-  local canMove = true
-  error('not implemented')
-end
-
 ---@return Direction4
 function Enemy:getRandomDirection4()
   return lume.randomchoice(Direction4Values)

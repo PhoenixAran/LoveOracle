@@ -95,6 +95,18 @@ function Tile:isWall()
   return bit.band(self.tileData.tileType, TileType.Wall) ~= 0
 end
 
+function Tile:isHole()
+  return bit.band(self.tileData.tileType, TileType.Hole) ~= 0
+end
+
+function Tile:isLava()
+  return bit.band(self.tileData.tileType, TileType.Lava) ~= 0
+end
+
+function Tile:isDeepWater()
+  return bit.band(self.tileData.tileType, TileType.DeepWater) ~= 0
+end
+
 function Tile:isAnimated()
   return self.sprite:isAnimated()
 end

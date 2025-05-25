@@ -194,10 +194,17 @@ end
 function Hitbox:debugDraw()
   local a = .25
   if self.enabled then
-    love.graphics.setColor(176 / 255, 35 / 255, 82 / 255, a)
-    love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
-    love.graphics.setColor(120 / 255, 22 / 255, 54 / 255)
-    love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+    if self.detectOnly then
+      love.graphics.setColor(1, 0.5, 0, a) -- Orange fill
+      love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
+      love.graphics.setColor(0.8, 0.4, 0) -- Darker orange outline
+      love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+    else
+      love.graphics.setColor(176 / 255, 35 / 255, 82 / 255, a)
+      love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
+      love.graphics.setColor(120 / 255, 22 / 255, 54 / 255)
+      love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+    end
   else
     love.graphics.setColor(116 / 255, 116 / 255, 117 / 255)
     love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
