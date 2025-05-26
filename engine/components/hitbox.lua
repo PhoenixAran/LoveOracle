@@ -116,11 +116,11 @@ end
 function Hitbox:update()
   if not self.detectOnly then
     -- TODO i think onTransformChanged makes this update call redunduant
-    Physics:update(self, self.x, self.y, self.w, self.h)
-    local len, cols = Physics:move(self, self.x, self.y, filter)
-    for _, v in ipairs(cols) do
-      v.reportHitboxCollision(self)
-    end
+    -- Physics:update(self, self.x, self.y, self.w, self.h)
+    -- local len, cols = Physics:move(self, self.x, self.y, filter)
+    -- for _, v in ipairs(cols) do
+    --   v.reportHitboxCollision(self)
+    -- end
   end
 end
 

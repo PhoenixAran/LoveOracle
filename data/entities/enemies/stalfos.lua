@@ -5,6 +5,8 @@ local BasicEnemy = require 'engine.entities.enemy.basic_enemy'
 local Direction4 = require 'engine.enums.direction4'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local Collider = require 'engine.components.collider'
+local bit = require 'bit'
+local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 
 local MOVING = 1
 local HURT = 2
@@ -12,7 +14,11 @@ local JUMP = 3
 local MARKED_DEAD = 4
 
 ---@class Stalfos : BasicEnemy
+---@field collidesWithTileNormalState string[]
+---@field collidesWithTileHurtState string[]
 local Stalfos = Class { __includes = BasicEnemy,
+  ---@param self Stalfos
+  ---@param args table
   init = function(self, args)
     if args == nil then
       args = { }
@@ -32,7 +38,10 @@ local Stalfos = Class { __includes = BasicEnemy,
     args.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     BasicEnemy.init(self, args)
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
-    self:setCollisionTile('wall')
+
+    self.collidesWithTileNormalState = { 'wall', 'water', 'lava', 'whirlpool', 'hole' }
+    self.collidesWithTileHurtState = { 'wall'}
+    self:setCollisionTile(self.collidesWithTileNormalState)
 
     self.spriteFlasher:addSprite(self.sprite)
     self.movement:setSpeed(40)
@@ -60,6 +69,9 @@ function Stalfos:prepForMoveState()
   self.changeDirectionTimer = 0
   self.currentJumpDelay = math.floor(love.math.random(70, 121))
   self.currentDirectionDelay = math.floor(love.math.random(30, 71))
+
+  self:setCollisionTileExplicit(0)
+  self:setCollisionTile(self.collidesWithTileNormalState)
 end
 
 function Stalfos:land()
@@ -80,21 +92,12 @@ function Stalfos:updateAi()
       self:move()
 
       local collidedWithWall = false
-      local collidedWithHazardTile = false
       for _, collision in ipairs(self.moveCollisions) do
         if collision.isTile and collision:isTile() then
-          if collision:isWall() then
-            collidedWithWall = true
-            break
-          end
-          if self:isHazardTile(collision) then
-            collidedWithHazardTile = true
-            break
-          end
+          collidedWithWall = true
         end
       end
-      shouldChangeDirection = shouldChangeDirection or collidedWithWall or collidedWithHazardTile
-
+      shouldChangeDirection = shouldChangeDirection or collidedWithWall
       if shouldChangeDirection then
         self:setVector(self:getRandomVector2())
         self.changeDirectionTimer = 0
@@ -127,8 +130,18 @@ function Stalfos:onHealthDepleted()
   self.state = MARKED_DEAD
 end
 
+function Stalfos:onHurt(damageInfo)
+  if self.state ~= HURT then
+    self:setCollisionTileExplicit(0)
+    self:setCollisionTile(self.collidesWithTileHurtState)
+    self.state = HURT
+    self.moveTimer = 0
+    self.changeDirectionTimer = 0
+  end
+end
+
 function Stalfos:onFall()
-  
+
 end
 
 function Stalfos:draw()

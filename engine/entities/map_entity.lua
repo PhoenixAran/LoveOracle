@@ -183,6 +183,11 @@ function MapEntity:setCollisionTile(tileType)
   end
 end
 
+--- set tiletypes to collide with explicitly with tile type flags
+function MapEntity:setCollisionTileExplicit(flags)
+  self.collisionTiles = flags
+end
+
 --- set a tiletype this map entity can collide with
 ---@param tileType string|string[]
 function MapEntity:unsetCollisionTile(tileType)

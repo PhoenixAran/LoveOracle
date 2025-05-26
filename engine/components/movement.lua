@@ -249,6 +249,56 @@ function Movement:getLinearVelocity()
   return self.motionX, self.motionY
 end
 
+---calculate linear velocity without updating internal state
+---@return number testLinearVelocityX
+---@return number testLinearVelocityY
+function Movement:getTestLinearVelocity()
+  local dt = love.time.dt
+  local testMotionX, testMotionY = self.motionX, self.motionY
+
+  if self.vectorX == 0 and self.vectorY == 0 then
+    if self.slippery then
+      local length = vector.len(testMotionX, testMotionY)
+      local minLength = 0
+      if self.minSpeed > .01 then
+        minLength = self.minSpeed
+      end
+      if length < minLength then
+        testMotionX, testMotionY = 0, 0
+      else
+        if testMotionX ~= 0 or testMotionY ~= 0 then
+          testMotionX = testMotionX * ((length - self.deceleration) / length)
+          testMotionY = testMotionY * ((length - self.deceleration) / length)
+        else
+          testMotionX = length - self.deceleration
+          testMotionY = 0
+        end
+      end
+    else
+      testMotionX, testMotionY = 0, 0
+    end
+  else
+    if self.slippery then
+      -- get velocity without acceleration
+      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(self:getVector()))
+      local maxLength = vector.len(velocityX, velocityY)
+
+      -- add accelerated velocity to the test motion values
+      testMotionX, testMotionY = vector.add(testMotionX, testMotionY, vector.mul(self.acceleration, velocityX, velocityY))
+      -- if the test motion values are too fast, just use the normal velocity
+      if vector.len(testMotionX, testMotionY) > maxLength then
+        testMotionX, testMotionY = velocityX, velocityY
+      end
+    else
+      -- simple velocity calculation
+      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(self:getVector()))
+      testMotionX, testMotionY = velocityX, velocityY
+    end
+  end
+
+  return testMotionX, testMotionY
+end
+
 ---@param newX any
 ---@param newY any
 ---@return number, number

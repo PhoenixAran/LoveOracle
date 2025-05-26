@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local Enemy = require 'engine.entities.enemy'
 local Pool = require 'engine.utils.pool'
+local Physics = require 'engine.physics'
 
 -- require states so they register themslves in the pool
 require 'engine.entities.enemy.states'
@@ -80,7 +81,23 @@ function BasicEnemy:update()
 end
 
 function BasicEnemy:canMoveInDirection(x, y)
-  
+  local canMoveInDirection = true
+  local oldX, oldY = self.movement:getVector()
+  self.movement:setVector(x, y)
+
+  local goalX, goalY = self.movement:getTestLinearVelocity()
+  local _, _, testCols, testLen = Physics:projectMove(self.x, self.y, self.w, self.h, goalX, goalY, self.moveFilter)
+  for i = 1, testLen do
+    local col = testCols[i]
+    if self:isHazardTile(col.other) then
+      canMoveInDirection = false
+      break
+    end
+  end
+  self.movement:setVector(oldX, oldY)
+  Physics.freeCollisions(testCols)
+
+  return canMoveInDirection
 end
 
 --- returns if the given tile entity is considered a hazard tile by this basic_enemy instance
