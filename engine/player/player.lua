@@ -9,10 +9,7 @@ local BumpBox = require 'engine.entities.bump_box'
 local Pool = require 'engine.utils.pool'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local MapEntity = require 'engine.entities.map_entity'
-local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local Collider = require 'engine.components.collider'
-local PrototypeSprite = require 'engine.graphics.prototype_sprite'
-local SpriteRenderer = require 'engine.components.sprite_renderer'
 local PlayerStateMachine = require 'engine.player.player_state_machine'
 local PlayerStateParameters = require 'engine.player.player_state_parameters'
 local PlayerMovementController = require 'engine.player.player_movement_controller'
@@ -109,6 +106,9 @@ local Player = Class { __includes = MapEntity,
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
     self.spriteFlasher:addSprite(self.sprite)
+
+    -- set up sprite squisher
+    self.spriteSquisher:addSpriteRenderer(self.sprite)
 
     -- states
     self.environmentStateMachine = PlayerStateMachine(self)
@@ -722,6 +722,7 @@ end
 function Player:_onLanded()
   -- TODO play sound
   -- print 'player landed!'
+  self.spriteSquisher:wiggle(.1)
 end
 
 function Player:checkRoomTransitions()
@@ -887,6 +888,7 @@ function Player:update()
   self:updateEntityEffectSprite()
 
   self.spriteFlasher:update()
+  self.spriteSquisher:update()
   self.sprite:update()
   self.combat:update()
   self.movement:update()

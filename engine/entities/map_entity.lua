@@ -9,6 +9,7 @@ local Health = require 'engine.components.health'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local SpriteFlasher = require 'engine.components.sprite_flasher'
+local SpriteSquisher = require 'engine.components.sprite_squisher'
 local InteractionResolver = require 'engine.components.interaction_resolver'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
@@ -70,6 +71,7 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field grassMovementTick integer current number of frames entity has been moving when effect sprite is showing grass effect
 ---@field interactionResolver InteractionResolver
 ---@field spriteFlasher SpriteFlasher
+---@field spriteSquisher SpriteSquisher
 ---@field sprite SpriteRenderer|AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
 ---@field moveCollisions any[]
@@ -111,6 +113,7 @@ local MapEntity = Class { __includes = Entity,
     self.combat = Combat(self)
     self.effectSprite = SpriteBank.build('entity_effects', self)
     self.spriteFlasher = SpriteFlasher(self)
+    self.spriteSquisher = SpriteSquisher(self)
     if args.sprite then
       assert(args.sprite:getType() == 'sprite_renderer' or args.sprite:getType() == 'animated_sprite_renderer', 'Wrong component type provided for sprite')
       self.sprite = args.sprite
@@ -465,6 +468,10 @@ function MapEntity:onFallInLava()
   local effect = EffectFactory.createLavaSplashEffect(self:getPosition())
   effect:initTransform()
   self:emit('spawned_entity', effect)
+end
+
+function MapEntity:onFallInHole()
+  
 end
 
 --- hurt this entity

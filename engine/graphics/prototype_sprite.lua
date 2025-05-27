@@ -74,13 +74,18 @@ function PrototypeSprite:getOrigin()
   return self.originX, self.originY
 end
 
-function PrototypeSprite:draw(x, y, alpha)
-  x = (x - self:getWidth() / 2) + self:getOffsetX()
-  y = (y - self:getHeight() / 2) + self:getOffsetY()
-  if alpha == nil then alpha = 1 end
+function PrototypeSprite:draw(x, y, alpha, scaleX, scaleY)
+  scaleX = scaleX or 1
+  scaleY = scaleY or 1
+  alpha = alpha or 1
+
   alpha = math.min(alpha, self.alpha)
+  local w, h = self.w * scaleX, self.h * scaleY
+  -- Adjust x and y to scale around the center
+  x = x - (self.originX * scaleX - self.originX) + self.offsetX
+  y = y - (self.originY * scaleY - self.originY) + self.offsetY
   love.graphics.setColor(self.r, self.g, self.b, alpha)
-  love.graphics.rectangle('fill', x, y, self.w, self.h)
+  love.graphics.rectangle('fill', x, y, w, h)
   love.graphics.setColor(1, 1, 1)
 end
 

@@ -8,6 +8,8 @@ local PaletteBank = require 'engine.banks.palette_bank'
 ---@field offsetY number
 ---@field maxOffsetY number? this is only used for when jump speeds are high and we dont want the entity sprite to go too far up
 ---@field followZ boolean
+---@field scaleX number
+---@field scaleY number
 ---@field sprite Sprite|ColorSprite|CompositeSprite|PrototypeSprite
 local SpriteRenderer = Class { __includes = Component,
   init = function(self, entity, args)
@@ -17,8 +19,12 @@ local SpriteRenderer = Class { __includes = Component,
     if args.offsetY == nil then args.offsetY = 0 end
     if args.alpha == nil then args.alpha = 1 end
     if args.followZ == nil then args.followZ = true end
+    if args.scaleX == nil then args.scaleX = 1 end
+    if args.scaleY == nil then args.scaleY = 1 end
 
     self.palette = args.palette
+    self.scaleX = args.scaleX
+    self.scaleY = args.scaleY
     self.offsetX = args.offsetX
     self.offsetY = args.offsetY
     self.maxOffsetY = args.maxOffsetY
@@ -44,6 +50,31 @@ end
 
 function SpriteRenderer:getOffsetY()
   return self.offsetY
+end
+
+function SpriteRenderer:getScale()
+  return self.scaleX, self.scaleY
+end
+
+function SpriteRenderer:setScale(x, y)
+  self.scaleX = x
+  self.scaleY = y
+end
+
+function SpriteRenderer:getScaleX()
+  return self.scaleX
+end
+
+function SpriteRenderer:setScaleX(value)
+  self.scaleX = value
+end
+
+function SpriteRenderer:getScaleY()
+  return self.scaleY
+end
+
+function SpriteRenderer:setScaleY(value)
+  self.scaleY = value
 end
 
 function SpriteRenderer:getMaxOffsetY()
@@ -116,10 +147,10 @@ function SpriteRenderer:draw()
   y = y + totalYOffset
 
   if self.palette == nil then
-    self.sprite:draw(x, y, self.alpha)
+    self.sprite:draw(x, y, self.alpha, self.scaleX, self.scaleY)
   else
     love.graphics.setShader(self.palette:getShader())
-    self.sprite:draw(x, y, self.alpha)
+    self.sprite:draw(x, y, self.alpha, self.scaleX, self.scaleY)
     love.graphics.setShader()
   end
 end

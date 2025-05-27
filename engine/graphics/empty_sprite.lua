@@ -43,7 +43,7 @@ function EmptySprite:getOrigin()
 end
 
 -- its an empty sprite, so dont do anything
-function EmptySprite:draw(x, y, alpha)
+function EmptySprite:draw(x, y, alpha, scaleX, scaleY)
 end
 
 function EmptySprite:release()

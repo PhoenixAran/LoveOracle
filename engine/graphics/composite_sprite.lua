@@ -134,11 +134,11 @@ function CompositeSprite:getOrigin()
   return self.originX, self.originY
 end
 
-function CompositeSprite:draw(x, y, alpha)
+function CompositeSprite:draw(x, y, alpha, scaleX, scaleY)
   if alpha == nil then alpha = 1 end
   alpha = math.min(alpha, self.alpha)
   for _, sprite in ipairs(self.sprites) do
-    sprite:draw(x + self:getOffsetX(), y + self:getOffsetY(), alpha)
+    sprite:draw(x + self:getOffsetX(), y + self:getOffsetY(), alpha, scaleX, scaleY)
   end
 end
 

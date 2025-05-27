@@ -71,7 +71,7 @@ function ColorSprite:getOrigin()
   return self.sprite:getOrigin()
 end
 
-function ColorSprite:draw(x, y, alpha)
+function ColorSprite:draw(x, y, alpha, scaleX, scaleY)
   x = x + self:getOffsetX()
   y = y + self:getOffsetY()
   local currentShader = love.graphics.getShader()
@@ -79,7 +79,7 @@ function ColorSprite:draw(x, y, alpha)
   if shouldSwapBack then
     love.graphics.setShader(self.palette:getShader())
   end
-  self.sprite:draw(x, y, alpha)
+  self.sprite:draw(x, y, alpha, scaleX, scaleY)
   if shouldSwapBack then
     love.graphics.setShader(currentShader)
   end
