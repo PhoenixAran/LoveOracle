@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu2Z2QrCMBBF41JFLYLr7\/dXTaCDQzCbTmWS3AMX+zCknBpNmtkaY4ZEdjZbwTqJuHtJMNqsbNYfMtlsbM6JunVBnUToXlL+B5tjICfmdYjErwuNJxG61z\/8Xei5HxPPgNe15H+dk\/Lnda349zD\/L+b93fm5Ma\/cupr87zaPRJ4FdbX5SwN\/+Ev4T17g35d\/7\/Mf\/vCv1T+2T5QI7TU1krNPLA29X\/h7zVbxz5DIf4nzH434Z0j0u1\/i\/Ecjue\/krQJ\/+Pfuz\/cQ5M33AC37+3uIVtb\/b3tIofU\/dzwtfNtDCq3\/ueNpofSsPfYOlFOn7X+ytNf0a12N\/rk9pFDd3tTr38P8\/7XX5D+nnPG0INFrIv+SnlRtxNZ1h\/PXtK5LM86fMX9N81qakV337k\/07u8Y2HWP\/hz4t0ur6zoAAAAAAAAAAAAAAACA\/\/ECP\/RnKQBAAAA=",
+         "data":"H4sIAAAAAAAACu2Z2QrCMBBF41KlWgTX3++vmkAHh2A2HWWS3AMX+zCknBrNNNkaY4ZEdjZbwTqJuHtJMNmsbNZvMttsbE6JunVBnUToXlL+o80hkCPzGiPx60LjSYTu9Q9\/F3ruh8Qz4HUt+V+WpPx5XSv+Pcz\/s3l9d36uzCu3rib\/m809kUdBXW3+0sAf\/hL+sxf49+Xf+\/yHP\/xr9Y\/1iRKhXlMjOX1iaej9wu81W8XfQyL\/X+z\/aMTfQ6Lf\/S\/2fzSS+07eKs7\/Xd8Hf\/j34s97CPLmPUDL\/n4P0cr6\/+kZUmj9zx1PC5+eIYXW\/9zxtFC61x57B8qp0\/Y\/WXrW9G1djf65Z0ihur2p17+H+f\/tWZP\/nHLG04LEWRP5l5xJ1UZsXXc4f03rujTT8hnz1zSvpZnYde\/+RO\/+joFd9+jPgX+7tLquAwAAAAAAAAAAAAAAAPgfTyEhgDIAQAAA",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -163,6 +163,12 @@
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
                  "x":532,
                  "y":444
+                }, 
+                {
+                 "id":62,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":612,
+                 "y":348
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -178,8 +184,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":512,
-                 "y":440
+                 "x":536,
+                 "y":484
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -188,7 +194,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":62,
+ "nextobjectid":63,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

@@ -471,7 +471,10 @@ function MapEntity:onFallInLava()
 end
 
 function MapEntity:onFallInHole()
-  
+  local x, y = self:getPosition()
+  local effect = EffectFactory.createFallingObjectEffect(x, y, 'blue')
+  effect:initTransform()
+  self:emit('spawned_entity', effect)
 end
 
 --- hurt this entity

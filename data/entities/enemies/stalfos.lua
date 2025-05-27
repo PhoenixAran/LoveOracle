@@ -44,6 +44,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self:setCollisionTile(self.collidesWithTileNormalState)
 
     self.spriteFlasher:addSprite(self.sprite)
+    self.spriteSquisher:addSpriteRenderer(self.sprite)
     self.movement:setSpeed(40)
     self.movement:setVector(self:getRandomVector2())
 
@@ -76,6 +77,7 @@ end
 
 function Stalfos:land()
   self:prepForMoveState()
+  self.spriteSquisher:wiggle(0.15, 0.25)
   self.state = MOVING
 end
 

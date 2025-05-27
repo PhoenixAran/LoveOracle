@@ -93,10 +93,4 @@ function EffectFactory.createFallingObjectEffect(x, y, color, time)
   return effect
 end
 
-
-
-
-
-
-
 return EffectFactory

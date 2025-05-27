@@ -56,6 +56,7 @@ end
 function Enemy:updateComponents()
   self.groundObserver:update()
   self.spriteFlasher:update()
+  self.spriteSquisher:update()
   if self.sprite then
     self.sprite:update()
   end
