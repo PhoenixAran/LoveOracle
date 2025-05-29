@@ -149,8 +149,8 @@
                 {
                  "id":59,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":704,
-                 "y":332
+                 "x":560,
+                 "y":212
                 }, 
                 {
                  "id":60,
@@ -167,8 +167,8 @@
                 {
                  "id":62,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":612,
-                 "y":348
+                 "x":616,
+                 "y":356
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -184,8 +184,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":536,
-                 "y":484
+                 "x":660,
+                 "y":364
                 }],
          "opacity":1,
          "type":"objectgroup",

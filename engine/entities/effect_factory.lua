@@ -86,7 +86,7 @@ function EffectFactory.createFallingObjectEffect(x, y, color, time)
   local effect = EffectFactory.createEffectEntity({
     x = x,
     y = y,
-    effectAnimation = 'effect_object_falling_' .. color,
+    effectAnimation = 'effect_falling_object_' .. color,
     time = time
   })
   effect:initTransform()

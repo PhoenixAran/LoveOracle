@@ -2,17 +2,17 @@ local Class = require 'lib.class'
 local Enemy = require 'engine.entities.enemy'
 local Pool = require 'engine.utils.pool'
 local Physics = require 'engine.physics'
+local EffectFactory = require 'engine.entities.effect_factory'
 
 -- require states so they register themslves in the pool
 require 'engine.entities.enemy.states'
-
-
 --- Class with built in behaviour for enemies.
 --- This class automatically handles entities:
 --- **falling in hole, lava, and/or water
 --- **Stun State
 ---@class BasicEnemy : Enemy
 ---@field enemyState EnemyState
+---@field fallInHoleEffectColor string
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
     Enemy.init(self, args)  
@@ -20,6 +20,8 @@ local BasicEnemy = Class { __includes = Enemy,
     self.canFallInHole = args.canFallInHole or true
     self.canSwimInLava = args.canSwimInLava or false
     self.canSwimInWater = args.canSwimInWater or false
+
+    self.fallInHoleEffectColor = args.fallInHoleEffectColor or 'blue'
 
     self.enemyState = Pool.obtain('enemy_normal_state')
     self.enemyState:setEnemy(self)
@@ -43,6 +45,9 @@ end
 function BasicEnemy:changeState(state, forceUpdate)
   if forceUpdate == nil then
     forceUpdate = false
+  end
+  if state then
+    state:setEnemy(self)
   end
   self:onStateEnd(self.enemyState)
   self.enemyState:endState()
@@ -77,7 +82,10 @@ end
 function BasicEnemy:update()
   self:updateComponents()
   self:updateEnvironment()
-  self.enemyState:update()
+  if self.enemyState then
+    self.enemyState:update()
+  end
+
 end
 
 function BasicEnemy:canMoveInDirection(x, y)
@@ -117,7 +125,14 @@ function BasicEnemy:isHazardTile(tileEntity)
 end
 
 function BasicEnemy:beginNormalState()
-  self.enemyState = nil
+  self:changeState(Pool.obtain('enemy_normal_state'))
+end
+
+function BasicEnemy:onFallInHole()
+  local x, y = self:getPosition()
+  local effect = EffectFactory.createFallingObjectEffect(x, y, self.fallInHoleEffectColor)
+  effect:initTransform()
+  self:emit('spawned_entity', effect)
 end
 
 -- this is where custom enemy code should be implemented in child classes

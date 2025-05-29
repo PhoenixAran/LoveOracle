@@ -248,7 +248,7 @@ function PlayerMovementController:stayInsideHole()
   Physics:update(self.player, self.player.x, self.player.y)
 end
 
----@return Tile
+---@return Tile?
 function PlayerMovementController:getCurrentHoleTile()
   local holeTile
   for k, v in ipairs(self.player.groundObserver:getVisitedTiles()) do

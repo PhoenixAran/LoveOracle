@@ -36,6 +36,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     })
     args.useBumpCoords = false
     args.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
+    args.fallInHoleEffectColor = 'orange'
     BasicEnemy.init(self, args)
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
 
@@ -77,7 +78,7 @@ end
 
 function Stalfos:land()
   self:prepForMoveState()
-  self.spriteSquisher:wiggle(0.15, 0.25)
+  self.spriteSquisher:wiggle(0.12, 0.20)
   self.state = MOVING
 end
 
@@ -140,10 +141,6 @@ function Stalfos:onHurt(damageInfo)
     self.moveTimer = 0
     self.changeDirectionTimer = 0
   end
-end
-
-function Stalfos:onFall()
-
 end
 
 function Stalfos:draw()

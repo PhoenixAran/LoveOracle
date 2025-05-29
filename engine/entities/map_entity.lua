@@ -325,7 +325,6 @@ function MapEntity:move()
   local posX, posY = self:getBumpPosition()
   local velX, velY = self:getLinearVelocity()
   velX, velY = vector.add(velX, velY, self:getKnockbackVelocity())
-
   -- movement due to environment
   if self:movesWithConveyors() and self:onConveyor() then
     velX, velY = vector.add(velX, velY, self.groundObserver.conveyorVelocityX, self.groundObserver.conveyorVelocityY)
