@@ -88,7 +88,7 @@ end
 function EnemyFallInHoleState:endState()
   self.enemy:setSpeed(self.originalSpeed)
   self.enemy:setVector(0, 0)
-  self.enemy.collisionTiles = self.originalCollisionTiles
+  self.enemy:setCollisionTilesExplicit(self.originalCollisionTiles)
 
   self.holeTile = nil
   self.originalSpeed = 0

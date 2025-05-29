@@ -96,6 +96,10 @@ local Player = Class { __includes = MapEntity,
     })
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
+
+    -- hitbox
+    self.hitbox:resize(6, 9)
+
     -- tile collision
     self:setCollisionTiles('wall')
     
@@ -827,6 +831,7 @@ end
 
 function Player:onAwake()
   self.roomEdgeCollisionBox:entityAwake()
+  self.hitbox:entityAwake()
 end
 
 ---gets active states. Be sure to return table to table pool when you are done with it

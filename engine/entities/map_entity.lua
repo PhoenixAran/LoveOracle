@@ -6,6 +6,7 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local Entity = require 'engine.entities.entity'
 local Combat = require 'engine.components.combat'
 local Health = require 'engine.components.health'
+local Hitbox = require 'engine.components.hitbox'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
 local SpriteFlasher = require 'engine.components.sprite_flasher'
@@ -61,6 +62,7 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field movement Movement
 ---@field groundObserver GroundObserver
 ---@field combat Combat
+---@field hitbox Hitbox
 ---@field effectSprite AnimatedSpriteRenderer
 ---@field shadowOffsetX number offset X when effect sprite is playing shadow animation
 ---@field shadowOffsetY number offset Y when effect sprite is playing shadow animation
@@ -114,6 +116,9 @@ local MapEntity = Class { __includes = Entity,
     self.effectSprite = SpriteBank.build('entity_effects', self)
     self.spriteFlasher = SpriteFlasher(self)
     self.spriteSquisher = SpriteSquisher(self)
+    self.hitbox = Hitbox(self)
+    -- TODO connect hitbox signals
+
     if args.sprite then
       assert(args.sprite:getType() == 'sprite_renderer' or args.sprite:getType() == 'animated_sprite_renderer', 'Wrong component type provided for sprite')
       self.sprite = args.sprite
@@ -162,6 +167,9 @@ end
 function MapEntity:onTransformChanged()
   if self.roomEdgeCollisionBox then
     self.roomEdgeCollisionBox:onTransformChanged()
+  end
+  if self.hitbox then
+    self.hitbox:onTransformChanged()
   end
 end
 
@@ -615,8 +623,8 @@ function MapEntity:debugDraw(entDebugDrawFlags)
   if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 and self.roomEdgeCollisionBox then
     self.roomEdgeCollisionBox:debugDraw()
   end
-  if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.HitBox) ~= 0 then
-    -- TODO
+  if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.HitBox) ~= 0 and self.hitbox then
+    self.hitbox:debugDraw()
   end
 end
 
