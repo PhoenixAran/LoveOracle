@@ -176,7 +176,7 @@ end
 
 --- unset a tiletype this map entity can collide with
 ---@param tileType string|string[]
-function MapEntity:setCollisionTile(tileType)
+function MapEntity:setCollisionTiles(tileType)
   if type(tileType) == 'table' then
     for _, val in ipairs(tileType) do
       self.collisionTiles = bit.bor(self.collisionTiles, TileTypeFlags:get(val).value)
@@ -187,8 +187,12 @@ function MapEntity:setCollisionTile(tileType)
 end
 
 --- set tiletypes to collide with explicitly with tile type flags
-function MapEntity:setCollisionTileExplicit(flags)
+function MapEntity:setCollisionTilesExplicit(flags)
   self.collisionTiles = flags
+end
+
+function MapEntity:getCollisionTiles()
+  return self.collisionTiles
 end
 
 --- set a tiletype this map entity can collide with

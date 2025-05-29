@@ -41,9 +41,9 @@ end
 function EnemyFallInHoleState:beginState()
   self.holeTile = getCurrentHoleTile(self.enemy)
   self.originalSpeed = self.enemy:getSpeed()
-  self.originalCollisionTiles = self.enemy.collisionTiles
+  self.originalCollisionTiles = self.enemy:getCollisionTiles()
 
-  self.enemy.collisionTiles = 0
+  self.enemy:setCollisionTilesExplicit(0)
 end
 
 function EnemyFallInHoleState:update()

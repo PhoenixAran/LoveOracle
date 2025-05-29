@@ -42,7 +42,7 @@ local Stalfos = Class { __includes = BasicEnemy,
 
     self.collidesWithTileNormalState = { 'wall', 'water', 'lava', 'whirlpool', 'hole' }
     self.collidesWithTileHurtState = { 'wall'}
-    self:setCollisionTile(self.collidesWithTileNormalState)
+    self:setCollisionTiles(self.collidesWithTileNormalState)
 
     self.spriteFlasher:addSprite(self.sprite)
     self.spriteSquisher:addSpriteRenderer(self.sprite)
@@ -72,8 +72,8 @@ function Stalfos:prepForMoveState()
   self.currentJumpDelay = math.floor(love.math.random(70, 121))
   self.currentDirectionDelay = math.floor(love.math.random(30, 71))
 
-  self:setCollisionTileExplicit(0)
-  self:setCollisionTile(self.collidesWithTileNormalState)
+  self:setCollisionTilesExplicit(0)
+  self:setCollisionTiles(self.collidesWithTileNormalState)
 end
 
 function Stalfos:land()
@@ -135,8 +135,8 @@ end
 
 function Stalfos:onHurt(damageInfo)
   if self.state ~= HURT then
-    self:setCollisionTileExplicit(0)
-    self:setCollisionTile(self.collidesWithTileHurtState)
+    self:setCollisionTilesExplicit(0)
+    self:setCollisionTiles(self.collidesWithTileHurtState)
     self.state = HURT
     self.moveTimer = 0
     self.changeDirectionTimer = 0

@@ -97,7 +97,7 @@ local Player = Class { __includes = MapEntity,
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
     -- tile collision
-    self:setCollisionTile('wall')
+    self:setCollisionTiles('wall')
     
     -- ground observer
     self.groundObserver:setOffset(0, 4)
