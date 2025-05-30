@@ -379,6 +379,10 @@ end
 
 -- combat component pass throughs
 function MapEntity:isIntangible()
+  local result = self.combat:isIntangible()
+  print(result)
+  
+
   return self.combat:isIntangible()
 end
 

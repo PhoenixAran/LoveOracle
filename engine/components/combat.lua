@@ -92,7 +92,7 @@ end
 
 ---@return boolean
 function Combat:isIntangible()
-  return self.currentKnockbackTime > 0 and self.currentIntangibilityTime < self.intangibilityTime
+  return self.intangibilityTime > 0 and self.currentIntangibilityTime < self.intangibilityTime
 end
 
 ---@return boolean
