@@ -143,8 +143,8 @@
                 {
                  "id":53,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":464,
-                 "y":440
+                 "x":448,
+                 "y":452
                 }, 
                 {
                  "id":59,
@@ -161,8 +161,8 @@
                 {
                  "id":61,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":532,
-                 "y":444
+                 "x":544,
+                 "y":448
                 }, 
                 {
                  "id":62,

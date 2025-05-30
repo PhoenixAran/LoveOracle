@@ -11,9 +11,14 @@ local TablePool = require 'engine.utils.table_pool'
 -- helper function
 local function setPositionRelativeToEntity(hitbox)
   local ex, ey = hitbox.entity:getPosition()
+  local ez = hitbox.entity:getZPosition()
   hitbox.x = (ex - hitbox.w / 2) + hitbox.offsetX
-  hitbox.y = (ey - hitbox.h / 2) + hitbox.offsetY
+  hitbox.y = (ey - hitbox.h / 2) + hitbox.offsetY - ez  -- follow entity z position in the air
   hitbox.z = hitbox.entity:getZPosition()
+
+  -- match the z range of tne entity
+  hitbox.zRange.min = hitbox.entity.zRange.min
+  hitbox.zRange.max = hitbox.entity.zRange.max
 end
 
 
@@ -222,20 +227,20 @@ function Hitbox:debugDraw()
   if self.enabled then
     if self.detectOnly then
       love.graphics.setColor(1, 0.5, 0, a) -- Orange fill
-      love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
+      love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
       love.graphics.setColor(0.8, 0.4, 0) -- Darker orange outline
-      love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+      love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
     else
       love.graphics.setColor(176 / 255, 35 / 255, 82 / 255, a)
-      love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
+      love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
       love.graphics.setColor(120 / 255, 22 / 255, 54 / 255)
-      love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+      love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
     end
   else
     love.graphics.setColor(116 / 255, 116 / 255, 117 / 255)
-    love.graphics.rectangle('fill', self.x, self.y - self.z, self.w, self.h)
+    love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
     love.graphics.setColor(55 / 255, 55 / 255, 56 / 255)
-    love.graphics.rectangle('line', self.x, self.y - self.z, self.w, self.h)
+    love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
   end
   love.graphics.setColor(1, 1, 1)
 end
