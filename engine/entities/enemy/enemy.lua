@@ -61,6 +61,7 @@ function Enemy:updateComponents()
     self.sprite:update()
   end
   self.combat:update()
+  self.hitbox:update()
   self.movement:update()
   self:updateEntityEffectSprite()
 end

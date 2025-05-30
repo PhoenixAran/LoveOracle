@@ -1,3 +1,5 @@
+-- used in Entity hitboxes
+
 local CollisionTag = {
   -- entities
   player = 'player',

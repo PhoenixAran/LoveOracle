@@ -85,7 +85,6 @@ function BasicEnemy:update()
   if self.enemyState then
     self.enemyState:update()
   end
-
 end
 
 function BasicEnemy:canMoveInDirection(x, y)

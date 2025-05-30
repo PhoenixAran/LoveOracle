@@ -22,6 +22,8 @@ local Consts = require 'constants'
 local PlayerSkills = require 'engine.player.player_skills'
 local bit = require 'bit'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
+local CollisionTag = require 'engine.enums.collision_tag'
+local Interactions = require 'engine.entities.interactions'
 
 
 -- ### STATES ###
@@ -96,6 +98,7 @@ local Player = Class { __includes = MapEntity,
     })
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
+    self.collisionTag = CollisionTag.player
 
     -- hitbox
     self.hitbox:resize(6, 9)
@@ -297,6 +300,8 @@ local Player = Class { __includes = MapEntity,
       end
       return false
     end
+
+    -- set interactions TODO
   end
 }
 
@@ -896,6 +901,7 @@ function Player:update()
   self.spriteSquisher:update()
   self.sprite:update()
   self.combat:update()
+  self.hitbox:update()
   self.movement:update()
 
   local tvx, tvy = self:move()

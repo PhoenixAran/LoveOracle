@@ -7,6 +7,8 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local Collider = require 'engine.components.collider'
 local bit = require 'bit'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
+local CollisionTag = require 'engine.enums.collision_tag'
+local Interactions = require 'engine.entities.interactions'
 
 local MOVING = 1
 local HURT = 2
@@ -23,7 +25,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     if args == nil then
       args = { }
     end
-    args.w, args.h = 8, 9
+    args.w, args.h = 10, 10
     args.direction = args.direction or Direction4.down
     args.sprite = SpriteBank.build('stalfos', self)
     args.roomEdgeCollisionBox = Collider(self, {
@@ -48,6 +50,8 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.spriteSquisher:addSpriteRenderer(self.sprite)
     self.movement:setSpeed(40)
     self.movement:setVector(self:getRandomVector2())
+    self.hitbox:resize(12, 11)
+    self.hitbox:setCollisionTag(CollisionTag.enemy)
 
     self.state = MOVING
     self.moveTimer = 0
@@ -57,6 +61,9 @@ local Stalfos = Class { __includes = BasicEnemy,
 
     self.shadowOffsetY = 6
     self.rippleOffsetY = 6
+
+    self.collisionTag = CollisionTag.enemy
+    self:setInteraction(CollisionTag.player, Interactions.damageOther)
   end
 }
 

@@ -37,6 +37,10 @@ function InteractionResolver:getInteraction(tag)
   return self.interactions[tag]
 end
 
+function InteractionResolver:hasInteraction(tag)
+  return self.interactions[tag] ~= nil
+end
+
 function InteractionResolver:resolveInteraction(receiver, sender)
   local tag = receiver:getCollisionTag()
   local interaction = self:getInteraction(tag)

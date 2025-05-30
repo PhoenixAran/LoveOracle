@@ -16,13 +16,6 @@ local function setPositionRelativeToEntity(hitbox)
   hitbox.z = hitbox.entity:getZPosition()
 end
 
-local function filter(item, other)
-  if other.getType then
-    other.reportHitboxCollision(item)
-  end
-  -- don't report
-  return nil
-end
 
 ---@class Hitbox : BumpBox, Component
 ---@field offsetX integer
@@ -35,6 +28,8 @@ end
 ---@field knockbackSpeed integer
 ---@field hitstunTime integer
 ---@field damageInfo DamageInfo
+---@field collisionTag string?
+---@field queryRectFilter function
 local Hitbox = Class { __includes = { BumpBox, Component },
   init = function(self, entity, args)
     if args == nil then
@@ -63,7 +58,7 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     self.canHitMultiple = args.canHitMultiple
     -- use entity's position as source position
     self.useEntityAsSource = args.useEntityAsSource
-
+    self.collisionTag = args.collisionTag
     self.damage = args.damage
     self.knockbackTime = args.knockbackTime
     self.knockbackSpeed = args.knockbackSpeed
@@ -74,6 +69,22 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     self.damageInfo.knockbackTime = self.knockbackTime
     self.damageInfo.knockbackSpeed = self.knockbackSpeed
     self.damageInfo.hitstunTime = self.hitstunTime
+
+    -- set the physics mask for this hitbox
+    self:setPhysicsLayer('hitbox')
+
+    local closureSelf = self
+    local canCollide = BumpBox.canCollide
+    local function queryRectHitboxFilter(item)
+      if canCollide(closureSelf, item) then
+        if item.getType and item:getType() == 'hitbox' then
+          return true
+        end
+      end
+      -- don't report
+      return nil
+    end
+    self.queryRectFilter = queryRectHitboxFilter
   end
 }
 
@@ -86,6 +97,14 @@ function Hitbox:onTransformChanged()
   if self.registeredWithPhysics then
     Physics:update(self, self.x, self.y, self.w, self.h)
   end
+end
+
+function Hitbox:setCollisionTag(collisionTag)
+  self.collisionTag = collisionTag
+end
+
+function Hitbox:getCollisionTag()
+  return self.collisionTag
 end
 
 function Hitbox:entityAwake()
@@ -117,7 +136,13 @@ end
 
 function Hitbox:update()
   if not self.detectOnly then
-    -- TODO
+    local items, len = Physics:queryRect(self.x, self.y, self.w, self.h, self.queryRectFilter)
+    if 0 < len then
+      for _, item in ipairs(items) do
+        self:reportHitboxCollision(item)
+      end
+    end
+    Physics.freeTable(items)
   end
 end
 

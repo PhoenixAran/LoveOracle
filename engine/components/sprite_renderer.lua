@@ -137,7 +137,6 @@ function SpriteRenderer:draw()
     totalYOffset = totalYOffset - z
   end
   if self.maxOffsetY ~= nil and math.abs(totalYOffset) > self.maxOffsetY then
-    print('here')
     if totalYOffset < 0 then
       totalYOffset = -self.maxOffsetY
     else

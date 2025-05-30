@@ -117,7 +117,6 @@ local MapEntity = Class { __includes = Entity,
     self.spriteFlasher = SpriteFlasher(self)
     self.spriteSquisher = SpriteSquisher(self)
     self.hitbox = Hitbox(self)
-    -- TODO connect hitbox signals
 
     if args.sprite then
       assert(args.sprite:getType() == 'sprite_renderer' or args.sprite:getType() == 'animated_sprite_renderer', 'Wrong component type provided for sprite')
@@ -125,9 +124,11 @@ local MapEntity = Class { __includes = Entity,
     end
     self.interactionResolver = InteractionResolver(self)
 
-
     -- component configuration
     self.health:connect('health_depleted', self, '_onHealthDepleted')
+    self.hitbox:connect('hitbox_entered', self, '_onHitboxEntered')
+    self.hitbox:connect('damaged_other', self, '_onHitboxDamagedOther')
+    self.hitbox:connect('resisted', self, '_onHitboxResisted')
 
     -- NB: this collision box will NOT actually exist in the Physics system
     -- if this is not null, it will only be used to collide with room edges if you want the room edge collider
@@ -452,6 +453,10 @@ function MapEntity:isInHole()
 end
 
 -- interaction resolver pass throughs
+
+---set interaction for when this entity runs into another entity's hitbox with a specific collision tag
+---@param tag string collision tag
+---@param interaction function
 function MapEntity:setInteraction(tag, interaction)
   self.interactionResolver:setInteraction(tag, interaction)
 end
@@ -461,7 +466,21 @@ function MapEntity:removeInteraction(tag)
 end
 
 function MapEntity:resolveInteraction(receiver, sender)
+  local tag = sender:getCollisionTag()
+  if self.interactionResolver:hasInteraction(tag) then
+    self.interactionResolver:resolveInteraction(receiver, sender)
+  end
   self.interactionResolver:resolveInteraction(receiver, sender)
+end
+
+--- this method is used when the entity is not configured to automatically respond to
+--- a given hitbox type. This allows the entity to check if any of it's items can
+--- protect it from the sender. This is usually just used on the player since players
+--- are not automatically set to collide with monsters, but they should still be able to block
+--- attacks with a shield or parry attacks with a sword
+--- @param sender Hitbox the hitbox that the entity is colliding with
+function MapEntity:triggerOverrideInteractions(sender)
+  return false
 end
 
 function MapEntity:reportCollsionWithHitbox(hitbox)
@@ -639,9 +658,14 @@ function MapEntity:_onHealthDepleted()
   end
 end
 
-function MapEntity:_onHitboxCollided(hitbox)
-  error('not implemented')
-  --self:reportCollisionWithHitbox(hitbox)
+-- TODO
+function MapEntity:_onHitboxEntered(hitbox)
+  self:resolveInteraction(self.hitbox, hitbox)
+end
+
+-- TODO
+function MapEntity:_onHitboxDamagedOther(hitbox)
+
 end
 
 return MapEntity
