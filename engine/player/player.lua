@@ -102,6 +102,7 @@ local Player = Class { __includes = MapEntity,
 
     -- hitbox
     self.hitbox:resize(6, 9)
+    self.hitbox:setCollisionTag(self.collisionTag)
 
     -- tile collision
     self:setCollisionTiles('wall')

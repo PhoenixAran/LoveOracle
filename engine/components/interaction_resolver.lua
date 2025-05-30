@@ -42,7 +42,7 @@ function InteractionResolver:hasInteraction(tag)
 end
 
 function InteractionResolver:resolveInteraction(receiver, sender)
-  local tag = receiver:getCollisionTag()
+  local tag = sender:getCollisionTag()
   local interaction = self:getInteraction(tag)
   if interaction then
     interaction(receiver, sender)

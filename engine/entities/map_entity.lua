@@ -470,7 +470,6 @@ function MapEntity:resolveInteraction(receiver, sender)
   if self.interactionResolver:hasInteraction(tag) then
     self.interactionResolver:resolveInteraction(receiver, sender)
   end
-  self.interactionResolver:resolveInteraction(receiver, sender)
 end
 
 --- this method is used when the entity is not configured to automatically respond to

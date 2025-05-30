@@ -72,10 +72,14 @@ local Hitbox = Class { __includes = { BumpBox, Component },
 
     -- set the physics mask for this hitbox
     self:setPhysicsLayer('hitbox')
+    self:setCollidesWithLayer('hitbox')
 
     local closureSelf = self
     local canCollide = BumpBox.canCollide
     local function queryRectHitboxFilter(item)
+      if item == closureSelf then
+        return nil -- don't collide with self
+      end
       if canCollide(closureSelf, item) then
         if item.getType and item:getType() == 'hitbox' then
           return true

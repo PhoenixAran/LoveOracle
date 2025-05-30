@@ -15,6 +15,8 @@ local HURT = 2
 local JUMP = 3
 local MARKED_DEAD = 4
 
+-- TODO color variants
+
 ---@class Stalfos : BasicEnemy
 ---@field collidesWithTileNormalState string[]
 ---@field collidesWithTileHurtState string[]
@@ -52,6 +54,10 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.movement:setVector(self:getRandomVector2())
     self.hitbox:resize(12, 11)
     self.hitbox:setCollisionTag(CollisionTag.enemy)
+    self.hitbox.damageInfo.damage = 2
+    self.hitbox.damageInfo.knockbackSpeed = 100
+    self.hitbox.damageInfo.knockbackTime = 8
+    self.hitbox.damageInfo.hitstunTime = 8
 
     self.state = MOVING
     self.moveTimer = 0

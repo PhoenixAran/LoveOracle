@@ -16,7 +16,7 @@ function Interactions.takeDamage(receiver, sender)
 end
 
 function Interactions.damageOther(receiver, sender)
-  if not (sender.triggerOverrideInteractions and sender:triggerOverrideInteractions(receiver)) then
+  if not (sender.entity.triggerOverrideInteractions and sender.entity:triggerOverrideInteractions(receiver)) then
     if not (sender.entity.isIntangible and sender.entity:isIntangible()) then
       sender.entity:hurt(receiver:getDamageInfo())
       receiver:notifyDidDamage(sender)
