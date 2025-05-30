@@ -70,9 +70,6 @@ local Stalfos = Class { __includes = BasicEnemy,
 
     self.collisionTag = CollisionTag.enemy
     self:setInteraction(CollisionTag.player, Interactions.damageOther)
-    
-
-    self:setSpeed(0)
   end
 }
 
