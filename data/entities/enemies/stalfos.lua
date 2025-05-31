@@ -84,7 +84,6 @@ function Stalfos:prepForMoveState()
   self.changeDirectionTimer = 0
   self.currentJumpDelay = math.floor(love.math.random(70, 121))
   self.currentDirectionDelay = math.floor(love.math.random(30, 71))
-
   self:setCollisionTilesExplicit(0)
   self:setCollisionTiles(self.collidesWithTileNormalState)
 end
@@ -154,10 +153,6 @@ function Stalfos:onHurt(damageInfo)
     self.moveTimer = 0
     self.changeDirectionTimer = 0
   end
-end
-
-function Stalfos:draw()
-  BasicEnemy.draw(self)
 end
 
 return Stalfos

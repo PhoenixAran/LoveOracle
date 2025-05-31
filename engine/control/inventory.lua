@@ -8,6 +8,10 @@ local SLOT_ITEM_2 = 3
 
 ---@class Inventory
 ---@field items table
+---@field equippedItems Item[]
+---@field gameControl GameControl?
+---@field piecesOfHeart number
+---@field player Player
 local Inventory = Class { __includes = SignalObject,
   init = function(self, gameControl)
     SignalObject.init(self)
@@ -45,6 +49,119 @@ end
 function Inventory:unequipItem(itemId, slot)
 
 end
+
+function Inventory:obtainItem(item)
+
+end
+
+function Inventory:unobtainItem(item)
+
+end
+
+function Inventory:setLevel(itemId, level)
+
+end
+
+function Inventory:setMaxLevel(itemId)
+
+end
+
+function Inventory:getSlotButton(slot)
+
+end
+
+function Inventory:isWeaponEquipped(weapon)
+
+end
+
+function Inventory:isWeaponButtonDown(id)
+
+end
+
+function Inventory:getWeapon(id)
+
+end
+
+function Inventory:getItems()
+
+end
+
+function Inventory:getItem(id)
+
+end
+
+function Inventory:containsItem(itemId)
+
+end
+
+function Inventory:isItemObtained(id)
+
+end
+
+function Inventory:isItemAvailable()
+
+end
+
+function Inventory:addAmmos(obtain, ammos)
+
+end
+
+function Inventory:addAmmo(obtain, ammo)
+
+end
+
+function Inventory:fillAllAmmo()
+
+end
+
+function Inventory:emptyAllAmmo()
+
+end
+
+function Inventory:obtainAmmo(ammo)
+
+end
+
+function Inventory:getAmmo(ammoId)
+
+end
+
+function Inventory:getAmmos()
+
+end
+
+function Inventory:containsAmmo(ammoId)
+
+end
+
+function Inventory:isAmmoObtained(ammoId)
+
+end
+
+function Inventory:isAmmoAvailable(ammoId)
+
+end
+
+function Inventory:isAmmoContainerAvailable(id)
+
+end
+
+function Inventory:getEquippedWeapons()
+
+end
+
+function Inventory:isTwoHandedEquipped()
+
+end
+
+function Inventory:getPiecesOfHeart()
+
+end
+
+function Inventory:getGameControl()
+  return self.gameControl
+end
+
 
 return Inventory
 
