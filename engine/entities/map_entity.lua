@@ -657,7 +657,6 @@ function MapEntity:_onHealthDepleted()
   end
 end
 
--- TODO
 function MapEntity:_onHitboxEntered(hitbox)
   self:resolveInteraction(self.hitbox, hitbox)
 end

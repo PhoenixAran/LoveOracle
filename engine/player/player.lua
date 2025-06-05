@@ -655,6 +655,7 @@ function Player:updateStates()
 end
 
 -- equip the given item
+-- TODO unequip
 ---@param item Item
 function Player:equipItem(item)
   self:addChild(item)
@@ -662,6 +663,7 @@ function Player:equipItem(item)
   for i, v in ipairs(item.useButtons) do
     self.items[v] = item
   end
+  item:awake()
 end
 
 function Player:updateEquippedItems()
@@ -911,7 +913,7 @@ function Player:update()
   if self:getWeaponState() == nil then
     self:updateLedgeJumpState()
   end
-  
+
   -- check push tile if we are not ledge jumping
   local EPSILON = 0.001
   if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then
@@ -969,6 +971,11 @@ function Player:debugDraw(entDebugDrawFlags)
   MapEntity.debugDraw(self, entDebugDrawFlags)
   if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 then
     self.roomEdgeCollisionBox:debugDraw()
+  end
+  if lume.any(self.items) then
+    for _, item in pairs(self.items) do
+      item:debugDraw(entDebugDrawFlags)
+    end
   end
 end
 

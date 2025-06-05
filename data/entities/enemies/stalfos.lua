@@ -68,8 +68,10 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.shadowOffsetY = 6
     self.rippleOffsetY = 6
 
+    -- set collision reactions
     self.collisionTag = CollisionTag.enemy
     self:setInteraction(CollisionTag.player, Interactions.damageOther)
+    self:setInteraction(CollisionTag.sword, Interactions.takeDamage)
   end
 }
 
@@ -90,7 +92,7 @@ end
 
 function Stalfos:land()
   self:prepForMoveState()
-  self.spriteSquisher:wiggle(0.12, 0.20)
+  self.spriteSquisher:wiggle(0.10, 0.08)
   self.state = MOVING
 end
 
@@ -128,6 +130,7 @@ function Stalfos:updateAi()
       self:prepForMoveState()
       self.state = MOVING
     end
+    self:move()
   elseif self.state == MARKED_DEAD then
     if not self.combat:inHitstun() then
       self:destroy()
@@ -147,7 +150,7 @@ end
 
 function Stalfos:onHurt(damageInfo)
   if self.state ~= HURT then
-    self:setCollisionTilesExplicit(0)
+    self:setCollisionTiles('wall')
     self:setCollisionTiles(self.collidesWithTileHurtState)
     self.state = HURT
     self.moveTimer = 0

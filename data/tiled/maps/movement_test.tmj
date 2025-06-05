@@ -149,8 +149,8 @@
                 {
                  "id":59,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":560,
-                 "y":212
+                 "x":592,
+                 "y":224
                 }, 
                 {
                  "id":60,
@@ -169,6 +169,12 @@
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
                  "x":616,
                  "y":356
+                }, 
+                {
+                 "id":65,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":820,
+                 "y":444
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -184,8 +190,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":508,
-                 "y":440
+                 "x":808,
+                 "y":488
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -194,7 +200,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":63,
+ "nextobjectid":66,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

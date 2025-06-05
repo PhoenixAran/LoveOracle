@@ -45,6 +45,12 @@ function BaseGameplayScreen:enter(prev, ...)
   local player = Player({name = 'player'})
   player:initTransform()
 
+  -- TODO set up inventory
+  local Sword = require 'engine.items.weapons.item_sword'
+  local sword = Sword({name = 'sword'})
+  sword.useButtons = { 'b' }
+  player:equipItem(sword)
+
   self.gameControl:setPlayer(player)
   local map = Map(mapFile)
   self.gameControl:setMap(map)

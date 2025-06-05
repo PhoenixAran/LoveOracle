@@ -7,10 +7,11 @@ local SLOT_ITEM_1 = 2
 local SLOT_ITEM_2 = 3
 
 ---@class Inventory
----@field items table
+---@field items table<string, Item>
+---@field ammos table<string, Ammo>
 ---@field equippedItems Item[]
 ---@field gameControl GameControl?
----@field piecesOfHeart number
+---@field piecesOfHeart number number of pieces of heart between 0 and 3
 ---@field player Player
 local Inventory = Class { __includes = SignalObject,
   init = function(self, gameControl)
@@ -43,11 +44,11 @@ function Inventory:removeItem(itemId)
 end
 
 function Inventory:equipItem(itemId, slot)
-  
+  local equippableItem
 end
 
 function Inventory:unequipItem(itemId, slot)
-
+  
 end
 
 function Inventory:obtainItem(item)
@@ -162,6 +163,10 @@ function Inventory:getGameControl()
   return self.gameControl
 end
 
+function Inventory:getInspectorProperties()
+  -- TODO would be extremely useful
+  error('Inventory:getInspectorProperties not implemented')
+end
 
 return Inventory
 

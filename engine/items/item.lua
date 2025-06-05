@@ -29,6 +29,10 @@ function Item:getName()
   return self.name
 end
 
+function Item:onAwake()
+
+end
+
 function Item:getUseParameters()
   return self.useParameters
 end
@@ -86,6 +90,11 @@ function Item:isUsable()
   end
   -- TODO check if player is in hole
   return true
+end
+
+
+---@param sender Hitbox
+function Item:overridesInteraction(sender)
 end
 
 -- called when assigned buttons are down

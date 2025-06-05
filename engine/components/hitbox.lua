@@ -35,6 +35,7 @@ end
 ---@field damageInfo DamageInfo
 ---@field collisionTag string?
 ---@field queryRectFilter function
+---@field ignoreHitboxSet table<Hitbox, boolean>
 local Hitbox = Class { __includes = { BumpBox, Component },
   init = function(self, entity, args)
     if args == nil then
@@ -74,6 +75,7 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     self.damageInfo.knockbackTime = self.knockbackTime
     self.damageInfo.knockbackSpeed = self.knockbackSpeed
     self.damageInfo.hitstunTime = self.hitstunTime
+    self.ignoreHitboxSet = args.ignoreHitboxSet or { }
 
     -- set the physics mask for this hitbox
     self:setPhysicsLayer('hitbox')
@@ -85,13 +87,13 @@ local Hitbox = Class { __includes = { BumpBox, Component },
       if item == closureSelf then
         return nil -- don't collide with self
       end
-      if canCollide(closureSelf, item) then
-        if item.getType and item:getType() == 'hitbox' then
+
+      if item.getType and item:getType() == 'hitbox' and not self.ignoreHitboxSet[item] then
+        if canCollide(closureSelf, item) then
           return true
         end
+        return nil
       end
-      -- don't report
-      return nil
     end
     self.queryRectFilter = queryRectHitboxFilter
   end
@@ -106,6 +108,14 @@ function Hitbox:onTransformChanged()
   if self.registeredWithPhysics then
     Physics:update(self, self.x, self.y, self.w, self.h)
   end
+end
+
+function Hitbox:addIgnoreHitbox(hitbox)
+  self.ignoreHitboxSet[hitbox] = true
+end
+
+function Hitbox:removeIgnoreHitbox(hitbox)
+  self.ignoreHitboxSet[hitbox] = nil
 end
 
 function Hitbox:setCollisionTag(collisionTag)
@@ -237,9 +247,9 @@ function Hitbox:debugDraw()
       love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
     end
   else
-    love.graphics.setColor(116 / 255, 116 / 255, 117 / 255)
+    love.graphics.setColor(116 / 255, 116 / 255, 117 / 255, a)
     love.graphics.rectangle('fill', self.x, self.y, self.w, self.h)
-    love.graphics.setColor(55 / 255, 55 / 255, 56 / 255)
+    love.graphics.setColor(55 / 255, 55 / 255, 56 / 255, a)
     love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
   end
   love.graphics.setColor(1, 1, 1)

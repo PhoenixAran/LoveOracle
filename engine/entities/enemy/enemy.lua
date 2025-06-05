@@ -83,6 +83,9 @@ function Enemy:onAwake()
   if self.roomEdgeCollisionBox then
     self.roomEdgeCollisionBox:entityAwake()
   end
+  if self.hitbox then
+    self.hitbox:entityAwake()
+  end
 end
 
 ---@param damageInfo DamageInfo
