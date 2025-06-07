@@ -22,10 +22,7 @@ local BasicEnemy = Class { __includes = Enemy,
     self.canSwimInWater = args.canSwimInWater or false
 
     self.fallInHoleEffectColor = args.fallInHoleEffectColor or 'blue'
-
-    self.enemyState = Pool.obtain('enemy_normal_state')
-    self.enemyState:setEnemy(self)
-    self:changeState(self.enemyState)
+    self:changeState(Pool.obtain('enemy_normal_state'))
   end
 }
 
@@ -35,7 +32,9 @@ end
 
 function BasicEnemy:release()
   if self.enemyState then
+    print('BasicEnemy:release')
     Pool.free(self.enemyState)
+    self.enemyState = nil
   end
   Enemy.release(self)
 end
@@ -43,23 +42,27 @@ end
 ---@param state EnemyState?
 ---@param forceUpdate boolean?
 function BasicEnemy:changeState(state, forceUpdate)
-  if forceUpdate == nil then
-    forceUpdate = false
-  end
+  forceUpdate = forceUpdate or false
+
   if state then
     state:setEnemy(self)
   end
-  self:onStateEnd(self.enemyState)
-  self.enemyState:endState()
+
+  if self.enemyState then
+    self:onStateEnd(self.enemyState)
+    self.enemyState:endState()
+    print('BasicEnemy:changeState')
+    Pool.free(self.enemyState)
+  end
+
   local oldState = self.enemyState
   self.enemyState = state
-  if (oldState ~= self.enemyState or forceUpdate) and state then
-    if self.enemyState then
-      Pool.free(self.enemyState)
-    end
+
+  if (oldState ~= self.enemyState or forceUpdate) and self.enemyState then
     self.enemyState:beginState()
-    self:onStateBegin(state)
+    self:onStateBegin(self.enemyState)
   end
+
 end
 
 function BasicEnemy:updateEnvironment()
