@@ -134,7 +134,8 @@ function Stalfos:updateAi()
     end
     self:move()
   elseif self.state == MARKED_DEAD then
-    if not self.combat:inHitstun() then
+    self:move()
+    if not self.combat:inHitstun() and not self.combat:inKnockback() then
       self:die()
     end
   end
@@ -163,6 +164,7 @@ end
 
 function Stalfos:onHurt(damageInfo)
   if self.state ~= HURT and not self.deathMarked and not self:isIntangible() then
+    self:setCollisionTilesExplicit(0)
     self:setCollisionTiles(self.collidesWithTileHurtState)
     self:changeAiState(HURT)
     self.moveTimer = 0
