@@ -56,7 +56,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.hitbox:resize(12, 11)
     self.hitbox:setCollisionTag(CollisionTag.enemy)
     self.hitbox.damageInfo.damage = 2
-    self.hitbox.damageInfo.knockbackSpeed = 100
+    self.hitbox.damageInfo.knockbackSpeed = 80
     self.hitbox.damageInfo.knockbackTime = 8
     self.hitbox.damageInfo.hitstunTime = 8
     self.health:setMaxHealth(2, true)
@@ -127,8 +127,9 @@ function Stalfos:updateAi()
     if self:isOnGround() then
       self:land()
     end
+    self:move()
   elseif self.state == HURT then
-    if not self.combat:inHitstun() then
+    if not self.combat:inKnockback() then
       self:prepForMoveState()
       self:changeAiState(MOVING)
     end
@@ -146,11 +147,15 @@ end
 
 -- callbacks
 function Stalfos:onJump()
+  self:setVector(0, 0)
   self.state = JUMP
   self.sprite:play('jump')
 end
 
 function Stalfos:onHealthDepleted()
+  print 'stalfos:onHealthDepleted'
+  -- if it died its probably getting hit
+  -- so set its collision to the hurt state
   self:changeAiState(MARKED_DEAD)
 end
 
@@ -162,8 +167,11 @@ function Stalfos:onDie()
 end
 
 function Stalfos:onHurt(damageInfo)
-  if self.state ~= HURT and not self.deathMarked and not self:isIntangible() then
+  if self.state ~= HURT or self.state ~= MARKED_DEAD then
+    self:setCollisionTilesExplicit(0)
     self:setCollisionTiles(self.collidesWithTileHurtState)
+  end
+  if self.state ~= HURT and not self.deathMarked and not self:isIntangible() then
     self:changeAiState(HURT)
     self.moveTimer = 0
     self.changeDirectionTimer = 0
