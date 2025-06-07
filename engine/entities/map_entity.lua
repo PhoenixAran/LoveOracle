@@ -564,6 +564,7 @@ function MapEntity:onDie()
 end
 
 --- calls self:onDie() and then destroys the entity via self:destroy()
+--- Use this when an NPC gets destroyed via hitboxes
 function MapEntity:die()
   self:onDie()
   self:destroy()

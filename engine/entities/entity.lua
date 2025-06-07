@@ -230,6 +230,9 @@ function Entity:removed(scene)
   end
 end
 
+--- destroys this Entity instance
+--- Do no confuse with MapEntity:die(), which will do gameplay things
+--- This function handles signal_object cleanup and stuff
 function Entity:destroy()
 ---@diagnostic disable-next-line: undefined-field
   if self.onDestroy then

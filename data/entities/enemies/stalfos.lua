@@ -135,7 +135,7 @@ function Stalfos:updateAi()
     self:move()
   elseif self.state == MARKED_DEAD then
     if not self.combat:inHitstun() then
-      self:destroy()
+      self:die()
     end
   end
 end
@@ -154,7 +154,7 @@ function Stalfos:onHealthDepleted()
   self:changeAiState(MARKED_DEAD)
 end
 
-function Stalfos:onDestroy()
+function Stalfos:onDie()
   local x, y = self:getPosition()
   local effect = EffectFactory.createMonsterExplosionEffect(x, y)
   effect:initTransform()
