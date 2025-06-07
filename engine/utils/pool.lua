@@ -24,10 +24,6 @@ end
 
 function pool.free(obj)
   local key = obj:getType()
-  if key ~= 'player_state_parameters' then
-    print('returning ' .. key)
-  end
-
   local pTable = pools[key]
   if obj.reset then
     obj:reset()

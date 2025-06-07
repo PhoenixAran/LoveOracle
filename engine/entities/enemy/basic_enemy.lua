@@ -32,7 +32,6 @@ end
 
 function BasicEnemy:release()
   if self.enemyState then
-    print('BasicEnemy:release')
     Pool.free(self.enemyState)
     self.enemyState = nil
   end
@@ -51,7 +50,6 @@ function BasicEnemy:changeState(state, forceUpdate)
   if self.enemyState then
     self:onStateEnd(self.enemyState)
     self.enemyState:endState()
-    print('BasicEnemy:changeState')
     Pool.free(self.enemyState)
   end
 
