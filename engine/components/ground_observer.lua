@@ -9,6 +9,9 @@ local vector = require 'engine.math.vector'
 
 local QUERY_RECT_LENGTH = 1.5
 
+--- Note that this will report what tile is under this ground observer
+--- It does not necessarily mean that the Entity is actually in the water or hole
+--- for example: the player can jump over stuff
 ---@class GroundObserver : Component
 ---@field pointOffsetX number
 ---@field pointOffsetY number
@@ -111,7 +114,7 @@ function GroundObserver:reset()
   self.inWater = false
   self.inHole = false
   self.inOcean = false
-
+  self.isAboveHole = false
   self.onPlatform = false
   lume.clear(self.visitedTileIndices)
   lume.clear(self.tiles)

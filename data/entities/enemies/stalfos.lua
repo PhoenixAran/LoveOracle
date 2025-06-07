@@ -94,6 +94,11 @@ end
 
 function Stalfos:land()
   self:prepForMoveState()
+  -- if we were above a hole before setting it to the normal staet
+  -- dont treat holes as a wall and let the stalfos fall
+  if self:isInHole() then
+    self:unsetCollisionTile('hole')
+  end
   self.spriteSquisher:wiggle(0.10, 0.08)
   self.state = MOVING
 end
@@ -154,7 +159,6 @@ function Stalfos:onJump()
 end
 
 function Stalfos:onHealthDepleted()
-  print 'stalfos:onHealthDepleted'
   -- if it died its probably getting hit
   -- so set its collision to the hurt state
   self:changeAiState(MARKED_DEAD)
