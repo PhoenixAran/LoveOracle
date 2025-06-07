@@ -135,7 +135,7 @@ function Stalfos:updateAi()
     self:move()
   elseif self.state == MARKED_DEAD then
     self:move()
-    if not self.combat:inHitstun() and not self.combat:inKnockback() then
+    if not self.combat:inHitstun() then
       self:die()
     end
   end
