@@ -205,9 +205,8 @@ end
 
 ---@param item BumpBox
 ---@param other BumpBox
----@param maxZDistance number
 ---@return boolean
-function BumpBox.canCollide(item, other, maxZDistance)
+function BumpBox.canCollide(item, other)
   -- 1. Layer mask check (bitmask)
   if bit.band(other.physicsLayer, item.collidesWithLayer) == 0 then
     return false
