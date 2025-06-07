@@ -14,7 +14,8 @@ local Health = Class { __includes = Component,
     Component.init(self, entity, args)
     self:signal('max_health_changed')
     self:signal('damage_taken')
-    self:signal('health_changed')
+    self:signal('health_reduced')
+    self:signal('health_increased')
     self:signal('health_depleted')
     args.maxHealth = nil or 1
     args.health = args.health or args.maxHealth
@@ -37,13 +38,17 @@ end
 ---@param value integer
 ---@param setCurrentHealthAlso boolean if the current health should also be set to max value
 function Health:setMaxHealth(value, setCurrentHealthAlso)
+  local oldMaxHealth = self.maxHealth
   self.maxHealth = value
-  self:emit('max_health_changed', self.maxHealth)
-  if value < self.maxHealth then
+  self:emit('max_health_changed', self.maxHealth, oldMaxHealth)
+
+  if setCurrentHealthAlso then
     local oldHealth = self.health
-    if setCurrentHealthAlso then
-      self.health = value
-      self:emit('max_health_changed', self.health, oldHealth)
+    self.health = value
+    if value > oldHealth then
+      self:emit('health_increased', self.health, oldHealth)
+    elseif value < oldHealth then
+      self:emit('health_reduced', self.health, oldHealth)
     end
   end
 end
@@ -56,7 +61,13 @@ end
 function Health:setHealth(value)
   local oldHealth = self.health
   self.health = value
-  self:emit('health_changed', self.health, oldHealth)
+
+  if value > oldHealth then
+    self:emit('health_increased', self.health, oldHealth)
+  elseif value < oldHealth then
+    self:emit('health_reduced', self.health, oldHealth)
+  end
+
   if self:isDepleted() then
     self:emit('health_depleted')
   end
@@ -69,7 +80,7 @@ function Health:takeDamage(damage)
     local actualDamage = damage - self.armor
     if 0 < actualDamage then
       self.health = self.health - actualDamage
-      self:emit('health_changed', self.health, oldHealth)
+      self:emit('health_reduced', self.health, oldHealth)
     end
     if self:isDepleted() then
       self:emit('health_depleted')
@@ -79,8 +90,9 @@ end
 
 ---@param amount integer
 function Health:heal(amount)
+  local oldHealth = self.health
   self.health = lume.clamp(self.health + amount, 0, self.maxHealth)
-  self:emit('health_changed', self.health)
+  self:emit('health_increased', self.health, oldHealth)
 end
 
 ---@param value integer

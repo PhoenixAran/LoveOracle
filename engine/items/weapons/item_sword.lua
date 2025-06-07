@@ -23,7 +23,7 @@ local ItemSword = Class { __includes = Item,
     -- TODO configurable damage
     self.hitbox.damageInfo.damage = 1
     self.hitbox.damageInfo.hitstunTime = 5
-    self.hitbox.damageInfo.intangibilityTime = 2
+    self.hitbox.damageInfo.intangibilityTime = 18
     self.hitbox.damageInfo.knockbackSpeed = 200
     self.hitbox.damageInfo.knockbackTime = 8
   end

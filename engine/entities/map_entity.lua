@@ -651,7 +651,7 @@ function MapEntity:_onHealthDepleted()
   self.deathMarked = true
   -- notify entity script
 ---@diagnostic disable-next-line: undefined-field
-  if self.onHealthReduced then
+  if self.onHealthDepleted then
 ---@diagnostic disable-next-line: undefined-field
     self:onHealthDepleted()
   end

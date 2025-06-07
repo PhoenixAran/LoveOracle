@@ -9,6 +9,7 @@ local bit = require 'bit'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local CollisionTag = require 'engine.enums.collision_tag'
 local Interactions = require 'engine.entities.interactions'
+local EffectFactory = require 'engine.entities.effect_factory'
 
 local MOVING = 1
 local HURT = 2
@@ -58,6 +59,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.hitbox.damageInfo.knockbackSpeed = 100
     self.hitbox.damageInfo.knockbackTime = 8
     self.hitbox.damageInfo.hitstunTime = 8
+    self.health:setMaxHealth(2, true)
 
     self.state = MOVING
     self.moveTimer = 0
@@ -128,7 +130,7 @@ function Stalfos:updateAi()
   elseif self.state == HURT then
     if not self.combat:inHitstun() then
       self:prepForMoveState()
-      self.state = MOVING
+      self:changeAiState(MOVING)
     end
     self:move()
   elseif self.state == MARKED_DEAD then
@@ -138,6 +140,10 @@ function Stalfos:updateAi()
   end
 end
 
+function Stalfos:changeAiState(state)
+  self.state = state
+end
+
 -- callbacks
 function Stalfos:onJump()
   self.state = JUMP
@@ -145,14 +151,20 @@ function Stalfos:onJump()
 end
 
 function Stalfos:onHealthDepleted()
-  self.state = MARKED_DEAD
+  self:changeAiState(MARKED_DEAD)
+end
+
+function Stalfos:onDestroy()
+  local x, y = self:getPosition()
+  local effect = EffectFactory.createMonsterExplosionEffect(x, y)
+  effect:initTransform()
+  self:emit('spawned_entity', effect)
 end
 
 function Stalfos:onHurt(damageInfo)
-  if self.state ~= HURT then
-    self:setCollisionTiles('wall')
+  if self.state ~= HURT and not self.deathMarked and not self:isIntangible() then
     self:setCollisionTiles(self.collidesWithTileHurtState)
-    self.state = HURT
+    self:changeAiState(HURT)
     self.moveTimer = 0
     self.changeDirectionTimer = 0
   end

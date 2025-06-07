@@ -2,8 +2,12 @@ local Class = require 'lib.class'
 local bit = require 'bit'
 local rect = require 'engine.math.rectangle'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
+local Consts = require 'constants'
+local BUMP_BOX_MAX_Z_DISTANCE = Consts.BUMP_BOX_MAX_Z_DISTANCE
 
---- ZRange
+--- ZRange where bumpbox exists
+--- Note that this does not refer to zPosition. This is used to separate
+--- entities by Floor level
 ---@class ZRange
 ---@field min integer
 ---@field max integer
@@ -199,13 +203,27 @@ function BumpBox:reportsCollisionsWith(otherBumpBox)
   return false
 end
 
---helper function that determines if a bumpbox can collide with another bumpbox (see bump module)
 ---@param item BumpBox
 ---@param other BumpBox
+---@param maxZDistance number
 ---@return boolean
-BumpBox.canCollide = function(item, other)
-  return bit.band(other.physicsLayer, item.collidesWithLayer) ~= 0
-         and other.zRange.max >= item.zRange.min and other.zRange.min <= item.zRange.max
+function BumpBox.canCollide(item, other, maxZDistance)
+  -- 1. Layer mask check (bitmask)
+  if bit.band(other.physicsLayer, item.collidesWithLayer) == 0 then
+    return false
+  end
+
+  -- 2. Z range overlap check
+  if other.zRange.max < item.zRange.min or other.zRange.min > item.zRange.max then
+    return false
+  end
+
+  -- 3. Distance check (optional: only if both have a "z" field)
+  if math.abs(item.z - other.z) > BUMP_BOX_MAX_Z_DISTANCE then
+    return false
+  end
+
+  return true
 end
 
 return BumpBox
