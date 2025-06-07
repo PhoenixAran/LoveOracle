@@ -168,7 +168,7 @@
                  "id":62,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
                  "x":616,
-                 "y":356
+                 "y":448
                 }, 
                 {
                  "id":65,
@@ -185,8 +185,8 @@
                 {
                  "id":70,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":684,
-                 "y":336
+                 "x":644,
+                 "y":440
                 }],
          "opacity":1,
          "type":"objectgroup",

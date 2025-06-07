@@ -17,10 +17,13 @@ local JUMP = 3
 local MARKED_DEAD = 4
 
 -- TODO color variants
+-- TODO maybe have more pathing function instead of treating colliding tiles as walls 
+-- works for now so..
 
 ---@class Stalfos : BasicEnemy
 ---@field collidesWithTileNormalState string[]
 ---@field collidesWithTileHurtState string[]
+---@field collidesWithTileJumpState string[]
 local Stalfos = Class { __includes = BasicEnemy,
   ---@param self Stalfos
   ---@param args table
@@ -46,7 +49,8 @@ local Stalfos = Class { __includes = BasicEnemy,
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
 
     self.collidesWithTileNormalState = { 'wall', 'water', 'lava', 'whirlpool', 'hole' }
-    self.collidesWithTileHurtState = { 'wall'}
+    self.collidesWithTileHurtState = { 'wall' }
+    self.collidesWithTileJumpState = { 'wall' }
     self:setCollisionTiles(self.collidesWithTileNormalState)
 
     self.spriteFlasher:addSprite(self.sprite)
@@ -156,6 +160,9 @@ function Stalfos:onJump()
   self:setVector(0, 0)
   self.state = JUMP
   self.sprite:play('jump')
+  
+  self:setCollisionTilesExplicit(0)
+  self:setCollisionTiles(self.collidesWithTileJumpState)
 end
 
 function Stalfos:onHealthDepleted()
