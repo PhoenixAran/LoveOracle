@@ -157,10 +157,11 @@ local Player = Class { __includes = MapEntity,
 
     -- bind controls (except dpad, thats automatically done)
     self:addPressInteraction('x', function(player)
-      self.playerMovementController:jump()
+      self:actionUseItem('x')
     end)
     self:addPressInteraction('a', function(player)
-      self:actionUseItem('a')
+      -- TODO interact
+      self.playerMovementController:jump()
     end)
     self:addPressInteraction('b', function(player)
       self:actionUseItem('b')
@@ -684,7 +685,9 @@ end
 function Player:actionUseItem(button)
   local item = self.items[button]
   if item ~= nil and item:isUsable() then
-    return item:onButtonPressed()
+    if item:onButtonPressed() then
+      return true
+    end
   end
   return false
 end
