@@ -2,8 +2,10 @@ local Class = require 'lib.class'
 local bit = require 'bit'
 local rect = require 'engine.math.rectangle'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
+local Axis = require 'engine.enums.axis'
 local Consts = require 'constants'
 local BUMP_BOX_MAX_Z_DISTANCE = Consts.BUMP_BOX_MAX_Z_DISTANCE
+local BUMP_BOX_ALIGNMENT_TOLERANCE = Consts.BUMP_BOX_ALIGNMENT_TOLERANCE
 
 --- ZRange where bumpbox exists
 --- Note that this does not refer to zPosition. This is used to separate
@@ -223,6 +225,34 @@ function BumpBox.canCollide(item, other)
   end
 
   return true
+end
+
+--- checks if two bumpboxes are aligned in a specific direction (based on center positions)
+--- @param other BumpBox
+--- @param direction Axis?
+function BumpBox:areBumpBoxCollisionAligned(other, direction)
+  local selfX, selfY, selfW, selfH = self:getBounds()
+  local otherX, otherY, otherW, otherH = other:getBounds()
+
+  -- Calculate center positions
+  local selfCenterX, selfCenterY = selfX + selfW / 2, selfY + selfH / 2
+  local otherCenterX, otherCenterY = otherX + otherW / 2, otherY + otherH / 2
+
+  if direction == Axis.vertical or direction == nil then
+    -- Check if centers are vertically aligned (x-coordinates within tolerance)
+    local verticallyAligned = math.abs(selfCenterX - otherCenterX) <= BUMP_BOX_ALIGNMENT_TOLERANCE
+    if direction == Axis.vertical or verticallyAligned then
+      return verticallyAligned
+    end
+  elseif direction == Axis.horizontal or direction == nil then
+    -- Check if centers are horizontally aligned (y-coordinates within tolerance)
+    local horizontallyAligned = math.abs(selfCenterY - otherCenterY) <= BUMP_BOX_ALIGNMENT_TOLERANCE
+    if direction ==  Axis.horizontal or horizontallyAligned then
+      return horizontallyAligned
+    end
+  end
+  
+  return false
 end
 
 return BumpBox

@@ -2,6 +2,7 @@ return {
   -- Maximum z-distance at which two bump boxes are still considered to be touching.
   -- If their z position (NOT Z Range) are separated by more than this, they are not colliding.
   BUMP_BOX_MAX_Z_DISTANCE = 10,
+  BUMP_BOX_ALIGNMENT_TOLERANCE = 0.1,
 
   TICK_RATE = 1 / 60,
   DEFAULT_GRAVITY = 7.5,

@@ -1,28 +1,116 @@
 local Class = require 'lib.class'
 local Enemy = require 'engine.entities.enemy'
+local lume = require 'lib.lume'
+local vector = require 'engine.math.vector'
 local Pool = require 'engine.utils.pool'
 local Physics = require 'engine.physics'
 local EffectFactory = require 'engine.entities.effect_factory'
+local Singletons = require 'engine.singletons'
+local Axis = require 'engine.enums.axis'
+local Direction4 = require 'engine.enums.direction4'
+
 
 -- require states so they register themslves in the pool
 require 'engine.entities.enemy.states'
---- Class with built in behaviour for enemies.
---- This class automatically handles entities:
---- **falling in hole, lava, and/or water
---- **Stun State
+
+local ChargeType = {
+  None = 'none',
+  Charge = 'charge',
+  ChargeUntilCollision = 'charge_until_collision',
+  ChargeUntilCollisionWithEnemy = 'charge_until_collision_with_enemy',
+}
+
+local AimType = {
+  Forward = 'forward',
+  FacePlayer = 'face_player', 
+  FaceRandom = 'face_random',
+  SeekPlayer = 'seek_player'
+}
+
+local ShootType = {
+  None = 'none',
+  OnStop = 'on_stop', 
+  WhileMoving = 'while_moving'
+}
+
+--- Class with more built in behaviour for enemies. 
+--- Most enemies should inherit from this class.
 ---@class BasicEnemy : Enemy
----@field enemyState EnemyState
 ---@field fallInHoleEffectColor string
+---@field stopTimeMin number
+---@field stopTimeMax number
+---@field moveTimeMin number
+---@field moveTimeMax number
+---@field facePlayerOdds integer
+---@field numMoveAngles integer
+---@field avoidHazardTiles boolean
+---@field chargeType string
+---@field chargeSpeed number
+---@field chargeAcceleration number
+---@field chargeMinAlignment integer
+---@field chargeDurationMin integer
+---@field chargeDurationMax integer
+---@field chargeCooldown number
+---@field chargeCooldownTimer integer
+---@field chaseSpeed number
+---@field chaseSpeedPauseDuration integer
+---@field shootType string
+---@field aimType string
+---@field projectileTypeClass any?
+---@field shootSpeed number
+---@field shootPauseDuration integer
+---@field shootSound any?
+---@field isMoving boolean
+---@field moveTimer integer
+---@field isChasingPlayer boolean
+---@field isPaused boolean
+---@field pauseTimer integer
+---@field isShooting boolean
+---@field isCharging boolean
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
-    Enemy.init(self, args)  
+    Enemy.init(self, args)
     -- environment configuration
     self.canFallInHole = args.canFallInHole or true
     self.canSwimInLava = args.canSwimInLava or false
     self.canSwimInWater = args.canSwimInWater or false
-
     self.fallInHoleEffectColor = args.fallInHoleEffectColor or 'blue'
-    self:changeState(Pool.obtain('enemy_normal_state'))
+
+    -- movement
+    self.stopTimeMin = args.stopTimeMin or 30
+    self.stopTimeMax = args.stopTimeMax or 60
+    self.moveTimeMin = args.moveTimeMin or 30
+    self.moveTimeMax = args.moveTimeMax or 50
+    self.avoidHazardTiles = args.avoidHazardTiles or true
+
+    -- charging
+    self.chargeType = args.chargeType or ChargeType.None
+    self.chargeSpeed = args.chargeSpeed or 100
+    self.chargeMinAlignment = args.chargeMinAlignment or 0.5
+    self.chargeDurationMin = args.chargeDurationMin or 0
+    self.chargeDurationMax = args.chargeDurationMax or 0
+    self.chargeCooldownTimer = args.cooldownTimer or 0
+
+    -- chasing
+    self.chaseSpeed = args.chaseSpeed or 100
+    self.chasePauseDuration = args.chasePauseDuration or 30
+
+    -- projectile
+    self.shootType = args.shootType or ShootType.None
+    self.aimType = args.aimType or AimType.FacePlayer
+    self.projectileTypeClass = args.projectileTypeClass or nil
+    self.shootSpeed = args.shootSpeed or 50
+    self.shootPauseDuration = args.shootPauseDuration or 30
+    self.shootSound = args.shootSound or nil  -- TODO
+
+    -- states
+    self.isMoving = false
+    self.moveTimer = lume.random(self.stopTimeMin, self.stopTimeMax)
+    self.isChasingPlayer = false
+    self.isPaused = false
+    self.isShooting = false
+
+    -- TODO color initialization
   end
 }
 
@@ -30,125 +118,85 @@ function BasicEnemy:getType()
   return 'basic_enemy'
 end
 
-function BasicEnemy:release()
-  if self.enemyState then
-    Pool.free(self.enemyState)
-    self.enemyState = nil
-  end
-  Enemy.release(self)
+function BasicEnemy:shoot()
+  error('not implemented')
 end
 
----@param state EnemyState?
----@param forceUpdate boolean?
-function BasicEnemy:changeState(state, forceUpdate)
-  forceUpdate = forceUpdate or false
+function BasicEnemy:updateChargingState()
+  error('not implemented')
+end
 
-  if state then
-    state:setEnemy(self)
-  end
+function BasicEnemy:facePlayer()
+  error('not implemented')
+end
 
-  if self.enemyState then
-    self:onStateEnd(self.enemyState)
-    self.enemyState:endState()
-    Pool.free(self.enemyState)
-  end
+function BasicEnemy:updateMovingState()
+  error('not implemented')
+end
 
-  local oldState = self.enemyState
-  self.enemyState = state
+function BasicEnemy:updateStoppedState()
+  error('not implemented')
+end
 
-  if (oldState ~= self.enemyState or forceUpdate) and self.enemyState then
-    self.enemyState:beginState()
-    self:onStateBegin(self.enemyState)
-  end
+---@param axis Axis
+function BasicEnemy:startCharging(axis)
 
 end
 
-function BasicEnemy:updateEnvironment()
-  local state = nil
-  if self:isInHole() and self.canFallInHole and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_hole_state') then
-    state = Pool.obtain('enemy_fall_in_hole_state')
-    state:setEnemy(self)
-  elseif self:isInWater() and not self.canSwimInWater and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_water_state') then
-    state = Pool.obtain('enemy_drown_state')
-    state:setEnemy(self)
-  elseif self:isInLava() and not self.canSwimInLava and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_lava_state') then
-    state = Pool.obtain('enemy_drown_state')
-    state:setEnemy(self)
-  end
-  if state ~= nil and self.enemyState ~= state then
-    self:changeState(state)
-  end
-end
+function BasicEnemy:updateAi()
+  if self:isOnGround() or self.movesInAir then
+    if self.isPaused then
+      if self.pauseTimer <= 0 then
+        self.isPaused = false
+      end
+      self.pauseTimer = self.pauseTimer - 1
+    elseif self.isShooting then
+      if self.pauseTimer <= 0 then
+        self:shoot()
+      end
+    elseif self.isCharging then
+      self:updateChargingState()
+    elseif self.isChasingPlayer then
+      local player = Singletons.gameControl:getPlayer()
+      if player then
+        local px, py = player:getPosition()
+        self:facePlayer()
+        self:setVector(vector.sub(px, py, self:getPosition()))
+      end
+    else
+      -- check for charging
+      if self.chargeCooldownTimer > 0 then
+        self.chargeCooldownTimer = self.chargeCooldownTimer - 1
+      elseif self.chargeType ~= ChargeType.None then
+        local player = Singletons.gameControl:getPlayer()
+        if player then   
+          local px, py = player:getPosition()
+          local dir4 = Direction4.getDirection(vector.sub(px, py, self:getPosition()))
+          local axis = nil
+          if dir4 == Direction4.right or dir4 == Direction4.left then
+            axis = Axis.horizontal
+          elseif dir4 == Direction4.up or dir4 == Direction4.down then
+            axis = Axis.vertical
+          end
+          
+          if self:areBumpBoxCollisionAligned(player, axis) then
+            self:startCharging(axis)
+          end
+          
+        end
+      end
 
-function BasicEnemy:update()
-  self:updateComponents()
-  self:updateEnvironment()
-  if self.enemyState then
-    self.enemyState:update()
-  end
-end
-
-function BasicEnemy:canMoveInDirection(x, y)
-  local canMoveInDirection = true
-  local oldX, oldY = self.movement:getVector()
-  self.movement:setVector(x, y)
-
-  local goalX, goalY = self.movement:getTestLinearVelocity()
-  local _, _, testCols, testLen = Physics:projectMove(self.x, self.y, self.w, self.h, goalX, goalY, self.moveFilter)
-  for i = 1, testLen do
-    local col = testCols[i]
-    if self:isHazardTile(col.other) then
-      canMoveInDirection = false
-      break
+      if self.isMoving then
+        self:updateMovingState()
+      else
+        self:updateStoppedState()
+      end
     end
   end
-  self.movement:setVector(oldX, oldY)
-  Physics.freeCollisions(testCols)
-
-  return canMoveInDirection
 end
 
---- returns if the given tile entity is considered a hazard tile by this basic_enemy instance
---- @param tileEntity Tile
---- @return boolean
-function BasicEnemy:isHazardTile(tileEntity)
-  if tileEntity:isHole() and self.canFallInHole then
-    return true
-  end
-  if tileEntity:isLava() and not self.canSwimInLava then
-    return true
-  end
-  if tileEntity:isDeepWater() and not self.canSwimInWater then
-    return true
-  end
-  return false
-end
-
-function BasicEnemy:beginNormalState()
-  self:changeState(Pool.obtain('enemy_normal_state'))
-end
-
-function BasicEnemy:onFallInHole()
-  local x, y = self:getPosition()
-  local effect = EffectFactory.createFallingObjectEffect(x, y, self.fallInHoleEffectColor)
-  effect:initTransform()
-  self:emit('spawned_entity', effect)
-end
-
--- this is where custom enemy code should be implemented in child classes
-function BasicEnemy:updateAi()
-end
-
----@param state EnemyState
-function BasicEnemy:onStateEnd(state)
-end
-
----@param state EnemyState
-function BasicEnemy:onStateBegin(state)
-end
-
----@param state EnemyState
-function BasicEnemy:onStateUpdate(state)
-end
+BasicEnemy.ChargeType = ChargeType
+BasicEnemy.AimType = AimType
+BasicEnemy.ShootType = ShootType
 
 return BasicEnemy

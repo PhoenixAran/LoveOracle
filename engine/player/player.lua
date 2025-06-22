@@ -157,7 +157,9 @@ local Player = Class { __includes = MapEntity,
 
     -- bind controls (except dpad, thats automatically done)
     self:addPressInteraction('x', function(player)
-      self:actionUseItem('x')
+      if not self:actionUseItem('x') then
+        self:actionStroke('x')
+      end
     end)
     self:addPressInteraction('a', function(player)
       -- TODO interact
@@ -167,7 +169,7 @@ local Player = Class { __includes = MapEntity,
       self:actionUseItem('b')
     end)
     self:addPressInteraction('y', function(player)
-      self:actionStroke('y')
+      self:actionUseItem('y')
     end)
 
     self.items = {

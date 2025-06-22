@@ -48,7 +48,7 @@ function BaseGameplayScreen:enter(prev, ...)
   -- TODO set up inventory
   local Sword = require 'engine.items.weapons.item_sword'
   local sword = Sword({name = 'sword'})
-  sword.useButtons = { 'b' }
+  sword.useButtons = { 'y' }
   player:equipItem(sword)
 
   self.gameControl:setPlayer(player)
