@@ -12,6 +12,10 @@ local Direction4 = {
   up = 4
 }
 
+function Direction4.count()
+  return 5
+end
+
 local direction4VectorMap = {
   [Direction4.none] = { x = 0, y = 0 },
   [Direction4.right] = { x = 1, y = 0 },
@@ -22,7 +26,7 @@ local direction4VectorMap = {
 
 ---get Direction4 enum value from vector or string name
 ---@param x number|string
----@param y number
+---@param y number?
 ---@return integer
 function Direction4.getDirection(x, y)
   if type(x) == 'string' then

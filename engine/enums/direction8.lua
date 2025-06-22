@@ -1,3 +1,4 @@
+---@diagnostic disable: inject-field
 local vector = require 'engine.math.vector'
 local lume = require 'lib.lume'
 
@@ -14,6 +15,10 @@ local Direction8 = {
   up = 7,
   upRight = 8
 }
+
+function Direction8.count()
+  return 9
+end
 
 local direction8VectorMap = {
   [Direction8.none] = { x = 0, y = 0 },

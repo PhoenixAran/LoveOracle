@@ -8,6 +8,8 @@ local EffectFactory = require 'engine.entities.effect_factory'
 local Singletons = require 'engine.singletons'
 local Axis = require 'engine.enums.axis'
 local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
+local TablePool = require 'engine.utils.table_pool'
 
 
 -- require states so they register themslves in the pool
@@ -31,6 +33,12 @@ local ShootType = {
   None = 'none',
   OnStop = 'on_stop', 
   WhileMoving = 'while_moving'
+}
+
+local RandomDirectionChoiceType = {
+  angle = 0,
+  dir4 = 1,
+  dir8 = 2
 }
 
 --- Class with more built in behaviour for enemies. 
@@ -67,9 +75,18 @@ local ShootType = {
 ---@field pauseTimer integer
 ---@field isShooting boolean
 ---@field isCharging boolean
+---@field moveDirectionX number
+---@field moveDirectionY number
+---@field moveSpeed number
+---@field animationMove string
+---@field randomDirectionChoiceType integer
+---@field projectileShootOdds integer
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
     Enemy.init(self, args)
+
+    self.randomDirectionChoiceType = args.randomDirectionChoiceType or RandomDirectionChoiceType.dir4
+
     -- environment configuration
     self.canFallInHole = args.canFallInHole or true
     self.canSwimInLava = args.canSwimInLava or false
@@ -81,7 +98,9 @@ local BasicEnemy = Class { __includes = Enemy,
     self.stopTimeMax = args.stopTimeMax or 60
     self.moveTimeMin = args.moveTimeMin or 30
     self.moveTimeMax = args.moveTimeMax or 50
+    self.moveSpeed = args.moveSpeed or 50
     self.avoidHazardTiles = args.avoidHazardTiles or true
+    self.animationMove = args.animationMove or 'move'
 
     -- charging
     self.chargeType = args.chargeType or ChargeType.None
@@ -102,6 +121,7 @@ local BasicEnemy = Class { __includes = Enemy,
     self.shootSpeed = args.shootSpeed or 50
     self.shootPauseDuration = args.shootPauseDuration or 30
     self.shootSound = args.shootSound or nil  -- TODO
+    self.projectileShootOdds = args.projectileShootOdds or 3  -- shoot every 1/3 times
 
     -- states
     self.isMoving = false
@@ -118,7 +138,101 @@ function BasicEnemy:getType()
   return 'basic_enemy'
 end
 
+function BasicEnemy:changeDirection()
+  if self.facePlayerOdds > 0 and math.floor(lume.random(0, self.facePlayerOdds)) == 0 then
+    local player = Singletons.gameControl:getPlayer()
+    local lookX, lookY = 0, 0
+    if player then
+      local px, py = player:getPosition()
+      lookX, lookY = vector.sub(px, py, self:getPosition())
+      lookX, lookY = vector.normalize(lookX, lookY)
+      if self:canMoveInDirection(lookX, lookY) then
+        self.moveDirectionX, self.moveDirectionY = lookX, lookY
+        self:setVector(self.moveDirectionX, self.moveDirectionY)
+        return
+      end
+
+      -- create a list of obstruction-free move angles
+      local possibleDirection4Angles = TablePool.obtain()
+      for i = 1, Direction4.count() - 1 do
+        if self:canMoveInDirection(Direction4.getDirection(i)) then
+          lume.push(possibleDirection4Angles[i], Direction4.getDirection(i))
+        end
+      end
+      
+      if lume.count(possibleDirection4Angles) == 0 then
+        -- No collision-free angles, so face a new random angle
+        self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.random(1, Direction4.count()))
+      else
+        self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.randomchoice(possibleDirection4Angles))
+      end
+
+      TablePool.free(possibleDirection4Angles)
+    end
+  end
+end
+
+function BasicEnemy:faceRandomDirection()
+  if self.randomDirectionChoiceType == RandomDirectionChoiceType.angle then
+    local angle = lume.random(0, math.pi * 2)
+    self.moveDirectionX, self.moveDirectionY = vector.fromAngle(angle)
+  elseif self.randomDirectionChoiceType == RandomDirectionChoiceType.dir4 then
+    local dir4 = math.floor(lume.random(1, Direction4.count()))
+    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(dir4)
+  elseif self.randomDirectionChoiceType == RandomDirectionChoiceType.dir8 then
+    local dir8 = math.floor(lume.random(1, Direction8.count()))
+    self.moveDirectionX, self.moveDirectionY = Direction8.getVector(dir8)
+  end
+  self:setVector(self.moveDirectionX, self.moveDirectionY)
+end
+
+function BasicEnemy:startMoving()
+  self.isMoving = true
+  self:setSpeed(self.moveSpeed)
+  self.moveTimer = math.floor(lume.random(self.moveTimeMin, self.moveTimeMax))
+  
+  self:changeDirection()
+  self:setVector(self.moveDirectionX, self.moveDirectionY)
+
+  if self.sprite then
+    if not self.sprite:isPlaying() or self.sprite:getCurrentAnimationKey() ~= self.animationMove then
+      self.sprite:play(self.animationMove)
+    end
+  end
+end
+
+function BasicEnemy:stopMoving()
+  self.moveTimer = math.floor(lume.random(self.stopTimeMin, self.stopTimeMax))
+  self.isMoving = false
+  self:setSpeed(0)
+
+  -- shoot
+  if self.shootType == ShootType.OnStop and self.projectileTypeClass ~= nil
+            and math.floor(lume.random(self.projectileShootOdds)) == 0 then
+    self:startShooting()
+  end
+end
+
+function BasicEnemy:startShooting()
+  self.pauseTimer = self.shootPauseDuration
+
+  if self.aimType == AimType.FacePlayer then
+    self:facePlayer()
+  elseif self.aimType == AimType.FaceRandom then
+    self:faceRandomDirection()
+  end
+
+  if self.pauseTimer == 0 then
+    self:shoot()
+  else
+    self.isShooting = true
+    self.isMoving = false
+  end
+end
+
 function BasicEnemy:shoot()
+  
+
   error('not implemented')
 end
 
@@ -140,7 +254,7 @@ end
 
 ---@param axis Axis
 function BasicEnemy:startCharging(axis)
-
+  error('Not implemented')
 end
 
 function BasicEnemy:updateAi()
@@ -161,7 +275,8 @@ function BasicEnemy:updateAi()
       if player then
         local px, py = player:getPosition()
         self:facePlayer()
-        self:setVector(vector.sub(px, py, self:getPosition()))
+        self.moveDirectionX, self.moveDirectionY = vector.sub(px, py, self:getPosition())
+        self:setVector(self.moveDirectionX, self.moveDirectionY)
       end
     else
       -- check for charging
@@ -198,5 +313,6 @@ end
 BasicEnemy.ChargeType = ChargeType
 BasicEnemy.AimType = AimType
 BasicEnemy.ShootType = ShootType
+BasicEnemy.RandomDirectionChoiceType = RandomDirectionChoiceType
 
 return BasicEnemy

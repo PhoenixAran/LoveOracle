@@ -13,6 +13,8 @@ local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local CollisionTag = require 'engine.enums.collision_tag'
 local EffectFactory = require 'engine.entities.effect_factory'
 local Pool = require 'engine.utils.pool'
+local bit = require 'bit'
+
 
 local Direction8Values = {Direction8.up, Direction8.upRight, Direction8.right, Direction8.downRight, Direction8.down, Direction8.downLeft, Direction8.left, Direction8.upLeft}
 local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Direction4.left}
@@ -24,6 +26,7 @@ local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Dire
 ---@field canFallInHole boolean
 ---@field canSwimInLava boolean
 ---@field canSwimInWater boolean
+---@field collidesWithWalls boolean
 ---@field movesInAir boolean
 ---@field jumpGravity number
 ---@field jumpZVelocity number
@@ -44,6 +47,7 @@ local Enemy = Class { __includes = MapEntity,
     self.canSwimInLava = args.canSwimInLava or false
     self.canSwimInWater = args.canSwimInWater or false
     self.movesInAir = args.movesInAir or false
+    self.collidesWithWalls = args.collidesWithWalls or true
 
     self.fallInHoleEffectColor = args.fallInHoleEffectColor or 'blue'
 
@@ -135,7 +139,18 @@ function Enemy:canMoveInDirection(x, y)
   local _, _, testCols, testLen = Physics:projectMove(self.x, self.y, self.w, self.h, goalX, goalY, self.moveFilter)
   for i = 1, testLen do
     local col = testCols[i]
-    if self:isHazardTile(col.other) then
+    if col.other.isTile and col.other:isTile() then
+      if self:isHazardTile(col.other) then
+        canMoveInDirection = false
+        break
+      end
+
+      if self.collidesWithWalls and bit.band(col.other:getTileType(), TileTypeFlags.wall) ~= 0 then
+        canMoveInDirection = false
+        break
+      end
+    else
+      -- entity collision
       canMoveInDirection = false
       break
     end
@@ -144,6 +159,29 @@ function Enemy:canMoveInDirection(x, y)
   Physics.freeCollisions(testCols)
 
   return canMoveInDirection
+end
+
+--- can move in the given direction4
+---@param direction4 Direction4
+---@return boolean
+function Enemy:canMoveInDirection4(direction4)
+  local x, y = Direction4.getVector(direction4)
+  return self:canMoveInDirection(x, y)
+end
+
+--- can move in the given direction8
+---@param direction8 Direction8
+---@return boolean
+function Enemy:canMoveInDirection8(direction8)
+  local x, y = Direction8.getVector(direction8)
+  return self:canMoveInDirection(x, y)
+end
+
+--- can move in the given angle in radians
+---@param radians number
+---@return boolean
+function Enemy:canMoveInAngle(radians)
+  return self:canMoveInDirection(vector.fromPolar(radians))
 end
 
 --- returns if the given tile entity is considered a hazard tile by this basic_enemy instance

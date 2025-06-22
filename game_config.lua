@@ -6,9 +6,9 @@ local controls = {
     up = {'key:up', 'axis:lefty-', 'button:dpup'},
     down = {'key:down', 'axis:lefty+', 'button:dpdown'}, 
     a = {'key:space', 'button:a'},
-    b = {'key:c', 'button:b'},
+    b = {'key:z', 'button:b'},
     x = {'key:x', 'button:y' },
-    y = {'key:z', 'button:x'},
+    y = {'key:c', 'button:x'},
     leftClick = { 'mouse:1' }
   },
   pairs = {
