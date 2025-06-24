@@ -81,6 +81,7 @@ local RandomDirectionChoiceType = {
 ---@field animationMove string
 ---@field randomDirectionChoiceType integer
 ---@field projectileShootOdds integer
+---@field changeDirectionOnCollision boolean
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
     Enemy.init(self, args)
@@ -101,6 +102,7 @@ local BasicEnemy = Class { __includes = Enemy,
     self.moveSpeed = args.moveSpeed or 50
     self.avoidHazardTiles = args.avoidHazardTiles or true
     self.animationMove = args.animationMove or 'move'
+    self.changeDirectionOnCollision = args.changeDirectionOnCollision or true
 
     -- charging
     self.chargeType = args.chargeType or ChargeType.None
@@ -269,11 +271,19 @@ end
 function BasicEnemy:updateChargingState()
   self:setSpeed(math.min(self.chargeSpeed, self.moveSpeed + self.chargeAcceleration))
 
-  local tx, ty = self:move()
+  local tx, ty, collisions = self:testMove()
 
   if self.avoidHazardTiles then
-    
+    -- enemy will avoid going into hazard tiles
+    -- TODO MAYBE: You can use Entity:getMeetingTiles() (and also implement an offset) if this doesnt adequetly check ahead enough
+    for _, other in ipairs(collisions) do
+      if other.isTile and other:isTile() and self:isHazardTile(other) then
+        self:stopCharging()
+        return
+      end
+    end
   end
+  TablePool.free(collisions)
 
   if self.chargeType == ChargeType.ChargeForDuration then
     if self.moveTimer <= 0 then
@@ -287,22 +297,75 @@ function BasicEnemy:updateChargingState()
     return
   end
 
+  self:move()
   self.moveTimer = self.moveTimer - 1
 end
 
-
-function BasicEnemy:facePlayer()
-  error('not implemented')
-end
-
 function BasicEnemy:updateMovingState()
-  error('not implemented')
+  local _, _, collisions = self:move()
+
+  -- stop moving after a duration
+  if self.moveTimer <= 0 then
+    self:stopMoving()
+    return
+  end
+
+  -- collided into wall or other entity
+  local collidedIntoWallOrEntity = false
+  for _, other in self.moveCollisions do
+    if other.isTile and other:isTile() then
+      if other:isWall() and self.collidesWithWalls then
+        collidedIntoWallOrEntity = true
+        break
+      end
+    elseif other.isEntity and other:isEntity() then
+      collidedIntoWallOrEntity = true
+      break
+    end
+  end
+
+  -- change direction on collisions
+  if self.changeDirectionOnCollision and collidedIntoWallOrEntity then
+    self:changeDirection()
+  elseif self.avoidHazardTiles then
+    -- enemy will avoid going into hazard tiles
+    -- TODO MAYBE: You can use Entity:getMeetingTiles() (and also implement an offset) if this doesnt adequetly check ahead enough
+    for _, other in ipairs(collisions) do
+      if other.isTile and other:isTile() and self:isHazardTile(other) then
+        self:changeDirection()
+        break
+      end
+    end
+  end
+
+  -- shoot while moving
+  if self.shootType == ShootType.WhileMoving and self.projectileTypeClass ~= nil and math.floor(lume.random(self.projectileShootOdds)) == 0 then
+    self:startShooting()
+  end
+
+  self.moveTimer = self.moveTimer - 1
 end
 
 function BasicEnemy:updateStoppedState()
-  error('not implemented')
+  self:setVector(0, 0)
+
+  -- start moving again after a duration
+  if self.moveTimer <= 0 then
+    self:startMoving()
+  end
+
+  self.moveTimer = self.moveTimer - 1
 end
 
+function BasicEnemy:facePlayer()
+  local player = Singletons.gameControl:getPlayer()
+  if player then
+    local px, py = player:getPosition()
+    self.moveDirectionX, self.moveDirectionY = vector.sub(px, py, self:getPosition())
+    self.moveDirectionX, self.moveDirectionY = vector.normalize(self.moveDirectionX, self.moveDirectionY)
+    self:setVector(self.moveDirectionX, self.moveDirectionY)
+  end
+end
 
 function BasicEnemy:updateAi()
   if self:isOnGround() or self.movesInAir then
