@@ -108,7 +108,7 @@ local BasicEnemy = Class { __includes = Enemy,
     self.chargeMinAlignment = args.chargeMinAlignment or 0.5
     self.chargeDurationMin = args.chargeDurationMin or 0
     self.chargeDurationMax = args.chargeDurationMax or 0
-    self.chargeCooldownTimer = args.cooldownTimer or 0
+    self.chargeCooldownTimer = args.chargeCooldownTimer or 0
 
     -- chasing
     self.chaseSpeed = args.chaseSpeed or 100
@@ -230,15 +230,66 @@ function BasicEnemy:startShooting()
   end
 end
 
+-- TODO implmement this when i finish the projectile entity class
 function BasicEnemy:shoot()
+  if self.shootSound then
+
+  end
   
+  -- construct the projectile
+  -- TODO
+
+  -- TODO spawn the projectile
 
   error('not implemented')
+end
+
+--- Pauses the enemy for a given duration.
+---@param duration integer
+function BasicEnemy:pause(duration)
+  self.pauseTimer = duration
+  self.isPaused = true
+end
+
+function BasicEnemy:startCharging()
+  self.moveDirectionX, self.moveDirectionY = Direction4.getVector(math.floor(lume.random(1, Direction4.count())))
+  self.isCharging = true
+  self.chargeCooldownTimer = self.chargeCooldown
+
+  if self.chargeType == ChargeType.ChargeForDuration then
+    self.moveTimer = math.floor(lume.random(self.chargeDurationMin, self.chargeDurationMax))
+  end
+end
+
+function BasicEnemy:stopCharging()
+  self.isCharging = false
+  self:startMoving()
 end
 
 function BasicEnemy:updateChargingState()
-  error('not implemented')
+  self:setSpeed(math.min(self.chargeSpeed, self.moveSpeed + self.chargeAcceleration))
+
+  local tx, ty = self:move()
+
+  if self.avoidHazardTiles then
+    
+  end
+
+  if self.chargeType == ChargeType.ChargeForDuration then
+    if self.moveTimer <= 0 then
+      self:stopCharging()
+      return
+    end
+  end
+
+  if lume.any(self.moveCollisions) then
+    self:stopCharging()
+    return
+  end
+
+  self.moveTimer = self.moveTimer - 1
 end
+
 
 function BasicEnemy:facePlayer()
   error('not implemented')
@@ -252,10 +303,6 @@ function BasicEnemy:updateStoppedState()
   error('not implemented')
 end
 
----@param axis Axis
-function BasicEnemy:startCharging(axis)
-  error('Not implemented')
-end
 
 function BasicEnemy:updateAi()
   if self:isOnGround() or self.movesInAir then
@@ -295,7 +342,7 @@ function BasicEnemy:updateAi()
           end
           
           if self:areBumpBoxCollisionAligned(player, axis) then
-            self:startCharging(axis)
+            self:startCharging()
           end
           
         end
