@@ -1,3 +1,0 @@
--- return enemy module from enemy.lua relative to this init.lua file
-local path = ...
-return require(path .. '.enemy')

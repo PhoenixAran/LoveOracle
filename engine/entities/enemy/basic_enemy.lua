@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Enemy = require 'engine.entities.enemy'
+local Enemy = require 'engine.entities.enemy.enemy'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 local Pool = require 'engine.utils.pool'
@@ -103,6 +103,8 @@ local BasicEnemy = Class { __includes = Enemy,
     self.avoidHazardTiles = args.avoidHazardTiles or true
     self.animationMove = args.animationMove or 'move'
     self.changeDirectionOnCollision = args.changeDirectionOnCollision or true
+    self.moveDirectionX = args.moveDirectionX or 0
+    self.moveDirectionY = args.moveDirectionY or 0
 
     -- charging
     self.chargeType = args.chargeType or ChargeType.None
@@ -133,6 +135,8 @@ local BasicEnemy = Class { __includes = Enemy,
     self.isShooting = false
 
     -- TODO color initialization
+
+    self:faceRandomDirection()
   end
 }
 
@@ -153,25 +157,23 @@ function BasicEnemy:changeDirection()
         self:setVector(self.moveDirectionX, self.moveDirectionY)
         return
       end
-
-      -- create a list of obstruction-free move angles
-      local possibleDirection4Angles = TablePool.obtain()
-      for i = 1, Direction4.count() - 1 do
-        if self:canMoveInDirection(Direction4.getDirection(i)) then
-          lume.push(possibleDirection4Angles[i], Direction4.getDirection(i))
-        end
-      end
-      
-      if lume.count(possibleDirection4Angles) == 0 then
-        -- No collision-free angles, so face a new random angle
-        self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.random(1, Direction4.count()))
-      else
-        self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.randomchoice(possibleDirection4Angles))
-      end
-
-      TablePool.free(possibleDirection4Angles)
     end
   end
+
+  -- create a list of obstruction-free move angles
+  local possibleDirection4Angles = TablePool.obtain()
+  for dir4 = 1, Direction4.count() - 1 do
+    if self:canMoveInDirection(Direction4.getVector(dir4)) then
+      lume.push(possibleDirection4Angles, dir4)
+    end
+  end
+  if lume.count(possibleDirection4Angles) == 0 then
+    -- No collision-free angles, so face a new random angle
+    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.random(1, Direction4.count()))
+  else
+    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.randomchoice(possibleDirection4Angles))
+  end
+  TablePool.free(possibleDirection4Angles)
 end
 
 function BasicEnemy:faceRandomDirection()
@@ -192,12 +194,13 @@ function BasicEnemy:startMoving()
   self.isMoving = true
   self:setSpeed(self.moveSpeed)
   self.moveTimer = math.floor(lume.random(self.moveTimeMin, self.moveTimeMax))
-  
+
   self:changeDirection()
   self:setVector(self.moveDirectionX, self.moveDirectionY)
 
   if self.sprite then
     if not self.sprite:isPlaying() or self.sprite:getCurrentAnimationKey() ~= self.animationMove then
+      print('playing ' .. self.animationMove)
       self.sprite:play(self.animationMove)
     end
   end
@@ -235,7 +238,7 @@ end
 -- TODO implmement this when i finish the projectile entity class
 function BasicEnemy:shoot()
   if self.shootSound then
-
+    -- TODO play sound
   end
   
   -- construct the projectile
@@ -312,7 +315,7 @@ function BasicEnemy:updateMovingState()
 
   -- collided into wall or other entity
   local collidedIntoWallOrEntity = false
-  for _, other in self.moveCollisions do
+  for _, other in ipairs(self.moveCollisions) do
     if other.isTile and other:isTile() then
       if other:isWall() and self.collidesWithWalls then
         collidedIntoWallOrEntity = true
@@ -403,11 +406,9 @@ function BasicEnemy:updateAi()
           elseif dir4 == Direction4.up or dir4 == Direction4.down then
             axis = Axis.vertical
           end
-          
           if self:areBumpBoxCollisionAligned(player, axis) then
             self:startCharging()
           end
-          
         end
       end
 

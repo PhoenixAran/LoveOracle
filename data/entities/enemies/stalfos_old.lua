@@ -20,13 +20,8 @@ local MARKED_DEAD = 4
 -- TODO maybe have more pathing function instead of treating colliding tiles as walls 
 -- works for now so..
 
----@class Stalfos : BasicEnemy
----@field collidesWithTileNormalState string[]
----@field collidesWithTileHurtState string[]
----@field collidesWithTileJumpState string[]
+
 local Stalfos = Class { __includes = BasicEnemy,
-  ---@param self Stalfos
-  ---@param args table
   init = function(self, args)
     if args == nil then
       args = { }

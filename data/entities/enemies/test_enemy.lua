@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Enemy = require 'engine.entities.enemy'
+local Enemy = require 'engine.entities.enemy.enemy'
 
 local TestEnemy = Class { __includes = Enemy,
   init = function(self, args)

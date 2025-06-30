@@ -8,7 +8,7 @@ local Physics = require 'engine.physics'
 local Collider = require 'engine.components.collider'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
-local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
+local TileTypeFlags = require('engine.enums.flags.tile_type_flags').enumMap
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local CollisionTag = require 'engine.enums.collision_tag'
 local EffectFactory = require 'engine.entities.effect_factory'
@@ -35,7 +35,8 @@ local Enemy = Class { __includes = MapEntity,
   ---@param self Enemy
   ---@param args table
   init = function(self, args)
-    
+    MapEntity.init(self, args)
+
     self.enemyState = nil
 
     -- jump behaviour configuration
@@ -68,7 +69,7 @@ function Enemy:release()
     Pool.free(self.enemyState)
     self.enemyState = nil
   end
-  Enemy.release(self)
+  MapEntity.release(self)
 end
 
 ---@param state EnemyState?
@@ -132,11 +133,12 @@ end
 
 function Enemy:canMoveInDirection(x, y)
   local canMoveInDirection = true
-  local oldX, oldY = self.movement:getVector()
+  local oldVectorX, oldVectorY = self.movement:getVector()
   self.movement:setVector(x, y)
+  
+  local goalX, goalY = vector.add(self.x, self.y, self.movement:getTestLinearVelocity())
 
-  local goalX, goalY = self.movement:getTestLinearVelocity()
-  local _, _, testCols, testLen = Physics:projectMove(self.x, self.y, self.w, self.h, goalX, goalY, self.moveFilter)
+  local _, _, testCols, testLen = Physics:projectMove(self, self.x,self.y,self.w,self.h, goalX,goalY, self.moveFilter)
   for i = 1, testLen do
     local col = testCols[i]
     if col.other.isTile and col.other:isTile() then
@@ -144,8 +146,7 @@ function Enemy:canMoveInDirection(x, y)
         canMoveInDirection = false
         break
       end
-
-      if self.collidesWithWalls and bit.band(col.other:getTileType(), TileTypeFlags.wall) ~= 0 then
+      if self.collidesWithWalls and bit.band(col.other:getTileType(), TileTypeFlags.Wall) ~= 0 then
         canMoveInDirection = false
         break
       end
@@ -155,7 +156,7 @@ function Enemy:canMoveInDirection(x, y)
       break
     end
   end
-  self.movement:setVector(oldX, oldY)
+  self.movement:setVector(oldVectorX, oldVectorY)
   Physics.freeCollisions(testCols)
 
   return canMoveInDirection

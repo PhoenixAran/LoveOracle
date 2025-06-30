@@ -10,9 +10,7 @@ return makeModuleFunction(function(spriteBank)
 
   -- sprite animation builder setup
   ab:setSpriteSheet('stalfos')
-
-
-  ab:setDefaultLoopType('cycle')
+  ab:setDefaultLoopType('cycle', true)
   ab:setSubstrips(false)
 
   -- @animation move

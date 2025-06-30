@@ -202,8 +202,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":656,
-                 "y":372
+                 "x":788,
+                 "y":464
                 }],
          "opacity":1,
          "type":"objectgroup",
