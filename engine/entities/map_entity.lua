@@ -24,6 +24,7 @@ local Consts = require 'constants'
 local bit = require 'bit'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 local EffectFactory = require 'engine.entities.effect_factory'
+local Rectangle = require 'engine.math.rectangle'
 
 
 local canCollide = require('engine.entities.bump_box').canCollide
@@ -428,7 +429,16 @@ end
 --- Note that this does not return tiles that the GroundObserver is over. This is mainly
 --- used for Enemy scripting to determine when the entity should stop moving
 --- NOTE: Use Physics.freeCollisions() to free the returned items
-function MapEntity:getTilesMeeting()
+--- @param inflateAmount number? amount to inflate the query rect by. Defaults to 0
+--- @return any[] items tiles that are colliding with the Entity's bumpbox. Free with Physics.freeCollisions()
+--- @return integer len number of items returned
+function MapEntity:getTilesMeeting(inflateAmount)
+  local x,y,w,h = self.x, self.y, self.w, self.h
+  if inflateAmount and inflateAmount > 0 then
+    x,y,w,h = Rectangle.resizeAroundCenter(x,y,w,h, w + inflateAmount, h + inflateAmount)
+  end
+
+  inflateAmount = inflateAmount or 0
   local items, len = Physics:queryRect(self.x, self.y, self.w, self.h, self._getMeetingTilesQueryRectFilter)
   return items, len
 end

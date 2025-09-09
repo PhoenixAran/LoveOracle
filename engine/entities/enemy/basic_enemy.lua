@@ -161,19 +161,23 @@ function BasicEnemy:changeDirection()
   end
 
   -- create a list of obstruction-free move angles
-  local possibleDirection4Angles = TablePool.obtain()
+  local possibleDirectionAngles = TablePool.obtain()
   for dir4 = 1, Direction4.count() - 1 do
-    if self:canMoveInDirection(Direction4.getVector(dir4)) then
-      lume.push(possibleDirection4Angles, dir4)
+    local testX, testY = Direction4.getVector(dir4)
+    if self:canMoveInDirection(testX, testY) then
+      lume.push(possibleDirectionAngles, dir4)
     end
   end
-  if lume.count(possibleDirection4Angles) == 0 then
+
+  print('available directions: ' .. love.inspect(possibleDirectionAngles))
+
+  if lume.count(possibleDirectionAngles) == 0 then
     -- No collision-free angles, so face a new random angle
-    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.random(1, Direction4.count()))
+    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(math.random(1, 4))
   else
-    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.randomchoice(possibleDirection4Angles))
+    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.randomchoice(possibleDirectionAngles))
   end
-  TablePool.free(possibleDirection4Angles)
+  TablePool.free(possibleDirectionAngles)
 end
 
 function BasicEnemy:faceRandomDirection()
@@ -305,7 +309,7 @@ function BasicEnemy:updateChargingState()
 end
 
 function BasicEnemy:updateMovingState()
-  local _, _, collisions = self:move()
+  local tvx, tvy, collisions = self:move()
 
   -- stop moving after a duration
   if self.moveTimer <= 0 then
@@ -321,7 +325,7 @@ function BasicEnemy:updateMovingState()
         collidedIntoWallOrEntity = true
         break
       end
-    elseif other.isEntity and other:isEntity() then
+    else
       collidedIntoWallOrEntity = true
       break
     end
@@ -331,14 +335,13 @@ function BasicEnemy:updateMovingState()
   if self.changeDirectionOnCollision and collidedIntoWallOrEntity then
     self:changeDirection()
   elseif self.avoidHazardTiles then
-    -- enemy will avoid going into hazard tiles
-    -- TODO MAYBE: You can use Entity:getMeetingTiles() (and also implement an offset) if this doesnt adequetly check ahead enough
-    for _, other in ipairs(collisions) do
-      if other.isTile and other:isTile() and self:isHazardTile(other) then
-        self:changeDirection()
-        break
-      end
+    local tvx, tvy = self:getTestLinearVelocity()
+    local items, len = self:getMeetingTiles(self.x + tvx, self.y + tvy)
+    if len > 0 then
+      self:changeDirection()
+      print '========'
     end
+    Physics.freeTable(items)
   end
 
   -- shoot while moving
@@ -397,7 +400,7 @@ function BasicEnemy:updateAi()
         self.chargeCooldownTimer = self.chargeCooldownTimer - 1
       elseif self.chargeType ~= ChargeType.None then
         local player = Singletons.gameControl:getPlayer()
-        if player then   
+        if player then
           local px, py = player:getPosition()
           local dir4 = Direction4.getDirection(vector.sub(px, py, self:getPosition()))
           local axis = nil

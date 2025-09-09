@@ -67,7 +67,7 @@ function Direction4.getVector(dir4)
   if direction4VectorMap[dir4] then
     return vectorTable.x, vectorTable.y
   end
-  error('Direction4 out of range')
+  error('Direction4 ' .. dir4 .. ' out of range')
 end
 
 function Direction4.debugString(dir4)

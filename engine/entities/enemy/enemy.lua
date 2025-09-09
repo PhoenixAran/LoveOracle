@@ -31,6 +31,7 @@ local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Dire
 ---@field jumpGravity number
 ---@field jumpZVelocity number
 ---@field fallInHoleEffectColor string
+---@field hazardTileQueryRectFilter function
 local Enemy = Class { __includes = MapEntity,
   ---@param self Enemy
   ---@param args table
@@ -44,7 +45,7 @@ local Enemy = Class { __includes = MapEntity,
     self.jumpZVelocity = args.jumpZVelocity or 2.8
 
     -- environment configuration
-    self.canFallInHole = args.canFallInHole or false
+    self.canFallInHole = args.canFallInHole or true
     self.canSwimInLava = args.canSwimInLava or false
     self.canSwimInWater = args.canSwimInWater or false
     self.movesInAir = args.movesInAir or false
@@ -57,6 +58,20 @@ local Enemy = Class { __includes = MapEntity,
 
     -- set default collision tag for Enemy 
     self.collisionTag = CollisionTag.enemy
+
+    -- filter function for queryRect that queries for hazard tiles
+    local canCollide = require('engine.entities.bump_box').canCollide
+    local enemyInstance = self
+    self.hazardTileQueryRectFilter = function(item)
+      if canCollide(enemyInstance, item) then
+        local hazardTilesFlags = enemyInstance:getHazardTileFlags()
+        if item.isTile and item:isTile() and item:isTopTile() then
+          -- only return true if the tile type is a considered a hazard tile
+          return bit.band(hazardTilesFlags, item.tileData.tileType) ~= 0
+        end
+      end
+      return false
+    end
   end
 }
 
@@ -70,6 +85,34 @@ function Enemy:release()
     self.enemyState = nil
   end
   MapEntity.release(self)
+end
+
+--- returns TileType flags for this Enemy's hazard tile
+--- useful when querying using physics
+---@return integer
+function Enemy:getHazardTileFlags()
+  local flags = 0
+  if self.canFallInHole then
+    flags = bit.bor(flags, TileTypeFlags.Hole)
+  end
+  if not self.canSwimInLava then
+    flags = bit.bor(flags, TileTypeFlags.Lava, TileTypeFlags.Lavafall)
+  end
+  if not self.canSwimInWater then
+    flags = bit.bor(flags, TileTypeFlags.Water)
+  end
+  return flags
+end
+
+function Enemy:getMeetingHazardTiles(testX, testY)
+  if testX == nil then
+    testX = self.x
+  end
+  if testY == nil then
+    testY = self.y
+  end
+  local items, len = Physics:queryRect(testX, testY, self.w, self.h, self.hazardTileQueryRectFilter)
+  return items, len
 end
 
 ---@param state EnemyState?
@@ -138,10 +181,11 @@ function Enemy:canMoveInDirection(x, y)
   
   local goalX, goalY = vector.add(self.x, self.y, self.movement:getTestLinearVelocity())
 
-  local _, _, testCols, testLen = Physics:projectMove(self, self.x,self.y,self.w,self.h, goalX,goalY, self.moveFilter)
+  local tvx, tvy, testCols, testLen = Physics:projectMove(self, self.x,self.y,self.w,self.h, goalX,goalY, self.moveFilter)
   for i = 1, testLen do
     local col = testCols[i]
     if col.other.isTile and col.other:isTile() then
+      lume.push(col.other.tileData.tileType)
       if self:isHazardTile(col.other) then
         canMoveInDirection = false
         break
@@ -156,9 +200,19 @@ function Enemy:canMoveInDirection(x, y)
       break
     end
   end
-  self.movement:setVector(oldVectorX, oldVectorY)
   Physics.freeCollisions(testCols)
 
+  if canMoveInDirection then
+    -- check for hazard tiles
+    local testX, testY = self.x + tvx, self.y + tvy
+    local items, len = self:getMeetingTiles(testX, testY)
+    if len > 0 then
+      canMoveInDirection = false
+    end
+    Physics.freeTable(items)
+  end
+
+  self.movement:setVector(oldVectorX, oldVectorY)
   return canMoveInDirection
 end
 

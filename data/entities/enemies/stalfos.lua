@@ -69,8 +69,11 @@ local Stalfos = Class { __includes = BasicEnemy,
     self:setInteraction(CollisionTag.player, Interactions.damageOther)
     self:setInteraction(CollisionTag.sword, Interactions.takeDamage)
 
+    -- BasicEnemy setup
+    self.randomDirectionChoiceType = BasicEnemy.RandomDirectionChoiceType.angle
     self.isMoving = true
     self.sprite:play(self.animationMove)
+
   end
 }
 

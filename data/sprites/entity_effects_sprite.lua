@@ -45,7 +45,7 @@ return makeModuleFunction(
     -- BUILD grass
     builder:addAnimation('grass', sb:build())
 
-  
+
     -- @animation effect_dirt
     sb:setSubstrips(true)
     sb:setLoopType('once')

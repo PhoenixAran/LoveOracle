@@ -11,7 +11,8 @@ local Consts = require 'constants'
 local Physics = require 'engine.physics'
 local bit = require 'bit'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
-
+local Singletons = require 'engine.singletons'
+local TablePool = require 'engine.utils.table_pool'
 
 local GRID_SIZE = Consts.GRID_SIZE
 
@@ -25,6 +26,7 @@ local GRID_SIZE = Consts.GRID_SIZE
 ---@field onRemoved function
 ---@field drawType EntityDrawType
 ---@field collisionTag string
+---@field _getMeetingTilesQueryRectFilter function
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, args)
     if args == nil then
@@ -54,7 +56,15 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.drawType = args.drawType
     self.transform = Transform:new(self)
     self.name = args.name or uuid()
-    self.collisionTag = args.collisionTag
+    self.collisionTag = args.collisionTags
+
+    local entityInstance = self
+    self._getMeetingTilesQueryRectFilter = function(item)
+      if item.isTile and item:isTile() and item:isTopTile() then
+        return BumpBox.canCollide(entityInstance, item)
+      end
+      return false
+    end
   end
 }
 
@@ -170,6 +180,20 @@ end
 ---@param y number
 function Entity:setLocalPosition(x, y)
   self.transform:setLocalPosition(x, y)
+end
+
+--- finds out which tiles would touch an entity
+--- Make sure you return tables to pools via Physics.freeTable
+---@param testX number? test x position. Uses actual x position if null 
+---@param testY number? test y position. Uses actual y position if null
+function Entity:getMeetingTiles(testX, testY)
+  if testX == nil then
+    testX = self.x
+  end
+  if testY == nil then
+    testY = self.y
+  end
+  return Physics:queryRect(testX, testY, self.w, self.h, self._getMeetingTilesQueryRectFilter)
 end
 
 ---resizes entity
