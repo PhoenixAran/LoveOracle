@@ -52,8 +52,10 @@ local slideAndCornerCorrect = function(world, col, x,y,w,h, goalX,goalY, filter,
         local afterCorrectionX, afterCorrectionY = x, y
         if correctHorizontal then
           afterCorrectionX = sign == 1 and ox + ow or ox - w
+          -- Look slightly past the correction in the move direction to ensure space is clear.
           afterCorrectionY = afterCorrectionY + (AFTER_CORNER_CORRECT_DEPTH_CHECK * -col.normalY)
         else
+          -- Look slightly past the correction in the move direction to ensure space is clear.
           afterCorrectionX = afterCorrectionX + (AFTER_CORNER_CORRECT_DEPTH_CHECK * -col.normalX)
           afterCorrectionY = sign == 1 and oy + oh or oy - h 
         end

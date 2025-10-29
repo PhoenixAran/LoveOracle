@@ -86,4 +86,9 @@ function Stalfos:updateAi()
   -- TODO jumping stuff based off player input
 end
 
+function Stalfos:draw()
+  BasicEnemy.draw(self)
+  
+end
+
 return Stalfos

@@ -32,6 +32,7 @@ local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Dire
 ---@field jumpZVelocity number
 ---@field fallInHoleEffectColor string
 ---@field hazardTileQueryRectFilter function
+---@field projectMoveFilter function
 local Enemy = Class { __includes = MapEntity,
   ---@param self Enemy
   ---@param args table
@@ -64,14 +65,28 @@ local Enemy = Class { __includes = MapEntity,
     local enemyInstance = self
     self.hazardTileQueryRectFilter = function(item)
       if canCollide(enemyInstance, item) then
-        local hazardTilesFlags = enemyInstance:getHazardTileFlags()
         if item.isTile and item:isTile() and item:isTopTile() then
+          local hazardTilesFlags = enemyInstance:getHazardTileFlags()
           -- only return true if the tile type is a considered a hazard tile
           return bit.band(hazardTilesFlags, item.tileData.tileType) ~= 0
         end
       end
       return false
     end
+
+    -- self.projectMoveFilter = function(item, other)
+    --   if canCollide(item, item) then
+    --     if other.isTile and other:isTile() then
+    --       local hazardTileFlags = item:getHazardTileFlags()
+    --       if bit.band(hazardTileFlags, other.tileData.tileType) ~= 0 then
+    --         return 'touch'
+    --       end
+    --     end
+    --   else
+    --     -- doesnt matter what type, we just need to register a collision
+    --     return 'touch'
+    --   end
+    -- end
   end
 }
 
@@ -104,6 +119,9 @@ function Enemy:getHazardTileFlags()
   return flags
 end
 
+--- NB: although we can use our groundobserver point to test, it looks better
+--- if enemies try to keep their whole bumpbox away from hazard tile and not get as close
+--- as possible
 function Enemy:getMeetingHazardTiles(testX, testY)
   if testX == nil then
     testX = self.x
@@ -178,39 +196,55 @@ function Enemy:canMoveInDirection(x, y)
   local canMoveInDirection = true
   local oldVectorX, oldVectorY = self.movement:getVector()
   self.movement:setVector(x, y)
-  
+
   local goalX, goalY = vector.add(self.x, self.y, self.movement:getTestLinearVelocity())
 
-  local tvx, tvy, testCols, testLen = Physics:projectMove(self, self.x,self.y,self.w,self.h, goalX,goalY, self.moveFilter)
-  for i = 1, testLen do
-    local col = testCols[i]
-    if col.other.isTile and col.other:isTile() then
-      lume.push(col.other.tileData.tileType)
-      if self:isHazardTile(col.other) then
-        canMoveInDirection = false
-        break
-      end
-      if self.collidesWithWalls and bit.band(col.other:getTileType(), TileTypeFlags.Wall) ~= 0 then
-        canMoveInDirection = false
-        break
-      end
-    else
-      -- entity collision
-      canMoveInDirection = false
-      break
-    end
-  end
+  -- project movement
+  local tvx, tvy, testCols = Physics:projectMove(self, self.x,self.y,self.w,self.h, goalX,goalY, self.moveFilter)
   Physics.freeCollisions(testCols)
 
-  if canMoveInDirection then
-    -- check for hazard tiles
-    local testX, testY = self.x + tvx, self.y + tvy
-    local items, len = self:getMeetingTiles(testX, testY)
-    if len > 0 then
-      canMoveInDirection = false
-    end
-    Physics.freeTable(items)
+
+  if tvx == x and tvy == y then
+    -- enemy is running into a wall or something
+    return true
   end
+
+  -- query hazard tiles
+  local items, len = self:getMeetingHazardTiles(tvx, tvy)
+  Physics.freeTable(items)
+  if len > 0 then
+    canMoveInDirection = false
+  end
+
+  -- for i = 1, testLen do
+  --   local col = testCols[i]
+  --   if col.other.isTile and col.other:isTile() then
+  --     lume.push(col.other.tileData.tileType)
+  --     if self:isHazardTile(col.other) then
+  --       canMoveInDirection = false
+  --       break
+  --     end
+  --     if self.collidesWithWalls and bit.band(col.other:getTileType(), TileTypeFlags.Wall) ~= 0 then
+  --       canMoveInDirection = false
+  --       break
+  --     end
+  --   else
+  --     -- entity collision
+  --     canMoveInDirection = false
+  --     break
+  --   end
+  -- end
+  -- Physics.freeCollisions(testCols)
+
+  -- if canMoveInDirection then
+  --   -- check for hazard tiles
+  --   local testX, testY = self.x + tvx, self.y + tvy
+  --   local items, len = self:getMeetingTiles(testX, testY)
+  --   if len > 0 then
+  --     canMoveInDirection = false
+  --   end
+  --   Physics.freeTable(items)
+  -- end
 
   self.movement:setVector(oldVectorX, oldVectorY)
   return canMoveInDirection

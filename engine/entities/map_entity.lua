@@ -88,7 +88,7 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field grassVisible boolean
 ---@field onHurt function
 ---@field onBump function
----@field moveFilter function filter for move function in Physics:move()\
+---@field moveFilter function filter for move function in Physics:move()
 ---@field roomEdgeCollisionBoxMoveFilter function
 ---@field _getMeetingTilesQueryRectFilter function filter for Physics:queryRect() when getting meeting tiles
 local MapEntity = Class { __includes = Entity,

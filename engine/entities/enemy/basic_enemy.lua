@@ -134,7 +134,6 @@ local BasicEnemy = Class { __includes = Enemy,
     self.isPaused = false
     self.isShooting = false
 
-    -- TODO color initialization
 
     self:faceRandomDirection()
   end
@@ -161,6 +160,7 @@ function BasicEnemy:changeDirection()
   end
 
   -- create a list of obstruction-free move angles
+  -- TODO use numMoveAngles
   local possibleDirectionAngles = TablePool.obtain()
   for dir4 = 1, Direction4.count() - 1 do
     local testX, testY = Direction4.getVector(dir4)
@@ -169,14 +169,15 @@ function BasicEnemy:changeDirection()
     end
   end
 
-  print('available directions: ' .. love.inspect(possibleDirectionAngles))
-
   if lume.count(possibleDirectionAngles) == 0 then
     -- No collision-free angles, so face a new random angle
     self.moveDirectionX, self.moveDirectionY = Direction4.getVector(math.random(1, 4))
   else
     self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.randomchoice(possibleDirectionAngles))
   end
+
+  self:setVector(self.moveDirectionX, self.moveDirectionY)
+
   TablePool.free(possibleDirectionAngles)
 end
 
@@ -339,7 +340,6 @@ function BasicEnemy:updateMovingState()
     local items, len = self:getMeetingTiles(self.x + tvx, self.y + tvy)
     if len > 0 then
       self:changeDirection()
-      print '========'
     end
     Physics.freeTable(items)
   end
