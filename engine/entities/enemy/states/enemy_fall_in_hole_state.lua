@@ -56,6 +56,7 @@ function EnemyFallInHoleState:update()
   -- slip toward hole center
   local i, j = self.holeTile.tileIndexX, self.holeTile.tileIndexY
   local tx, ty = self.holeTile:getPosition()
+  -- TODO get rid of magic numbers (see also PlayerController hole stuff)
   local holeRectX, holeRectY, holeRectW, holeRectH  =
     (i * GRID_SIZE) + (0.375 * GRID_SIZE),
     (j * GRID_SIZE) + (0.5 * GRID_SIZE),

@@ -205,7 +205,6 @@ function BasicEnemy:startMoving()
 
   if self.sprite then
     if not self.sprite:isPlaying() or self.sprite:getCurrentAnimationKey() ~= self.animationMove then
-      print('playing ' .. self.animationMove)
       self.sprite:play(self.animationMove)
     end
   end
@@ -310,6 +309,7 @@ function BasicEnemy:updateChargingState()
 end
 
 function BasicEnemy:updateMovingState()
+  self:setSpeed(self.moveSpeed)
   local tvx, tvy, collisions = self:move()
 
   -- stop moving after a duration
@@ -337,7 +337,7 @@ function BasicEnemy:updateMovingState()
     self:changeDirection()
   elseif self.avoidHazardTiles then
     local tvx, tvy = self:getTestLinearVelocity()
-    local items, len = self:getMeetingTiles(self.x + tvx, self.y + tvy)
+    local items, len = self:getMeetingHazardTiles(self.x + tvx, self.y + tvy)
     if len > 0 then
       self:changeDirection()
     end

@@ -42,7 +42,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.spriteSquisher:addSpriteRenderer(self.sprite)
 
     -- movement (see basic_enemy.lua)
-    self.movement:setSpeed(30)
+    self.moveSpeed = 30
     self.numMoveAngles = 16
     self.facePlayerOdds = 0
     self.changeDirectionOnCollision = true
