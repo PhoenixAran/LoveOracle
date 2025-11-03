@@ -1,4 +1,5 @@
 local Class = require 'lib.class'
+local AngleSnap = require 'engine.enums.angle_snap'
 
 ---@class PlayerMotionType
 ---@field speed integer
@@ -6,7 +7,7 @@ local Class = require 'lib.class'
 ---@field deceleration integer
 ---@field minSpeed integer
 ---@field slippery boolean
----@field directionSnapCount integer
+---@field angleSnap AngleSnap
 local PlayerMotionType = Class {
   init = function(self)
     -- movement component modifiers
@@ -15,7 +16,7 @@ local PlayerMotionType = Class {
     self.deceleration = 1
     self.minSpeed = 0.05
     self.slippery = false
-    self.directionSnapCount = 32
+    self.angleSnap = AngleSnap.to32
   end
 }
 

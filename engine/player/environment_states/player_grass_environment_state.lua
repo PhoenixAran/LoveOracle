@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local PlayerState = require 'engine.player.player_state'
 local PlayerMotionType = require 'engine.player.player_motion_type'
 local PlayerEnvironmentState = require 'engine.player.environment_states.player_environment_state'
+local AngleSnap = require 'engine.enums.angle_snap'
 
 ---@class PlayerGrassEnvironmentState : PlayerEnvironmentState
 local PlayerGrassEnvironmentState = Class { __includes = PlayerEnvironmentState,

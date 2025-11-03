@@ -921,7 +921,7 @@ function Player:update()
 
   -- check push tile if we are not ledge jumping
   local EPSILON = 0.001
-  if math.abs(tvx) < EPSILON and math.abs(tvy) < EPSILON then
+  if tvx == 0 and tvy == 0 then
     local movementDir8 = self.movement:getDirection8()
     if movementDir8 == Direction8.up or movementDir8 == Direction8.down
       or movementDir8 == Direction8.left or movementDir8 == Direction8.right then

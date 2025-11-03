@@ -4,6 +4,8 @@ local vector = require 'engine.math.vector'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local Constants = require 'constants'
+local AngleSnap = require 'engine.enums.angle_snap'
+
 ---component that manages an entity's movement
 ---@class Movement : Component
 ---@field speed number
@@ -14,6 +16,7 @@ local Constants = require 'constants'
 ---@field slippery boolean
 ---@field movesWithConveyors boolean
 ---@field movesWithPlatforms boolean
+---@field angleSnap AngleSnap
 ---@field gravity number
 ---@field maxFallSpeed number
 ---@field vectorX number
@@ -55,6 +58,7 @@ local Movement = Class { __includes = Component,
     self.acceleration = args.acceleration
     self.deceleration = args.deceleration
 
+    self.angleSnap = AngleSnap.none
     self.slippery = args.slippery -- if true, this component will actually use acceleration and deceleration
     self.gravity = args.gravity
     self.maxFallSpeed = args.maxFallSpeed
@@ -200,6 +204,21 @@ function Movement:setZVelocity(value)
   self.zVelocity = value
 end
 
+---get angle snap
+---@return AngleSnap
+function Movement:getAngleSnap()
+  return self.angleSnap
+end
+
+---set angle snap
+---@param value? AngleSnap
+function Movement:setAngleSnap(value)
+  if value == nil then
+    value = AngleSnap.none
+  end
+  self.angleSnap = value
+end
+
 --- calculate linear velocity for this frame
 ---@return number linearVelocityX
 ---@return number linearVelocityY
@@ -207,7 +226,9 @@ function Movement:getLinearVelocity()
   local dt = love.time.dt
   self.prevMotionX = self.motionX
   self.prevMotionY = self.motionY
-  if self.vectorX == 0 and self.vectorY == 0 then
+
+  local x, y = AngleSnap.toVector(self.angleSnap, self.vectorX, self.vectorY)
+  if x == 0 and y == 0 then
     if self.slippery then
       local length = vector.len(self.motionX, self.motionY)
       local minLength = 0
@@ -231,7 +252,7 @@ function Movement:getLinearVelocity()
   else
     if self.slippery then
       -- get velocity without acceleration
-      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(self:getVector()))
+      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(x, y))
       local maxLength = vector.len(velocityX, velocityY)
 
       -- add accelerated velocity to our cached motionX and motionY values
@@ -242,7 +263,7 @@ function Movement:getLinearVelocity()
       end
     else
       -- simple velocity calculation
-      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(self:getVector()))
+      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(x, y))
       self.motionX, self.motionY = velocityX, velocityY
     end
   end
@@ -255,8 +276,9 @@ end
 function Movement:getTestLinearVelocity()
   local dt = love.time.dt
   local testMotionX, testMotionY = self.motionX, self.motionY
-
-  if self.vectorX == 0 and self.vectorY == 0 then
+  
+  local x, y = AngleSnap.toVector(self.angleSnap, self.vectorX, self.vectorY)
+  if x == 0 and y == 0 then
     if self.slippery then
       local length = vector.len(testMotionX, testMotionY)
       local minLength = 0
@@ -280,7 +302,7 @@ function Movement:getTestLinearVelocity()
   else
     if self.slippery then
       -- get velocity without acceleration
-      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(self:getVector()))
+      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(x, y))
       local maxLength = vector.len(velocityX, velocityY)
 
       -- add accelerated velocity to the test motion values
@@ -291,7 +313,7 @@ function Movement:getTestLinearVelocity()
       end
     else
       -- simple velocity calculation
-      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(self:getVector()))
+      local velocityX, velocityY = vector.mul(dt * self.speed * self.speedScale, vector.normalize(x, y))
       testMotionX, testMotionY = velocityX, velocityY
     end
   end

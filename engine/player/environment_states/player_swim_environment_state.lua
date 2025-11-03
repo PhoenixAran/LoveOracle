@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local PlayerEnvironmentState = require 'engine.player.environment_states.player_environment_state'
 local EffectFactory = require 'engine.entities.effect_factory'
 local vec2 = require 'engine.math.vector'
-
+local AngleSnap = require 'engine.enums.angle_snap'
 
 ---@class PlayerSwimEnvironmentState : PlayerEnvironmentState
 ---@field isSubmerged boolean
@@ -31,7 +31,7 @@ local PlayerSwimEnvironmentState = Class { __includes = PlayerEnvironmentState,
     self.motionSettings.acceleration = .05
     self.motionSettings.deceleration = .05
     self.motionSettings.minSpeed = .5
-    self.motionSettings.directionSnapCount = 32
+    self.motionSettings.angleSnap = AngleSnap.to32
   end
 }
 

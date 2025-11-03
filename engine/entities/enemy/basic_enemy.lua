@@ -10,6 +10,7 @@ local Axis = require 'engine.enums.axis'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local TablePool = require 'engine.utils.table_pool'
+local AngleSnap = require 'engine.enums.angle_snap'
 
 
 -- require states so they register themslves in the pool
@@ -50,7 +51,7 @@ local RandomDirectionChoiceType = {
 ---@field moveTimeMin number
 ---@field moveTimeMax number
 ---@field facePlayerOdds integer
----@field numMoveAngles integer
+---@field movementAngleSnap AngleSnap
 ---@field avoidHazardTiles boolean
 ---@field chargeType string
 ---@field chargeSpeed number
@@ -78,6 +79,7 @@ local RandomDirectionChoiceType = {
 ---@field moveDirectionX number
 ---@field moveDirectionY number
 ---@field moveSpeed number
+---@field moveAngleSnap AngleSnap
 ---@field animationMove string
 ---@field randomDirectionChoiceType integer
 ---@field projectileShootOdds integer
@@ -105,6 +107,7 @@ local BasicEnemy = Class { __includes = Enemy,
     self.changeDirectionOnCollision = args.changeDirectionOnCollision or true
     self.moveDirectionX = args.moveDirectionX or 0
     self.moveDirectionY = args.moveDirectionY or 0
+    self.moveAngleSnap = args.moveAngleSnap or AngleSnap.none
 
     -- charging
     self.chargeType = args.chargeType or ChargeType.None
@@ -201,6 +204,7 @@ function BasicEnemy:startMoving()
   self.moveTimer = math.floor(lume.random(self.moveTimeMin, self.moveTimeMax))
 
   self:changeDirection()
+  self:setAngleSnap(self.moveAngleSnap)
   self:setVector(self.moveDirectionX, self.moveDirectionY)
 
   if self.sprite then

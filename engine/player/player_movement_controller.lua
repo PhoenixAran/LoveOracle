@@ -9,9 +9,7 @@ local TileTypes = TileTypeFlags.enumMap
 local Input = require('engine.singletons').input
 local Physics = require 'engine.physics'
 local Constants = require 'constants'
-
--- how many times to 'split the pie' when clamping joystick vector to certian radian values
-local DIRECTION_SNAP = 40
+local AngleSnap = require 'engine.enums.angle_snap'
 
 ---@class PlayerMovementController
 ---@field player Player
@@ -77,6 +75,7 @@ function PlayerMovementController:setMode(mode)
     self.movement:setDeceleration(mode.deceleration)
     self.movement:setMinSpeed(mode.minSpeed)
     self.movement:setSlippery(mode.slippery)
+    self.movement:setAngleSnap(mode.angleSnap)
   end
 end
 
@@ -124,7 +123,7 @@ function PlayerMovementController:pollMovementControls(allowMovementControl)
   self.moving = false
   if allowMovementControl then
     x, y = Input:get('move')
-    x, y = vector.snapDirectionByCount(x, y, DIRECTION_SNAP)
+    x, y = AngleSnap.toVector(AngleSnap.none, x, y)
     self.directionX, self.directionY = x, y
     if x ~= 0 or y ~= 0 then
       self.moving = true

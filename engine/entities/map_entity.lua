@@ -493,6 +493,15 @@ function MapEntity:getKnockbackVelocity()
   return self.combat:getKnockbackVelocity()
 end
 
+function MapEntity:getAngleSnap()
+  return self.movement:getAngleSnap()
+end
+
+---@param value AngleSnap?
+function MapEntity:setAngleSnap(value)
+  self.movement:setAngleSnap(value)
+end
+
 -- ground observer pass throughs
 function MapEntity:onConveyor()
   return self.groundObserver.onConveyor
