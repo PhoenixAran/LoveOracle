@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
+local AngleSnap = require 'engine.enums.angle_snap'
 local BasicEnemy = require 'engine.entities.enemy.basic_enemy'
 local CollisionTag = require 'engine.enums.collision_tag'
 local Interactions = require 'engine.entities.interactions'
@@ -43,7 +44,6 @@ local Stalfos = Class { __includes = BasicEnemy,
 
     -- movement (see basic_enemy.lua)
     self.moveSpeed = 30
-    self.numMoveAngles = 16
     self.facePlayerOdds = 0
     self.changeDirectionOnCollision = true
     self.movesInAir = false
@@ -51,6 +51,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.stopTimeMax = 0
     self.moveTimeMin = 30
     self.moveTimeMax = 80
+    self:setAngleSnap(AngleSnap.none)
 
     -- physics
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
@@ -70,10 +71,9 @@ local Stalfos = Class { __includes = BasicEnemy,
     self:setInteraction(CollisionTag.sword, Interactions.takeDamage)
 
     -- BasicEnemy setup
-    self.randomDirectionChoiceType = BasicEnemy.RandomDirectionChoiceType.angle
+    self.randomDirectionChoiceType = AngleSnap.none
     self.isMoving = true
     self.sprite:play(self.animationMove)
-
   end
 }
 

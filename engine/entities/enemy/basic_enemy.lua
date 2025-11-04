@@ -36,12 +36,6 @@ local ShootType = {
   WhileMoving = 'while_moving'
 }
 
-local RandomDirectionChoiceType = {
-  angle = 0,
-  dir4 = 1,
-  dir8 = 2
-}
-
 --- Class with more built in behaviour for enemies. 
 --- Most enemies should inherit from this class.
 ---@class BasicEnemy : Enemy
@@ -81,14 +75,14 @@ local RandomDirectionChoiceType = {
 ---@field moveSpeed number
 ---@field moveAngleSnap AngleSnap
 ---@field animationMove string
----@field randomDirectionChoiceType integer
+---@field randomDirectionChoiceType AngleSnap
 ---@field projectileShootOdds integer
 ---@field changeDirectionOnCollision boolean
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
     Enemy.init(self, args)
 
-    self.randomDirectionChoiceType = args.randomDirectionChoiceType or RandomDirectionChoiceType.dir4
+    self.randomDirectionChoiceType = args.randomDirectionChoiceType or AngleSnap.none
 
     -- environment configuration
     self.canFallInHole = args.canFallInHole or true
@@ -162,39 +156,32 @@ function BasicEnemy:changeDirection()
     end
   end
 
-  -- create a list of obstruction-free move angles
-  -- TODO use numMoveAngles
-  local possibleDirectionAngles = TablePool.obtain()
-  for dir4 = 1, Direction4.count() - 1 do
-    local testX, testY = Direction4.getVector(dir4)
-    if self:canMoveInDirection(testX, testY) then
-      lume.push(possibleDirectionAngles, dir4)
+  -- parallel arrays
+  local possibleDirectionAnglesX = TablePool.obtain()
+  local possibleDirectionAnglesY = TablePool.obtain()
+  for _, v in AngleSnap.vectors(self:getAngleSnap()) do
+    if self:canMoveInDirection(v.x, v.y) then
+      lume.push(possibleDirectionAnglesX, v.x)
+      lume.push(possibleDirectionAnglesY, v.y)
     end
   end
 
-  if lume.count(possibleDirectionAngles) == 0 then
+  if lume.count(possibleDirectionAnglesX) == 0 then
     -- No collision-free angles, so face a new random angle
-    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(math.random(1, 4))
+    self.moveDirectionX, self.moveDirectionY = AngleSnap.getRandomVector(self:getAngleSnap())
   else
-    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(lume.randomchoice(possibleDirectionAngles))
+    local randomIndex = math.random(lume.count(possibleDirectionAnglesX))
+    self.moveDirectionX, self.moveDirectionY = possibleDirectionAnglesX[randomIndex], possibleDirectionAnglesY[randomIndex]
   end
 
   self:setVector(self.moveDirectionX, self.moveDirectionY)
 
-  TablePool.free(possibleDirectionAngles)
+  TablePool.free(possibleDirectionAnglesX)
+  TablePool.free(possibleDirectionAnglesY)
 end
 
 function BasicEnemy:faceRandomDirection()
-  if self.randomDirectionChoiceType == RandomDirectionChoiceType.angle then
-    local angle = lume.random(0, math.pi * 2)
-    self.moveDirectionX, self.moveDirectionY = vector.fromAngle(angle)
-  elseif self.randomDirectionChoiceType == RandomDirectionChoiceType.dir4 then
-    local dir4 = math.floor(lume.random(1, Direction4.count()))
-    self.moveDirectionX, self.moveDirectionY = Direction4.getVector(dir4)
-  elseif self.randomDirectionChoiceType == RandomDirectionChoiceType.dir8 then
-    local dir8 = math.floor(lume.random(1, Direction8.count()))
-    self.moveDirectionX, self.moveDirectionY = Direction8.getVector(dir8)
-  end
+  self.moveDirectionX, self.moveDirectionY = AngleSnap.getRandomVector(self.randomDirectionChoiceType)
   self:setVector(self.moveDirectionX, self.moveDirectionY)
 end
 
@@ -431,6 +418,5 @@ end
 BasicEnemy.ChargeType = ChargeType
 BasicEnemy.AimType = AimType
 BasicEnemy.ShootType = ShootType
-BasicEnemy.RandomDirectionChoiceType = RandomDirectionChoiceType
 
 return BasicEnemy

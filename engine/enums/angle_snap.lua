@@ -1,3 +1,6 @@
+local lume = require 'lib.lume'
+
+---@diagnostic disable: inject-field
 ---@enum AngleSnap 
 local AngleSnap = {
   none = -1,
@@ -148,8 +151,13 @@ local snapVectors = {
     vector(1, -0.09849140336)        -- 354.375°
   }
 }
+-- give 360 degrees via programatic loop
+snapVectors[AngleSnap.none] = { }
+for i = 0, 359 do
+  local angle = (i / 360) * math.pi * 2
+  lume.push(snapVectors[AngleSnap.none], vector(math.cos(angle), math.sin(angle)))
+end
 
----@diagnostic disable-next-line: inject-field
 function AngleSnap.toVector(angleSnap, x, y)
   if x == 0 and y == 0 then
     return x, y
@@ -180,6 +188,27 @@ function AngleSnap.toVector(angleSnap, x, y)
 
   -- Return normalized snap direction with original length
   return snappedVec.x * length, snappedVec.y * length
+end
+
+---@param angleSnap AngleSnap?
+---@return function iterator, table table, integer index
+function AngleSnap.vectors(angleSnap)
+  if angleSnap == nil then
+    angleSnap = AngleSnap.none
+  end
+  return ipairs(snapVectors[angleSnap])
+end
+
+---@param angleSnap? AngleSnap
+---@return number, number
+function AngleSnap.getRandomVector(angleSnap)
+  if angleSnap ~= AngleSnap.none and angleSnap ~= nil then
+    local randomVector = lume.randomchoice(snapVectors[angleSnap])
+    return randomVector.x, randomVector.y
+  end
+  -- return a random x, y in unit length
+  local angle = math.random() * math.pi * 2
+  return math.cos(angle), math.sin(angle)
 end
 
 -- TODO start using this
