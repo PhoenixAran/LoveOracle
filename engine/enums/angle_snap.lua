@@ -17,20 +17,20 @@ end
 
 local snapVectors = {
   [AngleSnap.to4] = {
-    vector(1, 0),    -- right
-    vector(0, 1),    -- up
-    vector(-1, 0),   -- left
-    vector(0, -1)    -- down
+    vector(1, 0),    -- right (0°)
+    vector(0, 1),    -- down (90°)
+    vector(-1, 0),   -- left (180°)
+    vector(0, -1)    -- up (270°)
   },
   [AngleSnap.to8] = {
-    vector(1, 0),    -- right
-    vector(1, 1),    -- up-right
-    vector(0, 1),    -- up
-    vector(-1, 1),   -- up-left
-    vector(-1, 0),   -- left
-    vector(-1, -1),  -- down-left
-    vector(0, -1),   -- down
-    vector(1, -1)    -- down-right
+    vector(1, 0),     -- right (0°)
+    vector(1, 1),     -- down-right (45°)
+    vector(0, 1),     -- down (90°)
+    vector(-1, 1),    -- down-left (135°)
+    vector(-1, 0),    -- left (180°)
+    vector(-1, -1),   -- up-left (225°)
+    vector(0, -1),    -- up (270°)
+    vector(1, -1)     -- up-right (315°)
   },
   [AngleSnap.to16] = {
     vector(1, 0),                    -- 0°
@@ -151,26 +151,23 @@ local snapVectors = {
     vector(1, -0.09849140336)        -- 354.375°
   }
 }
--- give 360 degrees via programatic loop
-snapVectors[AngleSnap.none] = { }
+
+snapVectors[AngleSnap.none] = {}
 for i = 0, 359 do
   local angle = (i / 360) * math.pi * 2
   lume.push(snapVectors[AngleSnap.none], vector(math.cos(angle), math.sin(angle)))
 end
 
 function AngleSnap.toVector(angleSnap, x, y)
-  if x == 0 and y == 0 then
+  if x == 0 and y == 0 or angleSnap == AngleSnap.none then
     return x, y
   end
-  if angleSnap == AngleSnap.none then
-    return x, y
-  end
-  
+
   local vectorMap = snapVectors[angleSnap]
   if vectorMap == nil then
     error(tostring(angleSnap) .. ' AngleSnap enum out of range')
   end
-  
+
   -- Use the same logic as original snapDirection function but with lookup table
   local theta = math.atan2(y, x)
   local FULL_ANGLE = math.pi * 2
@@ -179,7 +176,7 @@ function AngleSnap.toVector(angleSnap, x, y)
     theta = theta + FULL_ANGLE
   end
 
-  local intervalCount = #vectorMap
+  local intervalCount = lume.count(vectorMap)
   local angleSnapInterval = FULL_ANGLE / intervalCount
   local angleIndex = math.floor((theta / angleSnapInterval) + 0.5) % intervalCount
 
@@ -203,7 +200,8 @@ end
 ---@return number, number
 function AngleSnap.getRandomVector(angleSnap)
   if angleSnap ~= AngleSnap.none and angleSnap ~= nil then
-    local randomVector = lume.randomchoice(snapVectors[angleSnap])
+    local randomIndex = math.random(lume.count(snapVectors[angleSnap]))
+    local randomVector = snapVectors[angleSnap][randomIndex]
     return randomVector.x, randomVector.y
   end
   -- return a random x, y in unit length

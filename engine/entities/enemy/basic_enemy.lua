@@ -75,14 +75,12 @@ local ShootType = {
 ---@field moveSpeed number
 ---@field moveAngleSnap AngleSnap
 ---@field animationMove string
----@field randomDirectionChoiceType AngleSnap
 ---@field projectileShootOdds integer
 ---@field changeDirectionOnCollision boolean
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
     Enemy.init(self, args)
 
-    self.randomDirectionChoiceType = args.randomDirectionChoiceType or AngleSnap.none
 
     -- environment configuration
     self.canFallInHole = args.canFallInHole or true
@@ -172,6 +170,7 @@ function BasicEnemy:changeDirection()
   else
     local randomIndex = math.random(lume.count(possibleDirectionAnglesX))
     self.moveDirectionX, self.moveDirectionY = possibleDirectionAnglesX[randomIndex], possibleDirectionAnglesY[randomIndex]
+    print(#possibleDirectionAnglesX)
   end
 
   self:setVector(self.moveDirectionX, self.moveDirectionY)
@@ -181,7 +180,7 @@ function BasicEnemy:changeDirection()
 end
 
 function BasicEnemy:faceRandomDirection()
-  self.moveDirectionX, self.moveDirectionY = AngleSnap.getRandomVector(self.randomDirectionChoiceType)
+  self.moveDirectionX, self.moveDirectionY = AngleSnap.getRandomVector(self:getAngleSnap())
   self:setVector(self.moveDirectionX, self.moveDirectionY)
 end
 
@@ -191,7 +190,6 @@ function BasicEnemy:startMoving()
   self.moveTimer = math.floor(lume.random(self.moveTimeMin, self.moveTimeMax))
 
   self:changeDirection()
-  self:setAngleSnap(self.moveAngleSnap)
   self:setVector(self.moveDirectionX, self.moveDirectionY)
 
   if self.sprite then

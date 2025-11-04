@@ -51,7 +51,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.stopTimeMax = 0
     self.moveTimeMin = 30
     self.moveTimeMax = 80
-    self:setAngleSnap(AngleSnap.none)
+    self:setAngleSnap(AngleSnap.to16)
 
     -- physics
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
@@ -71,7 +71,6 @@ local Stalfos = Class { __includes = BasicEnemy,
     self:setInteraction(CollisionTag.sword, Interactions.takeDamage)
 
     -- BasicEnemy setup
-    self.randomDirectionChoiceType = AngleSnap.none
     self.isMoving = true
     self.sprite:play(self.animationMove)
   end
