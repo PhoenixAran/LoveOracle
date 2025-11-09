@@ -110,6 +110,7 @@ local MapEntity = Class { __includes = Entity,
     self:signal('entity_bumped')
     self:signal('entity_immobolized')
     self:signal('entity_marked_dead')
+    self:signal('entity_item_used')
 
     self.health = Health(self)
     self.movement = Movement(self)

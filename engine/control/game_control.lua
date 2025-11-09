@@ -84,6 +84,9 @@ function GameControl:setInitialRoomControlState(room, spawnPositionX, spawnPosit
   self.roomControl = RoomControl(self:getMap(), self:getPlayer())
   self:getPlayer():setPosition(spawnPositionX, spawnPositionY)
   self:getPlayer():markRespawn()
+
+  -- declare singleton asap since entities often require connecting to player events
+  Singletons.roomControl = self.roomControl
   
   -- man handle room control for initial startup
   self.roomControl.currentRoom = room
@@ -107,7 +110,6 @@ function GameControl:setInitialRoomControlState(room, spawnPositionX, spawnPosit
   self:pushState(self.roomControl)
 
   -- set singleton
-  Singletons.roomControl = self.roomControl
 end
 
 function GameControl:update()

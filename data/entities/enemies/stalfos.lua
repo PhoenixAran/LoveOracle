@@ -9,10 +9,18 @@ local EffectFactory = require 'engine.entities.effect_factory'
 local Collider = require 'engine.components.collider'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local Direction4 = require 'engine.enums.direction4'
+local Singletons = require 'engine.singletons'
+local Input = Singletons.input
 
 -- TODO color variants
 
+-- consts
+local STALFOS_JUMP_RANGE = 48
+local STALFOS_JUMP_SPEED = 2.25
+local STALFOS_JUMP_MOVE_SPEED = 60
+
 ---@class Stalfos : BasicEnemy
+---@field jumpDelayTimer integer
 local Stalfos = Class { __includes = BasicEnemy,
   ---@param self Stalfos
   ---@param args table
@@ -51,6 +59,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.stopTimeMax = 0
     self.moveTimeMin = 30
     self.moveTimeMax = 80
+    self.avoidHazardTilesInAir = true
     self:setAngleSnap(AngleSnap.to16)
 
     -- physics
@@ -73,6 +82,11 @@ local Stalfos = Class { __includes = BasicEnemy,
     -- BasicEnemy setup
     self.isMoving = true
     self.sprite:play(self.animationMove)
+
+    -- stalfos
+    self.jumpDelayTimer = 0
+
+    self.movement:connect('landed', self, '_onLanded')
   end
 }
 
@@ -80,9 +94,60 @@ function Stalfos:getType()
   return 'stalfos'
 end
 
+function Stalfos:onAwake()
+  BasicEnemy.onAwake(self)
+  local roomControl = Singletons.roomControl
+  local player = nil
+  if roomControl then
+    player = roomControl:getPlayer()
+  end
+  if player then
+    player:connect('entity_item_used', self, "_onPlayerItemUsed")
+  end
+end
+
 function Stalfos:updateAi()
   BasicEnemy.updateAi(self)
-  -- TODO jumping stuff based off player input
+  if self.jumpDelayTimer > 0 then
+    self.jumpDelayTimer = self.jumpDelayTimer - 1
+  end
+end
+
+---@param player Player
+function Stalfos:jumpAwayFromPlayer(player)
+  self:setZVelocity(STALFOS_JUMP_SPEED)
+  self:setSpeed(STALFOS_JUMP_MOVE_SPEED)
+
+  local x, y = self:getPosition()
+  local px, py = player:getPosition()
+  local vectorX, vectorY = vector.normalize(vector.sub(x, y, px, py))
+  self:setVector(vectorX, vectorY)
+
+  self:jump()
+end
+
+function Stalfos:onJump()
+  self.sprite:play('jump')
+end
+
+function Stalfos:_onLanded()
+  self.sprite:play(self.animationMove)
+end
+
+function Stalfos:_onPlayerItemUsed()
+  -- check for jumnping toward or away fro mthe player
+  if self:isOnGround() and self.jumpDelayTimer == 0 then
+    -- get player
+    local player = Singletons.roomControl:getPlayer()
+    if player then
+      local x, y = self:getPosition()
+      local px, py = player:getPosition()
+      local distanceToPlayer = vector.dist(x, y, px, py)
+      if distanceToPlayer <= STALFOS_JUMP_RANGE then
+        self:jumpAwayFromPlayer(player)
+      end
+    end
+  end
 end
 
 function Stalfos:draw()

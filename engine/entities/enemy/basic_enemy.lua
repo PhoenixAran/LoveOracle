@@ -36,6 +36,24 @@ local ShootType = {
   WhileMoving = 'while_moving'
 }
 
+local canCollide = require('engine.entities.bump_box').canCollide
+local function avoidHazardTileInAirMoveFilter(item, other)
+  if canCollide(item, other) then
+    if other.isTile and other:isTile() then
+      if other:isTopTile() then
+        if bit.band(item.collisionTiles, other.tileData.tileType) == 0 
+            and bit.band(item:getHazardTileFlags(), other.tileData.tileType) == 0 then   -- treat hazard tiles as a wall
+          return nil
+        end
+        return 'slide'
+      end
+      return nil
+    end
+    return 'slide'
+  end
+  return nil
+end
+
 --- Class with more built in behaviour for enemies. 
 --- Most enemies should inherit from this class.
 ---@class BasicEnemy : Enemy
@@ -47,6 +65,7 @@ local ShootType = {
 ---@field facePlayerOdds integer
 ---@field movementAngleSnap AngleSnap
 ---@field avoidHazardTiles boolean
+---@field avoidHazardTilesInAir boolean if entity should avoid falling in tiles when voluntarily jumping (will still fall if in knockback)
 ---@field chargeType string
 ---@field chargeSpeed number
 ---@field chargeAcceleration number
@@ -98,6 +117,7 @@ local BasicEnemy = Class { __includes = Enemy,
     self.moveTimeMax = args.moveTimeMax or 50
     self.moveSpeed = args.moveSpeed or 50
     self.avoidHazardTiles = args.avoidHazardTiles or true
+    self.avoidHazardTilesInAir = args.avoidHazardTilesInAir or false
     self.animationMove = args.animationMove or 'move'
     self.changeDirectionOnCollision = args.changeDirectionOnCollision or true
     self.moveDirectionX = args.moveDirectionX or 0
@@ -425,6 +445,17 @@ function BasicEnemy:updateAi()
       else
         self:updateStoppedState()
       end
+    end
+  elseif self:isInAir() then
+    if not self:inKnockback() then
+      -- use the avoid hazard tile in air move filter
+      local originalMoveFilter = self.moveFilter
+      self.moveFilter = avoidHazardTileInAirMoveFilter
+      self:move()
+      self.moveFilter = originalMoveFilter
+    else
+      -- move normally
+      self:move()
     end
   end
 end
