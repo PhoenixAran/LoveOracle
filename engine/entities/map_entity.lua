@@ -261,10 +261,15 @@ function MapEntity:getAnimationDirection4()
 end
 
 ---makes sure this entity should be dead. If it should, it marks this entity as death marked
+---returns true if entity is dead
+---@deprecated
+---@return boolean destroyed
 function MapEntity:pollDeath()
-  if self.deathMarked and not (self:inHitstun() or self:inKnockback()) then
+  if self.deathMarked and not self:inHitstun() and not self:inKnockback() then
     self:destroy()
+    return true
   end
+  return false
 end
 
 -- health component pass throughs
@@ -553,6 +558,7 @@ end
 --- are not automatically set to collide with monsters, but they should still be able to block
 --- attacks with a shield or parry attacks with a sword
 --- @param sender Hitbox the hitbox that the entity is colliding with
+--- @return boolean
 function MapEntity:triggerOverrideInteractions(sender)
   return false
 end
@@ -635,7 +641,6 @@ function MapEntity:bump(sourcePositionX, sourcePositionY, duration, speed)
 end
 
 function MapEntity:onDie()
-
 end
 
 --- calls self:onDie() and then destroys the entity via self:destroy()

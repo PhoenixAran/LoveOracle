@@ -70,6 +70,9 @@ local ShootType = {
 ---@field pauseTimer integer
 ---@field isShooting boolean
 ---@field isCharging boolean
+---@field isInHitstun boolean
+---@field isMarkedDead boolean
+---@field hitstunAnimation string
 ---@field moveDirectionX number
 ---@field moveDirectionY number
 ---@field moveSpeed number
@@ -127,7 +130,11 @@ local BasicEnemy = Class { __includes = Enemy,
     self.moveTimer = lume.random(self.stopTimeMin, self.stopTimeMax)
     self.isChasingPlayer = false
     self.isPaused = false
+    self.pauseTimer = 0
     self.isShooting = false
+    self.hitstunTimer = 0
+    self.hitstunAnimation = nil
+
 
 
     self:faceRandomDirection()
@@ -170,7 +177,6 @@ function BasicEnemy:changeDirection()
   else
     local randomIndex = math.random(lume.count(possibleDirectionAnglesX))
     self.moveDirectionX, self.moveDirectionY = possibleDirectionAnglesX[randomIndex], possibleDirectionAnglesY[randomIndex]
-    print(#possibleDirectionAnglesX)
   end
 
   self:setVector(self.moveDirectionX, self.moveDirectionY)
@@ -364,11 +370,21 @@ end
 
 function BasicEnemy:updateAi()
   if self:isOnGround() or self.movesInAir then
-    if self.isPaused then
+    if self.deathMarked then
+      if not self:inHitstun() and not self:inKnockback() then
+        self:die()
+      else
+        self:move()
+      end
+    elseif self.isPaused then
       if self.pauseTimer <= 0 then
         self.isPaused = false
       end
       self.pauseTimer = self.pauseTimer - 1
+    elseif self.isInHitstun then
+      if not self:inHitstun() then
+        self.isInHitstun = false
+      end
     elseif self.isShooting then
       if self.pauseTimer <= 0 then
         self:shoot()
@@ -412,6 +428,16 @@ function BasicEnemy:updateAi()
     end
   end
 end
+
+function BasicEnemy:onHurt(damageInfo)
+  if not self:isIntangible() then
+    self.isInHitstun = true
+    if self.sprite and self.sprite.play and self.hitstunAnimation and self.hitstunAnimation ~= '' then
+      self.sprite:play(self.hitstunAnimation)
+    end
+  end
+end
+
 
 BasicEnemy.ChargeType = ChargeType
 BasicEnemy.AimType = AimType

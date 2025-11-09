@@ -4,6 +4,7 @@ local rect = require 'engine.math.rectangle'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Axis = require 'engine.enums.axis'
 local Consts = require 'constants'
+
 local BUMP_BOX_MAX_Z_DISTANCE = Consts.BUMP_BOX_MAX_Z_DISTANCE
 local BUMP_BOX_ALIGNMENT_TOLERANCE = Consts.BUMP_BOX_ALIGNMENT_TOLERANCE
 

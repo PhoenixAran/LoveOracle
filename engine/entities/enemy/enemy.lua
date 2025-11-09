@@ -216,36 +216,6 @@ function Enemy:canMoveInDirection(x, y)
     canMoveInDirection = false
   end
 
-  -- for i = 1, testLen do
-  --   local col = testCols[i]
-  --   if col.other.isTile and col.other:isTile() then
-  --     lume.push(col.other.tileData.tileType)
-  --     if self:isHazardTile(col.other) then
-  --       canMoveInDirection = false
-  --       break
-  --     end
-  --     if self.collidesWithWalls and bit.band(col.other:getTileType(), TileTypeFlags.Wall) ~= 0 then
-  --       canMoveInDirection = false
-  --       break
-  --     end
-  --   else
-  --     -- entity collision
-  --     canMoveInDirection = false
-  --     break
-  --   end
-  -- end
-  -- Physics.freeCollisions(testCols)
-
-  -- if canMoveInDirection then
-  --   -- check for hazard tiles
-  --   local testX, testY = self.x + tvx, self.y + tvy
-  --   local items, len = self:getMeetingTiles(testX, testY)
-  --   if len > 0 then
-  --     canMoveInDirection = false
-  --   end
-  --   Physics.freeTable(items)
-  -- end
-
   self.movement:setVector(oldVectorX, oldVectorY)
   return canMoveInDirection
 end
@@ -378,7 +348,7 @@ function Enemy:onHurt(damageInfo)
 end
 
 function Enemy:onDie()
-  local x, y = vector.add(0, 0, self:getPosition())
+  local x, y = self:getPosition()
   local effect = EffectFactory.createMonsterExplosionEffect(x, y)
   effect:initTransform()
   self:emit('spawned_entity', effect)

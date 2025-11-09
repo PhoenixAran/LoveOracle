@@ -87,7 +87,14 @@ end
 
 function Stalfos:draw()
   BasicEnemy.draw(self)
-  
+end
+
+function Stalfos:onHurt(damageInfo)
+  if not self:isIntangible() then
+    if damageInfo.hitstunTime > 0 then
+      self:pause(damageInfo.hitstunTime)
+    end
+  end
 end
 
 return Stalfos
