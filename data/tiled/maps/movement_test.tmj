@@ -18,7 +18,7 @@
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3ZrU4DQRhG4SEBASggXBACDKI1FWAQrcFg0Gh0NQKFWMUtMl\/6TdiUGTZs96fLe57kpE2TJvPuNmnShoAqdu3deTmPDU2V7b7yFl7uGrzGPrw3Lz1\/HuSk\/Sjtr7ykvn+7Ke+fxW69B28Z+tl\/0s2RO1Xavy3tX4fv3Wuvzf1fxW5i89h9i\/d3xe7xzFuG\/Hbz0tBfrbynsLkO+D+OGjoc72iDmPvjb9dAhfp+o77fqO839f3vnhr1\/Ub18w8AbdR\/b1Ckvr8KP3+TUqK+H8C0lf4\/2PV77bLWPrONn4UUvtfZz37l\/djNPv5\/3IeDwusq+49Dfqva\/lSiuj\/ttsfTsQ41oNz+lML+s9h5oYsRzwUAAAAAAAAAwBR8ATUMrA8AQAAA",
+         "data":"H4sIAAAAAAAACu3ZvU4CQRiF4SHBAqnUK7LQxgIaC2wsoLGhsba2pragstiKW2QmfBM3OOOGZX9Yz\/skbyAkJHN2SUjAORS+B2thpbxVNFRh9731bKWuwafv2\/qy4vP3Tk7ajtz+worK+48b8v6Z78l6tZaunf3XzRy5Ubn9x+L+jfvZvbHq3P+V79E3973UeH9Twj2eWUuX3h58VHSqlbV2h+uA\/+OqonF\/R+vE3B7\/ugYq1PcH6vsD9f1Bef\/WUqO+P1D9\/ANAHeXfGxSp7y\/c79+klKjvB5C2TXSJcv8fnPu9NqT9u0wK3+vsZ7\/yfpznEv8\/bsMo87rK\/olLb1XbH4tU98fd4XHa16E6lNofU9h\/47vNdNfjuQAAAAAAAAAAGII9LSs10QBAAAA=",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -191,8 +191,8 @@
                 {
                  "id":71,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":812,
-                 "y":484
+                 "x":832,
+                 "y":460
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -208,8 +208,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":680,
-                 "y":336
+                 "x":820,
+                 "y":500
                 }],
          "opacity":1,
          "type":"objectgroup",

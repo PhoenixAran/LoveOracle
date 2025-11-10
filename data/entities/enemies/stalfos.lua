@@ -18,6 +18,7 @@ local Input = Singletons.input
 local STALFOS_JUMP_RANGE = 48
 local STALFOS_JUMP_SPEED = 2.25
 local STALFOS_JUMP_MOVE_SPEED = 60
+local STALFOS_MOVE_SPEED = 30
 
 ---@class Stalfos : BasicEnemy
 ---@field jumpDelayTimer integer
@@ -45,13 +46,14 @@ local Stalfos = Class { __includes = BasicEnemy,
     args.fallInHoleEffectColor = 'orange'
     BasicEnemy.init(self, args)
 
-    -- general
+    -- components
     self.health:setMaxHealth(1, true)
     self.spriteFlasher:addSprite(self.sprite)
     self.spriteSquisher:addSpriteRenderer(self.sprite)
 
-    -- movement (see basic_enemy.lua)
-    self.moveSpeed = 30
+    -- movement (see basic_enemy.lua and enemy.lua)
+    self.jumpZVelocity = STALFOS_JUMP_SPEED
+    self.moveSpeed = STALFOS_MOVE_SPEED
     self.facePlayerOdds = 0
     self.changeDirectionOnCollision = true
     self.movesInAir = false
@@ -61,6 +63,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.moveTimeMax = 80
     self.avoidHazardTilesInAir = true
     self:setAngleSnap(AngleSnap.to16)
+    
 
     -- physics
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
@@ -86,7 +89,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     -- stalfos
     self.jumpDelayTimer = 0
 
-    self.movement:connect('landed', self, '_onLanded')
+    self.movement:connect('landed', self, 'onLand')
   end
 }
 
@@ -121,16 +124,18 @@ function Stalfos:jumpAwayFromPlayer(player)
   local x, y = self:getPosition()
   local px, py = player:getPosition()
   local vectorX, vectorY = vector.normalize(vector.sub(x, y, px, py))
-  self:setVector(vectorX, vectorY)
-
+  --self:setVector(vectorX, vectorY)
+  self:setVector(0, 0)
   self:jump()
 end
 
 function Stalfos:onJump()
+  BasicEnemy.onJump(self)
   self.sprite:play('jump')
 end
 
-function Stalfos:_onLanded()
+function Stalfos:onLand()
+  BasicEnemy.onLand(self)
   self.sprite:play(self.animationMove)
 end
 

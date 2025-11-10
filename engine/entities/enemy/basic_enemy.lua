@@ -99,10 +99,12 @@ end
 ---@field animationMove string
 ---@field projectileShootOdds integer
 ---@field changeDirectionOnCollision boolean
+---@field _originalMoveFilter function?
 local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
     Enemy.init(self, args)
 
+    self.movement:connect('landed', self, 'onLand')
 
     -- environment configuration
     self.canFallInHole = args.canFallInHole or true
@@ -155,7 +157,7 @@ local BasicEnemy = Class { __includes = Enemy,
     self.hitstunTimer = 0
     self.hitstunAnimation = nil
 
-
+    self._originalMoveFilter = self.moveFilter
 
     self:faceRandomDirection()
   end
@@ -390,6 +392,11 @@ end
 
 function BasicEnemy:updateAi()
   if self:isOnGround() or self.movesInAir then
+    if self._originalMoveFilter then
+      self.moveFilter = self._originalMoveFilter
+      self._originalMoveFilter = nil
+    end
+
     if self.deathMarked then
       if not self:inHitstun() and not self:inKnockback() then
         self:die()
@@ -447,16 +454,23 @@ function BasicEnemy:updateAi()
       end
     end
   elseif self:isInAir() then
-    if not self:inKnockback() then
-      -- use the avoid hazard tile in air move filter
-      local originalMoveFilter = self.moveFilter
-      self.moveFilter = avoidHazardTileInAirMoveFilter
-      self:move()
-      self.moveFilter = originalMoveFilter
-    else
-      -- move normally
-      self:move()
-    end
+    self:move()
+  end
+end
+
+function BasicEnemy:onJump()
+  if not self:inHitstun() and self._originalMoveFilter == nil then
+        -- use the avoid hazard tile in air move filter
+    self._originalMoveFilter = self.moveFilter
+    self.moveFilter = avoidHazardTileInAirMoveFilter
+  end
+end
+
+function BasicEnemy:onLand()
+  if self._originalMoveFilter ~= nil then
+    -- still swapped to the avoidHazardTilesInAirMoveFilter
+    self.moveFilter = self._originalMoveFilter
+    self._originalMoveFilter = nil
   end
 end
 
@@ -465,6 +479,14 @@ function BasicEnemy:onHurt(damageInfo)
     self.isInHitstun = true
     if self.sprite and self.sprite.play and self.hitstunAnimation and self.hitstunAnimation ~= '' then
       self.sprite:play(self.hitstunAnimation)
+    end
+
+    if self:isInAir() and self._originalMoveFilter then
+      -- swap back to original move filter so enemies
+      -- can get hit into hazard tiles
+      -- this is not possible until we swap from avoidHazardTilesInAirMoveFilter
+      self.moveFilter = self._originalMoveFilter
+      self._originalMoveFilter = nil
     end
   end
 end
