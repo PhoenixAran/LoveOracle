@@ -459,7 +459,7 @@ function BasicEnemy:updateAi()
 end
 
 function BasicEnemy:onJump()
-  if not self:inHitstun() and self._originalMoveFilter == nil then
+  if not self:inHitstun() and self._originalMoveFilter == nil and self.avoidHazardTilesInAir then
         -- use the avoid hazard tile in air move filter
     self._originalMoveFilter = self.moveFilter
     self.moveFilter = avoidHazardTileInAirMoveFilter
