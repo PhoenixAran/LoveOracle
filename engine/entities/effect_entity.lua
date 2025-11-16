@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
 local SpriteAnimationUpdater = require 'engine.graphics.sprite_animation_updater'
-
+local Movement = require 'engine.components.movement'
 -- TODO handle sound when the time comes
 
 ---@class EffectEntity : Entity
@@ -9,6 +9,7 @@ local SpriteAnimationUpdater = require 'engine.graphics.sprite_animation_updater
 ---@field spriteAnimationUpdater SpriteAnimationUpdater the effect animation updater
 ---@field time number|nil the time in ms the effect should last. This will override the effectAnimation duration if provided
 ---@field effectSound any the effect sound
+---@field movement Movement used for effects that bounce off ground
 local EffectEntity = Class{ __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -16,8 +17,23 @@ local EffectEntity = Class{ __includes = Entity,
     self.effectAnimation = args.effectAnimation
     self.time = args.time
     self.effectSound = args.sound
+    self.movement = Movement()
+
+
   end
 }
+
+function EffectEntity:setVector(x, y)
+  self.movement:setVector(x, y)
+end
+
+function EffectEntity:setZVelocity(value)
+  self.movement:setZVelocity(value)
+end
+
+function EffectEntity:setGravity(value)
+  self.movement:setGravity(value)
+end
 
 function EffectEntity:onAwake()
   if self.effectAnimation then

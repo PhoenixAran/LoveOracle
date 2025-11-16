@@ -210,6 +210,14 @@ function Movement:getAngleSnap()
   return self.angleSnap
 end
 
+function Movement:setGravity(value)
+  self.gravity = value
+end
+
+function Movement:getGravity()
+  return self.gravity
+end
+
 ---set angle snap
 ---@param value? AngleSnap
 function Movement:setAngleSnap(value)

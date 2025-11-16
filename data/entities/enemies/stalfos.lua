@@ -124,8 +124,7 @@ function Stalfos:jumpAwayFromPlayer(player)
   local x, y = self:getPosition()
   local px, py = player:getPosition()
   local vectorX, vectorY = vector.normalize(vector.sub(x, y, px, py))
-  --self:setVector(vectorX, vectorY)
-  self:setVector(0, 0)
+  self:setVector(vectorX, vectorY)
   self:jump()
 end
 
