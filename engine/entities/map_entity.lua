@@ -234,14 +234,12 @@ end
 
 -- animation stuff
 
----@deprecated
 ---sets if this map entity should match its direction with it's sprite
 ---@param value boolean
 function MapEntity:setSyncDirectionWithAnimation(value)
   self.syncDirectionWithAnimation = true
 end
 
----@deprecated
 function MapEntity:doesSyncDirectionWithAnimation()
   return self.syncDirectionWithAnimation
 end

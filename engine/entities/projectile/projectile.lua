@@ -11,6 +11,10 @@ local Interactions = require 'engine.entities.interactions'
 local Hitbox = require 'engine.components.hitbox'
 local CollisionTag = require 'engine.enums.collision_tag'
 local bit = require 'bit'
+local AnimationDirectionSyncMode = require 'engine.enums.animation_direction_sync_mode'
+local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
+
 
 local Physics = require 'engine.physics'
 local canCollide = require('engine.entities.bump_box')
@@ -37,7 +41,10 @@ end
 ---@field hitbox Hitbox
 ---@field interactionResolver InteractionResolver
 ---@field collisionTiles integer
+---@field sprite SpriteRenderer|AnimatedSpriteRenderer
 ---@field owner Entity?
+---@field animDirectionSyncMode AnimationDirectionSyncMode
+---@field animDirection integer?
 local Projectile = Class {
   ---@param self Projectile
   ---@param args table
@@ -46,11 +53,14 @@ local Projectile = Class {
     self.projectileType = args.projectileType or ProjectileType.physical
     self.crashAnimation = args.crashAnimation
     self.bounceOnCrash = args.bounceOnCrash or false
+    self.animDirectionSyncMode = args.animDirectionSyncMode or AnimationDirectionSyncMode.dir4
+    self.animDirection = args.animDirection or nil
     self.owner = args.owner
 
     self.movement = Movement(self)
     self.hitbox = Hitbox(self)
     self.interactionResolver = InteractionResolver(self)
+
 
     self.hitbox:connect('hitbox_entered', self, 'onHitboxEntered')
   end
@@ -102,11 +112,10 @@ function Projectile:crash(rebounded)
       })
     end
     self:emit('spawned_entity', effect)
-  else
-    self:destroy()
   end
-
+  
   self:onCrash()
+  self:destroy()
 end
 
 function Projectile:intercept()
@@ -121,7 +130,19 @@ function Projectile:deflect()
   end
 end
 
+function Projectile:updateAnimationDirection()
+  if self.animDirectionSyncMode == AnimationDirectionSyncMode.dir4 then
+    self.animDirection = self.movement:getDirection4()
+  elseif self.animDirectionSyncMode == AnimationDirectionSyncMode.dir8 then
+    self.animDirection = self.movement:getDirection8()
+  end
+end
+
 function Projectile:onCrash()
+end
+
+function Projectile:onAwake()
+  self:updateAnimationDirection()
 end
 
 function Projectile:update()
@@ -129,6 +150,10 @@ function Projectile:update()
   local px, py = self:getBumpPosition()
   local velX, velY = self.movement:getLinearVelocity()
   local x, y, cols = Physics:move(self, px + velX, py + velY, defaultMoveFilter)
+
+  if self.animDirectionSyncMode ~= AnimationDirectionSyncMode.none then
+    self:updateAnimationDirection()
+  end
 
   for _, col in ipairs(cols) do
     local other = col.other

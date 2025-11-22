@@ -135,4 +135,8 @@ function Tile:onSwordHit(swordItem)
   end
 end
 
+---@param projectile Projectile
+function Tile:onHitByProjectile(projectile)
+end
+
 return Tile

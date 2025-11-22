@@ -26,8 +26,6 @@ local GRID_SIZE = Consts.GRID_SIZE
 ---@field onRemoved function
 ---@field drawType EntityDrawType
 ---@field collisionTag string
----@field sprite SpriteRenderer|AnimatedSpriteRenderer
----@field syncDirectionWithAnimation boolean
 ---@field _getMeetingTilesQueryRectFilter function
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, args)
