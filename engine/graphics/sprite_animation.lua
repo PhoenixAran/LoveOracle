@@ -20,7 +20,7 @@ local SpriteAnimation = Class {
       if self.substrips is false, spriteFrames and timedActions will just be a flat table
       if self.substrips is true, spriteFrames will be structured as
       {
-        1 = { ... } -- default when no substripKey is used in getter function
+        'default' = { ... } -- default when no substripKey is used in getter function
         up = { ... },
         down = { ... },
         left = { ... },

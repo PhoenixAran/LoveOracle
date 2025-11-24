@@ -4,5 +4,6 @@
 # entity Spritesheet Declarations
 "player", "player", 16, 16
 
-# enemies
+# monsters
+"monster_items", "monster_items", 16, 16
 "stalfos", "stalfos", 16, 16, 1, 1

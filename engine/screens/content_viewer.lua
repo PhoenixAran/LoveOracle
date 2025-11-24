@@ -48,6 +48,9 @@ local AnimationSource = {
 ---@field animViewerDir4Select string[]
 ---@field animViewerDir4Idx integer
 ---@field animViewerCurrentDir4 string
+---@field animViewerDir8Select string[]
+---@field animViewerDir8Idx integer
+---@field animViewerCurrentDir8 string
 ---@field animViewerTick integer
 ---@field animViewerFrameIndex integer
 ---@field animViewerPlaying boolean
@@ -55,6 +58,7 @@ local AnimationSource = {
 ---@field animViewerCurrentSprite Sprite|CompositeSprite|ColorSprite|PrototypeSprite|nil
 ---@field animViewerDrawCenterPoint boolean
 ---@field spriteAnimationUpdater SpriteAnimationUpdater
+---@field animViewerSubstripsMode string
 local ContentViewer = Class {
   init = function(self)
     -- animation viewer
@@ -86,9 +90,15 @@ local ContentViewer = Class {
     self.animViewerCurrentAnimation = nil
 
     -- we add 1 for the default animation
+    self.animViewerSubstripsMode = 'dir4'
+
     self.animViewerDir4Select = { 'right', 'down', 'left', 'up', 'default' }
     self.animViewerDir4Idx = 1
     self.animViewerCurrentDir4 = nil
+
+    self.animViewerDir8Select = { 'right', 'downRight', 'down', 'downLeft', 'left', 'upLeft', 'up', 'upRight'}
+    self.animViewerDir8Idx = 1
+    self.animViewerCurrentDir8 = nil
 
     self.animViewerFrameIndex = 1
     self.animViewerTick = 1
@@ -206,9 +216,8 @@ function ContentViewer:update()
           imgui.EndCombo()
         end
 
-
         if self.animViewerCurrentBuilder.type == 'animated_sprite_renderer' then
-          if lume.count(self.animViewerAnimationSelect) > 0 then
+          if lume.count(self.animViewerCurrentAnimation.spriteFrames) > 0 then
             if imgui.BeginCombo('Animation', self.animViewerAnimationSelect[self.animViewerAnimationSelectIdx]) then
               for k, v in ipairs(self.animViewerAnimationSelect) do
                 local isSelected = self.animViewerAnimationSelectIdx == k
@@ -239,25 +248,55 @@ function ContentViewer:update()
 
           if self.animViewerCurrentAnimation then
             if self.animViewerCurrentAnimation:hasSubstrips() then
-              if imgui.BeginCombo('Substrip', self.animViewerDir4Select[self.animViewerDir4Idx]) then
-                for k, v in ipairs(self.animViewerDir4Select) do
-                  local isSelected = self.animViewerDir4Idx == k
+              -- NB lume.count does not count the 'default' key i think 
+              if lume.count(self.animViewerCurrentAnimation.spriteFrames) == 4 then
+                -- use dir4
+                self.animViewerSubstripsMode = 'dir4'
+                if imgui.BeginCombo('Substrip', self.animViewerDir4Select[self.animViewerDir4Idx]) then
+                  for k, v in ipairs(self.animViewerDir4Select) do
+                    local isSelected = self.animViewerDir4Idx == k
 
-                  if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
-                    -- update animation substrip selection
-                    self.animViewerDir4Idx = k
-                    self.animViewerCurrentDir4 = v
+                    if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
+                      -- update animation substrip selection
+                      self.animViewerDir4Idx = k
+                      self.animViewerCurrentDir4 = v
 
-                    -- reset anim playing variables
-                    self.animViewerTick = 1
-                    self.animViewerFrameIndex = 1
+                      -- reset anim playing variables
+                      self.animViewerTick = 1
+                      self.animViewerFrameIndex = 1
+                    end
+
+                    if isSelected then
+                      imgui.SetItemDefaultFocus()
+                    end
                   end
+                  imgui.EndCombo()
+                end                
+              elseif lume.count(self.animViewerCurrentAnimation) == 8 then
+                -- use dir8
+                self.animViewerSubstripsMode = 'dir8'
+                if imgui.BeginCombo('Substrip', self.animViewerDir8Select[self.animViewerDir8Idx]) then
+                  for k, v in ipairs(self.animViewerDir8Select) do
+                    local isSelected = self.animViewerDir8Idx == k
 
-                  if isSelected then
-                    imgui.SetItemDefaultFocus()
+                    if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
+                      -- update animation substrip selection
+                      self.animViewerDir8Idx = k
+                      self.animViewerCurrentDir8 = v
+
+                      -- reset anim playing variables
+                      self.animViewerTick = 1
+                      self.animViewerFrameIndex = 1
+                    end
+
+                    if isSelected then
+                      imgui.SetItemDefaultFocus()
+                    end
                   end
-                end
-                imgui.EndCombo()
+                  imgui.EndCombo()
+                end                
+              else
+                error('Animation with substrips does not have valid amount of substrips')
               end
             end
           end
@@ -363,26 +402,50 @@ function ContentViewer:update()
 
         -- select substrip
         if self.animViewerCurrentAnimation:hasSubstrips() then
-          if imgui.BeginCombo('Substrip', self.animViewerDir4Select[self.animViewerDir4Idx]) then
-            for k, v in ipairs(self.animViewerDir4Select) do
-              local isSelected = self.animViewerDir4Idx == k
+          if self.animViewerSubstripsMode == 'dir4' then
+            if imgui.BeginCombo('Substrip', self.animViewerDir4Select[self.animViewerDir4Idx]) then
+              for k, v in ipairs(self.animViewerDir4Select) do
+                local isSelected = self.animViewerDir4Idx == k
 
-              if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
-                -- update animation substrip selection
-                self.animViewerDir4Idx = k
-                self.animViewerCurrentDir4 = v
+                if imgui.Selectable(self.animViewerDir4Select[k], isSelected) then
+                  -- update animation substrip selection
+                  self.animViewerDir4Idx = k
+                  self.animViewerCurrentDir4 = v
 
-                -- reset anim playing variables
-                self.animViewerTick = 1
-                self.animViewerFrameIndex = 1
+                  -- reset anim playing variables
+                  self.animViewerTick = 1
+                  self.animViewerFrameIndex = 1
+                end
+
+                if isSelected then
+                  imgui.SetItemDefaultFocus()
+                end
               end
-
-              if isSelected then
-                imgui.SetItemDefaultFocus()
-              end
+              imgui.EndCombo()
             end
-            imgui.EndCombo()
+          else
+            if imgui.BeginCombo('Substrip', self.animViewerDir8Select[self.animViewerDir8Idx]) then
+              for k, v in ipairs(self.animViewerDir8Select) do
+                local isSelected = self.animViewerDir8Idx == k
+
+                if imgui.Selectable(self.animViewerDir8Select[k], isSelected) then
+                  -- update animation substrip selection
+                  self.animViewerDir8Idx = k
+                  self.animViewerCurrentDir8 = v
+
+                  -- reset anim playing variables
+                  self.animViewerTick = 1
+                  self.animViewerFrameIndex = 1
+                end
+
+                if isSelected then
+                  imgui.SetItemDefaultFocus()
+                end
+              end
+              imgui.EndCombo()
+            end
           end
+
         end
       
         -- animation tick state

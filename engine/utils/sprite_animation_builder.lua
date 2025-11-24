@@ -8,10 +8,15 @@ local CompositeSprite = require 'engine.graphics.composite_sprite'
 local SpriteFrame = require 'engine.graphics.sprite_frame'
 local SpriteAnimation = require 'engine.graphics.sprite_animation'
 local Direction4 = require 'engine.enums.direction4'
+local Direction8 = require 'engine.enums.direction8'
+
 
 local assetManager = require 'engine.asset_manager'
 
 local DEFAULT_KEY = 'default'
+
+local SUBSTRIP_MODE_DIR4 = 'dir4'
+local SUBSTRIP_MODE_DIR8 = 'dir8'
 
 ---@class SpriteAnimationBuilder
 ---@field spriteSheet SpriteSheet
@@ -24,6 +29,7 @@ local DEFAULT_KEY = 'default'
 ---@field subFrames table<string, SpriteFrame[]>
 ---@field subTimedActions table<integer, function[]>
 ---@field Direction4 table<string, integer>
+---@field substripMode string
 local SpriteAnimationBuilder = Class {
   init = function(self)
     self.spriteSheet = nil
@@ -36,8 +42,10 @@ local SpriteAnimationBuilder = Class {
     self.hasSubstrips = false
     self.subFrames = { }
     self.subTimedActions = { }
+    self.substripMode = SUBSTRIP_MODE_DIR4
     -- easy access to Direction4 enums for data scripting
     self.Direction4 = Direction4
+    self.Direction8 = Direction8
   end
 }
 
@@ -172,7 +180,11 @@ function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
     makeDefault = false
   end
   if type(substripKey) == 'string' then
-    substripKey = Direction4[substripKey]
+    if self.substripMode == SUBSTRIP_MODE_DIR4 then
+      substripKey = Direction4[substripKey]
+    else
+      substripKey = Direction8[substripKey]
+    end
   end
   assert(substripKey ~= nil, 'Substrip key out of range')
   self.subFrames[substripKey] = self.frames
@@ -186,6 +198,13 @@ function SpriteAnimationBuilder:buildSubstrip(substripKey, makeDefault)
   self.frames = { }
   self.timedActions = { }
   self.compositeSprites = { }
+end
+
+function SpriteAnimationBuilder:setSubstripMode(mode)
+  if mode ~= SUBSTRIP_MODE_DIR4 and mode ~= SUBSTRIP_MODE_DIR8 then
+    error('Substrip mode ' .. mode .. ' out of range')
+  end
+  self.substripMode = mode
 end
 
 ---repeats the given function
