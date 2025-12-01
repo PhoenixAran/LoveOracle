@@ -433,6 +433,7 @@ function BasicEnemy:updateAi()
     elseif self.isShooting then
       if self.pauseTimer <= 0 then
         self:shoot()
+        self.isShooting = false
       end
       self.pauseTimer = self.pauseTimer - 1
     elseif self.isCharging then

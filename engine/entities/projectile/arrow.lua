@@ -43,7 +43,7 @@ end
 
 function Arrow:onAwake()
   Projectile.onAwake(self)
-  self.sprite:play('shoot')
+  self.sprite:play('move')
 end
 
 function Arrow:onCrash()

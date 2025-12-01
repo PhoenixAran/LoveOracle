@@ -13,7 +13,7 @@ local BoneProjectile = Class { __includes = Projectile,
     Projectile.init(self, args)
 
     -- entity setup
-    self.collisionTag(CollisionTag.thrownProjectile)
+    self.collisionTag = CollisionTag.thrownProjectile
     self.projectileType = ProjectileType.physical
     self.crashAnimation = 'effect_rock_break'
     self.sprite = SpriteBank.build('projectile_monster_bone')
@@ -36,7 +36,7 @@ end
 
 function BoneProjectile:onAwake()
   Projectile.onAwake(self)
-  self.sprite:play('shoot')
+  self.sprite:play('move')
 end
 
 

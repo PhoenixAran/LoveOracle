@@ -51,11 +51,12 @@ end
 ---@field animDirectionSyncMode AnimationDirectionSyncMode
 ---@field animDirection integer?
 ---@field collisions any[]
-local Projectile = Class {
+local Projectile = Class { __includes = MoverEntity,
   ---@param self Projectile
   ---@param args table
   init = function(self, args)
     -- Initialization code here
+    MoverEntity.init(self)
     self.projectileType = args.projectileType or ProjectileType.physical
     self.crashAnimation = args.crashAnimation
     self.bounceOnCrash = args.bounceOnCrash or false
