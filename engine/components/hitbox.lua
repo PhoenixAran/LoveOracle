@@ -229,7 +229,7 @@ end
 ---used to let the owner know to stop the attack or something
 ---@param hitbox Hitbox
 function Hitbox:notifyResisted(hitbox)
-  self:emit('notify_resisted', hitbox)
+  self:emit('resisted', hitbox)
 end
 
 function Hitbox:debugDraw()

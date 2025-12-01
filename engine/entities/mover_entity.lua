@@ -6,6 +6,8 @@ local Physics = require 'engine.physics'
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local Movement = require 'engine.components.movement'
 local GroundObserver = require 'engine.components.ground_observer'
+local TablePool = require 'engine.utils.table_pool'
+local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 
 local canCollide = require('engine.entities.bump_box').canCollide
 --- default filter for move function in Map_Entities in Physics module
@@ -47,6 +49,7 @@ end
 ---@field movesWithConveyors boolean
 ---@field movesWithPlatforms boolean
 ---@field collisionTiles integer
+---@field moveCollisions any[]
 local MoverEntity = Class { __includes = Entity,
   init = function(self, args)
     -- Initialization code here
@@ -58,6 +61,7 @@ local MoverEntity = Class { __includes = Entity,
 
     -- vars
     self.collisionTiles = 0
+    self.moveCollisions = { }  -- table to store collisions that occur when MapEntity:move() is called
 
     -- move filters
     self.moveFilter = defaultMoveFilter
@@ -67,6 +71,39 @@ local MoverEntity = Class { __includes = Entity,
 
 function MoverEntity:getType()
   return 'mover_entity'
+end
+
+--- unset a tiletype this map entity can collide with
+---@param tileType string|string[]
+function MoverEntity:setCollisionTiles(tileType)
+  if type(tileType) == 'table' then
+    for _, val in ipairs(tileType) do
+      self.collisionTiles = bit.bor(self.collisionTiles, TileTypeFlags:get(val).value)
+    end
+  else
+    self.collisionTiles = bit.bor(self.collisionTiles, TileTypeFlags:get(tileType).value)
+  end
+end
+
+--- set tiletypes to collide with explicitly with tile type flags
+function MoverEntity:setCollisionTilesExplicit(flags)
+  self.collisionTiles = flags
+end
+
+function MoverEntity:getCollisionTiles()
+  return self.collisionTiles
+end
+
+--- set a tiletype this map entity can collide with
+---@param tileType string|string[]
+function MoverEntity:unsetCollisionTile(tileType)
+  if type(tileType) == 'table' then
+    for _, val in ipairs(tileType) do
+      self.collisionTiles = bit.band(self.collisionTiles, bit.bnot(TileTypeFlags:get(val).value))
+    end
+  else
+    self.collisionTiles = bit.band(self.collisionTiles, bit.bnot(TileTypeFlags:get(tileType).value))
+  end
 end
 
 function MoverEntity:movesWithConveyors()
@@ -216,6 +253,27 @@ function MoverEntity:_handleMove(collisions, isTest)
   end
   local translationVectorX, translationVectorY = vector.sub(actualX, actualY, oldX, oldY)
   return translationVectorX, translationVectorY
+end
+
+---@return number tvx translation vector x
+---@return number tvy translation vector y
+---@return any[] moveCollisions Note: should be readonly and not modified
+function MoverEntity:move()
+  lume.clear(self.moveCollisions)
+  local tvx, tvy = self:_handleMove(self.moveCollisions)
+  self:setPosition(vector.add(tvx, tvy, self:getPosition()))
+  return tvx, tvy, self.moveCollisions
+end
+
+--- test move function for MapEntity
+--- Note: You should return testMoveCollisions with TablePool.free() after you are done with it
+---@return number tvx test translation vector x
+---@return number tvy test translation vector y
+---@return any[] testMoveCollisions collisions that occurred during the test move
+function MoverEntity:testMove()
+  local collisions = TablePool.obtain()
+  local tvx, tvy = self:_handleMove(collisions, true)
+  return tvx, tvy, collisions
 end
 
 return MoverEntity

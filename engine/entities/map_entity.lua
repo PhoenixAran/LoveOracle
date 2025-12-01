@@ -1,7 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
-local Collider = require 'engine.components.collider'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local MoverEntity = require 'engine.entities.mover_entity'
 local Combat = require 'engine.components.combat'
@@ -11,18 +10,11 @@ local SpriteFlasher = require 'engine.components.sprite_flasher'
 local SpriteSquisher = require 'engine.components.sprite_squisher'
 local InteractionResolver = require 'engine.components.interaction_resolver'
 local Direction4 = require 'engine.enums.direction4'
-local Direction8 = require 'engine.enums.direction8'
 local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
-local Physics = require 'engine.physics'
-local PhysicsFlags = require 'engine.enums.flags.physics_flags'
-local TablePool = require 'engine.utils.table_pool'
 local DamageInfo = require 'engine.entities.damage_info'
-local Pool = require 'engine.utils.pool'
-local Consts = require 'constants'
 local bit = require 'bit'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 local EffectFactory = require 'engine.entities.effect_factory'
-local Rectangle = require 'engine.math.rectangle'
 
 
 local GRASS_ANIMATION_UPDATE_INTERVAL = 3
@@ -44,7 +36,6 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field spriteSquisher SpriteSquisher
 ---@field sprite SpriteRenderer|AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
----@field moveCollisions any[]
 ---@field deathMarked boolean
 ---@field persistant boolean
 ---@field syncDirectionWithAnimation boolean
@@ -102,8 +93,6 @@ local MapEntity = Class { __includes = MoverEntity,
       self.roomEdgeCollisionBox = args.roomEdgeCollisionBox
     end
 
-    -- table to store collisions that occur when MapEntity:move() is called
-    self.moveCollisions = { }
     -- declarations
     self.deathMarked = false
     self.persistant = false
@@ -136,44 +125,11 @@ end
 
 function MapEntity:release()
   lume.clear(self.moveCollisions)
-  MapEntity.release(self)
+  MoverEntity.release(self)
 end
 
 function MapEntity:isPersistant()
   return self.persistant
-end
-
---- unset a tiletype this map entity can collide with
----@param tileType string|string[]
-function MapEntity:setCollisionTiles(tileType)
-  if type(tileType) == 'table' then
-    for _, val in ipairs(tileType) do
-      self.collisionTiles = bit.bor(self.collisionTiles, TileTypeFlags:get(val).value)
-    end
-  else
-    self.collisionTiles = bit.bor(self.collisionTiles, TileTypeFlags:get(tileType).value)
-  end
-end
-
---- set tiletypes to collide with explicitly with tile type flags
-function MapEntity:setCollisionTilesExplicit(flags)
-  self.collisionTiles = flags
-end
-
-function MapEntity:getCollisionTiles()
-  return self.collisionTiles
-end
-
---- set a tiletype this map entity can collide with
----@param tileType string|string[]
-function MapEntity:unsetCollisionTile(tileType)
-  if type(tileType) == 'table' then
-    for _, val in ipairs(tileType) do
-      self.collisionTiles = bit.band(self.collisionTiles, bit.bnot(TileTypeFlags:get(val).value))
-    end
-  else
-    self.collisionTiles = bit.band(self.collisionTiles, bit.bnot(TileTypeFlags:get(tileType).value))
-  end
 end
 
 -- animation stuff
@@ -237,26 +193,7 @@ function MapEntity:setArmor(value)
   self.health:setArmor(value)
 end
 
----@return number tvx translation vector x
----@return number tvy translation vector y
----@return any[] moveCollisions Note: should be readonly and not modified
-function MapEntity:move()
-  lume.clear(self.moveCollisions)
-  local tvx, tvy = self:_handleMove(self.moveCollisions)
-  self:setPosition(vector.add(tvx, tvy, self:getPosition()))
-  return tvx, tvy, self.moveCollisions
-end
 
---- test move function for MapEntity
---- Note: You should return testMoveCollisions with TablePool.free() after you are done with it
----@return number tvx test translation vector x
----@return number tvy test translation vector y
----@return any[] testMoveCollisions collisions that occurred during the test move
-function MapEntity:testMove()
-  local collisions = TablePool.obtain()
-  local tvx, tvy = self:_handleMove(collisions, true)
-  return tvx, tvy, collisions
-end
 
 -- combat component pass throughs
 function MapEntity:isIntangible()
@@ -347,6 +284,9 @@ function MapEntity:triggerOverrideInteractions(sender)
   return false
 end
 
+---forgot what this was for
+---might need it later idk
+---@deprecated
 function MapEntity:reportCollsionWithHitbox(hitbox)
   error('not implemented')
   --self.interactionResolver:reportCollisionWithHitbox(hitbox)
@@ -514,21 +454,17 @@ end
 -- signal callbacks
 function MapEntity:_onHealthDepleted()
   self.deathMarked = true
-  -- notify entity script
----@diagnostic disable-next-line: undefined-field
-  if self.onHealthDepleted then
----@diagnostic disable-next-line: undefined-field
-    self:onHealthDepleted()
-  end
 end
 
 function MapEntity:_onHitboxEntered(hitbox)
   self:resolveInteraction(self.hitbox, hitbox)
 end
 
--- TODO
-function MapEntity:_onHitboxDamagedOther(hitbox)
 
+function MapEntity:_onHitboxDamagedOther(hitbox)
+end
+
+function MapEntity:_onHitboxResisted(otherHitbox)
 end
 
 return MapEntity

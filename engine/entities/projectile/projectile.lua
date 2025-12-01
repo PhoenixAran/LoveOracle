@@ -1,7 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
-local Entity = require 'engine.entity'
+local MoverEntity = require 'engine.entities.mover_entity'
 local ProjectileType = require 'engine.enums.projectile_type'
 local EffectFactory = require 'engine.entities.effect_factory'
 local Movement = require 'engine.components.movement'
@@ -17,23 +17,28 @@ local Direction8 = require 'engine.enums.direction8'
 
 
 local Physics = require 'engine.physics'
-local canCollide = require('engine.entities.bump_box')
-
-local function defaultMoveFilter(item, other)
+local canCollide = require('engine.entities.bump_box').canCollide
+--- default filter for move function in Map_Entities in Physics module
+---@param item MoverEntity
+---@param other any
+---@return string?
+local function defaultProjectileMoveFilter(item, other)
   if canCollide(item, other) then
     if other.isTile and other:isTile() then
-      if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
-        return nil
+      if other:isTopTile() then
+        if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
+          return nil
+        end
+        return 'touch'
       end
+      return nil
     end
-
     return 'touch'
   end
-
   return nil
 end
 
----@class Projectile : Entity
+---@class Projectile : MoverEntity
 ---@field projectileType ProjectileType
 ---@field crashAnimation string?
 ---@field bounceOnCrash boolean
@@ -66,6 +71,8 @@ local Projectile = Class {
 
 
     self.hitbox:connect('hitbox_entered', self, 'onHitboxEntered')
+
+    self.moveFilter = defaultProjectileMoveFilter
   end
 }
 
@@ -103,8 +110,7 @@ function Projectile:crash(rebounded)
         time = 533,
         effectAnimation = self.crashAnimation
       })
-      local mx, my = self.movement:getVector()
-      effect:setVector(-mx, -my)
+      local mx, my = vector.mul(-1, self.movement:getVector())
       effect:setZVelocity(1)
       effect:setGravity(4.2) -- think this might be 4.2 instead?
     else
@@ -133,7 +139,6 @@ function Projectile:deflect()
   end
 end
 
-
 function Projectile:updateAnimationDirection()
   if self.animDirectionSyncMode == AnimationDirectionSyncMode.dir4 then
     self.animDirection = self.movement:getDirection4()
@@ -145,6 +150,10 @@ end
 function Projectile:onCrash()
 end
 
+function Projectile:onCollideSolid(solid)
+  self:crash(true)
+end 
+
 function Projectile:onAwake()
   self:updateAnimationDirection()
 end
@@ -153,29 +162,15 @@ function Projectile:update()
   self.movement:update()
   self.hitbox:update()
 
-  local px, py = self:getBumpPosition()
-  local velX, velY = self.movement:getLinearVelocity()
-  local x, y, cols = Physics:move(self, px + velX, py + velY, defaultMoveFilter)
-
-  if self.animDirectionSyncMode ~= AnimationDirectionSyncMode.none then
-    self:updateAnimationDirection()
+  
+  local tvx, tvy, cols = self:move()
+  if tvx == 0 and tvy == 0 and lume.any(cols) then 
+    self:onCollideSolid(cols[1])
   end
+end
 
-  for _, col in ipairs(cols) do
-    local other = col.other
-    if other.isTile and other:isTile() then
-      ---@type Tile tile
-      local tile = other
-      if bit.band(self.collisionTiles, tile:getTileType()) ~= 0 then
-        self:onCrash()
-        -- TODO tile onHitByProjectile or something similar should go here
-      end
-    end
-    lume.push(self.collisions, other)
-  end
-
-  Physics.freeCollisions(cols)
-  self:setPositionWithBumpCoords(x, y)
+function Projectile:draw()
+  self.sprite:draw()
 end
 
 --- interaction resolver api
@@ -209,11 +204,9 @@ function Projectile:triggerOverrideInteractions(sender)
   return false
 end
 
-
 -- signal callbacks
 function Projectile:onHitboxEntered(hitbox)
   self.interactionResolver:resolveInteraction(self.hitbox, hitbox)
-end
-
+end 
 
 return Projectile

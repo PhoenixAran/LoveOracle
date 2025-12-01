@@ -63,7 +63,6 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.moveTimeMax = 80
     self.avoidHazardTilesInAir = true
     self:setAngleSnap(AngleSnap.to16)
-    
 
     -- physics
     self:setCollidesWithLayer({'tile', 'ledge_jump'})
