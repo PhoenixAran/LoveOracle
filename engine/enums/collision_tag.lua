@@ -8,7 +8,6 @@ local CollisionTag = {
 
   -- weapons
   sword = 'sword',
-  bow = 'bow',
   arrow = 'arrow',
   thrownProjectile = 'thrown_projectile',
   shield = 'shield',

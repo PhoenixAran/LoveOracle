@@ -113,6 +113,7 @@ function Projectile:crash(rebounded)
       local mx, my = vector.mul(-1, self.movement:getVector())
       effect:setZVelocity(1)
       effect:setGravity(4.2) -- think this might be 4.2 instead?
+      -- TODO have movement stuff without components in effect class
     else
       effect = EffectFactory.createEffectEntity({
         x = px,

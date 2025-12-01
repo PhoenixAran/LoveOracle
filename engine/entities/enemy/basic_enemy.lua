@@ -79,6 +79,8 @@ end
 ---@field shootType string
 ---@field aimType string
 ---@field projectileTypeClass any?
+---@field projectileArgsTable table
+---@field projectileAngleSnap AngleSnap
 ---@field shootSpeed number
 ---@field shootPauseDuration integer
 ---@field shootSound any?
@@ -142,10 +144,14 @@ local BasicEnemy = Class { __includes = Enemy,
     self.shootType = args.shootType or ShootType.None
     self.aimType = args.aimType or AimType.FacePlayer
     self.projectileTypeClass = args.projectileTypeClass or nil
+    self.projectileAngleSnap = args.projectileAngleSnap or AngleSnap.to4
     self.shootSpeed = args.shootSpeed or 50
     self.shootPauseDuration = args.shootPauseDuration or 30
     self.shootSound = args.shootSound or nil  -- TODO
     self.projectileShootOdds = args.projectileShootOdds or 3  -- shoot every 1/3 times
+    self.projectileArgsTable = { 
+      ['owner'] = self
+    }
 
     -- states
     self.isMoving = false
@@ -248,6 +254,7 @@ function BasicEnemy:startShooting()
     self:faceRandomDirection()
   end
 
+
   if self.pauseTimer == 0 then
     self:shoot()
   else
@@ -263,11 +270,22 @@ function BasicEnemy:shoot()
   end
   
   -- construct the projectile
-  -- TODO
+  assert(self.projectileTypeClass, 'Projectile type not provided')
+  ---@type Projectile
+  local projectile = self.projectileTypeClass(self.projectileArgsTable)
+  local projectileVectorX, projectileVectorY = AngleSnap.toVector(self.projectileAngleSnap, self.moveDirectionX, self.moveDirectionY)
+  if self.aimType == AimType.SeekPlayer then
+    local player = Singletons.gameControl:getPlayer()
+    if player then
+      local playerX, playerY = player:getPosition()
+      projectileVectorX, projectileVectorY = vector.normalize(vector.sub(playerX, playerY, self:getPosition()))
+    end
+    projectile:setVector(projectileVectorX, projectileVectorY)
+    projectile:setSpeed(self.shootSpeed)
+  end
 
-  -- TODO spawn the projectile
-
-  error('not implemented')
+  --spawn the projectile
+  self:emit('spawned_entity', projectile)
 end
 
 --- Pauses the enemy for a given duration.
@@ -416,6 +434,7 @@ function BasicEnemy:updateAi()
       if self.pauseTimer <= 0 then
         self:shoot()
       end
+      self.pauseTimer = self.pauseTimer - 1
     elseif self.isCharging then
       self:updateChargingState()
     elseif self.isChasingPlayer then

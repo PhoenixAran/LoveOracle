@@ -4,7 +4,7 @@ local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 local Interactions = require 'engine.entities.interactions'
 local CollisionTag = require 'engine.enums.collision_tag'
-local ProjectileTag = require 'engine.enums.projectile_type'
+local ProjectileType = require 'engine.enums.projectile_type'
 local SpriteBank = require 'engine.banks.sprite_bank'
 
 ---@class Arrow : Projectile
@@ -16,9 +16,11 @@ local Arrow = Class { __includes = Projectile,
     Projectile.init(self, args)
 
     -- entity setup
+    self.projectileType = ProjectileType.physical
+    self.crashAnimation = 'crash'
     self.sprite = SpriteBank.build('projectile_monster_arrow')
     self:setCollidesWithLayer({'tile'})
-    self:setColl({'wall'})
+    self:setCollisionTiles({'wall'})
 
 
     self.hitbox:resize(12, 11)

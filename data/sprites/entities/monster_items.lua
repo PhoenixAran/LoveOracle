@@ -217,6 +217,8 @@ return makeModuleFunction(function(spriteBank)
   -- BUILD move
   sb:addAnimation('move', ab:build())
 
+  -- TODO @animation crash?
+
   -- register builder
   spriteBank.registerSpriteRendererBuilder('projectile_monster_rock', sb)
 end)

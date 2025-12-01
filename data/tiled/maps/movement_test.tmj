@@ -192,7 +192,7 @@
                  "id":71,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
                  "x":832,
-                 "y":460
+                 "y":464
                 }],
          "opacity":1,
          "type":"objectgroup",
