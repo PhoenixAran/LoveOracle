@@ -3,12 +3,10 @@ local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 local Collider = require 'engine.components.collider'
 local SpriteBank = require 'engine.banks.sprite_bank'
-local Entity = require 'engine.entities.entity'
+local MoverEntity = require 'engine.entities.mover_entity'
 local Combat = require 'engine.components.combat'
 local Health = require 'engine.components.health'
 local Hitbox = require 'engine.components.hitbox'
-local Movement = require 'engine.components.movement'
-local GroundObserver = require 'engine.components.ground_observer'
 local SpriteFlasher = require 'engine.components.sprite_flasher'
 local SpriteSquisher = require 'engine.components.sprite_squisher'
 local InteractionResolver = require 'engine.components.interaction_resolver'
@@ -27,41 +25,10 @@ local EffectFactory = require 'engine.entities.effect_factory'
 local Rectangle = require 'engine.math.rectangle'
 
 
-local canCollide = require('engine.entities.bump_box').canCollide
-
---- default filter for move function in Map_Entities in Physics module
----@param item MapEntity
----@param other any
----@return string?
-local function defaultMoveFilter(item, other)
-  if canCollide(item, other) then
-    if other.isTile and other:isTile() then
-      if other:isTopTile() then
-        if bit.band(item.collisionTiles, other.tileData.tileType) == 0 then
-          return nil
-        end
-        return 'slide'
-      end
-      return nil
-    end
-    return 'slide'
-  end
-  return nil
-end
-
-local function roomEdgeCollisionBoxMoveFilter(item, other)
-  if bit.band(PhysicsFlags:get('room_edge').value, other.physicsLayer) ~= 0 then
-    return 'slide'
-  end
-  return nil
-end
-
 local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 
----@class MapEntity : Entity
+---@class MapEntity : MoverEntity
 ---@field health Health
----@field movement Movement
----@field groundObserver GroundObserver
 ---@field combat Combat
 ---@field hitbox Hitbox
 ---@field effectSprite AnimatedSpriteRenderer
@@ -78,7 +45,6 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field sprite SpriteRenderer|AnimatedSpriteRenderer
 ---@field roomEdgeCollisionBox Collider
 ---@field moveCollisions any[]
----@field collisionTiles integer
 ---@field deathMarked boolean
 ---@field persistant boolean
 ---@field syncDirectionWithAnimation boolean
@@ -88,12 +54,9 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field grassVisible boolean
 ---@field onHurt function
 ---@field onBump function
----@field moveFilter function filter for move function in Physics:move()
----@field roomEdgeCollisionBoxMoveFilter function
----@field _getMeetingTilesQueryRectFilter function filter for Physics:queryRect() when getting meeting tiles
-local MapEntity = Class { __includes = Entity,
+local MapEntity = Class { __includes = MoverEntity,
   init = function(self, args)
-    Entity.init(self, args)
+    MoverEntity.init(self, args)
 
     if args.direction == nil then
       args.direction = Direction4.none
@@ -113,8 +76,6 @@ local MapEntity = Class { __includes = Entity,
     self:signal('entity_item_used')
 
     self.health = Health(self)
-    self.movement = Movement(self)
-    self.groundObserver = GroundObserver(self)
     self.combat = Combat(self)
     self.effectSprite = SpriteBank.build('entity_effects', self)
     self.spriteFlasher = SpriteFlasher(self)
@@ -143,10 +104,6 @@ local MapEntity = Class { __includes = Entity,
 
     -- table to store collisions that occur when MapEntity:move() is called
     self.moveCollisions = { }
-    -- tile types this entity reports collisions with
-    self.collisionTiles = 0
-    self.moveFilter = defaultMoveFilter
-    self.roomEdgeCollisionBoxMoveFilter = roomEdgeCollisionBoxMoveFilter
     -- declarations
     self.deathMarked = false
     self.persistant = false
@@ -161,19 +118,6 @@ local MapEntity = Class { __includes = Entity,
     self.grassVisible = true
     self.grassOffsetX, self.grassOffsetY = 0, 0
     self.grassMovementTick = 0
-
-    local mapEntity = self
-    self._getMeetingTilesQueryRectFilter = function(item)
-      if (item.isTile and item:isTile()) or (item.getType and item:getType() == 'moving_platform') then
-        if item.isTopTile and not item:isTopTile() then
-          return false
-        end
-        local entityZMin, entityZMax = mapEntity.zRange.min, mapEntity.zRange.max
-        local itemZMin, itemZMax = item.zRange.min, item.zRange.max
-        return entityZMax > itemZMin and itemZMax > entityZMin
-      end
-      return false
-    end
   end
 }
 
@@ -192,7 +136,7 @@ end
 
 function MapEntity:release()
   lume.clear(self.moveCollisions)
-  Entity.release(self)
+  MapEntity.release(self)
 end
 
 function MapEntity:isPersistant()
@@ -293,122 +237,6 @@ function MapEntity:setArmor(value)
   self.health:setArmor(value)
 end
 
--- movement component pass throughs
-function MapEntity:getVector()
-  return self.movement:getVector()
-end
-
-function MapEntity:setVector(x, y)
-  return self.movement:setVector(x, y)
-end
-
-function MapEntity:setZVelocity(zVelocity)
-  self.movement:setZVelocity(zVelocity)
-end
-
-function MapEntity:getDirection4()
-  return self.movement:getDirection4()
-end
-
-function MapEntity:getDirection8()
-  return self.movement:getDirection8()
-end
-
-function MapEntity:setVectorAwayFrom(x, y)
-  local mx, my = self.movement:getVector()
-  self.movement:setVector(vector.sub(mx, my, x, y))
-end
-
-function MapEntity:getLinearVelocity()
-  return self.movement:getLinearVelocity()
-end
-
-function MapEntity:getTestLinearVelocity()
-  return self.movement:getTestLinearVelocity()
-end
-
-function MapEntity:getSpeed()
-  return self.movement:getSpeed()
-end
-
-function MapEntity:setSpeed(value)
-  self.movement:setSpeed(value)
-end
-
-function MapEntity:setSpeedScale(value)
-  self.movement:setSpeedScale(value)
-end
-
-function MapEntity:isInAir()
-  if self.movement and self.movement:isEnabled() then
-    return self.movement:isInAir()
-  end
-  return self:getZPosition() > 0
-end
-
-function MapEntity:movesWithConveyors()
-  return self.movement.movesWithConveyors
-end
-
-function MapEntity:movesWithPlatforms()
-  return self.movement.movesWithPlatforms
-end
-
---- private method to handle movement logic
----@param collisions any[] table to store collisions that occur during movement
----@param isTest boolean? if true, will use test linear velocity from Movement component instead of getting it from the regular method. Defaults to false
----@return number tvx translation vector x
----@return number tvy translation vector y
-function MapEntity:_handleMove(collisions, isTest)
-  local oldX, oldY = self:getBumpPosition()
-  local posX, posY = self:getBumpPosition()
-  local velX, velY = 0, 0
-  if isTest then
-    velX, velY = self:getTestLinearVelocity()
-  else
-    velX, velY = self:getLinearVelocity()
-  end  
-  velX, velY = vector.add(velX, velY, self:getKnockbackVelocity())
-
-  -- Movement due to environment
-  if self:movesWithConveyors() and self:onConveyor() then
-    velX, velY = vector.add(velX, velY, self.groundObserver.conveyorVelocityX, self.groundObserver.conveyorVelocityY)
-  end
-  if self:movesWithPlatforms() and self:onPlatform() then
-    velX, velY = vector.add(velX, velY, self.groundObserver.movingPlatformX, self.groundObserver.movingPlatformY)
-  end
-
-  local goalX, goalY = vector.add(posX, posY, velX, velY)
-  local actualX, actualY, cols = Physics:move(self, goalX, goalY, self.moveFilter)
-  for _, v in ipairs(cols) do
-    lume.push(collisions, v.other)
-  end
-  Physics.freeCollisions(cols)
-
-  if self.roomEdgeCollisionBox then
-    -- Create goal vector value for room edge collision box
-    local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y)
-    local goalX2, goalY2 = vector.sub(actualX, actualY, diffX, diffY)
-    local actualX2, actualY2, cols2 = Physics:move(self.roomEdgeCollisionBox, goalX2, goalY2, self.roomEdgeCollisionBoxMoveFilter)
-    for _, col in ipairs(cols2) do
-      local shouldAddToCollisions = true
-      for _, collision in ipairs(collisions) do
-        if col.other == collision then
-          shouldAddToCollisions = false
-          break
-        end
-      end
-      if shouldAddToCollisions then
-        lume.push(collisions, col.other)
-      end
-    end
-    Physics.freeCollisions(cols2)
-    actualX, actualY = vector.add(actualX2, actualY2, diffX, diffY)
-  end
-  local translationVectorX, translationVectorY = vector.sub(actualX, actualY, oldX, oldY)
-  return translationVectorX, translationVectorY
-end
-
 ---@return number tvx translation vector x
 ---@return number tvy translation vector y
 ---@return any[] moveCollisions Note: should be readonly and not modified
@@ -428,24 +256,6 @@ function MapEntity:testMove()
   local collisions = TablePool.obtain()
   local tvx, tvy = self:_handleMove(collisions, true)
   return tvx, tvy, collisions
-end
-
---- gets tiles that are colliding with the Entity's bumpbox.
---- Note that this does not return tiles that the GroundObserver is over. This is mainly
---- used for Enemy scripting to determine when the entity should stop moving
---- NOTE: Use Physics.freeCollisions() to free the returned items
---- @param inflateAmount number? amount to inflate the query rect by. Defaults to 0
---- @return any[] items tiles that are colliding with the Entity's bumpbox. Free with Physics.freeCollisions()
---- @return integer len number of items returned
-function MapEntity:getTilesMeeting(inflateAmount)
-  local x,y,w,h = self.x, self.y, self.w, self.h
-  if inflateAmount and inflateAmount > 0 then
-    x,y,w,h = Rectangle.resizeAroundCenter(x,y,w,h, w + inflateAmount, h + inflateAmount)
-  end
-
-  inflateAmount = inflateAmount or 0
-  local items, len = Physics:queryRect(self.x, self.y, self.w, self.h, self._getMeetingTilesQueryRectFilter)
-  return items, len
 end
 
 -- combat component pass throughs
@@ -477,7 +287,6 @@ function MapEntity:resetCombatVariables()
   self.combat:resetCombatVariables()
 end
 
----@return number, number
 function MapEntity:getKnockbackVector()
   return self.combat:getKnockbackVector()
 end
@@ -507,32 +316,7 @@ function MapEntity:setAngleSnap(value)
   self.movement:setAngleSnap(value)
 end
 
--- ground observer pass throughs
-function MapEntity:onConveyor()
-  return self.groundObserver.onConveyor
-end
-
-function MapEntity:onPlatform()
-  return self.groundObserver.onPlatform
-end
-
-function MapEntity:isInWater()
-  return self.groundObserver.inWater
-end
-
-function MapEntity:isInLava()
-  return self.groundObserver.inLava
-end
-
-function MapEntity:isInPuddle()
-  return self.groundObserver.inPuddle
-end
-
-function MapEntity:isInHole()
-  return self.groundObserver.inHole
-end
-
--- interaction resolver pass throughs
+--- interaction resolver api
 
 ---set interaction for when this entity runs into another entity's hitbox with a specific collision tag
 ---@param tag string collision tag
@@ -718,7 +502,7 @@ end
 --- debug draw
 ---@param entDebugDrawFlags integer
 function MapEntity:debugDraw(entDebugDrawFlags)
-  Entity.debugDraw(self, entDebugDrawFlags)
+  MoverEntity.debugDraw(self, entDebugDrawFlags)
   if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 and self.roomEdgeCollisionBox then
     self.roomEdgeCollisionBox:debugDraw()
   end

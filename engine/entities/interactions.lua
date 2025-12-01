@@ -21,6 +21,7 @@ function Interactions.takeDamage(receiver, sender)
   end
 end
 
+--- hurt the sender entity
 function Interactions.damageOther(receiver, sender)
   if not (sender.entity.triggerOverrideInteractions and sender.entity:triggerOverrideInteractions(receiver)) then
     if not (sender.entity.isIntangible and sender.entity:isIntangible()) then
@@ -30,19 +31,29 @@ function Interactions.damageOther(receiver, sender)
   end
 end
 
---- used in Projectiles
+--- deflect the sender if its a projectile
 function Interactions.deflect(receiver, sender)
   if receiver.projectileType then
     if receiver.projectileType == ProjectileType.notDeflectable then
       return
     end
-    -- TODO weapon level
+    -- TODO weapon level logic here
   end
 
   if receiver.deflect then
     receiver:deflect()
   end
 end
+
+--- intercept the sender if it has :intercept() method. Typically
+--- this is used for projectiles to cause them to crash or be destroyed
+function Interactions.intercept(receiver, sender)
+  if sender.intercept then
+    sender:intercept()
+  end
+end
+
+
 
 return Interactions
 

@@ -45,6 +45,7 @@ end
 ---@field owner Entity?
 ---@field animDirectionSyncMode AnimationDirectionSyncMode
 ---@field animDirection integer?
+---@field collisions any[]
 local Projectile = Class {
   ---@param self Projectile
   ---@param args table
@@ -55,11 +56,13 @@ local Projectile = Class {
     self.bounceOnCrash = args.bounceOnCrash or false
     self.animDirectionSyncMode = args.animDirectionSyncMode or AnimationDirectionSyncMode.dir4
     self.animDirection = args.animDirection or nil
-    self.owner = args.owner
+    self.owner = args.owner or nil
 
     self.movement = Movement(self)
     self.hitbox = Hitbox(self)
     self.interactionResolver = InteractionResolver(self)
+    self.collisions = { }
+    self.collisionTiles = 0
 
 
     self.hitbox:connect('hitbox_entered', self, 'onHitboxEntered')
@@ -119,7 +122,7 @@ function Projectile:crash(rebounded)
 end
 
 function Projectile:intercept()
-  self:destroy()
+  self:crash(true)
   return true
 end
 
@@ -129,6 +132,7 @@ function Projectile:deflect()
     self:intercept()
   end
 end
+
 
 function Projectile:updateAnimationDirection()
   if self.animDirectionSyncMode == AnimationDirectionSyncMode.dir4 then
@@ -147,6 +151,8 @@ end
 
 function Projectile:update()
   self.movement:update()
+  self.hitbox:update()
+
   local px, py = self:getBumpPosition()
   local velX, velY = self.movement:getLinearVelocity()
   local x, y, cols = Physics:move(self, px + velX, py + velY, defaultMoveFilter)
@@ -165,13 +171,46 @@ function Projectile:update()
         -- TODO tile onHitByProjectile or something similar should go here
       end
     end
+    lume.push(self.collisions, other)
   end
 
   Physics.freeCollisions(cols)
   self:setPositionWithBumpCoords(x, y)
 end
 
+--- interaction resolver api
 
+---set interaction for when this entity runs into another entity's hitbox with a specific collision tag
+---@param tag string collision tag
+---@param interaction function
+function Projectile:setInteraction(tag, interaction)
+  self.interactionResolver:setInteraction(tag, interaction)
+end
+
+function Projectile:removeInteraction(tag)
+  self.interactionResolver:removeInteraction(tag)
+end
+
+function Projectile:resolveInteraction(receiver, sender)
+  local tag = sender:getCollisionTag()
+  if self.interactionResolver:hasInteraction(tag) then
+    self.interactionResolver:resolveInteraction(receiver, sender)
+  end
+end
+
+--- this method is used when the entity is not configured to automatically respond to
+--- a given hitbox type. This allows the entity to check if any of it's items can
+--- protect it from the sender. This is usually just used on the player since players
+--- are not automatically set to collide with monsters, but they should still be able to block
+--- attacks with a shield or parry attacks with a sword
+--- @param sender Hitbox the hitbox that the entity is colliding with
+--- @return boolean
+function Projectile:triggerOverrideInteractions(sender)
+  return false
+end
+
+
+-- signal callbacks
 function Projectile:onHitboxEntered(hitbox)
   self.interactionResolver:resolveInteraction(self.hitbox, hitbox)
 end

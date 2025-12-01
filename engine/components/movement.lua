@@ -14,8 +14,6 @@ local AngleSnap = require 'engine.enums.angle_snap'
 ---@field acceleration number
 ---@field deceleration number
 ---@field slippery boolean
----@field movesWithConveyors boolean
----@field movesWithPlatforms boolean
 ---@field angleSnap AngleSnap
 ---@field gravity number
 ---@field maxFallSpeed number

@@ -16,6 +16,18 @@ local TablePool = require 'engine.utils.table_pool'
 
 local GRID_SIZE = Consts.GRID_SIZE
 
+local function defaultGetMeetingTilesQueryRectFilter(item)
+  if (item.isTile and item:isTile()) or (item.getType and item:getType() == 'moving_platform') then
+    if item.isTopTile and not item:isTopTile() then
+      return false
+    end
+    local entityZMin, entityZMax = mapEntity.zRange.min, mapEntity.zRange.max
+    local itemZMin, itemZMax = item.zRange.min, item.zRange.max
+    return entityZMax > itemZMin and itemZMax > entityZMin
+  end
+  return false
+end
+
 ---@class Entity : SignalObject, BumpBox
 ---@field enabled boolean
 ---@field visible boolean
@@ -59,12 +71,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.collisionTag = args.collisionTags
 
     local entityInstance = self
-    self._getMeetingTilesQueryRectFilter = function(item)
-      if item.isTile and item:isTile() and item:isTopTile() then
-        return BumpBox.canCollide(entityInstance, item)
-      end
-      return false
-    end
+    self._getMeetingTilesQueryRectFilter = defaultGetMeetingTilesQueryRectFilter
   end
 }
 
@@ -182,18 +189,22 @@ function Entity:setLocalPosition(x, y)
   self.transform:setLocalPosition(x, y)
 end
 
---- finds out which tiles would touch an entity
---- Make sure you return tables to pools via Physics.freeTable
----@param testX number? test x position. Uses actual x position if null 
----@param testY number? test y position. Uses actual y position if null
-function Entity:getMeetingTiles(testX, testY)
-  if testX == nil then
-    testX = self.x
+--- gets tiles that are colliding with the Entity's bumpbox.
+--- Note that this does not return tiles that the GroundObserver is over. This is mainly
+--- used for Enemy scripting to determine when the entity should stop moving
+--- NOTE: Use Physics.freeCollisions() to free the returned items
+--- @param inflateAmount number? amount to inflate the query rect by. Defaults to 0
+--- @return any[] items tiles that are colliding with the Entity's bumpbox. Free with Physics.freeCollisions()
+--- @return integer len number of items returned
+function Entity:getTilesMeeting(inflateAmount)
+  local x,y,w,h = self.x, self.y, self.w, self.h
+  if inflateAmount and inflateAmount > 0 then
+    x,y,w,h = Rectangle.resizeAroundCenter(x,y,w,h, w + inflateAmount, h + inflateAmount)
   end
-  if testY == nil then
-    testY = self.y
-  end
-  return Physics:queryRect(testX, testY, self.w, self.h, self._getMeetingTilesQueryRectFilter)
+
+  inflateAmount = inflateAmount or 0
+  local items, len = Physics:queryRect(self.x, self.y, self.w, self.h, self._getMeetingTilesQueryRectFilter)
+  return items, len
 end
 
 ---resizes entity
