@@ -163,8 +163,8 @@ end
 function Projectile:update()
   self.movement:update()
   self.hitbox:update()
+  self.sprite:update()
 
-  
   local tvx, tvy, cols = self:move()
   if tvx == 0 and tvy == 0 and lume.any(cols) then 
     self:onCollideSolid(cols[1])

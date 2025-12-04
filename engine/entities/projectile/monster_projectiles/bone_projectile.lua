@@ -16,7 +16,7 @@ local BoneProjectile = Class { __includes = Projectile,
     self.collisionTag = CollisionTag.thrownProjectile
     self.projectileType = ProjectileType.physical
     self.crashAnimation = 'effect_rock_break'
-    self.sprite = SpriteBank.build('projectile_monster_bone')
+    self.sprite = SpriteBank.build('projectile_monster_bone', self)
     self.animDirectionSyncMode = AnimationDirectionSyncMode.none
     self:setCollidesWithLayer({'tile'})
     self:setCollisionTiles('wall')

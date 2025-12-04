@@ -84,6 +84,10 @@ end
 ---@field shootSpeed number
 ---@field shootPauseDuration integer
 ---@field shootSound any?
+---@field shootDirectionX number
+---@field shootDirectionY number
+---@field preShootMoveDirectionX number
+---@field preShootMoveDirectionY number
 ---@field isMoving boolean
 ---@field moveTimer integer
 ---@field isChasingPlayer boolean
@@ -149,9 +153,15 @@ local BasicEnemy = Class { __includes = Enemy,
     self.shootPauseDuration = args.shootPauseDuration or 30
     self.shootSound = args.shootSound or nil  -- TODO
     self.projectileShootOdds = args.projectileShootOdds or 3  -- shoot every 1/3 times
+    self.preShootMoveDirectionX = 0
+    self.preShootMoveDirectionY = 0
     self.projectileArgsTable = { 
       ['owner'] = self
     }
+
+    -- calculated by basic_enemy
+    self.shootDirectionX = 0
+    self.shootDirectionY = 0
 
     -- states
     self.isMoving = false
@@ -246,6 +256,9 @@ function BasicEnemy:stopMoving()
 end
 
 function BasicEnemy:startShooting()
+  self.preShootMoveDirectionX = self.moveDirectionX
+  self.preShootMoveDirectionY = self.moveDirectionY
+
   self.pauseTimer = self.shootPauseDuration
 
   if self.aimType == AimType.FacePlayer then
@@ -273,16 +286,26 @@ function BasicEnemy:shoot()
   assert(self.projectileTypeClass, 'Projectile type not provided')
   ---@type Projectile
   local projectile = self.projectileTypeClass(self.projectileArgsTable)
-  local projectileVectorX, projectileVectorY = AngleSnap.toVector(self.projectileAngleSnap, self.moveDirectionX, self.moveDirectionY)
+  projectile:initTransform()
+  projectile:setPosition(self:getPosition())
+  local projectileVectorX, projectileVectorY
   if self.aimType == AimType.SeekPlayer then
     local player = Singletons.gameControl:getPlayer()
     if player then
       local playerX, playerY = player:getPosition()
       projectileVectorX, projectileVectorY = vector.normalize(vector.sub(playerX, playerY, self:getPosition()))
     end
-    projectile:setVector(projectileVectorX, projectileVectorY)
-    projectile:setSpeed(self.shootSpeed)
+  else
+    -- Use the stored direction from before shooting started
+    projectileVectorX = self.preShootMoveDirectionX or self.moveDirectionX
+    projectileVectorY = self.preShootMoveDirectionY or self.moveDirectionY
   end
+
+  -- Apply angle snapping to the projectile direction
+  projectileVectorX, projectileVectorY = AngleSnap.toVector(self.projectileAngleSnap, projectileVectorX, projectileVectorY)
+
+  projectile:setVector(projectileVectorX, projectileVectorY)
+  projectile:setSpeed(self.shootSpeed)
 
   --spawn the projectile
   self:emit('spawned_entity', projectile)
@@ -434,6 +457,10 @@ function BasicEnemy:updateAi()
       if self.pauseTimer <= 0 then
         self:shoot()
         self.isShooting = false
+
+        -- clear the stored direction after shooting
+        self.preShootMoveDirectionX = 0
+        self.preShootMOveDirectionY = 0
       end
       self.pauseTimer = self.pauseTimer - 1
     elseif self.isCharging then
