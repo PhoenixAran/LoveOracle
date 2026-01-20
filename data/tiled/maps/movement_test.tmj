@@ -143,8 +143,8 @@
                 {
                  "id":53,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":524,
-                 "y":440
+                 "x":240,
+                 "y":52
                 }, 
                 {
                  "id":59,
@@ -193,6 +193,54 @@
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
                  "x":832,
                  "y":464
+                }, 
+                {
+                 "id":79,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":684,
+                 "y":448
+                }, 
+                {
+                 "id":80,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":664,
+                 "y":432
+                }, 
+                {
+                 "id":81,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":712,
+                 "y":444
+                }, 
+                {
+                 "id":82,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":692,
+                 "y":496
+                }, 
+                {
+                 "id":83,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":636,
+                 "y":496
+                }, 
+                {
+                 "id":84,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":696,
+                 "y":468
+                }, 
+                {
+                 "id":85,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":636,
+                 "y":468
+                }, 
+                {
+                 "id":86,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":656,
+                 "y":464
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -208,8 +256,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":820,
-                 "y":500
+                 "x":668,
+                 "y":484
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -218,7 +266,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":72,
+ "nextobjectid":87,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

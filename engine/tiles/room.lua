@@ -4,6 +4,7 @@ local SignalObject = require 'engine.signal_object'
 local RoomEdge = require 'engine.entities.room_edge'
 local Direction4 = require 'engine.enums.direction4'
 local Tile = require 'engine.tiles.tile'
+local TablePool = require 'engine.utils.table_pool'
 
 local GRID_SIZE = require('constants').GRID_SIZE
 
@@ -19,6 +20,7 @@ local GRID_SIZE = require('constants').GRID_SIZE
 ---@field destroyedTileEntities integer[]
 ---@field animatedTiles table<integer, TileData>
 ---@field animatedTilesCollectionCreated boolean
+---@field entityGroupName string
 local Room = Class { __includes = SignalObject,
   ---@param self table
   ---@param map Map
@@ -46,6 +48,8 @@ local Room = Class { __includes = SignalObject,
     -- note that this collection is created then the load function is called
     self.animatedTiles = { }
     self.animatedTilesCollectionCreated = false
+
+    self.entityGroupName = 'room_' .. tostring(self.roomData.topLeftPosX) .. '_' .. tostring(self.roomData.topLeftPosY)
   end
 }
 
@@ -95,13 +99,18 @@ local function createRoomEdge(name, x, y, w, h, direction, room, entities)
     w = w,
     h = h,
     direction4 = direction,
-    transitionStyle = 'push'  -- TODO support other styles
+    transitionStyle = 'push',  -- TODO support other styles,
+    group = room:getEntityGroupName()
   }
   roomEdge:connect('room_transition_request', room, 'onRoomTransitionRequest')
   entities:addEntity(roomEdge)
   lume.push(room.entities, roomEdge)
 end
 
+--- the group room entities get assigned by when being initialized by this room instance
+function Room:getEntityGroupName()
+  return self.entityGroupName
+end
 
 ---@param entities Entities
 function Room:load(entities)
@@ -144,6 +153,7 @@ function Room:load(entities)
   ]]
   for _, entitySpawner in ipairs(self.roomData.entitySpawners) do
     local entity = entitySpawner:createEntity()
+    entity:setGroup(self:getEntityGroupName())
     entity:initTransform()
     entities:addEntity(entity)
     lume.push(self.entities, entity)
@@ -160,11 +170,17 @@ function Room:unload(entities)
     STEP 2. Remove Entities
   ]]
   -- remove entities
-  for i = lume.count(self.entities), 1, -1 do
-    entities:removeEntity(self.entities[i])
-    lume.remove(self.entities, self.entities[i])
+  local roomEntities = entities:queryByGroup(self:getEntityGroupName())
+  for _, roomEntity in ipairs(roomEntities) do
+    if roomEntity:getType() == 'player' then
+      error()
+    end
+    entities:removeEntity(roomEntity)
   end
-  assert(lume.count(self.entities) == 0, 'Entities not removed from room')
+  TablePool.free(roomEntities)
+
+  -- clear references from Room list
+  lume.clear(self.entities)
   
   --[[
     STEP 3. Remove Tile Entities

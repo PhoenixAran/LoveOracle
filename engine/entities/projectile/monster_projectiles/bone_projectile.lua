@@ -30,6 +30,7 @@ local BoneProjectile = Class { __includes = Projectile,
   end
 }
 
+
 function BoneProjectile:getType()
   return 'bone_projectile'
 end
@@ -38,8 +39,6 @@ function BoneProjectile:onAwake()
   Projectile.onAwake(self)
   self.sprite:play('move')
 end
-
-
 
 return BoneProjectile
 

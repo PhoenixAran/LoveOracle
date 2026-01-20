@@ -85,8 +85,11 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.isMoving = true
     self.sprite:play(self.animationMove)
     self.projectileTypeClass = require 'engine.entities.projectile.monster_projectiles.bone_projectile' -- TODO put this in data folder
-    self.projectileShootOdds = 1
-    self.shootType = BasicEnemy.ShootType.OnStop
+    self.projectileShootOdds = 300
+    self.shootPauseDuration = 0
+    self.shootType = BasicEnemy.ShootType.WhileMoving
+    self.aimType = BasicEnemy.AimType.SeekPlayer
+    self.projectileAngleSnap = AngleSnap.to32
 
     -- stalfos
     self.jumpDelayTimer = 0

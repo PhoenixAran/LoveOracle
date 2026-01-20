@@ -33,6 +33,7 @@ end
 ---@field visible boolean
 ---@field transform Transform
 ---@field name string
+---@field group string?
 ---@field onTransformChanged function
 ---@field onAwake function
 ---@field onRemoved function
@@ -69,6 +70,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.transform = Transform:new(self)
     self.name = args.name or uuid()
     self.collisionTag = args.collisionTags
+    self.group = args.group
 
     local entityInstance = self
     self._getMeetingTilesQueryRectFilter = defaultGetMeetingTilesQueryRectFilter
@@ -77,6 +79,14 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
 
 function Entity:getName()
   return self.name
+end
+
+function Entity:setGroup(value)
+  self.group = value
+end
+
+function Entity:getGroup()
+  return self.group
 end
 
 function Entity:getType()
@@ -199,7 +209,7 @@ end
 function Entity:getTilesMeeting(inflateAmount)
   local x,y,w,h = self.x, self.y, self.w, self.h
   if inflateAmount and inflateAmount > 0 then
-    x,y,w,h = Rectangle.resizeAroundCenter(x,y,w,h, w + inflateAmount, h + inflateAmount)
+    x,y,w,h = rect.resizeAroundCenter(x,y,w,h, w + inflateAmount, h + inflateAmount)
   end
 
   inflateAmount = inflateAmount or 0

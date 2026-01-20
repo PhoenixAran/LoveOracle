@@ -118,7 +118,7 @@ local BasicEnemy = Class { __includes = Enemy,
     self.canSwimInWater = args.canSwimInWater or false
     self.fallInHoleEffectColor = args.fallInHoleEffectColor or 'blue'
 
-    -- movement
+    -- movement 
     self.stopTimeMin = args.stopTimeMin or 30
     self.stopTimeMax = args.stopTimeMax or 60
     self.moveTimeMin = args.moveTimeMin or 30
@@ -156,7 +156,8 @@ local BasicEnemy = Class { __includes = Enemy,
     self.preShootMoveDirectionX = 0
     self.preShootMoveDirectionY = 0
     self.projectileArgsTable = { 
-      ['owner'] = self
+      ['owner'] = self,
+      ['group'] = 'projectile'
     }
 
     -- calculated by basic_enemy
@@ -236,7 +237,7 @@ function BasicEnemy:startMoving()
   self:changeDirection()
   self:setVector(self.moveDirectionX, self.moveDirectionY)
 
-  if self.sprite then
+  if self.sprite and self.sprite:getType() == 'animated_sprite_renderer' then
     if not self.sprite:isPlaying() or self.sprite:getCurrentAnimationKey() ~= self.animationMove then
       self.sprite:play(self.animationMove)
     end
@@ -246,7 +247,6 @@ end
 function BasicEnemy:stopMoving()
   self.moveTimer = math.floor(lume.random(self.stopTimeMin, self.stopTimeMax))
   self.isMoving = false
-  self:setSpeed(0)
 
   -- shoot
   if self.shootType == ShootType.OnStop and self.projectileTypeClass ~= nil
@@ -274,6 +274,7 @@ function BasicEnemy:startShooting()
     self.isShooting = true
     self.isMoving = false
   end
+
 end
 
 -- TODO implmement this when i finish the projectile entity class
@@ -288,6 +289,7 @@ function BasicEnemy:shoot()
   local projectile = self.projectileTypeClass(self.projectileArgsTable)
   projectile:initTransform()
   projectile:setPosition(self:getPosition())
+  projectile:setGroup(self:getGroup())
   local projectileVectorX, projectileVectorY
   if self.aimType == AimType.SeekPlayer then
     local player = Singletons.gameControl:getPlayer()
@@ -306,7 +308,7 @@ function BasicEnemy:shoot()
 
   projectile:setVector(projectileVectorX, projectileVectorY)
   projectile:setSpeed(self.shootSpeed)
-
+  projectile:setOwner(self)
   --spawn the projectile
   self:emit('spawned_entity', projectile)
 end
@@ -493,7 +495,7 @@ function BasicEnemy:updateAi()
           end
         end
       end
-
+      
       if self.isMoving then
         self:updateMovingState()
       else

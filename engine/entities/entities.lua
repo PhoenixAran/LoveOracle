@@ -4,6 +4,7 @@ local lume = require 'lib.lume'
 local Consts = require 'constants'
 local rect = require 'engine.math.rectangle'
 local EntityDrawType = require 'engine.enums.entity_draw_type'
+local TablePool = require 'engine.utils.table_pool'
 
 ---@class Entities : SignalObject
 ---@field player Player
@@ -83,6 +84,7 @@ function Entities:addEntity(entity, awakeEntity)
   if entity:getName() == "" then
     error(entity:getType())
   end
+  
   assert(entity:getName() and entity:getName() ~= "", 'Entity requires name')
   assert(not entity:isTile(), 'Tile Entity should be added via Entities:addTileEntity')
   if awakeEntity == nil then awakeEntity = true end
@@ -312,6 +314,21 @@ function Entities:debugDrawEntities(x,y,w,h, entDebugDrawFlags)
   else
     lume.each(self.entitiesYSort, function(entity) entity:debugDraw() end)
   end
+end
+
+--- query entities by group
+--- table can be returned to TablePool
+---@param group string
+---@return Entity[]
+function Entities:queryByGroup(group)
+  local table = TablePool.obtain()
+  for _, entity in ipairs(self.entities) do
+    if entity:getGroup() == group then
+      lume.push(table, entity)
+    end
+  end
+
+  return table
 end
 
 -- signal callbacks
