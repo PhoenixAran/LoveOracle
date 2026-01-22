@@ -4,6 +4,7 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local ProjectileType = require 'engine.enums.projectile_type'
 local CollisionTag = require 'engine.enums.collision_tag'
 local AnimationDirectionSyncMode = require 'engine.enums.animation_direction_sync_mode'
+local Interactions = require 'engine.entities.interactions'
 
 ---@class BoneProjectile : Projectile
 local BoneProjectile = Class { __includes = Projectile,
@@ -27,6 +28,10 @@ local BoneProjectile = Class { __includes = Projectile,
     self.hitbox.damageInfo.knockbackSpeed = 80
     self.hitbox.damageInfo.knockbackTime = 8
     self.hitbox.damageInfo.hitstunTime = 8
+    self.hitbox.damageInfo.intangibilityTime = 8
+
+    -- set collision reactions
+    self:setInteraction(CollisionTag.player, Interactions.damageOther)
   end
 }
 

@@ -89,6 +89,9 @@ local Hitbox = Class { __includes = { BumpBox, Component },
       end
 
       if item.getType and item:getType() == 'hitbox' and not self.ignoreHitboxSet[item] then
+        if closureSelf:getType() == 'bone_projectile' and item:getType() == 'player' then
+          print '!!'
+        end
         if canCollide(closureSelf, item) then
           return true
         end

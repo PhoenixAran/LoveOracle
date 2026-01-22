@@ -75,6 +75,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.hitbox.damageInfo.knockbackSpeed = 80
     self.hitbox.damageInfo.knockbackTime = 8
     self.hitbox.damageInfo.hitstunTime = 8
+    self.hitbox.damageInfo.intangibilityTime = 8
 
     -- set collision reactions
     self.collisionTag = CollisionTag.enemy
@@ -105,12 +106,11 @@ end
 function Stalfos:onAwake()
   BasicEnemy.onAwake(self)
   local roomControl = Singletons.roomControl
-  local player = nil
   if roomControl then
-    player = roomControl:getPlayer()
-  end
-  if player then
-    player:connect('entity_item_used', self, "_onPlayerItemUsed")
+    local player = roomControl:getPlayer()
+    if player then
+      player:connect('entity_item_used', self, "_onPlayerItemUsed")
+    end
   end
 end
 

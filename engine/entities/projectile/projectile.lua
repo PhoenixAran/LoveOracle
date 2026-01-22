@@ -14,6 +14,7 @@ local bit = require 'bit'
 local AnimationDirectionSyncMode = require 'engine.enums.animation_direction_sync_mode'
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
+local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 
 
 local Physics = require 'engine.physics'
@@ -79,6 +80,12 @@ local Projectile = Class { __includes = MoverEntity,
 
 function Projectile:getType()
   return 'projectile'
+end
+
+function Projectile:onTransformChanged()
+  if self.hitbox then
+    self.hitbox:onTransformChanged()
+  end
 end
 
 function Projectile:setVector(x, y)
@@ -158,6 +165,12 @@ end
 
 function Projectile:onAwake()
   self:updateAnimationDirection()
+  if self.roomEdgeCollisionBox then
+    self.roomEdgeCollisionBox:entityAwake()
+  end
+  if self.hitbox then
+    self.hitbox:entityAwake()
+  end
 end
 
 function Projectile:update()
@@ -173,6 +186,16 @@ end
 
 function Projectile:draw()
   self.sprite:draw()
+end
+
+function Projectile:debugDraw(entDebugDrawFlags)
+  MoverEntity.debugDraw(self, entDebugDrawFlags)
+  if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 and self.roomEdgeCollisionBox then
+    self.roomEdgeCollisionBox:debugDraw()
+  end
+  if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.HitBox) ~= 0 and self.hitbox then
+    self.hitbox:debugDraw()
+  end
 end
 
 --- interaction resolver api
@@ -208,7 +231,7 @@ end
 
 -- signal callbacks
 function Projectile:onHitboxEntered(hitbox)
-  self.interactionResolver:resolveInteraction(self.hitbox, hitbox)
+  self:resolveInteraction(self.hitbox, hitbox)
 end 
 
 return Projectile
