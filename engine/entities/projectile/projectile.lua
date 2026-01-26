@@ -41,6 +41,7 @@ end
 
 ---@class Projectile : MoverEntity
 ---@field projectileType ProjectileType
+---@field hasCrashed boolean if projectile already crashed. Prevents crashes when hitbox collision events attempt to destroy projectile
 ---@field crashAnimation string?
 ---@field bounceOnCrash boolean
 ---@field movement Movement
@@ -52,6 +53,7 @@ end
 ---@field animDirectionSyncMode AnimationDirectionSyncMode
 ---@field animDirection integer?
 ---@field collisions any[]
+---@field crashOnHit boolean if projectile should crash on hitting something
 local Projectile = Class { __includes = MoverEntity,
   ---@param self Projectile
   ---@param args table
@@ -61,6 +63,8 @@ local Projectile = Class { __includes = MoverEntity,
     self.projectileType = args.projectileType or ProjectileType.physical
     self.crashAnimation = args.crashAnimation
     self.bounceOnCrash = args.bounceOnCrash or false
+    self.crashOnHit = args.crashOnHit or true
+    self.hasCrashed = false
     self.animDirectionSyncMode = args.animDirectionSyncMode or AnimationDirectionSyncMode.dir4
     self.animDirection = args.animDirection or nil
     self.owner = args.owner or nil
@@ -73,6 +77,7 @@ local Projectile = Class { __includes = MoverEntity,
 
 
     self.hitbox:connect('hitbox_entered', self, 'onHitboxEntered')
+    self.hitbox:connect('damaged_other', self, 'onDamagedOther')
 
     self.moveFilter = defaultProjectileMoveFilter
   end
@@ -106,6 +111,10 @@ end
 
 ---@param rebounded boolean
 function Projectile:crash(rebounded)
+  if self.hasCrashed then
+    return
+  end
+  self.hasCrashed = true
   local px, py = self:getPosition()
   if self.crashAnimation ~= nil then
     -- create crash effect
@@ -131,7 +140,7 @@ function Projectile:crash(rebounded)
     end
     self:emit('spawned_entity', effect)
   end
-  
+
   self:onCrash()
   self:destroy()
 end
@@ -178,9 +187,11 @@ function Projectile:update()
   self.hitbox:update()
   self.sprite:update()
 
-  local tvx, tvy, cols = self:move()
-  if tvx == 0 and tvy == 0 and lume.any(cols) then 
-    self:onCollideSolid(cols[1])
+  if not self.hasCrashed then
+    local tvx, tvy, cols = self:move()
+    if tvx == 0 and tvy == 0 and lume.any(cols) then
+      self:onCollideSolid(cols[1])
+    end
   end
 end
 
@@ -232,6 +243,12 @@ end
 -- signal callbacks
 function Projectile:onHitboxEntered(hitbox)
   self:resolveInteraction(self.hitbox, hitbox)
-end 
+end
+
+function Projectile:onDamagedOther(hitbox)
+  if self.crashOnHit then
+    self:crash(true)
+  end
+end
 
 return Projectile

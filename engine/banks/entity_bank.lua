@@ -8,10 +8,12 @@ local excludedEntities = {
   'component',
   'damage_info',
   'enemy',
+  'projectile',
   'entities',
   'entity',
   'inspector_properties',
   'map_entity',
+  'mover_entity',
   'transform',
 
   -- skip entities that get manually created map_loader.lua
