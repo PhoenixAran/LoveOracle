@@ -110,8 +110,6 @@ local BasicEnemy = Class { __includes = Enemy,
   init = function(self, args)
     Enemy.init(self, args)
 
-    self.movement:connect('landed', self, 'onLand')
-
     -- environment configuration
     self.canFallInHole = args.canFallInHole or true
     self.canSwimInLava = args.canSwimInLava or false

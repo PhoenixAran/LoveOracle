@@ -131,6 +131,7 @@ function Projectile:crash(rebounded)
       effect:setZVelocity(1)
       effect:setGravity(4.2) -- think this might be 4.2 instead?
       -- TODO have movement stuff without components in effect class
+      
     else
       effect = EffectFactory.createEffectEntity({
         x = px,

@@ -40,6 +40,7 @@ end
 ---@field drawType EntityDrawType
 ---@field collisionTag string
 ---@field _getMeetingTilesQueryRectFilter function
+---@field destroyed boolean
 local Entity = Class { __includes = { SignalObject, BumpBox },
   init = function(self, args)
     if args == nil then
@@ -71,6 +72,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.name = args.name or uuid()
     self.collisionTag = args.collisionTags
     self.group = args.group
+    self.destroyed = false
 
     local entityInstance = self
     self._getMeetingTilesQueryRectFilter = defaultGetMeetingTilesQueryRectFilter
@@ -317,6 +319,24 @@ function Entity:getInspectorProperties()
   props:addVector2i('Size', self.getSize, self.resize)
   props:setGroup()
   return props
+end
+
+
+-- API for more gameplay related stuff below
+
+-- returns if given entity is on top of a hazard surface
+-- to be implemented by subclasses
+function Entity:checkHazardSurface()
+  return false
+end
+
+function Entity:onFallInWater()
+end
+
+function Entity:onFallInLava()
+end
+
+function Entity:onFallInHole()
 end
 
 return Entity

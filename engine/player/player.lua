@@ -183,7 +183,7 @@ local Player = Class { __includes = MapEntity,
     self.shadowVisible = true
 
     -- signal connections
-    self.movement:connect('landed', self, '_onLanded')
+    -- TODO as needed
 
     self.tileQueryRect = {
       x = 0,
@@ -737,7 +737,7 @@ function Player:onHurt(damageInfo)
   self:beginConditionState(PlayerHitstunState())
 end
 
-function Player:_onLanded()
+function Player:onLand()
   -- TODO play sound
   -- print 'player landed!'
   self.spriteSquisher:wiggle(.1)

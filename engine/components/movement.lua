@@ -24,6 +24,8 @@ local AngleSnap = require 'engine.enums.angle_snap'
 ---@field motionY number
 ---@field prevMotionX number
 ---@field prevMotionY number
+---@field bounceOnLand boolean
+---@field bounceCoefficient number -- coefficient 
 local Movement = Class { __includes = Component,
   init = function(self, entity, args)
     if args == nil then
@@ -61,6 +63,7 @@ local Movement = Class { __includes = Component,
     self.gravity = args.gravity
     self.maxFallSpeed = args.maxFallSpeed
 
+    self.bounceOnLand = args.bounceOnLand or false
 
     -- updated values
 
@@ -356,10 +359,26 @@ end
 
 -- land entity on ground
 function Movement:land()
-  -- TODO if Movement.Bounces
-  self.entity:setZPosition(0)
-  self.zVelocity = 0
-  self:emit('landed')
+  -- TODO give names to magic numbers
+  if self.bounceOnLand and self.zVelocity < -1.0 then
+    -- bounce back into the air
+    self.entity:setZPosition(0.1)
+    -- lose some energy on bounce
+    self.zVelocity = -self.zVelocity * 0.5
+    -- damp lateral motion: if speed > 0.25, halve it; otherwise zero it
+    if vector.len(self.motionX, self.motionY) > 0.25 then
+      self.motionX = self.motionX * 0.5
+      self.motionY = self.motionY * 0.5
+    else
+      self.motionX = 0
+      self.motionY = 0
+    end
+    self:emit('bounced')
+  else
+    self.entity:setZPosition(0)
+    self.zVelocity = 0
+    self:emit('landed')
+  end
 end
 
 -- if entity is in air

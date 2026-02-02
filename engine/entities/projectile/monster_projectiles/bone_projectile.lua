@@ -21,6 +21,7 @@ local BoneProjectile = Class { __includes = Projectile,
     self.animDirectionSyncMode = AnimationDirectionSyncMode.none
     self:setCollidesWithLayer({'tile'})
     self:setCollisionTiles('wall')
+    self.bounceOnCrash = true
 
     self.hitbox:resize(10, 10)
     self.hitbox:setCollisionTag(self.collisionTag)

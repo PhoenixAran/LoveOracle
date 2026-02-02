@@ -51,6 +51,8 @@ end
 ---@field collisionTiles integer
 ---@field moveCollisions any[]
 local MoverEntity = Class { __includes = Entity,
+  ---@param self MoverEntity
+  ---@param table
   init = function(self, args)
     -- Initialization code here
     Entity.init(self, args)
@@ -66,6 +68,10 @@ local MoverEntity = Class { __includes = Entity,
     -- move filters
     self.moveFilter = defaultMoveFilter
     self.roomEdgeCollisionBoxMoveFilter = defaultRoomEdgeCollisionBoxMoveFilter
+
+    self.movement:connect('landed', self, 'onLand')
+    self.movement:connect('bounced', self, 'onBounce')
+    
   end
 }
 
@@ -274,6 +280,18 @@ function MoverEntity:testMove()
   local collisions = TablePool.obtain()
   local tvx, tvy = self:_handleMove(collisions, true)
   return tvx, tvy, collisions
+end
+
+-- Signal responses to movement component
+
+--- overridable callback to movement component landed signal
+function MoverEntity:onLand()
+
+end
+
+---overridable callback to movement component bounced signal
+function MoverEntity:onBounce()
+
 end
 
 return MoverEntity

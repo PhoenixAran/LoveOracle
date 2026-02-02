@@ -94,8 +94,6 @@ local Stalfos = Class { __includes = BasicEnemy,
 
     -- stalfos
     self.jumpDelayTimer = 0
-
-    self.movement:connect('landed', self, 'onLand')
   end
 }
 
