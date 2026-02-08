@@ -25,7 +25,6 @@ local AngleSnap = require 'engine.enums.angle_snap'
 ---@field prevMotionX number
 ---@field prevMotionY number
 ---@field bounceOnLand boolean
----@field bounceCoefficient number -- coefficient 
 local Movement = Class { __includes = Component,
   init = function(self, entity, args)
     if args == nil then
@@ -228,6 +227,8 @@ function Movement:setAngleSnap(value)
   self.angleSnap = value
 end
 
+
+
 --- calculate linear velocity for this frame
 ---@return number linearVelocityX
 ---@return number linearVelocityY
@@ -359,8 +360,9 @@ end
 
 -- land entity on ground
 function Movement:land()
-  -- TODO give names to magic numbers
+  print ('landed with zvelocity ', self.zVelocity)
   if self.bounceOnLand and self.zVelocity < -1.0 then
+
     -- bounce back into the air
     self.entity:setZPosition(0.1)
     -- lose some energy on bounce

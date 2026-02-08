@@ -986,7 +986,7 @@ function Player:debugDraw(entDebugDrawFlags)
 end
 
 function Player:getInspectorProperties()
-  local props = Entity.getInspectorProperties(self)
+  local props = MapEntity.getInspectorProperties(self)
   props:setGroup('States')
   props:addReadOnlyString('Environment',
     ---@param player Player

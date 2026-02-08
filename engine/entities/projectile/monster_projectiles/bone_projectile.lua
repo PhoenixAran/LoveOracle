@@ -31,6 +31,8 @@ local BoneProjectile = Class { __includes = Projectile,
     self.hitbox.damageInfo.hitstunTime = 8
     self.hitbox.damageInfo.intangibilityTime = 8
 
+    self.movement.bounceOnLand = true
+
     -- set collision reactions
     self:setInteraction(CollisionTag.player, Interactions.damageOther)
   end

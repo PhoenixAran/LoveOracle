@@ -294,4 +294,17 @@ function MoverEntity:onBounce()
 
 end
 
+function MoverEntity:getInspectorProperties()
+  local props = Entity.getInspectorProperties(self)
+  props:setGroup('Movement')
+  props:addReadOnlyFloat('speed', self.getSpeed)
+  props:addReadOnlyFloat('Z Velocity', function()
+    local zVel = self.movement:getZVelocity()
+    if zVel == nil then zVel = 0 end
+    return zVel
+  end, false)
+  props:setGroup()
+  return props
+end
+
 return MoverEntity

@@ -17,9 +17,7 @@ local EffectEntity = Class{ __includes = Entity,
     self.effectAnimation = args.effectAnimation
     self.time = args.time
     self.effectSound = args.sound
-    self.movement = Movement()
-
-
+    self.movement = Movement(self)
   end
 }
 
@@ -61,6 +59,9 @@ function EffectEntity:update()
 
   if effectEnded then
     self:destroy()
+  else
+    self.movement:update()
+    print(self:getZPosition())
   end
 end
 
@@ -69,7 +70,7 @@ function EffectEntity:draw()
     local spriteFrame = self.spriteAnimationUpdater:getCurrentSprite()
     if spriteFrame then
       local x, y = self:getPosition()
-      spriteFrame:getSprite():draw(x, y)
+      spriteFrame:getSprite():draw(x, y - self:getZPosition())
     end
   end
 end
