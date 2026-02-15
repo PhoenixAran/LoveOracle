@@ -188,7 +188,7 @@ function RoomTransitionState:draw()
 
   -- HUD placeholder
   love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
-  love.graphics.rectangle('fill', 0, 144 - 16, 160, 16)
+  love.graphics.rectangle('fill', 0, 144 - 16, 256, 16)
   love.graphics.setColor(1,1,1)
   love.graphics.setFont(AssetManager.getFont('game_font'))
   love.graphics.print('HUD Placeholder', 8, 130)

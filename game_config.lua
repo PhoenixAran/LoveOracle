@@ -20,10 +20,10 @@ local controls = {
 local window = {
   title = "Love Oracle " .. version,
   displayConfig = {
-    gameWidth = 160,
-    gameHeight = 144,
-    virtualWidth = 1280,
-    virtualHeight = 720
+    gameWidth = 16 * 16,
+    gameHeight = (8 * 16) + 16,
+    virtualWidth = 1024,
+    virtualHeight = 576
   }
 }
 

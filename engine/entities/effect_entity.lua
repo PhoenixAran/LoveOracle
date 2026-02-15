@@ -61,7 +61,6 @@ function EffectEntity:update()
     self:destroy()
   else
     self.movement:update()
-    print(self:getZPosition())
   end
 end
 
