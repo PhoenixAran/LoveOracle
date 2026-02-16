@@ -22,8 +22,8 @@ local window = {
   displayConfig = {
     gameWidth = 16 * 16,
     gameHeight = (8 * 16) + 16,
-    virtualWidth = 1024,
-    virtualHeight = 576
+    virtualWidth = 1280,
+    virtualHeight = 720
   }
 }
 

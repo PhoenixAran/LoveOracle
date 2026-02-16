@@ -22,8 +22,9 @@ function BaseScreen:drawFPS()
   local monogram = AssetManager.getFont('base_screen_debug')
   love.graphics.setFont(monogram)
   local fps = ("%d fps"):format(love.timer.getFPS())
+  love.graphics.setColor(57 / 255, 255 / 255, 20 / 255)
+  love.graphics.printf(fps, 0, 0, 200, 'left')
   love.graphics.setColor(1, 1, 1)
-  love.graphics.printf(fps, 0, 132, 200, 'left')
 end
 
 function BaseScreen:drawMemory()
