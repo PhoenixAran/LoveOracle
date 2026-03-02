@@ -5,7 +5,7 @@ local SpriteBuilder = require 'engine.utils.sprite_builder'
 local SpriteRendererBuilder = require 'engine.utils.sprite_renderer_builder'
 local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
 local Spriteset = require 'engine.graphics.spriteset'
-
+local NinePatchTexture = require 'engine.graphics.nine_patch_texture'
 
 local SpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
@@ -26,9 +26,11 @@ local SpriteBank = {
   builders = { },
   -- holds SpriteSet instances
   spritesets = { },
+  
+  -- holds nine patch textures
+  ninePatchTextures = { }
 }
 
--- getters and setters for caches
 function SpriteBank.registerSprite(key, sprite)
   assert(not SpriteBank.sprites[key], 'SpriteBank already has sprite with key ' .. key)
   SpriteBank.sprites[key] = sprite
@@ -70,6 +72,16 @@ function SpriteBank.getSpriteset(key)
   return SpriteBank.spritesets[key]
 end
 
+function SpriteBank.registerNinePatchTexture(key, ninePatchTexture)
+  assert(not SpriteBank.ninePatchTextures[key], 'SpriteBank already has nine patch texture with key ' .. key)
+  SpriteBank.ninePatchTextures[key] = ninePatchTexture
+end
+
+function SpriteBank.getNinePatchTexture(key)
+  assert(SpriteBank.ninePatchTextures[key], 'SpriteBank does not have nine patch texture with key ' .. key)
+  return SpriteBank.ninePatchTextures[key]
+end
+
 ---@return SpriteRendererBuilder
 function SpriteBank.createSpriteRendererBuilder()
   return SpriteRendererBuilder()
@@ -87,6 +99,30 @@ end
 
 function SpriteBank.createSpriteset(spritesetName, sizeX, sizeY)
   return Spriteset(spritesetName, sizeX, sizeY)
+end
+
+---builds a NinePatchTexture
+---adds it to the SpriteBank's ninePatchTextures if a key is provided
+---@param spriteSheet SpriteSheet
+---@param startX integer
+---@param startY integer
+---@return NinePatchTexture
+function SpriteBank.createNinePatchTexture(spriteSheet, startX, startY, key)
+  local ninePatchTexture = NinePatchTexture {
+    spriteSheet:getTexture(startX, startY),
+    spriteSheet:getTexture(startX + 1, startY),
+    spriteSheet:getTexture(startX + 2, startY),
+    spriteSheet:getTexture(startX, startY + 1),
+    spriteSheet:getTexture(startX + 1, startY + 1),
+    spriteSheet:getTexture(startX + 2, startY + 1),
+    spriteSheet:getTexture(startX, startY + 2),
+    spriteSheet:getTexture(startX + 1, startY + 2),
+    spriteSheet:getTexture(startX + 2, startY + 2)
+  }
+  if key then
+    SpriteBank.registerNinePatchTexture(key, ninePatchTexture)
+  end
+  return ninePatchTexture
 end
 
 function SpriteBank.initialize(path)

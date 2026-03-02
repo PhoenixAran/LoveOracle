@@ -9,7 +9,10 @@ local controls = {
     b = {'key:z', 'button:b'},
     x = {'key:x', 'button:y' },
     y = {'key:c', 'button:x'},
-    leftClick = { 'mouse:1' }
+    leftClick = { 'mouse:1' },
+
+    start = { 'key:kpenter', 'button:start'},
+    select = {'key:rshift', 'button:back'}
   },
   pairs = {
     move = { 'left', 'right', 'up', 'down' }

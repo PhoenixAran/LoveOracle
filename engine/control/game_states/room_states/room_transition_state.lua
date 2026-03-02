@@ -173,6 +173,8 @@ end
 
 function RoomTransitionState:draw()
   local entities = self.control:getEntities()
+  local gameControl = self.control.control
+  local hud = gameControl:getHud()
   local entityDebugDrawFlags = self.control.control.entityDebugDrawFlags
   local w,h = Camera.getSize()
   Camera.push()
@@ -185,13 +187,7 @@ function RoomTransitionState:draw()
       entities:debugDrawEntities(x,y,w,h, entityDebugDrawFlags)
     end
   Camera.pop()
-
-  -- HUD placeholder
-  love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
-  love.graphics.rectangle('fill', 0, 144 - 16, 256, 16)
-  love.graphics.setColor(1,1,1)
-  love.graphics.setFont(AssetManager.getFont('game_font'))
-  love.graphics.print('HUD Placeholder', 8, 130)
+  hud:draw()
 end
 
 return RoomTransitionState

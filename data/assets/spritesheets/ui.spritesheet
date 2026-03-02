@@ -1,0 +1,3 @@
+# argument examples below
+# <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 3)
+"inventory_panel", "inventory_panel", 16, 16

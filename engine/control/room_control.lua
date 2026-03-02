@@ -4,6 +4,7 @@ local vector = require 'engine.math.vector'
 local GameState = require 'engine.control.game_state'
 local GameStateStack = require 'engine.control.game_state_stack'
 local Entities = require 'engine.entities.entities'
+local Input = require('engine.singletons').input
 
 local GRID_SIZE = require('constants').GRID_SIZE
 local RoomTransitionState = require 'engine.control.game_states.room_states.room_transition_state'
@@ -17,6 +18,7 @@ local RoomTransitionState = require 'engine.control.game_states.room_states.room
 ---@field currentRoom Room?
 ---@field allowRoomTransition boolean
 ---@field roomStateStack GameStateStack
+---@field gameStateInventory GameState? the inventory game state type. Made abstract to keep the inventory implementation flexible and decoupled from the main engine. If nil uses default engine provided inventory system
 local RoomControl = Class { __includes = GameState,
   init = function(self, map, player)
     GameState.init(self)
@@ -30,6 +32,7 @@ local RoomControl = Class { __includes = GameState,
     self.currentRoom = nil
     self.allowRoomTransition = true
     self.roomStateStack = GameStateStack(self)
+    self.gameStateInventiroy = nil
   end
 }
 
@@ -110,9 +113,18 @@ function RoomControl:onEnd()
 end
 
 function RoomControl:update()
+  -- update current room
   local roomState = self.roomStateStack:getCurrentState()
   if roomState then
     roomState:update()
+
+    if roomState:getType() == 'room_normal_state' then
+      -- todo update hud
+      if self.gameStateInventory then
+        
+      end
+      
+    end
   end
 end
 

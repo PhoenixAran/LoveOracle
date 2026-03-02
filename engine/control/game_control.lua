@@ -8,6 +8,7 @@ local GameStateStack = require 'engine.control.game_state_stack'
 local GameConfig = require 'game_config'
 local Consts = require 'constants'
 local Camera = require 'engine.camera'
+local Hud = require 'engine.control.hud'
 
 local RoomControl = require 'engine.control.room_control'
 local RoomNormalState = require 'engine.control.game_states.room_states.room_normal_state'
@@ -28,6 +29,7 @@ local console = require 'lib.console'
 ---@field roomControl RoomControl
 ---@field gameStateStack GameStateStack
 ---@field entityDebugDrawFlags integer
+---@field hud Hud
 local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()
@@ -39,6 +41,8 @@ local GameControl = Class { __includes = SignalObject,
     self.gameStateStack = GameStateStack(self)
     self.entityDebugDrawFlags = 0
     --self.entityDebugDrawFlags = bit.bor(EntityDebugDrawFlags.BumpBox, EntityDebugDrawFlags.RoomBox, EntityDebugDrawFlags.HitBox)
+
+    self.hud = Hud()
   end
 }
 
@@ -74,6 +78,15 @@ end
 ---@param map Map    
 function GameControl:setMap(map)
   self.map = map
+end
+
+function GameControl:getHud()
+  return self.hud
+end
+
+---@param hud Hud
+function GameControl:setHud(hud)
+  self.hud = hud
 end
 
 --- creates the initial room control state. called when game starts

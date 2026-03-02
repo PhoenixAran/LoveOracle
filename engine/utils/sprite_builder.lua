@@ -5,6 +5,7 @@ local Sprite = require 'engine.graphics.sprite'
 local PrototypeSprite = require 'engine.graphics.prototype_sprite'
 local CompositeSprite = require 'engine.graphics.composite_sprite'
 local ColorSprite = require 'engine.graphics.color_sprite'
+local NinePatchSprite = require 'engine.graphics.nine_patch_sprite'
 
 local AssetManager = require 'engine.asset_manager'
 local Subtexture = require 'engine.graphics.subtexture'
@@ -36,6 +37,12 @@ function SpriteBuilder:setSpriteSheet(spriteSheet)
   else
     self.spriteSheet = spriteSheet
   end
+end
+
+--- get the current underlying spritesheet
+---@return SpriteSheet?
+function SpriteBuilder:getSpriteSheet()
+  return self.spriteSheet
 end
 
 ---builds a basic sprite
@@ -105,6 +112,17 @@ end
 ---@return ColorSprite
 function SpriteBuilder:buildColorSprite(sprite, paletteKey, offsetX, offsetY)
   return ColorSprite(sprite, paletteKey, offsetX, offsetY)
+end
+
+
+--- builds nine patch sprite
+--- Note that this takes NinePatchTextures, so it is independent from the spritesheet
+---@param ninePatchTexture NinePatchTexture
+---@param width integer
+---@param height integer
+---@param alpha number?
+function SpriteBuilder:buildNinePatchSprite(ninePatchTexture, width, height, alpha)
+  return NinePatchSprite(ninePatchTexture, width, height, alpha)
 end
 
 return SpriteBuilder

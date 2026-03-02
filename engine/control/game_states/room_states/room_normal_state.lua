@@ -21,6 +21,7 @@ function RoomNormalState:update()
   local entities = self.control.entities
   local room = self.control.currentRoom
   assert(room)
+  -- update entities, camera, and tile animations
   entities:update()
   Camera.update()
   room:updateAnimatedTiles()
@@ -29,6 +30,7 @@ end
 function RoomNormalState:draw()
   local entities = self.control.entities
   local gameControl = self.control.control
+  local hud = gameControl:getHud()
   assert(gameControl:getType() == 'game_control', 'GameControl expected')
   local entityDebugDrawFlags = gameControl.entityDebugDrawFlags
   Camera.push()
@@ -43,13 +45,7 @@ function RoomNormalState:draw()
       entities:debugDrawEntities(cullX, cullY, cullW, cullH, entityDebugDrawFlags)
     end
   Camera.pop()
-
-  -- HUD placeholder
-  love.graphics.setColor(50 / 255, 50 / 255, 60 / 255)
-  love.graphics.rectangle('fill', 0, 144 - 16, 256, 16)
-  love.graphics.setColor(1,1,1)
-  love.graphics.setFont(AssetManager.getFont('game_font'))
-  love.graphics.print('HUD Placeholder', 8, 130)
+  hud:draw()
 end
 
 return RoomNormalState

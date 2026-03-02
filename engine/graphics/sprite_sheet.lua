@@ -1,6 +1,7 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local Subtexture = require 'engine.graphics.subtexture'
+local NinePatchTexture = require 'engine.graphics.nine_patch_texture'
 
 ---collection of Subtextures organized as a spritesheet
 ---@class SpriteSheet
@@ -47,6 +48,21 @@ function SpriteSheet:getTexture(x, y)
     return self.textures[x]
   end
   return self.textures[(y - 1) * self.colCount + x]
+end
+
+function SpriteSheet:makeNinePatch(leftCornerX, leftCornerY, rightCornerX, rightCornerY)
+  local subtextures = {
+    self:getTexture(leftCornerX, leftCornerY), -- top left
+    self:getTexture(leftCornerX + 1, leftCornerY), -- top middle
+    self:getTexture(rightCornerX, rightCornerY), -- top right
+    self:getTexture(leftCornerX, leftCornerY + 1), -- middle left
+    self:getTexture(leftCornerX + 1, leftCornerY + 1), -- middle middle
+    self:getTexture(rightCornerX, rightCornerY + 1), -- middle right
+    self:getTexture(leftCornerX, rightCornerY), -- bottom left
+    self:getTexture(leftCornerX + 1, rightCornerY), -- bottom middle
+    self:getTexture(rightCornerX, rightCornerY) -- bottom right
+  }
+  return NinePatchTexture(subtextures)
 end
 
 ---number of subtextures in spritesheet

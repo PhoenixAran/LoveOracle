@@ -99,6 +99,18 @@
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
                  "x":296,
                  "y":148
+                }, 
+                {
+                 "id":96,
+                 "properties":[
+                        {
+                         "name":"pathScript",
+                         "type":"string",
+                         "value":"move 5, 0;\npause 1;\ninitial_position;\npause 1;"
+                        }],
+                 "template":"..\/templates\/objects\/1x2_platform.tj",
+                 "x":320,
+                 "y":176
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -114,8 +126,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":20,
-                 "y":20
+                 "x":416,
+                 "y":160
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -124,7 +136,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":96,
+ "nextobjectid":97,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",
