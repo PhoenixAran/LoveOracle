@@ -2,15 +2,19 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 local GameState = require 'engine.control.game_state'
-
+local AssetManager = require 'engine.asset_manager'
+local SpriteBank = require 'engine.banks.sprite_bank'
 
 --- Game state for inventory screen
 --- The default engine implementation if data directory does not implement one
 ---@class GameStateInventory : GameState
-local GameStateInventory = Class {
+---@field lastRoomState GameState? the last room state that was active. Used to pass into the inventory game state when it is opened from a room state, so that the inventory can be drawn over the gameplay screen
+local GameStateInventory = Class { __includes = GameState,
   init = function(self, args)
     -- Initialization code here
     GameState.init(self)
+    self.lastRoomState = args.lastRoomState
+    
   end
 }
 
@@ -27,9 +31,11 @@ function GameStateInventory:update()
 end
 
 function GameStateInventory:draw()
-  love.graphics.setColor(0, 0, 0, 0.5)
-  love.graphics.rectangle('fill', 0, 0, 256, 144)
-  love.graphics.setColor(1,1,1)
+  local font = AssetManager.getFont('game_font')
+  if self.lastRoomState then
+    self.lastRoomState:draw()
+  end
+  love.graphics.setFont(font)
   love.graphics.printf('Inventory Screen Placeholder', 0, 72 - 6, 256, 'center')
 end
 

@@ -1,6 +1,5 @@
 local lume = require 'lib.lume'
 local json = require 'lib.json'
-local ffi = require 'ffi'
 local FileHelper = require 'engine.utils.file_helper'
 local SpriteSheet = require 'engine.graphics.sprite_sheet'
 local AssetManager = require 'engine.asset_manager'
@@ -80,7 +79,7 @@ local function parseObject(jObject)
     local template = tiledTemplates[templateKey]
     for k, v in pairs(template.object) do
       if k == 'properties' then
-        -- handle this later
+        -- handle this down below later
         templateProperties = parsePropertyDict(v)
       elseif tiledObject[k] == nil then
         -- inject value from template into tiled object if instance does not have data for given field
@@ -133,15 +132,21 @@ local function parseObject(jObject)
   return tiledObject
 end
 
+
 local function getDecompressedData(data)
-  local tileGids = { }
-  -- cast data as uint array
-  local ptr = ffi.cast('uint32_t*', data)
-  for i = 0, (data:len() / ffi.sizeof('uint32_t')) - 1 do
-    lume.push(tileGids, tonumber(ptr[i]))
+  local tileGids = {}
+  local pos = 1
+  local count = math.floor(#data / 4)
+
+  for i = 1, count do
+    local gid
+    gid, pos = love.data.unpack("<I4", data, pos) -- little-endian uint32
+    tileGids[i] = gid
   end
+
   return tileGids
 end
+
 
 -- layer parsing
 -- Only tilelayer and objectgroup is supported. The only ones I'll probably use

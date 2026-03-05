@@ -8,6 +8,7 @@ local Input = require('engine.singletons').input
 
 local GRID_SIZE = require('constants').GRID_SIZE
 local RoomTransitionState = require 'engine.control.game_states.room_states.room_transition_state'
+local GameStateInventory = require 'engine.control.game_states.game_state_inventory'
 
 ---@class RoomControl : GameState
 ---@field player Player
@@ -18,7 +19,6 @@ local RoomTransitionState = require 'engine.control.game_states.room_states.room
 ---@field currentRoom Room?
 ---@field allowRoomTransition boolean
 ---@field roomStateStack GameStateStack
----@field gameStateInventory GameState? the inventory game state type. Made abstract to keep the inventory implementation flexible and decoupled from the main engine. If nil uses default engine provided inventory system
 local RoomControl = Class { __includes = GameState,
   init = function(self, map, player)
     GameState.init(self)
@@ -32,7 +32,7 @@ local RoomControl = Class { __includes = GameState,
     self.currentRoom = nil
     self.allowRoomTransition = true
     self.roomStateStack = GameStateStack(self)
-    self.gameStateInventiroy = nil
+
   end
 }
 
@@ -118,12 +118,10 @@ function RoomControl:update()
   if roomState then
     roomState:update()
 
-    if roomState:getType() == 'room_normal_state' then
-      -- todo update hud
-      if self.gameStateInventory then
-        
+    if roomState:getType() == 'room_normal_state' then  -- we have updated a tick from the room normal state
+      if Input:down('start') then
+        self.control:openInventoryMenu()
       end
-      
     end
   end
 end

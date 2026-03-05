@@ -26,7 +26,7 @@ function Hud:initialize()
 end
 
 function Hud:update()
-  
+
 end
 
 function Hud:draw()

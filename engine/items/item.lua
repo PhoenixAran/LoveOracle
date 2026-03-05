@@ -68,7 +68,7 @@ function Item:isButtonDown()
 end
 
 function Item:isButtonPressed()
-    for _, button in ipairs(self.useButtons) do
+  for _, button in ipairs(self.useButtons) do
     if Input:pressed(button) then
       return true
     end
