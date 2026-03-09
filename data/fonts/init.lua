@@ -3,4 +3,5 @@ return makeModuleFunction(function(loadFontFunc)
   -- font for base screen on screen print
   loadFontFunc('data/assets/fonts/robotomono.ttf', 'base_screen_debug', 16)
   loadFontFunc('data/assets/fonts/harvest-moon-fomt.ttf', 'game_font', 16)
+  loadFontFunc('data/assets/fonts/pixuf.ttf', 'ui_panel_label', 8)
 end)

@@ -4,17 +4,26 @@ local vector = require 'engine.math.vector'
 local GameState = require 'engine.control.game_state'
 local AssetManager = require 'engine.asset_manager'
 local SpriteBank = require 'engine.banks.sprite_bank'
+local Input = require('engine.singletons').input
+local NLay = require 'lib.nlay'
+local GameConfig = require 'game_config'
+
 
 --- Game state for inventory screen
 --- The default engine implementation if data directory does not implement one
 ---@class GameStateInventory : GameState
 ---@field lastRoomState GameState? the last room state that was active. Used to pass into the inventory game state when it is opened from a room state, so that the inventory can be drawn over the gameplay screen
+---@field itemPanel NinePatchSprite the panel that items are drawn on in the inventory
+---@field itemPanelRect NLay.Constraint
+---@field itemDetailsPanel NinePatchSprite the panel that item details are drawn on in the inventory
+---@field itemDetailsPanelRect NLay.Constraint
 local GameStateInventory = Class { __includes = GameState,
   init = function(self, args)
     -- Initialization code here
     GameState.init(self)
     self.lastRoomState = args.lastRoomState
-    
+    self.itemPanel = SpriteBank.getSprite('item_panel_9')
+    self.itemDetailsPanel = SpriteBank.getSprite('item_details_panel_9')
   end
 }
 
@@ -22,22 +31,73 @@ function GameStateInventory:getType()
   return 'game_state_inventory'
 end
 
+
+---@param ninePatchSprite NinePatchSprite
+function GameStateInventory:drawMenuPanel(ninePatchSprite)
+
+end
+
 function GameStateInventory:onBegin()
-  
+  -- set up NLay layout
+  local uiPadding = 4
+  NLay.update(0, 0, GameConfig.window.displayConfig.gameWidth, GameConfig.window.displayConfig.gameHeight)
+  local root = NLay
+
+  -- top left
+  self.itemPanelRect = NLay.constraint(root, root, root, nil, nil, uiPadding) 
+                           :size(self.itemPanel:getWidth(), self.itemPanel:getHeight())
+
+  -- top right
+  self.itemDetailsPanelRect = NLay.constraint(root, root, nil, nil, root, uiPadding)
+                            :size(self.itemDetailsPanel:getWidth(), self.itemDetailsPanel:getHeight())
+                
+
+
 end
 
 function GameStateInventory:update()
-
+  if Input:pressed('start') then
+    self:endState()
+  end
 end
 
 function GameStateInventory:draw()
-  local font = AssetManager.getFont('game_font')
   if self.lastRoomState then
     self.lastRoomState:draw()
   end
+  local font = AssetManager.getFont('game_font')
   love.graphics.setFont(font)
-  love.graphics.printf('Inventory Screen Placeholder', 0, 72 - 6, 256, 'center')
+
+  self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEMS', 12)
+  self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
 end
+
+function GameStateInventory:drawPanel(rectConstraint, panelSprite, panelLabel, xPadding)
+  if xPadding == nil then
+    xPadding = 4
+  end
+  local itemPanelX, itemPanelY, itemPanelW, itemPanelH = rectConstraint:get()
+  panelSprite:setWidth(itemPanelW)
+  panelSprite:setHeight(itemPanelH)
+  panelSprite:draw(itemPanelX + itemPanelW / 2, itemPanelY + itemPanelH / 2, 1)
+
+  if panelLabel then
+    local font = AssetManager.getFont('ui_panel_label')
+    love.graphics.setFont(font)
+
+    local textX = itemPanelX + 12
+    local textY = itemPanelY
+    local textW = font:getWidth(panelLabel) + 4
+    local textH = font:getHeight()
+
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.rectangle("fill", textX - 2, textY, textW, textH)
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(panelLabel, textX, textY)
+  end
+end
+
 
 
 return GameStateInventory

@@ -1,4 +1,4 @@
-local version = '0.0.17.0'
+local version = '0.0.18.0'
 local controls = {
   controls = {
     left = {'key:left', 'axis:leftx-', 'button:dpleft'},
@@ -11,7 +11,7 @@ local controls = {
     y = {'key:c', 'button:x'},
     leftClick = { 'mouse:1' },
 
-    start = { 'key:kpenter', 'button:start'},
+    start = { 'key:p', 'button:start'},
     select = {'key:rshift', 'button:back'}
   },
   pairs = {
@@ -23,10 +23,10 @@ local controls = {
 local window = {
   title = "Love Oracle " .. version,
   displayConfig = {
-    gameWidth = 16 * 16,
-    gameHeight = (8 * 16) + 16,
-    virtualWidth = 1280,
-    virtualHeight = 720
+    gameWidth = 256,
+    gameHeight = 144,
+    virtualWidth = 768,
+    virtualHeight = 432
   }
 }
 

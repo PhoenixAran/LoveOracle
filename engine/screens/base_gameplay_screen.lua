@@ -83,7 +83,6 @@ end
 
 function BaseGameplayScreen:draw()
   self.gameControl:draw()
-  self:drawFPS()
   if console.active then
     console.draw()
   end

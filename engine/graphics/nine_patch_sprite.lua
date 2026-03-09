@@ -17,6 +17,7 @@ local NinePatchSprite = Class {
     self.width = width
     self.height = height
     self.originX = width / 2
+    self.originY = height / 2
     self.height = height / 2
     self.alpha = alpha or 1
   end
@@ -33,6 +34,15 @@ end
 function NinePatchSprite:setWidth(width)
   self.width = width
   self.originX = width / 2
+end
+
+function NinePatchSprite:setHeight(height)
+  self.height = height
+  self.originY = height / 2
+end
+
+function NinePatchSprite:getHeight()
+  return self.height
 end
 
 function NinePatchSprite:getDimensions()
@@ -53,75 +63,69 @@ function NinePatchSprite:getBounds()
   return 0, 0, w, h
 end
 
----Helper function to draw a single patch region
----@param x number screen x position
----@param y number screen y position
----@param scaleX number x scale factor
----@param scaleY number y scale factor
-function NinePatchSprite:draw(x, y, alpha, scaleX, scaleY)
--- Adjust x and y to scale around the center
-  local w, h = self.width * scaleX, self.height * scaleY
-  x = x - self.originX * scaleX
-  y = y - self.originY * scaleY
-  
-  local subtextures = self.ninePatchTexture:getSubtextures()
+---@param x number
+---@param y number
+---@param alpha number?   -- 0..1
+function NinePatchSprite:draw(x, y, alpha)
+  alpha = alpha or 1
 
-  -- Get corner/edge dimensions
-  local cornerW1, cornerH1 = subtextures[1]:getDimensions()
-  local edgeW2, edgeH2 = subtextures[2]:getDimensions()
-  local cornerW3, cornerH3 = subtextures[3]:getDimensions()
-  local edgeW4, edgeH4 = subtextures[4]:getDimensions()
-  local centerW5, centerH5 = subtextures[5]:getDimensions()
+  -- position is for the *top-left* of the final rect, respecting origin
+  x = x - self.originX
+  y = y - self.originY
 
-  -- Calculate scaled dimensions
-  local scaledCornerW = cornerW1 * scaleX
-  local scaledCornerH = cornerH1 * scaleY
-  local scaledEdgeW = edgeW4 * scaleX
-  local scaledCenterW = self.width * scaleX - (scaledCornerW * 2)
-  local scaledCenterH = self.height * scaleY - (scaledCornerH * 2)
+  local s = self.ninePatchTexture:getSubtextures()
+
+  -- Dimensions per patch (pixels in the source texture)
+  local w1,h1 = s[1]:getDimensions()
+  local w2,h2 = s[2]:getDimensions()
+  local w3,h3 = s[3]:getDimensions()
+
+  local w4,h4 = s[4]:getDimensions()
+  local w5,h5 = s[5]:getDimensions()
+  local w6,h6 = s[6]:getDimensions()
+
+  local w7,h7 = s[7]:getDimensions()
+  local w8,h8 = s[8]:getDimensions()
+  local w9,h9 = s[9]:getDimensions()
+
+  -- Corner sizes in the final rect (keep corners unscaled by default)
+  local leftW   = w1
+  local rightW  = w3
+  local topH    = h1
+  local bottomH = h7
+
+  -- Center area size (clamp so it never goes negative)
+  local centerW = math.max(0, self.width - leftW - rightW)
+  local centerH = math.max(0, self.height - topH - bottomH)
 
   love.graphics.setColor(1, 1, 1, alpha)
 
-  -- Draw the 9 patches
-  -- Top-left (1)
-  self:drawPatch(x, y, subtextures[1], 1, 1)
+  -- Row 1
+  self:drawPatch(x,                 y,                  s[1], 1, 1)
+  self:drawPatch(x + leftW,         y,                  s[2], centerW / w2, 1)
+  self:drawPatch(x + leftW+centerW, y,                  s[3], 1, 1)
 
-  -- Top (2)
-  self:drawPatch(x + scaledCornerW, y, subtextures[2], scaledCenterW / edgeW2, 1)
+  -- Row 2
+  self:drawPatch(x,                 y + topH,           s[4], 1, centerH / h4)
+  self:drawPatch(x + leftW,         y + topH,           s[5], centerW / w5, centerH / h5)
+  self:drawPatch(x + leftW+centerW, y + topH,           s[6], 1, centerH / h6)
 
-  -- Top-right (3)
-  self:drawPatch(x + scaledCornerW + scaledCenterW, y, subtextures[3], 1, 1)
+  -- Row 3
+  self:drawPatch(x,                 y + topH+centerH,   s[7], 1, 1)
+  self:drawPatch(x + leftW,         y + topH+centerH,   s[8], centerW / w8, 1)
+  self:drawPatch(x + leftW+centerW, y + topH+centerH,   s[9], 1, 1)
 
-  -- Left (4)
-  self:drawPatch(x, y + scaledCornerH, subtextures[4], 1, scaledCenterH / edgeH4)
-
-  -- Center (5)
-  self:drawPatch(x + scaledCornerW, y + scaledCornerH, subtextures[5], scaledCenterW / centerW5, scaledCenterH / centerH5)
-
-  -- Right (6)
-  self:drawPatch(x + scaledCornerW + scaledCenterW, y + scaledCornerH, subtextures[6], 1, scaledCenterH / edgeH4)
-
-  -- Bottom-left (7)
-  self:drawPatch(x, y + scaledCornerH + scaledCenterH, subtextures[7], 1, 1)
-
-  -- Bottom (8)
-  self:drawPatch(x + scaledCornerW, y + scaledCornerH + scaledCenterH, subtextures[8], scaledCenterW / edgeW2, 1)
-
-  -- Bottom-right (9)
-  self:drawPatch(x + scaledCornerW + scaledCenterW, y + scaledCornerH + scaledCenterH, subtextures[9], 1, 1)
-
-  love.graphics.setColor(1, 1, 1)
+  love.graphics.setColor(1, 1, 1, 1)
 end
 
----Helper function to draw a single patch region
----@param drawX number screen x position
----@param drawY number screen y position
----@param scaleX number x scale factor
----@param scaleY number y scale factor
+---@param drawX number
+---@param drawY number
+---@param subtexture table
+---@param scaleX number
+---@param scaleY number
 function NinePatchSprite:drawPatch(drawX, drawY, subtexture, scaleX, scaleY)
   love.graphics.draw(subtexture.image, subtexture.quad, drawX, drawY, 0, scaleX, scaleY)
 end
-
 function NinePatchSprite:release()
 end
 

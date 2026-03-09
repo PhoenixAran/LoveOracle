@@ -9,7 +9,9 @@ return function(spriteBank)
   local redNinePatch = spriteBank.createNinePatchTexture(spriteBuilder:getSpriteSheet(), 7, 1, 'red_ui_9_patch')
 
   -- construct sprites
-  spriteBuilder:buildNinePatchSprite(greenNinePatch, 32, 32, 1)
+  spriteBank.registerSprite('item_panel_9', spriteBuilder:buildNinePatchSprite(greenNinePatch, 160, 192, 1))
+  spriteBank.registerSprite('item_details_panel_9', spriteBuilder:buildNinePatchSprite(yellowNinePatch, 96, 80, 1))
+  
   -- TODO rest of them
 
 end

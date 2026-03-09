@@ -141,6 +141,9 @@ function GameControl:update()
   if gameState then
     gameState:update()
   end
+  if not gameState.active then
+    self:popState()
+  end
 end
 
 function GameControl:draw()
