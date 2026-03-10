@@ -68,11 +68,14 @@ function GameStateInventory:draw()
   local font = AssetManager.getFont('game_font')
   love.graphics.setFont(font)
 
-  self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEMS', 12)
+  self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEM', 12)
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
 end
 
 function GameStateInventory:drawPanel(rectConstraint, panelSprite, panelLabel, xPadding)
+  -- TODO make NinePatchSprite draw method take width and height?
+  local originalWidth = panelSprite:getWidth()
+  local originalHeight = panelSprite:getHeight()
   if xPadding == nil then
     xPadding = 4
   end
@@ -80,18 +83,29 @@ function GameStateInventory:drawPanel(rectConstraint, panelSprite, panelLabel, x
   panelSprite:setWidth(itemPanelW)
   panelSprite:setHeight(itemPanelH)
   panelSprite:draw(itemPanelX + itemPanelW / 2, itemPanelY + itemPanelH / 2, 1)
+  panelSprite:setWidth(originalWidth)
+  panelSprite:setHeight(originalHeight)
 
   if panelLabel then
     local font = AssetManager.getFont('ui_panel_label')
     love.graphics.setFont(font)
 
-    local textX = itemPanelX + 12
-    local textY = itemPanelY
-    local textW = font:getWidth(panelLabel) + 4
+    -- draw background for text
+    local textW = font:getWidth(panelLabel)
     local textH = font:getHeight()
 
+    local rectW = textW + 4
+    local rectH = textH
+
+    local rectX = itemPanelX + 12 - 2
+    local rectY = itemPanelY
+
     love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.rectangle("fill", textX - 2, textY, textW, textH)
+    love.graphics.rectangle("fill", rectX, rectY, rectW, rectH)
+
+    -- center text inside the rectangle
+    local textX = rectX + (rectW - textW) / 2
+    local textY = rectY + (rectH - textH) / 2
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(panelLabel, textX, textY)
