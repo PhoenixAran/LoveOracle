@@ -20,6 +20,16 @@
             "shortcut": null,
             "showOutput": true,
             "workingDirectory": "%projectpath/../../"
+        },
+        {
+            "arguments": ". %mapfile",
+            "command": "/Applications/love.app/Contents/MacOS/love",
+            "enabled": true,
+            "name": "test_map_macos",
+            "saveBeforeExecute": true,
+            "shortcut": null,
+            "showOutput": true,
+            "workingDirectory": "%projectpath/../../"
         }
     ],
     "extensionsPath": "extensions",
