@@ -7,15 +7,15 @@ local controls = {
     down = {'key:down', 'axis:lefty+', 'button:dpdown'}, 
 
     a = {'key:space', 'button:a'},
-    b = {'key:c', 'button:b'},
+    b = {'key:c', 'button:b' },
     x = {'key:x', 'button:y' },
     y = {'key:z', 'button:x'},
 
     leftShoulder = {'key:lshift', 'button:leftshoulder'},
-    leftTrigger = {'key:i', 'axis:triggerleft'},
+    leftTrigger = {'key:i', 'axis:triggerleft+'},
 
     rightShoulder = {'key:lctrl', 'button:rightshoulder'},
-    rightTrigger = {'key:o', 'axis:triggerright'},
+    rightTrigger = {'key:o', 'axis:triggerright+'},
 
 
     leftClick = { 'mouse:1' },
@@ -26,7 +26,8 @@ local controls = {
   pairs = {
     move = { 'left', 'right', 'up', 'down' }
   },
-  joystick = love.joystick.getJoysticks()[1]
+  joystick = love.joystick.getJoysticks()[1],
+  deadzone = 0.33
 }
 
 local window = {

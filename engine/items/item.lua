@@ -1,28 +1,41 @@
 local Class = require 'lib.class'
 local Entity = require 'engine.entities.entity'
-local ItemUseParameters = require 'engine.items.item_use_parameters'
 local Input = require('engine.singletons').input
 
 ---@class Item : Entity
----@field useParameters ItemUseParameters
+---@field id string
+---@field name string[] names indexed by level
+---@field description string[] descriptions indexed by level
+---@field maxLevel integer max level of this item
+---@field message string[] message shown when item is obtained, indexed by level
+---@field price integer[] price of item in shop, indexed by level
 ---@field player Player
 ---@field level integer
 ---@field useButtons string[]
 ---@field drawBelow nil|function
 ---@field drawAbove nil|function
+---@field itemRewardHoldsType ItemRewardsHoldType how the player visually holds the reward when collected
 local Item = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
-    self.useParameters = ItemUseParameters()
+    self.id = args.id or nil
+    self.names = { }
     self.name = nil
     self.level = 0
     self.useButtons = { }
+    self.prices = { }
     self.player = nil
+    self.itemRewardsHoldType = args.itemRewardsHoldType or 0
+
   end
 }
 
 function Item:getType()
   return 'item'
+end
+
+function Item:isEquippable()
+  return false
 end
 
 function Item:getName()
@@ -33,9 +46,6 @@ function Item:onAwake()
 
 end
 
-function Item:getUseParameters()
-  return self.useParameters
-end
 
 function Item:getPlayer()
   return self.player
@@ -50,9 +60,7 @@ function Item:getLevel()
   return self.level
 end
 
-function Item:isTwoHanded()
-  return self.useParameters.twoHanded
-end
+
 
 function Item:getUseButton()
   return self.useButtons
