@@ -5,15 +5,24 @@ local controls = {
     right = {'key:right','axis:leftx+', 'button:dpright'},
     up = {'key:up', 'axis:lefty-', 'button:dpup'},
     down = {'key:down', 'axis:lefty+', 'button:dpdown'}, 
-    a = {'key:space', 'button:a'},
-    b = {'key:z', 'button:b'},
-    x = {'key:x', 'button:y' },
-    y = {'key:c', 'button:x'},
-    leftClick = { 'mouse:1' },
 
+    a = {'key:space', 'button:a'},
+    b = {'key:c', 'button:b'},
+    x = {'key:x', 'button:y' },
+    y = {'key:z', 'button:x'},
+
+    leftShoulder = {'key:lshift', 'button:leftshoulder'},
+    leftTrigger = {'key:i', 'axis:triggerleft'},
+
+    rightShoulder = {'key:lctrl', 'button:rightshoulder'},
+    rightTrigger = {'key:o', 'axis:triggerright'},
+
+
+    leftClick = { 'mouse:1' },
     start = { 'key:p', 'button:start'},
-    select = {'key:rshift', 'button:back'}
+    select = {'key:k', 'button:back'}
   },
+
   pairs = {
     move = { 'left', 'right', 'up', 'down' }
   },
@@ -25,8 +34,8 @@ local window = {
   displayConfig = {
     gameWidth = 256,
     gameHeight = 144,
-    virtualWidth = 768,
-    virtualHeight = 432
+    virtualWidth = 1024,
+    virtualHeight = 576
   }
 }
 

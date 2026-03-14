@@ -1,7 +1,7 @@
 # Zelda Oracle
 
 Fan made Zelda game.
-Requires [LOVE 11.5](https://love2d.org/) and [Tiled 1.9](https://thorbjorn.itch.io/tiled).   
+Requires [LOVE 11.5](https://love2d.org/) and [Tiled 1.10](https://thorbjorn.itch.io/tiled).   
 
 ![screenshot of game](readme_picture.png)
 

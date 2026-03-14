@@ -87,7 +87,7 @@ function love.load(args)
     -- resolution solution arguments
     game_width = gameConfig.window.displayConfig.gameWidth,
     game_height = gameConfig.window.displayConfig.gameHeight,
-    scale_mode = 1
+    scale_mode = 3
   })
   
   -- build content here (need it for font)

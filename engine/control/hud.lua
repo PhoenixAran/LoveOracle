@@ -4,6 +4,8 @@ local vector = require 'engine.math.vector'
 local SignalObject = require 'engine.signal_object'
 local AssetManager = require 'engine.asset_manager'
 
+
+-- TODO implement
 ---@class Hud
 ---@field dynamicCurrency number -- used to slowly increment currency count
 ---@field dynamicHealth number -- used to slowly increment health count
