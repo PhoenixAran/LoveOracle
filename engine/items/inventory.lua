@@ -7,7 +7,7 @@ local SLOT_ITEM_1 = 2
 local SLOT_ITEM_2 = 3
 
 ---@class Inventory
----@field items table<string, Item>
+---@field items table<string, Item|ItemEquipment>
 ---@field ammos table<string, Ammo>
 ---@field equippedItems Item[]
 ---@field gameControl GameControl?

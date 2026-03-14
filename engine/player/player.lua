@@ -921,7 +921,6 @@ function Player:update()
   end
 
   -- check push tile if we are not ledge jumping
-  local EPSILON = 0.001
   if tvx == 0 and tvy == 0 then
     local movementDir8 = self.movement:getDirection8()
     if movementDir8 == Direction8.up or movementDir8 == Direction8.down
@@ -939,16 +938,16 @@ end
 
 function Player:draw()
   for _, item in pairs(self.items) do
-    if item.drawBelow and item:isVisible() then
-      item:drawBelow()
+    if item:isVisible() then
+      item:drawUnder()
     end
   end
 
   MapEntity.draw(self)
 
   for _, item in pairs(self.items) do
-    if item.drawAbove and item:isVisible() then
-      item:drawAbove()
+    if item:isVisible() then
+      item:drawOver()
     end
   end
 end

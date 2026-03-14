@@ -34,7 +34,7 @@ end
 
 function ItemSword:onAwake()
   self.hitbox:entityAwake()
-  self.hitbox:addIgnoreHitbox(self.player.hitbox)
+  self.hitbox:addIgnoreHitbox(self:getPlayer().hitbox)
   self.hitbox:setEnabled(false)
 end
 
@@ -44,9 +44,9 @@ function ItemSword:getType()
 end
 
 function ItemSword:onButtonPressed()
-  local swingSwordState = self.player:getStateFromCollection('player_swing_state')
+  local swingSwordState = self:getPlayer():getStateFromCollection('player_swing_state')
   swingSwordState.weapon = self
-  self.player:beginWeaponState(swingSwordState)
+  self:getPlayer():beginWeaponState(swingSwordState)
   return true
 end
 
