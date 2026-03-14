@@ -12,9 +12,12 @@ local Input = require('engine.singletons').input
 ---@field player Player
 ---@field level integer
 ---@field useButtons string[]
----@field drawBelow nil|function
----@field drawAbove nil|function
+---@field ammo Ammo[] ammo types used by this item, indexed by level
+---@field levelUpAmmo boolean if ammo type should match level. If not, ammo[1] will be used for all levels
+---@field maxAmmo integer[] max ammo for this item, indexed by level
 ---@field itemRewardHoldsType ItemRewardsHoldType how the player visually holds the reward when collected
+---@field isLost boolean
+---@field isObtained boolean
 local Item = Class { __includes = Entity,
   init = function(self, args)
     Entity.init(self, args)
@@ -26,7 +29,8 @@ local Item = Class { __includes = Entity,
     self.prices = { }
     self.player = nil
     self.itemRewardsHoldType = args.itemRewardsHoldType or 0
-
+    self.isLost = args.isLost or false
+    self.isObtained = args.isObtained or false
   end
 }
 
@@ -60,8 +64,6 @@ function Item:getLevel()
   return self.level
 end
 
-
-
 function Item:getUseButton()
   return self.useButtons
 end
@@ -84,23 +86,6 @@ function Item:isButtonPressed()
   return false
 end
 
--- feel free to override this
-function Item:isUsable()
-  local player = self.player
-  if not player:getStateParameters().canUseWeapons then
-    return false
-  elseif player:isInAir() and not self.useParameters.usableWhileJumping then
-    return false
-  elseif self.player:getWeaponState() ~= nil and
-          self.player:getWeaponState():getType() == 'sword' and -- TODO: add sword state checks as time goes on
-          not self.useParameters.usableWithSword then
-    return false
-  end
-  -- TODO check if player is in hole
-  return true
-end
-
-
 ---@param sender Hitbox
 function Item:overridesInteraction(sender)
 end
@@ -113,6 +98,38 @@ end
 -- called when items are pressed this frame
 function Item:onButtonPressed()
   return false
+end
+
+
+--- formerly onInitialize
+--- called when item is added to the Inventory list
+function Item:onAddedToInventoryList()
+
+end
+
+--- called when the item's level has increased
+function Item:onItemLevelUp()
+
+end
+
+--- called when the item is obtained
+function Item:onObtained()
+
+end
+
+--- called when the item is unobtained
+function Item:onUnobtained()
+
+end
+
+--- called when the item is lost
+function Item:onLost()
+
+end
+
+--- called when the item has been reobtained after being lost
+function Item:onReobtained()
+
 end
 
 function Item:update()

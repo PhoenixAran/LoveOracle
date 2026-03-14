@@ -60,7 +60,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field respawnPositionY number
 ---@field respawnDirection4 number
 ---@field moveAnimation string
----@field items table<string, Item?>
+---@field items table<string, ItemEquipment?>
 ---@field previousPositionX number
 ---@field previousPositionY number
 ---@field respawnIndexX integer
@@ -659,7 +659,7 @@ end
 
 -- equip the given item
 -- TODO unequip
----@param item Item
+---@param item ItemEquipment
 function Player:equipItem(item)
   self:addChild(item)
   item:setPlayer(self)

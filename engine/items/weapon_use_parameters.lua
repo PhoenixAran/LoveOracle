@@ -1,12 +1,12 @@
 local Class = require 'lib.class'
 
 -- determines if item can be used
----@class ItemUseParameters
+---@class WeaponUseParameters
 ---@field twoHanded boolean
 ---@field usableWhileJumping boolean
 ---@field usableWithSword boolean
 ---@field usableWhileInHole boolean
-local ItemUseParameters = Class {
+local WeaponUseParameters = Class {
   init = function(self)
     self.twoHanded = false
     -- usable while jumping
@@ -18,8 +18,8 @@ local ItemUseParameters = Class {
   end
 }
 
-function ItemUseParameters:getType()
+function WeaponUseParameters:getType()
   return 'item_use_parameters'
 end
 
-return ItemUseParameters
+return WeaponUseParameters

@@ -1,17 +1,17 @@
 local Class = require 'lib.class'
-local ItemEquipment = require 'engine.items.item_equipment'
+local ItemWeapon = require 'engine.items.item_weapon'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local Hitbox = require 'engine.components.hitbox'
 local CollisionTag = require 'engine.enums.collision_tag'
 
----@class ItemSword : ItemEquipment
+---@class ItemSword : ItemWeapon
 ---@field hitbox Hitbox
 ---@field sprite AnimatedSpriteRenderer
-local ItemSword = Class { __includes = ItemEquipment,
+local ItemSword = Class { __includes = ItemWeapon,
   ---@param self ItemSword 
   ---@param args table
   init = function(self, args)
-    ItemEquipment.init(self, args)
+    ItemWeapon.init(self, args)
     -- declare stuff that will be used in onTransformChanged BEFORE entity constructor
     self.hitbox = Hitbox(self)
     self.hitbox:setCollisionTag(CollisionTag.sword)
