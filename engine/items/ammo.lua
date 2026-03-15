@@ -3,7 +3,6 @@ local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 
 ---@class Ammo
----@field ammoData AmmoData
 ---@field id string
 ---@field container Item
 ---@field name string
@@ -17,36 +16,22 @@ local vector = require 'engine.math.vector'
 ---@field isAvailable boolean
 local Ammo = Class {
   ---@param self Ammo
-  ---@param ammoData AmmoData
-  init = function(self, ammoData)
-    if ammoData == nil then
-      error('AmmoData is required')
-    end
-    self.ammoData = ammoData
-    self.id = lume.uuid()
+  init = function(self, args)
     self.container = nil
-    self.name = ammoData.name
-    self.description = ammoData.description
-    self.obtainMessage = ammoData.obtainMessage
-    self.cantCollectMessage = ammoData.cantCollectMessage
-    self.fullMessage = ammoData.fullMessage
-    self.isAmountBased = ammoData.isAmountBased
+    self.name = args.name
+    self.description = args.description
+    self.obtainMessage = args.obtainMessage
+    self.cantCollectMessage = args.cantCollectMessage
+    self.fullMessage = args.fullMessage
+    self.isAmountBased = args.isAmountBased
     self.amount = 0
-    self.maxAmount = ammoData.maxAmount or 1
+    self.maxAmount = args.maxAmount or 1
     self.isAvailable = true
   end
 }
 
 function Ammo:getType()
   return 'ammo'
-end
-
-function Ammo:getAmmoData()
-  return self.ammoData
-end
-
-function Ammo:getId()
-  return self.id
 end
 
 function Ammo:getContainer()

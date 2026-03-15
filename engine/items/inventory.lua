@@ -2,9 +2,10 @@ local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local ItemBank = require 'engine.banks.item_bank'
 
-local SLOT_SWORD = 1 -- should be hardcoded to always be equipped to sword if it exists
-local SLOT_ITEM_1 = 2
-local SLOT_ITEM_2 = 3
+
+local protectedSlots = {
+  'b', ''
+}
 
 ---@class Inventory
 ---@field items table<string, Item|ItemEquipment>
@@ -35,14 +36,13 @@ function Inventory:getType()
   return 'inventory'
 end
 
-function Inventory:addItem(itemId)
-  self.items[itemId] = ItemBank.getItem(itemId)
-end
-
 function Inventory:removeItem(itemId)
   self.items[itemId] = nil
 end
 
+--- equip an item on the player
+---@param item string|ItemEquipment the item to equip, either an item id or an ItemEquipment instance
+---@param slot string the slot to equip the item to, either 'x', 'y'
 function Inventory:equipItem(itemId, slot)
   local equippableItem
 end

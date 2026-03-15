@@ -162,7 +162,6 @@ local Player = Class { __includes = MapEntity,
       end
     end)
     self:addPressInteraction('a', function(player)
-      -- TODO interact
       self.playerMovementController:jump()
     end)
     self:addPressInteraction('b', function(player)
