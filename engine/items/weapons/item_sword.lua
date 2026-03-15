@@ -55,7 +55,7 @@ function ItemSword:update()
   self.sprite:update()
 end
 
-function ItemSword:drawAbove()
+function ItemSword:drawOver()
   self.sprite:draw()
 end
 

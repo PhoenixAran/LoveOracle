@@ -831,7 +831,7 @@ end
 
 function Player:stopPushing()
   local weaponState = self:getWeaponState()
-  if weaponState == self:getStateFromCollection('player_push_state') then
+  if weaponState and weaponState == self:getStateFromCollection('player_push_state') then
     weaponState:endState()
   end
   self:integrateStateParameters()
@@ -945,6 +945,8 @@ function Player:draw()
   MapEntity.draw(self)
 
   for _, item in pairs(self.items) do
+    print('drawing item' .. item:getType())
+    print(item:getType() .. ' is visible = ' .. tostring(item:isVisible()))
     if item:isVisible() then
       item:drawOver()
     end
