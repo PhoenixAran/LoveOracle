@@ -3,6 +3,7 @@ local Pool = require 'engine.utils.pool'
 
 ---@class PlayerStateParameters
 ---@field animations table<string, string>
+---@field allowMovement boolean
 ---@field canJump boolean
 ---@field canWarp boolean
 ---@field canLedgeJump boolean
@@ -45,6 +46,7 @@ local PlayerStateParameters = Class {
     self.canLedgeJump = true
 
     -- note you can still jump when these are false
+    self.allowMovement = true
     self.canControlOnGround = true
     self.canControlInAir = true
 
@@ -91,6 +93,7 @@ end
 
 ---@param other PlayerStateParameters
 function PlayerStateParameters:integrateParameters(other)
+  self.allowMovement = prioritizeFalse(self.allowMovement, other.allowMovement)
   self.canJump = prioritizeFalse(self.canJump, other.canJump)
   self.canWarp =  prioritizeFalse(self.canWarp, other.canWarp)
   self.canLedgeJump =  prioritizeFalse(self.canLedgeJump, other.canLedgeJump)
@@ -120,6 +123,7 @@ end
 
 function PlayerStateParameters:reset()
     -- default values
+    self.allowMovement = true
     self.canJump = true
     self.canWarp = true
     self.canLedgeJump = true

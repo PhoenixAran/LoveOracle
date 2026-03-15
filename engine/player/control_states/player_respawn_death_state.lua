@@ -86,6 +86,8 @@ end
 
 ---@param previousState PlayerState
 function PlayerRespawnDeathState:onBegin(previousState)
+  -- TODO interrupt weapons self.player:interruptWeapons()
+  self.player:setVector(0, 0)
   self.respawnState = RespawnState.DeathAnimation
   self.stateParameters.canStrafe = true
   self.stateParameters.canControlOnGround = false

@@ -28,12 +28,14 @@ function ItemWeapon:isUsable()
     return false
   elseif player:isInAir() and not self.useParameters.usableWhileJumping then
     return false
+  elseif player:isInHole() and not self.useParameters.usableWhileInHole then
+    return false
   elseif player:getWeaponState() ~= nil and
           player:getWeaponState():getType() == 'sword' and -- TODO: add sword state checks as time goes on
           not self.useParameters.usableWithSword then
     return false
   end
-  -- TODO check if player is in hole
+  -- TODO check if player is in minecart
   return true
 end
 

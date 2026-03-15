@@ -22,7 +22,6 @@ local Inventory = Class { __includes = SignalObject,
 
     self.items = { }
     self.equippedItems = { }
-    self.equippedSlotItems = { }
 
     self.gameControl = gameControl or nil
     self.piecesOfHeart = nil
@@ -40,7 +39,15 @@ function Inventory:getType()
 end
 
 function Inventory:removeItem(itemId)
-  self.items[itemId] = nil
+  local item = self.items[itemId]
+  if item then
+    if lume.any(self.equippedItems, item) then
+      ---@type ItemEquipment
+      local equippableItem = item
+      self:unequipItem(equippableItem)
+      self.items[itemId] = nil
+    end
+  end
 end
 
 --- equip an item on the player
@@ -76,7 +83,7 @@ function Inventory:equipItem(item, slot)
   equippableItem:equip()
 
   -- add to inventory's internal items collection so we can keep track of whats currently equipped
-  lume.push(self.items, equippableItem)
+  lume.push(self.equippedItems, equippableItem)
 end
 
 function Inventory:unequipItem(item)
@@ -92,8 +99,8 @@ function Inventory:unequipItem(item)
   equippableItem:setPlayer(nil)
   equippableItem:clearUseButtons()
 
-  -- remove from our inventory's internal items collection
-  lume.remove(self.items, equippableItem)
+  -- remove from our inventory's internal equipped items collection
+  lume.remove(self.equippedItems, equippableItem)
 end
 
 function Inventory:unequipItemBySlot(slot)
