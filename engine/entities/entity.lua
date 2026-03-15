@@ -228,7 +228,7 @@ function Entity:resize(width, height)
 end
 
 ---adds given entity's transform as child
----@param entity any
+---@param entity Entity
 function Entity:addChild(entity)
   entity.transform:setParent(self.transform)
 end

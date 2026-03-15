@@ -52,7 +52,7 @@ end
 ---@field moveCollisions any[]
 local MoverEntity = Class { __includes = Entity,
   ---@param self MoverEntity
-  ---@param table
+  ---@param args table
   init = function(self, args)
     -- Initialization code here
     Entity.init(self, args)

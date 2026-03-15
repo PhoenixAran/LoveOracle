@@ -35,9 +35,12 @@ function ItemEquipment:getPlayer()
   return self.item:getPlayer()
 end
 
+---@param player Player?
 function ItemEquipment:setPlayer(player)
   self.item:setPlayer(player)
-  self:setPosition(player:getPosition())
+  if player then
+    self:setPosition(player:getPosition())
+  end
 end
 
 
@@ -77,6 +80,15 @@ function ItemEquipment:onReobtained()
 end
 
 -- ItemEquipment api
+
+--- If item when equipped, should occupy a slot
+--- This is determined by checking if any useButtons are assigned
+--- Passive items such as armors should not take up a slot
+---@return boolean
+function ItemEquipment:isSlotItem()
+  return lume.any(self.useButtons)
+end
+
 function ItemEquipment:isEquipped()
   return self.isEquipped
 end
@@ -101,7 +113,7 @@ function ItemEquipment:addUseButtons(button)
   end
 end
 
-function ItemEquipment:getUseButton()
+function ItemEquipment:getUseButtons()
   return self.useButtons
 end
 
@@ -132,15 +144,26 @@ function ItemEquipment:onButtonPressed()
   return false
 end
 
-function ItemEquipment:equip()
+function ItemEquipment:equip(slotButton)
+  local player = self:getPlayer()
+
+  assert(player, 'Item equipment cannot be equipped without player instance being set')
+  assert(lume.count(self.useButtons), 'Item equipment cannot be equipped without buttons being set')
+
   if not self.equipped then
+    -- equip item
+    player:equipItem(self)
     self.equipped = true
     self:onEquip()
   end
 end
 
 function ItemEquipment:unequip()
+local player = self:getPlayer()
+
   if self.equipped then
+    -- unequip item
+    player:unequipItem(self)
     self.equipped = false
     self:onUnequip()
   end

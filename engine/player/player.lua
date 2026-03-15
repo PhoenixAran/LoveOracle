@@ -60,7 +60,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field respawnPositionY number
 ---@field respawnDirection4 number
 ---@field moveAnimation string
----@field items table<string, ItemEquipment?>
+---@field slotItems table<string, ItemEquipment?>
 ---@field previousPositionX number
 ---@field previousPositionY number
 ---@field respawnIndexX integer
@@ -171,7 +171,7 @@ local Player = Class { __includes = MapEntity,
       self:actionUseItem('y')
     end)
 
-    self.items = {
+    self.slotItems = {
       ['a'] = nil,
       ['b'] = nil
     }
@@ -656,20 +656,34 @@ function Player:updateStates()
   end
 end
 
--- equip the given item
--- TODO unequip
+-- equip usable ItemEquipment
 ---@param item ItemEquipment
 function Player:equipItem(item)
   self:addChild(item)
   item:setPlayer(self)
-  for i, v in ipairs(item.useButtons) do
-    self.items[v] = item
+  if item:isSlotItem() then
+    -- put it in the slot items collection
+    for i, v in ipairs(item.useButtons) do
+      self.slotItems[v] = item
+    end
   end
   item:awake()
 end
 
+--- unequip the gien usable ItemEquipment
+---@param item ItemEquipment
+function Player:unequipItem(item)
+---@diagnostic disable-next-line: param-type-mismatch
+  item.transform:setParent(nil) -- remove item transform from child transforms
+  item:setPlayer(nil)
+  for i, v in ipairs(item.useButtons) do
+    self.slotItems[v] = nil
+  end
+  item:removed()
+end
+
 function Player:updateEquippedItems()
-  for _, item in pairs(self.items) do
+  for _, item in pairs(self.slotItems) do
     item:update()
     if item:isUsable() then
       if item:isButtonDown() then
@@ -681,10 +695,11 @@ end
 
 -- actions
 
+--- TODO figure out how to handle two handed weapons, and find a way not to call onButtonPressed twice in one frame for it
 --- calls the item:onButtonPress callback for the given mapped button
 ---@param button string
 function Player:actionUseItem(button)
-  local item = self.items[button]
+  local item = self.slotItems[button]
   if item ~= nil and item:isUsable() then
     if item:onButtonPressed() then
       self:emit('entity_item_used', item)
@@ -703,7 +718,7 @@ function Player:actionStroke(button)
 end
 
 function Player:interruptItems()
-  for _, item in pairs(self.items) do
+  for _, item in pairs(self.slotItems) do
     item:interrupt()
   end
   if self.controlStateMachine:isActive() then
@@ -936,7 +951,7 @@ function Player:update()
 end
 
 function Player:draw()
-  for _, item in pairs(self.items) do
+  for _, item in pairs(self.slotItems) do
     if item:isVisible() then
       item:drawUnder()
     end
@@ -944,9 +959,7 @@ function Player:draw()
 
   MapEntity.draw(self)
 
-  for _, item in pairs(self.items) do
-    print('drawing item' .. item:getType())
-    print(item:getType() .. ' is visible = ' .. tostring(item:isVisible()))
+  for _, item in pairs(self.slotItems) do
     if item:isVisible() then
       item:drawOver()
     end
@@ -978,8 +991,8 @@ function Player:debugDraw(entDebugDrawFlags)
   if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 then
     self.roomEdgeCollisionBox:debugDraw()
   end
-  if lume.any(self.items) then
-    for _, item in pairs(self.items) do
+  if lume.any(self.slotItems) then
+    for _, item in pairs(self.slotItems) do
       item:debugDraw(entDebugDrawFlags)
     end
   end

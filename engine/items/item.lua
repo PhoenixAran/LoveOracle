@@ -48,9 +48,9 @@ function Item:getPlayer()
   return self.player
 end
 
+---@param player Player?
 function Item:setPlayer(player)
   self.player = player
-  -- self:setPosition(player:getPosition())
 end
 
 function Item:getLevel()

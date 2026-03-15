@@ -3,6 +3,7 @@ local SignalObject = require 'engine.signal_object'
 local lume = require 'lib.lume'
 
 -- Class that ItemSlot will utilise
+---@deprecated will use Item instead of ItemData for item information. Will likely remove ItemData entirely in the future.
 ---@class ItemData
 ---@field name string
 ---@field category string

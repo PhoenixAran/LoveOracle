@@ -1,13 +1,10 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local ItemBank = require 'engine.banks.item_bank'
-
-
-local protectedSlots = {
-  'b', ''
-}
+local lume = require 'lib.lume'
 
 ---@class Inventory
+---@field protectedSlots string[] list of slots that are protected and can only be set to certain items. See default values for examples
 ---@field items table<string, Item|ItemEquipment>
 ---@field ammos table<string, Ammo>
 ---@field equippedItems Item[]
@@ -18,8 +15,14 @@ local Inventory = Class { __includes = SignalObject,
   init = function(self, gameControl)
     SignalObject.init(self)
 
+    self.protectedSLots = {
+      'a', -- reserved for Roc feather when unlocked. It is also the interact button so it should not be used for anything else
+      'b'  -- reserved for sword
+    }
+
     self.items = { }
     self.equippedItems = { }
+    self.equippedSlotItems = { }
 
     self.gameControl = gameControl or nil
     self.piecesOfHeart = nil
@@ -42,13 +45,68 @@ end
 
 --- equip an item on the player
 ---@param item string|ItemEquipment the item to equip, either an item id or an ItemEquipment instance
----@param slot string the slot to equip the item to, either 'x', 'y'
-function Inventory:equipItem(itemId, slot)
+---@param slot nil|string|string[] the slot(s) to equip the item to, if any
+function Inventory:equipItem(item, slot)
+  if slot ~= nil then
+    if type(slot) == 'string' then
+      assert(not lume.any(self.protectedSlots, slot))
+    else
+      if lume.count(slot) == 0 then
+        error('Empty slot array provided to Inventory::equipItem')
+      end
+      for _, v in ipairs(slot) do
+        assert(not lume.any(self.protectedSlots), v)
+      end
+    end
+  end
+
+  -- validate item
+  ---@type ItemEquipment
   local equippableItem
+  if type(item) == 'string' then
+    equippableItem = ItemBank.getItem(item)
+  end
+  assert(equippableItem:isEquippable(), 'Cannot equip non-equippable item')
+
+  -- equip item
+  equippableItem:clearUseButtons()
+  if slot ~= nil then
+    equippableItem:addUseButtons(slot)
+  end
+  equippableItem:equip()
+
+  -- add to inventory's internal items collection so we can keep track of whats currently equipped
+  lume.push(self.items, equippableItem)
 end
 
-function Inventory:unequipItem(itemId, slot)
-  
+function Inventory:unequipItem(item)
+  ---@type ItemEquipment
+  local equippableItem
+  if type(item) == 'string' then
+    equippableItem = ItemBank.getItem(item)
+  end
+
+  assert(equippableItem:isEquippable(), 'Cannot unequip non-equippable item')
+
+  equippableItem:unequip()
+  equippableItem:setPlayer(nil)
+  equippableItem:clearUseButtons()
+
+  -- remove from our inventory's internal items collection
+  lume.remove(self.items, equippableItem)
+end
+
+function Inventory:unequipItemBySlot(slot)
+  for _, item in ipairs(self.items) do
+    if item:isEquippable() then
+      ---@type ItemEquipment
+      local equippableItem = item
+      if lume.any(equippableItem:getUseButtons(), slot) then
+        self:unequipItem(equippableItem)
+        break
+      end
+    end
+  end
 end
 
 function Inventory:obtainItem(item)
