@@ -319,6 +319,8 @@ end
 --- override map_entity knockback().
 --- player knockback checks if we are doomed to fall in a hole, and prevents knockback vectors
 function Player:knockback(vectorX, vectorY, speed, time)
+  -- TODO implement in map_entity disableCollisions() and disableHitboxCollisions() and an easy reenableCollisions() and reenableHitboxCollisions() since
+  -- Player can currently get knocked around when in fall animation when falling in hole
   if not self.playerMovementController.doomedToFallInHole then
     MapEntity.knockback(self, vectorX, vectorY, speed, time)
   end
@@ -745,6 +747,7 @@ function Player:interruptItems()
   end
   if self.weaponStateMachine:isActive() then
     self.weaponStateMachine:getCurrentState():onInterruptItems()
+    self.weaponStateMachine:getCurrentState():endState()
   end
   self:integrateStateParameters()
 end
