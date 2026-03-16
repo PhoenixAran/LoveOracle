@@ -338,10 +338,7 @@ function MapEntity:hurt(damageInfo)
 
   end
   if damageInfo:applyKnockback() then
-    self:setKnockback(damageInfo.knockbackTime)
-    self:setKnockbackSpeed(damageInfo.knockbackSpeed)
-    local ex, ey = self:getPosition()
-    self:setKnockbackVector(vector.sub(ex, ey,damageInfo.sourceX, damageInfo.sourceY))
+    self:knockback(damageInfo.sourceX, damageInfo.sourceY, damageInfo.knockbackSpeed, damageInfo.knockbackTime)
   end
 
   self.health:takeDamage(damageInfo.damage)
@@ -349,6 +346,13 @@ function MapEntity:hurt(damageInfo)
     self:onHurt(damageInfo)
   end
   self:signal('entity_hit')
+end
+
+function MapEntity:knockback(vectorX, vectorY, speed, time)
+  self:setKnockback(time)
+  self:setKnockbackSpeed(speed)
+  local ex, ey = self:getPosition()
+  self:setKnockbackVector(vector.sub(ex, ey, vectorX, vectorY))
 end
 
 ---TODO bump this entity

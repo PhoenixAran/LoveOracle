@@ -109,7 +109,7 @@ local Player = Class { __includes = MapEntity,
     
     -- ground observer
     self.groundObserver:setOffset(0, 4)
-
+ 
     -- components
     self.playerMovementController = PlayerMovementController(self, self.movement)
     self.sprite = SpriteBank.build('player', self)
@@ -314,6 +314,14 @@ end
 
 function Player:getSkills()
   return self.skills
+end
+
+--- override map_entity knockback().
+--- player knockback checks if we are doomed to fall in a hole, and prevents knockback vectors
+function Player:knockback(vectorX, vectorY, speed, time)
+  if not self.playerMovementController.doomedToFallInHole then
+    MapEntity.knockback(self, vectorX, vectorY, speed, time)
+  end
 end
 
 ---matches animation direction with a given vector
