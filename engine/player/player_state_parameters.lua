@@ -67,7 +67,7 @@ local PlayerStateParameters = Class {
     -- triggers room transition no matter how player collides with a room_edge (normally, we only trigger room 
     -- transition if player is deliberately trying to move into it, and not when they get bumped by an enemy or something)
     self.canAutoRoomTransition = false
-    self.canStrafe = false
+    self.canStrafe = false  -- if they can change the direction they are facing without changing movement direction
     self.alwaysFaceUp = false
     self.alwaysFaceDown = false
     self.alwaysFaceLeft = false

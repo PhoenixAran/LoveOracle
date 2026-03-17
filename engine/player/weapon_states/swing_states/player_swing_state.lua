@@ -65,4 +65,5 @@ function PlayerSwingState:onEnd()
   self.weapon:endSwing()
 end
 
+
 return PlayerSwingState

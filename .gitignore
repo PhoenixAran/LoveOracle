@@ -52,3 +52,6 @@ luac.out
 
 # Tiled Session
 *.tiled-session
+
+# DS_Store (from macos)
+**/.DS_Store

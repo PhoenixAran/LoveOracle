@@ -31,6 +31,7 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
     self.stateParameters.canControlOnGround = false
     self.stateParameters.canControlInAir = false
     self.stateParameters.hitboxCollisions = false
+    self.stateParameters.canUseWeapons = false
 
     self.respawnDamageInfo = DamageInfo({
       damage = 2,
@@ -93,6 +94,8 @@ function PlayerRespawnDeathState:onBegin(previousState)
   self.stateParameters.canControlOnGround = false
   self.stateParameters.canControlInAir = false
   self.stateParameters.canJump = false
+
+  self.player:interruptItems()
 end
 
 function PlayerRespawnDeathState:onEnd(newState)
