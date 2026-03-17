@@ -16,18 +16,6 @@ local TablePool = require 'engine.utils.table_pool'
 
 local GRID_SIZE = Consts.GRID_SIZE
 
-local function defaultGetMeetingTilesQueryRectFilter(item)
-  if (item.isTile and item:isTile()) or (item.getType and item:getType() == 'moving_platform') then
-    if item.isTopTile and not item:isTopTile() then
-      return false
-    end
-    local entityZMin, entityZMax = mapEntity.zRange.min, mapEntity.zRange.max
-    local itemZMin, itemZMax = item.zRange.min, item.zRange.max
-    return entityZMax > itemZMin and itemZMax > entityZMin
-  end
-  return false
-end
-
 ---@class Entity : SignalObject, BumpBox
 ---@field enabled boolean
 ---@field visible boolean
@@ -75,9 +63,21 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.destroyed = false
 
     local entityInstance = self
-    self._getMeetingTilesQueryRectFilter = defaultGetMeetingTilesQueryRectFilter
+    self._getMeetingTilesQueryRectFilter = self._defaultGetMeetingTilesQueryRectFilter
   end
 }
+
+function Entity:_defaultGetMeetingTilesQueryRectFilter(item)
+  if item.isTile and item:isTile() then
+    if item.isTopTile and not item:isTopTile() then
+      return false
+    end
+    local entityZMin, entityZMax = self.zRange.min, self.zRange.max
+    local itemZMin, itemZMax = item.zRange.min, item.zRange.max
+    return entityZMax > itemZMin and itemZMax > entityZMin
+  end
+  return false
+end
 
 function Entity:getName()
   return self.name
