@@ -45,6 +45,8 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field grassVisible boolean
 ---@field onHurt function
 ---@field onBump function
+---@field _storedCollisionFlags table<string, any> used to store collision flags when MapEntity.DisableCollisions() is called so that they can be restored when MapEntity.EnableCollisions() is called
+---@field _storedCollisionFlagsInUse boolean flag to make sure we correct behavior for MapEntity.DisableCollisions() being called multiple times in a row without MapEntity.EnableCollisions() being called or vice versa
 local MapEntity = Class { __includes = MoverEntity,
   init = function(self, args)
     MoverEntity.init(self, args)
@@ -107,6 +109,9 @@ local MapEntity = Class { __includes = MoverEntity,
     self.grassVisible = true
     self.grassOffsetX, self.grassOffsetY = 0, 0
     self.grassMovementTick = 0
+
+    self._storedCollisionFlags = { }
+    self._storedCollisionFlagsInUse = false
   end
 }
 
@@ -193,8 +198,6 @@ function MapEntity:setArmor(value)
   self.health:setArmor(value)
 end
 
-
-
 -- combat component pass throughs
 function MapEntity:isIntangible()
   return self.combat:isIntangible()
@@ -273,11 +276,50 @@ function MapEntity:resolveInteraction(receiver, sender)
   end
 end
 
+
+--- temporarily disable collisions. This is done by storing collision flags into a table, which is then
+--- reset when MapEntity:reenableCollisions is called
+--- Note that this does not disable RoomEdgeCollisions
+function MapEntity:disableCollisions()
+  if not self._storedCollisionFlagsInUse then
+    self._storedCollisionFlagsInUse = true
+    self._storedCollisionFlags['entity_collidesWithLayer'] = self.collidesWithLayer
+    self._storedCollisionFlags['entity_physicsLayer'] = self.physicsLayer
+    self._storedCollisionFlags['entity_collisionTag'] = self.collisionTag
+    self:setCollidesWithLayerExplicit(0)
+    self:setPhysicsLayerExplicit(0)
+    self.collisionTag = ''
+    if self.hitbox then
+      self._storedCollisionFlags['hitbox_collidesWithLayer'] = self.hitbox.collidesWithLayer
+      self._storedCollisionFlags['hitbox_physicsLayer'] = self.hitbox.physicsLayer
+      self.hitbox:setCollidesWithLayerExplicit(0)
+      self.hitbox:setPhysicsLayerExplicit(0)
+      self.hitbox.collisionTag = ''
+    end
+  end
+end
+
+function MapEntity:enableCollisions()
+  if self._storedCollisionFlagsInUse then
+    self._storedCollisionFlagsInUse = false
+    self:setCollidesWithLayerExplicit(self._storedCollisionFlags['entity_collidesWithLayer'])
+    self:setPhysicsLayerExplicit(self._storedCollisionFlags['entity_physicsLayer'])
+    self.collisionTag = self._storedCollisionFlags['entity_collisionTag']
+    if self.hitbox then
+      self.hitbox:setCollidesWithLayerExplicit(self._storedCollisionFlags['hitbox_collidesWithLayer'])
+      self.hitbox:setPhysicsLayerExplicit(self._storedCollisionFlags['hitbox_physicsLayer'])
+      self.hitbox.collisionTag = self._storedCollisionFlags['hitbox_collisionTag']
+    end
+    lume.clear(self._storedCollisionFlags)
+  end
+end
+
 --- this method is used when the entity is not configured to automatically respond to
 --- a given hitbox type. This allows the entity to check if any of it's items can
 --- protect it from the sender. This is usually just used on the player since players
 --- are not automatically set to collide with monsters, but they should still be able to block
 --- attacks with a shield or parry attacks with a sword
+--- So far, this is only used in Interactions.damageOther
 --- @param sender Hitbox the hitbox that the entity is colliding with
 --- @return boolean
 function MapEntity:triggerOverrideInteractions(sender)

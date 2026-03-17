@@ -61,8 +61,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.collisionTag = args.collisionTags
     self.group = args.group
     self.destroyed = false
-
-    local entityInstance = self
+    
     self._getMeetingTilesQueryRectFilter = self._defaultGetMeetingTilesQueryRectFilter
   end
 }

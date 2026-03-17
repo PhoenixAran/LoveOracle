@@ -1,4 +1,4 @@
-local version = '0.0.18.0'
+local version = '0.0.20.0'
 local controls = {
   controls = {
     left = {'key:left', 'axis:leftx-', 'button:dpleft'},

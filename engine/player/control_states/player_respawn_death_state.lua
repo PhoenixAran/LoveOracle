@@ -87,18 +87,19 @@ end
 
 ---@param previousState PlayerState
 function PlayerRespawnDeathState:onBegin(previousState)
-  -- TODO interrupt weapons self.player:interruptWeapons()
-  self.player:setVector(0, 0)
   self.respawnState = RespawnState.DeathAnimation
   self.stateParameters.canStrafe = true
   self.stateParameters.canControlOnGround = false
   self.stateParameters.canControlInAir = false
   self.stateParameters.canJump = false
 
+  self.player:setVector(0, 0)
   self.player:interruptItems()
+  self.player:disableCollisions()
 end
 
 function PlayerRespawnDeathState:onEnd(newState)
+  self.player:enableCollisions()
   self.player = nil
   self.camera = nil
 end
