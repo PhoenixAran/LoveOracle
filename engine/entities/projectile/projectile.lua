@@ -68,6 +68,7 @@ local Projectile = Class { __includes = MoverEntity,
     self.animDirectionSyncMode = args.animDirectionSyncMode or AnimationDirectionSyncMode.dir4
     self.animDirection = args.animDirection or nil
     self.owner = args.owner or nil
+    
 
     self.movement = Movement(self)
     self.hitbox = Hitbox(self)
