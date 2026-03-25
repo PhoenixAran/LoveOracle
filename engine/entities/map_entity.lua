@@ -278,7 +278,7 @@ end
 
 
 --- temporarily disable collisions. This is done by storing collision flags into a table, which is then
---- reset when MapEntity:reenableCollisions is called
+--- reset when MapEntity:reenableCollisions is called. This also disables the hibox via setEnabled(false) if it exists, and re-enables it when MapEntity:reenableCollisions is called. Note that this does not disable RoomEdgeCollisions
 --- Note that this does not disable RoomEdgeCollisions
 function MapEntity:disableCollisions()
   if not self._storedCollisionFlagsInUse then
@@ -290,11 +290,7 @@ function MapEntity:disableCollisions()
     self:setPhysicsLayerExplicit(0)
     self.collisionTag = ''
     if self.hitbox then
-      self._storedCollisionFlags['hitbox_collidesWithLayer'] = self.hitbox.collidesWithLayer
-      self._storedCollisionFlags['hitbox_physicsLayer'] = self.hitbox.physicsLayer
-      self.hitbox:setCollidesWithLayerExplicit(0)
-      self.hitbox:setPhysicsLayerExplicit(0)
-      self.hitbox.collisionTag = ''
+      self:setEnabled(false)
     end
   end
 end
@@ -306,9 +302,7 @@ function MapEntity:enableCollisions()
     self:setPhysicsLayerExplicit(self._storedCollisionFlags['entity_physicsLayer'])
     self.collisionTag = self._storedCollisionFlags['entity_collisionTag']
     if self.hitbox then
-      self.hitbox:setCollidesWithLayerExplicit(self._storedCollisionFlags['hitbox_collidesWithLayer'])
-      self.hitbox:setPhysicsLayerExplicit(self._storedCollisionFlags['hitbox_physicsLayer'])
-      self.hitbox.collisionTag = self._storedCollisionFlags['hitbox_collisionTag']
+      self:setEnabled(true)
     end
     lume.clear(self._storedCollisionFlags)
   end

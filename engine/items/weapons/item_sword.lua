@@ -33,6 +33,7 @@ function ItemSword:onTransformChanged()
 end
 
 function ItemSword:onAwake()
+  self.sprite:entityAwake()
   self.hitbox:entityAwake()
   self.hitbox:addIgnoreHitbox(self:getPlayer().hitbox)
   self.hitbox:setEnabled(false)
@@ -51,8 +52,12 @@ function ItemSword:onButtonPressed()
 end
 
 function ItemSword:update()
-  self.hitbox:update()
-  self.sprite:update()
+  if self.hitbox:isEnabled() then
+    self.hitbox:update()
+  end
+  if self.sprite:isEnabled() then
+    self.sprite:update()
+  end
 end
 
 function ItemSword:drawOver()

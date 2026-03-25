@@ -935,7 +935,9 @@ function Player:update()
   self.spriteSquisher:update()
   self.sprite:update()
   self.combat:update()
-  self.hitbox:update()
+  if self.hitbox:isEnabled() then
+    self.hitbox:update()
+  end
   self.movement:update()
 
   local tvx, tvy = self:move()

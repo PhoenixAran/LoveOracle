@@ -160,7 +160,6 @@ end
 
 function ItemEquipment:unequip()
 local player = self:getPlayer()
-
   if self.equipped then
     -- unequip item
     player:unequipItem(self)

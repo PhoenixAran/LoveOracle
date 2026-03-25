@@ -25,7 +25,7 @@ local SpriteAnimationUpdater = Class {
     self.substripKey = nil
     self.currentAnimation = nil
     self.currentFrameIndex = 1
-    self.currentTick = 1
+    self.currentTick = 0
     self.loopType = 'once'
     self.speed = 1
   end
@@ -105,7 +105,7 @@ function SpriteAnimationUpdater:play(animation, substripKey, forcePlayFromStart)
   playFromStart = playFromStart or self.state == States.Completed
   if playFromStart then
     self.currentFrameIndex = 1
-    self.currentTick = 1
+    self.currentTick = 0
   end
   self.loopType = self.currentAnimation.loopType
   self.state = States.Running
@@ -118,7 +118,7 @@ end
 
 function SpriteAnimationUpdater:stop()
   self.currentFrameIndex = 1
-  self.currentTick = 1
+  self.currentTick = 0
   self.state = States.None
 
   if self.currentAnimation then
@@ -160,7 +160,7 @@ function SpriteAnimationUpdater:update()
   local currentFrame = spriteFrames[self.currentFrameIndex]
   self.currentTick = self.currentTick + 1
   if currentFrame:getDelay() < self.currentTick * self.speed then
-    self.currentTick = 1
+    self.currentTick = 0
     self.currentFrameIndex = self.currentFrameIndex + 1
     if #spriteFrames < self.currentFrameIndex then
       if self.loopType == 'once' then
