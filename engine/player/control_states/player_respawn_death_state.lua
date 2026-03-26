@@ -5,6 +5,7 @@ local Tween = require 'lib.tween'
 local rect = require 'engine.math.rectangle'
 local DamageInfo = require 'engine.entities.damage_info'
 local Camera = require 'engine.camera'
+local GenericStateMachine = require 'engine.utils.generic_state_machine'
 
 local RespawnState = {
   DeathAnimation = 0,
@@ -14,19 +15,18 @@ local RespawnState = {
 
 ---@class PlayerRespawnDeathState : PlayerState
 ---@field waitForAnimation boolean
----@field respawnState integer
 ---@field cameraSubject any
 ---@field cameraTween any
 ---@field lastCameraX number
 ---@field lastCameraY number
 ---@field respawnDamageInfo DamageInfo
+---@field subStateMachine GenericStateMachine
 local PlayerRespawnDeathState = Class { __includes = PlayerState,
   ---@param self PlayerRespawnDeathState
   init = function(self)
     PlayerState.init(self)
-
     self.waitForAnimation = true
-    self.respawnState = RespawnState.DeathAnimation
+
     self.stateParameters.canStrafe = true
     self.stateParameters.canControlOnGround = false
     self.stateParameters.canControlInAir = false
@@ -38,6 +38,23 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
       hitstunTime = 12,
       intangibilityTime = 44,
     })
+
+
+    -- configure the sub-state machine
+    self.subStateMachine = GenericStateMachine(self, RespawnState)
+    self.subStateMachine:addState(RespawnState.DeathAnimation)
+                        :onUpdate(self.onUpdateDeathAnimationState)
+                        :onEnd(self.onEndDeathAnimationState)
+    self.subStateMachine:addState(RespawnState.ViewPanning)
+                        :onBegin(self.onBeginViewPanningState)
+                        :onUpdate(self.onUpdateViewPanningState)
+                        :onEnd(self.onEndViewPanningState)
+    self.subStateMachine:addState(RespawnState.Delay)
+                        :onBegin(self.onBeginDelayState)
+                        :addEvent(16, function()
+                          self:endState()
+                        end)
+    
   end
 }
 
@@ -45,46 +62,40 @@ function PlayerRespawnDeathState:getType()
   return 'player_respawn_death_state'
 end
 
-function PlayerRespawnDeathState:endDeathAnimationState()
+
+function PlayerRespawnDeathState:onEndDeathAnimationState()
+  self.player:setVisible(false)
 end
 
-function PlayerRespawnDeathState:startViewPanningState()
+function PlayerRespawnDeathState:onBeginViewPanningState()
   self.player:respawn()
   self.player:setVisible(true)
   self.respawnState = RespawnState.ViewPanning
 end
 
-function PlayerRespawnDeathState:endViewPanningState()
+function PlayerRespawnDeathState:onUpdateViewPanningState()
+  -- TODO wait until camera stops moving towards the player
+  self.subStateMachine:nextState()
+end
+
+function PlayerRespawnDeathState:onEndViewPanningState()
   self.respawnState = RespawnState.Delay
 end
 
-function PlayerRespawnDeathState:startDelayState()
+function PlayerRespawnDeathState:onUpdateDeathAnimationState()
+  if (not self.waitForAnimation) or self.player.sprite:isCompleted() then
+    self.subStateMachine:nextState()
+  end
+end
+
+function PlayerRespawnDeathState:onBeginDelayState()
   self.respawnState = RespawnState.Delay
   self.player:setVisible(true)
   self.player:hurt(self.respawnDamageInfo)
 end
 
-function PlayerRespawnDeathState:endDelayState()
-  self:endState()
-end
 
-function PlayerRespawnDeathState:update()
-  if self.respawnState == RespawnState.DeathAnimation then
-    if (not self.waitForAnimation) or self.player.sprite:isCompleted() then
-      self.player:setVisible(false)
-      self:endDeathAnimationState()
-      self:startViewPanningState()
-    end
-  elseif self.respawnState == RespawnState.ViewPanning then
-    self:endViewPanningState()
-    self:startDelayState()
-  elseif self.respawnState == RespawnState.Delay then
-    if not self.player:inHitstun() then
-      self:endDelayState()
-    end
-  end
-end
-
+-- player respawn state 
 ---@param previousState PlayerState
 function PlayerRespawnDeathState:onBegin(previousState)
   self.respawnState = RespawnState.DeathAnimation
@@ -96,6 +107,12 @@ function PlayerRespawnDeathState:onBegin(previousState)
   self.player:setVector(0, 0)
   self.player:interruptItems()
   self.player:disableCollisions()
+
+  self.subStateMachine:initializeOnState(RespawnState.DeathAnimation)
+end
+
+function PlayerRespawnDeathState:update()
+  self.subStateMachine:update()
 end
 
 function PlayerRespawnDeathState:onEnd(newState)

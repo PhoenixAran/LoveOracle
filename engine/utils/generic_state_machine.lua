@@ -74,8 +74,8 @@ function TimedState:getType()
   return 'timed_state'
 end
 
----@param tick function
----@param func any
+---@param tick integer
+---@param func function
 ---@return TimedState
 function TimedState:addEvent(tick, func)
   self.timedActions[tick] = func
@@ -157,6 +157,7 @@ local GenericStateMachine = Class {
   init = function(self, context, stateType)
     self.context = context
     self.states = { }
+    self.stateIds = { }
     for k, v in pairs(stateType) do
       lume.push(self.stateIds, v)
     end
@@ -178,6 +179,7 @@ end
 function GenericStateMachine:addState(stateId)
   local timedState = TimedState(self)
   timedState.id = stateId
+  self.states[stateId] = timedState
   return timedState
 end
 
