@@ -460,7 +460,7 @@ function BasicEnemy:updateAi()
 
         -- clear the stored direction after shooting
         self.preShootMoveDirectionX = 0
-        self.preShootMOveDirectionY = 0
+        self.preShootMoveDirectionY = 0
       end
       self.pauseTimer = self.pauseTimer - 1
     elseif self.isCharging then

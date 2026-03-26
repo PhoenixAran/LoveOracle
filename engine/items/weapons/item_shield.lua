@@ -10,7 +10,7 @@ local ItemShield = Class { __includes = ItemWeapon,
   init = function(self, args)
     ItemWeapon.init(self, args)
     self.useParameters.usableWhileJumping = true
-    self.useParameters.usableWithSword = truefac
+    self.useParameters.usableWithSword = true
     self.useParameters.usableWhileInHole = true
   end
 }
