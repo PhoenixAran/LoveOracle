@@ -56,7 +56,7 @@ local MoverEntity = Class { __includes = Entity,
   init = function(self, args)
     -- Initialization code here
     Entity.init(self, args)
-    
+
     -- components
     self.movement = Movement(self)
     self.groundObserver = GroundObserver(self)

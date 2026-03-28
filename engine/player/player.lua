@@ -33,6 +33,7 @@ local PlayerRespawnDeathState = require 'engine.player.control_states.player_res
 -- condition states
 local PlayerBusyState = require 'engine.player.condition_states.player_busy_state'
 local PlayerHitstunState = require 'engine.player.condition_states.player_hitstun_state'
+local PlayerShieldState = require 'engine.player.condition_states.player_shield_state'
 -- environment states
 local PlayerGrassEnvironmentState = require 'engine.player.environment_states.player_grass_environment_state'
 local PlayerSwimEnvironmentState = require 'engine.player.environment_states.player_swim_environment_state'
@@ -127,6 +128,7 @@ local Player = Class { __includes = MapEntity,
 
     self.stateCollection = {
       -- condition states
+      ['player_shield_state'] = PlayerShieldState(self),
       -- control states
       ['player_ledge_jump_state'] = PlayerLedgeJumpState(self),
       ['player_respawn_death_state'] = PlayerRespawnDeathState(self),
@@ -742,7 +744,7 @@ function Player:interruptItems()
   end
   for _, stateMachine in ipairs(self.conditionStateMachines) do
     if stateMachine:isActive() then
-      stateMachine:getCurrentState():endState()
+      stateMachine:getCurrentState():onInterruptItems()
     end
   end
   if self.weaponStateMachine:isActive() then
@@ -863,7 +865,7 @@ function Player:stopPushing()
   self:integrateStateParameters()
   self:setVector(0, 0)
   self.playerMovementController:chooseAnimation()
-  if self:isOnGround() and not self.stateParameters.canControlOnGround then
+  if self:isOnGround() and self.stateParameters.canControlOnGround then
     self.sprite:play(self.stateParameters.animations.default)
   end
 end
@@ -908,6 +910,7 @@ function Player:update()
   self.pressedActionButtons['b'] = false
   self.pressedActionButtons['x'] = false
   self.pressedActionButtons['y'] = false
+  self.pressedActionButtons['leftShoulder'] = false
 
   if Input:pressed('a') then
     self.pressedActionButtons['a'] = self:checkPressInteractions('a')
@@ -920,6 +923,9 @@ function Player:update()
   end
   if Input:pressed('y') then
     self.pressedActionButtons['y'] = self:checkPressInteractions('y')
+  end
+  if Input:pressed('leftShoulder') then
+    self.pressedActionButtons['leftShoulder'] = self:checkPressInteractions('leftShoulder')
   end
 
   self:integrateStateParameters()

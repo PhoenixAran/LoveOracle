@@ -32,7 +32,7 @@ function PlayerHitstunState:onBegin(previousState)
 
   self.combat = self.player.combat
   self.player:interruptItems()
-  self.player.sprite:play('idle')
+  self.player.sprite:play(self.player:getStateParameters().animations.default)
 end
 
 function PlayerHitstunState:update()

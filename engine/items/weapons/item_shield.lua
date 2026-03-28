@@ -12,6 +12,7 @@ local ItemShield = Class { __includes = ItemWeapon,
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWithSword = true
     self.useParameters.usableWhileInHole = true
+    self.item.level = args.level or 1
   end
 }
 
@@ -22,6 +23,13 @@ function ItemShield:onEquip()
   return true
 end
 
+function ItemShield:onButtonPressed()
+
+end
+
+function ItemShield:update()
+
+end
 
 function ItemShield:getType()
   return 'item_shield'
