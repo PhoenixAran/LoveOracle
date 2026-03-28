@@ -112,11 +112,11 @@ function MoverEntity:unsetCollisionTile(tileType)
   end
 end
 
-function MoverEntity:movesWithConveyors()
+function MoverEntity:canMoveWithConveyors()
   return self.movesWithConveyors
 end
 
-function MoverEntity:movesWithPlatforms()
+function MoverEntity:canMoveWithPlatforms()
   return self.movesWithPlatforms
 end
 
@@ -223,10 +223,10 @@ function MoverEntity:_handleMove(collisions, isTest)
   velX, velY = vector.add(velX, velY, self:getKnockbackVelocity())
 
   -- Movement due to environment
-  if self:movesWithConveyors() and self:onConveyor() then
+  if self.movesWithConveyors and self:onConveyor() then
     velX, velY = vector.add(velX, velY, self.groundObserver.conveyorVelocityX, self.groundObserver.conveyorVelocityY)
   end
-  if self:movesWithPlatforms() and self:onPlatform() then
+  if self.movesWithPlatforms and self:onPlatform() then
     velX, velY = vector.add(velX, velY, self.groundObserver.movingPlatformX, self.groundObserver.movingPlatformY)
   end
 

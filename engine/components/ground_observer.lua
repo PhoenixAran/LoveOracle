@@ -188,5 +188,15 @@ function GroundObserver:debugDraw()
   love.graphics.setColor(1, 1, 1, 1)
 end
 
+--- Note that when GroundObserver is disabled, it will reset all of its values and will not report any 
+--- tiles/conveyors/moving platforms until it is enabled again
+---@param enabled boolean
+---@return GroundObserver
+function GroundObserver:setEnabled(enabled)
+  Component.setEnabled(self, enabled)
+  if not enabled then
+    self:reset()
+  end
+end
 
 return GroundObserver

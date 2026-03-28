@@ -18,7 +18,7 @@
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAACu3UwQkAIAwDwO6\/SbcUwZf4q7\/cQQYIoa1i65NU6f3hly73BHBL\/Y39SJL0\/qnsDQAAAAAAAAAAAAAAMLMA\/oleUgBAAAA=",
+         "data":"H4sIAAAAAAAACu3WMQqAMBBFwb1\/5yFSpPKKGtBGRATXIuwMvDp8kiIRDP0oQ9tbH2pJ52T6a\/8Sc+zPdO6\/qrZ\/pvefqb0IoJoeuX+NWfSbKqm+vyr3DQAAAAAAAAAAAAAA8M0GB3uqQwBAAAA=",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -126,7 +126,7 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":416,
+                 "x":364,
                  "y":160
                 }],
          "opacity":1,

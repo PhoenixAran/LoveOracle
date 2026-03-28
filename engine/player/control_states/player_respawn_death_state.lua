@@ -54,7 +54,6 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
                         :addEvent(16, function()
                           self:endState()
                         end)
-    
   end
 }
 
