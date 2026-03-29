@@ -392,7 +392,7 @@ function MapEntity:knockback(vectorX, vectorY, speed, time)
 end
 
 ---TODO bump this entity
----@param sourcePositionX any
+---@param sourcePositionX number
 ---@param sourcePositionY any
 ---@param duration any
 ---@param speed any
