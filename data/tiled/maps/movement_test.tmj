@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAAE+3WuwrCMBTG8eMVvCB4fR8HXRx0cdDFQRcX38XZwUfwFT0FQ4pGTY3QlP5\/8EGpHOiXVGNdRBo\/pqmpB87nraupaKoZU9P0\/jCft+T5W5q2IzPNVLPWbJ4+64jtb+aPnknP5+1T\/6Vmodlp9vLa3+yluXcW2\/H2JmeJt\/9V3OvgSvL8g0fMPZ+9v0i8\/b8lvT6u9z9LYurfF7uXn3JNXQ\/F9vedHzjm8zbSjH\/MJMN88o50HPNF53v+m\/6xnf+hfM9\/872P7fwPVfTfv1Cu\/nPNQbN9XJet\/0pzErsOZetftve\/yOd\/qND\/DwAAAAAAAAAAAAAAAAAAAAAAAN\/cASJRIqQAQAAA",
+         "data":"H4sIAAAAAAAAE+3VMW7CQBCF4QkBJAJCggTuQ5E0KUhDkTQU0KTJXVxTcASuyFhitJaz9noJilfm\/6QnWbbG2vHanr6IDK7MUNP\/Y33bJpoHTS8yj5rpDerblq9\/pHny5FWz0mw0n6VrY3H9W\/13wxTr21bX\/1rzrtlqdvK7f9tLO5eJ6\/FUkUzS7f8o\/ufgS77++SV2rsneHyTd\/kMpPh\/f+x+TlPqfidvLuhwLx8\/i+m9aP\/fUt+1Fs6hIvq\/jmuvLQH3oXst\/6C+kbn7bmm8x\/333Smn+x36\/sfPf6lKc\/7G9W7ry\/7u2f9vLcv9vmr3m63Lc1f7tX17u\/0PzI+45dLX\/rrz\/+fyOXf89zP9QYuZ\/VT0AAAAAAAAAAAAAAAAAAAAAAEDIGVex0FAAQAAA",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -51,6 +51,12 @@
                  "id":92,
                  "template":"..\/templates\/single_room_template.tj",
                  "x":256,
+                 "y":128
+                }, 
+                {
+                 "id":106,
+                 "template":"..\/templates\/single_room_template.tj",
+                 "x":0,
                  "y":128
                 }],
          "opacity":0.9,
@@ -113,18 +119,6 @@
                  "y":176
                 }, 
                 {
-                 "id":99,
-                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":82.4956047423703,
-                 "y":38.3176306180408
-                }, 
-                {
-                 "id":101,
-                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
-                 "x":156.876887706802,
-                 "y":23.4413740251544
-                }, 
-                {
                  "id":103,
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
                  "x":202.858044448451,
@@ -144,8 +138,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":466.486215538847,
-                 "y":52.9924812030075
+                 "x":160,
+                 "y":160
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -154,7 +148,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":106,
+ "nextobjectid":107,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.12.1",

@@ -189,11 +189,12 @@ function Projectile:update()
   self.sprite:update()
 
   if not self.hasCrashed then
-    local tvx, tvy, cols = self:move()
-    if tvx == 0 and tvy == 0 and lume.any(cols) then
-      self:onCollideSolid(cols[1])
+    local _, _, cols = self:move()
+    if lume.any(cols) then
+      self:onCollideSolid(cols[1].other)
     end
   end
+
 end
 
 function Projectile:draw()

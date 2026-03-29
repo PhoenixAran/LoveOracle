@@ -7,6 +7,7 @@ local rect = require 'engine.math.rectangle'
 local Physics = require 'engine.physics'
 local DamageInfo = require 'engine.entities.damage_info'
 local TablePool = require 'engine.utils.table_pool'
+local CollisionTag = require 'engine.enums.collision_tag'
 
 -- helper function
 local function setPositionRelativeToEntity(hitbox)
@@ -64,7 +65,7 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     self.canHitMultiple = args.canHitMultiple
     -- use entity's position as source position
     self.useEntityAsSource = args.useEntityAsSource
-    self.collisionTag = args.collisionTag
+    self.collisionTag = args.collisionTag or CollisionTag.none
     self.damage = args.damage
     self.knockbackTime = args.knockbackTime
     self.knockbackSpeed = args.knockbackSpeed

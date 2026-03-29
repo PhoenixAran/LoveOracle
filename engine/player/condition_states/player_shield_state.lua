@@ -9,7 +9,6 @@ local ShieldState = {
   blocking = 2
 }
 
--- TODO finish implementing
 
 ---@class PlayerShieldState : PlayerState
 ---@field shieldState integer
@@ -47,9 +46,7 @@ function PlayerShieldState:onBeginNotBlockingState()
     self.stateParameters.animations.move = 'walk_shield_large'
   end
 
-  if not self.shield:isEquipped() then
-    self.shield:unequip()
-  end
+  self.shield:stopBlocking()
 end
 
 function PlayerShieldState:onUpdateNotBlockingState()
@@ -94,6 +91,9 @@ function PlayerShieldState:onBeginBlockingState()
     self.stateParameters.animations.default = 'idle_shield_large_block'
     self.stateParameters.animations.move = 'walk_shield_large_block'
   end
+
+  -- tell shield entity to start blocking
+  self.shield:startBlocking()
 end
 
 function PlayerShieldState:onUpdateBlockingState()

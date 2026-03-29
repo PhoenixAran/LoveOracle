@@ -3,6 +3,7 @@ local ItemWeapon = require 'engine.items.item_weapon'
 local SpriteBank = require 'engine.banks.sprite_bank'
 local Hitbox = require 'engine.components.hitbox'
 local CollisionTag = require 'engine.enums.collision_tag'
+local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 
 ---@class ItemSword : ItemWeapon
 ---@field hitbox Hitbox
@@ -15,8 +16,7 @@ local ItemSword = Class { __includes = ItemWeapon,
     -- declare stuff that will be used in onTransformChanged BEFORE entity constructor
     self.hitbox = Hitbox(self)
     self.hitbox:setCollisionTag(CollisionTag.sword)
-    self.useParameters.usableWhileJumping = true
-    self.useParameters.usableWhileInHole = true
+
     self.sprite = SpriteBank.build('player_sword', self)
     self.visible = false
 
@@ -25,9 +25,16 @@ local ItemSword = Class { __includes = ItemWeapon,
     self.hitbox.damageInfo.intangibilityTime = 18
     self.hitbox.damageInfo.knockbackSpeed = 200
     self.hitbox.damageInfo.knockbackTime = 8
+
+    self.useParameters.usableWhileJumping = true
+    self.useParameters.usableWhileInHole = true
   end
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+function ItemSword:getType()
+  return 'item_sword'
+end
+
 function ItemSword:onTransformChanged()
   self.hitbox:onTransformChanged()
 end
@@ -39,10 +46,6 @@ function ItemSword:onAwake()
   self.hitbox:setEnabled(false)
 end
 
-
-function ItemSword:getType()
-  return 'item_sword'
-end
 
 function ItemSword:onButtonPressed()
   local swingSwordState = self:getPlayer():getStateFromCollection('player_swing_state')
@@ -64,8 +67,10 @@ function ItemSword:drawOver()
   self.sprite:draw()
 end
 
-function ItemSword:debugDraw()
-  self.hitbox:debugDraw()
+function ItemSword:debugDraw(flags)
+  if bit.band(flags, EntityDebugDrawFlags.HitBox) ~= 0 and self.hitbox then
+    self.hitbox:debugDraw()
+  end
 end
 
 ---@param direction4 integer

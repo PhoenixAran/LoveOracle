@@ -1,6 +1,8 @@
 -- used in Entity hitboxes
 
 local CollisionTag = {
+  none = 'none',
+
   -- entities
   player = 'player',
   enemy = 'enemy',
