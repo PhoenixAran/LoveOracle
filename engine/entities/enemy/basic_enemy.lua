@@ -538,6 +538,20 @@ function BasicEnemy:onHurt(damageInfo)
   end
 end
 
+function BasicEnemy:onKnockback(damageInfo)
+  if not self:isIntangible() then
+    self.isInHitstun = true
+
+    if self:isInAir() and self._originalMoveFilter then
+      -- swap back to original move filter so enemies
+      -- can get hit into hazard tiles
+      -- this is not possible until we swap from avoidHazardTilesInAirMoveFilter
+      self.moveFilter = self._originalMoveFilter
+      self._originalMoveFilter = nil
+    end
+  end 
+end
+
 
 BasicEnemy.ChargeType = ChargeType
 BasicEnemy.AimType = AimType

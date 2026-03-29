@@ -165,6 +165,7 @@ function Stalfos:draw()
 end
 
 function Stalfos:onHurt(damageInfo)
+  BasicEnemy.onHurt(self, damageInfo)
   if not self:isIntangible() then
     if damageInfo.hitstunTime > 0 then
       self:pause(damageInfo.hitstunTime)
@@ -173,6 +174,7 @@ function Stalfos:onHurt(damageInfo)
 end
 
 function Stalfos:onKnockback(damageInfo)
+  BasicEnemy.onKnockback(self, damageInfo)
   if not self:isIntangible() then
     if damageInfo.hitstunTime > 0 then
       self:pause(damageInfo.hitstunTime)
