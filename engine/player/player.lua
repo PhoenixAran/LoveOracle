@@ -61,7 +61,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field respawnPositionY number
 ---@field respawnDirection4 number
 ---@field moveAnimation string
----@field slotItems table<string, ItemEquipment?>
+---@field slotItems table<string, ItemEquipment>
 ---@field previousPositionX number
 ---@field previousPositionY number
 ---@field respawnIndexX integer
@@ -896,6 +896,18 @@ function Player:getActiveStates()
   end
 
   return activeStates
+end
+
+---if player has any equipped items that will override a given hitbox interaction
+---@param sender Hitbox
+---@return boolean
+function Player:triggerOverrideInteractions(sender)
+  for k, item in pairs(self.slotItems) do
+    if item:triggerOverrideInteractions(sender) then
+      return true
+    end
+  end
+  return false
 end
 
 function Player:update()

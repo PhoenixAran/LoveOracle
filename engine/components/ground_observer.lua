@@ -7,7 +7,7 @@ local TileTypeFlags = require 'engine.enums.flags.tile_type_flags'
 local TileTypes = TileTypeFlags.enumMap
 local vector = require 'engine.math.vector'
 
-local QUERY_RECT_LENGTH = 1.5
+local QUERY_RECT_LENGTH = 1.75
 
 --- Note that this will report what tile is under this ground observer
 --- It does not necessarily mean that the Entity is actually in the water or hole

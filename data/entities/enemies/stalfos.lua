@@ -87,7 +87,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     -- BasicEnemy setup
     self.isMoving = true
     self.sprite:play(self.animationMove)
-    self.projectileTypeClass = require 'engine.entities.projectile.monster_projectiles.bone_projectile' -- TODO put this in data folder
+    self.projectileTypeClass = require 'data.entities.enemies.projectiles.bone_projectile'
     self.projectileShootOdds = 300
     self.shootPauseDuration = 0
     self.shootType = BasicEnemy.ShootType.WhileMoving
@@ -96,8 +96,6 @@ local Stalfos = Class { __includes = BasicEnemy,
 
     -- stalfos
     self.jumpDelayTimer = 0
-
-    
   end
 }
 
@@ -111,7 +109,7 @@ function Stalfos:onAwake()
   if roomControl then
     local player = roomControl:getPlayer()
     if player then
-      player:connect('entity_item_used', self, "_onPlayerItemUsed")
+      player:connect('entity_item_used', self, "onPlayerItemUsed")
     end
   end
 end
@@ -145,7 +143,7 @@ function Stalfos:onLand()
   self.sprite:play(self.animationMove)
 end
 
-function Stalfos:_onPlayerItemUsed()
+function Stalfos:onPlayerItemUsed(item)
   -- check for jumnping toward or away fro mthe player
   if self:isOnGround() and self.jumpDelayTimer == 0 then
     -- get player
@@ -172,5 +170,7 @@ function Stalfos:onHurt(damageInfo)
     end
   end
 end
+
+
 
 return Stalfos

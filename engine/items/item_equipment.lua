@@ -26,11 +26,11 @@ function ItemEquipment:getType()
   return 'item_equipment'
 end
 
--- Item api
 function ItemEquipment:isEquippable()
   return true
 end
 
+-- Item api. ItemEquipment by defaults forwards all item api calls to the underlying item instance, but can be overridden if needed
 function ItemEquipment:getPlayer()
   return self.item:getPlayer()
 end
@@ -78,6 +78,14 @@ end
 function ItemEquipment:onReobtained()
   self.item:onReobtained()
 end
+
+
+---@oaram sender Hitbox
+---@return boolean
+function ItemEquipment:triggerOverrideInteractions(sender)
+  return self.item:triggerOverrideInteractions(sender)
+end
+
 
 -- ItemEquipment api
 

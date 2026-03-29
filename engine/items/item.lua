@@ -58,7 +58,8 @@ function Item:getLevel()
 end
 
 ---@param sender Hitbox
-function Item:overridesInteraction(sender)
+---@return boolean
+function Item:triggerOverrideInteractions(sender)
 end
 
 
