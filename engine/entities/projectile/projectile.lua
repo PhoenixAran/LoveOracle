@@ -212,6 +212,9 @@ function Projectile:debugDraw(entDebugDrawFlags)
 end
 
 --- interaction resolver api
+function Projectile:getInteractionResolver()
+  return self.interactionResolver
+end
 
 ---set interaction for when this entity runs into another entity's hitbox with a specific collision tag
 ---@param tag string collision tag

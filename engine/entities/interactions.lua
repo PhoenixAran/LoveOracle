@@ -1,10 +1,14 @@
 local ProjectileType = require 'engine.enums.projectile_type'
 
 
--- interactions are functions that can be used to resolve interactions between entities
--- see engine/components/interaction_resolver.lua
+--- interactions are functions that can be used to resolve interactions between entities
+--- see engine/components/interaction_resolver.lua
+--- all functions here assume the receiver and sender are Entity's that implement the InteractionResolver api. 
+--- See engine/entities/map_entity.lua and engine/entities/projectile/projectile.lua for examples of this api implemented in entities
 local Interactions = { }
 
+--- receiver ignores the interaction
+--- Note that this still counts as an interaction. See ItemShield:triggerOverrideInteractions() as an example
 function Interactions.ignore(receiver, sender)
   -- do nothing
 end
