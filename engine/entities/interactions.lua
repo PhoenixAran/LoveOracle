@@ -1,5 +1,6 @@
 local ProjectileType = require 'engine.enums.projectile_type'
 
+-- NB: this module is purposely nontyped
 
 --- interactions are functions that can be used to resolve interactions between entities
 --- see engine/components/interaction_resolver.lua
@@ -38,7 +39,7 @@ function Interactions.damageOther(receiver, sender)
   end
 end
 
---- deflect the sender if its a projectile
+--- deflect the sender if its a projectile or it has a :deflect() method
 function Interactions.deflect(receiver, sender)
   if receiver.projectileType then
     if receiver.projectileType == ProjectileType.notDeflectable then
@@ -52,7 +53,7 @@ function Interactions.deflect(receiver, sender)
   end
 end
 
---- intercept the sender if it has :intercept() method. Typically
+--- intercept the sender if its a projectile or it has a :intercept() method. Typically
 --- this is used for projectiles to cause them to crash or be destroyed
 function Interactions.intercept(receiver, sender)
   if sender.intercept then
@@ -60,7 +61,19 @@ function Interactions.intercept(receiver, sender)
   end
 end
 
+--- receiver entity bumps off the sender
+function Interactions.knockback(receiver, sender)
+  if receiver.entity and receiver.entity.knockback then
+    local senderEntity = sender.entity
+    local senderX, senderY = senderEntity:getPosition()
+    
+
+    local speed = 60 -- TODO maybe this should be based on the attack or something?
+    local time = 0.2
+    
+  end
+end
+
 
 
 return Interactions
-

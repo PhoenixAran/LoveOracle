@@ -43,8 +43,6 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field shadowVisible boolean
 ---@field rippleVisible boolean
 ---@field grassVisible boolean
----@field onHurt function
----@field onBump function
 ---@field _storedCollisionFlags table<string, any> used to store collision flags when MapEntity.DisableCollisions() is called so that they can be restored when MapEntity.EnableCollisions() is called
 ---@field _storedCollisionFlagsInUse boolean flag to make sure we correct behavior for MapEntity.DisableCollisions() being called multiple times in a row without MapEntity.EnableCollisions() being called or vice versa
 local MapEntity = Class { __includes = MoverEntity,
@@ -381,10 +379,12 @@ function MapEntity:hurt(damageInfo)
   end
 
   self.health:takeDamage(damageInfo.damage)
-  if self.onHurt then
-    self:onHurt(damageInfo)
-  end
+  self:onHurt(damageInfo)
   self:signal('entity_hit')
+end
+
+function MapEntity:onHurt(damageInfo)
+
 end
 
 function MapEntity:knockback(vectorX, vectorY, speed, time)
@@ -392,29 +392,23 @@ function MapEntity:knockback(vectorX, vectorY, speed, time)
   self:setKnockbackSpeed(speed)
   local ex, ey = self:getPosition()
   self:setKnockbackVector(vector.sub(ex, ey, vectorX, vectorY))
+  self:onKnockback(vectorX, vectorY, speed, time)
+  self:signal('entity_bumped') -- maybe rename this
+  
 end
 
----TODO bump this entity
----@param sourcePositionX number
----@param sourcePositionY any
----@param duration any
----@param speed any
-function MapEntity:bump(sourcePositionX, sourcePositionY, duration, speed)
-  -- TODO bump entity
-  if self.onBump then
-    self:onBump(sourcePositionX, sourcePositionY, duration, speed)
-  end
-  self:signal('entity_bumped')
+function MapEntity:onKnockback(vectorX, vectorY, speed, time)
 end
 
-function MapEntity:onDie()
-end
 
 --- calls self:onDie() and then destroys the entity via self:destroy()
 --- Use this when an NPC gets destroyed via hitboxes
 function MapEntity:die()
   self:onDie()
   self:destroy()
+end
+
+function MapEntity:onDie()
 end
 
 -- sprite flash
