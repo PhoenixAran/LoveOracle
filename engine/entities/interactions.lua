@@ -64,13 +64,8 @@ end
 --- receiver entity bumps off the sender
 function Interactions.knockback(receiver, sender)
   if receiver.entity and receiver.entity.knockback then
-    local senderEntity = sender.entity
-    local senderX, senderY = senderEntity:getPosition()
-    
-
-    local speed = 60 -- TODO maybe this should be based on the attack or something?
-    local time = 0.2
-    
+    local senderKnockbackInfo = sender:getKnockbackInfo()
+    receiver.entity:knockback(senderKnockbackInfo)
   end
 end
 

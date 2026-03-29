@@ -45,6 +45,11 @@ local ItemShield = Class { __includes = ItemWeapon,
     ItemWeapon.init(self, args)
     self.hitbox = Hitbox(self)
     self.hitbox:setEnabled(false)
+    self.hitbox.damageInfo.damage = 0
+    self.hitbox.damageInfo.hitstunTime = 20
+    self.hitbox.damageInfo.knockbackSpeed = 65
+    self.hitbox.damageInfo.intangibilityTime = 0
+    self.hitbox.damageInfo.knockbackTime = 20
 
     self.item.level = args.level or 1
 
@@ -118,8 +123,8 @@ function ItemShield:triggerOverrideInteractions(sender)
     if senderEntity['getInteractionResolver'] then
       -- sender entity implements Interaction resolver api
       local interactionResolver = senderEntity['getInteractionResolver'](senderEntity)
-      if interactionResolver:hasInteraction(self.collisionTag) then
-        local interaction = interactionResolver:getInteraction(self.collisionTag)
+      if interactionResolver:hasInteraction(self.hitbox.collisionTag) then
+        local interaction = interactionResolver:getInteraction(self.hitbox.collisionTag)
         if interaction ~= nil then
           return true
         end

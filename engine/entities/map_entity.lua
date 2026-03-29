@@ -375,7 +375,12 @@ function MapEntity:hurt(damageInfo)
 
   end
   if damageInfo:applyKnockback() then
-    self:knockback(damageInfo.sourceX, damageInfo.sourceY, damageInfo.knockbackSpeed, damageInfo.knockbackTime)
+    -- apply knockback vars
+    self:setKnockback(damageInfo.knockbackTime)
+    self:setKnockbackSpeed(damageInfo.knockbackSpeed)
+    local ex, ey = self:getPosition()
+    self:setKnockbackVector(vector.sub(ex, ey, damageInfo.sourceX, damageInfo.sourceY))
+    self:onKnockback(damageInfo)
   end
 
   self.health:takeDamage(damageInfo.damage)
@@ -387,19 +392,20 @@ function MapEntity:onHurt(damageInfo)
 
 end
 
-function MapEntity:knockback(vectorX, vectorY, speed, time)
-  self:setKnockback(time)
-  self:setKnockbackSpeed(speed)
+
+-- todo rename this to bump
+---@param damageInfo DamageInfo
+function MapEntity:knockback(damageInfo)
+  self:setKnockback(damageInfo.knockbackTime)
+  self:setKnockbackSpeed(damageInfo.knockbackSpeed)
   local ex, ey = self:getPosition()
-  self:setKnockbackVector(vector.sub(ex, ey, vectorX, vectorY))
-  self:onKnockback(vectorX, vectorY, speed, time)
-  self:signal('entity_bumped') -- maybe rename this
-  
+  self:setKnockbackVector(vector.sub(ex, ey, damageInfo.sourceX, damageInfo.sourceY))
+  self:onKnockback(damageInfo)
+  self:signal('entity_bumped')
 end
 
-function MapEntity:onKnockback(vectorX, vectorY, speed, time)
+function MapEntity:onKnockback(damageInfo)
 end
-
 
 --- calls self:onDie() and then destroys the entity via self:destroy()
 --- Use this when an NPC gets destroyed via hitboxes

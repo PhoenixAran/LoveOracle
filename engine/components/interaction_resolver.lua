@@ -49,4 +49,5 @@ function InteractionResolver:resolveInteraction(receiver, sender)
   end
 end
 
+
 return InteractionResolver

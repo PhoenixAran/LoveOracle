@@ -181,6 +181,12 @@ function Hitbox:getDamageInfo()
   return self.damageInfo
 end
 
+-- by default just uses damage info
+-- knockback interaction ignores damage anyways
+function Hitbox:getKnockbackInfo()
+  return self:getDamageInfo()
+end
+
 ---@param x number
 ---@param y number
 function Hitbox:setOffset(x, y)

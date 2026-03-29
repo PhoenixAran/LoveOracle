@@ -83,6 +83,7 @@ local Stalfos = Class { __includes = BasicEnemy,
     self.collisionTag = CollisionTag.enemy
     self:setInteraction(CollisionTag.player, Interactions.damageOther)
     self:setInteraction(CollisionTag.sword, Interactions.takeDamage)
+    self:setInteraction(CollisionTag.shield, Interactions.knockback)
 
     -- BasicEnemy setup
     self.isMoving = true
@@ -171,6 +172,13 @@ function Stalfos:onHurt(damageInfo)
   end
 end
 
+function Stalfos:onKnockback(damageInfo)
+  if not self:isIntangible() then
+    if damageInfo.hitstunTime > 0 then
+      self:pause(damageInfo.hitstunTime)
+    end
+  end
+end
 
 
 return Stalfos

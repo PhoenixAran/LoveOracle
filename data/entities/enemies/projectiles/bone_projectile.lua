@@ -36,6 +36,7 @@ local BoneProjectile = Class { __includes = Projectile,
 
     -- set collision reactions
     self:setInteraction(CollisionTag.player, Interactions.damageOther)
+    self:setInteraction(CollisionTag.shield, Interactions.deflect)
   end
 }
 
