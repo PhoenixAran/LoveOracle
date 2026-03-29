@@ -82,10 +82,10 @@ local MapEntity = Class { __includes = MoverEntity,
     self.interactionResolver = InteractionResolver(self)
 
     -- component configuration
-    self.health:connect('health_depleted', self, '_onHealthDepleted')
-    self.hitbox:connect('hitbox_entered', self, '_onHitboxEntered')
-    self.hitbox:connect('damaged_other', self, '_onHitboxDamagedOther')
-    self.hitbox:connect('resisted', self, '_onHitboxResisted')
+    self.health:connect('health_depleted', self, 'onHealthDepleted')
+    self.hitbox:connect('hitbox_entered', self, 'onHitboxEntered')
+    self.hitbox:connect('damaged_other', self, 'onHitboxDamagedOther')
+    self.hitbox:connect('resisted', self, 'onHitboxResisted')
 
     -- NB: this collision box will NOT actually exist in the Physics system
     -- if this is not null, it will only be used to collide with room edges if you want the room edge collider
@@ -392,7 +392,7 @@ function MapEntity:knockback(vectorX, vectorY, speed, time)
 end
 
 ---TODO bump this entity
----@param sourcePositionX any
+---@param sourcePositionX number
 ---@param sourcePositionY any
 ---@param duration any
 ---@param speed any
@@ -492,19 +492,19 @@ function MapEntity:debugDraw(entDebugDrawFlags)
 end
 
 -- signal callbacks
-function MapEntity:_onHealthDepleted()
+function MapEntity:onHealthDepleted()
   self.deathMarked = true
 end
 
-function MapEntity:_onHitboxEntered(hitbox)
+function MapEntity:onHitboxEntered(hitbox)
   self:resolveInteraction(self.hitbox, hitbox)
 end
 
 
-function MapEntity:_onHitboxDamagedOther(hitbox)
+function MapEntity:onHitboxDamagedOther(hitbox)
 end
 
-function MapEntity:_onHitboxResisted(otherHitbox)
+function MapEntity:onHitboxResisted(otherHitbox)
 end
 
 return MapEntity

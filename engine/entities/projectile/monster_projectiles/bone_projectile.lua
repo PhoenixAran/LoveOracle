@@ -22,7 +22,7 @@ local BoneProjectile = Class { __includes = Projectile,
     self:setCollidesWithLayer({'tile'})
     self:setCollisionTiles('wall')
     self.bounceOnCrash = true
-    self.w, self.h = 2, 2
+    self.w, self.h = 6, 6
 
     self.hitbox:resize(10, 10)
     self.hitbox:setCollisionTag(self.collisionTag)

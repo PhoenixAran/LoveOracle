@@ -133,6 +133,7 @@ end
 function ItemEquipment:isButtonPressed()
   for _, button in ipairs(self.useButtons) do
     if Input:pressed(button) then
+      self:onButtonPressed()
       return true
     end
   end

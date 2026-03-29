@@ -713,7 +713,7 @@ end
 function Player:actionUseItem(button)
   local item = self.slotItems[button]
   if item ~= nil and item:isUsable() then
-    if item:onButtonPressed() then
+    if item:isButtonPressed() then
       self:emit('entity_item_used', item)
       return true
     end

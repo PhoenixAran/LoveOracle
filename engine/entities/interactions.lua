@@ -1,7 +1,7 @@
 local ProjectileType = require 'engine.enums.projectile_type'
 
 
--- interactinos are functions that can be used to resolve interactions between entities
+-- interactions are functions that can be used to resolve interactions between entities
 -- see engine/components/interaction_resolver.lua
 local Interactions = { }
 
@@ -15,6 +15,9 @@ end
 function Interactions.takeDamage(receiver, sender)
   if not (receiver.entity.isIntangible and receiver.entity:isIntangible()) then
     if receiver.entity.hurt then
+      if receiver.entity.triggerOverrideInteractions and receiver.entity:triggerOverrideInteractions(sender) then
+        return  -- exit out early
+      end
       receiver.entity:hurt(sender:getDamageInfo())
       sender:notifyDidDamage(receiver)
     end
