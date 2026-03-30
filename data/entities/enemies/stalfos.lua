@@ -119,7 +119,7 @@ function Stalfos:updateAi()
   BasicEnemy.updateAi(self)
   if self.jumpDelayTimer > 0 then
     self.jumpDelayTimer = self.jumpDelayTimer - 1
-  end
+  end  
 end
 
 ---@param player Player

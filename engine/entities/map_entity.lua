@@ -396,12 +396,15 @@ end
 -- todo rename this to bump
 ---@param damageInfo DamageInfo
 function MapEntity:knockback(damageInfo)
-  self:setKnockback(damageInfo.knockbackTime)
-  self:setKnockbackSpeed(damageInfo.knockbackSpeed)
-  local ex, ey = self:getPosition()
-  self:setKnockbackVector(vector.sub(ex, ey, damageInfo.sourceX, damageInfo.sourceY))
-  self:onKnockback(damageInfo)
-  self:signal('entity_bumped')
+  if not self:inKnockback() then
+    self:setKnockback(damageInfo.knockbackTime)
+    self:setKnockbackSpeed(damageInfo.knockbackSpeed)
+    self:setHitstun(damageInfo.hitstunTime)
+    local ex, ey = self:getPosition()
+    self:setKnockbackVector(vector.sub(ex, ey, damageInfo.sourceX, damageInfo.sourceY))
+    self:onKnockback(damageInfo)
+    self:signal('entity_bumped')
+  end
 end
 
 function MapEntity:onKnockback(damageInfo)

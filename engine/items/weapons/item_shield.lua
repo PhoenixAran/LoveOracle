@@ -46,10 +46,10 @@ local ItemShield = Class { __includes = ItemWeapon,
     self.hitbox = Hitbox(self)
     self.hitbox:setEnabled(false)
     self.hitbox.damageInfo.damage = 0
-    self.hitbox.damageInfo.hitstunTime = 5
-    self.hitbox.damageInfo.knockbackSpeed = 65
-    self.hitbox.damageInfo.intangibilityTime = 0
-    self.hitbox.damageInfo.knockbackTime = 20
+    self.hitbox.damageInfo.hitstunTime = 11
+    self.hitbox.damageInfo.knockbackSpeed = 75
+    self.hitbox.damageInfo.intangibilityTime = 8
+    self.hitbox.damageInfo.knockbackTime = 11
 
     self.item.level = args.level or 1
 

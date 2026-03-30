@@ -4,7 +4,7 @@
  "layers":[
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAAE+3VMW7CQBCF4QkBJAJCggTuQ5E0KUhDkTQU0KTJXVxTcASuyFhitJaz9noJilfm\/6QnWbbG2vHanr6IDK7MUNP\/Y33bJpoHTS8yj5rpDerblq9\/pHny5FWz0mw0n6VrY3H9W\/13wxTr21bX\/1rzrtlqdvK7f9tLO5eJ6\/FUkUzS7f8o\/ufgS77++SV2rsneHyTd\/kMpPh\/f+x+TlPqfidvLuhwLx8\/i+m9aP\/fUt+1Fs6hIvq\/jmuvLQH3oXst\/6C+kbn7bmm8x\/333Smn+x36\/sfPf6lKc\/7G9W7ry\/7u2f9vLcv9vmr3m63Lc1f7tX17u\/0PzI+45dLX\/rrz\/+fyOXf89zP9QYuZ\/VT0AAAAAAAAAAAAAAAAAAAAAAEDIGVex0FAAQAAA",
+         "data":"H4sIAAAAAAAACu3VMW7CQBCF4QkBJAJCggTuQ5E0KUhDkTQU0KTJXVxTcASuyFhitJaz9noJilfm\/6QnWbbG2vHanr6IDK7MUNP\/Y33bJpoHTS8yj5rpDerblq9\/pHny5FWz0mw0n6VrY3H9W\/13wxTr21bX\/1rzrtlqdvK7f9tLO5eJ6\/FUkUzS7f8o\/ufgS77++SV2rsneHyTd\/kMpPh\/f+x+TlPqfidvLuhwLx8\/i+m9aP\/fUt+1Fs6hIvq\/jmuvLQH3oXst\/6C+kbn7bmm8x\/333Smn+x36\/sfPf6lKc\/7G9W7ry\/7u2f9vLcv9vmr3m63Lc1f7tX17u\/0PzI+45dLX\/rrz\/+fyOXf89zP9QYuZ\/VT0AAAAAAAAAAAAAAAAAAAAAAEDIGVex0FAAQAAA",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -18,7 +18,7 @@
         }, 
         {
          "compression":"gzip",
-         "data":"H4sIAAAAAAAAE+3WMQqAMBBFwb1\/5yFSpPKKGtBGRATXIuwMvDp8kiIRDP0oQ9tbH2pJ52T6a\/8Sc+zPdO6\/qrZ\/pvefqb0IoJoeuX+NWfSbKqm+vyr3DQAAAAAAAAAAAAAA8M0GB3uqQwBAAAA=",
+         "data":"H4sIAAAAAAAACu3WMQqAMBBFwb1\/5yFSpPKKGtBGRATXIuwMvDp8kiIRDP0oQ9tbH2pJ52T6a\/8Sc+zPdO6\/qrZ\/pvefqb0IoJoeuX+NWfSbKqm+vyr3DQAAAAAAAAAAAAAA8M0GB3uqQwBAAAA=",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -123,6 +123,12 @@
                  "template":"..\/templates\/monsters\/stalfos_orange.tj",
                  "x":202.858044448451,
                  "y":69.4225307668034
+                }, 
+                {
+                 "id":107,
+                 "template":"..\/templates\/monsters\/stalfos_orange.tj",
+                 "x":178.858,
+                 "y":165.4225
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -138,8 +144,8 @@
                 {
                  "id":40,
                  "template":"..\/templates\/test_spawn.tj",
-                 "x":160,
-                 "y":160
+                 "x":115,
+                 "y":173.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -148,10 +154,10 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":107,
+ "nextobjectid":108,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.12.1",
+ "tiledversion":"1.11.2",
  "tileheight":16,
  "tilesets":[
         {

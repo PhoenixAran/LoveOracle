@@ -92,10 +92,11 @@ end
 ---@field moveTimer integer
 ---@field isChasingPlayer boolean
 ---@field isPaused boolean
+---@field prePauseMoveDirectionX number
+---@field prePauseMoveDirectionY number
 ---@field pauseTimer integer
 ---@field isShooting boolean
 ---@field isCharging boolean
----@field isInHitstun boolean
 ---@field isMarkedDead boolean
 ---@field hitstunAnimation string
 ---@field moveDirectionX number
@@ -129,6 +130,9 @@ local BasicEnemy = Class { __includes = Enemy,
     self.moveDirectionX = args.moveDirectionX or 0
     self.moveDirectionY = args.moveDirectionY or 0
     self.moveAngleSnap = args.moveAngleSnap or AngleSnap.none
+    
+    self.prePauseMoveDirectionX = 0
+    self.prePauseMoveDirectionY = 0
 
     -- charging
     self.chargeType = args.chargeType or ChargeType.None
@@ -316,6 +320,8 @@ end
 function BasicEnemy:pause(duration)
   self.pauseTimer = duration
   self.isPaused = true
+  self.prePauseMoveDirectionX, self.prePauseMoveDirectionY = self.moveDirectionX, self.moveDirectionY
+  self:setVector(0, 0)
 end
 
 function BasicEnemy:startCharging()
@@ -447,12 +453,15 @@ function BasicEnemy:updateAi()
     elseif self.isPaused then
       if self.pauseTimer <= 0 then
         self.isPaused = false
+        self:setVector(self.prePauseMoveDirectionX, self.prePauseMoveDirectionY)
+        self.prePauseMoveDirectionX, self.prePauseMoveDirectionY = 0, 0
       end
       self.pauseTimer = self.pauseTimer - 1
-    elseif self.isInHitstun then
-      if not self:inHitstun() then
-        self.isInHitstun = false
-      end
+
+      -- move so knockback vectors and other movement still apply while paused
+      self:move()
+    elseif self:inHitstun() then
+      self:move()
     elseif self.isShooting then
       if self.pauseTimer <= 0 then
         self:shoot()
@@ -467,7 +476,7 @@ function BasicEnemy:updateAi()
       self:updateChargingState()
     elseif self.isChasingPlayer then
       local player = Singletons.gameControl:getPlayer()
-      if player then
+      if player then 
         local px, py = player:getPosition()
         self:facePlayer()
         self.moveDirectionX, self.moveDirectionY = vector.sub(px, py, self:getPosition())
@@ -493,7 +502,7 @@ function BasicEnemy:updateAi()
           end
         end
       end
-      
+
       if self.isMoving then
         self:updateMovingState()
       else
@@ -523,7 +532,6 @@ end
 
 function BasicEnemy:onHurt(damageInfo)
   if not self:isIntangible() then
-    self.isInHitstun = true
     if self.sprite and self.sprite.play and self.hitstunAnimation and self.hitstunAnimation ~= '' then
       self.sprite:play(self.hitstunAnimation)
     end
@@ -540,8 +548,6 @@ end
 
 function BasicEnemy:onKnockback(damageInfo)
   if not self:isIntangible() then
-    self.isInHitstun = true
-
     if self:isInAir() and self._originalMoveFilter then
       -- swap back to original move filter so enemies
       -- can get hit into hazard tiles
