@@ -161,16 +161,22 @@ local Player = Class { __includes = MapEntity,
     self:addPressInteraction('x', function(player)
       if not self:actionUseItem('x') then
         self:actionStroke('x')
+        return true
       end
+      return false
     end)
     self:addPressInteraction('a', function(player)
       self.playerMovementController:jump()
+      return true
     end)
     self:addPressInteraction('b', function(player)
-      self:actionUseItem('b')
+      return self:actionUseItem('b')
     end)
     self:addPressInteraction('y', function(player)
-      self:actionUseItem('y')
+      return self:actionUseItem('y')
+    end)
+    self:addPressInteraction('leftShoulder', function(player)
+      return self:actionUseItem('leftShoulder')
     end)
 
     self.slotItems = {

@@ -6,7 +6,7 @@ local CollisionTag = require 'engine.enums.collision_tag'
 local Hitbox = require 'engine.components.hitbox'
 local Direction4 = require 'engine.enums.direction4'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
-local canCollide = require('engine.entities.bump_box').canCollide
+local isColliding = require('engine.entities.bump_box').isColliding
 local Interactions = require 'engine.entities.interactions'
 
 local SHIELD_HITBOX_PLACEMENTS = {
@@ -118,7 +118,7 @@ end
 ---@param sender Hitbox
 ---@return boolean
 function ItemShield:triggerOverrideInteractions(sender)
-  if self.hitbox:isEnabled() and canCollide(self.hitbox, sender) then
+  if self.hitbox:isEnabled() and isColliding(self.hitbox, sender) then
     local senderEntity = sender.entity
     if senderEntity['getInteractionResolver'] then
       -- sender entity implements Interaction resolver api

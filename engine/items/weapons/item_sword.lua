@@ -28,6 +28,7 @@ local ItemSword = Class { __includes = ItemWeapon,
 
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWhileInHole = true
+    
   end
 }
 

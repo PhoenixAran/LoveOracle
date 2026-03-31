@@ -72,7 +72,7 @@ function PlayerShieldState:onUpdateNotBlockingState()
 
   -- check for beginning shield blocking
   if self.shield:isButtonDown()
-       and not playerPressedActionButton
+       and playerPressedActionButton
        and (self.player:getWeaponState() == nil or self.player:getWeaponState():getType() == 'player_push_state')
     then
     self.subStateMachine:beginState(ShieldState.blocking)

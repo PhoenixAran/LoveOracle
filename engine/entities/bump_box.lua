@@ -206,6 +206,8 @@ function BumpBox:reportsCollisionsWith(otherBumpBox)
   return false
 end
 
+--- check if the other bumpbox's collidesWithLayer matches this bumpbox's physicsLayer
+--- also checks if the zDistance is within the max distance for collision
 ---@param item BumpBox
 ---@param other BumpBox
 ---@return boolean
@@ -226,6 +228,25 @@ function BumpBox.canCollide(item, other)
   end
 
   return true
+end
+
+--- check if two bumpboxes are intersecting (bounding box check)
+--- note that this does not check if the z distance is within the max distance for collision, or if the collision layers match
+--- so it is possible for two boxes to be intersecting but not colliding!
+---@param item BumpBox
+---@param other BumpBox
+function BumpBox.isIntersecting(item, other)
+  return rect.isIntersecting(item.x, item.y, item.w, item.h, other.x, other.y, other.w, other.h)
+end
+
+
+--- check if two bumpboxes are colliding
+--- this requires both collision eligibility and 2D intersection
+---@param item BumpBox
+---@param other BumpBox
+---@return boolean
+function BumpBox.isColliding(item, other)
+  return BumpBox.canCollide(item, other) and BumpBox.isIntersecting(item, other)
 end
 
 --- checks if two bumpboxes are aligned in a specific direction (based on center positions)
