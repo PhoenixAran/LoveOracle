@@ -63,6 +63,8 @@ local MoverEntity = Class { __includes = Entity,
 
     -- vars
     self.collisionTiles = 0
+    self.movesWithConveyors = true
+    self.movesWithPlatforms = true
     self.moveCollisions = { }  -- table to store collisions that occur when MapEntity:move() is called
 
     -- move filters
