@@ -41,23 +41,25 @@ end
 
 --- deflect the sender if its a projectile or it has a :deflect() method
 function Interactions.deflect(receiver, sender)
-  if receiver.projectileType then
-    if receiver.projectileType == ProjectileType.notDeflectable then
+  local senderProjectile = receiver.entity
+  if senderProjectile.projectileType then
+    if senderProjectile.projectileType == ProjectileType.notDeflectable then
       return
     end
     -- TODO weapon level logic here
   end
 
-  if receiver.deflect then
-    receiver:deflect()
+  if senderProjectile.deflect then
+    senderProjectile:deflect()
   end
 end
 
 --- intercept the sender if its a projectile or it has a :intercept() method. Typically
 --- this is used for projectiles to cause them to crash or be destroyed
 function Interactions.intercept(receiver, sender)
-  if sender.intercept then
-    sender:intercept()
+  local senderProjectile = sender.entity
+  if senderProjectile.intercept then
+    senderProjectile:intercept()
   end
 end
 
