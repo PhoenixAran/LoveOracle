@@ -69,6 +69,9 @@ end
 function PlayerSwimEnvironmentState:drown()
   if not self.isDrowning then
     self.isDrowning = true
+    
+    self.stateParameters.animations.default = 'drown'
+    self.stateParameters.animations.move = 'drown'
     self.player.sprite:play('drown')
     self.player:startRespawnControlState(false)
   end

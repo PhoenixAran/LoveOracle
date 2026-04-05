@@ -159,14 +159,19 @@ local Player = Class { __includes = MapEntity,
 
     -- bind controls (except dpad, thats automatically done)
     self:addPressInteraction('x', function(player)
-      if not self:actionUseItem('x') then
-        self:actionStroke('x')
-        return true
-      end
-      return false
+      -- local dmg = require('engine.entities.damage_info')()
+      -- dmg.damage = 5
+      -- dmg.knockbackSpeed = 50
+      -- dmg.knockbackTime = 10
+      -- dmg.hitstunTime = 10
+      -- self:hurt(dmg)
+      -- return true
+      return self:actionUseItem('x')
     end)
     self:addPressInteraction('a', function(player)
-      self.playerMovementController:jump()
+      if not self:actionStroke('x') then
+        self.playerMovementController:jump()
+      end
       return true
     end)
     self:addPressInteraction('b', function(player)
@@ -180,8 +185,7 @@ local Player = Class { __includes = MapEntity,
     end)
 
     self.slotItems = {
-      ['a'] = nil,
-      ['b'] = nil
+
     }
 
     -- entity sprite effect configuration

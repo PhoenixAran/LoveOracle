@@ -81,8 +81,18 @@ function PlayerRespawnDeathState:onEndViewPanningState()
   self.respawnState = RespawnState.Delay
 end
 
+function PlayerRespawnDeathState:shouldWaitForCurrentAnimation()
+  if not self.waitForAnimation then
+    return false
+  end
+
+  local sprite = self.player.sprite
+  local currentAnimation = sprite and sprite.currentAnimation
+  return currentAnimation ~= nil and currentAnimation.loopType == 'once'
+end
+
 function PlayerRespawnDeathState:onUpdateDeathAnimationState()
-  if (not self.waitForAnimation) or self.player.sprite:isCompleted() then
+  if (not self:shouldWaitForCurrentAnimation()) or self.player.sprite:isCompleted() then
     self.subStateMachine:nextState()
   end
 end
