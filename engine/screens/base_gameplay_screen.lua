@@ -49,14 +49,23 @@ function BaseGameplayScreen:enter(prev, ...)
   local Sword = require 'engine.items.weapons.item_sword'
   local sword = Sword({name = 'sword'})
   sword.useButtons = { 'b' }
+  sword.item.level = 1
   sword:setPlayer(player)
   sword:equip()
 
   local Shield = require 'engine.items.weapons.item_shield'
   local shield = Shield({name = 'shield'})
+  shield.item.level = 1
   shield.useButtons = { 'leftShoulder'}
   shield:setPlayer(player)
   shield:equip()
+
+  local Boomerang = require 'engine.items.weapons.item_boomerang'
+  local boomerang = Boomerang({name = 'boomerang'})
+  boomerang.useButtons = { 'x' }
+  boomerang.item.level = 1
+  boomerang:setPlayer(player)
+  boomerang:equip()
 
   self.gameControl:setPlayer(player)
   local map = Map(mapFile)

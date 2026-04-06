@@ -610,8 +610,8 @@ local function moduleFunction(spriteBank)
     -- @animation effect_cling_light
     sb:setSpriteSheet('color_effects_' .. color)
     sb:setDefaultLoopType('once')
-    sb:addSpriteFrame(7, 1, 0, 0, 4)
-    sb:addSpriteFrame(8, 1, 0, 0, 5)
+    sb:addSpriteFrame(7, 1, 0, 0, 4, .5)
+    sb:addSpriteFrame(8, 1, 0, 0, 5, .5)
     local animation = sb:build()
     spriteBank.registerAnimation('effect_cling_light_' .. color, animation)
   end

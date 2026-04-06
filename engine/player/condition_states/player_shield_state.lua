@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 local PlayerState = require 'engine.player.player_state'
-local GenericStateMachine = require 'engine.utils.generic_state_machine'
+local SimpleStateMachine = require 'engine.utils.simple_state_machine'
 
 local ShieldState = {
   notBlocking = 1,
@@ -13,13 +13,13 @@ local ShieldState = {
 ---@class PlayerShieldState : PlayerState
 ---@field shieldState integer
 ---@field shield ItemShield
----@field subStateMachine GenericStateMachine
+---@field subStateMachine SimpleStateMachine
 local PlayerShieldState = Class { __includes = PlayerState,
   init = function(self, args)
     PlayerState.init(self, args)
     self.shieldState = ShieldState.notBlocking
 
-    self.subStateMachine = GenericStateMachine(self, ShieldState)
+    self.subStateMachine = SimpleStateMachine(self, ShieldState)
     self.subStateMachine:addState(ShieldState.notBlocking)
                         :onBegin(self.onBeginNotBlockingState)
                         :onUpdate(self.onUpdateNotBlockingState)

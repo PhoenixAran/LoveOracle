@@ -43,15 +43,15 @@ end
 -- override playerstate methods
 ---@param previousState PlayerState?
 function PlayerBusyState:onBegin(previousState)
-  self.canJump = false
-  self.canWarp = false
-  self.canLedgeJump = false
-  self.canControlOnGround = false
-  self.canControlInAir = false
-  self.canPush = false
-  self.canUseWeapons = false
-  self.canRoomTransition = false
-  self.canStrafe = false
+  self.stateParameters.canJump = false
+  self.stateParameters.canWarp = false
+  self.stateParameters.canLedgeJump = false
+  self.stateParameters.canControlOnGround = false
+  self.stateParameters.canControlInAir = false
+  self.stateParameters.canPush = false
+  self.stateParameters.canUseWeapons = false
+  self.stateParameters.canRoomTransition = false
+  self.stateParameters.canStrafe = false
 
   self.timer = 0
 

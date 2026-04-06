@@ -2,8 +2,8 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 
---- Used by GenericStateMachine to represent a single state. 
---- Meant for intenral use by GenericStateMachine
+--- Used by SimpleStateMachine to represent a single state. 
+--- Meant for internal use by SimpleStateMachine
 --- @class GenericState
 --- @field init function we get this from the class module
 --- @field id any the id of this state
@@ -11,11 +11,11 @@ local vector = require 'engine.math.vector'
 --- @field beginFunc function?
 --- @field updateFunc function?
 --- @field endFunc function?
---- @field stateMachine GenericStateMachine the state machine that this state belongs to
+--- @field stateMachine SimpleStateMachine the state machine that this state belongs to
 --- @field active boolean whether this state is currently active
 local GenericState = Class {
-  init = function(self, genericStateMachine)
-    self.stateMachine = genericStateMachine
+  init = function(self, simpleStateMachine)
+    self.stateMachine = simpleStateMachine
     self.id = nil
     self.beginFunc = nil
     self.updateFunc = nil
@@ -58,8 +58,8 @@ end
 ---@field timedActionsList table<{tick: integer, func: function}> a list of the timed actions in order of their ticks. This is used to iterate through the timed actions in order without having to sort the keys of the timedActions table
 ---@field activeDuration integer
 local TimedState = Class { __includes = GenericState,
-  init = function(self, genericStateMachine)
-    GenericState.init(self, genericStateMachine)
+  init = function(self, simpleStateMachine)
+    GenericState.init(self, simpleStateMachine)
     self.tick = 0
     self.rangeMin = -1
     self.rangeMax = -1
@@ -145,13 +145,13 @@ end
 --- The integer values are used as state IDs and for nextState() ordering.
 --- Values should be unique and preferably sequential (1..n).
 --- Order is not guaranteed unless stateIds is sorted.
----@class GenericStateMachine
+---@class SimpleStateMachine
 ---@field context any the context that will be passed into the begin/update/end functions of each state as the first parameter. Example would be an Entity
 ---@field states table<any, GenericState> a table mapping state ids to GenericState objects
 ---@field stateIds any[] a list of the state ids
 ---@field currentState GenericState the current state
-local GenericStateMachine = Class {
-  ---@param self GenericStateMachine
+local SimpleStateMachine = Class {
+  ---@param self SimpleStateMachine
   ---@param context any?
   ---@param stateType table<any, any> enum state map 
   init = function(self, context, stateType)
@@ -165,21 +165,35 @@ local GenericStateMachine = Class {
   end
 }
 
-function GenericStateMachine:getType()
-  return 'generic_state_machine'
+function SimpleStateMachine:getType()
+  return 'simple_state_machine'
 end
 
-function GenericStateMachine:getContext()
+function SimpleStateMachine:getContext()
   return self.context
 end
 
 --- add a new state using the given Id
 ---@param stateId any
+---@param funcTable table with optional keys onBegin, onUpdate, onEnd mapping to functions that will be called during the respective phases of the state. Each function should take the context as a parameter
 ---@return TimedState
-function GenericStateMachine:addState(stateId)
+function SimpleStateMachine:addState(stateId, funcTable)
   local timedState = TimedState(self)
   timedState.id = stateId
   self.states[stateId] = timedState
+
+  if funcTable then
+    if funcTable.onBegin then
+      timedState:onBegin(funcTable.onBegin)
+    end
+    if funcTable.onUpdate then
+      timedState:onUpdate(funcTable.onUpdate)
+    end
+    if funcTable.onEnd then
+      timedState:onEnd(funcTable.onEnd)
+    end
+  end
+
   return timedState
 end
 
@@ -187,7 +201,7 @@ end
 --- begin the state machine on the state with the given Id
 --- this will not end the previous state if one was active
 ---@param stateId any
-function GenericStateMachine:initializeOnState(stateId)
+function SimpleStateMachine:initializeOnState(stateId)
   self.currentState = self.states[stateId]
   if self.currentState then
     self.currentState:begin()
@@ -197,7 +211,7 @@ end
 
 --- begin or transition to the state with the given id
 ---@param stateId any
-function GenericStateMachine:beginState(stateId)
+function SimpleStateMachine:beginState(stateId)
   if self.currentState then
     self.currentState:endState()
   end
@@ -208,7 +222,7 @@ function GenericStateMachine:beginState(stateId)
 end
 
 --- ends the currently active state
-function GenericStateMachine:endCurrentState()
+function SimpleStateMachine:endCurrentState()
   if self.currentState then
     self.currentState:endState()
     self.currentState = nil
@@ -216,16 +230,16 @@ function GenericStateMachine:endCurrentState()
 end
 
 --- transition to the next state as defined by the order of the state ID values
-function GenericStateMachine:nextState()
+function SimpleStateMachine:nextState()
   local index = lume.find(self.stateIds, self.currentState.id)
   index = (index % lume.count(self.stateIds)) + 1
   self:beginState(self.stateIds[index])
 end
 
-function GenericStateMachine:update()
+function SimpleStateMachine:update()
   if self.currentState then
     self.currentState:update()
   end
 end
 
-return GenericStateMachine
+return SimpleStateMachine

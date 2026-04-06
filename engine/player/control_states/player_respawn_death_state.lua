@@ -5,7 +5,7 @@ local Tween = require 'lib.tween'
 local rect = require 'engine.math.rectangle'
 local DamageInfo = require 'engine.entities.damage_info'
 local Camera = require 'engine.camera'
-local GenericStateMachine = require 'engine.utils.generic_state_machine'
+local SimpleStateMachine = require 'engine.utils.simple_state_machine'
 
 local RespawnState = {
   DeathAnimation = 0,
@@ -20,7 +20,7 @@ local RespawnState = {
 ---@field lastCameraX number
 ---@field lastCameraY number
 ---@field respawnDamageInfo DamageInfo
----@field subStateMachine GenericStateMachine
+---@field subStateMachine SimpleStateMachine
 local PlayerRespawnDeathState = Class { __includes = PlayerState,
   ---@param self PlayerRespawnDeathState
   init = function(self)
@@ -41,7 +41,7 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
 
 
     -- configure the sub-state machine
-    self.subStateMachine = GenericStateMachine(self, RespawnState)
+    self.subStateMachine = SimpleStateMachine(self, RespawnState)
     self.subStateMachine:addState(RespawnState.DeathAnimation)
                         :onUpdate(self.onUpdateDeathAnimationState)
                         :onEnd(self.onEndDeathAnimationState)

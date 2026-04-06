@@ -191,14 +191,16 @@ function Projectile:update()
   if not self.hasCrashed then
     local _, _, cols = self:move()
     if lume.any(cols) then
-      self:onCollideSolid(cols[1].other)
+      self:onCollideSolid(cols[1])
     end
   end
 
 end
 
 function Projectile:draw()
-  self.sprite:draw()
+  if self.sprite then
+    self.sprite:draw()
+  end
 end
 
 function Projectile:debugDraw(entDebugDrawFlags)

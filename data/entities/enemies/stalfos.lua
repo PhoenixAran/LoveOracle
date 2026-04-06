@@ -11,7 +11,7 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local Direction4 = require 'engine.enums.direction4'
 local Singletons = require 'engine.singletons'
 local Input = Singletons.input
-local GenericStateMachine = require 'engine.utils.generic_state_machine'
+local SimpleStateMachine = require 'engine.utils.simple_state_machine'
 
 -- TODO color variants
 
@@ -23,7 +23,7 @@ local STALFOS_MOVE_SPEED = 30
 
 ---@class Stalfos : BasicEnemy
 ---@field jumpDelayTimer integer
----@field stateMachine GenericStateMachine
+---@field stateMachine SimpleStateMachine
 local Stalfos = Class { __includes = BasicEnemy,
   ---@param self Stalfos
   ---@param args table

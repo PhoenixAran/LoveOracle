@@ -24,7 +24,7 @@ local BoneProjectile = Class { __includes = Projectile,
     self.bounceOnCrash = true
     self.w, self.h = 2, 1
 
-    self.hitbox:resize(10, 10)
+    self.hitbox:resize(2, 1)
     self.hitbox:setCollisionTag(self.collisionTag)
     self.hitbox.damageInfo.damage = 2
     self.hitbox.damageInfo.knockbackSpeed = 80

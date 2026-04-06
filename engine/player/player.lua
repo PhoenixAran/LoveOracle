@@ -613,7 +613,7 @@ function Player:beginBusyState(duration, animation)
     -- should i check if the current animation is the same? not sure yet
     self.sprite:play(animation)
   end
-  local busyState = PlayerBusyState(self, duration, animation)
+  local busyState = PlayerBusyState(duration, animation)
   self:beginConditionState(busyState)
   return busyState
 end

@@ -93,4 +93,36 @@ function EffectFactory.createFallingObjectEffect(x, y, color, time)
   return effect
 end
 
+--- creates a color cling effect entity. used when weapons or projectiles hit a solid surface
+---@param x number the x position of the effect
+---@param y number the y position of the effect
+---@param color string the color of the monster falling effect. for this instance it can be 'red', 'blue', 'green', 'orange', and 'inverse_red'
+---@param time number? the time in ms the effect should last. This will override the effectAnimation duration if provided
+function EffectFactory.createClingEffect(x, y, color, time)
+  local effect = EffectFactory.createEffectEntity({
+    x = x,
+    y = y,
+    effectAnimation = 'effect_cling_' .. color,
+    time = time
+  })
+  effect:initTransform()
+  return effect
+end
+
+--- creates a color cling light effect entity. used when weapons or projectiles hit a solid surface
+---@param x number the x position of the effect
+---@param y number the y position of the effect
+---@param color string the color of the monster falling effect. for this instance it can be 'red', 'blue', 'green', 'orange', and 'inverse_red'
+---@param time number? the time in ms the effect should last. This will override the effectAnimation duration if provided
+function EffectFactory.createClingEffectLight(x, y, color, time)
+  local effect = EffectFactory.createEffectEntity({
+    x = x,
+    y = y,
+    effectAnimation = 'effect_cling_light' .. color,
+    time = time
+  })
+  effect:initTransform()
+  return effect
+end
+
 return EffectFactory

@@ -43,8 +43,6 @@ local GRASS_ANIMATION_UPDATE_INTERVAL = 3
 ---@field shadowVisible boolean
 ---@field rippleVisible boolean
 ---@field grassVisible boolean
----@field _storedCollisionFlags table<string, any> used to store collision flags when MapEntity.DisableCollisions() is called so that they can be restored when MapEntity.EnableCollisions() is called
----@field _storedCollisionFlagsInUse boolean flag to make sure we correct behavior for MapEntity.DisableCollisions() being called multiple times in a row without MapEntity.EnableCollisions() being called or vice versa
 local MapEntity = Class { __includes = MoverEntity,
   init = function(self, args)
     MoverEntity.init(self, args)
@@ -277,35 +275,34 @@ function MapEntity:resolveInteraction(receiver, sender)
   end
 end
 
+--- convenience method for shooting a projectile from this entity with a given direction
+--- @param projectile Projectile
+--- @param directionX number
+--- @param directionY number
+--- @param zPositionOffset number? optional offset to apply to the projectile's z position when shooting it
+--- @return Projectile the projectile that was shot
+function MapEntity:shootFromDirection(projectile, directionX, directionY, zPositionOffset)
+  if zPositionOffset == nil then
+    zPositionOffset = 0
+  end
+  projectile.owner = self
+  projectile:setVector(directionX, directionY)
+  self:emit('spawned_entity', projectile)
 
---- temporarily disable collisions. This is done by storing collision flags into a table, which is then
---- reset when MapEntity:reenableCollisions is called. This also disables the hibox via setEnabled(false) if it exists, and re-enables it when MapEntity:reenableCollisions is called. Note that this does not disable RoomEdgeCollisions
---- Note that this does not disable RoomEdgeCollisions
+  return projectile
+end
+
 function MapEntity:disableCollisions()
-  if not self._storedCollisionFlagsInUse then
-    self._storedCollisionFlagsInUse = true
-    self._storedCollisionFlags['entity_collidesWithLayer'] = self.collidesWithLayer
-    self._storedCollisionFlags['entity_physicsLayer'] = self.physicsLayer
-    self._storedCollisionFlags['entity_collisionTag'] = self.collisionTag
-    self:setCollidesWithLayerExplicit(0)
-    self:setPhysicsLayerExplicit(0)
-    self.collisionTag = ''
-    if self.hitbox then
-      self:setEnabled(false)
-    end
+  MoverEntity.disableCollisions(self)
+  if self.hitbox then
+    self:setEnabled(false)
   end
 end
 
 function MapEntity:enableCollisions()
-  if self._storedCollisionFlagsInUse then
-    self._storedCollisionFlagsInUse = false
-    self:setCollidesWithLayerExplicit(self._storedCollisionFlags['entity_collidesWithLayer'])
-    self:setPhysicsLayerExplicit(self._storedCollisionFlags['entity_physicsLayer'])
-    self.collisionTag = self._storedCollisionFlags['entity_collisionTag']
-    if self.hitbox then
-      self:setEnabled(true)
-    end
-    lume.clear(self._storedCollisionFlags)
+  MoverEntity.enableCollisions(self)
+  if self.hitbox then
+    self:setEnabled(true)
   end
 end
 

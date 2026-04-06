@@ -285,6 +285,7 @@ function Entity:destroy()
 ---@diagnostic disable-next-line: undefined-field
     self:onDestroy()
   end
+  self.destroyed = true
   self:emit('entity_destroyed', self)
   self:release()
 end

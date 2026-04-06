@@ -1,18 +1,59 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
-local ItemWeapon = require 'engine.items.weapons.item_weapon'
+local ItemWeapon = require 'engine.items.item_weapon'
 local CollisionTag = require 'engine.enums.collision_tag'
 local Direction4 = require 'engine.enums.direction4'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
+local EntityTracker = require 'engine.entities.entity_tracker'
+local PlayerBoomerang = require 'engine.entities.projectile.player_projectiles.player_boomerang'
+local AngleSnap = require 'engine.enums.angle_snap'
 
 -- TODO implmement
 
----@class Item : ItemWeapon
+---@class ItemBoomerang : ItemWeapon
+---@field boomerangTracker EntityTracker
 local ItemBoomerang = Class { __includes = ItemWeapon,
   init = function(self, args)
     ItemWeapon.init(self, args)
+
+    self.useParameters.usableWhileJumping = true
+    self.useParameters.usableWithSword = true
+    self.useParameters.usableWhileInHole = true
+
+    self.boomerangTracker = EntityTracker(1)
   end
 }
+
+function ItemBoomerang:getType()
+  return 'item_boomerang'
+end
+
+function ItemBoomerang:onButtonPressed()
+  if self.boomerangTracker:isMaxedOut() then
+    return false
+  end
+
+  -- shoot and track the boomerang
+  local boomerang = PlayerBoomerang({name = 'player_boomerang_projectile', itemBoomerang = self})
+  local player = self:getPlayer()
+  local px, py = player:getPosition()
+  local useDirectionX, useDirectionY = player:getUseDirection()
+  if useDirectionX == 0 and useDirectionY == 0 then
+    useDirectionX, useDirectionY = Direction4.getVector(player:getAnimationDirection4())
+  end
+  boomerang:setPosition(px, py)
+  useDirectionX, useDirectionY = AngleSnap.toVector(AngleSnap.to8, useDirectionX, useDirectionY)
+  player:shootFromDirection(boomerang, useDirectionX, useDirectionY)
+  self.boomerangTracker:addEntity(boomerang)
+
+  if self:getLevel() == 1 then
+    player:beginBusyState(10, 'throw')
+  else
+    -- TODO magical boomerang state
+  end
+
+  return true
+end
 
 return ItemBoomerang

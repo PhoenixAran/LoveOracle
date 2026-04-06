@@ -8,10 +8,13 @@ local SignalObject = require 'engine.signal_object'
 ---@field maxCount integer
 local EntityTracker = Class {
   init = function(self, maxCount)
+    if maxCount == nil then
+      maxCount = math.huge
+    end
     -- Initialization code here
     SignalObject.init(self)
     self.entities = { }
-    self.maxCount = maxCount or math.huge
+    self.maxCount = maxCount
   end
 }
 
@@ -50,7 +53,7 @@ function EntityTracker:onEntityDestroyed(entity)
 end
 
 function EntityTracker:isMaxedOut()
-  return lume.count(self.entities) <= self.maxCount
+  return lume.count(self.entities) >= self.maxCount
 end
 
 function EntityTracker:isEmpty()

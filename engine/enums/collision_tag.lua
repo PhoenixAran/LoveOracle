@@ -13,6 +13,7 @@ local CollisionTag = {
   arrow = 'arrow',
   thrownProjectile = 'thrown_projectile',
   shield = 'shield',
+  boomerang = 'boomerang',
 
   -- other
 }

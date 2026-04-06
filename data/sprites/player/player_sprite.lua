@@ -326,18 +326,18 @@ return makeModuleFunction(function(spriteBank)
 
   -- @animation throw
   ab:setSubstrips(true)
-  ab:setLoopType('once')
+  ab:setLoopType('cycle')
   -- #substrip up
-  ab:addSpriteFrame(3, 1, 0, 0, 1)
+  ab:addSpriteFrame(3, 5, 0, 0, 1)
   ab:buildSubstrip('up')
   -- #substrip down
-  ab:addSpriteFrame(7, 1, 0, 0, 1)
+  ab:addSpriteFrame(7, 5, 0, 0, 1)
   ab:buildSubstrip('down', true)
   -- #substrip left
-  ab:addSpriteFrame(5, 1, 0, 0, 1)
+  ab:addSpriteFrame(5, 5, 0, 0, 1)
   ab:buildSubstrip('left')
   -- #substrip right
-  ab:addSpriteFrame(1, 1, 0, 0, 1)
+  ab:addSpriteFrame(2, 5, 0, 0, 1)
   ab:buildSubstrip('right')
   -- BUILD throw
   sb:addAnimation('throw', ab:build())
@@ -357,22 +357,26 @@ return makeModuleFunction(function(spriteBank)
   -- #substrip up
   ab:addSpriteFrame(4, 12, 0, 0, 9)
   ab:addSpriteFrame(5, 12, 0, 0, 9)
-  ab:addSpriteFrame(6, 12, 0, 0, 9)
+  ab:addSpriteFrame(6, 12, 0, 0, 6)
+  ab:addSpriteFrame(4, 1, 0, 0, 6)
   ab:buildSubstrip('up')
   -- #substrip down
   ab:addSpriteFrame(4, 13, 0, 0, 9)
   ab:addSpriteFrame(5, 13, 0, 0, 9)
-  ab:addSpriteFrame(6, 13, 0, 0, 9)
+  ab:addSpriteFrame(6, 13, 0, 0, 6)
+  ab:addSpriteFrame(8, 1, 0, 0, 6)
   ab:buildSubstrip('down', true)
   -- #substrip left
   ab:addSpriteFrame(1, 13, 0, 0, 9)
   ab:addSpriteFrame(2, 13, 0, 0, 9)
-  ab:addSpriteFrame(3, 13, 0, 0, 9)
+  ab:addSpriteFrame(3, 13, 0, 0, 6)
+  ab:addSpriteFrame(6, 1, 0, 0, 6)
   ab:buildSubstrip('left')
   -- #substrip right
   ab:addSpriteFrame(1, 12, 0, 0, 9)
   ab:addSpriteFrame(2, 12, 0, 0, 9)
-  ab:addSpriteFrame(3, 12, 0, 0, 9)
+  ab:addSpriteFrame(3, 12, 0, 0, 6)
+  ab:addSpriteFrame(2, 1, 0, 0, 6)
   ab:buildSubstrip('right')
   -- BUILD jump
   sb:addAnimation('jump', ab:build())

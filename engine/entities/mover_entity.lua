@@ -50,12 +50,17 @@ end
 ---@field movesWithPlatforms boolean
 ---@field collisionTiles integer
 ---@field moveCollisions any[]
+---@field _storedCollisionFlags table<string, any> used to store collision flags when MapEntity.DisableCollisions() is called so that they can be restored when MapEntity.EnableCollisions() is called
+---@field _storedCollisionFlagsInUse boolean flag to make sure we correct behavior for MapEntity.DisableCollisions() being called multiple times in a row without MapEntity.EnableCollisions() being called or vice versa
 local MoverEntity = Class { __includes = Entity,
   ---@param self MoverEntity
   ---@param args table
   init = function(self, args)
     -- Initialization code here
     Entity.init(self, args)
+
+    self._storedCollisionFlags = { }
+    self._storedCollisionFlagsInUse = false
 
     -- components
     self.movement = Movement(self)
@@ -239,7 +244,7 @@ function MoverEntity:_handleMove(collisions, isTest)
   end
   Physics.freeCollisions(cols)
 
-  if self.roomEdgeCollisionBox then
+  if self.roomEdgeCollisionBox and self.roomEdgeCollisionBox:isEnabled() then
     -- Create goal vector value for room edge collision box
     local diffX, diffY = vector.sub(self.x, self.y, self.roomEdgeCollisionBox.x, self.roomEdgeCollisionBox.y)
     local goalX2, goalY2 = vector.sub(actualX, actualY, diffX, diffY)
@@ -283,6 +288,34 @@ function MoverEntity:testMove()
   local tvx, tvy = self:_handleMove(collisions, true)
   return tvx, tvy, collisions
 end
+
+--- Convenience method temporarily disable collisions. This is done by storing collision flags into a table, which is then
+--- reset when MoverEntity:reenableCollisions is called.
+--- Note that this does not disable RoomEdgeCollisions
+function MoverEntity:disableCollisions()
+  if not self._storedCollisionFlagsInUse then
+    self._storedCollisionFlagsInUse = true
+    self._storedCollisionFlags['entity_collidesWithLayer'] = self.collidesWithLayer
+    self._storedCollisionFlags['entity_physicsLayer'] = self.physicsLayer
+    self._storedCollisionFlags['entity_collisionTag'] = self.collisionTag
+    self:setCollidesWithLayerExplicit(0)
+    self:setPhysicsLayerExplicit(0)
+    self.collisionTag = ''
+  end
+end
+
+--- renable collisions after they have been disabled with MoverEntity:disableCollisions(). T
+--- This will restore collision flags to what they were before MoverEntity:disableCollisions() was called
+function MoverEntity:enableCollisions()
+  if self._storedCollisionFlagsInUse then
+    self._storedCollisionFlagsInUse = false
+    self:setCollidesWithLayerExplicit(self._storedCollisionFlags['entity_collidesWithLayer'])
+    self:setPhysicsLayerExplicit(self._storedCollisionFlags['entity_physicsLayer'])
+    self.collisionTag = self._storedCollisionFlags['entity_collisionTag']
+    lume.clear(self._storedCollisionFlags)
+  end
+end
+
 
 -- Signal responses to movement component
 
