@@ -39,8 +39,8 @@ local BumpBox = Class {
     if args.w == nil then args.w = 1 end
     if args.h == nil then args.h = 1 end
     if args.z == nil then args.z = 0 end
-    if args.zMin == nil then args.zMin = 0 end
-    if args.zMax == nil then args.zMax = 1 end
+    if args.zMin == nil then args.zMin = -1 end
+    if args.zMax == nil then args.zMax = 4 end
 
     assert(args.zMin <= args.zMax)
     self.zRange = { min = args.zMin, max = args.zMax }

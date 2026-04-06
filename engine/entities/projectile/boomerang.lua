@@ -31,11 +31,12 @@ local Boomerang = Class { __includes = Projectile,
     Projectile.init(self, args)
 
     self.roomEdgeCollisionBox = Collider(self, {
-      x = -1,
-      y = -1,
+      x = 0,
+      y = 0,
       w = 2,
       h = 2
     })
+    self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
 
     self.hitbox:setCollisionTag(CollisionTag.thrownProjectile)
 
@@ -122,7 +123,6 @@ end
 
 function Boomerang:onCollideSolid(solid)
   if solid.isTile and solid:isTile() then
-    print(love.inspect(solid))
     local effect = EffectFactory.createClingEffectLight(self.x, self.y, 'blue')
     self:emit('spawned_entity', effect)
   end

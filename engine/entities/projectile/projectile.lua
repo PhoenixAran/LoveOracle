@@ -92,6 +92,9 @@ function Projectile:onTransformChanged()
   if self.hitbox then
     self.hitbox:onTransformChanged()
   end
+  if self.roomEdgeCollisionBox then
+    self.roomEdgeCollisionBox:onTransformChanged()
+  end
 end
 
 function Projectile:setVector(x, y)

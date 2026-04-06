@@ -45,6 +45,7 @@ function ItemBoomerang:onButtonPressed()
   boomerang:setPosition(px, py)
   useDirectionX, useDirectionY = AngleSnap.toVector(AngleSnap.to8, useDirectionX, useDirectionY)
   player:shootFromDirection(boomerang, useDirectionX, useDirectionY)
+  boomerang:initTransform()
   self.boomerangTracker:addEntity(boomerang)
 
   if self:getLevel() == 1 then

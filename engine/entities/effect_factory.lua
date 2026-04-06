@@ -118,7 +118,7 @@ function EffectFactory.createClingEffectLight(x, y, color, time)
   local effect = EffectFactory.createEffectEntity({
     x = x,
     y = y,
-    effectAnimation = 'effect_cling_light' .. color,
+    effectAnimation = 'effect_cling_light_' .. color,
     time = time
   })
   effect:initTransform()
