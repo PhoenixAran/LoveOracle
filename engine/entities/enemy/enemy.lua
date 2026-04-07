@@ -26,11 +26,11 @@ local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Dire
 ---@field canFallInHole boolean
 ---@field canSwimInLava boolean
 ---@field canSwimInWater boolean
----@field collidesWithWalls boolean
 ---@field movesInAir boolean
 ---@field jumpGravity number
 ---@field jumpZVelocity number
 ---@field fallInHoleEffectColor string
+---@field isStunnable boolean
 ---@field hazardTileQueryRectFilter function
 ---@field projectMoveFilter function
 local Enemy = Class { __includes = MapEntity,
@@ -50,12 +50,15 @@ local Enemy = Class { __includes = MapEntity,
     self.canSwimInLava = args.canSwimInLava or false
     self.canSwimInWater = args.canSwimInWater or false
     self.movesInAir = args.movesInAir or false
-    self.collidesWithWalls = args.collidesWithWalls or true
+    self.isStunnable = args.isStunnable or true
 
     self.fallInHoleEffectColor = args.fallInHoleEffectColor or 'blue'
 
     -- set initial state
     self:changeState(Pool.obtain('enemy_normal_state'))
+
+    self.hitbox:setPhysicsLayer('hitbox_enemy')
+    self.hitbox:setCollidesWithLayer('hitbox_player')
 
     -- set default collision tag for Enemy 
     self.collisionTag = CollisionTag.enemy
@@ -273,11 +276,13 @@ function Enemy:updateComponents()
   self.groundObserver:update()
   self.spriteFlasher:update()
   self.spriteSquisher:update()
-  if self.sprite then
+  if self.sprite and self.sprite:isEnabled() then
     self.sprite:update()
   end
   self.combat:update()
-  self.hitbox:update()
+  if self.hitbox:isEnabled() then
+    self.hitbox:update()
+  end
   self.movement:update()
   self:updateEntityEffectSprite()
 end
@@ -299,11 +304,11 @@ end
 function Enemy:jump()
   self.movement.gravity = self.jumpGravity
   self.movement:setZVelocity(self.jumpZVelocity)
----@diagnostic disable-next-line: undefined-field
-  if self.onJump then
----@diagnostic disable-next-line: undefined-field
-    self:onJump()
-  end
+  self:onJump()
+end
+
+function Enemy:onJump()
+
 end
 
 function Enemy:fall()
@@ -311,13 +316,47 @@ function Enemy:fall()
     self.sprite:play('fall')
     self.deathMarked = true
   end
----@diagnostic disable-next-line: undefined-field
-  if self.onFall then
----@diagnostic disable-next-line: undefined-field
-    self:onFall()
-  end
+  self:onFall()
 end
 
+function Enemy:onFall()
+
+end
+
+
+---@param damageInfo DamageInfo
+---@return boolean true if the enemy was stunned, false it it wasnt
+function Enemy:stun(damageInfo)
+  if self.isStunnable and (self.enemyState:getType() == 'enemy_normal_state' or self.enemyState:getType() == 'enemy_stun_state') then
+    self:onStun(damageInfo)
+
+    -- remove knockback and intangibilityTime
+    local originalKnockbackTime = damageInfo.knockbackTime
+    local originalIntangibilityTime = damageInfo.intangibilityTime
+    self:hurt(damageInfo)
+    -- set original values back to damage info ref
+    damageInfo.knockbackTime = originalKnockbackTime
+    damageInfo.intangibilityTime = originalIntangibilityTime
+
+    if self.health:isDepleted() then
+      -- enemy died from the stun damage, so instead of doing the full instance,
+      -- set it to 16 so the stun jiggle can play out and not look weird with the enemy disappearing immediately
+      self.combat:setHitstun(16)
+    end
+    local stunState = Pool.obtain('enemy_stun_state')
+    stunState:setEnemy(self)
+    self:changeState(stunState)
+    return true
+  end
+
+  return false
+end
+
+
+---@param damageInfo DamageInfo
+function Enemy:onStun(damageInfo)
+
+end
 
 -- implements basic callbacks for basic enemies
 -- override these if you want more custom behavior

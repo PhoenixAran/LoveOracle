@@ -10,6 +10,7 @@ local EMPTY_TABLE = { }
 ---@field knockbackSpeed integer
 ---@field hitstunTime integer
 ---@field intangibilityTime integer|nil
+---@field flashSprite boolean whether to flash the sprite if this damage info applys intangibility. Defaults to true.
 local DamageInfo = Class {
   init = function(self, args)
     args = args or EMPTY_TABLE
@@ -18,9 +19,11 @@ local DamageInfo = Class {
 
     self.damage = args.damage or 0
     self.knockbackTime = args.knockbackTime or 0
-    self.knockbackSpeed = args.knoackbackSpeed or 0
+    self.knockbackSpeed = args.knockbackSpeed or 0
     self.hitstunTime = args.hitstunTime or 0
     self.intangibilityTime = args.intangibilityTime
+    self.flashSprite = args.flashSprite or true
+    
     -- todo store sound here?
     -- self.sound = nil
   end

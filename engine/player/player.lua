@@ -102,8 +102,10 @@ local Player = Class { __includes = MapEntity,
     self.collisionTag = CollisionTag.player
 
     -- hitbox
-    self.hitbox:resize(6, 9)
     self.hitbox:setCollisionTag(self.collisionTag)
+    self.hitbox:setPhysicsLayer('hitbox_player')
+    self.hitbox:setCollidesWithLayer('hitbox_enemy')
+    self.hitbox:resize(6, 9)
 
     -- tile collision
     self:setCollisionTiles('wall')

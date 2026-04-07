@@ -29,7 +29,15 @@ local PlayerBoomerang = Class { __includes = Boomerang,
     self:setCollisionTiles('wall')
 
     self.sprite = SpriteBank.build('player_boomerang_' .. itemBoomerang:getLevel(), self)
-    self.hitbox:setCollisionTag(CollisionTag.thrownProjectile)
+    self.hitbox:setCollisionTag(CollisionTag.boomerang)
+    self.hitbox:setPhysicsLayer('hitbox_player')
+    self.hitbox:setCollidesWithLayer('hitbox_enemy')
+    self.hitbox.damageInfo.damage = itemBoomerang:getLevel()
+    self.hitbox.damageInfo.hitstunTime = 90
+    self.hitbox.damageInfo.knockbackSpeed = 0
+    self.hitbox.damageInfo.knockbackTime = 0
+    self.hitbox.damageInfo.intangibilityTime = 4
+    self.hitbox.damageInfo.flashSprite = false
 
 
 

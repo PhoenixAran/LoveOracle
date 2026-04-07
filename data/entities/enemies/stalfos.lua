@@ -71,6 +71,8 @@ local Stalfos = Class { __includes = BasicEnemy,
     self:setCollisionTiles({'wall'})
 
     -- hitbox
+    self.hitbox:setPhysicsLayer('hitbox_enemy')
+    self.hitbox:setCollidesWithLayer('hitbox_player')
     self.hitbox:resize(12, 11)
     self.hitbox:setCollisionTag(CollisionTag.enemy)
     self.hitbox.damageInfo.damage = 2
@@ -82,8 +84,9 @@ local Stalfos = Class { __includes = BasicEnemy,
     -- set collision reactions
     self.collisionTag = CollisionTag.enemy
     self:setInteraction(CollisionTag.player, Interactions.damageOther)
-    self:setInteraction(CollisionTag.sword, Interactions.takeDamage)
-    self:setInteraction(CollisionTag.shield, Interactions.knockback)
+    self:setInteraction(CollisionTag.sword, Interactions.damageSelf)
+    self:setInteraction(CollisionTag.shield, Interactions.knockbackSelf)
+    self:setInteraction(CollisionTag.boomerang, Interactions.stunSelf)
 
     -- BasicEnemy setup
     self.isMoving = true
@@ -144,17 +147,20 @@ function Stalfos:onLand()
   self.sprite:play(self.animationMove)
 end
 
+---@param item ItemWeapon
 function Stalfos:onPlayerItemUsed(item)
-  -- check for jumnping toward or away fro mthe player
-  if self:isOnGround() and self.jumpDelayTimer == 0 then
-    -- get player
-    local player = Singletons.roomControl:getPlayer()
-    if player then
-      local x, y = self:getPosition()
-      local px, py = player:getPosition()
-      local distanceToPlayer = vector.dist(x, y, px, py)
-      if distanceToPlayer <= STALFOS_JUMP_RANGE then
-        self:jumpAwayFromPlayer(player)
+  if item:getType() == 'item_sword' then
+    -- check for jumnping toward or away from the player
+    if self:isOnGround() and self.jumpDelayTimer == 0 and not self:inHitstun() then
+      -- get player
+      local player = Singletons.roomControl:getPlayer()
+      if player then
+        local x, y = self:getPosition()
+        local px, py = player:getPosition()
+        local distanceToPlayer = vector.dist(x, y, px, py)
+        if distanceToPlayer <= STALFOS_JUMP_RANGE then
+          self:jumpAwayFromPlayer(player)
+        end
       end
     end
   end

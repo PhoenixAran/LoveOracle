@@ -24,8 +24,10 @@ local BoneProjectile = Class { __includes = Projectile,
     self.bounceOnCrash = true
     self.w, self.h = 2, 1
 
-    self.hitbox:resize(2, 1)
     self.hitbox:setCollisionTag(self.collisionTag)
+    self.hitbox:setPhysicsLayer('hitbox_enemy')
+    self.hitbox:setCollidesWithLayer('hitbox_player')
+    self.hitbox:resize(2, 1)
     self.hitbox.damageInfo.damage = 2
     self.hitbox.damageInfo.knockbackSpeed = 80
     self.hitbox.damageInfo.knockbackTime = 8
@@ -36,7 +38,7 @@ local BoneProjectile = Class { __includes = Projectile,
 
     -- set collision reactions
     self:setInteraction(CollisionTag.player, Interactions.damageOther)
-    self:setInteraction(CollisionTag.shield, Interactions.deflect)
+    self:setInteraction(CollisionTag.shield, Interactions.deflectSelf)
   end
 }
 

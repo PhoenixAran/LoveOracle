@@ -12,7 +12,8 @@ PhysicsFlags:makeTags {
   'push_block',
   'ledge_jump',
 
-  'hitbox'
+  'hitbox_enemy',
+  'hitbox_player'
 }
 PhysicsFlags:makeEnumMap {
   Entity = 'entity',
@@ -25,7 +26,10 @@ PhysicsFlags:makeEnumMap {
   PushBlock = 'push_block',
   LedgeJump = 'ledge_jump',
 
-  Hitbox = 'hitbox'
+  -- hitboxes owned by enemies, enemy items, and enemy projectiles
+  HitboxEnemy = 'hitbox_enemy', 
+  -- hitboxes owned by player, player items, and player projectiles
+  HitboxPlayer = 'hitbox_player'
 }
 
 return PhysicsFlags

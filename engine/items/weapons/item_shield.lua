@@ -43,9 +43,12 @@ local ItemShield = Class { __includes = ItemWeapon,
   ---@param args table
   init = function(self, args)
     ItemWeapon.init(self, args)
+
     self.hitbox = Hitbox(self)
+    self.hitbox:setCollisionTag(CollisionTag.shield)
+    self.hitbox:setPhysicsLayer('hitbox_player')
+    self.hitbox:setCollidesWithLayer('hitbox_enemy')
     self.hitbox:setEnabled(false)
-    
     self.hitbox.damageInfo.damage = 0
     self.hitbox.damageInfo.hitstunTime = 11
     self.hitbox.damageInfo.knockbackSpeed = 75

@@ -337,7 +337,7 @@ return makeModuleFunction(function(spriteBank)
   ab:addSpriteFrame(5, 5, 0, 0, 1)
   ab:buildSubstrip('left')
   -- #substrip right
-  ab:addSpriteFrame(2, 5, 0, 0, 1)
+  ab:addSpriteFrame(1, 5, 0, 0, 1)
   ab:buildSubstrip('right')
   -- BUILD throw
   sb:addAnimation('throw', ab:build())

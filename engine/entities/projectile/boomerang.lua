@@ -39,12 +39,14 @@ local Boomerang = Class { __includes = Projectile,
     self.roomEdgeCollisionBox:setCollidesWithLayer('room_edge')
 
     self.hitbox:setCollisionTag(CollisionTag.thrownProjectile)
+    self.hitbox:connect('hit_other', self, 'beginReturning')
 
     self.boomerangTracker = EntityTracker()
     self.movement:setSpeed(90)
     self.returnDelay = 40
     self.returnTimer = 0
     self.returnToOwnerDistance = 1.5
+    self.crashOnHit = false
 
     self.stateMachine = SimpleStateMachine(self, BoomerangState)
     self.stateMachine:addState(BoomerangState.moving, {

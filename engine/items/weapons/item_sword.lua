@@ -20,6 +20,9 @@ local ItemSword = Class { __includes = ItemWeapon,
     self.sprite = SpriteBank.build('player_sword', self)
     self.visible = false
 
+
+    self.hitbox:setPhysicsLayer('hitbox_player')
+    self.hitbox:setCollidesWithLayer('hitbox_enemy')
     self.hitbox.damageInfo.damage = 1
     self.hitbox.damageInfo.hitstunTime = 4
     self.hitbox.damageInfo.intangibilityTime = 18

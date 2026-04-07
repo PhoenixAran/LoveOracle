@@ -252,7 +252,10 @@ end
 --- checks if two bumpboxes are aligned in a specific direction (based on center positions)
 --- @param other BumpBox
 --- @param direction Axis?
-function BumpBox:areBumpBoxCollisionAligned(other, direction)
+--- @param alignmentTolerance number? how far apart the centers can be to still be considered aligned. Only applies to the specified direction. Default is Consts.BUMP_BOX_ALIGNMENT_TOLERANCE
+function BumpBox:areBumpBoxCollisionAligned(other, direction, alignmentTolerance)
+  alignmentTolerance = alignmentTolerance or BUMP_BOX_ALIGNMENT_TOLERANCE
+
   local selfX, selfY, selfW, selfH = self:getBounds()
   local otherX, otherY, otherW, otherH = other:getBounds()
 
@@ -262,13 +265,13 @@ function BumpBox:areBumpBoxCollisionAligned(other, direction)
 
   if direction == Axis.vertical or direction == nil then
     -- Check if centers are vertically aligned (x-coordinates within tolerance)
-    local verticallyAligned = math.abs(selfCenterX - otherCenterX) <= BUMP_BOX_ALIGNMENT_TOLERANCE
+    local verticallyAligned = math.abs(selfCenterX - otherCenterX) <= alignmentTolerance
     if direction == Axis.vertical or verticallyAligned then
       return verticallyAligned
     end
   elseif direction == Axis.horizontal or direction == nil then
     -- Check if centers are horizontally aligned (y-coordinates within tolerance)
-    local horizontallyAligned = math.abs(selfCenterY - otherCenterY) <= BUMP_BOX_ALIGNMENT_TOLERANCE
+    local horizontallyAligned = math.abs(selfCenterY - otherCenterY) <= alignmentTolerance
     if direction ==  Axis.horizontal or horizontallyAligned then
       return horizontallyAligned
     end

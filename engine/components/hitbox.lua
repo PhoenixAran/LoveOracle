@@ -22,6 +22,16 @@ local function setPositionRelativeToEntity(hitbox)
   hitbox.zRange.max = hitbox.entity.zRange.max
 end
 
+local function setDamageInfoSource(hitbox, damageInfo)
+  if hitbox.useEntityAsSource then
+    local ex, ey = hitbox.entity:getPosition()
+    hitbox.damageInfo.sourceX = ex
+    hitbox.damageInfo.sourceY = ey
+  else
+    hitbox.damageInfo.sourceX = hitbox.x + hitbox.w / 2
+    hitbox.damageInfo.sourceY = hitbox.y + hitbox.y / 2
+  end
+end
 
 ---@class Hitbox : BumpBox, Component
 ---@field offsetX integer
@@ -46,8 +56,8 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     Component.init(self, entity, args)
 
     self:signal('hitbox_entered')
-    self:signal('damaged_other')
     self:signal('resisted')
+    self:signal('hit_other')
 
     if args.offsetX == nil then args.offsetX = 0 end
     if args.offsetY == nil then args.offsetY = 0 end
@@ -77,10 +87,6 @@ local Hitbox = Class { __includes = { BumpBox, Component },
     self.damageInfo.knockbackSpeed = self.knockbackSpeed
     self.damageInfo.hitstunTime = self.hitstunTime
     self.ignoreHitboxSet = args.ignoreHitboxSet or { }
-
-    -- set the physics mask for this hitbox
-    self:setPhysicsLayer('hitbox')
-    self:setCollidesWithLayer('hitbox')
 
     local closureSelf = self
     local canCollide = BumpBox.canCollide
@@ -167,21 +173,8 @@ function Hitbox:update()
 end
 
 function Hitbox:getDamageInfo()
-  if self.useEntityAsSource then
-    local ex, ey = self.entity:getPosition()
-    self.damageInfo.sourceX = ex
-    self.damageInfo.sourceY = ey
-  else
-    self.damageInfo.sourceX = self.x + self.w / 2
-    self.damageInfo.sourceY = self.y + self.y / 2
-  end
+  setDamageInfoSource(self, self.damageInfo)
   return self.damageInfo
-end
-
--- by default just uses damage info
--- knockback interaction ignores damage anyways
-function Hitbox:getKnockbackInfo()
-  return self:getDamageInfo()
 end
 
 ---@param x number
@@ -226,10 +219,10 @@ function Hitbox:reportHitboxCollision(hitbox)
   self:emit('hitbox_entered', hitbox)
 end
 
----notify that this hitbox inflicted damage
+---notify that this hitbox hit something
 ---@param hitbox Hitbox
-function Hitbox:notifyDidDamage(hitbox)
-  self:emit('damaged_other', hitbox)
+function Hitbox:notifyHitOther(hitbox)
+  self:emit('hit_other', hitbox)
 end
 
 ---notify that this hitbox has been resisted

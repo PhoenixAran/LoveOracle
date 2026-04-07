@@ -279,7 +279,6 @@ function BasicEnemy:startShooting()
 
 end
 
--- TODO implmement this when i finish the projectile entity class
 function BasicEnemy:shoot()
   if self.shootSound then
     -- TODO play sound
@@ -386,7 +385,7 @@ function BasicEnemy:updateMovingState()
   local collidedIntoWallOrEntity = false
   for _, other in ipairs(self.moveCollisions) do
     if other.isTile and other:isTile() then
-      if other:isWall() and self.collidesWithWalls then
+      if other:isWall() then
         collidedIntoWallOrEntity = true
         break
       end
@@ -516,7 +515,7 @@ end
 
 function BasicEnemy:onJump()
   if not self:inHitstun() and self._originalMoveFilter == nil and self.avoidHazardTilesInAir then
-        -- use the avoid hazard tile in air move filter
+    -- use the avoid hazard tile in air move filter
     self._originalMoveFilter = self.moveFilter
     self.moveFilter = avoidHazardTileInAirMoveFilter
   end
@@ -531,31 +530,27 @@ function BasicEnemy:onLand()
 end
 
 function BasicEnemy:onHurt(damageInfo)
-  if not self:isIntangible() then
-    if self.sprite and self.sprite.play and self.hitstunAnimation and self.hitstunAnimation ~= '' then
-      self.sprite:play(self.hitstunAnimation)
-    end
+  if self.sprite and self.sprite.play and self.hitstunAnimation and self.hitstunAnimation ~= '' then
+    self.sprite:play(self.hitstunAnimation)
+  end
 
-    if self:isInAir() and self._originalMoveFilter then
-      -- swap back to original move filter so enemies
-      -- can get hit into hazard tiles
-      -- this is not possible until we swap from avoidHazardTilesInAirMoveFilter
-      self.moveFilter = self._originalMoveFilter
-      self._originalMoveFilter = nil
-    end
+  if self:isInAir() and self._originalMoveFilter then
+    -- swap back to original move filter so enemies
+    -- can get hit into hazard tiles
+    -- this is not possible until we swap from avoidHazardTilesInAirMoveFilter
+    self.moveFilter = self._originalMoveFilter
+    self._originalMoveFilter = nil
   end
 end
 
 function BasicEnemy:onKnockback(damageInfo)
-  if not self:isIntangible() then
-    if self:isInAir() and self._originalMoveFilter then
-      -- swap back to original move filter so enemies
-      -- can get hit into hazard tiles
-      -- this is not possible until we swap from avoidHazardTilesInAirMoveFilter
-      self.moveFilter = self._originalMoveFilter
-      self._originalMoveFilter = nil
-    end
-  end 
+  if self:isInAir() and self._originalMoveFilter then
+    -- swap back to original move filter so enemies
+    -- can get hit into hazard tiles
+    -- this is not possible until we swap from avoidHazardTilesInAirMoveFilter
+    self.moveFilter = self._originalMoveFilter
+    self._originalMoveFilter = nil
+  end
 end
 
 

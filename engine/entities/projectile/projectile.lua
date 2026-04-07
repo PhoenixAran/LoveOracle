@@ -78,7 +78,7 @@ local Projectile = Class { __includes = MoverEntity,
 
 
     self.hitbox:connect('hitbox_entered', self, 'onHitboxEntered')
-    self.hitbox:connect('damaged_other', self, 'onDamagedOther')
+    self.hitbox:connect('hit_other', self, 'onHitOther')
 
     self.moveFilter = defaultProjectileMoveFilter
   end
@@ -255,7 +255,7 @@ function Projectile:onHitboxEntered(hitbox)
   self:resolveInteraction(self.hitbox, hitbox)
 end
 
-function Projectile:onDamagedOther(hitbox)
+function Projectile:onHitOther(hitbox)
   if self.crashOnHit then
     self:crash(true)
   end

@@ -80,7 +80,7 @@ local MapEntity = Class { __includes = MoverEntity,
     -- component configuration
     self.health:connect('health_depleted', self, 'onHealthDepleted')
     self.hitbox:connect('hitbox_entered', self, 'onHitboxEntered')
-    self.hitbox:connect('damaged_other', self, 'onHitboxDamagedOther')
+    self.hitbox:connect('hit_other', self, 'onHitboxHitOther')
     self.hitbox:connect('resisted', self, 'onHitboxResisted')
 
     -- NB: this collision box will NOT actually exist in the Physics system
@@ -363,11 +363,16 @@ function MapEntity:hurt(damageInfo)
     -- apply intangible time if it is set
     if damageInfo.intangibilityTime then
       self:setIntangibility(damageInfo.intangibilityTime)
-      self:flashSprite(damageInfo.intangibilityTime)
+      if damageInfo.flashSprite then
+        self:flashSprite(damageInfo.intangibilityTime)
+      end
     else
       -- apply default intangibility time
-      self:setIntangibility(damageInfo.hitstunTime + 8)
-      self:flashSprite(damageInfo.hitstunTime + 8)
+      local defaultIntangibilityTime = damageInfo.hitstunTime + 8
+      self:setIntangibility(defaultIntangibilityTime)
+      if damageInfo.flashSprite then
+        self:flashSprite(defaultIntangibilityTime)
+      end
     end
 
   end
@@ -390,10 +395,9 @@ function MapEntity:onHurt(damageInfo)
 end
 
 
--- todo rename this to bump
 ---@param damageInfo DamageInfo
 function MapEntity:knockback(damageInfo)
-  if not self:inKnockback() then
+  if not self:inKnockback() and not self:isIntangible() then
     self:setKnockback(damageInfo.knockbackTime)
     self:setKnockbackSpeed(damageInfo.knockbackSpeed)
     self:setHitstun(damageInfo.hitstunTime)
@@ -504,7 +508,7 @@ function MapEntity:onHitboxEntered(hitbox)
 end
 
 
-function MapEntity:onHitboxDamagedOther(hitbox)
+function MapEntity:onHitboxHitOther(hitbox)
 end
 
 function MapEntity:onHitboxResisted(otherHitbox)
