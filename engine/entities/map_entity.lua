@@ -295,14 +295,14 @@ end
 function MapEntity:disableCollisions()
   MoverEntity.disableCollisions(self)
   if self.hitbox then
-    self:setEnabled(false)
+    self.hitbox:setEnabled(false)
   end
 end
 
 function MapEntity:enableCollisions()
   MoverEntity.enableCollisions(self)
   if self.hitbox then
-    self:setEnabled(true)
+    self.hitbox:setEnabled(true)
   end
 end
 
@@ -419,6 +419,12 @@ function MapEntity:die()
 end
 
 function MapEntity:onDie()
+end
+
+function MapEntity:onRemoved(scene)
+  if self.hitbox then
+    self.hitbox:onRemoved()
+  end
 end
 
 -- sprite flash

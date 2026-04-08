@@ -1,4 +1,3 @@
-local Pool = require 'engine.utils.pool'
 local Class = require 'lib.class'
 local EnemyState = require 'engine.entities.enemy.states.enemy_state'
 local Singletons = require 'engine.singletons'
@@ -102,7 +101,5 @@ function EnemyFallInHoleState:free()
   self.originalSpeed = 0
   self.originalCollisionTiles = 0
 end
-
-Pool.register('enemy_fall_in_hole_state', EnemyFallInHoleState)
 
 return EnemyFallInHoleState

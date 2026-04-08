@@ -129,6 +129,7 @@ end
 function Stalfos:jumpAwayFromPlayer(player)
   self:setZVelocity(STALFOS_JUMP_SPEED)
   self:setSpeed(STALFOS_JUMP_MOVE_SPEED)
+  self.jumpDelayTimer = 14
 
   local x, y = self:getPosition()
   local px, py = player:getPosition()

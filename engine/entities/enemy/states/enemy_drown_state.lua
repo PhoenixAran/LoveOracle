@@ -1,6 +1,5 @@
 local Class = require 'lib.class'
 local EnemyState = require 'engine.entities.enemy.states.enemy_state'
-local Pool = require 'engine.utils.pool'
 local EffectFactory = require 'engine.entities.effect_factory'
 
 ---@class EnemyDrownState : EnemyState
@@ -26,7 +25,5 @@ end
 function EnemyDrownState:free()
   EnemyState.free(self)
 end
-
-Pool.register('enemy_drown_state', EnemyDrownState)
 
 return EnemyDrownState

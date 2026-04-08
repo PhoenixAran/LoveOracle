@@ -12,8 +12,13 @@ local TileTypeFlags = require('engine.enums.flags.tile_type_flags').enumMap
 local PhysicsFlags = require 'engine.enums.flags.physics_flags'
 local CollisionTag = require 'engine.enums.collision_tag'
 local EffectFactory = require 'engine.entities.effect_factory'
-local Pool = require 'engine.utils.pool'
 local bit = require 'bit'
+
+local EnemyDrownState = require 'engine.entities.enemy.states.enemy_drown_state'
+local EnemyFallInHoleState = require 'engine.entities.enemy.states.enemy_fall_in_hole_state'
+local EnemyStunState = require 'engine.entities.enemy.states.enemy_stun_state'
+local EnemyNormalState = require 'engine.entities.enemy.states.enemy_normal_state'
+
 
 
 local Direction8Values = {Direction8.up, Direction8.upRight, Direction8.right, Direction8.downRight, Direction8.down, Direction8.downLeft, Direction8.left, Direction8.upLeft}
@@ -33,6 +38,10 @@ local Direction4Values = {Direction4.up, Direction4.right, Direction4.down, Dire
 ---@field isStunnable boolean
 ---@field hazardTileQueryRectFilter function
 ---@field projectMoveFilter function
+---@field enemyDrownState EnemyDrownState
+---@field enemyFallInHoleState EnemyFallInHoleState
+---@field enemyStunState EnemyStunState
+---@field enemyNormalState EnemyNormalState
 local Enemy = Class { __includes = MapEntity,
   ---@param self Enemy
   ---@param args table
@@ -55,7 +64,13 @@ local Enemy = Class { __includes = MapEntity,
     self.fallInHoleEffectColor = args.fallInHoleEffectColor or 'blue'
 
     -- set initial state
-    self:changeState(Pool.obtain('enemy_normal_state'))
+    self:changeState(EnemyNormalState())
+
+    -- states that we can reuse
+    self.enemyDrownState = EnemyDrownState()
+    self.enemyFallInHoleState = EnemyFallInHoleState()
+    self.enemyStunState = EnemyStunState()
+    self.enemyNormalState = EnemyNormalState()
 
     self.hitbox:setPhysicsLayer('hitbox_enemy')
     self.hitbox:setCollidesWithLayer('hitbox_player')
@@ -77,19 +92,6 @@ local Enemy = Class { __includes = MapEntity,
       return false
     end
 
-    -- self.projectMoveFilter = function(item, other)
-    --   if canCollide(item, item) then
-    --     if other.isTile and other:isTile() then
-    --       local hazardTileFlags = item:getHazardTileFlags()
-    --       if bit.band(hazardTileFlags, other.tileData.tileType) ~= 0 then
-    --         return 'touch'
-    --       end
-    --     end
-    --   else
-    --     -- doesnt matter what type, we just need to register a collision
-    --     return 'touch'
-    --   end
-    -- end
   end
 }
 
@@ -99,7 +101,6 @@ end
 
 function Enemy:release()
   if self.enemyState then
-    Pool.free(self.enemyState)
     self.enemyState = nil
   end
   MapEntity.release(self)
@@ -148,32 +149,31 @@ function Enemy:changeState(state, forceUpdate)
   if self.enemyState then
     self:onStateEnd(self.enemyState)
     self.enemyState:endState()
-    Pool.free(self.enemyState)
   end
 
   local oldState = self.enemyState
   self.enemyState = state
 
-  if (oldState ~= self.enemyState or forceUpdate) and self.enemyState then
+  if (oldState ~= state or forceUpdate) and self.enemyState then
     self.enemyState:beginState()
     self:onStateBegin(self.enemyState)
   end
 end
 
 function Enemy:beginNormalState()
-  self:changeState(Pool.obtain('enemy_normal_state'))
+  self:changeState(self.enemyNormalState)
 end
 
 function Enemy:updateEnvironment()
   local state = nil
   if self:isInHole() and self.canFallInHole and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_hole_state') then
-    state = Pool.obtain('enemy_fall_in_hole_state')
+    state = self.enemyFallInHoleState
     state:setEnemy(self)
   elseif self:isInWater() and not self.canSwimInWater and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_water_state') then
-    state = Pool.obtain('enemy_drown_state')
+    state = self.enemyDrownState
     state:setEnemy(self)
   elseif self:isInLava() and not self.canSwimInLava and (self.enemyState == nil or self.enemyState:getType() ~= 'enemy_fall_in_lava_state') then
-    state = Pool.obtain('enemy_drown_state')
+    state = self.enemyDrownState
     state:setEnemy(self)
   end
   if state ~= nil and self.enemyState ~= state then
@@ -343,7 +343,7 @@ function Enemy:stun(damageInfo)
       -- set it to 16 so the stun jiggle can play out and not look weird with the enemy disappearing immediately
       self.combat:setHitstun(16)
     end
-    local stunState = Pool.obtain('enemy_stun_state')
+    local stunState = EnemyStunState()
     stunState:setEnemy(self)
     self:changeState(stunState)
     return true

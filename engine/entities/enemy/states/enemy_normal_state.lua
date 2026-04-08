@@ -1,6 +1,5 @@
 local Class = require 'lib.class'
 local EnemyState = require 'engine.entities.enemy.states.enemy_state'
-local Pool = require 'engine.utils.pool'
 
 ---@class EnemyNormalState : EnemyState
 local EnemyNormalState = Class { __includes = EnemyState,
@@ -20,6 +19,6 @@ end
 function EnemyNormalState:free()
   EnemyState.free(self)
 end
-Pool.register('enemy_normal_state', EnemyNormalState)
+
 
 return EnemyNormalState

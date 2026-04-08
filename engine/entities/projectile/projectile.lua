@@ -15,6 +15,7 @@ local AnimationDirectionSyncMode = require 'engine.enums.animation_direction_syn
 local Direction4 = require 'engine.enums.direction4'
 local Direction8 = require 'engine.enums.direction8'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
+local Physics = require 'engine.physics'
 
 
 local Physics = require 'engine.physics'
@@ -183,6 +184,12 @@ function Projectile:onAwake()
   end
   if self.hitbox then
     self.hitbox:entityAwake()
+  end
+end
+
+function Projectile:onRemoved()
+  if self.hitbox then
+    self.hitbox:onRemoved()
   end
 end
 

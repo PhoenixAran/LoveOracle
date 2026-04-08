@@ -2,10 +2,8 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 local EnemyState = require 'engine.entities.enemy.states.enemy_state'
-local Pool = require 'engine.utils.pool'
 
 -- TODO shake duration???
----@field 
 ---@class EnemyStunState : EnemyState
 local EnemyStunState = Class { __includes = EnemyState,
   init = function(self, args)
@@ -27,7 +25,7 @@ function EnemyStunState:beginState()
 end
 
 
-function EnemyStunState:onEnd()
+function EnemyStunState:endState()
   if self.enemy.sprite then
     self.enemy.sprite:play()
   end
@@ -45,6 +43,10 @@ function EnemyStunState:update()
     self.enemy:beginNormalState()
   end
 end
-Pool.register('enemy_stun_state', EnemyStunState)
+
+function EnemyStunState:free()
+  EnemyState.free(self)
+  self.timer = 0
+end
 
 return EnemyStunState

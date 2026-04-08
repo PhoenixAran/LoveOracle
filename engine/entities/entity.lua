@@ -24,7 +24,6 @@ local GRID_SIZE = Consts.GRID_SIZE
 ---@field group string?
 ---@field onTransformChanged function
 ---@field onAwake function
----@field onRemoved function
 ---@field drawType EntityDrawType
 ---@field collisionTag string
 ---@field _getMeetingTilesQueryRectFilter function
@@ -271,9 +270,11 @@ function Entity:removed(scene)
   Physics:remove(self)
   self.registeredWithPhysics = false
   self.scene = nil
-  if self.onRemoved then
-    self:onRemoved(scene)
-  end
+  self:onRemoved(scene)
+end
+
+function Entity:onRemoved(scene)
+
 end
 
 --- destroys this Entity instance
