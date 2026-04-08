@@ -120,7 +120,6 @@ function Entities:removeEntity(entity)
   entity:disconnect('entity_destroyed', self)
   entity:removed()
   self:emit('entity_removed', entity)
-  entity:release()
 end
 
 ---sets how large the map is in tile size

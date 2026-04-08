@@ -2,3 +2,4 @@
 # <spritesheet key>, <image key>, <sprite width>, <sprite height>, option <margin> (default = 1) , optional <spacing> (default = 3)
 "inventory_panel", "inventory_panel", 16, 16
 "inventory_cursors", "inventory_cursors", 8, 8
+"ui_bars_small", "ui_bars_small", 16, 16

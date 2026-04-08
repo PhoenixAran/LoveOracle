@@ -2,12 +2,12 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local SignalConnectType = require 'engine.enums.signal_connect_type'
 
---- FriendType signal connection
+--- Represents a single link between a signal and a listener
 ---@class SignalConnection
 ---@field signal Signal
 ---@field targetObject SignalObject
 ---@field connectType SignalConnectType
----@field bindingArgs table
+---@field bindingArgs any[]
 ---@field argumentHolder table
 ---@field targetMethod string
 ---@field init function
@@ -17,151 +17,179 @@ local SignalConnection = Class {
     self.targetObject = targetObject
     self.targetMethod = targetMethod
     self.connectType = connectType
-    self.bindingArgs = bindingArgs
-    self.argumentHolder = { }
+    self.bindingArgs = bindingArgs or {}
+    self.argumentHolder = {} 
   end
 }
 
---- Emits signal to listener
+--- Runs the target method. Merges stored args with call-time args.
 ---@param ... any
 function SignalConnection:emit(...)
-  assert(self.targetObject[self.targetMethod] ~= nil, 'Target method ' .. self.targetMethod .. ' does not exist on target object')
-  if self.bindingArgs ~= nil and #self.bindingArgs > 0 then
-    for i, v in ipairs(self.bindingArgs) do
-      self.argumentHolder[#self.argumentHolder + 1] = v
-    end
-  end
-  lume.push(self.argumentHolder, ...)
-  self.targetObject[self.targetMethod](self.targetObject, unpack(self.argumentHolder))
-  lume.clear(self.argumentHolder)
+  local method = self.targetObject[self.targetMethod]
+  assert(method ~= nil, 'Target method ' .. self.targetMethod .. ' does not exist on target object')
+  
+  local args = lume.concat(self.bindingArgs, {...})
+  method(self.targetObject, unpack(args))
 
-  if self.connectType  == SignalConnectType.oneShot then
+  if self.connectType == SignalConnectType.oneShot then
     self:disconnect()
   end
 end
 
---- Disconnect signal from listener
+--- Tells the parent signal to stop talking to this object.
 function SignalConnection:disconnect()
-  self.signal:disconnect(self.targetObject, self.targetMethod)
+  self.signal:disconnect(self.targetObject, self.signal.name)
 end
 
---- Signal instance
+--- The actual event "channel" held by a SignalObject
 ---@class Signal
 ---@field sourceObject SignalObject
 ---@field name string
 ---@field connections SignalConnection[]
+---@field _emitSnapshot SignalConnection[]
 local Signal = Class {
   init = function(self, sourceObject, name)
     self.sourceObject = sourceObject
     self.name = name
-    self.connections = { }
+    self.connections = {}
+    -- We reuse this table to avoid making garbage every frame
+    self._emitSnapshot = {} 
   end
 }
 
---- Emit signal to listeners
+--- Snapshots the listeners and fires them. Mid-loop removals won't break the iterator.
 ---@param ... any
 function Signal:emit(...)
-  for _, connection in ipairs(self.connections) do
-    connection:emit(...)
+  lume.clear(self._emitSnapshot)
+  for i = 1, #self.connections do
+    self._emitSnapshot[i] = self.connections[i]
   end
+
+  for i = 1, #self._emitSnapshot do
+    local connection = self._emitSnapshot[i]
+    
+    -- Final check: don't call it if a previous listener killed it earlier this frame
+    if lume.find(self.connections, connection) then
+      connection:emit(...)
+    end
+  end
+
+  lume.clear(self._emitSnapshot)
 end
 
---- Connect object to signal
+--- Creates a connection. ConnectType can be bindArgs if you use the shorthand.
 ---@param targetObject SignalObject
 ---@param targetMethod string
----@param connectType SignalConnectType|any[] ConnectType or just bind args. This allows for signal:connect(targetObj, targetMethod, connectType, bindArgs) and signal:connect(targetObj, targetMethod, bindArgs)
+---@param connectType SignalConnectType|any[]
 ---@param bindArgs any[]?
 function Signal:connect(targetObject, targetMethod, connectType, bindArgs)
   if type(connectType) == 'table' then
     bindArgs = connectType
     connectType = SignalConnectType.default
   end
+  
   local connection = SignalConnection(self, targetObject, targetMethod, connectType, bindArgs)
-  self.connections[#self.connections + 1] = connection
-  targetObject.connections[#targetObject.connections + 1] = connection
+  table.insert(self.connections, connection)
+  table.insert(targetObject.connections, connection)
 end
 
---- Disconnect object from signal
+--- Removes a listener from both the signal and the listener's own tracker.
 ---@param otherObject SignalObject
----@param signal string
-function Signal:disconnect(otherObject, signal)
-  for i, connection in ipairs(self.connections) do
-    if connection.targetObject == otherObject and signal == connection.signal then
+---@param signalName string
+function Signal:disconnect(otherObject, signalName)
+  for i = #self.connections, 1, -1 do
+    local c = self.connections[i]
+    if c.targetObject == otherObject and (not signalName or c.signal.name == signalName) then
       table.remove(self.connections, i)
-      break
     end
   end
-  for i, connection in ipairs(otherObject.connections) do
-    if connection.signal == signal then
+
+  for i = #otherObject.connections, 1, -1 do
+    local c = otherObject.connections[i]
+    if c.signal == self then
       table.remove(otherObject.connections, i)
-      break
     end
   end
 end
 
---- Export Type SignalObject
+--- Base class for anything that needs to send or receive events
 ---@class SignalObject
----@field signals Signal[]
----@field connections SignalConnection[] SignalConnections this SignalObject exists in
----@field init function We get this from the class module
+---@field signals table<string, Signal>
+---@field connections SignalConnection[] 
 local SignalObject = Class {
   init = function(self)
-    self.signals = { }
-    self.connections = { }
+    self.signals = {}
+    self.connections = {}
   end
 }
 
----Create Signal
+--- Register a new signal name on this object.
 ---@param signalName string
 function SignalObject:signal(signalName)
   self.signals[signalName] = Signal(self, signalName)
 end
 
----Emits signal to listeners
+--- Trigger an event by name.
 ---@param signalName string
 ---@param ... any
 function SignalObject:emit(signalName, ...)
-  assert(self.signals[signalName] ~= nil, 'Signal ' .. signalName .. ' does not exist')
-  self.signals[signalName]:emit(...)
+  local sig = self.signals[signalName]
+  assert(sig ~= nil, 'Signal ' .. signalName .. ' does not exist')
+  sig:emit(...)
 end
 
----Connect to specified signal
+--- Start listening to a signal on another object.
 ---@param signalName string
 ---@param otherObject SignalObject
 ---@param targetMethod string
 ---@param bindArgs any[]?
 function SignalObject:connect(signalName, otherObject, targetMethod, bindArgs)
-  assert(self.signals[signalName] ~= nil, 'Signal ' .. signalName .. ' does not exist')
-  self.signals[signalName]:connect(otherObject, targetMethod, bindArgs)
+  local sig = self.signals[signalName]
+  assert(sig ~= nil, 'Signal ' .. signalName .. ' does not exist')
+  sig:connect(otherObject, targetMethod, bindArgs)
 end
 
----Disconnect from specified signal
+--- Stop listening to a specific signal.
 ---@param signalName string
 ---@param otherObject SignalObject
 function SignalObject:disconnect(signalName, otherObject)
-  self.signals[signalName]:disconnect(otherObject, signalName)
-end
-
----Clears all connections this SingalObject is connected to
-function SignalObject:clearConnections()
-  for _, connection in ipairs(self.connections) do
-    connection:disconnect()
+  local sig = self.signals[signalName]
+  if sig then
+    sig:disconnect(otherObject, signalName)
   end
 end
 
---- Call this so this can actually get garbage collected
---- if this isnt called, there is a possibility for dangling references
+--- Unsubscribe from every object this instance is currently watching.
+function SignalObject:clearConnections()
+  while #self.connections > 0 do
+      local connection = self.connections[#self.connections]
+      if connection then
+          connection:disconnect()
+      end
+      if self.connections[#self.connections] == connection then
+          table.remove(self.connections)
+      end
+  end
+end
+
+--- Tear-down function. Use this before nil-ing out an entity so the GC can grab it.
 function SignalObject:release()
   self:clearConnections()
-  for k, signal in pairs(self.signals) do
-    for _, connection in ipairs(self.signals[k]) do
-      connection:disconnect()
-    end
+  for _, signal in pairs(self.signals) do
+      while #signal.connections > 0 do
+          local connection = signal.connections[#signal.connections]
+          if connection then
+              connection:disconnect()
+          end
+          if signal.connections[#signal.connections] == connection then
+              table.remove(signal.connections)
+          end
+      end
   end
 end
 
----
----@return string type Type of object this is
+--- Standard type getter for debugging/tracking.
+---@return string
 function SignalObject:getType()
   return 'signal_object'
 end

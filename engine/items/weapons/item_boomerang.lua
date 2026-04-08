@@ -9,7 +9,6 @@ local EntityTracker = require 'engine.entities.entity_tracker'
 local PlayerBoomerang = require 'engine.entities.projectile.player_projectiles.player_boomerang'
 local AngleSnap = require 'engine.enums.angle_snap'
 
--- TODO implmement
 
 ---@class ItemBoomerang : ItemWeapon
 ---@field boomerangTracker EntityTracker

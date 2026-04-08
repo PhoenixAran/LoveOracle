@@ -282,13 +282,14 @@ end
 --- This function handles signal_object cleanup and stuff
 function Entity:destroy()
 ---@diagnostic disable-next-line: undefined-field
-  if self.onDestroy then
----@diagnostic disable-next-line: undefined-field
-    self:onDestroy()
-  end
+  self:onDestroy()
   self.destroyed = true
   self:emit('entity_destroyed', self)
   self:release()
+end
+
+function Entity:onDestroy()
+
 end
 
 function Entity:isInAir()

@@ -48,7 +48,9 @@ end
 
 ---@param entity Entity
 function EntityTracker:onEntityDestroyed(entity)
-  entity:disconnect('entity_destroyed', self)
+  -- Don't call entity:disconnect() here.
+  -- The entity is already calling :release(), which will 
+  -- handle the disconnection for us safely.
   lume.remove(self.entities, entity)
 end
 
