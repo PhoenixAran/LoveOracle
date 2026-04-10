@@ -23,7 +23,7 @@ local Hud = Class { __includes = SignalObject,
   init = function(self, args)
     SignalObject.init(self)
 
-    self.statusBarBorder = SpriteBank.createNinePatchSprite('ui_bar_border')
+    self.statusBarBorder = SpriteBank.createNinePatchSprite('ui_bar_border', 56)
     self.statusBarFill = SpriteBank.getSprite('black_bar_fill')
     self.healthBarFill = SpriteBank.getSprite('health_bar_fill')
 
@@ -97,28 +97,40 @@ function Hud:drawHealthBar()
   local spritePadX = 9
   local spritePadY = 5
 
-  local barX, barY = x, y
-  barX, barY = barX - spritePadX, barY - spritePadY
-  barX, barY = barX + self.statusBarFill.originX, barY + self.statusBarFill.originY
-  self.statusBarFill:draw(barX, barY)
+  -- base top-left corner where all bar sprites should start
+  local barX, barY = x - spritePadX, y - spritePadY
+
+  local statusFillScaleX = self.statusBarBorder:getWidth() / self.statusBarFill:getWidth()
+  -- normal sprite: draw(x,y) does x - originX*scaleX internally, so pass barX + originX*scaleX to land at barX
+  self.statusBarFill:draw(barX + self.statusBarFill.originX * statusFillScaleX,
+                          barY + self.statusBarFill.originY, 1, statusFillScaleX, 1)
 
   local maxHealth = self.player.health:getMaxHealth()
   local currentHealth = self.player.health:getHealth()
   local healthRatio = maxHealth > 0 and (currentHealth / maxHealth) or 0
-  local fillWidth = math.floor(self.healthBarFill:getWidth() * healthRatio)
+  
+  -- compute scale so healthBarFill stretches to match the nine-patch width
+  local fillScaleX = self.statusBarBorder:getWidth() / self.healthBarFill:getWidth()
+  local scaledFillW = self.statusBarBorder:getWidth()   -- = getWidth() * fillScaleX
+  local fillWidth = math.floor(scaledFillW * healthRatio)
+
   if fillWidth > 0 then
     -- store old scissor
     local oldSx, oldSy, oldSw, oldSh = love.graphics.getScissor()
     local ox, oy = self.healthBarFill:getOrigin()
-    local healthSx, healthSy, healthSw, healthSh = DisplayHandler.transformRect(barX - ox, barY - oy, fillWidth, self.healthBarFill:getHeight())
+    -- actual pixel top-left after sprite.draw's origin subtraction is barX, barY
+    local healthSx, healthSy, healthSw, healthSh = DisplayHandler.transformRect(
+      barX, barY, fillWidth, self.healthBarFill:getHeight()
+    )
     love.graphics.setScissor(healthSx, healthSy, healthSw, healthSh)
-    self.healthBarFill:draw(barX, barY)
+    self.healthBarFill:draw(barX + ox * fillScaleX, barY + oy, 1, fillScaleX, 1)
 
     -- restore old scissor
     love.graphics.setScissor(oldSx, oldSy, oldSw, oldSh)
   end
 
-  self.statusBarBorder:draw(barX, barY)
+  -- NinePatch: draw(x,y) does x - originX internally, so pass barX + originX for top-left alignment
+  self.statusBarBorder:draw(barX + self.statusBarBorder.originX, barY + self.statusBarBorder.originY)
 
 
 
