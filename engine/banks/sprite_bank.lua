@@ -6,6 +6,7 @@ local SpriteRendererBuilder = require 'engine.utils.sprite_renderer_builder'
 local SpriteAnimationBuilder = require 'engine.utils.sprite_animation_builder'
 local Spriteset = require 'engine.graphics.spriteset'
 local NinePatchTexture = require 'engine.graphics.nine_patch_texture'
+local Subtexture = require 'engine.graphics.subtexture'
 
 local SpriteRenderer = require 'engine.components.animated_sprite_renderer'
 local AnimatedSpriteRenderer = require 'engine.components.animated_sprite_renderer'
@@ -82,6 +83,19 @@ function SpriteBank.getNinePatchTexture(key)
   return SpriteBank.ninePatchTextures[key]
 end
 
+--- create a nine patch sprite given a registed nine_patch_texture
+--- NinePatchSprites are not cached due to the dynamic nature of their dimensions, so this always creates a new instance
+---@param ninePatchTextureKey string
+---@param width number?
+---@param height number?
+---@param alpha number?
+---@return NinePatchSprite
+function SpriteBank.createNinePatchSprite(ninePatchTextureKey, width, height, alpha)
+  local spriteBuilder = SpriteBuilder()
+  local ninePatchTexture = SpriteBank.getNinePatchTexture(ninePatchTextureKey)
+  return spriteBuilder:buildNinePatchSprite(ninePatchTexture, width, height, alpha)
+end
+
 ---@return SpriteRendererBuilder
 function SpriteBank.createSpriteRendererBuilder()
   return SpriteRendererBuilder()
@@ -124,6 +138,68 @@ function SpriteBank.createNinePatchTexture(spriteSheet, startX, startY, key)
   end
   return ninePatchTexture
 end
+
+--- builds a three patch texture as a nine patch texture, where the middle column
+--- useful for textures that only need to stretch in one direction
+--- @param spriteSheet SpriteSheet
+--- @param startX integer
+--- @param startY integer
+--- @param horizontal boolean -- whether the three patch is horizontal (stretches in x direction) or vertical (stretches in y direction)
+--- @param key string? -- optional key to register the nine patch texture in the SpriteBank
+function SpriteBank.createThreePatchTextureAsNine(spriteSheet, startX, startY, horizontal, key)
+  local ninePatchTexture
+  if horizontal then
+    -- 3 patches in a row: left | center | right  (stretches in X)
+    local left   = spriteSheet:getTexture(startX,     startY)
+    local center = spriteSheet:getTexture(startX + 1, startY)
+    local right  = spriteSheet:getTexture(startX + 2, startY)
+
+    local img = left.image
+    local iw, ih = img:getDimensions()
+    local lw = left:getDimensions()
+    local cw = center:getDimensions()
+    local rw = right:getDimensions()
+
+    -- zero-height fillers preserve left/right widths so draw() gets correct leftW/rightW
+    local emptyLeft   = Subtexture(img, love.graphics.newQuad(0, 0, lw, 0, iw, ih))
+    local emptyCenter = Subtexture(img, love.graphics.newQuad(0, 0, cw, 0, iw, ih))
+    local emptyRight  = Subtexture(img, love.graphics.newQuad(0, 0, rw, 0, iw, ih))
+
+    ninePatchTexture = NinePatchTexture {
+      emptyLeft, emptyCenter, emptyRight,  -- row 1: zero height
+      left,      center,      right,       -- row 2: actual patches
+      emptyLeft, emptyCenter, emptyRight,  -- row 3: zero height
+    }
+  else
+    -- 3 patches in a column: top / center / bottom  (stretches in Y)
+    local top    = spriteSheet:getTexture(startX, startY)
+    local center = spriteSheet:getTexture(startX, startY + 1)
+    local bottom = spriteSheet:getTexture(startX, startY + 2)
+
+    local img = top.image
+    local iw, ih = img:getDimensions()
+    local th = select(2, top:getDimensions())
+    local ch = select(2, center:getDimensions())
+    local bh = select(2, bottom:getDimensions())
+
+    -- zero-width fillers preserve top/bottom heights so draw() gets correct topH/bottomH
+    local emptyTop    = Subtexture(img, love.graphics.newQuad(0, 0, 0, th, iw, ih))
+    local emptyCenter = Subtexture(img, love.graphics.newQuad(0, 0, 0, ch, iw, ih))
+    local emptyBottom = Subtexture(img, love.graphics.newQuad(0, 0, 0, bh, iw, ih))
+
+    ninePatchTexture = NinePatchTexture {
+      emptyTop,    top,    emptyTop,     -- row 1: zero-width edges, actual top
+      emptyCenter, center, emptyCenter, -- row 2: zero-width edges, actual center
+      emptyBottom, bottom, emptyBottom, -- row 3: zero-width edges, actual bottom
+    }
+  end
+
+  if key then
+    SpriteBank.registerNinePatchTexture(key, ninePatchTexture)
+  end
+  return ninePatchTexture
+end
+
 
 function SpriteBank.initialize(path)
   path = path or 'data.sprites'

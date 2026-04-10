@@ -14,10 +14,9 @@ local Health = Class { __includes = Component,
     Component.init(self, entity, args)
     self:signal('max_health_changed')
     self:signal('damage_taken')
-    self:signal('health_reduced')
     self:signal('health_increased')
     self:signal('health_depleted')
-    args.maxHealth = nil or 1
+    args.maxHealth = args.maxHealth or 1
     args.health = args.health or args.maxHealth
     args.armor = args.armor or 0
     self.maxHealth = args.maxHealth
@@ -48,7 +47,7 @@ function Health:setMaxHealth(value, setCurrentHealthAlso)
     if value > oldHealth then
       self:emit('health_increased', self.health, oldHealth)
     elseif value < oldHealth then
-      self:emit('health_reduced', self.health, oldHealth)
+      self:emit('damage_taken', self.health, oldHealth)
     end
   end
 end
@@ -65,7 +64,7 @@ function Health:setHealth(value)
   if value > oldHealth then
     self:emit('health_increased', self.health, oldHealth)
   elseif value < oldHealth then
-    self:emit('health_reduced', self.health, oldHealth)
+    self:emit('damage_taken', self.health, oldHealth)
   end
 
   if self:isDepleted() then
@@ -80,7 +79,7 @@ function Health:takeDamage(damage)
     local actualDamage = damage - self.armor
     if 0 < actualDamage then
       self.health = self.health - actualDamage
-      self:emit('health_reduced', self.health, oldHealth)
+      self:emit('damage_taken', self.health, oldHealth)
     end
     if self:isDepleted() then
       self:emit('health_depleted')

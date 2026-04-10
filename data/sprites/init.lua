@@ -5,5 +5,5 @@ return function(spriteBank)
   require(path .. '.entities')(spriteBank)
   require(path .. '.effects')(spriteBank)
   require(path .. '.entity_effects_sprite')(spriteBank)
-  require(path .. '.ui')(spriteBank)
+  require(path .. '.ui_sprite')(spriteBank)
 end

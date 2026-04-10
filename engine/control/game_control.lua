@@ -71,6 +71,7 @@ end
 ---@param player Player
 function GameControl:setPlayer(player)
   self.player = player
+  self.hud:setPlayer(player)
 end
 
 ---@return Map

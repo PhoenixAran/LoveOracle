@@ -22,8 +22,8 @@ local GameStateInventory = Class { __includes = GameState,
     -- Initialization code here
     GameState.init(self)
     self.lastRoomState = args.lastRoomState
-    self.itemPanel = SpriteBank.getSprite('item_panel_9')
-    self.itemDetailsPanel = SpriteBank.getSprite('item_details_panel_9')
+    self.itemPanel = SpriteBank.createNinePatchSprite('green_ui_9_patch', 160, 96, 1)
+    self.itemDetailsPanel = SpriteBank.createNinePatchSprite('yellow_ui_9_patch', 96, 96, 1)
   end
 }
 

@@ -118,8 +118,8 @@ end
 --- builds nine patch sprite
 --- Note that this takes NinePatchTextures, so it is independent from the spritesheet
 ---@param ninePatchTexture NinePatchTexture
----@param width integer
----@param height integer
+---@param width integer?
+---@param height integer?
 ---@param alpha number?
 function SpriteBuilder:buildNinePatchSprite(ninePatchTexture, width, height, alpha)
   return NinePatchSprite(ninePatchTexture, width, height, alpha)

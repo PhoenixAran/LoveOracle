@@ -254,7 +254,7 @@ local Player = Class { __includes = MapEntity,
     self.previousPositionY = 0
 
     -- put debug stuff here
-    self.health:setMaxHealth(9999999999, true)
+    self.health:setMaxHealth(100, true)
 
 
     -- set up Bump callbacks

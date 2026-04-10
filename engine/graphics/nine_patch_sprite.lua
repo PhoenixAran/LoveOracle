@@ -1,9 +1,41 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
+--- Calculates natural (source) dimensions from a NinePatchTexture.
+--- Detects horizontal 3-slice (top/bottom row heights == 0) and
+--- vertical 3-slice (left/right column widths == 0) automatically.
+---@param ninePatchTexture NinePatchTexture
+---@return number width
+---@return number height
+local function calculateDimensions(ninePatchTexture)
+  local s = ninePatchTexture:getSubtextures()
+  local w1, h1 = s[1]:getDimensions()
+  local w2     = s[2]:getDimensions()
+  local w3     = s[3]:getDimensions()
+  local w4, h4 = s[4]:getDimensions()
+  local w5     = s[5]:getDimensions()
+  local w6     = s[6]:getDimensions()
+  local     h7 = select(2, s[7]:getDimensions())
+
+  -- horizontal 3-slice: top and bottom rows carry no height
+  if h1 == 0 and h7 == 0 then
+    return w4 + w5 + w6, h4
+  end
+
+  -- vertical 3-slice: left and right columns carry no width
+  if w1 == 0 and w3 == 0 then
+    return w5, h1 + h4 + h7
+  end
+
+  -- full 9-patch
+  return w1 + w2 + w3, h1 + h4 + h7
+end
+
 --- A 9-patch sprite that scales for UI elements
 --- The image is divided into 9 regions: 4 corners, 4 edges, and 1 center
 --- Corners don't scale, edges scale in one direction, center scales both ways
+--- Supports horizontal 3-slice (top/bottom rows have 0 height) and
+--- vertical 3-slice (left/right columns have 0 width).
 ---@class NinePatchSprite
 ---@field ninePatchTexture NinePatchTexture nine patch texture
 ---@field width number the total width of the 9-patch
@@ -14,12 +46,19 @@ local lume = require 'lib.lume'
 local NinePatchSprite = Class {
   init = function(self, ninePatchTexture, width, height, alpha)
     self.ninePatchTexture = ninePatchTexture
-    self.width = width
-    self.height = height
-    self.originX = width / 2
-    self.originY = height / 2
-    self.height = height / 2
     self.alpha = alpha or 1
+
+    -- auto-calculate any missing dimension from the subtextures
+    if not width or not height then
+      local calcW, calcH = calculateDimensions(ninePatchTexture)
+      width  = width  or calcW
+      height = height or calcH
+    end
+
+    self.width   = width
+    self.height  = height
+    self.originX = width  / 2
+    self.originY = height / 2
   end
 }
 

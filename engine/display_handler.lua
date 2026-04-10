@@ -66,6 +66,16 @@ function DisplayHandler.setShader(newShader)
   shader = newShader
 end
 
+function DisplayHandler.transformRect(x, y, w, h)
+  local x1, y1 = love.graphics.transformPoint(x, y)
+  local x2, y2 = love.graphics.transformPoint(x + w, y + h)
+
+  x1, y1 = math.floor(x1 + 0.5), math.floor(y1 + 0.5)
+  x2, y2 = math.floor(x2 + 0.5), math.floor(y2 + 0.5)
+
+  return x1, y1, math.max(0, x2 - x1), math.max(0, y2 - y1)
+end
+
 -- love callback
 function DisplayHandler.resize(w, h)
   rs.resize()
