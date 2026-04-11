@@ -17,17 +17,4 @@ return function(spriteBank)
 
   -- register bar nine patch texture
   spriteBank.createThreePatchTextureAsNine(spriteBuilder:getSpriteSheet(), 1, 1, true, 'ui_bar_border')
-
-  -- bar fills
-  spriteBuilder:setSpriteSheet('ui_bars_fill')
-  
-  spriteBank.registerSprite('black_bar_fill', spriteBuilder:buildSprite(1, 4))
-  spriteBank.registerSprite('health_bar_fill', spriteBuilder:buildSprite(1, 1))
-  spriteBank.registerSprite('madness_bar_fill', spriteBuilder:buildSprite(1, 2))
-  spriteBank.registerSprite('stamina_bar_fill', spriteBuilder:buildSprite(1, 3))
-
-  -- construct nine patch textures
-  -- local healthBarFill = spriteBank.createThreePatchAsNine(spriteBuilder:getSpriteSheet(), 1, 1, 'health_bar_fill_9')
-  -- local staminaBarFill = spriteBank.createThreePatchAsNine(spriteBuilder:getSpriteSheet(), 1, 2, 'stamina_bar_fill_9')
-  -- local madnessBarFill = spriteBank.createThreePatchAsNine(spriteBuilder:getSpriteSheet(), 1, 3, 'madness_bar_fill_9')
 end

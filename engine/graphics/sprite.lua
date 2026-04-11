@@ -73,14 +73,10 @@ end
 function Sprite:draw(x, y, alpha, scaleX, scaleY)
   scaleX = scaleX or 1
   scaleY = scaleY or 1
-  -- Adjust x and y to scale around the center
-  local w, h = self.w * scaleX, self.h * scaleY
-  x = x - self.originX * scaleX + self.offsetX
-  y = y - self.originY * scaleY + self.offsetY
   if alpha == nil then alpha = 1 end
   alpha = math.min(alpha, self.alpha)
   love.graphics.setColor(1, 1, 1, alpha)
-  love.graphics.draw(self.subtexture.image, self.subtexture.quad, x, y, 0, scaleX or 1, scaleY or 1)
+  love.graphics.draw(self.subtexture.image, self.subtexture.quad, x + self.offsetX, y + self.offsetY, 0, scaleX, scaleY, self.originX, self.originY)
   love.graphics.setColor(1, 1, 1)
 end
 

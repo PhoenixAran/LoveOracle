@@ -3,5 +3,4 @@
 "inventory_panel", "inventory_panel", 16, 16
 "inventory_cursors", "inventory_cursors", 8, 8
 "ui_bars_small", "ui_bars_small", 16, 16, 0, 0
-"ui_bars_fill", "ui_bars_fill", 48, 16, 0, 0
-"ui_bars_border_9", "ui_bars_border_9", 16, 16
+"ui_bars_border_9", "ui_bars_border_9", 7, 5

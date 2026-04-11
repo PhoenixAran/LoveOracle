@@ -66,6 +66,7 @@ function DisplayHandler.setShader(newShader)
   shader = newShader
 end
 
+-- note the return is rounded to integers
 function DisplayHandler.transformRect(x, y, w, h)
   local x1, y1 = love.graphics.transformPoint(x, y)
   local x2, y2 = love.graphics.transformPoint(x + w, y + h)

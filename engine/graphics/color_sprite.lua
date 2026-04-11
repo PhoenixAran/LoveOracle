@@ -17,9 +17,6 @@ local ColorSprite = Class {
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end
     
-    if type(sprite) == 'string' then
-      sprite = AssetManager.getSprite(sprite)
-    end
     if type(palette) == 'string' then
       palette = PaletteBank.getPalette(palette)
     end
@@ -72,14 +69,12 @@ function ColorSprite:getOrigin()
 end
 
 function ColorSprite:draw(x, y, alpha, scaleX, scaleY)
-  x = x + self:getOffsetX()
-  y = y + self:getOffsetY()
   local currentShader = love.graphics.getShader()
   local shouldSwapBack = currentShader ~= self.palette:getShader()
   if shouldSwapBack then
     love.graphics.setShader(self.palette:getShader())
   end
-  self.sprite:draw(x, y, alpha, scaleX, scaleY)
+  self.sprite:draw(x + self:getOffsetX(), y + self:getOffsetY(), alpha, scaleX, scaleY)
   if shouldSwapBack then
     love.graphics.setShader(currentShader)
   end
