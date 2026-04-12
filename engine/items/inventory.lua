@@ -15,9 +15,9 @@ local Inventory = Class { __includes = SignalObject,
   init = function(self, gameControl)
     SignalObject.init(self)
 
+    -- TODO prevent sprint boots button, to whatever it will be
     self.protectedSLots = {
-      'a', -- reserved for Roc feather when unlocked. It is also the interact button so it should not be used for anything else
-      'b'  -- reserved for sword
+      'a', -- reserved for Roc feather when unlocked. It is also the interact button and swim button when in water
     }
 
     self.items = { }

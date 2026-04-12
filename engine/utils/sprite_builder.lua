@@ -50,7 +50,7 @@ end
 ---@param y integer
 ---@param offsetX number?
 ---@param offsetY number?
----@return unknown
+---@return Sprite
 function SpriteBuilder:buildSprite(x, y, offsetX, offsetY)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
@@ -79,15 +79,15 @@ function SpriteBuilder:addCompositeSprite(sprite)
 end
 
 ---builds composite sprite. CompositeSprite array will then be cleared
----@param sprite Sprite
 ---@param originX number?
 ---@param originY number?
 ---@param offsetX number?
 ---@param offsetY number?
 ---@return CompositeSprite
 function SpriteBuilder:buildCompositeSprite(sprite, originX, originY, offsetX, offsetY)
-  self.sprites = { }
-  return CompositeSprite(self.sprites, originX, originY, offsetX, offsetY)
+  local compositeSprite = CompositeSprite(self.sprites, originX, originY, offsetX, offsetY)
+  self.sprites = { }  
+  return compositeSprite
 end
 
 ---builds prototype sprite

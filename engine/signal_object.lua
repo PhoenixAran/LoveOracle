@@ -116,6 +116,7 @@ end
 ---@class SignalObject
 ---@field signals table<string, Signal>
 ---@field connections SignalConnection[] 
+---@field init function
 local SignalObject = Class {
   init = function(self)
     self.signals = {}

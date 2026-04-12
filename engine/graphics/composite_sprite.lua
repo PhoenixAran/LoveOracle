@@ -45,7 +45,7 @@ end
 function CompositeSprite:calculateBounds()
   if #self.sprites == 0 then return end
   if #self.sprites == 1 then
-    self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h = self.sprites[0]:getBounds()
+    self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h = self.sprites[1]:getBounds()
     return
   end
   local top = self:getTopMostBoundary()

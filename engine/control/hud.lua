@@ -7,7 +7,7 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local NLay = require 'lib.nlay'
 local GameConfig = require 'game_config'
 local DisplayHandler = require 'engine.display_handler'
-
+local Singletons = require 'engine.singletons'
 
 
 
@@ -19,6 +19,10 @@ local DisplayHandler = require 'engine.display_handler'
 ---@field hudLeftRect NLay.Constraint the left section of the bottom HUD area, used for player health and madness bars
 ---@field hudCenterRect NLay.Constraint the center section of the bottom HUD area, used for player stamina bar
 ---@field hudRightRect NLay.Constraint the right section of the bottom HUD area, used for other info such as score or currency
+---@field equipmentSlot Sprite the sprite used to indicate an equipment slot, drawn in the right section of the HUD
+---@field bSlotButtonSprite Sprite the sprite used to indicate the B button equipment slot
+---@field xSlotButtonSprite Sprite the sprite used to indicate the X button equipment slot
+---@field ySlotButtonSprite Sprite the sprite used to indicate the Y button equipment slot
 local Hud = Class { __includes = SignalObject,
   init = function(self, args)
     SignalObject.init(self)
@@ -35,11 +39,15 @@ local Hud = Class { __includes = SignalObject,
       :size(0, 16)
 
     -- split bottom strip into 3 equal horizontal sections
-    local leftRect, centerRect, rightRect = NLay.split(self.hudRect, "horizontal", 1, 1, 1)
+    local leftRect, centerRect, rightRect = NLay.split(self.hudRect, "horizontal", 1, 1.25, 1.75)
  
     self.hudLeftRect = leftRect:margin(uiPadding)
     self.hudCenterRect = centerRect:margin(uiPadding)
     self.hudRightRect = rightRect:margin(uiPadding)
+
+    self.equipmentSlot = SpriteBank.getSprite('hud_equipment_slot')
+    
+    
   end
 }
 
@@ -58,11 +66,13 @@ function Hud:setPlayer(player)
   self:updateHealthBarWidth()
 end
 
-local BASE_HEALTHBAR_WIDTH = 24
-local MAX_HEALTHBAR_WIDTH = 60
-local BASE_MAX_HEALTH = 3
-local HEALTHBAR_GROWTH = 0.12
+
 function Hud:updateHealthBarWidth()
+  local BASE_HEALTHBAR_WIDTH = 24
+  local MAX_HEALTHBAR_WIDTH = 60
+  local BASE_MAX_HEALTH = 3
+  local HEALTHBAR_GROWTH = 0.12
+
   local maxHealth = self.player.health:getMaxHealth()
   local healthDelta = math.max(0, maxHealth - BASE_MAX_HEALTH)
 
@@ -84,7 +94,9 @@ function Hud:draw()
   love.graphics.setColor(1,1,1)
 
   self:debugDrawNlaySections()
-  self:drawHealthBar()
+  self:drawStatBars()
+  self:drawEquippedItems()
+
 end
 
 function Hud:debugDrawNlaySections()
@@ -104,17 +116,20 @@ function Hud:debugDrawNlaySections()
   love.graphics.setColor(1, 1, 1, 1)
 end
 
-function Hud:drawHealthBar()
-  -- draw our border
+-- left section of our hud
+function Hud:drawStatBars()
+  -- TODO draw madness bars and stamina bars eventually
+
   local x, y, w, h = self.hudLeftRect:get()
 
   -- base top-left corner where all bar sprites should start
   local borderOx, borderOy = self.statusBarBorder:getOrigin()
   local barX, barY = x + borderOx, y + borderOy
+  barX, barY = math.floor(barX + 0.5), math.floor(barY + 0.5)
   
   -- black background for health border
   local STATUS_BAR_FILL_WIDTH_ADJUST = 2
-  local STATUS_BAR_FILL_HEIGHT_ADJUST = 1.5
+  local STATUS_BAR_FILL_HEIGHT_ADJUST = 2
   love.graphics.setColor(0, 0, 0, 1)
   love.graphics.rectangle(
     'fill',
@@ -145,6 +160,23 @@ function Hud:drawHealthBar()
   self.statusBarBorder:draw(barX, barY)
 end
 
+function Hud:drawEquippedItems()
+  -- draw the three equipment slots
+  local EQUIPMENT_SLOT_X_ADJUST = -1.5
+  local x, y, w, h = self.hudRightRect:get()
+  local drawX, drawY = x, y
+  for i = 1, 3 do
+    drawX = x + (i - 1) * (self.equipmentSlot:getWidth())
+    local ox, oy = self.equipmentSlot:getOrigin()
+    local esx, esy = drawX + ox, drawY + oy
+    esx = esx + i * EQUIPMENT_SLOT_X_ADJUST
+    esx, esy = math.floor(esx + 0.5), math.floor(esy + 0.5)
+    self.equipmentSlot:draw(esx, esy)
+    -- local bx, by, bw, bh = self.equipmentSlot:getBounds()
+    -- love.graphics.rectangle('line', esx - bw / 2, esy - bh / 2, bw, bh)
+  end
+
+end
 
 
 -- callbacks
