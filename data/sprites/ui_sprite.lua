@@ -17,4 +17,10 @@ return function(spriteBank)
 
   -- register bar nine patch texture
   spriteBank.createThreePatchTextureAsNine(spriteBuilder:getSpriteSheet(), 1, 1, true, 'ui_bar_border')
+
+
+  -- HUD equipment section
+  spriteBuilder:setSpriteSheet('ui_small')
+
+  
 end

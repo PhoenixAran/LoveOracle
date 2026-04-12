@@ -1,18 +1,20 @@
 ---@diagnostic disable: missing-fields
 
--- dont have annotations for library object instances
+-- note: dont have annotations for library object instances
 ---@class Singletons
 ---@field input any
 ---@field screenManager any
 ---@field gameControl GameControl
 ---@field roomControl RoomControl
 ---@field imguiModules any[]
+---@field joystickData any
 local singletons = {
   input = nil,
   screenManager = { },
   gameControl = { },
   roomControl = { },
-  imguiModules = { }
+  imguiModules = { },
+  joystickData = nil
 }
 
 function singletons.getType()

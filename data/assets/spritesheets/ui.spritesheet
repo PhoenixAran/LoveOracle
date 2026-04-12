@@ -4,3 +4,4 @@
 "inventory_cursors", "inventory_cursors", 8, 8
 "ui_bars_small", "ui_bars_small", 16, 16, 0, 0
 "ui_bars_border_9", "ui_bars_border_9", 7, 5
+"ui_small", "ui_small", 8, 8

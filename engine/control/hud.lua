@@ -83,7 +83,12 @@ function Hud:draw()
   love.graphics.rectangle('fill', 0, 144 - 16, 256, 16)
   love.graphics.setColor(1,1,1)
 
-  -- debug: draw rects
+  self:debugDrawNlaySections()
+  self:drawHealthBar()
+end
+
+function Hud:debugDrawNlaySections()
+    -- debug: draw rect outlines of HUD sections
   love.graphics.setColor(1, 1, 1, 0.5)
   local x, y, w, h
   x, y, w, h = self.hudLeftRect:get()
@@ -97,8 +102,6 @@ function Hud:draw()
 
   -- reset color
   love.graphics.setColor(1, 1, 1, 1)
-
-  self:drawHealthBar()
 end
 
 function Hud:drawHealthBar()
@@ -141,6 +144,8 @@ function Hud:drawHealthBar()
   end
   self.statusBarBorder:draw(barX, barY)
 end
+
+
 
 -- callbacks
 function Hud:onDamageTaken(damageAmount, oldHealth)

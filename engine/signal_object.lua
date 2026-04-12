@@ -46,14 +46,14 @@ end
 ---@field sourceObject SignalObject
 ---@field name string
 ---@field connections SignalConnection[]
+---@field init function
 ---@field _emitSnapshot SignalConnection[]
 local Signal = Class {
   init = function(self, sourceObject, name)
     self.sourceObject = sourceObject
     self.name = name
     self.connections = {}
-    -- We reuse this table to avoid making garbage every frame
-    self._emitSnapshot = {} 
+    self._emitSnapshot = {}
   end
 }
 

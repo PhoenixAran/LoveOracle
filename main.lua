@@ -65,6 +65,10 @@ local screenManager = nil
 local input = nil
 
 function love.load(args)
+  -- gamepad guessser init
+  local gamepadGuesser = require 'lib.gamepadguesser'
+  Singletons.joystickData = gamepadGuesser.createJoystickData('lib/gamepadguesser')
+
   -- graphics setup
   love.graphics.setDefaultFilter('nearest', 'nearest')
   love.window.setTitle(gameConfig.window.title)
@@ -123,6 +127,7 @@ function love.load(args)
   love.log.trace('Startup Screen: ' .. gameConfig.startupScreen)
   screenManager:enter(require(gameConfig.startupScreen)(), unpack(args))
 end
+
 
 function love.update(dt)
   love.time.update(dt)
