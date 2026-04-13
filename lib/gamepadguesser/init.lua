@@ -17,18 +17,20 @@ gamepadguesser.CONSOLES = {
 }
 
 local all_patterns = {
+    xbox = {
+        "Xbox", "XBOX", "xbox",
+        "Microsoft",      
+        "X%-Box",       
+        "360",       
+        "One",
+        "Series",         
+    },
     playstation = {
-        "%f[%w]PS%d%f[%D]", "Sony%f[%W]", "Play[Ss]tation",  "[Dd]ual[Ss]ense"
+        "%f[%w]PS%d%f[%D]", "Sony%f[%W]", "Play[Ss]tation",  "[Dd]ual[Ss]ense", "[Dd]ual[Ss]hock", "Wireless Controller", 
     },
     nintendo = {
-        "Wii%f[%L]", "%f[%u]S?NES%f[%U]", "%f[%l]s?nes%f[%L]", "%f[%u]Switch%f[%L]", "Joy[- ]Cons?%f[%L]",
+        "Wii%f[%L]", "%f[%u]S?NES%f[%U]", "%f[%l]s?nes%f[%L]", "%f[%u]Switch%f[%L]", "Joy[- ]Cons?%f[%L]", "[Pp]ro Controller", "Nintendo"
     },
-    -- Our art doesn't have sega and I don't have a sega gamepad to test with,
-    -- so don't include it.
-    --~ sega = {
-    --~     -- Be very cautious since sega gamepads are rare.
-    --~     "%f[%a]Sega%f[%W]",
-    --~ },
 }
 
 local function getNameFromMapping(mapping)
