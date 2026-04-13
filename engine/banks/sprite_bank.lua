@@ -90,10 +90,10 @@ end
 ---@param height number?
 ---@param alpha number?
 ---@return NinePatchSprite
-function SpriteBank.createNinePatchSprite(ninePatchTextureKey, width, height, alpha)
+function SpriteBank.createNinePatchSprite(ninePatchTextureKey, width, height, originX, originY, alpha)
   local spriteBuilder = SpriteBuilder()
   local ninePatchTexture = SpriteBank.getNinePatchTexture(ninePatchTextureKey)
-  return spriteBuilder:buildNinePatchSprite(ninePatchTexture, width, height, alpha)
+  return spriteBuilder:buildNinePatchSprite(ninePatchTexture, width, height, originX, originY, alpha)
 end
 
 ---@return SpriteRendererBuilder
@@ -120,6 +120,7 @@ end
 ---@param spriteSheet SpriteSheet
 ---@param startX integer
 ---@param startY integer
+---@param key string? -- optional key to register the nine patch texture in the SpriteBank
 ---@return NinePatchTexture
 function SpriteBank.createNinePatchTexture(spriteSheet, startX, startY, key)
   local ninePatchTexture = NinePatchTexture {

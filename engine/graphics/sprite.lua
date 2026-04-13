@@ -11,7 +11,7 @@ local Class = require 'lib.class'
 ---@field originY number
 ---@field alpha number?
 local Sprite = Class {
-  init = function(self, subtexture, offsetX, offsetY, alpha)
+  init = function(self, subtexture, offsetX, offsetY, originX, originY, alpha)
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end
     self.subtexture = subtexture
@@ -20,8 +20,16 @@ local Sprite = Class {
     local w, h = self:getDimensions()
     self.w = w
     self.h = h
-    self.originX = w / 2
-    self.originY = h / 2
+    if originX == nil then
+      self.originX = w / 2
+    else
+      self.originX = originX
+    end
+    if originY == nil then
+      self.originY = h / 2
+    else
+      self.originY = originY
+    end
     if alpha == nil then alpha = 1 end
     self.alpha = alpha or 1
   end
@@ -68,6 +76,11 @@ end
 
 function Sprite:getOrigin()
   return self.originX, self.originY
+end
+
+function Sprite:setOrigin(originX, originY)
+  self.originX = originX
+  self.originY = originY
 end
 
 function Sprite:draw(x, y, alpha, scaleX, scaleY)

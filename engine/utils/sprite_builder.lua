@@ -50,12 +50,15 @@ end
 ---@param y integer
 ---@param offsetX number?
 ---@param offsetY number?
+---@param originX number?
+---@param originY number?
+---@param alpha number?
 ---@return Sprite
-function SpriteBuilder:buildSprite(x, y, offsetX, offsetY)
+function SpriteBuilder:buildSprite(x, y, offsetX, offsetY, originX, originY, alpha)
   if offsetX == nil then offsetX = 0 end
   if offsetY == nil then offsetY = 0 end
   local subtexture = self.spriteSheet:getTexture(x, y)
-  local sprite = Sprite(subtexture, offsetX, offsetY)
+  local sprite = Sprite(subtexture, offsetX, offsetY, originX, originY, alpha)
   return sprite
 end
 
@@ -121,8 +124,8 @@ end
 ---@param width integer?
 ---@param height integer?
 ---@param alpha number?
-function SpriteBuilder:buildNinePatchSprite(ninePatchTexture, width, height, alpha)
-  return NinePatchSprite(ninePatchTexture, width, height, alpha)
+function SpriteBuilder:buildNinePatchSprite(ninePatchTexture, width, height, originX, originY, alpha)
+  return NinePatchSprite(ninePatchTexture, width, height, originX, originY, alpha)
 end
 
 return SpriteBuilder

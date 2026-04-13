@@ -266,6 +266,14 @@ rs.resize = function(window_width, window_height)
 
     x_offset = (window_width - (scale * game_width)) / 2
     y_offset = (window_height - (scale * game_height)) / 2
+
+    -- In pixel-perfect mode, half-pixel offsets can cause seam artifacts
+    -- on 1px UI edges even when all game-space coordinates are integers.
+    if scale_mode == rs.PIXEL_PERFECT_MODE then
+      x_offset = math.floor(x_offset + 0.5)
+      y_offset = math.floor(y_offset + 0.5)
+    end
+
     scale_width, scale_height = scale, scale
   end
   

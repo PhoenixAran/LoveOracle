@@ -22,11 +22,14 @@ local CompositeSprite = Class {
     self.height = 0
     self.boundsRect = { x = 0, y = 0, w = 0, h = 0 }
     self:calculateBounds()
-    if originX == nil or originY == nil then
+    if originX == nil then
       self.originX = self.boundsRect.w / 2
-      self.originY = self.boundsRect.h / 2
     else
       self.originX = originX
+    end
+    if originY == nil then
+      self.originY = self.boundsRect.h / 2
+    else
       self.originY = originY
     end
     if alpha == nil then
@@ -42,17 +45,21 @@ function CompositeSprite:getType()
 end
 
 function CompositeSprite:calculateBounds()
-  if #self.sprites == 0 then return end
-  if #self.sprites == 1 then
-    self.boundsRect.x, self.boundsRect.y, self.boundsRect.w, self.boundsRect.h = self.sprites[1]:getBounds()
+  if #self.sprites == 0 then
+    self.boundsRect.x = 0
+    self.boundsRect.y = 0
+    self.boundsRect.w = 0
+    self.boundsRect.h = 0
     return
   end
+
   local top = self:getTopMostBoundary()
   local bottom = self:getBottomMostBoundary()
   local left = self:getLeftMostBoundary()
   local right = self:getRightMostBoundary()
-  self.boundsRect.x = self.offsetX
-  self.boundsRect.y = self.offsetY
+
+  self.boundsRect.x = self.offsetX + left
+  self.boundsRect.y = self.offsetY + top
   self.boundsRect.w = right - left
   self.boundsRect.h = bottom - top
 end
@@ -60,7 +67,7 @@ end
 function CompositeSprite:getLeftMostBoundary()
   local returnVal = 10000
   for _, sprite in ipairs(self.sprites) do
-    local x = sprite:getOffsetX()
+    local x = sprite:getBounds()
     if x < returnVal then 
       returnVal = x
     end
@@ -71,7 +78,8 @@ end
 function CompositeSprite:getRightMostBoundary()
   local returnVal = -10000
   for _, sprite in ipairs(self.sprites) do
-    local x = sprite:getOffsetX() + sprite:getWidth()
+    local x, _, w = sprite:getBounds()
+    x = x + w
     if returnVal < x then
       returnVal = x
     end
@@ -82,7 +90,7 @@ end
 function CompositeSprite:getTopMostBoundary()
   local returnVal = 10000
   for _, sprite in ipairs(self.sprites) do
-    local y = sprite:getOffsetY()
+    local _, y = sprite:getBounds()
     if y < returnVal then
       returnVal = y
     end
@@ -93,7 +101,8 @@ end
 function CompositeSprite:getBottomMostBoundary()
   local returnVal = -10000
   for _, sprite in ipairs(self.sprites) do
-    local y = sprite:getOffsetY() + sprite:getHeight()
+    local _, y, _, h = sprite:getBounds()
+    y = y + h
     if returnVal < y then
       returnVal = y
     end
@@ -134,10 +143,16 @@ function CompositeSprite:getOrigin()
 end
 
 function CompositeSprite:draw(x, y, alpha, scaleX, scaleY)
+  scaleX = scaleX or 1
+  scaleY = scaleY or 1
   if alpha == nil then alpha = 1 end
   alpha = math.min(alpha, self.alpha)
+
+  local drawX = x - (self.originX * scaleX - self.originX) + self.offsetX
+  local drawY = y - (self.originY * scaleY - self.originY) + self.offsetY
+
   for _, sprite in ipairs(self.sprites) do
-    sprite:draw(x + self:getOffsetX(), y + self:getOffsetY(), alpha, scaleX, scaleY)
+    sprite:draw(drawX, drawY, alpha, scaleX, scaleY)
   end
 end
 

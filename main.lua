@@ -68,6 +68,9 @@ function love.load(args)
   -- gamepad guessser init
   local gamepadGuesser = require 'lib.gamepadguesser'
   Singletons.joystickData = gamepadGuesser.createJoystickData('lib/gamepadguesser')
+  for _, joystick in ipairs(love.joystick.getJoysticks()) do
+    Singletons.joystickData:addJoystick(joystick)
+  end
 
   -- graphics setup
   love.graphics.setDefaultFilter('nearest', 'nearest')

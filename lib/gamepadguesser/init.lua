@@ -18,7 +18,7 @@ gamepadguesser.CONSOLES = {
 
 local all_patterns = {
     playstation = {
-        "%f[%w]PS%d%f[%D]", "Sony%f[%W]", "Play[Ss]tation",
+        "%f[%w]PS%d%f[%D]", "Sony%f[%W]", "Play[Ss]tation",  "[Dd]ual[Ss]ense"
     },
     nintendo = {
         "Wii%f[%L]", "%f[%u]S?NES%f[%U]", "%f[%l]s?nes%f[%L]", "%f[%u]Switch%f[%L]", "Joy[- ]Cons?%f[%L]",

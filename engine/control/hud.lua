@@ -24,11 +24,12 @@ local GamepadGuesser = require 'lib.gamepadguesser'
 ---@field bSlotButtonSprite Sprite the sprite used to indicate the B button equipment slot
 ---@field xSlotButtonSprite Sprite the sprite used to indicate the X button equipment slot
 ---@field ySlotButtonSprite Sprite the sprite used to indicate the Y button equipment slot
+---@field slotButtonSprites Sprite[] list of the three button sprites in order of equipment slot
 local Hud = Class { __includes = SignalObject,
   init = function(self, args)
     SignalObject.init(self)
 
-    self.statusBarBorder = SpriteBank.createNinePatchSprite('hud_bar_border', 16)
+    self.statusBarBorder = SpriteBank.createNinePatchSprite('hud_bar_border', 16, nil, 0, 0)
 
     -- Set up NLay layout area
     local uiPadding = 1
@@ -50,21 +51,30 @@ local Hud = Class { __includes = SignalObject,
     
     
     local gamepadConsole = 'pc'
-  
-    if lume.count(Singletons.joystickData.joysticks) > 0 then
+
+    local joysticks = love.joystick.getJoysticks()
+    local firstJoystick = joysticks[1]
+    if firstJoystick then
       -- only support one joystick
       -- TODO might be better to have the console value directly in Singletons like Singletons.console
       -- so for eventual ports it can just be set via game_config
       -- then if its 'PC' we can use gamepad guesser, otherwise we can just set it to the correct console value for that platform and skip gamepad guesser entirely
-      local gamepadConsole = GamepadGuesser.joystickNameToConsole(Singletons.joystickData.joysticks[1])
+      if Singletons.joystickData then
+        Singletons.joystickData:addJoystick(firstJoystick)
+        gamepadConsole = Singletons.joystickData.joysticks[firstJoystick]
+      else
+        gamepadConsole = GamepadGuesser.joystickToConsole(firstJoystick)
+      end
+
       if not (gamepadConsole == 'nintendo' or gamepadConsole == 'xbox' or gamepadConsole == 'playstation') then
         gamepadConsole = 'xbox' -- default to xbox button prompts if we can't identify the controller type
       end
     end
-
     self.bSlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_b_button')
     self.xSlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_x_button')
     self.ySlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_y_button')
+
+    self.slotButtonSprites = { self.bSlotButtonSprite, self.xSlotButtonSprite, self.ySlotButtonSprite }
   end
 }
 
@@ -118,7 +128,7 @@ end
 
 function Hud:debugDrawNlaySections()
     -- debug: draw rect outlines of HUD sections
-  love.graphics.setColor(1, 1, 1, 0.5)
+  love.graphics.setColor(1, 1, 1, 0.3)
   local x, y, w, h
   x, y, w, h = self.hudLeftRect:get()
   love.graphics.rectangle('line', x, y, w, h)
@@ -138,64 +148,50 @@ function Hud:drawStatBars()
   -- TODO draw madness bars and stamina bars eventually
 
   local x, y, w, h = self.hudLeftRect:get()
+  x, y = math.floor(x + 0.5), math.floor(y + 0.5)
 
-  -- base top-left corner where all bar sprites should start
-  local borderOx, borderOy = self.statusBarBorder:getOrigin()
-  local barX, barY = x + borderOx, y + borderOy
-  barX, barY = math.floor(barX + 0.5), math.floor(barY + 0.5)
-  
+  local FILL_BAR_ADJUST_X = 1
+  local FILL_BAR_ADJUST_Y = 1
+  local FILL_BAR_ADJUST_W = -2
+  local FILL_BAR_ADJUST_H = -2
   -- black background for health border
-  local STATUS_BAR_FILL_WIDTH_ADJUST = 1
-  local STATUS_BAR_FILL_HEIGHT_ADJUST = 2
+  local statusW, statusH = self.statusBarBorder:getWidth(), self.statusBarBorder:getHeight()
   love.graphics.setColor(0, 0, 0, 1)
   love.graphics.rectangle(
-    'fill',
-    barX - borderOx + 1,
-    barY - borderOy + 1,
-    self.statusBarBorder:getWidth() - STATUS_BAR_FILL_WIDTH_ADJUST,
-    self.statusBarBorder:getHeight() - STATUS_BAR_FILL_HEIGHT_ADJUST
-  )
+    'fill', x + FILL_BAR_ADJUST_X, y + FILL_BAR_ADJUST_Y, statusW + FILL_BAR_ADJUST_W,statusH + FILL_BAR_ADJUST_H)
   love.graphics.setColor(1, 1, 1, 1)
 
   local maxHealth = self.player.health:getMaxHealth()
   local currentHealth = self.player.health:getHealth()
   local healthRatio = maxHealth > 0 and (currentHealth / maxHealth) or 0
-  
+
   -- compute scale so healthBarFill stretches to match the nine-patch width
   local fillWidth = math.floor((self.statusBarBorder:getWidth() - 2) * healthRatio + 0.5)
+  local fillHeight = self.statusBarBorder:getHeight() + FILL_BAR_ADJUST_H
   if fillWidth > 0 then
     love.graphics.setColor(254 / 255, 30 / 255, 42 / 255, 1)
-    love.graphics.rectangle(
-      'fill',
-      barX - borderOx + 1,
-      barY - borderOy + 1,
-      fillWidth,
-      self.statusBarBorder:getHeight() - STATUS_BAR_FILL_HEIGHT_ADJUST
-    )
+    love.graphics.rectangle('fill', x + FILL_BAR_ADJUST_X, y + FILL_BAR_ADJUST_Y, fillWidth, fillHeight)
     love.graphics.setColor(1, 1, 1, 1)
   end
-  self.statusBarBorder:draw(barX, barY)
+  self.statusBarBorder:draw(x, y)
 end
 
 function Hud:drawEquippedItems()
   -- draw the three equipment slots
   local x, y, w, h = self.hudRightRect:get()
+  local x, y = math.floor(x + 0.5), math.floor(y + 0.5)
   local startX = x
   local diff = 38
+  local spaceBetweenButtonAndSlot = 7
   for i = 1, 3 do
     local drawX, drawY = startX + ( (i - 1) * diff), y
-    local ox, oy = self.equipmentSlot:getOrigin()
-    local esx, esy = drawX + ox, drawY + oy
-    esx = esx + i
-    esx, esy = math.floor(esx + 0.5), math.floor(esy + 0.5)
-    self.equipmentSlot:draw(esx, esy)
-    -- local bx, by, bw, bh = self.equipmentSlot:getBounds()
-    -- love.graphics.rectangle('line', esx - bw / 2, esy - bh / 2, bw, bh)
+    local slotButtonSprite = self.slotButtonSprites[i]
+    slotButtonSprite:draw(drawX, drawY)
+    self.equipmentSlot:draw(drawX + spaceBetweenButtonAndSlot, drawY)
   end
 end
 
 function Hud:drawEquipmentSlot(slotButton, x, y)
-  
   local ox, oy = self.equipmentSlot:getOrigin()
   local esx, esy = x + ox, y + oy
 

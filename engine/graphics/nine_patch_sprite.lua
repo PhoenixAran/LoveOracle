@@ -44,7 +44,7 @@ end
 ---@field originY number the y-coordinate of the origin point for drawing
 ---@field alpha number
 local NinePatchSprite = Class {
-  init = function(self, ninePatchTexture, width, height, alpha)
+  init = function(self, ninePatchTexture, width, height, originX, originY, alpha)
     self.ninePatchTexture = ninePatchTexture
     self.alpha = alpha or 1
 
@@ -57,8 +57,18 @@ local NinePatchSprite = Class {
 
     self.width   = width
     self.height  = height
-    self.originX = width  / 2
-    self.originY = height / 2
+
+    if originX == nil then
+      self.originX = width / 2
+    else
+      self.originX = originX
+    end
+
+    if originY == nil then
+      self.originY = height / 2
+    else
+      self.originY = originY
+    end
   end
 }
 
@@ -70,14 +80,18 @@ function NinePatchSprite:getWidth()
   return self.width
 end
 
-function NinePatchSprite:setWidth(width)
+function NinePatchSprite:setWidth(width, setOrigin)
   self.width = width
-  self.originX = width / 2
+  if setOrigin then
+    self.originX = width / 2
+  end
 end
 
-function NinePatchSprite:setHeight(height)
+function NinePatchSprite:setHeight(height, setOrigin  )
   self.height = height
-  self.originY = height / 2
+  if setOrigin then
+    self.originY = height / 2
+  end
 end
 
 function NinePatchSprite:getHeight()
@@ -90,6 +104,11 @@ end
 
 function NinePatchSprite:getOrigin()
   return self.originX, self.originY
+end
+
+function NinePatchSprite:setOrigin(originX, originY)
+  self.originX = originX
+  self.originY = originY
 end
 
 ---gets the boundaries of this sprite
@@ -108,7 +127,6 @@ end
 function NinePatchSprite:draw(x, y, alpha)
   alpha = alpha or 1
 
-  -- position is for the *top-left* of the final rect, respecting origin
   x = x - self.originX
   y = y - self.originY
 

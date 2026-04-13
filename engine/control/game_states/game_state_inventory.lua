@@ -22,8 +22,9 @@ local GameStateInventory = Class { __includes = GameState,
     -- Initialization code here
     GameState.init(self)
     self.lastRoomState = args.lastRoomState
-    self.itemPanel = SpriteBank.createNinePatchSprite('green_ui_9_patch', 160, 96, 1)
-    self.itemDetailsPanel = SpriteBank.createNinePatchSprite('yellow_ui_9_patch', 96, 96, 1)
+    self.itemPanel = SpriteBank.createNinePatchSprite('green_ui_9_patch', 160, 96, 0, 0)
+    self.itemDetailsPanel = SpriteBank.createNinePatchSprite('yellow_ui_9_patch', 96, 96, 0, 0)
+    print(self.itemPanel:getOrigin())
   end
 }
 
@@ -82,7 +83,7 @@ function GameStateInventory:drawPanel(rectConstraint, panelSprite, panelLabel, x
   local itemPanelX, itemPanelY, itemPanelW, itemPanelH = rectConstraint:get()
   panelSprite:setWidth(itemPanelW)
   panelSprite:setHeight(itemPanelH)
-  panelSprite:draw(itemPanelX + itemPanelW / 2, itemPanelY + itemPanelH / 2, 1)
+  panelSprite:draw(itemPanelX, itemPanelY, 1)
   panelSprite:setWidth(originalWidth)
   panelSprite:setHeight(originalHeight)
 
