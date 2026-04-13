@@ -8,6 +8,7 @@ local NLay = require 'lib.nlay'
 local GameConfig = require 'game_config'
 local DisplayHandler = require 'engine.display_handler'
 local Singletons = require 'engine.singletons'
+local GamepadGuesser = require 'lib.gamepadguesser'
 
 
 
@@ -27,7 +28,7 @@ local Hud = Class { __includes = SignalObject,
   init = function(self, args)
     SignalObject.init(self)
 
-    self.statusBarBorder = SpriteBank.createNinePatchSprite('ui_bar_border', 16)
+    self.statusBarBorder = SpriteBank.createNinePatchSprite('hud_bar_border', 16)
 
     -- Set up NLay layout area
     local uiPadding = 1
@@ -39,7 +40,7 @@ local Hud = Class { __includes = SignalObject,
       :size(0, 16)
 
     -- split bottom strip into 3 equal horizontal sections
-    local leftRect, centerRect, rightRect = NLay.split(self.hudRect, "horizontal", 1, 1.25, 1.75)
+    local leftRect, centerRect, rightRect = NLay.split(self.hudRect, 'horizontal', 1, 1.20, 1.80)
  
     self.hudLeftRect = leftRect:margin(uiPadding)
     self.hudCenterRect = centerRect:margin(uiPadding)
@@ -48,6 +49,22 @@ local Hud = Class { __includes = SignalObject,
     self.equipmentSlot = SpriteBank.getSprite('hud_equipment_slot')
     
     
+    local gamepadConsole = 'pc'
+  
+    if lume.count(Singletons.joystickData.joysticks) > 0 then
+      -- only support one joystick
+      -- TODO might be better to have the console value directly in Singletons like Singletons.console
+      -- so for eventual ports it can just be set via game_config
+      -- then if its 'PC' we can use gamepad guesser, otherwise we can just set it to the correct console value for that platform and skip gamepad guesser entirely
+      local gamepadConsole = GamepadGuesser.joystickNameToConsole(Singletons.joystickData.joysticks[1])
+      if not (gamepadConsole == 'nintendo' or gamepadConsole == 'xbox' or gamepadConsole == 'playstation') then
+        gamepadConsole = 'xbox' -- default to xbox button prompts if we can't identify the controller type
+      end
+    end
+
+    self.bSlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_b_button')
+    self.xSlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_x_button')
+    self.ySlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_y_button')
   end
 }
 
@@ -128,7 +145,7 @@ function Hud:drawStatBars()
   barX, barY = math.floor(barX + 0.5), math.floor(barY + 0.5)
   
   -- black background for health border
-  local STATUS_BAR_FILL_WIDTH_ADJUST = 2
+  local STATUS_BAR_FILL_WIDTH_ADJUST = 1
   local STATUS_BAR_FILL_HEIGHT_ADJUST = 2
   love.graphics.setColor(0, 0, 0, 1)
   love.graphics.rectangle(
@@ -162,19 +179,25 @@ end
 
 function Hud:drawEquippedItems()
   -- draw the three equipment slots
-  local EQUIPMENT_SLOT_X_ADJUST = -1.5
   local x, y, w, h = self.hudRightRect:get()
-  local drawX, drawY = x, y
+  local startX = x
+  local diff = 38
   for i = 1, 3 do
-    drawX = x + (i - 1) * (self.equipmentSlot:getWidth())
+    local drawX, drawY = startX + ( (i - 1) * diff), y
     local ox, oy = self.equipmentSlot:getOrigin()
     local esx, esy = drawX + ox, drawY + oy
-    esx = esx + i * EQUIPMENT_SLOT_X_ADJUST
+    esx = esx + i
     esx, esy = math.floor(esx + 0.5), math.floor(esy + 0.5)
     self.equipmentSlot:draw(esx, esy)
     -- local bx, by, bw, bh = self.equipmentSlot:getBounds()
     -- love.graphics.rectangle('line', esx - bw / 2, esy - bh / 2, bw, bh)
   end
+end
+
+function Hud:drawEquipmentSlot(slotButton, x, y)
+  
+  local ox, oy = self.equipmentSlot:getOrigin()
+  local esx, esy = x + ox, y + oy
 
 end
 

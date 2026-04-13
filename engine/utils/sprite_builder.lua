@@ -79,13 +79,13 @@ function SpriteBuilder:addCompositeSprite(sprite)
 end
 
 ---builds composite sprite. CompositeSprite array will then be cleared
----@param originX number?
----@param originY number?
 ---@param offsetX number?
 ---@param offsetY number?
+---@param originX number?
+---@param originY number?
 ---@return CompositeSprite
-function SpriteBuilder:buildCompositeSprite(sprite, originX, originY, offsetX, offsetY)
-  local compositeSprite = CompositeSprite(self.sprites, originX, originY, offsetX, offsetY)
+function SpriteBuilder:buildCompositeSprite(offsetX, offsetY, originX, originY)
+  local compositeSprite = CompositeSprite(self.sprites, offsetX, offsetY, originX, originY)
   self.sprites = { }  
   return compositeSprite
 end

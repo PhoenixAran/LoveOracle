@@ -1,4 +1,6 @@
 local version = '0.0.20.0'
+-- Note: face buttons are labelled to correlate with the xbox controller layout
+-- so a = bottom, b = right, x = left, y = top
 local controls = {
   controls = {
     left = {'key:left', 'axis:leftx-', 'button:dpleft'},
@@ -8,8 +10,8 @@ local controls = {
 
     a = {'key:space', 'button:a'},
     b = {'key:c', 'button:b' },
-    x = {'key:x', 'button:y' },
-    y = {'key:z', 'button:x'},
+    x = {'key:x', 'button:x' },
+    y = {'key:z', 'button:y'},
 
     leftShoulder = {'key:lshift', 'button:leftshoulder'},
     leftTrigger = {'key:i', 'axis:triggerleft+'},

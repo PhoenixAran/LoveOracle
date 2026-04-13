@@ -12,10 +12,9 @@ local Class = require 'lib.class'
 ---@field originY number
 ---@field alpha number?
 local CompositeSprite = Class {
-  init = function(self, sprites, originX, originY, offsetX, offsetY, alpha)
+  init = function(self, sprites, offsetX, offsetY, originX, originY, alpha)
     if offsetX == nil then offsetX = 0 end
     if offsetY == nil then offsetY = 0 end
-
     self.sprites = sprites
     self.offsetX = offsetX
     self.offsetY = offsetY
