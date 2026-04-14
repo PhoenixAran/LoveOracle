@@ -24,9 +24,9 @@ return function(spriteBank)
   -- HUD equipment section
   spriteBuilder:setSpriteSheet('ui_small')
   spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(5, 5, -6, 0, 0, 0))
-  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(5, 6, -6, 4, 0, 0))
+  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(5, 6, -6, 8, 0, 0))
   spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(6, 5, 16, 0, 0, 0))
-  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(6, 6, 16, 4, 0, 0))
+  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(6, 6, 16, 8, 0, 0))
   local hudEquipmentSlot = spriteBuilder:buildCompositeSprite(0, -1, 0, 0)
   spriteBank.registerSprite('hud_equipment_slot', hudEquipmentSlot)
 

@@ -182,11 +182,10 @@ function Hud:drawEquippedItems()
   local x, y, w, h = self.hudLeftRect:get()
   x, y = math.floor(x + 0.5), math.floor(y + 0.5)
   local startX = x
-  y = y + 2
   local spaceBetweenButtonAndSlot = 7
   local menuSpriteOffsetX = 12
-  local menuSpriteOffsetY = -3
-  local equipmentBorderSpace = 32
+  local menuSpriteOffsetY = -1
+  local equipmentBorderSpace = 30
   for i = 1, #self.slotButtonSprites do
     local drawX, drawY = startX + ( (i - 1) * equipmentBorderSpace), y
     local slotButtonSprite = self.slotButtonSprites[i]
