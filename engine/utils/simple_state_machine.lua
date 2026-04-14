@@ -175,7 +175,7 @@ end
 
 --- add a new state using the given Id
 ---@param stateId any
----@param funcTable table with optional keys onBegin, onUpdate, onEnd mapping to functions that will be called during the respective phases of the state. Each function should take the context as a parameter
+---@param funcTable table? with optional keys onBegin, onUpdate, onEnd mapping to functions that will be called during the respective phases of the state. Each function should take the context as a parameter
 ---@return TimedState
 function SimpleStateMachine:addState(stateId, funcTable)
   local timedState = TimedState(self)

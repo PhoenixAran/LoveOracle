@@ -41,7 +41,7 @@ local Hud = Class { __includes = SignalObject,
       :size(0, 16)
 
     -- split bottom strip into 3 equal horizontal sections
-    local leftRect, centerRect, rightRect = NLay.split(self.hudRect, 'horizontal', 1, 1.20, 1.80)
+    local leftRect, centerRect, rightRect = NLay.split(self.hudRect, 'horizontal', 39, 33, 30)
  
     self.hudLeftRect = leftRect:margin(uiPadding)
     self.hudCenterRect = centerRect:margin(uiPadding)
@@ -120,10 +120,9 @@ function Hud:draw()
   love.graphics.rectangle('fill', 0, 144 - 16, 256, 16)
   love.graphics.setColor(1,1,1)
 
-  self:debugDrawNlaySections()
+  --self:debugDrawNlaySections()
   self:drawStatBars()
   self:drawEquippedItems()
-
 end
 
 function Hud:debugDrawNlaySections()
@@ -147,7 +146,7 @@ end
 function Hud:drawStatBars()
   -- TODO draw madness bars and stamina bars eventually
 
-  local x, y, w, h = self.hudLeftRect:get()
+  local x, y, w, h = self.hudCenterRect:get()
   x, y = math.floor(x + 0.5), math.floor(y + 0.5)
 
   local FILL_BAR_ADJUST_X = 1
@@ -157,8 +156,7 @@ function Hud:drawStatBars()
   -- black background for health border
   local statusW, statusH = self.statusBarBorder:getWidth(), self.statusBarBorder:getHeight()
   love.graphics.setColor(0, 0, 0, 1)
-  love.graphics.rectangle(
-    'fill', x + FILL_BAR_ADJUST_X, y + FILL_BAR_ADJUST_Y, statusW + FILL_BAR_ADJUST_W,statusH + FILL_BAR_ADJUST_H)
+  love.graphics.rectangle('fill', x + FILL_BAR_ADJUST_X, y + FILL_BAR_ADJUST_Y, statusW + FILL_BAR_ADJUST_W,statusH + FILL_BAR_ADJUST_H)
   love.graphics.setColor(1, 1, 1, 1)
 
   local maxHealth = self.player.health:getMaxHealth()
@@ -178,10 +176,10 @@ end
 
 function Hud:drawEquippedItems()
   -- draw the three equipment slots
-  local x, y, w, h = self.hudRightRect:get()
-  local x, y = math.floor(x + 0.5), math.floor(y + 0.5)
+  local x, y, w, h = self.hudLeftRect:get()
+  x, y = math.floor(x + 0.5), math.floor(y + 0.5)
   local startX = x
-  local diff = 38
+  local diff = 32
   local spaceBetweenButtonAndSlot = 7
   for i = 1, 3 do
     local drawX, drawY = startX + ( (i - 1) * diff), y

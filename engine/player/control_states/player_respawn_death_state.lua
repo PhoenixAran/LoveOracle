@@ -42,18 +42,21 @@ local PlayerRespawnDeathState = Class { __includes = PlayerState,
 
     -- configure the sub-state machine
     self.subStateMachine = SimpleStateMachine(self, RespawnState)
-    self.subStateMachine:addState(RespawnState.DeathAnimation)
-                        :onUpdate(self.onUpdateDeathAnimationState)
-                        :onEnd(self.onEndDeathAnimationState)
-    self.subStateMachine:addState(RespawnState.ViewPanning)
-                        :onBegin(self.onBeginViewPanningState)
-                        :onUpdate(self.onUpdateViewPanningState)
-                        :onEnd(self.onEndViewPanningState)
-    self.subStateMachine:addState(RespawnState.Delay)
-                        :onBegin(self.onBeginDelayState)
-                        :addEvent(16, function()
-                          self:endState()
-                        end)
+    self.subStateMachine:addState(RespawnState.DeathAnimation, {
+      onUpdate = self.onUpdateDeathAnimationState,
+      onEnd = self.onEndDeathAnimationState
+    })
+    self.subStateMachine:addState(RespawnState.ViewPanning, {
+      onBegin = self.onBeginViewPanningState,
+      onUpdate = self.onUpdateViewPanningState,
+      onEnd = self.onEndViewPanningState
+    })
+    self.subStateMachine:addState(RespawnState.Delay, {
+      onBegin = self.onBeginDelayState
+    }):addEvent(16, function()
+      self:endState()
+    end)
+
   end
 }
 

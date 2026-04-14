@@ -20,7 +20,7 @@ local GRID_SIZE = Consts.GRID_SIZE
 ---@field enabled boolean
 ---@field visible boolean
 ---@field transform Transform
----@field name string
+---@field name string  unique name for this entity instance, used for debugging and inspector TODO rename to Id
 ---@field group string?
 ---@field onTransformChanged function
 ---@field onAwake function
@@ -274,7 +274,7 @@ function Entity:removed(scene)
 end
 
 function Entity:onRemoved(scene)
-
+  
 end
 
 --- destroys this Entity instance

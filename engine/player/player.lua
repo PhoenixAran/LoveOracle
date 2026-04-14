@@ -698,12 +698,14 @@ end
 ---@param item ItemEquipment
 function Player:unequipItem(item)
 ---@diagnostic disable-next-line: param-type-mismatch
-  item.transform:setParent(nil) -- remove item transform from child transforms
-  item:setPlayer(nil)
   for i, v in ipairs(item.useButtons) do
-    self.slotItems[v] = nil
+    if self.slotItems[v] == item then
+      self.slotItems[v] = nil
+    end
   end
   item:removed()
+  item.transform:setParent(nil) -- remove item transform from child transforms
+  item:setPlayer(nil)
 end
 
 function Player:updateEquippedItems()
@@ -915,7 +917,7 @@ end
 ---@return boolean
 function Player:triggerOverrideInteractions(sender)
   for k, item in pairs(self.slotItems) do
-    if item:triggerOverrideInteractions(sender) then
+    if item:canTriggerOverrideInteractions() and item:triggerOverrideInteractions(sender) then
       return true
     end
   end

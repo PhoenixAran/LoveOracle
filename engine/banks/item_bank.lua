@@ -1,8 +1,6 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
-local ItemData = require 'engine.items.item_data'
-
 -- export type
 local ItemBank = {
   items = { }
@@ -12,7 +10,7 @@ local ItemBank = {
 ---@param item Item|ItemEquipment
 function ItemBank.registerItem(item)
   local itemId = item:getName()
-  assert(not ItemBank.items[itemId], 'ItemBank already has ItemData with key ' .. itemId)
+  assert(not ItemBank.items[itemId], 'ItemBank already has item with key ' .. itemId)
   ItemBank.items[itemId] = item
 end
 
@@ -21,7 +19,7 @@ end
 ---@return Item|ItemEquipment
 function ItemBank.getItem(itemId)
   local itemData = ItemBank.items[itemId]
-  assert(itemData, 'ItemBank does not have ItemData with key ' .. itemId)
+  assert(itemData, 'ItemBank does not have item with key ' .. itemId)
   return itemData
 end
 

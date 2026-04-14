@@ -25,12 +25,18 @@ local ItemEquipment = Class { __includes = Entity,
 function ItemEquipment:getType()
   return 'item_equipment'
 end
+-- Item api. A lot of methods, ItemEquipment willl forwards all item api calls to the underlying item instance, 
+-- but can be overridden if needed
 
 function ItemEquipment:isEquippable()
+  -- ItemEquipment is always eqippable, hence the name
   return true
 end
 
--- Item api. ItemEquipment by defaults forwards all item api calls to the underlying item instance, but can be overridden if needed
+function ItemEquipment:getItemId()
+  return self.item:getItemId()
+end
+
 function ItemEquipment:getPlayer()
   return self.item:getPlayer()
 end
@@ -80,10 +86,16 @@ function ItemEquipment:onReobtained()
 end
 
 
----@oaram sender Hitbox
+--- item equipment can trigger override interactions
+--- @return boolean
+function ItemEquipment:canTriggerOverrideInteractions()
+  return true
+end
+
+---@param sender Hitbox
 ---@return boolean
 function ItemEquipment:triggerOverrideInteractions(sender)
-  return self.item:triggerOverrideInteractions(sender)
+  return false
 end
 
 
@@ -153,7 +165,7 @@ function ItemEquipment:onButtonPressed()
   return false
 end
 
-function ItemEquipment:equip(slotButton)
+function ItemEquipment:equip()
   local player = self:getPlayer()
 
   assert(player, 'Item equipment cannot be equipped without player instance being set')
