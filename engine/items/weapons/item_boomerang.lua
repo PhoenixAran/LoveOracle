@@ -8,7 +8,7 @@ local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags
 local EntityTracker = require 'engine.entities.entity_tracker'
 local PlayerBoomerang = require 'engine.entities.projectile.player_projectiles.player_boomerang'
 local AngleSnap = require 'engine.enums.angle_snap'
-
+local SpriteBank = require 'engine.banks.sprite_bank'
 
 ---@class ItemBoomerang : ItemWeapon
 ---@field boomerangTracker EntityTracker
@@ -21,6 +21,11 @@ local ItemBoomerang = Class { __includes = ItemWeapon,
     self.useParameters.usableWhileInHole = true
 
     self.boomerangTracker = EntityTracker(1)
+
+    self.item:setLevel(args.level or 1)
+    self.item.maxLevel = 2
+    self.item:setMenuSprite(1, SpriteBank.getSprite('icon_boomerang_1'))
+    self.item:setMenuSprite(2, SpriteBank.getSprite('icon_boomerang_2'))
   end
 }
 

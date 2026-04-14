@@ -26,6 +26,7 @@ local Item = Class { __includes = SignalObject,
     self.name = nil
     self.level = 0
     self.prices = { }
+    self.menuSprites = { }
     self.player = nil
     self.itemRewardsHoldType = args.itemRewardsHoldType or 0
     self.lost = args.lost or false
@@ -104,6 +105,22 @@ end
 
 --- called when the item has been reobtained after being lost
 function Item:onReobtained()
+end
+
+-- convenience methods
+function Item:setMenuSprite(level, sprite)
+  self.menuSprites[level] = sprite
+end
+
+function Item:getMenuSprite(level)
+  if level == nil then 
+    level = self.level
+  end
+  return self.menuSprites[level]
+end
+
+function Item:setPrice(level, price)
+  self.price[level] = price
 end
 
 return Item

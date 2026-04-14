@@ -8,6 +8,7 @@ local Direction4 = require 'engine.enums.direction4'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 local isColliding = require('engine.entities.bump_box').isColliding
 local Interactions = require 'engine.entities.interactions'
+local SpriteBank = require 'engine.banks.sprite_bank'
 
 local SHIELD_HITBOX_PLACEMENTS = {
   [Direction4.up] = {
@@ -55,11 +56,16 @@ local ItemShield = Class { __includes = ItemWeapon,
     self.hitbox.damageInfo.intangibilityTime = 8
     self.hitbox.damageInfo.knockbackTime = 11
 
-    self.item.level = args.level or 1
 
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWithSword = true
     self.useParameters.usableWhileInHole = true
+
+    self.item:setLevel(args.level or 1)
+    self.item.maxLevel = 3
+    self.item:setMenuSprite(1, SpriteBank.getSprite('icon_shield_1'))
+    self.item:setMenuSprite(2, SpriteBank.getSprite('icon_shield_2'))
+    self.item:setMenuSprite(3, SpriteBank.getSprite('icon_shield_3'))
   end
 }
 

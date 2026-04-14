@@ -54,6 +54,10 @@ function ItemEquipment:getLevel()
   return self.item:getLevel()
 end
 
+function ItemEquipment:getMenuSprite(level)
+  return self.item:getMenuSprite(level)
+end
+
 --- formerly onInitialize
 --- called when item is added to the Inventory list
 function ItemEquipment:onAddedToInventoryList()

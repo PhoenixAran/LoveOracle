@@ -24,6 +24,7 @@ local GamepadGuesser = require 'lib.gamepadguesser'
 ---@field bSlotButtonSprite Sprite the sprite used to indicate the B button equipment slot
 ---@field xSlotButtonSprite Sprite the sprite used to indicate the X button equipment slot
 ---@field ySlotButtonSprite Sprite the sprite used to indicate the Y button equipment slot
+---@field slots string[] list of the three equipment slot keys in order of equipment slot, e.g. {'b', 'x', 'y'}
 ---@field slotButtonSprites Sprite[] list of the three button sprites in order of equipment slot
 local Hud = Class { __includes = SignalObject,
   init = function(self, args)
@@ -70,11 +71,13 @@ local Hud = Class { __includes = SignalObject,
         gamepadConsole = 'xbox' -- default to xbox button prompts if we can't identify the controller type
       end
     end
+
     self.bSlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_b_button')
     self.xSlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_x_button')
     self.ySlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_y_button')
 
     self.slotButtonSprites = { self.bSlotButtonSprite, self.xSlotButtonSprite, self.ySlotButtonSprite }
+    self.slots = { 'b', 'x', 'y' }
   end
 }
 
@@ -179,20 +182,31 @@ function Hud:drawEquippedItems()
   local x, y, w, h = self.hudLeftRect:get()
   x, y = math.floor(x + 0.5), math.floor(y + 0.5)
   local startX = x
-  local diff = 32
+  y = y + 2
   local spaceBetweenButtonAndSlot = 7
-  for i = 1, 3 do
-    local drawX, drawY = startX + ( (i - 1) * diff), y
+  local menuSpriteOffsetX = 12
+  local menuSpriteOffsetY = -3
+  local equipmentBorderSpace = 32
+  for i = 1, #self.slotButtonSprites do
+    local drawX, drawY = startX + ( (i - 1) * equipmentBorderSpace), y
     local slotButtonSprite = self.slotButtonSprites[i]
     slotButtonSprite:draw(drawX, drawY)
     self.equipmentSlot:draw(drawX + spaceBetweenButtonAndSlot, drawY)
+    -- TODO get from Inventory singleton instead of player directly
+    local slotItems = self.player.slotItems
+    local slotButton = self.slots[i]
+    local item = slotItems[slotButton]
+    if item then
+      local menuSprite = item:getMenuSprite()
+      if menuSprite then
+        menuSprite:draw(drawX + menuSpriteOffsetX, drawY + menuSpriteOffsetY)
+      end
+    end
   end
 end
 
 function Hud:drawEquipmentSlot(slotButton, x, y)
-  local ox, oy = self.equipmentSlot:getOrigin()
-  local esx, esy = x + ox, y + oy
-
+  -- TODO
 end
 
 

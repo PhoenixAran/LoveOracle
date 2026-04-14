@@ -25,8 +25,8 @@ return function(spriteBank)
   spriteBuilder:setSpriteSheet('ui_small')
   spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(5, 5, -6, 0, 0, 0))
   spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(5, 6, -6, 4, 0, 0))
-  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(6, 5, 20, 0, 0, 0))
-  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(6, 6, 20, 4, 0, 0))
+  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(6, 5, 16, 0, 0, 0))
+  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(6, 6, 16, 4, 0, 0))
   local hudEquipmentSlot = spriteBuilder:buildCompositeSprite(0, -1, 0, 0)
   spriteBank.registerSprite('hud_equipment_slot', hudEquipmentSlot)
 
@@ -51,4 +51,19 @@ return function(spriteBank)
   spriteBank.registerSprite('nintendo_b_button', spriteBuilder:buildSprite(9, 1, 0, 0, 0, 1))
   spriteBank.registerSprite('nintendo_x_button', spriteBuilder:buildSprite(4, 1, 0, 0, 0, 1))
   spriteBank.registerSprite('nintendo_y_button', spriteBuilder:buildSprite(5, 1, 0, 0, 0, 1))
+
+
+  -- inventory icons
+  spriteBuilder:setSpriteSheet('inventory_icons_small')
+  spriteBank.registerSprite('icon_sword_1', spriteBuilder:buildSprite(1, 1, 0, 0, 0, 0))
+  spriteBank.registerSprite('icon_sword_2', spriteBuilder:buildSprite(2, 1, 0, 0, 0, 0))
+  spriteBank.registerSprite('icon_sword_3', spriteBuilder:buildSprite(3, 1, 0, 0, 0, 0))
+
+  spriteBank.registerSprite('icon_shield_1', spriteBuilder:buildSprite(4, 1, 0, 0, 0, 0))
+  spriteBank.registerSprite('icon_shield_2', spriteBuilder:buildSprite(5, 1, 0, 0, 0, 0))
+  spriteBank.registerSprite('icon_shield_3', spriteBuilder:buildSprite(6, 1, 0, 0, 0, 0))
+
+  spriteBank.registerSprite('icon_boomerang_1', spriteBuilder:buildSprite(5, 2, 0, 0, 0, 0))
+  spriteBank.registerSprite('icon_boomerang_2', spriteBuilder:buildSprite(6, 2, 0, 0, 0, 0))
+
 end

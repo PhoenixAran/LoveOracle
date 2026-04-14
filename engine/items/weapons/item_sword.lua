@@ -32,6 +32,12 @@ local ItemSword = Class { __includes = ItemWeapon,
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWhileInHole = true
     
+    -- item configuration
+    self.item:setLevel(1)
+    self.item.maxLevel = 3
+    self.item:setMenuSprite(1, SpriteBank.getSprite('icon_sword_1'))
+    self.item:setMenuSprite(2, SpriteBank.getSprite('icon_sword_2'))
+    self.item:setMenuSprite(3, SpriteBank.getSprite('icon_sword_3'))
   end
 }
 
