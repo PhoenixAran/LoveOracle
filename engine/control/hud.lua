@@ -132,7 +132,6 @@ end
 function Hud:update()
   local health = self.player:getHealth()
   if self.dynamicHealth < health then
-    error()
     if self.healthTimer < 3 then
       self.healthTimer = self.healthTimer + 1
     else
@@ -258,7 +257,7 @@ end
 
 
 -- callbacks
-function Hud:onDamageTaken(damageAmount, oldHealth)
+function Hud:onDamageTaken(newHealth, oldHealth)
   -- TODO
 end
 
