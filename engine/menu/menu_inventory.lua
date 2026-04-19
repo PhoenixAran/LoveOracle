@@ -16,22 +16,27 @@ local AssetManager = require 'engine.asset_manager'
 ---@field itemDetailsPanelRect NLay.Constraint
 local MenuInventory = Class {
   init = function(self)
-    self.itemPanel = SpriteBank.createNinePatchSprite('green_ui_9_patch', 160, 96, 0, 0)
-    self.itemDetailsPanel = SpriteBank.createNinePatchSprite('yellow_ui_9_patch', 96, 96, 0, 0)
-
     -- set up NLay layout
-    -- set up NLay layout
-    local uiPadding = 4
+    local uiPadding = 2
     NLay.update(0, 0, GameConfig.window.displayConfig.gameWidth, GameConfig.window.displayConfig.gameHeight)
     local root = NLay
 
-    -- top left
-    self.itemPanelRect = NLay.constraint(root, root, root, nil, nil, uiPadding) 
-                            :size(self.itemPanel:getWidth(), self.itemPanel:getHeight())
+    -- top menu box
+    self.itemPanelRect = NLay.constraint(root, root, root, nil, root, uiPadding)
+                            :size(-1, GameConfig.window.displayConfig.gameHeight * 0.65)
+    -- bottom panel box, used for item description
+    self.itemDetailsPanelRect = NLay.constraint(root, self.itemPanelRect, root, nil, root, uiPadding)
+                            :size(-1, GameConfig.window.displayConfig.gameHeight * 0.2)
 
-    -- top right
-    self.itemDetailsPanelRect = NLay.constraint(root, root, nil, nil, root, uiPadding)
-                              :size(self.itemDetailsPanel:getWidth(), self.itemDetailsPanel:getHeight())
+    local ipx, ipy, ipw, iph = self.itemPanelRect:get()
+    ipw = math.floor(ipw + 0.5)
+    iph = math.floor(iph + 0.5)
+    local idpx, idpy, idpw, idph = self.itemDetailsPanelRect:get()
+    idpw = math.floor(idpw + 0.5)
+    idph = math.floor(idph + 0.5)
+
+    self.itemPanel = SpriteBank.createNinePatchSprite('green_ui_9_patch', ipw, iph, 0, 0)
+    self.itemDetailsPanel = SpriteBank.createNinePatchSprite('yellow_ui_9_patch', idpw, idph, 0, 0)
   end
 }
 
