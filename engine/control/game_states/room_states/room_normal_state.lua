@@ -20,11 +20,13 @@ end
 function RoomNormalState:update()
   local entities = self.control.entities
   local room = self.control.currentRoom
+  local hud = self.control.control:getHud()
   assert(room)
   -- update entities, camera, and tile animations
   entities:update()
   Camera.update()
   room:updateAnimatedTiles()
+  hud:update()
 end
 
 function RoomNormalState:draw()

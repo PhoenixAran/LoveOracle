@@ -21,6 +21,7 @@ return function(spriteBank)
   spriteBank.createThreePatchTextureAsNine(spriteBuilder:getSpriteSheet(), 1, 1, true, 'hud_bar_border')
 
 
+
   -- HUD equipment section
   spriteBuilder:setSpriteSheet('ui_small')
   spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(5, 5, -6, 0, 0, 0))
@@ -31,6 +32,13 @@ return function(spriteBank)
   spriteBank.registerSprite('hud_equipment_slot', hudEquipmentSlot)
 
   -- HUD equipment slot button icons
+  -- heart icons
+  spriteBank.registerSprite('heart_empty', spriteBuilder:buildSprite(1, 7, 0, 0, 0, 0))
+  spriteBank.registerSprite('heart_quarter', spriteBuilder:buildSprite(2, 7, 0, 0, 0, 0))
+  spriteBank.registerSprite('heart_half', spriteBuilder:buildSprite(3, 7, 0, 0, 0, 0))
+  spriteBank.registerSprite('heart_three_quarters', spriteBuilder:buildSprite(4, 7, 0, 0, 0, 0))
+  spriteBank.registerSprite('heart_full', spriteBuilder:buildSprite(5, 7, 0, 0, 0, 0))
+
   -- keyboard
   spriteBank.registerSprite('pc_b_button', spriteBuilder:buildSprite(2, 1, 0, 0, 0, 1))
   spriteBank.registerSprite('pc_x_button', spriteBuilder:buildSprite(5, 1, 0, 0, 0, 1))
@@ -65,5 +73,4 @@ return function(spriteBank)
 
   spriteBank.registerSprite('icon_boomerang_1', spriteBuilder:buildSprite(5, 2, 0, 0, 0, 0))
   spriteBank.registerSprite('icon_boomerang_2', spriteBuilder:buildSprite(6, 2, 0, 0, 0, 0))
-
 end

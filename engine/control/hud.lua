@@ -26,6 +26,9 @@ local GamepadGuesser = require 'lib.gamepadguesser'
 ---@field ySlotButtonSprite Sprite the sprite used to indicate the Y button equipment slot
 ---@field slots string[] list of the three equipment slot keys in order of equipment slot, e.g. {'b', 'x', 'y'}
 ---@field slotButtonSprites Sprite[] list of the three button sprites in order of equipment slot
+---@field heartSprites Sprite[] list of the heart sprites in order of fullness, from empty to full
+---@field dynamicHealth integer used to slowly increment player health
+---@field healthTimer integer used to update the health positively at a slower pace
 local Hud = Class { __includes = SignalObject,
   init = function(self, args)
     SignalObject.init(self)
@@ -78,6 +81,15 @@ local Hud = Class { __includes = SignalObject,
 
     self.slotButtonSprites = { self.bSlotButtonSprite, self.xSlotButtonSprite, self.ySlotButtonSprite }
     self.slots = { 'b', 'x', 'y' }
+    self.heartSprites = {
+      SpriteBank.getSprite('heart_empty'),
+      SpriteBank.getSprite('heart_quarter'),
+      SpriteBank.getSprite('heart_half'),
+      SpriteBank.getSprite('heart_three_quarters'),
+      SpriteBank.getSprite('heart_full'),
+    }
+    self.dynamicHealth = 0
+    self.healthTimer = 0
   end
 }
 
@@ -93,6 +105,10 @@ function Hud:setPlayer(player)
   health:connect('damage_taken', self, 'onDamageTaken')
   health:connect('max_health_changed', self, 'onMaxHealthChanged')
   health:connect('health_increased', self, 'onHealthIncreased')
+  
+  self.dynamicHealth = self.player:getHealth()
+  self.healthTimer = 0
+
   self:updateHealthBarWidth()
 end
 
@@ -114,7 +130,23 @@ function Hud:updateHealthBarWidth()
 end
 
 function Hud:update()
-
+  local health = self.player:getHealth()
+  if self.dynamicHealth < health then
+    error()
+    if self.healthTimer < 3 then
+      self.healthTimer = self.healthTimer + 1
+    else
+      self.dynamicHealth = self.dynamicHealth + 1
+      self.healthTimer = 0
+      if self.dynamicHealth % 4 == 0 then
+        -- TODO play get heart sound
+      end
+    end
+  elseif self.dynamicHealth > health then
+    self.dynamicHealth = self.dynamicHealth - 1
+  else
+    self.healthTimer = 0
+  end
 end
 
 function Hud:draw()
@@ -124,7 +156,8 @@ function Hud:draw()
   love.graphics.setColor(1,1,1)
 
   --self:debugDrawNlaySections()
-  self:drawStatBars()
+  --self:drawStatBars()
+  self:drawHearts()
   self:drawEquippedItems()
 end
 
@@ -145,7 +178,9 @@ function Hud:debugDrawNlaySections()
   love.graphics.setColor(1, 1, 1, 1)
 end
 
--- left section of our hud
+-- middle section of our hud
+-- TODO use this when we add a stamina bar and/or sanity bar
+-- did the health stuff just for testing
 function Hud:drawStatBars()
   -- TODO draw madness bars and stamina bars eventually
 
@@ -175,6 +210,19 @@ function Hud:drawStatBars()
     love.graphics.setColor(1, 1, 1, 1)
   end
   self.statusBarBorder:draw(x, y)
+end
+
+function Hud:drawHearts()
+  local HEART_SIZE = 8
+  local x, y, w, h = self.hudCenterRect:get()
+  x, y = math.floor(x + 0.5), math.floor(y + 0.5)
+  local maxHearts = math.floor(self.player:getMaxHealth() / 4)
+  for i = 0, maxHearts - 1 do
+    local fullness = math.max(0, math.min(self.dynamicHealth - i * 4, 4))
+    local drawX = x + (i % 7) * HEART_SIZE
+    local drawY = y + math.floor(i / 7) * HEART_SIZE
+    self.heartSprites[fullness + 1]:draw(drawX, drawY)
+  end
 end
 
 function Hud:drawEquippedItems()
