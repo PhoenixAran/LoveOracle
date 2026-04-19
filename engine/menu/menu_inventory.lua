@@ -7,6 +7,7 @@ local NLay = require 'lib.nlay'
 local GameConfig = require 'game_config'
 local AssetManager = require 'engine.asset_manager'
 
+
 ---@class MenuInventory
 ---@field lastRoomState GameState? the last room state that was active. Used to pass into the inventory game state when it is opened from a room state, so that the inventory can be drawn over the gameplay screen
 ---@field itemPanel NinePatchSprite the panel that items are drawn on in the inventory
@@ -79,7 +80,7 @@ function MenuInventory:drawPanel(rectConstraint, panelSprite, panelLabel, xPaddi
 end
 
 function MenuInventory:update()
-  
+
 end
 
 

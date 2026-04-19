@@ -53,6 +53,10 @@ function SlotGroup:getCurrentSlotIndex()
   return index
 end
 
+function SlotGroup:getCurrentSlot()
+  return self.currentSlot
+end
+
 ---@return Slot[]
 function SlotGroup:getSlots()
   return self.slots

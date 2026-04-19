@@ -7,7 +7,7 @@ local Class = require 'lib.class'
 ---@field slotGroup SlotGroup
 ---@field item Item|ItemEquipment
 ---@field enabled boolean
----@field connections table<Direction4, any>
+---@field connections table<Direction4, Slot|SlotGroup>
 local Slot = Class {
   init = function(self, slotGroup, positionX, positionY, width)
     self.slotGroup = slotGroup
@@ -24,6 +24,10 @@ function Slot:getType()
   return 'slot'
 end
 
+function Slot:isEnabled()
+  return self.enabled
+end
+
 function Slot:select()
   self.slotGroup:setCurrentSlot(self)
   return self.slotGroup
@@ -34,6 +38,8 @@ function Slot:setItem(item)
   self.item = item
 end
 
+---@param dir4 Direction4
+---@param slotConnection Slot|SlotGroup
 function Slot:setConnection(dir4, slotConnection)
   if type(dir4) == 'table' then
     self.connections = dir4

@@ -30,7 +30,7 @@ local console = require 'lib.console'
 ---@field gameStateStack GameStateStack
 ---@field entityDebugDrawFlags integer
 ---@field hud Hud
----@field gameStateInventory GameState? the inventory game state type. Made abstract to keep the inventory implementation flexible and decoupled from the main engine. If nil uses default engine provided inventory system
+---@field gameStateMenu GameState? the menu game state type. Made abstract to keep the menu implementation flexible and decoupled from the main engine. If nil uses default engine provided menu system
 local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()
@@ -43,7 +43,7 @@ local GameControl = Class { __includes = SignalObject,
     self.entityDebugDrawFlags = 0
     --self.entityDebugDrawFlags = bit.bor(EntityDebugDrawFlags.BumpBox, EntityDebugDrawFlags.RoomBox, EntityDebugDrawFlags.HitBox)
 
-    self.gameStateInventory = nil
+    self.gameStateMenu = nil
     -- TODO also make this customizable by the Data folder
     self.hud = Hud()
   end
@@ -93,12 +93,12 @@ function GameControl:setHud(hud)
   self.hud = hud
 end
 
-function GameControl:getGameStateInventory()
-  return self.gameStateInventory
+function GameControl:getGameStateMenu()
+  return self.gameStateMenu
 end
 
-function GameControl:setGameStateInventory(gameStateInventory)
-  self.gameStateInventory = gameStateInventory
+function GameControl:setGameStateMenu(gameStateMenu)
+  self.gameStateMenu = gameStateMenu
 end
 
 --- creates the initial room control state. called when game starts
@@ -167,14 +167,14 @@ function GameControl:popState()
 end
 
 -- helper state functions
-function GameControl:openInventoryMenu()
-  if self.gameStateInventory == nil then
+function GameControl:openMenu()
+  if self.gameStateMenu == nil then
     -- use the engine default
-    local DefaultGameStateInventory = require('engine.control.game_states.game_state_menu')
+    local DefaultGameStateMenu = require('engine.control.game_states.game_state_menu')
     local lastRoomState = self.roomControl.roomStateStack:getCurrentState()
-    self.gameStateInventory = DefaultGameStateInventory({lastRoomState = lastRoomState})
+    self.gameStateMenu = DefaultGameStateMenu({lastRoomState = lastRoomState})
   end
-  self:pushState(self.gameStateInventory)
+  self:pushState(self.gameStateMenu)
 end
 
 
