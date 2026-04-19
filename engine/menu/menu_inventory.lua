@@ -6,15 +6,16 @@ local Input = require('engine.singletons').input
 local NLay = require 'lib.nlay'
 local GameConfig = require 'game_config'
 local AssetManager = require 'engine.asset_manager'
+local Menu = require 'engine.menu.menu'
 
 
----@class MenuInventory
+---@class MenuInventory : Menu
 ---@field lastRoomState GameState? the last room state that was active. Used to pass into the inventory game state when it is opened from a room state, so that the inventory can be drawn over the gameplay screen
 ---@field itemPanel NinePatchSprite the panel that items are drawn on in the inventory
 ---@field itemPanelRect NLay.Constraint
 ---@field itemDetailsPanel NinePatchSprite the panel that item details are drawn on in the inventory
 ---@field itemDetailsPanelRect NLay.Constraint
-local MenuInventory = Class {
+local MenuInventory = Class { __includes = Menu,
   init = function(self)
     -- set up NLay layout
     local uiPadding = 2
