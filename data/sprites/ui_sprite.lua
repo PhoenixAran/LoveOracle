@@ -11,6 +11,16 @@ return function(spriteBank)
   spriteBank.createNinePatchTexture(spriteBuilder:getSpriteSheet(), 4, 1, 'yellow_ui_9_patch')
   spriteBank.createNinePatchTexture(spriteBuilder:getSpriteSheet(), 7, 1, 'red_ui_9_patch')
 
+  -- inventory cursors
+  spriteBuilder:setSpriteSheet('inventory_cursors')
+  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(3, 1, -6, 0, 0, 0))
+  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(4, 1, 16, 0, 0, 0))
+  spriteBank.registerSprite('inventory_cursor_equipped', spriteBuilder:buildCompositeSprite())
+
+  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(5, 1, -6, 0, 0, 0))
+  spriteBuilder:addCompositeSprite(spriteBuilder:buildSprite(6, 1, 16, 0, 0, 0))
+  spriteBank.registerSprite('inventory_cursor_hover', spriteBuilder:buildCompositeSprite())
+
   -- spriteBank.registerSprite('item_panel_9', spriteBuilder:buildNinePatchSprite(greenNinePatch, 160, 192, 1))
   -- spriteBank.registerSprite('item_details_panel_9', spriteBuilder:buildNinePatchSprite(yellowNinePatch, 96, 96, 1))
 

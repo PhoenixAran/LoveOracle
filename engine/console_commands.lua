@@ -62,7 +62,7 @@ function console.commands.inspect(entityId)
   local module = require 'engine.imgui_modules.runtime_inspector'
   local entities = singleton.roomControl:getEntities()
   entityId = entityId:gsub('%s+', '')
-  local entity = entities:getByName(entityId)
+  local entity = entities:getById(entityId)
   if entity then
     module.setup(entity)
     if not lume.find(singleton.imguiModules, module) then

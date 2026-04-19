@@ -20,7 +20,7 @@ local GRID_SIZE = Consts.GRID_SIZE
 ---@field enabled boolean
 ---@field visible boolean
 ---@field transform Transform
----@field name string  unique name for this entity instance, used for debugging and inspector TODO rename to Id
+---@field id string  unique id for this entity instance, used for debugging and inspector
 ---@field group string?
 ---@field onTransformChanged function
 ---@field onAwake function
@@ -56,7 +56,7 @@ local Entity = Class { __includes = { SignalObject, BumpBox },
     self.visible = args.visible
     self.drawType = args.drawType
     self.transform = Transform:new(self)
-    self.name = args.name or uuid()
+    self.id = args.id or uuid()
     self.collisionTag = args.collisionTags
     self.group = args.group
     self.destroyed = false
@@ -77,8 +77,8 @@ function Entity:_defaultGetMeetingTilesQueryRectFilter(item)
   return false
 end
 
-function Entity:getName()
-  return self.name
+function Entity:getId()
+  return self.id
 end
 
 function Entity:setGroup(value)

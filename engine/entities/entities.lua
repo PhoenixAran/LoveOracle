@@ -58,10 +58,10 @@ end
 ---@param awakeEntity boolean?
 function Entities:setPlayer(player, awakeEntity)
   if awakeEntity == nil then awakeEntity = true end
-  assert(not self.entitiesHash[player:getName()])
+  assert(not self.entitiesHash[player:getId()])
   self.player = player
   lume.push(self.entities, player)
-  self.entitiesHash[self.player:getName()] = player
+  self.entitiesHash[self.player:getId()] = player
   lume.push(self.entitiesYSort, player)
   if awakeEntity then
     player:awake()
@@ -81,15 +81,15 @@ end
 ---@param entity Entity
 ---@param awakeEntity boolean? default true
 function Entities:addEntity(entity, awakeEntity)
-  if entity:getName() == "" then
+  if entity:getId() == "" then
     error(entity:getType())
   end
   
-  assert(entity:getName() and entity:getName() ~= "", 'Entity requires name')
+  assert(entity:getId() and entity:getId() ~= "", 'Entity requires id for debugging and inspector purposes')
   assert(not entity:isTile(), 'Tile Entity should be added via Entities:addTileEntity')
   if awakeEntity == nil then awakeEntity = true end
   lume.push(self.entities, entity)
-  self.entitiesHash[entity:getName()] = entity
+  self.entitiesHash[entity:getId()] = entity
 
   -- determine entity draw type
   local drawType = entity:getDrawType()
@@ -112,7 +112,7 @@ end
 ---removes entity
 ---@param entity Entity
 function Entities:removeEntity(entity)
-  assert(self.entitiesHash[entity:getName()], 'Attempting to remove entity that is not in entities collection')
+  assert(self.entitiesHash[entity:getId()], 'Attempting to remove entity that is not in entities collection')
   lume.remove(self.entities, entity)
   lume.remove(self.entitiesHash, entity)
   lume.remove(self.entitiesYSort, entity)
@@ -172,10 +172,10 @@ function Entities:removeTileEntity(x, y, layer)
 end
 
 ---get entity by name
----@param name string
+---@param id string
 ---@return Entity
-function Entities:getByName(name)
-  return self.entitiesHash[name]
+function Entities:getById(id)
+  return self.entitiesHash[id]
 end
 
 --- get tile entity by map index

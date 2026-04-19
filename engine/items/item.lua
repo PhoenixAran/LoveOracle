@@ -15,8 +15,6 @@ local SignalObject = require 'engine.signal_object'
 ---@field levelUpAmmo boolean if ammo type should match level. If not, ammo[1] will be used for all levels
 ---@field maxAmmo integer[] max ammo for this item, indexed by level
 ---@field itemRewardHoldsType ItemRewardsHoldType how the player visually holds the reward when collected
----@field lost boolean TODO deprecate
----@field obtained boolean TODO deprecate
 local Item = Class { __includes = SignalObject,
   init = function(self, args)
     SignalObject.init(self, args)
@@ -26,10 +24,9 @@ local Item = Class { __includes = SignalObject,
     self.level = 0
     self.prices = { }
     self.menuSprites = { }
+    self.descriptions = { }
     self.player = nil
     self.itemRewardsHoldType = args.itemRewardsHoldType or 0
-    self.lost = args.lost or false
-    self.obtained = args.obtained or false
   end
 }
 
@@ -41,13 +38,21 @@ function Item:getItemId()
   return self.id
 end
 
-function Item:isEquippable()
-  return false
-end
+
+-- Item:getName() and Item:getItemDescription() are functions required to be implemented for the Menu screens
 
 function Item:getName()
   return self.name
 end
+
+function Item:getDescription()
+  
+end
+
+function Item:isEquippable()
+  return false
+end
+
 
 function Item:getPlayer()
   return self.player
@@ -120,6 +125,16 @@ end
 
 function Item:setPrice(level, price)
   self.price[level] = price
+end
+
+function Item:drawSlot(x, y)
+  local menuSprite
+  if self.menuSprites[self.level] then
+    menuSprite = self.menuSprites[self.level]
+  else
+    menuSprite = self.menuSprites[1]
+  end
+  menuSprite:draw(x, y)
 end
 
 return Item

@@ -8,7 +8,6 @@ local Input = require('engine.singletons').input
 
 local GRID_SIZE = require('constants').GRID_SIZE
 local RoomTransitionState = require 'engine.control.game_states.room_states.room_transition_state'
-local GameStateInventory = require 'engine.control.game_states.game_state_inventory'
 
 ---@class RoomControl : GameState
 ---@field player Player

@@ -25,6 +25,7 @@ local ItemEquipment = Class { __includes = Entity,
 function ItemEquipment:getType()
   return 'item_equipment'
 end
+
 -- Item api. A lot of methods, ItemEquipment willl forwards all item api calls to the underlying item instance, 
 -- but can be overridden if needed
 
@@ -35,6 +36,14 @@ end
 
 function ItemEquipment:getItemId()
   return self.item:getItemId()
+end
+
+function ItemEquipment:getName()
+  return self.item:getName()
+end
+
+function ItemEquipment:getDescription()
+  return self.item:getDescription()
 end
 
 function ItemEquipment:getPlayer()
@@ -89,6 +98,9 @@ function ItemEquipment:onReobtained()
   self.item:onReobtained()
 end
 
+function ItemEquipment:drawSlot(x, y)
+  self.item:drawSlot(x, y)
+end
 
 --- item equipment can trigger override interactions
 --- @return boolean
@@ -101,7 +113,6 @@ end
 function ItemEquipment:triggerOverrideInteractions(sender)
   return false
 end
-
 
 -- ItemEquipment api
 

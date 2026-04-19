@@ -170,7 +170,7 @@ end
 function GameControl:openInventoryMenu()
   if self.gameStateInventory == nil then
     -- use the engine default
-    local DefaultGameStateInventory = require('engine.control.game_states.game_state_inventory')
+    local DefaultGameStateInventory = require('engine.control.game_states.game_state_menu')
     local lastRoomState = self.roomControl.roomStateStack:getCurrentState()
     self.gameStateInventory = DefaultGameStateInventory({lastRoomState = lastRoomState})
   end
