@@ -15,7 +15,9 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 local ItemBoomerang = Class { __includes = ItemWeapon,
   init = function(self, args)
     ItemWeapon.init(self, args)
-
+    if self.item.id == nil then
+      self.item.id = 'item_boomerang'
+    end
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWithSword = true
     self.useParameters.usableWhileInHole = true

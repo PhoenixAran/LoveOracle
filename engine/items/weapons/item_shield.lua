@@ -44,7 +44,9 @@ local ItemShield = Class { __includes = ItemWeapon,
   ---@param args table
   init = function(self, args)
     ItemWeapon.init(self, args)
-
+    if self.item.id == nil then
+      self.item.id = 'item_shield'
+    end
     self.hitbox = Hitbox(self)
     self.hitbox:setCollisionTag(CollisionTag.shield)
     self.hitbox:setPhysicsLayer('hitbox_player')

@@ -45,27 +45,19 @@ function BaseGameplayScreen:enter(prev, ...)
   local player = Player({name = 'player'})
   player:initTransform()
 
+  -- TODO set up inventory from save file
+  local inventory = self.gameControl.inventory
+  inventory:setPlayer(player)
+
+
   -- TODO set up inventory. Note that Inventory class handles calling the sword:equip() so we have to do it here
-  local Sword = require 'engine.items.weapons.item_sword'
-  local sword = Sword({name = 'sword'})
-  sword.useButtons = { 'b' }
-  sword.item.level = 1
-  sword:setPlayer(player)
-  sword:equip()
+  inventory:obtainItem('item_sword')
+  inventory:obtainItem('item_shield')
+  inventory:obtainItem('item_boomerang')
 
-  local Shield = require 'engine.items.weapons.item_shield'
-  local shield = Shield({name = 'shield'})
-  shield.item.level = 1
-  shield.useButtons = { 'leftShoulder'}
-  shield:setPlayer(player)
-  shield:equip()
-
-  local Boomerang = require 'engine.items.weapons.item_boomerang'
-  local boomerang = Boomerang({name = 'boomerang'})
-  boomerang.useButtons = { 'x' }
-  boomerang.item.level = 1
-  boomerang:setPlayer(player)
-  boomerang:equip()
+  inventory:equipItem('item_sword', 'b')
+  inventory:equipItem('item_shield', 'leftShoulder')
+  inventory:equipItem('item_boomerang', 'x')
 
   self.gameControl:setPlayer(player)
   local map = Map(mapFile)

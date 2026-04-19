@@ -1,7 +1,6 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 
-
 ---@class Item : SignalObject
 ---@field id string
 ---@field menuSprites Sprite[] sprites shown in menu, indexed by level

@@ -13,10 +13,14 @@ local ItemSword = Class { __includes = ItemWeapon,
   ---@param args table
   init = function(self, args)
     ItemWeapon.init(self, args)
+    if self.item.id == nil then
+      self.item.id = 'item_sword'
+    end
     -- declare stuff that will be used in onTransformChanged BEFORE entity constructor
     self.hitbox = Hitbox(self)
     self.hitbox:setCollisionTag(CollisionTag.sword)
 
+    -- TODO do sprite by level
     self.sprite = SpriteBank.build('player_sword', self)
     self.visible = false
 
@@ -43,6 +47,10 @@ local ItemSword = Class { __includes = ItemWeapon,
 
 function ItemSword:getType()
   return 'item_sword'
+end
+
+function ItemSword:onItemLevelUp()
+  -- TODO adjust hitbox damage and stuff based on level
 end
 
 function ItemSword:onTransformChanged()

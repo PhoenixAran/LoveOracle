@@ -72,6 +72,10 @@ function love.load(args)
     Singletons.joystickData:addJoystick(joystick)
   end
 
+  -- set up input
+  input = require('lib.baton').new(gameConfig.controls)
+  Singletons.input = input
+
   -- graphics setup
   love.graphics.setDefaultFilter('nearest', 'nearest')
   love.window.setTitle(gameConfig.window.title)
@@ -114,10 +118,6 @@ function love.load(args)
   end
   screenManager:hook({ exclude = excludeEvents })
   Singletons.screenManager = screenManager
-
-  -- set up input
-  input = require('lib.baton').new(gameConfig.controls)
-  Singletons.input = input
 
 
   -- set up console

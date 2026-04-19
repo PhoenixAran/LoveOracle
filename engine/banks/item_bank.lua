@@ -9,7 +9,7 @@ local ItemBank = {
 --- register item
 ---@param item Item|ItemEquipment
 function ItemBank.registerItem(item)
-  local itemId = item:getName()
+  local itemId = item:getItemId()
   assert(not ItemBank.items[itemId], 'ItemBank already has item with key ' .. itemId)
   ItemBank.items[itemId] = item
 end

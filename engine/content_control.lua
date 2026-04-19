@@ -50,6 +50,7 @@ function ContentControl.buildContent()
   loadSpriteSheets('data/assets/spritesheets')
   PaletteBank.initialize('data.palettes')
   SpriteBank.initialize('data.sprites')
+  require('data.items.init')    -- load item bank by requiring the init file which registers all the items
   EntityDb.initialize()
   TiledMapLoader.initialize()
   local runTime = love.timer.getTime() - startTime
