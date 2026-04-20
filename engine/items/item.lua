@@ -1,32 +1,26 @@
 local Class = require 'lib.class'
-local SignalObject = require 'engine.signal_object'
+local lume = require 'lib.lume'
+local vector = require 'engine.math.vector'
+local Entity = require 'engine.entities.entity'
+local Input = require('engine.singletons').input
 
----@class Item : SignalObject
----@field id string
----@field menuSprites Sprite[] sprites shown in menu, indexed by level
----@field name string[] names indexed by level
----@field description string[] descriptions indexed by level
----@field maxLevel integer max level of this item
----@field message string[] message shown when item is obtained, indexed by level
----@field price integer[] price of item in shop, indexed by level
+--- Item that can be equipped
+--- TODO Item should have a generic implemenation where the character just holds it above their head and they can
+--- gift it to NPCs or throw it away, like Harvest Moon
+---@class Item : Entity
+---@field itemData ItemData underlying item data for this item
+---@field useButtons string[]
+---@field equipped boolean
 ---@field player Player
 ---@field level integer
----@field ammo Ammo[] ammo types used by this item, indexed by level
----@field levelUpAmmo boolean if ammo type should match level. If not, ammo[1] will be used for all levels
----@field maxAmmo integer[] max ammo for this item, indexed by level
----@field itemRewardHoldsType ItemRewardsHoldType how the player visually holds the reward when collected
-local Item = Class { __includes = SignalObject,
-  init = function(self, args)
-    SignalObject.init(self, args)
-    self.id = args.id or nil
-    self.names = { }
-    self.name = nil
-    self.level = 0
-    self.prices = { }
-    self.menuSprites = { }
-    self.descriptions = { }
+local Item = Class { __includes = Entity,
+  init = function(self, itemData, args)
+    Entity.init(self, args)
+    self.itemData = itemData
+    self.equipped = false
+    self.useButtons = { }
     self.player = nil
-    self.itemRewardsHoldType = args.itemRewardsHoldType or 0
+    self.level = itemData.level
   end
 }
 
@@ -34,42 +28,46 @@ function Item:getType()
   return 'item'
 end
 
-function Item:getItemId()
-  return self.id
-end
-
-
--- Item:getName() and Item:getItemDescription() are functions required to be implemented for the Menu screens
-
-function Item:getName()
-  return self.name
-end
-
-function Item:getDescription()
-  
-end
-
 function Item:isEquippable()
-  return false
+  return true
 end
 
+function Item:getItemId()
+  return self.itemData:getItemId()
+end
 
-function Item:getPlayer()
-  return self.player
+function Item:getItemData()
+  return self.itemData
 end
 
 ---@param player Player?
 function Item:setPlayer(player)
   self.player = player
+  if player then
+    self:setPosition(player:getPosition())
+  end
+end
+
+function Item:getPlayer()
+  return self.player
+end
+
+---@param level integer?
+function Item:getMenuSprite(level)
+  if level == nil then
+    level = self.level
+  end
+  return self.itemData:getMenuSprite(level)
 end
 
 function Item:getLevel()
   return self.level
 end
 
---- plain items cannot trigger override interactions
+--- item equipment can trigger override interactions
+--- @return boolean
 function Item:canTriggerOverrideInteractions()
-  return false
+  return true
 end
 
 ---@param sender Hitbox
@@ -78,63 +76,114 @@ function Item:triggerOverrideInteractions(sender)
   return false
 end
 
-function Item:setLevel(level)
-  self.level = level
+--- If item when equipped, should occupy a slot
+--- This is determined by checking if any useButtons are assigned
+--- Passive items such as armors should not take up a slot
+---@return boolean
+function Item:isSlotItem()
+  return lume.any(self.useButtons)
 end
 
-function Item:setMaxLevel()
-  self.level = self.maxLevel
+function Item:isEquipped()
+  return self.equipped
 end
 
---- formerly onInitialize
---- called when item is added to the Inventory list
-function Item:onAddedToInventoryList()
+function Item:isUsable()
+  return false
 end
 
---- called when the item's level has increased
-function Item:onItemLevelUp()
+function Item:clearUseButtons()
+  lume.clear(self.useButtons)
 end
 
---- called when the item is obtained
-function Item:onObtained()
-end
-
---- called when the item is unobtained
-function Item:onUnobtained()
-end
-
---- called when the item is lost
-function Item:onLost()
-end
-
---- called when the item has been reobtained after being lost
-function Item:onReobtained()
-end
-
--- convenience methods
-function Item:setMenuSprite(level, sprite)
-  self.menuSprites[level] = sprite
-end
-
-function Item:getMenuSprite(level)
-  if level == nil then 
-    level = self.level
+--- assign use buttons
+---@param button string|string[]
+function Item:addUseButtons(button)
+  if type(button) == 'string' then
+    lume.push(self.useButtons, button)
+  elseif type(button) == 'table' then
+    for _, b in ipairs(button) do
+      lume.push(self.useButtons, b)
+    end
   end
-  return self.menuSprites[level]
 end
 
-function Item:setPrice(level, price)
-  self.price[level] = price
+function Item:getUseButtons()
+  return self.useButtons
 end
 
-function Item:drawSlot(x, y)
-  local menuSprite
-  if self.menuSprites[self.level] then
-    menuSprite = self.menuSprites[self.level]
-  else
-    menuSprite = self.menuSprites[1]
+function Item:isButtonDown()
+  for _, button in ipairs(self.useButtons) do
+    if Input:down(button) then
+      return true
+    end
   end
-  menuSprite:draw(x, y)
+  return false
 end
+
+-- called when assigned buttons are down
+function Item:onButtonDown()
+end
+
+function Item:isButtonPressed()
+  for _, button in ipairs(self.useButtons) do
+    if Input:pressed(button) then
+      self:onButtonPressed()
+      return true
+    end
+  end
+  return false
+end
+
+-- called when items are pressed this frame
+function Item:onButtonPressed()
+  return false
+end
+
+function Item:equip()
+  local player = self:getPlayer()
+
+  assert(player, 'Item equipment cannot be equipped without player instance being set')
+  assert(lume.count(self.useButtons), 'Item equipment cannot be equipped without buttons being set')
+
+  if not self.equipped then
+    -- equip item
+    player:equipItem(self)
+    self.equipped = true
+    self:onEquip()
+  end
+end
+
+function Item:unequip()
+local player = self:getPlayer()
+  if self.equipped then
+    -- unequip item
+    player:unequipItem(self)
+    self.equipped = false
+    self:onUnequip()
+  end
+end
+
+function Item:onEquip()
+end
+
+function Item:onUnequip()
+end
+
+function Item:update()
+end
+
+function Item:draw()
+end
+
+function Item:interrupt()
+end
+
+function Item:drawUnder()
+end
+
+function Item:drawOver()
+end
+
 
 return Item

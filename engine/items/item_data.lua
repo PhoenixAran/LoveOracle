@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
+local SpriteBank = require 'engine.banks.sprite_bank'
 local lume = require 'lib.lume'
 
 -- Class that ItemSlot will utilise
@@ -18,6 +19,7 @@ local lume = require 'lib.lume'
 ---@field itemTypeArgs table[] arguments to pass to the item type when creating an instance of it, indexed by level
 ---@field amountBased boolean
 ---@field ammoBased boolean
+---@field ammoType string?
 local ItemData = Class {
   init = function(self, itemId)
     assert(itemId, 'Item ID cannot be null')
@@ -31,6 +33,7 @@ local ItemData = Class {
     self.itemTypes = { }
     self.itemTypeArgs = { }
     self.amountBased = false
+    self.ammoType = nil
   end
 }
 
@@ -38,7 +41,7 @@ function ItemData:getType()
   return 'item_data'
 end
 
-function ItemData:getId()
+function ItemData:getItemId()
   return self.itemId
 end
 
@@ -74,18 +77,33 @@ function ItemData:setMaxLevel(level)
   end
 end
 
----@param level integer|Sprite[]
----@param sprite Sprite?
+---@param level integer|(Sprite|string)[]
+---@param sprite (Sprite|string)? the sprite or sprite bank id
 function ItemData:setMenuSprites(level, sprite)
   if type(level) == 'table' then
-    lume.push(self.menuSprites, unpack(level))
+    for i, sprite in ipairs(level) do
+      if type(sprite) == 'string' then
+        sprite = SpriteBank.getSprite(sprite)
+      end
+      self.menuSprites[i] = sprite
+    end
   else
+    if type(sprite) == 'string' then
+      sprite = SpriteBank.getSprite(sprite)
+    end
     self.menuSprites[level] = sprite
   end
 end
 
 function ItemData:getMenuSprites()
   return self.menuSprites
+end
+
+--- get menu sprite
+---@param level integer
+---@return Sprite
+function ItemData:getMenuSprite(level)
+  return self.menuSprites[level]
 end
 
 ---@param level integer|string[]

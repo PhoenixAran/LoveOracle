@@ -10,12 +10,10 @@ local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags
 ---@field sprite AnimatedSpriteRenderer
 local ItemSword = Class { __includes = ItemWeapon,
   ---@param self ItemSword 
+  ---@param itemData ItemData
   ---@param args table
-  init = function(self, args)
-    ItemWeapon.init(self, args)
-    if self.item.id == nil then
-      self.item.id = 'item_sword'
-    end
+  init = function(self, itemData, args)
+    ItemWeapon.init(self, itemData, args)
     -- declare stuff that will be used in onTransformChanged BEFORE entity constructor
     self.hitbox = Hitbox(self)
     self.hitbox:setCollisionTag(CollisionTag.sword)
@@ -37,11 +35,10 @@ local ItemSword = Class { __includes = ItemWeapon,
     self.useParameters.usableWhileInHole = true
     
     -- item configuration
-    self.item:setLevel(1)
-    self.item.maxLevel = 3
-    self.item:setMenuSprite(1, SpriteBank.getSprite('icon_sword_1'))
-    self.item:setMenuSprite(2, SpriteBank.getSprite('icon_sword_2'))
-    self.item:setMenuSprite(3, SpriteBank.getSprite('icon_sword_3'))
+    -- self.item.maxLevel = 3
+    -- self.item:setMenuSprite(1, SpriteBank.getSprite('icon_sword_1'))
+    -- self.item:setMenuSprite(2, SpriteBank.getSprite('icon_sword_2'))
+    -- self.item:setMenuSprite(3, SpriteBank.getSprite('icon_sword_3'))
   end
 }
 

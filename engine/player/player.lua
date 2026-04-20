@@ -61,7 +61,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field respawnPositionY number
 ---@field respawnDirection4 number
 ---@field moveAnimation string
----@field slotItems table<string, ItemEquipment>
+---@field slotItems table<string, Item>
 ---@field previousPositionX number
 ---@field previousPositionY number
 ---@field respawnIndexX integer
@@ -680,8 +680,8 @@ function Player:updateStates()
   end
 end
 
--- equip usable ItemEquipment
----@param item ItemEquipment
+-- equip usable Item
+---@param item Item
 function Player:equipItem(item)
   self:addChild(item)
   item:setPlayer(self)
@@ -694,8 +694,8 @@ function Player:equipItem(item)
   item:awake()
 end
 
---- unequip the gien usable ItemEquipment
----@param item ItemEquipment
+--- unequip the gien usable Item
+---@param item Item
 function Player:unequipItem(item)
 ---@diagnostic disable-next-line: param-type-mismatch
   for i, v in ipairs(item.useButtons) do

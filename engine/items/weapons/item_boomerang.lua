@@ -13,21 +13,21 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 ---@class ItemBoomerang : ItemWeapon
 ---@field boomerangTracker EntityTracker
 local ItemBoomerang = Class { __includes = ItemWeapon,
-  init = function(self, args)
-    ItemWeapon.init(self, args)
-    if self.item.id == nil then
-      self.item.id = 'item_boomerang'
-    end
+  ---@param self ItemBoomerang
+  ---@param itemData ItemData
+  ---@param args table
+  init = function(self, itemData, args)
+    ItemWeapon.init(self, itemData, args)
+
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWithSword = true
     self.useParameters.usableWhileInHole = true
 
     self.boomerangTracker = EntityTracker(1)
 
-    self.item:setLevel(args.level or 1)
-    self.item.maxLevel = 2
-    self.item:setMenuSprite(1, SpriteBank.getSprite('icon_boomerang_1'))
-    self.item:setMenuSprite(2, SpriteBank.getSprite('icon_boomerang_2'))
+    -- self.item.maxLevel = 2
+    -- self.item:setMenuSprite(1, SpriteBank.getSprite('icon_boomerang_1'))
+    -- self.item:setMenuSprite(2, SpriteBank.getSprite('icon_boomerang_2'))
   end
 }
 

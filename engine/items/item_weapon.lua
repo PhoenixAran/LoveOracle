@@ -1,14 +1,14 @@
 local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
-local ItemEquipment = require 'engine.items.item_equipment'
+local Item = require 'engine.items.item'
 local WeaponUseParameters = require 'engine.items.weapon_use_parameters'
 
----@class ItemWeapon : ItemEquipment
+---@class ItemWeapon : Item
 ---@field useParameters WeaponUseParameters
-local ItemWeapon = Class { __includes = ItemEquipment,
+local ItemWeapon = Class { __includes = Item,
   init = function(self, args)
-    ItemEquipment.init(self, args)
+    Item.init(self, args)
     self.useParameters = WeaponUseParameters()
   end
 }
