@@ -46,7 +46,6 @@ function MenuInventory:getType()
 end
 
 function MenuInventory:drawPanel(rectConstraint, panelSprite, panelLabel, xPadding)
-  -- TODO make NinePatchSprite draw method take width and height?
   local originalWidth = panelSprite:getWidth()
   local originalHeight = panelSprite:getHeight()
   if xPadding == nil then
@@ -100,8 +99,6 @@ function MenuInventory:draw()
   self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEMS', 12)
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
 end
-
-
 
 
 return MenuInventory

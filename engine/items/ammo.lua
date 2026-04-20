@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local vector = require 'engine.math.vector'
 
+---@deprecated use Item class instead for now. Leaving this here when I change my mind
 ---@class Ammo
 ---@field id string
 ---@field container Item

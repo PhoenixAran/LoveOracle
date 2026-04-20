@@ -5,6 +5,9 @@ local Entity = require 'engine.entities.entity'
 local Item = require 'engine.items.item'
 local Input = require('engine.singletons').input
 
+--- ItemEquipment is defined as Items that can be equipped in a slot
+--- TODO ItemEquipment should have a generic implemenation where the character just holds it above their head and they can
+--- gift it to NPCs or throw it away, like Harvest Moon
 ---@class ItemEquipment : Entity
 ---@field item Item the item this equipment represents
 ---@field useButtons string[]
