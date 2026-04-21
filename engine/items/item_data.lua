@@ -18,6 +18,7 @@ local lume = require 'lib.lume'
 ---@field itemTypes string[]
 ---@field itemTypeArgs table[] arguments to pass to the item type when creating an instance of it, indexed by level
 ---@field amountBased boolean
+---@field maxAmount integer
 ---@field ammoBased boolean
 ---@field ammoType string?
 ---@field buttonSlotItem boolean if item gets assigned a button slot when equipped
@@ -38,6 +39,7 @@ local ItemData = Class {
     self.ammoType = nil
     self.buttonSlotItem = false
     self.equippable = false
+    self.maxAmount = 1
   end
 }
 
@@ -135,6 +137,15 @@ end
 
 function ItemData:isEquippable()
   return self.equippable
+end
+
+function ItemData:getMaxAmount()
+  return self.maxAmount
+end
+
+function ItemData:setMaxAmount(maxAmount)
+  assert(maxAmount > 0, 'Max amount must be greater than 0')
+  self.maxAmount = maxAmount
 end
 
 --- create an item instance from this item data

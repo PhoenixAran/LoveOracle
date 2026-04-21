@@ -13,7 +13,7 @@ end
 
 ---@class InventoryItem
 ---@field itemData ItemData underlying item data for this inventory item
----@field instanceId integer unique id for this instance of the item, used to track individual items in the inventory and distinguish between multiple copies of the same item
+---@field id integer unique id for this instance of the item, used to track individual items in the inventory and distinguish between multiple copies of the same item
 ---@field level integer level of the item, used to determine which item type to use when creating an instance of the item. This is separate from the level in ItemData because it can be upgraded or downgraded independently of the underlying item data
 ---@field amount integer? amount of the item, used for items that are amount based. Nil if not ammount based
 local InventoryItem = Class {
@@ -26,10 +26,43 @@ local InventoryItem = Class {
       itemData = ItemBank.getItem(itemData)
     end
     self.itemData = itemData
-    self.instanceId = getInstanceId()
+    self.id = getInstanceId()
     self.level = itemData.level or 1
     self.amount = amount
   end
 }
+
+function InventoryItem:getType()
+  return 'inventory_item'
+end
+
+function InventoryItem:getItemData()
+  return self.itemData
+end
+
+function InventoryItem:getId()
+  return self.id
+end
+
+function InventoryItem:getLevel()
+  return self.level
+end
+
+function InventoryItem:setLevel(level)
+  self.level = level
+end
+
+function InventoryItem:getAmount()
+  return self.amount
+end
+
+---@param amount integer
+function InventoryItem:setAmount(amount)
+  self.amount = lume.clamp(amount, 0, self.itemData:getMaxAmount())
+end
+
+function InventoryItem:createItem()
+  return self.itemData:createItem(self:getLevel())
+end
 
 return InventoryItem

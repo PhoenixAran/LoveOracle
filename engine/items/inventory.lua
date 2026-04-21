@@ -8,8 +8,8 @@ local lume = require 'lib.lume'
 
 ---@class Inventory
 ---@field protectedSlots string[] list of slots that are protected and can only be set to certain items. See default values for examples
----@field items ItemData[] items currently in the inventory
----@field lostItems ItemData[] items that have been lost, indexed by item id. This is used to track items that have been lost but not yet re-obtained, so that they can be made unavailable in the UI and other places. Once an item is re-obtained, it will be removed from this list
+---@field items InventoryItem[] items currently in the inventory
+---@field lostItems InventoryItem[] items that have been lost, indexed by item id. This is used to track items that have been lost but not yet re-obtained, so that they can be made unavailable in the UI and other places. Once an item is re-obtained, it will be removed from this list
 ---@field ammos table<string, Ammo>
 ---@field gameControl GameControl?
 ---@field piecesOfHeart number number of pieces of heart between 0 and 3
