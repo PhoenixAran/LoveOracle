@@ -9,7 +9,7 @@ local vector = require 'engine.math.vector'
 ---@field obtainMessage string
 ---@field cantCollectMessage string
 ---@field fullMessage string
----@field isAmountBased boolean
+---@field amountBased boolean
 ---@field amount integer
 ---@field maxAmount integer
 local AmmoData = Class {
@@ -25,7 +25,7 @@ local AmmoData = Class {
     self.obtainMessage = args.obtainMessage
     self.cantCollectMessage = args.cantCollectMessage
     self.fullMessage = args.fullMessage
-    self.isAmountBased = args.isAmountBased
+    self.amountBased = args.amountBased
     self.maxAmount = args.maxAmount
   end
 }
@@ -59,7 +59,7 @@ function AmmoData:getFullMessage()
 end
 
 function AmmoData:isAmountBased()
-  return self.isAmountBased
+  return self.amountBased
 end
 
 function AmmoData:getAmount()

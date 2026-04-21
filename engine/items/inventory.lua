@@ -3,11 +3,13 @@ local SignalObject = require 'engine.signal_object'
 local ItemBank = require 'engine.banks.item_bank'
 local lume = require 'lib.lume'
 
+-- TODO refactor to use InventoryItem instead of ItemData directly
+-- necessary to support a more flexible inventory system like harvest moon
 
 ---@class Inventory
 ---@field protectedSlots string[] list of slots that are protected and can only be set to certain items. See default values for examples
----@field items table<string, (Item|ItemEquipment)> items currently in the inventory, indexed by item id
----@field lostItems table<string,(Item|ItemEquipment)> items that have been lost, indexed by item id. This is used to track items that have been lost but not yet re-obtained, so that they can be made unavailable in the UI and other places. Once an item is re-obtained, it will be removed from this list
+---@field items ItemData[] items currently in the inventory
+---@field lostItems ItemData[] items that have been lost, indexed by item id. This is used to track items that have been lost but not yet re-obtained, so that they can be made unavailable in the UI and other places. Once an item is re-obtained, it will be removed from this list
 ---@field ammos table<string, Ammo>
 ---@field gameControl GameControl?
 ---@field piecesOfHeart number number of pieces of heart between 0 and 3
@@ -30,21 +32,35 @@ local Inventory = Class { __includes = SignalObject,
   end
 }
 
+function Inventory:getType()
+  return 'inventory'
+end
+
 -- connect player signals to inventory
 function Inventory:setPlayer(player)
   self.player = player
 end
 
----@return table<string, ItemEquipment>?
-function Inventory:getEquippedItems()
+--- get equipped button slot items
+---@return table<string, Item>?
+function Inventory:getEquippedButtonSlotItems()
   if self.player then
-    return self.player.slotItems
+    return self.player.buttonSlotItems
   end
   return nil
 end
 
-function Inventory:getType()
-  return 'inventory'
+-- TODO get method to get eqipped non button slot items
+
+--- get all equipped items, including both button slot and non-button slot items
+--- @return 
+function Inventory:getAllEquippedItems()
+  -- no non button slot items implemented yet
+  local equipedItems = { }
+  local equippedItems =  self:getEquippedButtonSlotItems() 
+  for _, item in pairs(equippedItems) do
+    lume.push(equipedItems, item)
+  end
 end
 
 function Inventory:getItem(itemId)
@@ -58,28 +74,10 @@ function Inventory:containsItem(itemId)
   return self:getItem(itemId) ~= nil
 end
 
-function Inventory:removeItem(itemId)
-
-  local item = self.items[itemId]
-  if item then
-    local equippedItems = self:getEquippedItems()
-    if not equippedItems then
-      return
-    end
-    if lume.any(equippedItems, item) then
-      ---@type ItemEquipment
-      local equippableItem = item
-      self:unequipItem(equippableItem)
-    end
-    self.items[itemId] = nil
-  end
-end
-
-
 --- equip an item on the player
----@param item string|ItemEquipment the item to equip, either an item id or an ItemEquipment instance
+---@param itemData string|ItemData the item to equip, either an item id or an ItemData instance
 ---@param slot nil|string|string[] the slot(s) to equip the item to, if any
-function Inventory:equipItem(item, slot)
+function Inventory:equipItem(itemData, slot)
   if slot ~= nil then
     if type(slot) == 'string' then
       assert(not lume.any(self.protectedSlots, slot))
@@ -94,34 +92,51 @@ function Inventory:equipItem(item, slot)
   end
 
   -- validate item
-  ---@type ItemEquipment
+  ---@type ItemData
   local equippableItem
-  if type(item) == 'string' then
-    equippableItem = ItemBank.getItem(item)
+  if type(itemData) == 'string' then
+    itemData = ItemBank.getItem(itemData)
   end
-  assert(equippableItem:isEquippable(), 'Cannot equip non-equippable item')
+  assert(itemData:isEquippable(), 'Cannot equip non-equippable item')
 
-  -- equip item
-  equippableItem:clearUseButtons()
-  if slot ~= nil then
-    equippableItem:addUseButtons(slot)
+  -- create item
+  local item = itemData:createItem()
+
+  if item:isButtonSlotItem() then
+    assert(slot, 'Button slot item must be equipped to a slot')
+    -- TODO handle equipping to multiple slots for two handed items. Like the great fairy sword
+    item:clearUseButtons()
+    item:addUseButtons(slot)
+    item:setPlayer(self.player)
+    item:equip()
+  else
+    error('Non button slot items not supported yet')
+    -- TODO things like rings and different tunics should be equippable but not button slot items. For now, just equip them to the first slot, but eventually they should be able to be equipped 
+    -- without a slot or to specific non-button slots
   end
-  equippableItem:setPlayer(self.player)
-  equippableItem:equip()
 end
 
-function Inventory:unequipItem(item)
-  ---@type ItemEquipment
-  local equippableItem
-  if type(item) == 'string' then
-    equippableItem = ItemBank.getItem(item)
+---@param itemData ItemData|string
+function Inventory:unequipItem(itemData)
+  if type(itemData) == 'string' then
+    itemData = ItemBank.getItem(itemData)
   end
 
-  assert(equippableItem:isEquippable(), 'Cannot unequip non-equippable item')
+  assert(itemData:isEquippable(), 'Cannot unequip non-equippable item')
+  
+  local allEquippedItems = self:getAllEquippedItems()
+  if allEquippedItems then
+    local equippedItemIndex = lume.find(allEquippedItems, function(equippedItem)
+      return equippedItem:getItemId() == itemData:getItemId()
+    end)
+    if equippedItemIndex then
+      local equippedItem = allEquippedItems[equippedItemIndex]
+      equippedItem:unequip()
+      equippedItem:setPlayer(nil)
+      equippedItem:clearUseButtons()
+    end
+  end
 
-  equippableItem:unequip()
-  equippableItem:setPlayer(nil)
-  equippableItem:clearUseButtons()
 end
 
 function Inventory:unequipItemBySlot(slot)
@@ -137,26 +152,34 @@ function Inventory:unequipItemBySlot(slot)
   end
 end
 
----@param item Item|ItemEquipment|string
-function Inventory:obtainItem(item)
-  if type(item) == 'string' then
-    item = ItemBank.getItem(item)
+---@param itemData ItemData|string
+function Inventory:addItem(itemData)
+  if type(itemData) == 'string' then
+    itemData = ItemBank.getItem(itemData)
   end
-  if not self:containsItem(item) then
-    self.items[item:getItemId()] = item
-  end
-  self.lostItems[item:getItemId()] = nil
+  lume.push(self.items, itemData)
 end
 
-function Inventory:unobtainItem(item)
-  if type(item) == 'string' then
-    item = self:getItem(item)
+
+---@param itemData ItemData|string
+function Inventory:removeItem(itemData)
+  if type(itemData) == 'string' then
+    itemData = ItemBank.getItem(itemData)
   end
   
-  if self:containsItem(item) then
-    lume.remove(self.items, item)
-    if item.unequip then
-      item:unequip()
+  -- remove item from inventory
+  local itemData = self.items[itemData:getItemId()]
+  self.items[itemData:getItemId()] = nil
+  if itemData then
+    local allEquippedItems = self:getAllEquippedItems()
+    if not allEquippedItems then
+      return
+    end
+    local equippedItem = lume.find(allEquippedItems, function(equippedItem)
+      return equippedItem:getItemId() == itemId
+    end)
+    if equippedItem then
+      self:unequipItem(equippedItem)
     end
   end
 end
@@ -219,10 +242,6 @@ function Inventory:isAmmoAvailable(ammoId)
 end
 
 function Inventory:isAmmoContainerAvailable(id)
-
-end
-
-function Inventory:getEquippedWeapons()
 
 end
 

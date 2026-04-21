@@ -4,7 +4,7 @@ local ItemBank = require 'engine.banks.item_bank'
 
 -- sword item
 local swordData = ItemBank.createItemData('item_sword')
-
+swordData:setMenuSprite({'icon_sword_1', 'icon_sword_2', 'icon_sword_3'})
 ItemBank.registerItem(swordData)
 
 -- shield

@@ -61,7 +61,7 @@ local PlayerPushState = require 'engine.player.weapon_states.player_push_state'
 ---@field respawnPositionY number
 ---@field respawnDirection4 number
 ---@field moveAnimation string
----@field slotItems table<string, Item>
+---@field buttonSlotItems table<string, Item>
 ---@field previousPositionX number
 ---@field previousPositionY number
 ---@field respawnIndexX integer
@@ -186,7 +186,7 @@ local Player = Class { __includes = MapEntity,
       return self:actionUseItem('leftShoulder')
     end)
 
-    self.slotItems = {
+    self.buttonSlotItems = {
 
     }
 
@@ -685,10 +685,10 @@ end
 function Player:equipItem(item)
   self:addChild(item)
   item:setPlayer(self)
-  if item:isSlotItem() then
+  if item:isButtonSlotItem() then
     -- put it in the slot items collection
     for i, v in ipairs(item.useButtons) do
-      self.slotItems[v] = item
+      self.buttonSlotItems[v] = item
     end
   end
   item:awake()
@@ -699,8 +699,8 @@ end
 function Player:unequipItem(item)
 ---@diagnostic disable-next-line: param-type-mismatch
   for i, v in ipairs(item.useButtons) do
-    if self.slotItems[v] == item then
-      self.slotItems[v] = nil
+    if self.buttonSlotItems[v] == item then
+      self.buttonSlotItems[v] = nil
     end
   end
   item:removed()
@@ -709,7 +709,7 @@ function Player:unequipItem(item)
 end
 
 function Player:updateEquippedItems()
-  for _, item in pairs(self.slotItems) do
+  for _, item in pairs(self.buttonSlotItems) do
     item:update()
     if item:isUsable() then
       if item:isButtonDown() then
@@ -725,7 +725,7 @@ end
 --- calls the item:onButtonPress callback for the given mapped button
 ---@param button string
 function Player:actionUseItem(button)
-  local item = self.slotItems[button]
+  local item = self.buttonSlotItems[button]
   if item ~= nil and item:isUsable() then
     if item:isButtonPressed() then
       self:emit('entity_item_used', item)
@@ -744,7 +744,7 @@ function Player:actionStroke(button)
 end
 
 function Player:interruptItems()
-  for _, item in pairs(self.slotItems) do
+  for _, item in pairs(self.buttonSlotItems) do
     item:interrupt()
   end
   if self.controlStateMachine:isActive() then
@@ -916,7 +916,7 @@ end
 ---@param sender Hitbox
 ---@return boolean
 function Player:triggerOverrideInteractions(sender)
-  for k, item in pairs(self.slotItems) do
+  for k, item in pairs(self.buttonSlotItems) do
     if item:canTriggerOverrideInteractions() and item:triggerOverrideInteractions(sender) then
       return true
     end
@@ -996,7 +996,7 @@ function Player:update()
 end
 
 function Player:draw()
-  for _, item in pairs(self.slotItems) do
+  for _, item in pairs(self.buttonSlotItems) do
     if item:isVisible() then
       item:drawUnder()
     end
@@ -1004,7 +1004,7 @@ function Player:draw()
 
   MapEntity.draw(self)
 
-  for _, item in pairs(self.slotItems) do
+  for _, item in pairs(self.buttonSlotItems) do
     if item:isVisible() then
       item:drawOver()
     end
@@ -1036,8 +1036,8 @@ function Player:debugDraw(entDebugDrawFlags)
   if bit.band(entDebugDrawFlags, EntityDebugDrawFlags.RoomBox) ~= 0 then
     self.roomEdgeCollisionBox:debugDraw()
   end
-  if lume.any(self.slotItems) then
-    for _, item in pairs(self.slotItems) do
+  if lume.any(self.buttonSlotItems) then
+    for _, item in pairs(self.buttonSlotItems) do
       item:debugDraw(entDebugDrawFlags)
     end
   end

@@ -53,7 +53,8 @@ function ItemBoomerang:onButtonPressed()
   player:shootFromDirection(boomerang, useDirectionX, useDirectionY)
   boomerang:initTransform()
   self.boomerangTracker:addEntity(boomerang)
-
+  -- use the player to emit the entity spawned signal so the Entities collection can add it
+  self.player:emit('entity_spawned', boomerang)
   if self:getLevel() == 1 then
     player:beginBusyState(10, 'throw')
   else

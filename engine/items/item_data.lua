@@ -20,6 +20,8 @@ local lume = require 'lib.lume'
 ---@field amountBased boolean
 ---@field ammoBased boolean
 ---@field ammoType string?
+---@field buttonSlotItem boolean if item gets assigned a button slot when equipped
+---@field isEquippable boolean if item can be equipped
 local ItemData = Class {
   init = function(self, itemId)
     assert(itemId, 'Item ID cannot be null')
@@ -34,6 +36,8 @@ local ItemData = Class {
     self.itemTypeArgs = { }
     self.amountBased = false
     self.ammoType = nil
+    self.buttonSlotItem = false
+    self.equippable = false
   end
 }
 
@@ -77,9 +81,11 @@ function ItemData:setMaxLevel(level)
   end
 end
 
+--- set menu sprites for this item. If an array of sprites is given, each sprite will be assigned
+--- to its corresponding level via array index
 ---@param level integer|(Sprite|string)[]
 ---@param sprite (Sprite|string)? the sprite or sprite bank id
-function ItemData:setMenuSprites(level, sprite)
+function ItemData:setMenuSprite(level, sprite)
   if type(level) == 'table' then
     for i, sprite in ipairs(level) do
       if type(sprite) == 'string' then
@@ -106,14 +112,43 @@ function ItemData:getMenuSprite(level)
   return self.menuSprites[level]
 end
 
----@param level integer|string[]
+---@param level integer
 ---@param modulePath string? the require path to the Item type
-function ItemData:setItemTypes(level, modulePath, initArgs)
-  if type(level) == 'table' then
-    lume.push(self.itemTypes, unpack(level))
-  else
-    self.itemTypes[level] = modulePath
+function ItemData:setItemType(level, modulePath, initArgs)
+  self.itemTypes[level] = modulePath
+  self.itemTypeArgs[level] = initArgs
+end
+
+--- sets if item, if equippable, should be assigned to a button slot
+---@param value boolean
+function ItemData:setButtonSlotItem(value)
+  self.buttonSlotItem = value
+end
+
+function ItemData:isButtonSlotItem()
+  return self.buttonSlotItem
+end
+
+function ItemData:setEquippable(value)
+  self.equippable = value
+end
+
+function ItemData:isEquippable()
+  return self.equippable
+end
+
+--- create an item instance from this item data
+---@param level integer?
+function ItemData:createItem(level)
+  if level == nil then
+    level = self.level
   end
+  if not self:isLeveled() then
+    level = 1
+  end
+
+  local initArgs = self.itemTypeArgs[level] or { }
+  return require(self.itemTypes[level])(self, self.itemTypeArgs[level])
 end
 
 return ItemData

@@ -29,7 +29,11 @@ function Item:getType()
 end
 
 function Item:isEquippable()
-  return true
+  return self.itemData:isEquippable()
+end
+
+function Item:isButtonSlotItem()
+  return self.itemData:isButtonSlotItem()
 end
 
 function Item:getItemId()
@@ -74,14 +78,6 @@ end
 ---@return boolean
 function Item:triggerOverrideInteractions(sender)
   return false
-end
-
---- If item when equipped, should occupy a slot
---- This is determined by checking if any useButtons are assigned
---- Passive items such as armors should not take up a slot
----@return boolean
-function Item:isSlotItem()
-  return lume.any(self.useButtons)
 end
 
 function Item:isEquipped()

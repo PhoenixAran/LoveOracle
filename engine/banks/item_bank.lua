@@ -26,6 +26,7 @@ end
 
 --- create item data by item id
 ---@param itemId string?
+---@return ItemData
 function ItemBank.createItemData(itemId)
   return ItemData(itemId)
 end
