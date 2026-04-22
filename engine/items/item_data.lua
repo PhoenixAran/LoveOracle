@@ -149,15 +149,15 @@ function ItemData:setMaxAmount(maxAmount)
 end
 
 --- create an item instance from this item data
----@param level integer?
-function ItemData:createItem(level)
-  if level == nil then
-    level = self.level
-  end
+---@param inventoryItem InventoryItem inventory item instance
+---@return Item
+function ItemData:createItem(inventoryItem)
+  local level = inventoryItem:getLevel()
   if not self:isLeveled() then
     level = 1
   end
 
+  
   local initArgs = self.itemTypeArgs[level] or { }
   return require(self.itemTypes[level])(self, self.itemTypeArgs[level])
 end

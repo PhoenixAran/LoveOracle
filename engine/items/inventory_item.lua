@@ -62,7 +62,7 @@ function InventoryItem:setAmount(amount)
 end
 
 function InventoryItem:createItem()
-  return self.itemData:createItem(self:getLevel())
+  return self.itemData:createItem(self)
 end
 
 return InventoryItem

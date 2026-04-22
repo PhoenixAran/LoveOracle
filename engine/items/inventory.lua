@@ -2,6 +2,7 @@ local Class = require 'lib.class'
 local SignalObject = require 'engine.signal_object'
 local ItemBank = require 'engine.banks.item_bank'
 local lume = require 'lib.lume'
+local InventoryItem = require 'engine.items.inventory_item'
 
 -- TODO refactor to use InventoryItem instead of ItemData directly
 -- necessary to support a more flexible inventory system like harvest moon
@@ -57,27 +58,34 @@ end
 function Inventory:getAllEquippedItems()
   -- no non button slot items implemented yet
   local equipedItems = { }
-  local equippedItems =  self:getEquippedButtonSlotItems() 
+  local equippedItems =  self:getEquippedButtonSlotItems()
   for _, item in pairs(equippedItems) do
     lume.push(equipedItems, item)
   end
 end
 
-function Inventory:getItem(itemId)
-  return self.items[itemId]
+---@param inventoryItemId integer
+---@return InventoryItem? the inventory item with the given id, or nil if no such item exists in the inventory
+function Inventory:getItem(inventoryItemId)
+  for _, inventoryItem in ipairs(self.items) do
+    if inventoryItem:getId() == inventoryItemId then
+      return inventoryItem
+    end
+  end
+  return nil
 end
 
-function Inventory:containsItem(itemId)
-  if type(itemId) == 'table' then
-    itemId = itemId:getItemId()
-  end
-  return self:getItem(itemId) ~= nil
+--- if the inventory contains an inventory item with the given instance id 
+---@param inventoryItemId integer
+---@return boolean
+function Inventory:containsItem(inventoryItemId)
+  return self:getItem(inventoryItemId) ~= nil
 end
 
 --- equip an item on the player
----@param itemData string|ItemData the item to equip, either an item id or an ItemData instance
+---@param inventoryItem InventoryItem|integer the inventory item to equip, either an InventoryItem instance or an inventory item id
 ---@param slot nil|string|string[] the slot(s) to equip the item to, if any
-function Inventory:equipItem(itemData, slot)
+function Inventory:equipItem(inventoryItem, slot)
   if slot ~= nil then
     if type(slot) == 'string' then
       assert(not lume.any(self.protectedSlots, slot))
@@ -91,16 +99,20 @@ function Inventory:equipItem(itemData, slot)
     end
   end
 
-  -- validate item
-  ---@type ItemData
-  local equippableItem
-  if type(itemData) == 'string' then
-    itemData = ItemBank.getItem(itemData)
+  if type(inventoryItem) == 'number' then
+    ---@cast inventoryItem integer
+    local inventoryItemId = inventoryItem
+    inventoryItem = self:getItem(inventoryItemId)
+    if inventoryItem == nil then
+      return
+    end
   end
-  assert(itemData:isEquippable(), 'Cannot equip non-equippable item')
+
+
+  assert(inventoryItem:getItemData():isEquippable(), 'Cannot equip non-equippable item')
 
   -- create item
-  local item = itemData:createItem()
+  local item = inventoryItem:createItem()
 
   if item:isButtonSlotItem() then
     assert(slot, 'Button slot item must be equipped to a slot')
@@ -116,18 +128,23 @@ function Inventory:equipItem(itemData, slot)
   end
 end
 
----@param itemData ItemData|string
-function Inventory:unequipItem(itemData)
-  if type(itemData) == 'string' then
-    itemData = ItemBank.getItem(itemData)
+---@param inventoryItem InventoryItem|integer the inventory item to unequip, either an InventoryItem instance or an inventory item id
+function Inventory:unequipItem(inventoryItem)
+  if type(inventoryItem) == 'number' then
+    ---@cast inventoryItem integer
+    local inventoryItemId = inventoryItem
+    inventoryItem = self:getItem(inventoryItemId)
+    if inventoryItem == nil then
+      return
+    end
   end
 
-  assert(itemData:isEquippable(), 'Cannot unequip non-equippable item')
-  
+  assert(inventoryItem:getItemData():isEquippable(), 'Cannot unequip non-equippable item')
+
   local allEquippedItems = self:getAllEquippedItems()
   if allEquippedItems then
     local equippedItemIndex = lume.find(allEquippedItems, function(equippedItem)
-      return equippedItem:getItemId() == itemData:getItemId()
+      return equippedItem:getInventoryItemId() == inventoryItem:getId()
     end)
     if equippedItemIndex then
       local equippedItem = allEquippedItems[equippedItemIndex]
@@ -136,52 +153,51 @@ function Inventory:unequipItem(itemData)
       equippedItem:clearUseButtons()
     end
   end
-
 end
 
-function Inventory:unequipItemBySlot(slot)
-  for _, item in ipairs(self.items) do
-    if item:isEquippable() then
-      ---@type ItemEquipment
-      local equippableItem = item
-      if lume.any(equippableItem:getUseButtons(), slot) then
-        self:unequipItem(equippableItem)
-        break
-      end
+function Inventory:unequipItemByButtonSlot(slot)
+  local buttonSlotItems = self:getEquippedButtonSlotItems()
+  for buttonSlot, item in pairs(buttonSlotItems) do
+    if buttonSlot == slot then
+      self:unequipItem(item:getInventoryItemId())
+      break
     end
   end
 end
 
 ---@param itemData ItemData|string
+---@return InventoryItem
 function Inventory:addItem(itemData)
   if type(itemData) == 'string' then
     itemData = ItemBank.getItem(itemData)
   end
-  lume.push(self.items, itemData)
+  local inventoryItem = InventoryItem(itemData)
+  lume.push(self.items, inventoryItem)
+  return inventoryItem
 end
 
 
----@param itemData ItemData|string
-function Inventory:removeItem(itemData)
-  if type(itemData) == 'string' then
-    itemData = ItemBank.getItem(itemData)
-  end
-  
-  -- remove item from inventory
-  local itemData = self.items[itemData:getItemId()]
-  self.items[itemData:getItemId()] = nil
-  if itemData then
-    local allEquippedItems = self:getAllEquippedItems()
-    if not allEquippedItems then
-      return
-    end
-    local equippedItem = lume.find(allEquippedItems, function(equippedItem)
-      return equippedItem:getItemId() == itemId
-    end)
-    if equippedItem then
-      self:unequipItem(equippedItem)
+---@param inventoryItem InventoryItem|integer
+---@return InventoryItem? the removed inventory item, or nil if the item was not found in the inventory
+function Inventory:removeItem(inventoryItem)
+  if type(inventoryItem) == 'number' then
+    ---@cast inventoryItem integer
+    local instanceId = inventoryItem
+    inventoryItem = self:getItem(instanceId)
+    if inventoryItem == nil then
+      return nil
     end
   end
+
+  -- unequip item
+  self:unequipItem(inventoryItem)
+
+  -- remove InventoryItem from inventory
+  if not lume.find(self.items, inventoryItem) then
+    return nil
+  end
+  lume.remove(self.items, inventoryItem)
+  return inventoryItem
 end
 
 function Inventory:setLevel(itemId, level)
@@ -192,63 +208,66 @@ function Inventory:setLevel(itemId, level)
 end
 
 function Inventory:setMaxLevel(itemId)
-  local item = self:getItem(itemId)
-  if item then
-    item:setMaxLevel()
-  end
+  error('not implemented')
 end
 
 function Inventory:getItems()
   return self.items
 end
 
-function Inventory:isItemAvailable(item)
-  if type(item) == 'string' then
-    item = self:getItem(item)
+---@param itemDataId string itemData string
+---@return boolean
+function Inventory:isItemAvailable(itemDataId)
+  for _, inventoryItem in ipairs(self.items) do
+    if inventoryItem:getItemData():getItemId() == itemDataId then
+      return true
+    end
   end
-  return item ~= nil and not self.lostItems[item:getItemId()]
+  return false
 end
 
 function Inventory:addAmmos(obtain, ammos)
-
+  error('not implemented')
 end
 
 function Inventory:addAmmo(obtain, ammo)
-
+  error('not implemented')
 end
 
 function Inventory:fillAllAmmo()
-
+  error('not implemented')
 end
 
 function Inventory:emptyAllAmmo()
-
+  error('not implemented')
 end
 
 function Inventory:obtainAmmo(ammo)
-
+  error('not implemented')
 end
 
 function Inventory:containsAmmo(ammoId)
-
+  error('not implemented')
 end
 
 function Inventory:isAmmoObtained(ammoId)
-
+  error('not implemented')
 end
 
 function Inventory:isAmmoAvailable(ammoId)
-
+  error('not implemented')
 end
 
 function Inventory:isAmmoContainerAvailable(id)
-
+  error('not implemented')
 end
 
 function Inventory:isTwoHandedEquipped()
-end
+  error('not implemented')
+end 
 
 function Inventory:getPiecesOfHeart()
+  error('not implemented')
 end
 
 function Inventory:getGameControl()

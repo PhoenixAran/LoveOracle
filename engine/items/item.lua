@@ -8,19 +8,21 @@ local Input = require('engine.singletons').input
 --- TODO Item should have a generic implemenation where the character just holds it above their head and they can
 --- gift it to NPCs or throw it away, like Harvest Moon
 ---@class Item : Entity
----@field itemData ItemData underlying item data for this item
+---@field inventoryItem InventoryItem underlying item item record for this item
+---@field itemData ItemData underlying item data for this item, accessed through inventoryItem
 ---@field useButtons string[]
 ---@field equipped boolean
 ---@field player Player
 ---@field level integer
 local Item = Class { __includes = Entity,
-  init = function(self, itemData, args)
+  init = function(self, inventoryItem, args)
     Entity.init(self, args)
-    self.itemData = itemData
+    self.inventoryItem = inventoryItem
+    self.itemData = inventoryItem:getItemData()
     self.equipped = false
     self.useButtons = { }
     self.player = nil
-    self.level = itemData.level
+    self.level = inventoryItem:getLevel()
   end
 }
 
@@ -36,12 +38,22 @@ function Item:isButtonSlotItem()
   return self.itemData:isButtonSlotItem()
 end
 
+---@return string itemId item id for from the underlying item data record for this item
 function Item:getItemId()
   return self.itemData:getItemId()
 end
 
+---@return integer inventoryItemId unique id from the underlying inventory item record for this item, used to track individual items in the inventory and distinguish between multiple copies of the same item
+function Item:getInventoryItemId()
+  return self.inventoryItem:getId()
+end
+
 function Item:getItemData()
   return self.itemData
+end
+
+function Item:getInventoryItem()
+  return self.inventoryItem
 end
 
 ---@param player Player?

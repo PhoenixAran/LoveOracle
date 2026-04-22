@@ -51,13 +51,13 @@ function BaseGameplayScreen:enter(prev, ...)
 
 
   -- TODO set up inventory. Note that Inventory class handles calling the sword:equip() so we have to do it here
-  inventory:obtainItem('item_sword')
-  inventory:obtainItem('item_shield')
-  inventory:obtainItem('item_boomerang')
+  local inventorySword = inventory:addItem('item_sword')
+  local inventoryShield = inventory:addItem('item_shield')
+  local inventoryBoomerang = inventory:addItem('item_boomerang')
 
-  inventory:equipItem('item_sword', 'b')
-  inventory:equipItem('item_shield', 'leftShoulder')
-  inventory:equipItem('item_boomerang', 'x')
+  inventory:equipItem(inventorySword, 'b')
+  inventory:equipItem(inventoryShield, 'leftShoulder')
+  inventory:equipItem(inventoryBoomerang, 'x')
 
   self.gameControl:setPlayer(player)
   local map = Map(mapFile)
