@@ -10,10 +10,10 @@ local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags
 ---@field sprite AnimatedSpriteRenderer
 local ItemSword = Class { __includes = ItemWeapon,
   ---@param self ItemSword 
-  ---@param itemData ItemData
+  ---@param inventoryItem InventoryItem
   ---@param args table
-  init = function(self, itemData, args)
-    ItemWeapon.init(self, itemData, args)
+  init = function(self, inventoryItem, args)
+    ItemWeapon.init(self, inventoryItem, args)
     -- declare stuff that will be used in onTransformChanged BEFORE entity constructor
     self.hitbox = Hitbox(self)
     self.hitbox:setCollisionTag(CollisionTag.sword)

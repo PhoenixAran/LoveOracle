@@ -239,7 +239,7 @@ function Hud:drawEquippedItems()
     slotButtonSprite:draw(drawX, drawY)
     self.equipmentSlot:draw(drawX + spaceBetweenButtonAndSlot, drawY)
     -- TODO get from Inventory singleton instead of player directly
-    local slotItems = self.player.slotItems
+    local slotItems = self.player.buttonSlotItems
     local slotButton = self.slots[i]
     local item = slotItems[slotButton]
     if item then

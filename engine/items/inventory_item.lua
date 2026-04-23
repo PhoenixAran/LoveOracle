@@ -44,6 +44,7 @@ function InventoryItem:getId()
   return self.id
 end
 
+---@return integer level
 function InventoryItem:getLevel()
   return self.level
 end
@@ -61,8 +62,16 @@ function InventoryItem:setAmount(amount)
   self.amount = lume.clamp(amount, 0, self.itemData:getMaxAmount())
 end
 
+---create an item instance from this inventory item
+---@return Item
 function InventoryItem:createItem()
-  return self.itemData:createItem(self)
+  local level = self:getLevel()
+  if not self.itemData:isLeveled() then
+    level = 1
+  end
+
+  local initArgs = self.itemData.itemTypeArgs[level] or { }
+  return self.itemData.itemTypes[level](self, initArgs)
 end
 
 return InventoryItem

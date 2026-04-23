@@ -41,10 +41,10 @@ local SHIELD_HITBOX_PLACEMENTS = {
 ---@field hitbox Hitbox
 local ItemShield = Class { __includes = ItemWeapon,
   ---@param self ItemShield
-  ---@param itemData ItemData
+  ---@param inventoryItem InventoryItem
   ---@param args table
-  init = function(self, itemData, args)
-    ItemWeapon.init(self, itemData, args)
+  init = function(self, inventoryItem, args)
+    ItemWeapon.init(self, inventoryItem, args)
     self.hitbox = Hitbox(self)
     self.hitbox:setCollisionTag(CollisionTag.shield)
     self.hitbox:setPhysicsLayer('hitbox_player')
@@ -60,11 +60,6 @@ local ItemShield = Class { __includes = ItemWeapon,
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWithSword = true
     self.useParameters.usableWhileInHole = true
-
-    -- self.item.maxLevel = 3
-    -- self.item:setMenuSprite(1, SpriteBank.getSprite('icon_shield_1'))
-    -- self.item:setMenuSprite(2, SpriteBank.getSprite('icon_shield_2'))
-    -- self.item:setMenuSprite(3, SpriteBank.getSprite('icon_shield_3'))
   end
 }
 

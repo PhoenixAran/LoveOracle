@@ -14,10 +14,10 @@ local SpriteBank = require 'engine.banks.sprite_bank'
 ---@field boomerangTracker EntityTracker
 local ItemBoomerang = Class { __includes = ItemWeapon,
   ---@param self ItemBoomerang
-  ---@param itemData ItemData
+  ---@param inventoryItem InventoryItem
   ---@param args table
-  init = function(self, itemData, args)
-    ItemWeapon.init(self, itemData, args)
+  init = function(self, inventoryItem, args)
+    ItemWeapon.init(self, inventoryItem, args)
 
     self.useParameters.usableWhileJumping = true
     self.useParameters.usableWithSword = true
@@ -53,8 +53,6 @@ function ItemBoomerang:onButtonPressed()
   player:shootFromDirection(boomerang, useDirectionX, useDirectionY)
   boomerang:initTransform()
   self.boomerangTracker:addEntity(boomerang)
-  -- use the player to emit the entity spawned signal so the Entities collection can add it
-  self.player:emit('entity_spawned', boomerang)
   if self:getLevel() == 1 then
     player:beginBusyState(10, 'throw')
   else

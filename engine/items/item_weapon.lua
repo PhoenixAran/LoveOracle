@@ -7,8 +7,8 @@ local WeaponUseParameters = require 'engine.items.weapon_use_parameters'
 ---@class ItemWeapon : Item
 ---@field useParameters WeaponUseParameters
 local ItemWeapon = Class { __includes = Item,
-  init = function(self, args)
-    Item.init(self, args)
+  init = function(self, inventoryItem, args)
+    Item.init(self, inventoryItem, args)
     self.useParameters = WeaponUseParameters()
   end
 }

@@ -15,7 +15,7 @@ local lume = require 'lib.lume'
 ---@field maxLevel integer
 ---@field level integer
 ---@field menuSprites Sprite|Sprite[]
----@field itemTypes string[]
+---@field itemTypes table[]
 ---@field itemTypeArgs table[] arguments to pass to the item type when creating an instance of it, indexed by level
 ---@field amountBased boolean
 ---@field maxAmount integer
@@ -115,9 +115,13 @@ function ItemData:getMenuSprite(level)
 end
 
 ---@param level integer
----@param modulePath string? the require path to the Item type
-function ItemData:setItemType(level, modulePath, initArgs)
-  self.itemTypes[level] = modulePath
+---@param module string|table path to itemtype or Itemtype
+---@param initArgs table? the arguments to pass to the item
+function ItemData:setItemType(level, module, initArgs)
+  if type(module) == 'string' then
+    module = require(module)
+  end
+  self.itemTypes[level] = module
   self.itemTypeArgs[level] = initArgs
 end
 
@@ -146,20 +150,6 @@ end
 function ItemData:setMaxAmount(maxAmount)
   assert(maxAmount > 0, 'Max amount must be greater than 0')
   self.maxAmount = maxAmount
-end
-
---- create an item instance from this item data
----@param inventoryItem InventoryItem inventory item instance
----@return Item
-function ItemData:createItem(inventoryItem)
-  local level = inventoryItem:getLevel()
-  if not self:isLeveled() then
-    level = 1
-  end
-
-  
-  local initArgs = self.itemTypeArgs[level] or { }
-  return require(self.itemTypes[level])(self, self.itemTypeArgs[level])
 end
 
 return ItemData
