@@ -23,6 +23,7 @@ local lume = require 'lib.lume'
 ---@field ammoType string?
 ---@field buttonSlotItem boolean if item gets assigned a button slot when equipped
 ---@field isEquippable boolean if item can be equipped
+---@field descriptions string[] item descriptions for each level. If only one description is given, it will be used for all levels
 local ItemData = Class {
   init = function(self, itemId)
     assert(itemId, 'Item ID cannot be null')
@@ -40,6 +41,7 @@ local ItemData = Class {
     self.buttonSlotItem = false
     self.equippable = false
     self.maxAmount = 1
+    self.descriptions = { '' }
   end
 }
 
@@ -150,6 +152,14 @@ end
 function ItemData:setMaxAmount(maxAmount)
   assert(maxAmount > 0, 'Max amount must be greater than 0')
   self.maxAmount = maxAmount
+end
+
+function ItemData:getDescription(level)
+  if lume.count(self.descriptions) == 1 then
+    return self.descriptions[1]
+  else
+    return self.descriptions[level]
+  end
 end
 
 return ItemData

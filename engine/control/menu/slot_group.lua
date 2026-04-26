@@ -20,6 +20,7 @@ end
 ---@param positionX number
 ---@param positionY number
 ---@param width number
+---@return Slot slot
 function SlotGroup:addSlot(slot, positionX, positionY, width)
   local slot = Slot(self, positionX, positionY, width)
   lume.push(self.slots, slot)

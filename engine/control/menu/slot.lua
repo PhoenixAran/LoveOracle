@@ -5,7 +5,7 @@ local Class = require 'lib.class'
 ---@field positionY number
 ---@field width number
 ---@field slotGroup SlotGroup
----@field item Item|ItemEquipment
+---@field item ItemData
 ---@field enabled boolean
 ---@field connections table<Direction4, Slot|SlotGroup>
 local Slot = Class {
@@ -33,9 +33,14 @@ function Slot:select()
   return self.slotGroup
 end
 
----@param item Item|ItemEquipment
+---@param item ItemData
 function Slot:setItem(item)
   self.item = item
+end
+
+---@return ItemData?
+function Slot:getItem()
+  return self.item
 end
 
 ---@param dir4 Direction4
@@ -54,7 +59,7 @@ end
 
 function Slot:draw()
   if self.item then
-    self.item:drawSlot(self.positionX, self.positionY)
+    -- TODO
   end
 end
 
