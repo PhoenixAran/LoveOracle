@@ -6,16 +6,16 @@ local Input = require('engine.singletons').input
 local NLay = require 'lib.nlay'
 local GameConfig = require 'game_config'
 local AssetManager = require 'engine.asset_manager'
-local Menu = require 'engine.menu.menu'
+local BaseMenuState = require 'engine.control.menu.base_menu_state'
+local Singletons = require 'engine.singletons'
 
 
----@class MenuInventory : Menu
----@field lastRoomState GameState? the last room state that was active. Used to pass into the inventory game state when it is opened from a room state, so that the inventory can be drawn over the gameplay screen
+---@class MenuInventoryState : BaseMenuState
 ---@field itemPanel NinePatchSprite the panel that items are drawn on in the inventory
 ---@field itemPanelRect NLay.Constraint
 ---@field itemDetailsPanel NinePatchSprite the panel that item details are drawn on in the inventory
 ---@field itemDetailsPanelRect NLay.Constraint
-local MenuInventory = Class { __includes = Menu,
+local MenuInventoryState = Class { __includes = BaseMenuState,
   init = function(self)
     -- set up NLay layout
     local uiPadding = 2
@@ -41,11 +41,11 @@ local MenuInventory = Class { __includes = Menu,
   end
 }
 
-function MenuInventory:getType()
+function MenuInventoryState:getType()
   return 'menu_inventory'
 end
 
-function MenuInventory:drawPanel(rectConstraint, panelSprite, panelLabel, xPadding)
+function MenuInventoryState:drawPanel(rectConstraint, panelSprite, panelLabel, xPadding)
   local originalWidth = panelSprite:getWidth()
   local originalHeight = panelSprite:getHeight()
   if xPadding == nil then
@@ -84,15 +84,20 @@ function MenuInventory:drawPanel(rectConstraint, panelSprite, panelLabel, xPaddi
   end
 end
 
-function MenuInventory:update()
+function MenuInventoryState:onBegin()
+  self.lastRoomState = Singletons.gameControl.roomControl.roomStateStack:getCurrentState()
 
+  -- build the grid of items
+  
+end
+
+function MenuInventoryState:update()
+  
 end
 
 
-function MenuInventory:draw()
-  if self.lastRoomState then
-    self.lastRoomState:draw()
-  end
+function MenuInventoryState:draw()
+  self:drawLastRoomState()
   local font = AssetManager.getFont('game_font')
   love.graphics.setFont(font)
 
@@ -101,4 +106,4 @@ function MenuInventory:draw()
 end
 
 
-return MenuInventory
+return MenuInventoryState

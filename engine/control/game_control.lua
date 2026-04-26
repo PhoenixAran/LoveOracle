@@ -58,6 +58,14 @@ function GameControl:getRoomControl()
   return self.roomControl
 end
 
+---@return GameState? currentRoomState current room state
+function GameControl:getCurrentRoomState()
+  if self.roomControl then
+    return self.roomControl.roomStateStack:getCurrentState()
+  end
+  return nil
+end
+
 ---@return Inventory
 function GameControl:getInventory()
   return self.inventory
@@ -167,12 +175,12 @@ function GameControl:popState()
 end
 
 -- helper state functions
+
 function GameControl:openMenu()
   if self.gameStateMenu == nil then
     -- use the engine default
-    local DefaultGameStateMenu = require('engine.control.game_states.game_state_menu')
-    local lastRoomState = self.roomControl.roomStateStack:getCurrentState()
-    self.gameStateMenu = DefaultGameStateMenu({lastRoomState = lastRoomState})
+    local DefaultGameStateMenu = require('engine.control.menu.menu_inventory_state')
+    self.gameStateMenu = DefaultGameStateMenu()
   end
   self:pushState(self.gameStateMenu)
 end

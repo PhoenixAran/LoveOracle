@@ -1,5 +1,5 @@
 local Class = require 'lib.class'
-local Slot = require 'engine.menu.slot'
+local Slot = require 'engine.control.menu.slot'
 local lume = require 'lib.lume'
 
 ---@class SlotGroup

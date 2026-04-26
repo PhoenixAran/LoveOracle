@@ -11,6 +11,7 @@ local MenuInventory = require 'engine.menu.menu_inventory'
 
 --- Game state for inventory screen
 --- The default engine implementation if data directory does not implement one
+---@deprecated
 ---@class GameStateMenu : GameState
 ---@field menuInventory MenuInventory
 ---@field lastRoomState GameState?

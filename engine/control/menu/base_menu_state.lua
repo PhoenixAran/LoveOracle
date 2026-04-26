@@ -2,17 +2,20 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 local GameState = require 'engine.control.game_state'
 local Input = require('engine.singletons').input
-local SlotGroup = require 'engine.menu.slot_group'
+local SlotGroup = require 'engine.control.menu.slot_group'
 local Direction4 = require 'engine.enums.direction4'
 local AngleSnap = require 'engine.enums.angle_snap'
 local SpriteBank = require 'engine.banks.sprite_bank'
+local Singletons = require 'engine.singletons'
 
 --- base class you can use for menu states
 --- contains convenience methods for navigating between slots and slot groups
----@class Menu : GameState
+---@class BaseMenuState : GameState
 ---@field slotGroups SlotGroup[]
 ---@field currentSlotGroup SlotGroup
 ---@field slotCursor Sprite|CompositeSprite the cursor that is drawn over the currently selected slot
+---@field drawLastRoomState boolean whether to draw the last room state in the background when this menu is open. Defaults to true, but can be set to false for menus like the start menu where you don't want to show the game screen in the background
+---@field lastRoomState GameState? the last room state
 local MenuState = Class { __includes = GameState,
   init = function(self)
     GameState.init(self)
@@ -88,6 +91,17 @@ function MenuState:drawSlots()
 
   for _, slotGroup in ipairs(self.slotGroups) do
     slotGroup:draw()
+  end
+end
+
+function MenuState:onBegin()
+  self.lastRoomState = Singletons.gameControl:getCurrentRoomState()
+end
+
+--- draws last room state if drawLastRoomState is true and lastRoomState is not nil
+function MenuState:drawLastRoomState()
+  if self.lastRoomState and self.drawLastRoomState then
+    self.lastRoomState:draw()
   end
 end
 
