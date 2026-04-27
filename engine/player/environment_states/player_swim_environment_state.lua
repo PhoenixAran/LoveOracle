@@ -80,6 +80,7 @@ end
 ---@param previousState PlayerState
 function PlayerSwimEnvironmentState:onBegin(previousState)
   self.stateParameters.animations.default = 'swim'
+  self.stateParameters.animations.move = 'swim'
   self.stateParameters.interactionCollisions = true
   self.player:interruptItems()
   self.isSubmerged = false
