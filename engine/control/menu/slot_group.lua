@@ -16,12 +16,11 @@ function SlotGroup:getType()
   return 'slot_group'
 end
 
----@param slot Slot
 ---@param positionX number
 ---@param positionY number
 ---@param width number
 ---@return Slot slot
-function SlotGroup:addSlot(slot, positionX, positionY, width)
+function SlotGroup:addSlot(positionX, positionY, width)
   local slot = Slot(self, positionX, positionY, width)
   lume.push(self.slots, slot)
   return slot

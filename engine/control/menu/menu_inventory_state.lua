@@ -11,10 +11,22 @@ local Singletons = require 'engine.singletons'
 local Input = Singletons.input
 local Slot = require 'engine.control.menu.slot'
 local SlotGroup = require 'engine.control.menu.slot_group'
+local Direction4 = require 'engine.enums.direction4'
 
 -- TODO we need to support paging inside panels somehow
 -- TODO support descriptions having simple {color #hex} tags to change the color until the next tag
 -- TODO still need to support ammo and ammo countainers and amount based items
+-- TODO event listeners for when items are equipped/unequipped and added/removed from inventory to update the menu
+
+-- TODO support paging
+local GRID_SIZE_X = 10
+local GRID_SIZE_Y = 4
+local GRID_WIDTH = 12
+local GRID_HEIGHT = 24
+
+local function indexOf(x, y)
+  return (y - 1) * GRID_SIZE_X + x
+end
 
 ---@class MenuInventoryState : BaseMenuState
 ---@field itemPanel NinePatchSprite the panel that items are drawn on in the inventory
@@ -27,6 +39,7 @@ local SlotGroup = require 'engine.control.menu.slot_group'
 ---@field textTimer integer
 ---@field textStart integer
 ---@field description string
+---@field inventoryItemsPopulated boolean
 local MenuInventoryState = Class { __includes = BaseMenuState,
   init = function(self)
     BaseMenuState.init(self)
@@ -59,6 +72,50 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
 
     -- TODO eventually use this
     self.inSubMenu = false
+
+    ---@type SlotGroup
+    local group = SlotGroup()
+    self.currentSlotGroup = group
+    lume.push(self.slotGroups, group)
+    ---@type Slot[]
+    local slots = { }
+
+
+    -- create the grid slot
+    local rx, ry, rw, rh = self.itemPanelRect:get()
+    local xModifier = 8
+    local yModifier = 8
+
+    for y = 1, GRID_SIZE_Y do
+      for x = 1, GRID_SIZE_X do
+        local index = indexOf(x, y)
+        local slotX = (GRID_WIDTH * (x - 1)) + rx + xModifier
+        local slotY = (GRID_HEIGHT * (y - 1)) + ry + yModifier
+        slots[index] = group:addSlot(slotX, slotY, GRID_WIDTH)
+      end
+    end
+
+    -- set up slot connections
+    for y = 1, GRID_SIZE_Y do
+      for x = 1, GRID_SIZE_X do
+        local index = (y - 1) * GRID_SIZE_X + x
+        
+        local leftX = (x == 1) and GRID_SIZE_X or (x - 1)
+        local rightX = (x == GRID_SIZE_X) and 1 or (x + 1)
+
+        local upY = (y == 1) and GRID_SIZE_Y or (y - 1)
+        local downY = (y == GRID_SIZE_Y) and 1 or (y + 1)
+
+        slots[index]:setConnection(Direction4.left, slots[indexOf(leftX, y)])
+        slots[index]:setConnection(Direction4.right, slots[indexOf(rightX, y)])
+        slots[index]:setConnection(Direction4.up, slots[indexOf(x, upY)])
+        slots[index]:setConnection(Direction4.down, slots[indexOf(x, downY)])
+      end
+    end
+
+    self.inventoryItemsPopulated = false
+    group.slots = slots
+    lume.push(self.slotGroups, group)
   end
 }
 
@@ -66,34 +123,38 @@ function MenuInventoryState:getType()
   return 'menu_inventory'
 end
 
-function MenuInventoryState:onBegin()
-  BaseMenuState.onBegin(self)
+function MenuInventoryState:getNextAvailableSlot()
+  local slotGroup = self.slotGroups[1]
+  if slotGroup == nil then 
+    return nil
+  end
 
-  -- clear out old slots
-  self.slotGroups = { }
-  self.currentSlotGroup = nil
-
-  -- build the grid of items
-  local GRID_SIZE_X = 10
-  local GRID_SIZE_Y = 4
-
-  local slotGroup = SlotGroup()
-  self.currentSlotGroup = slotGroup
-  for y = 1, GRID_SIZE_Y do
-    for x = 1, GRID_SIZE_X do
-      local slot = slotGroup:addSlot(nil, 0, 0, 0)
-      if x > 1 then
-        slot:setConnection('left', slotGroup:getSlotAt((y - 1) * GRID_SIZE_X + (x - 1)))
-      end
-
-      if y > 1 then
-        slot:setConnection('up', slotGroup:getSlotAt((y - 2) * GRID_SIZE_X + x))
-      end
+  for k, v in ipairs(slotGroup:getSlots()) do
+    if v:getItem() == nil then
+      return v
     end
   end
 
+  return nil
+end
 
-  lume.push(self.slotGroups, slotGroup)
+function MenuInventoryState:onBegin()
+  BaseMenuState.onBegin(self)
+  local gameControl = Singletons.gameControl
+  if not self.inventoryItemsPopulated and gameControl:getInventory() then
+    local inventory = gameControl:getInventory()
+    for i, v in ipairs(inventory.items) do
+      local item = v
+      local slot = self:getNextAvailableSlot()
+      if slot then
+        slot:setItem(item)
+      else
+        -- TODO handle no more inventory space in the menu
+        break
+      end
+    end
+    self.inventoryItemsPopulated = true
+  end
 end
 
 function MenuInventoryState:update()
@@ -110,10 +171,24 @@ function MenuInventoryState:draw()
 
   love.graphics.setFont(AssetManager.getFont('ui_panel_label'))
   self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEMS', 12)
+  self:drawPanelItems()
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
   
 end
 
+function MenuInventoryState:drawPanelItems()
+  local slotGroup = self.slotGroups[1]
+  if slotGroup then
+    for k, v in pairs(slotGroup:getSlots()) do
+      local slot = v
+      if slot:getItem() then
+        local itemSprite = slot:getItem():getMenuSprite()
+        local x, y = slot:getPosition()
+        itemSprite:draw(x, y)
+      end
+    end
+  end
+end
 
 function MenuInventoryState:resetDescription()
   local slotItem = self.currentSlotGroup:getCurrentSlot():getItem()

@@ -43,7 +43,7 @@ local GameControl = Class { __includes = SignalObject,
     self.entityDebugDrawFlags = 0
     --self.entityDebugDrawFlags = bit.bor(EntityDebugDrawFlags.BumpBox, EntityDebugDrawFlags.RoomBox, EntityDebugDrawFlags.HitBox)
 
-    self.gameStateMenu = nil
+    self.gameStateMenu = require('engine.control.menu.menu_inventory_state')()
     -- TODO also make this customizable by the Data folder
     self.hud = Hud()
   end
@@ -177,11 +177,6 @@ end
 -- helper state functions
 
 function GameControl:openMenu()
-  if self.gameStateMenu == nil then
-    -- use the engine default
-    local DefaultGameStateMenu = require('engine.control.menu.menu_inventory_state')
-    self.gameStateMenu = DefaultGameStateMenu()
-  end
   self:pushState(self.gameStateMenu)
 end
 

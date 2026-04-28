@@ -16,6 +16,7 @@ ItemBank.registerItem(swordData)
 -- shield
 local shieldData = ItemBank.createItemData('item_shield')
 shieldData:setEquippable(true)
+shieldData:setMenuSprite({'icon_shield_1', 'icon_shield_2', 'icon_shield_3'})
 shieldData:setItemType(1, require('engine.items.weapons.item_shield'))
 -- todo uncomment below when item_shield takes levels into account
 -- shieldData:setItemType(2, require('engine.items.equipment.item_shield'))

@@ -74,4 +74,26 @@ function InventoryItem:createItem()
   return self.itemData.itemTypes[level](self, initArgs)
 end
 
+function InventoryItem:getMenuSprite()
+  local level = self:getLevel()
+  if not self.itemData:isLeveled() then
+    level = 1
+  end
+  if lume.count(self.itemData.menuSprites) == 1 then
+    level = 1
+  end
+  return self.itemData.menuSprites[level]
+end
+
+function InventoryItem:getDescription()
+  local level = self:getLevel()
+  if not self.itemData:isLeveled() then
+    level = 1
+  end
+  if lume.count(self.itemData.descriptions) == 1 then
+    level = 1
+  end
+  return self.itemData.descriptions[level]
+end
+
 return InventoryItem
