@@ -19,10 +19,11 @@ local Direction4 = require 'engine.enums.direction4'
 -- TODO event listeners for when items are equipped/unequipped and added/removed from inventory to update the menu
 
 -- TODO support paging
-local GRID_SIZE_X = 10
+local GRID_SIZE_X = 17
 local GRID_SIZE_Y = 4
 local GRID_WIDTH = 12
-local GRID_HEIGHT = 24
+local GRID_HEIGHT = 16
+local MENU_NAVIGATION_ICON_WIDTH = 16
 
 local function indexOf(x, y)
   return (y - 1) * GRID_SIZE_X + x
@@ -85,16 +86,19 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
     local rx, ry, rw, rh = self.itemPanelRect:get()
     local xModifier = 8
     local yModifier = 8
+    local gridTotalWidth = GRID_WIDTH * GRID_SIZE_X
+    
+    -- Absolute centering: Start at panel edge, add half of the leftover space
+    local gridStartX = rx + (rw - gridTotalWidth) / 2
 
     for y = 1, GRID_SIZE_Y do
       for x = 1, GRID_SIZE_X do
         local index = indexOf(x, y)
-        local slotX = (GRID_WIDTH * (x - 1)) + rx + xModifier
-        local slotY = (GRID_HEIGHT * (y - 1)) + ry + yModifier
+        local slotX = gridStartX + GRID_WIDTH * (x - 1)
+        local slotY = ry + yModifier + GRID_HEIGHT * (y - 1)
         slots[index] = group:addSlot(slotX, slotY, GRID_WIDTH)
       end
     end
-
     -- set up slot connections
     for y = 1, GRID_SIZE_Y do
       for x = 1, GRID_SIZE_X do
@@ -173,7 +177,7 @@ function MenuInventoryState:draw()
   self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEMS', 12)
   self:drawPanelItems()
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
-  
+  self:debugDrawSlots()
 end
 
 function MenuInventoryState:drawPanelItems()
@@ -186,6 +190,17 @@ function MenuInventoryState:drawPanelItems()
         local x, y = slot:getPosition()
         itemSprite:draw(x, y)
       end
+    end
+  end
+end
+
+function MenuInventoryState:debugDrawSlots()
+  local slotGroup = self.slotGroups[1]
+  if slotGroup then
+    for k, v in pairs(slotGroup:getSlots()) do
+      local slot = v
+      local x, y = slot:getPosition()
+      love.graphics.rectangle('line', x, y, GRID_WIDTH, GRID_HEIGHT)
     end
   end
 end
