@@ -9,6 +9,7 @@ local GameConfig = require 'game_config'
 local DisplayHandler = require 'engine.display_handler'
 local Singletons = require 'engine.singletons'
 local GamepadGuesser = require 'lib.gamepadguesser'
+local Platform = require 'engine.platform'
 
 
 
@@ -54,30 +55,11 @@ local Hud = Class { __includes = SignalObject,
     self.equipmentSlot = SpriteBank.getSprite('hud_equipment_slot')
     
     
-    local gamepadConsole = 'pc'
+    local gamepadType = Platform.getGamepadType()
 
-    local joysticks = love.joystick.getJoysticks()
-    local firstJoystick = joysticks[1]
-    if firstJoystick then
-      -- only support one joystick
-      -- TODO might be better to have the console value directly in Singletons like Singletons.console
-      -- so for eventual ports it can just be set via game_config
-      -- then if its 'PC' we can use gamepad guesser, otherwise we can just set it to the correct console value for that platform and skip gamepad guesser entirely
-      if Singletons.joystickData then
-        Singletons.joystickData:addJoystick(firstJoystick)
-        gamepadConsole = Singletons.joystickData.joysticks[firstJoystick]
-      else
-        gamepadConsole = GamepadGuesser.joystickToConsole(firstJoystick)
-      end
-
-      if not (gamepadConsole == 'nintendo' or gamepadConsole == 'xbox' or gamepadConsole == 'playstation') then
-        gamepadConsole = 'xbox' -- default to xbox button prompts if we can't identify the controller type
-      end
-    end
-
-    self.bSlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_b_button')
-    self.xSlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_x_button')
-    self.ySlotButtonSprite = SpriteBank.getSprite(gamepadConsole .. '_y_button')
+    self.bSlotButtonSprite = SpriteBank.getSprite(gamepadType .. '_b_slot_button')
+    self.xSlotButtonSprite = SpriteBank.getSprite(gamepadType .. '_x_slot_button')
+    self.ySlotButtonSprite = SpriteBank.getSprite(gamepadType .. '_y_slot_button')
 
     self.slotButtonSprites = { self.bSlotButtonSprite, self.xSlotButtonSprite, self.ySlotButtonSprite }
     self.slots = { 'b', 'x', 'y' }

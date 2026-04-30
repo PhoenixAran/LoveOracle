@@ -12,6 +12,7 @@ local Input = Singletons.input
 local Slot = require 'engine.control.menu.slot'
 local SlotGroup = require 'engine.control.menu.slot_group'
 local Direction4 = require 'engine.enums.direction4'
+local Platform = require 'engine.platform'
 
 -- TODO we need to support paging inside panels somehow
 -- TODO support descriptions having simple {color #hex} tags to change the color until the next tag
@@ -19,11 +20,10 @@ local Direction4 = require 'engine.enums.direction4'
 -- TODO event listeners for when items are equipped/unequipped and added/removed from inventory to update the menu
 
 -- TODO support paging
-local GRID_SIZE_X = 17
+local GRID_SIZE_X = 14
 local GRID_SIZE_Y = 4
 local GRID_WIDTH = 12
 local GRID_HEIGHT = 16
-local MENU_NAVIGATION_ICON_WIDTH = 16
 
 local function indexOf(x, y)
   return (y - 1) * GRID_SIZE_X + x
@@ -41,6 +41,8 @@ end
 ---@field textStart integer
 ---@field description string
 ---@field inventoryItemsPopulated boolean
+---@field leftTriggerButtonSprite Sprite
+---@field rightTriggerButtonSprite Sprite
 local MenuInventoryState = Class { __includes = BaseMenuState,
   init = function(self)
     BaseMenuState.init(self)
@@ -49,12 +51,19 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
     NLay.update(0, 0, GameConfig.window.displayConfig.gameWidth, GameConfig.window.displayConfig.gameHeight)
     local root = NLay
 
+    -- left trigger icons
+    local gamepadType = Platform.getGamepadType()
+    self.leftTriggerButtonSprite = SpriteBank.getSprite(gamepadType .. '_left_trigger_button')
+    self.rightTriggerButtonSprite = SpriteBank.getSprite(gamepadType .. '_right_trigger_button')
+
     -- top menu box
+    -- local panelRectW = -1
+    local panelRectW = GameConfig.window.displayConfig.gameWidth * 0.75
     self.itemPanelRect = NLay.constraint(root, root, root, nil, root, uiPadding)
-                            :size(-1, GameConfig.window.displayConfig.gameHeight * 0.65)
+                            :size(panelRectW, GameConfig.window.displayConfig.gameHeight * 0.65)
     -- bottom panel box, used for item description
     self.itemDetailsPanelRect = NLay.constraint(root, self.itemPanelRect, root, nil, root, uiPadding)
-                            :size(-1, GameConfig.window.displayConfig.gameHeight * 0.2)
+                            :size(panelRectW, GameConfig.window.displayConfig.gameHeight * 0.2)
 
     local ipx, ipy, ipw, iph = self.itemPanelRect:get()
     ipw = math.floor(ipw + 0.5)
@@ -88,8 +97,9 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
     local yModifier = 8
     local gridTotalWidth = GRID_WIDTH * GRID_SIZE_X
     
-    -- Absolute centering: Start at panel edge, add half of the leftover space
+    -- this one centers it
     local gridStartX = rx + (rw - gridTotalWidth) / 2
+    --local gridStartX = rx + xModifier
 
     for y = 1, GRID_SIZE_Y do
       for x = 1, GRID_SIZE_X do
@@ -103,7 +113,7 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
     for y = 1, GRID_SIZE_Y do
       for x = 1, GRID_SIZE_X do
         local index = (y - 1) * GRID_SIZE_X + x
-        
+
         local leftX = (x == 1) and GRID_SIZE_X or (x - 1)
         local rightX = (x == GRID_SIZE_X) and 1 or (x + 1)
 
@@ -178,6 +188,7 @@ function MenuInventoryState:draw()
   self:drawPanelItems()
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
   self:debugDrawSlots()
+  self:drawTriggerButtonPrompts()
 end
 
 function MenuInventoryState:drawPanelItems()
@@ -214,6 +225,18 @@ function MenuInventoryState:resetDescription()
   end
 
   -- TODO handle description
+end
+
+function MenuInventoryState:drawTriggerButtonPrompts()
+  -- draw left trigger sprite to the left of the item panel and right trigger sprite to the right of the item panel
+  local ipx, ipy, ipw, iph = self.itemPanelRect:get()
+  local leftTriggerX = ipx - 16 - 4
+  local leftTriggerY = ipy + iph / 2 - self.leftTriggerButtonSprite:getHeight() / 2
+  self.leftTriggerButtonSprite:draw(leftTriggerX, leftTriggerY)
+
+  local rightTriggerX = ipx + ipw + 4
+  local rightTriggerY = ipy + iph / 2 - self.rightTriggerButtonSprite:getHeight() / 2
+  self.rightTriggerButtonSprite:draw(rightTriggerX, rightTriggerY)
 end
 
 function MenuInventoryState:updateDescription()

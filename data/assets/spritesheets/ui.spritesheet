@@ -6,3 +6,7 @@
 "ui_bars_small", "ui_bars_small", 16, 16, 0, 0
 "ui_bars_border_9", "ui_bars_border_9", 7, 5
 "ui_small", "ui_small", 8, 8
+"buttons_kbm", "buttons_kbm", 16, 16
+"buttons_playstation", "buttons_playstation", 16, 16
+"buttons_switch", "buttons_switch", 16, 16
+"buttons_xbox", "buttons_xbox", 16, 16
