@@ -2,7 +2,7 @@ local Class = require 'lib.class'
 local lume = require 'lib.lume'
 
 ---@class GameStateStack
----@field control GameControl
+---@field control any
 ---@field states GameState[]
 local GameStateStack = Class {
   init = function(self, control)
