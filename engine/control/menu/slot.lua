@@ -63,7 +63,13 @@ end
 
 function Slot:draw()
   if self.item then
-    -- TODO
+    local sprite = self.item:getMenuSprite()
+    if sprite then
+      -- draw item sprite centered horizontally
+      local x, y = self.positionX, self.positionY
+      x = x + (self.width - sprite:getWidth()) / 2
+      sprite:draw(x, y)
+    end
   end
 end
 

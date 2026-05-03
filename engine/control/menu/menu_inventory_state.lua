@@ -19,7 +19,7 @@ local Platform = require 'engine.platform'
 -- TODO still need to support ammo and ammo countainers and amount based items
 -- TODO event listeners for when items are equipped/unequipped and added/removed from inventory to update the menu
 
--- TODO support paging
+-- TODO support paging. Paging might be tough with how slots have a set position. could maybe use scissors 
 local GRID_SIZE_X = 14
 local GRID_SIZE_Y = 4
 local GRID_WIDTH = 12
@@ -41,18 +41,21 @@ end
 ---@field textStart integer
 ---@field description string
 ---@field inventoryItemsPopulated boolean
+---@field cursorSprite Sprite
 local MenuInventoryState = Class { __includes = BaseMenuState,
   ---@param self MenuInventoryState
   ---@param parent NLay.Constraint the constraint to use for the root of the menu layout
   init = function(self, parent)
     BaseMenuState.init(self)
+
+    self.slotCursor = SpriteBank.getSprite('inventory_cursor_green')
+
     -- set up NLay layout
     local uiPadding = 1
     NLay.update(0, 0, GameConfig.window.displayConfig.gameWidth, GameConfig.window.displayConfig.gameHeight)
 
 
     -- top menu box
-    -- local panelRectW = -1
     local parentX, parentY, parentW, parentH = parent:get()
     self.itemPanelRect = NLay.constraint(parent, parent, parent, nil, parent, uiPadding)
                             :size(-1, parentH * 0.75)
@@ -125,6 +128,15 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
     self.inventoryItemsPopulated = false
     group.slots = slots
     lume.push(self.slotGroups, group)
+
+    -- set current slot to first slot that is enabled and has an item
+    for k, v in pairs(group.slots) do
+      local slot = v
+      if slot:isEnabled() then
+        group:setCurrentSlot(slot)
+        break
+      end
+    end
   end
 }
 
@@ -167,9 +179,7 @@ function MenuInventoryState:onBegin()
 end
 
 function MenuInventoryState:update()
-  if Input:pressed('start') then
-    self:endState()
-  end
+  self:updateSlotTraversal()
 end
 
 
@@ -180,11 +190,15 @@ function MenuInventoryState:draw()
 
   love.graphics.setFont(AssetManager.getFont('ui_panel_label'))
   self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEMS', 12)
-  self:drawPanelItems()
+  --self:debugDrawSlots()
+  self:drawSlots()
+  --self:drawPanelItems()
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
-  self:debugDrawSlots()
+
 end
 
+
+---@deprecated use slot:draw. Might have to go back to this way if we support paging
 function MenuInventoryState:drawPanelItems()
   local slotGroup = self.slotGroups[1]
   if slotGroup then
@@ -199,6 +213,8 @@ function MenuInventoryState:drawPanelItems()
   end
 end
 
+
+
 function MenuInventoryState:debugDrawSlots()
   local slotGroup = self.slotGroups[1]
   if slotGroup then
@@ -209,6 +225,9 @@ function MenuInventoryState:debugDrawSlots()
     end
   end
 end
+
+
+-- description stuff below here, still need to implement
 
 function MenuInventoryState:resetDescription()
   local slotItem = self.currentSlotGroup:getCurrentSlot():getItem()

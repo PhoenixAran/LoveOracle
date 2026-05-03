@@ -14,7 +14,7 @@ local AssetManager = require 'engine.asset_manager'
 ---@class BaseMenuState : GameState
 ---@field slotGroups SlotGroup[]
 ---@field currentSlotGroup SlotGroup
----@field slotCursor Sprite|CompositeSprite the cursor that is drawn over the currently selected slot
+---@field slotCursor? Sprite|CompositeSprite the cursor that is drawn over the currently selected slot
 ---@field drawLastRoomState boolean whether to draw the last room state in the background when this menu is open. Defaults to true, but can be set to false for menus like the start menu where you don't want to show the game screen in the background
 ---@field lastRoomState GameState? the last room state
 local BaseMenuState = Class { __includes = GameState,
@@ -22,7 +22,6 @@ local BaseMenuState = Class { __includes = GameState,
     GameState.init(self)
     self.slotGroups = {}
     self.currentSlotGroup = nil
-    self.slotCursor = SpriteBank.getSprite('inventory_cursor_hover')
     self.drawLastRoomState = true
   end
 }
@@ -40,9 +39,18 @@ function BaseMenuState:getCurrentSlotGroup()
 end
 
 function BaseMenuState:getDirection4FromControl()
-  local x, y = Input:get('move')
-  x, y = AngleSnap.toVector(AngleSnap.to4, x, y)
-  return Direction4.getDirection(x, y)
+  -- TODO code so that if one is held down for a little, it starts to go to the next slot
+  -- in the same direction again at a human friendly rate
+
+  if Input:pressed('up') then
+    return Direction4.up
+  elseif Input:pressed('down') then
+    return Direction4.down
+  elseif Input:pressed('left') then
+    return Direction4.left
+  elseif Input:pressed('right') then
+    return Direction4.right
+  end
 end
 
 function BaseMenuState:updateSlotTraversal()
@@ -57,22 +65,28 @@ function BaseMenuState:nextSlot(direction4)
     return
   end
 
+  --print '1'
   local currentSlot = self.currentSlotGroup:getCurrentSlot()
   if currentSlot == nil then 
     return
   end
 
+  --print '2'
   local connection = currentSlot:getConnectionAt(direction4)
   if connection == nil then
     return
   end
 
+  --print '3'
   if connection:getType() == 'slot' then
     ---@type Slot
     local slot = connection
     slot:select()
     if not slot:isEnabled() then
       self:nextSlot(direction4)
+    else
+      -- TOOD remove this branch after debug
+      print 'slot selected'
     end
     -- TODO play audio sound
   else
@@ -85,8 +99,10 @@ end
 
 ---@param slot Slot
 function BaseMenuState:drawSlotCursor(slot)
-  local x, y = slot.positionX, slot.positionY
-  self.slotCursor:draw(x, y)
+  if self.slotCursor then
+    local x, y = slot.positionX, slot.positionY
+    self.slotCursor:draw(x, y)
+  end
 end
 
 function BaseMenuState:drawSlots()
