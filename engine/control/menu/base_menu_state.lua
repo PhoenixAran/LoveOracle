@@ -84,9 +84,6 @@ function BaseMenuState:nextSlot(direction4)
     slot:select()
     if not slot:isEnabled() then
       self:nextSlot(direction4)
-    else
-      -- TOOD remove this branch after debug
-      print 'slot selected'
     end
     -- TODO play audio sound
   else

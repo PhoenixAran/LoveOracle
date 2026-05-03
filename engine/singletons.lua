@@ -7,7 +7,6 @@
 ---@field gameControl GameControl
 ---@field roomControl RoomControl
 ---@field imguiModules any[]
----@field inventory Inventory
 ---@field joystickData any  -- joystick data, used by lib.gamepadguesser to determine gamepad type for correct button icons
 local singletons = {
   input = nil,

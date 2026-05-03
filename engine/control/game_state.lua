@@ -6,7 +6,7 @@ local SignalObject = require 'engine.signal_object'
 ---@field visible boolean
 ---@field control GameControl|RoomControl
 ---@field init function
-local GameState = Class { _includes = SignalObject,
+local GameState = Class { __includes = SignalObject,
   init = function(self)
     SignalObject.init(self)
     self.active = false

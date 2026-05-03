@@ -96,4 +96,8 @@ function InventoryItem:getDescription()
   return self.itemData.descriptions[level]
 end
 
+function InventoryItem:isTwoHanded()
+  return self.itemData:isTwoHanded()
+end
+
 return InventoryItem

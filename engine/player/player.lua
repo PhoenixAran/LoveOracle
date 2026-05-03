@@ -694,8 +694,7 @@ function Player:equipItem(item)
   item:awake()
 end
 
---- unequip the gien usable Item
----@param item Item
+--- unequip the given usable Item
 function Player:unequipItem(item)
 ---@diagnostic disable-next-line: param-type-mismatch
   for i, v in ipairs(item.useButtons) do
@@ -706,6 +705,7 @@ function Player:unequipItem(item)
   item:removed()
   item.transform:setParent(nil) -- remove item transform from child transforms
   item:setPlayer(nil)
+  item:release()
 end
 
 function Player:updateEquippedItems()

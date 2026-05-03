@@ -24,6 +24,7 @@ local lume = require 'lib.lume'
 ---@field buttonSlotItem boolean if item gets assigned a button slot when equipped
 ---@field isEquippable boolean if item can be equipped
 ---@field descriptions string[] item descriptions for each level. If only one description is given, it will be used for all levels
+---@field twoHanded boolean
 local ItemData = Class {
   init = function(self, itemId)
     assert(itemId, 'Item ID cannot be null')
@@ -42,6 +43,7 @@ local ItemData = Class {
     self.equippable = false
     self.maxAmount = 1
     self.descriptions = { '' }
+    self.twoHanded = false
   end
 }
 
@@ -160,6 +162,14 @@ function ItemData:getDescription(level)
   else
     return self.descriptions[level]
   end
+end
+
+function ItemData:setTwoHanded(value)
+  self.twoHanded = value
+end
+
+function ItemData:isTwoHanded()
+  return self.twoHanded
 end
 
 return ItemData

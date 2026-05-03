@@ -13,11 +13,13 @@ local Slot = require 'engine.control.menu.slot'
 local SlotGroup = require 'engine.control.menu.slot_group'
 local Direction4 = require 'engine.enums.direction4'
 local Platform = require 'engine.platform'
+local Singletons = require 'engine.singletons'
+
 
 -- TODO we need to support paging inside panels somehow
 -- TODO support descriptions having simple {color #hex} tags to change the color until the next tag
 -- TODO still need to support ammo and ammo countainers and amount based items
--- TODO event listeners for when items are equipped/unequipped and added/removed from inventory to update the menu
+-- TODO event listeners for when items are added/removed from inventory to update the menu
 
 -- TODO support paging. Paging might be tough with how slots have a set position. could maybe use scissors 
 local GRID_SIZE_X = 14
@@ -47,6 +49,7 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
   ---@param parent NLay.Constraint the constraint to use for the root of the menu layout
   init = function(self, parent)
     BaseMenuState.init(self)
+    self:signal('test')
 
     self.slotCursor = SpriteBank.getSprite('inventory_cursor_green')
 
@@ -159,6 +162,31 @@ function MenuInventoryState:getNextAvailableSlot()
   return nil
 end
 
+--- get the pressed button slot
+---@return string? the button slot that was pressed, or nil if no button slot was pressed
+function MenuInventoryState:getPressedButtonSlot()
+  if Input:pressed('b') then
+    return 'b'
+  end
+  if Input:pressed('x') then
+    return 'x'
+  end
+  if Input:pressed('y') then
+    return 'y'
+  end
+  return nil
+end
+
+---@param buttonSlot string
+function MenuInventoryState:equipItemFromCursor(buttonSlot)
+  local inventory = Singletons.gameControl:getInventory()
+  local currentSlot = self.currentSlotGroup:getCurrentSlot()
+  if currentSlot and currentSlot:getItem() then
+    local item = currentSlot:getItem()
+    inventory:equipItem(item, buttonSlot)
+  end
+end
+
 function MenuInventoryState:onBegin()
   BaseMenuState.onBegin(self)
   local gameControl = Singletons.gameControl
@@ -179,7 +207,18 @@ function MenuInventoryState:onBegin()
 end
 
 function MenuInventoryState:update()
-  self:updateSlotTraversal()
+  if self.inSubMenu then
+    
+  else
+    self:updateSlotTraversal()
+    local buttonSlot = self:getPressedButtonSlot()
+    local currentSlot = self.currentSlotGroup:getCurrentSlot()
+    -- TODO maybe if item is two handed, prevent equipping to the last button slot, as it needs to take up two
+    -- and look nice on the hud?
+    if buttonSlot and currentSlot:getItem() then
+      self:equipItemFromCursor(buttonSlot)
+    end
+  end
 end
 
 
@@ -192,9 +231,7 @@ function MenuInventoryState:draw()
   self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEMS', 12)
   --self:debugDrawSlots()
   self:drawSlots()
-  --self:drawPanelItems()
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
-
 end
 
 

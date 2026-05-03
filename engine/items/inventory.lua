@@ -86,6 +86,9 @@ end
 ---@param inventoryItem InventoryItem|integer the inventory item to equip, either an InventoryItem instance or an inventory item id
 ---@param slot nil|string|string[] the slot(s) to equip the item to, if any
 function Inventory:equipItem(inventoryItem, slot)
+  if self.player == nil then
+    error('Cannot equip item without player set in inventory')
+  end
   if slot ~= nil then
     if type(slot) == 'string' then
       assert(not lume.any(self.protectedSlots, slot))
@@ -111,12 +114,35 @@ function Inventory:equipItem(inventoryItem, slot)
 
   assert(inventoryItem:getItemData():isEquippable(), 'Cannot equip non-equippable item')
 
+  -- unequip any currently equipped items on the button slot, and unequip other button slot if it has the same inventory id
+  local equippedButtonSlotItems = self:getEquippedButtonSlotItems()
+  for buttonSlot, equippedItem in pairs(equippedButtonSlotItems) do
+    local sameButtonSlot = false
+    if type(slot) == 'string' then
+      sameButtonSlot = buttonSlot == slot
+    elseif type(slot) == 'table' then
+      sameButtonSlot = lume.find(slot, buttonSlot) ~= nil
+    end
+    print(love.inspect({
+      equippedItemInventoryId = equippedItem:getInventoryItemId(),
+      inventoryItemId = inventoryItem:getId()
+    }))
+    if equippedItem:getInventoryItemId() == inventoryItem:getId() or sameButtonSlot then
+      self:unequipItemByButtonSlot(buttonSlot)
+    end
+  end
+
   -- create item
   local item = inventoryItem:createItem()
 
+  -- equip item
   if item:isButtonSlotItem() then
     assert(slot, 'Button slot item must be equipped to a slot')
-    -- TODO handle equipping to multiple slots for two handed items. Like the great fairy sword
+    -- TODO handle two handed weapons
+    if inventoryItem:isTwoHanded() then
+      error('Two handed items are not supported yet')
+    end
+
     item:clearUseButtons()
     item:addUseButtons(slot)
     item:setPlayer(self.player)
