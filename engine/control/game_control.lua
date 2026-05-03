@@ -13,6 +13,10 @@ local Hud = require 'engine.control.hud'
 local RoomControl = require 'engine.control.room_control'
 local RoomNormalState = require 'engine.control.game_states.room_states.room_normal_state'
 
+local MenuControl = require 'engine.control.menu.menu_control'
+local MenuInventoryState = require 'engine.control.menu.menu_inventory_state'
+local MenuEquipmentState = require 'engine.control.menu.menu_equipment_state'
+
 local Singletons = require 'engine.singletons'
 local DisplayHandler = require 'engine.display_handler'
 
@@ -27,10 +31,12 @@ local console = require 'lib.console'
 ---@field camera any
 ---@field map Map
 ---@field roomControl RoomControl
+---@field menuControl MenuControl
+---@field menuInventoryState MenuInventoryState
+---@field menuEquipmentState MenuEquipmentState
 ---@field gameStateStack GameStateStack
 ---@field entityDebugDrawFlags integer
 ---@field hud Hud
----@field gameStateMenu GameState? the menu game state type. Made abstract to keep the menu implementation flexible and decoupled from the main engine. If nil uses default engine provided menu system
 local GameControl = Class { __includes = SignalObject,
   init = function(self)
     self.inventory = Inventory()
@@ -41,10 +47,9 @@ local GameControl = Class { __includes = SignalObject,
     self.roomControl = nil
     self.gameStateStack = GameStateStack(self)
     self.entityDebugDrawFlags = 0
-    --self.entityDebugDrawFlags = bit.bor(EntityDebugDrawFlags.BumpBox, EntityDebugDrawFlags.RoomBox, EntityDebugDrawFlags.HitBox)
 
-    self.gameStateMenu = require('engine.control.menu.menu_inventory_state')()
-    -- TODO also make this customizable by the Data folder
+    self.menuControl = MenuControl()
+
     self.hud = Hud()
   end
 }
@@ -101,14 +106,6 @@ function GameControl:setHud(hud)
   self.hud = hud
 end
 
-function GameControl:getGameStateMenu()
-  return self.gameStateMenu
-end
-
-function GameControl:setGameStateMenu(gameStateMenu)
-  self.gameStateMenu = gameStateMenu
-end
-
 --- creates the initial room control state. called when game starts
 ---@param room Room
 ---@param spawnPositionX integer?
@@ -141,8 +138,6 @@ function GameControl:setInitialRoomControlState(room, spawnPositionX, spawnPosit
   Camera.syncSmoothingPositionWithActualPosition()
   -- push room control state so user can actually start playing
   self:pushState(self.roomControl)
-
-  -- set singleton
 end
 
 function GameControl:update()
@@ -176,8 +171,11 @@ end
 
 -- helper state functions
 
-function GameControl:openMenu()
-  self:pushState(self.gameStateMenu)
+--- opens menu with given menu key / menu state type
+---@param menu string|BaseMenuState the menu state to open, can be a string key or the menu state itself
+function GameControl:openMenu(menu)
+  self.menuControl:pushState(menu)
+  self:pushState(self.menuControl)
 end
 
 

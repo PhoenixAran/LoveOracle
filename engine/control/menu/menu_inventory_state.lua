@@ -41,29 +41,24 @@ end
 ---@field textStart integer
 ---@field description string
 ---@field inventoryItemsPopulated boolean
----@field leftTriggerButtonSprite Sprite
----@field rightTriggerButtonSprite Sprite
 local MenuInventoryState = Class { __includes = BaseMenuState,
-  init = function(self)
+  ---@param self MenuInventoryState
+  ---@param parent NLay.Constraint the constraint to use for the root of the menu layout
+  init = function(self, parent)
     BaseMenuState.init(self)
     -- set up NLay layout
-    local uiPadding = 2
+    local uiPadding = 1
     NLay.update(0, 0, GameConfig.window.displayConfig.gameWidth, GameConfig.window.displayConfig.gameHeight)
-    local root = NLay
 
-    -- left trigger icons
-    local gamepadType = Platform.getGamepadType()
-    self.leftTriggerButtonSprite = SpriteBank.getSprite(gamepadType .. '_left_trigger_button')
-    self.rightTriggerButtonSprite = SpriteBank.getSprite(gamepadType .. '_right_trigger_button')
 
     -- top menu box
     -- local panelRectW = -1
-    local panelRectW = GameConfig.window.displayConfig.gameWidth * 0.75
-    self.itemPanelRect = NLay.constraint(root, root, root, nil, root, uiPadding)
-                            :size(panelRectW, GameConfig.window.displayConfig.gameHeight * 0.65)
+    local parentX, parentY, parentW, parentH = parent:get()
+    self.itemPanelRect = NLay.constraint(parent, parent, parent, nil, parent, uiPadding)
+                            :size(-1, parentH * 0.75)
     -- bottom panel box, used for item description
-    self.itemDetailsPanelRect = NLay.constraint(root, self.itemPanelRect, root, nil, root, uiPadding)
-                            :size(panelRectW, GameConfig.window.displayConfig.gameHeight * 0.2)
+    self.itemDetailsPanelRect = NLay.constraint(parent, self.itemPanelRect, parent, nil, parent, uiPadding)
+                            :size(-1, parentH * 0.25)
 
     local ipx, ipy, ipw, iph = self.itemPanelRect:get()
     ipw = math.floor(ipw + 0.5)
@@ -188,7 +183,6 @@ function MenuInventoryState:draw()
   self:drawPanelItems()
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
   self:debugDrawSlots()
-  self:drawTriggerButtonPrompts()
 end
 
 function MenuInventoryState:drawPanelItems()
@@ -225,18 +219,6 @@ function MenuInventoryState:resetDescription()
   end
 
   -- TODO handle description
-end
-
-function MenuInventoryState:drawTriggerButtonPrompts()
-  -- draw left trigger sprite to the left of the item panel and right trigger sprite to the right of the item panel
-  local ipx, ipy, ipw, iph = self.itemPanelRect:get()
-  local leftTriggerX = ipx - 16 - 4
-  local leftTriggerY = ipy + iph / 2 - self.leftTriggerButtonSprite:getHeight() / 2
-  self.leftTriggerButtonSprite:draw(leftTriggerX, leftTriggerY)
-
-  local rightTriggerX = ipx + ipw + 4
-  local rightTriggerY = ipy + iph / 2 - self.rightTriggerButtonSprite:getHeight() / 2
-  self.rightTriggerButtonSprite:draw(rightTriggerX, rightTriggerY)
 end
 
 function MenuInventoryState:updateDescription()

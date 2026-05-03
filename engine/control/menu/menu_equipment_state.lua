@@ -13,3 +13,18 @@ local Slot = require 'engine.control.menu.slot'
 local SlotGroup = require 'engine.control.menu.slot_group'
 local Direction4 = require 'engine.enums.direction4'
 local Platform = require 'engine.platform'
+
+---@class MenuEquipmentState : BaseMenuState
+local MenuEquipmentState = Class { __includes = BaseMenuState,
+  init = function(self)
+    BaseMenuState.init(self)
+  end
+}
+
+function MenuEquipmentState:getType()
+  return 'menu_equipment_state'
+end
+
+-- TODO implement rest of class
+
+return MenuEquipmentState
