@@ -696,9 +696,9 @@ end
 
 --- unequip the given usable Item
 function Player:unequipItem(item)
----@diagnostic disable-next-line: param-type-mismatch
   for i, v in ipairs(item.useButtons) do
     if self.buttonSlotItems[v] == item then
+      print('unequipping item from button slot', v)
       self.buttonSlotItems[v] = nil
     end
   end

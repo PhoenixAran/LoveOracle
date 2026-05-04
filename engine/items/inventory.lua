@@ -22,6 +22,7 @@ local Inventory = Class { __includes = SignalObject,
     -- TODO prevent sprint boots button, to whatever it will be
     self.protectedSlots = {
       'a', -- reserved for Roc feather when unlocked. It is also the interact button and swim button when in water
+      'leftShoulder'
     }
 
     self.items = { }
@@ -54,14 +55,15 @@ end
 -- TODO get method to get eqipped non button slot items
 
 --- get all equipped items, including both button slot and non-button slot items
---- @return 
+--- @return Item[] list of all equipped items
 function Inventory:getAllEquippedItems()
   -- no non button slot items implemented yet
-  local equipedItems = { }
+  local items = { }
   local equippedItems =  self:getEquippedButtonSlotItems()
   for _, item in pairs(equippedItems) do
-    lume.push(equipedItems, item)
+    lume.push(items, item)
   end
+  return items
 end
 
 ---@param inventoryItemId integer
@@ -85,6 +87,7 @@ end
 --- equip an item on the player
 ---@param inventoryItem InventoryItem|integer the inventory item to equip, either an InventoryItem instance or an inventory item id
 ---@param slot nil|string|string[] the slot(s) to equip the item to, if any
+---@return boolean success whether the item was succesfully equipped or not
 function Inventory:equipItem(inventoryItem, slot)
   if self.player == nil then
     error('Cannot equip item without player set in inventory')
@@ -107,7 +110,7 @@ function Inventory:equipItem(inventoryItem, slot)
     local inventoryItemId = inventoryItem
     inventoryItem = self:getItem(inventoryItemId)
     if inventoryItem == nil then
-      return
+      return false
     end
   end
 
@@ -123,12 +126,8 @@ function Inventory:equipItem(inventoryItem, slot)
     elseif type(slot) == 'table' then
       sameButtonSlot = lume.find(slot, buttonSlot) ~= nil
     end
-    print(love.inspect({
-      equippedItemInventoryId = equippedItem:getInventoryItemId(),
-      inventoryItemId = inventoryItem:getId()
-    }))
     if equippedItem:getInventoryItemId() == inventoryItem:getId() or sameButtonSlot then
-      self:unequipItemByButtonSlot(buttonSlot)
+      self:unequipItem(equippedItem:getInventoryItem())
     end
   end
 
@@ -152,16 +151,20 @@ function Inventory:equipItem(inventoryItem, slot)
     -- TODO things like rings and different tunics should be equippable but not button slot items. For now, just equip them to the first slot, but eventually they should be able to be equipped 
     -- without a slot or to specific non-button slots
   end
+
+
+  return true
 end
 
 ---@param inventoryItem InventoryItem|integer the inventory item to unequip, either an InventoryItem instance or an inventory item id
+---@return boolean success wheter the item was succesfully unequipped or not
 function Inventory:unequipItem(inventoryItem)
   if type(inventoryItem) == 'number' then
     ---@cast inventoryItem integer
     local inventoryItemId = inventoryItem
     inventoryItem = self:getItem(inventoryItemId)
     if inventoryItem == nil then
-      return
+      return false
     end
   end
 
@@ -169,16 +172,17 @@ function Inventory:unequipItem(inventoryItem)
 
   local allEquippedItems = self:getAllEquippedItems()
   if allEquippedItems then
-    local equippedItemIndex = lume.find(allEquippedItems, function(equippedItem)
-      return equippedItem:getInventoryItemId() == inventoryItem:getId()
-    end)
-    if equippedItemIndex then
-      local equippedItem = allEquippedItems[equippedItemIndex]
-      equippedItem:unequip()
-      equippedItem:setPlayer(nil)
-      equippedItem:clearUseButtons()
+    for _, equippedItem in pairs(allEquippedItems) do
+      if equippedItem:getInventoryItemId() == inventoryItem:getId() then
+        equippedItem:unequip()
+        equippedItem:setPlayer(nil)
+        equippedItem:clearUseButtons()
+        break
+      end
     end
+
   end
+  return true
 end
 
 function Inventory:unequipItemByButtonSlot(slot)
