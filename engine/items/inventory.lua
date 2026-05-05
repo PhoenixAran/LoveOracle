@@ -3,6 +3,7 @@ local SignalObject = require 'engine.signal_object'
 local ItemBank = require 'engine.banks.item_bank'
 local lume = require 'lib.lume'
 local InventoryItem = require 'engine.items.inventory_item'
+local ControlHelper = require 'engine.utils.control_helper'
 
 -- TODO refactor to use InventoryItem instead of ItemData directly
 -- necessary to support a more flexible inventory system like harvest moon
@@ -133,7 +134,6 @@ function Inventory:equipItem(inventoryItem, slot)
       
       -- if this is the same inventory item instance, we reuse it and just swap it to another slot
       if equippedItem:getInventoryItemId() == inventoryItem:getId() then
-        print '1'
         if sameButtonSlot then
           -- already equipped to the same slot, nothing to do
           -- TODO figure out how to handle this with two handed weapons that occupy multiple slots

@@ -23,6 +23,7 @@ local PlayerSkills = require 'engine.player.player_skills'
 local bit = require 'bit'
 local EntityDebugDrawFlags = require('engine.enums.flags.entity_debug_draw_flags').enumMap
 local CollisionTag = require 'engine.enums.collision_tag'
+local ControlHelper = require 'engine.utils.control_helper'
 local Interactions = require 'engine.entities.interactions'
 
 
