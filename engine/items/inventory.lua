@@ -90,8 +90,9 @@ end
 ---@return boolean success whether the item was succesfully equipped or not
 function Inventory:equipItem(inventoryItem, slot)
   if self.player == nil then
-    error('Cannot equip item without player set in inventory')
+    return false
   end
+
   if slot ~= nil then
     if type(slot) == 'string' then
       assert(not lume.any(self.protectedSlots, slot))
@@ -110,6 +111,7 @@ function Inventory:equipItem(inventoryItem, slot)
     local inventoryItemId = inventoryItem
     inventoryItem = self:getItem(inventoryItemId)
     if inventoryItem == nil then
+      -- inventory item does not exist
       return false
     end
   end
@@ -117,19 +119,36 @@ function Inventory:equipItem(inventoryItem, slot)
 
   assert(inventoryItem:getItemData():isEquippable(), 'Cannot equip non-equippable item')
 
-  -- unequip any currently equipped items on the button slot, and unequip other button slot if it has the same inventory id
-  local equippedButtonSlotItems = self:getEquippedButtonSlotItems()
-  for buttonSlot, equippedItem in pairs(equippedButtonSlotItems) do
-    local sameButtonSlot = false
-    if type(slot) == 'string' then
-      sameButtonSlot = buttonSlot == slot
-    elseif type(slot) == 'table' then
-      sameButtonSlot = lume.find(slot, buttonSlot) ~= nil
+  
+  local inventoryItemId = inventoryItem:getId()
+  if inventoryItem:isButtonSlotItem() then
+    local equippedButtonSlotItems = self:getEquippedButtonSlotItems()
+    for buttonSlot, equippedItem in pairs(equippedButtonSlotItems) do
+      local sameButtonSlot = false
+      if type(slot) == 'string' then
+        sameButtonSlot = buttonSlot == slot
+      elseif type(slot) == 'table' then
+        sameButtonSlot = lume.find(slot, buttonSlot) ~= nil
+      end
+      
+      -- if this is the same inventory item instance, we reuse it and just swap it to another slot
+      if equippedItem:getInventoryItemId() == inventoryItem:getId() then
+        print '1'
+        if sameButtonSlot then
+          -- already equipped to the same slot, nothing to do
+          -- TODO figure out how to handle this with two handed weapons that occupy multiple slots
+          return true
+        else
+          -- unequip from current slot and equip to new slot below
+          return self:moveButtonSlotItem(equippedItem, slot)
+        end
+      end
     end
-    if equippedItem:getInventoryItemId() == inventoryItem:getId() or sameButtonSlot then
-      self:unequipItem(equippedItem:getInventoryItem())
-    end
+  else
+    -- TODO
   end
+
+  -- in this case we are equpping an item that is not currently equipped
 
   -- create item
   local item = inventoryItem:createItem()
@@ -193,6 +212,16 @@ function Inventory:unequipItemByButtonSlot(slot)
       break
     end
   end
+end
+
+--- moves a currently equipped button slot item to different button slot(s)
+---@param item Item item that is currently equipped to a button slot (or multiple slots for 2 handed)
+---@param newSlots string|string[] the new slot or slots to equip the item to
+function Inventory:moveButtonSlotItem(item, newSlots)
+  if not self.player then
+    return false
+  end
+  return self.player:moveButtonSlotItem(item, newSlots)
 end
 
 ---@param itemData ItemData|string

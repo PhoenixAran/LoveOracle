@@ -100,4 +100,8 @@ function InventoryItem:isTwoHanded()
   return self.itemData:isTwoHanded()
 end
 
+function InventoryItem:isButtonSlotItem()
+  return self.itemData:isButtonSlotItem()
+end
+
 return InventoryItem

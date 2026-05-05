@@ -1,4 +1,4 @@
-local version = '0.0.20.0'
+local version = '0.0.21.0'
 -- Note: face buttons are labelled to correlate with the xbox controller layout
 -- so a = bottom, b = right, x = left, y = top
 local controls = {
@@ -32,6 +32,11 @@ local controls = {
   deadzone = 0.33
 }
 
+-- ordered list of button slots, used to determine adjacency for two-handed weapons
+local buttonSlotOrder = {
+  'b', 'x', 'y'
+}
+
 local window = {
   title = "Love Oracle " .. version,
   displayConfig = {
@@ -55,5 +60,7 @@ return {
   window = window,
   startupScreen = startupScreen,
   version = version,
-  enableQuakeConsole = enableQuakeConsole
+  enableQuakeConsole = enableQuakeConsole,
+
+  buttonSlotOrder = buttonSlotOrder
 }

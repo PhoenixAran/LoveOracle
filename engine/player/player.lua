@@ -708,6 +708,51 @@ function Player:unequipItem(item)
   item:release()
 end
 
+--- moves a currently equipped button slot item to different button slot(s)
+---@param item Item
+---@param newSlots string|string[] the new button slot(s) that the item should be in
+function Player:moveButtonSlotItem(item, newSlots)
+  if type(newSlots) == 'string' then
+    newSlots = { newSlots }
+  end
+  local oldSlots = {}
+  for _, v in ipairs(item:getUseButtons()) do
+    table.insert(oldSlots, v)
+  end
+  local itemsToSwap = { }
+  
+  -- collect items currently occupying the new slots (excluding the item we are moving)
+  for _, newSlot in ipairs(newSlots) do
+    local occupyingItem = self.buttonSlotItems[newSlot]
+    print('checking slot', newSlot, 'occupant', occupyingItem and occupyingItem:getItemData():getName() or 'nil')
+    if occupyingItem and occupyingItem ~= item then
+      lume.push(itemsToSwap, occupyingItem)
+    end
+  end
+
+  -- clear the moving item from all its old slots
+  for _, buttonSlot in ipairs(oldSlots) do
+    self.buttonSlotItems[buttonSlot] = nil
+  end
+
+  -- place moving item in new slots
+  item:clearUseButtons()
+  item:addUseButtons(newSlots)
+  for _, newSlot in ipairs(newSlots) do
+    self.buttonSlotItems[newSlot] = item
+  end
+
+  -- place swapped items into vacated old slots
+  for i, itemToSwap in ipairs(itemsToSwap) do
+    local oldSlot = oldSlots[i]
+    if oldSlot then
+      itemToSwap:clearUseButtons()
+      itemToSwap:addUseButtons(oldSlot)
+      self.buttonSlotItems[oldSlot] = itemToSwap
+    end
+  end
+end
+
 function Player:updateEquippedItems()
   for _, item in pairs(self.buttonSlotItems) do
     item:update()
