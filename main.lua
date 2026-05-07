@@ -1,3 +1,7 @@
+if arg[2] == "debug" then
+    require("lldebugger").start()
+end
+
 local lume = require 'lib.lume'
 local gameConfig = require 'game_config'
 local ContentControl = require 'engine.content_control'

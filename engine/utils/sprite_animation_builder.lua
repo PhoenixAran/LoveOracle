@@ -91,9 +91,11 @@ end
 ---@param y integer? column number OR offsetX depending on first argument
 ---@param offsetX number? 
 ---@param offsetY number? 
+---@param originX number?
+---@param originY number?
 ---@param delay integer?
 ---@param alpha number?
-function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay, alpha)
+function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, originX, originY, delay, alpha)
   -- user is adding an explicit Sprite object
   if type(x) == 'table' then
     -- x becomes a Sprite instance
@@ -106,7 +108,7 @@ function SpriteAnimationBuilder:addSpriteFrame(x, y, offsetX, offsetY, delay, al
   if offsetY == nil then offsetY = 0 end
 
   local subtexture = self.spriteSheet:getTexture(x, y)
-  local sprite = Sprite(subtexture, offsetX, offsetY, alpha)
+  local sprite = Sprite(subtexture, offsetX, offsetY, originX, originY, alpha)
   local spriteFrame = SpriteFrame(sprite, delay)
   lume.push(self.frames, spriteFrame)
 end

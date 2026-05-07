@@ -1,5 +1,3 @@
-
---- player sprite
 ---@param spriteBank SpriteBank
 return function(spriteBank)
   local sb = spriteBank.createSpriteRendererBuilder()
@@ -13,10 +11,10 @@ return function(spriteBank)
   ab:setLoopType('cycle')
 
   --@animation move
-  ab:addSpriteFrame(1, 10, 0, 0, 2)
-  ab:addSpriteFrame(4, 10, 0, 0, 2)
-  ab:addSpriteFrame(3, 10, 0, 0, 2)
-  ab:addSpriteFrame(2, 10, 0, 0, 2)
+  ab:addSpriteFrame(1, 10, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(4, 10, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(3, 10, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(2, 10, 0, 0, nil, nil, 2)
 
   -- BUILD move
   sb:addAnimation('move', ab:build())
@@ -34,10 +32,10 @@ return function(spriteBank)
   ab:setSubstrips(false)
 
   --@animation move
-  ab:addSpriteFrame(1 + 4, 10, 0, 0, 2)
-  ab:addSpriteFrame(4 + 4, 10, 0, 0, 2)
-  ab:addSpriteFrame(3 + 4, 10, 0, 0, 2)
-  ab:addSpriteFrame(2 + 4, 10, 0, 0, 2)
+  ab:addSpriteFrame(1 + 4, 10, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(4 + 4, 10, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(3 + 4, 10, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(2 + 4, 10, 0, 0, nil, nil, 2)
 
   -- BUILD move
   sb:addAnimation('move', ab:build())

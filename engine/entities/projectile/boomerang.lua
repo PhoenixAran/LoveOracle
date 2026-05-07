@@ -125,7 +125,8 @@ end
 
 function Boomerang:onCollideSolid(solid)
   if solid.isTile and solid:isTile() then
-    local effect = EffectFactory.createClingEffectLight(self.x, self.y, 'blue')
+    local x, y = self:getPosition()
+    local effect = EffectFactory.createClingEffectLight(x, y, 'blue')
     self:emit('spawned_entity', effect)
   end
   self:beginReturning()

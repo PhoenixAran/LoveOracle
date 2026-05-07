@@ -38,6 +38,10 @@ function Item:isButtonSlotItem()
   return self.itemData:isButtonSlotItem()
 end
 
+function Item:isTwoHanded()
+  return self.itemData:isTwoHanded()
+end
+
 ---@return string itemId item id for from the underlying item data record for this item
 function Item:getItemId()
   return self.itemData:getItemId()

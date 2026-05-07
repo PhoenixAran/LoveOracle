@@ -69,31 +69,31 @@ return makeModuleFunction(function(spriteBank)
   -- @animation crash
   ab:setSubstrips(true)
   -- #substrip up
-  ab:addSpriteFrame(2, 2, -8, -8, 6)
-  ab:addSpriteFrame(3, 2, -8, -8, 6)
-  ab:addSpriteFrame(4, 2, -8, -8, 6)
-  ab:addSpriteFrame(1, 2, -8, -8, 6)
+  ab:addSpriteFrame(2, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(3, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(4, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(1, 2, -8, -8, nil, nil, 6)
   ab:buildSubstrip('up')
 
   -- #substrip down
-  ab:addSpriteFrame(4, 2, -8, -8, 6)
-  ab:addSpriteFrame(1, 2, -8, -8, 6)
-  ab:addSpriteFrame(2, 2, -8, -8, 6)
-  ab:addSpriteFrame(3, 2, -8, -8, 6)
+  ab:addSpriteFrame(4, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(1, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(2, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(3, 2, -8, -8, nil, nil, 6)
   ab:buildSubstrip('down', true)
 
   -- #substrip left
-  ab:addSpriteFrame(3, 2, -8, -8, 6)
-  ab:addSpriteFrame(4, 2, -8, -8, 6)
-  ab:addSpriteFrame(1, 2, -8, -8, 6)
-  ab:addSpriteFrame(2, 2, -8, -8, 6)
+  ab:addSpriteFrame(3, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(4, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(1, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(2, 2, -8, -8, nil, nil, 6)
   ab:buildSubstrip('left')
 
   -- #substrip right
-  ab:addSpriteFrame(1, 2, -8, -8, 6)
-  ab:addSpriteFrame(2, 2, -8, -8, 6)
-  ab:addSpriteFrame(3, 2, -8, -8, 6)
-  ab:addSpriteFrame(4, 2, -8, -8, 6)
+  ab:addSpriteFrame(1, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(2, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(3, 2, -8, -8, nil, nil, 6)
+  ab:addSpriteFrame(4, 2, -8, -8, nil, nil, 6)
   ab:buildSubstrip('right')
 
   -- BUILD crash
@@ -110,14 +110,14 @@ return makeModuleFunction(function(spriteBank)
   ab:setSubstrips(false)
 
   -- TODO offset -8 -8s?
-  ab:addSpriteFrame(1, 4, 0, 0, 1)
-  ab:addSpriteFrame(2, 4, 0, 0, 1)
-  ab:addSpriteFrame(3, 4, 0, 0, 1)
-  ab:addSpriteFrame(4, 4, 0, 0, 1)
-  ab:addSpriteFrame(1, 4, 0, 0, 1)
-  ab:addSpriteFrame(2, 4, 0, 0, 1)
-  ab:addSpriteFrame(3, 4, 0, 0, 1)
-  ab:addSpriteFrame(4, 4, 0, 0, 1)
+  ab:addSpriteFrame(1, 4, 0, 0, nil, nil, 1)
+  ab:addSpriteFrame(2, 4, 0, 0, nil, nil, 1)
+  ab:addSpriteFrame(3, 4, 0, 0, nil, nil, 1)
+  ab:addSpriteFrame(4, 4, 0, 0, nil, nil, 1)
+  ab:addSpriteFrame(1, 4, 0, 0, nil, nil, 1)
+  ab:addSpriteFrame(2, 4, 0, 0, nil, nil, 1)
+  ab:addSpriteFrame(3, 4, 0, 0, nil, nil, 1)
+  ab:addSpriteFrame(4, 4, 0, 0, nil, nil, 1)
 
   -- BUILD move
   sb:addAnimation('move', ab:build())
@@ -135,10 +135,10 @@ return makeModuleFunction(function(spriteBank)
 
   --@animation move
   -- TODO offset -8 -8s?
-  ab:addSpriteFrame(5, 1, 0, 0, 2)
-  ab:addSpriteFrame(6, 1, 0, 0, 2)
-  ab:addSpriteFrame(7, 1, 0, 0, 2)
-  ab:addSpriteFrame(8, 1, 0, 0, 2)
+  ab:addSpriteFrame(5, 1, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(6, 1, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(7, 1, 0, 0, nil, nil, 2)
+  ab:addSpriteFrame(8, 1, 0, 0, nil, nil, 2)
 
   -- BUILD move
   sb:addAnimation('move', ab:build())
@@ -180,8 +180,8 @@ return makeModuleFunction(function(spriteBank)
   ab:setSubstrips(false)
 
   -- TODO -8, -8 offsets?
-  ab:addSpriteFrame(5, 4, 0, 0, 4)
-  ab:addSpriteFrame(6, 4, 0, 0, 4)
+  ab:addSpriteFrame(5, 4, 0, 0, nil, nil, 4)
+  ab:addSpriteFrame(6, 4, 0, 0, nil, nil, 4)
 
   -- BUILD move
   sb:addAnimation('move', ab:build())
@@ -197,8 +197,8 @@ return makeModuleFunction(function(spriteBank)
 
   -- BUILD move
   -- TODO -8, -8 offsets?
-  ab:addSpriteFrame(5, 3, 0, 0, 4)
-  ab:addSpriteFrame(6, 3, 0, 0, 4)
+  ab:addSpriteFrame(5, 3, 0, 0, nil, nil, 4)
+  ab:addSpriteFrame(6, 3, 0, 0, nil, nil, 4)
 
   -- BUILD move
   sb:addAnimation('move', ab:build())

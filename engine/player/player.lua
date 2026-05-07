@@ -258,7 +258,7 @@ local Player = Class { __includes = MapEntity,
     self.health:setMaxHealth(4 * 14, true)
 
 
-    -- set up Bump callbacks
+    -- set up Bump callbsacks
     local canCollide = require('engine.entities.bump_box').canCollide
     local playerInstance = self
     -- set up filter to be used for world:move()
@@ -725,7 +725,6 @@ function Player:moveButtonSlotItem(item, newSlots)
   -- collect items currently occupying the new slots (excluding the item we are moving)
   for _, newSlot in ipairs(newSlots) do
     local occupyingItem = self.buttonSlotItems[newSlot]
-    print('checking slot', newSlot, 'occupant', occupyingItem and occupyingItem:getItemData():getName() or 'nil')
     if occupyingItem and occupyingItem ~= item then
       lume.push(itemsToSwap, occupyingItem)
     end

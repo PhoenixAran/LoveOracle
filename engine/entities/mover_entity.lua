@@ -50,6 +50,8 @@ end
 ---@field movesWithPlatforms boolean
 ---@field collisionTiles integer
 ---@field moveCollisions any[]
+---@field moveCollisionNormalsX any[]
+---@field moveCollisionNormalsY any[]
 ---@field _storedCollisionFlags table<string, any> used to store collision flags when MapEntity.DisableCollisions() is called so that they can be restored when MapEntity.EnableCollisions() is called
 ---@field _storedCollisionFlagsInUse boolean flag to make sure we correct behavior for MapEntity.DisableCollisions() being called multiple times in a row without MapEntity.EnableCollisions() being called or vice versa
 local MoverEntity = Class { __includes = Entity,
@@ -71,6 +73,8 @@ local MoverEntity = Class { __includes = Entity,
     self.movesWithConveyors = true
     self.movesWithPlatforms = true
     self.moveCollisions = { }  -- table to store collisions that occur when MapEntity:move() is called
+    self.moveCollisionNormalsX = { } -- table to store collision normals x values that occur when MapEntity:move() is called
+    self.moveCollisionNormalsY = { } -- table to store collision normals y values that occur when MapEntity:move() is called
 
     -- move filters
     self.moveFilter = defaultMoveFilter

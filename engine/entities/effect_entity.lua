@@ -12,6 +12,8 @@ local Movement = require 'engine.components.movement'
 ---@field movement Movement used for effects that bounce off ground
 local EffectEntity = Class{ __includes = Entity,
   init = function(self, args)
+    args.w = 20
+    args.h = 20
     Entity.init(self, args)
     self.currentTime = 0
     self.effectAnimation = args.effectAnimation

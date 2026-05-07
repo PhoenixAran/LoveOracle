@@ -3,11 +3,12 @@ local lume = require 'lib.lume'
 
 ---@type string[]
 local buttonSlotOrder = { }
-for _, buttonSlot in pairs(GameConfig.controls.buttons) do
+for _, buttonSlot in pairs(GameConfig.buttonSlotOrder) do
   lume.push(buttonSlotOrder, buttonSlot)
 end
 
 --- utility functions for button slot item logic
+--- mainly used for two handed weapon equipment logic
 ---@class ControlHelper
 local ControlHelper = {
 }
@@ -17,6 +18,16 @@ function ControlHelper.setButtonSlotOrders(newButtonSlotOrder)
   for _, buttonSlot in pairs(newButtonSlotOrder) do
     lume.push(buttonSlotOrder, buttonSlot)
   end
+end
+
+function ControlHelper.getButtonSlotIndex(slot)
+  local slotIndex = lume.indexof(buttonSlotOrder, slot)
+  assert(slotIndex, 'Invalid button slot: ' .. slot)
+  return slotIndex
+end
+
+function ControlHelper.getButtonSlotCount()
+  return lume.count(buttonSlotOrder)
 end
 
 function ControlHelper.areSlotsAdjacent(slot1, slot2)
