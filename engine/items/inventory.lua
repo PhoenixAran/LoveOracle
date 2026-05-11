@@ -23,7 +23,7 @@ local Inventory = Class { __includes = SignalObject,
     -- TODO prevent sprint boots button, to whatever it will be
     self.protectedSlots = {
       'a', -- reserved for Roc feather when unlocked. It is also the interact button and swim button when in water
-      'leftShoulder'
+      'leftShoulder' -- reserved for shield
     }
 
     self.items = { }
@@ -72,6 +72,17 @@ end
 function Inventory:getItem(inventoryItemId)
   for _, inventoryItem in ipairs(self.items) do
     if inventoryItem:getId() == inventoryItemId then
+      return inventoryItem
+    end
+  end
+  return nil
+end
+
+---@param itemName string
+---@return InventoryItem? InventoryItem the first inventory item with the given name, or nil if no such item exists in the inventory
+function Inventory:getItemByName(itemName)
+  for _, inventoryItem in ipairs(self.items) do
+    if inventoryItem:getItemData():getName() == itemName then
       return inventoryItem
     end
   end
@@ -272,6 +283,17 @@ end
 
 function Inventory:getItems()
   return self.items
+end
+
+
+--- get items by group
+---@param group string
+---@return InventoryItem[] inventoryItems list of inventory items in the given group
+function Inventory:getItemsByGroup(group)
+  assert(group, 'Group must be provided')
+  return lume.filter(self.items, function(x) 
+    return x:getItemData():getGroup() == group
+  end)
 end
 
 ---@param itemDataId string itemData string

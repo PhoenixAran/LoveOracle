@@ -26,8 +26,8 @@ local MenuEquipmentState = require 'engine.control.menu.menu_equipment_state'
 
 ---@class MenuControl : GameState
 ---@field menuStateStack GameStateStack
----@field leftTriggerButtonSprite Sprite
----@field rightTriggerButtonSprite Sprite
+---@field leftShoulderButtonSprite Sprite
+---@field rightShoulderButtonSprite Sprite
 ---@field lastRoomState GameState? the last room state
 ---@field menuStates table<string, BaseMenuState>
 ---@field menuConstraint NLay.Constraint the root constraint for menu states
@@ -48,8 +48,8 @@ local MenuControl = Class { __includes = GameState,
 
     -- trigger icons
     local gamepadType = Platform.getGamepadType()
-    self.leftTriggerButtonSprite = SpriteBank.getSprite(gamepadType .. '_left_trigger_button')
-    self.rightTriggerButtonSprite = SpriteBank.getSprite(gamepadType .. '_right_trigger_button')
+    self.leftShoulderButtonSprite = SpriteBank.getSprite(gamepadType .. '_left_shoulder_button')
+    self.rightShoulderButtonSprite = SpriteBank.getSprite(gamepadType .. '_right_shoulder_button')
   end
 }
 
@@ -98,12 +98,15 @@ function MenuControl:drawTriggerButtonPrompts()
     -- draw left trigger sprite to the left of the item panel and right trigger sprite to the right of the item panel
   local x, y, w, h = self.menuConstraint:get()
   local leftTriggerX = x - 16 - 4
-  local leftTriggerY = y + h / 2 - self.leftTriggerButtonSprite:getHeight() / 2
-  self.leftTriggerButtonSprite:draw(leftTriggerX, leftTriggerY)
+  if Platform.getGamepadType() == 'pc' then
+    leftTriggerX = leftTriggerX - 8
+  end
+  local leftTriggerY = y + h / 2 - self.leftShoulderButtonSprite:getHeight() / 2
+  self.leftShoulderButtonSprite:draw(leftTriggerX, leftTriggerY)
 
   local rightTriggerX = x + w + 4
-  local rightTriggerY = y + h / 2 - self.rightTriggerButtonSprite:getHeight() / 2
-  self.rightTriggerButtonSprite:draw(rightTriggerX, rightTriggerY)
+  local rightTriggerY = y + h / 2 - self.rightShoulderButtonSprite:getHeight() / 2
+  self.rightShoulderButtonSprite:draw(rightTriggerX, rightTriggerY)
 end
 
 function MenuControl:draw()

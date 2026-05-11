@@ -192,7 +192,8 @@ function MenuInventoryState:onBegin()
   local gameControl = Singletons.gameControl
   if not self.inventoryItemsPopulated and gameControl:getInventory() then
     local inventory = gameControl:getInventory()
-    for i, v in ipairs(inventory.items) do
+    local items = inventory:getItemsByGroup('slot_item')
+    for i, v in ipairs(items) do
       local item = v
       local slot = self:getNextAvailableSlot()
       if slot then

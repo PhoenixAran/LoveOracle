@@ -9,12 +9,12 @@ local lume = require 'lib.lume'
 -- ItemWeapon will then extend Item 
 
 ---@class ItemData
----@field name string
----@field category string?
+---@field group string? the item group this item belongs to. Used to organize which items show up on which inventory screen
 ---@field itemId string
 ---@field maxLevel integer
 ---@field level integer
 ---@field menuSprites Sprite|Sprite[]
+---@field hudSprites Sprite|Sprite[] sprites to use for the item when drawn in the hud. If not set, menuSprites will be used again
 ---@field itemTypes table[]
 ---@field itemTypeArgs table[] arguments to pass to the item type when creating an instance of it, indexed by level
 ---@field amountBased boolean
@@ -25,6 +25,7 @@ local lume = require 'lib.lume'
 ---@field isEquippable boolean if item can be equipped
 ---@field descriptions string[] item descriptions for each level. If only one description is given, it will be used for all levels
 ---@field twoHanded boolean
+---@field name string
 local ItemData = Class {
   init = function(self, itemId)
     assert(itemId, 'Item ID cannot be null')
@@ -44,6 +45,8 @@ local ItemData = Class {
     self.maxAmount = 1
     self.descriptions = { '' }
     self.twoHanded = false
+    self.group = nil
+    self.name = nil
   end
 }
 
@@ -55,20 +58,20 @@ function ItemData:getItemId()
   return self.itemId
 end
 
+function ItemData:setName(name)
+  self.name = name
+end
+
 function ItemData:getName()
   return self.name
 end
 
-function ItemData:setCategory(category)
-  self.category = category
+function ItemData:setGroup(group)
+  self.group = group
 end
 
-function ItemData:getCategory()
-  return self.category
-end
-
-function ItemData:setName(name)
-  self.name = name
+function ItemData:getGroup()
+  return self.group
 end
 
 function ItemData:setAmountBased(isAmountBased)
@@ -116,6 +119,20 @@ end
 ---@return Sprite
 function ItemData:getMenuSprite(level)
   return self.menuSprites[level]
+end
+
+function ItemData:getHudSprites()
+  return self.hudSprites
+end
+
+--- gets hud sprite
+--- if hud sprite is nil at the given level, menu sprite is used as fallback
+function ItemData:getHudSprite(level)
+  if self.hudSprites[level] then
+    return self.hudSprites[level]
+  else
+    return self.menuSprites[level]
+  end
 end
 
 ---@param level integer

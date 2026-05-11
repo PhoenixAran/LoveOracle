@@ -134,6 +134,8 @@ return function(spriteBank)
 
 
   -- inventory icons
+
+  -- icons from ui_icons_small
   spriteBuilder:setSpriteSheet('inventory_icons_small')
   spriteBank.registerSprite('icon_sword_1', spriteBuilder:buildSprite(1, 1, 0, 0, 0, 0))
   spriteBank.registerSprite('icon_sword_2', spriteBuilder:buildSprite(2, 1, 0, 0, 0, 0))
@@ -145,4 +147,9 @@ return function(spriteBank)
 
   spriteBank.registerSprite('icon_boomerang_1', spriteBuilder:buildSprite(5, 2, 0, 0, 0, 0))
   spriteBank.registerSprite('icon_boomerang_2', spriteBuilder:buildSprite(6, 2, 0, 0, 0, 0))
+
+
+  -- icons from ui_large
+  --spriteBuilder:setSpriteSheet('ui_large')
+  
 end

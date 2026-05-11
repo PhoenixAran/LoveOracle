@@ -9,6 +9,7 @@ Requires [LOVE 11.5](https://love2d.org/) and [Tiled 1.10](https://thorbjorn.itc
 ## Libraries
 - [baton](https://github.com/tesselode/baton)
 - [bump-niji](https://github.com/oniietzschan/bump-niji)
+- [debugger]('https://codeberg.org/slembcke/debugger.lua')
 - [Erogodic](https://github.com/oniietzschan/erogodic)
 - [STALKER-X](https://github.com/a327ex/STALKER-X)
 - [inspect](http://github.com/kikito/inspect.lua)
