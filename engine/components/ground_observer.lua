@@ -79,7 +79,7 @@ local GroundObserver = Class { __includes = {Component},
       ey = ey + groundObserver.pointOffsetY
       local distanceA = vector.dist(ex, ey, a.x, a.y)
       local distanceB = vector.dist(ex, ey, b.x, b.y)
-      return distanceA <= distanceB
+      return distanceA < distanceB
     end
     self.visitedTileIndices = { }
     self.tiles = { }

@@ -20,6 +20,7 @@ local Singletons = require 'engine.singletons'
 -- TODO support descriptions having simple {color #hex} tags to change the color until the next tag
 -- TODO still need to support ammo and ammo countainers and amount based items
 -- TODO event listeners for when items are added/removed from inventory to update the menu
+-- TODO we have to maintain insert order when saves get reloaded somehow. InventoryItem might just need an insert order field?
 
 -- TODO support paging. Paging might be tough with how slots have a set position. could maybe use scissors 
 local GRID_SIZE_X = 14

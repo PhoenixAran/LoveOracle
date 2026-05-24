@@ -14,15 +14,40 @@ local SlotGroup = require 'engine.control.menu.slot_group'
 local Direction4 = require 'engine.enums.direction4'
 local Platform = require 'engine.platform'
 
+
+-- TODO support paging. Paging might be tough with how slots have a set position. could maybe use scissors 
+local GRID_SIZE_X = 14
+local GRID_SIZE_Y = 4
+local GRID_WIDTH = 12
+local GRID_HEIGHT = 16
+
+local function indexOf(x, y)
+  return (y - 1) * GRID_SIZE_X + x
+end
+
 ---@class MenuEquipmentState : BaseMenuState
 local MenuEquipmentState = Class { __includes = BaseMenuState,
-  init = function(self)
+  ---@param self MenuEquipmentState
+  ---@param parent NLay.Constraint the constraint to usefor the root of the menu layout
+  init = function(self, parent)
     BaseMenuState.init(self)
   end
 }
 
 function MenuEquipmentState:getType()
   return 'menu_equipment_state'
+end
+
+function MenuEquipmentState:onBegin()
+
+end
+
+function MenuEquipmentState:update(dt)
+
+end
+
+function MenuEquipmentState:draw()
+
 end
 
 -- TODO implement rest of class
