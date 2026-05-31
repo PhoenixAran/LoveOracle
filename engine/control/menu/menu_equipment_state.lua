@@ -26,6 +26,12 @@ local function indexOf(x, y)
 end
 
 ---@class MenuEquipmentState : BaseMenuState
+---@field equipmentPanel NinePatchSprite the panel that items in the 'equipment' group are drawn on in the inventory
+---@field equipmentPanelRect NLay.Constraint
+---@field detailsPanel NinePatchSprite the panel that item descriptions are drawn on in the inventory
+---@field detailsPanelRect NLay.Constraint 
+---@field currentDescription string the current item description being shown in the details panel
+---@field inSubMenu boolean
 local MenuEquipmentState = Class { __includes = BaseMenuState,
   ---@param self MenuEquipmentState
   ---@param parent NLay.Constraint the constraint to usefor the root of the menu layout

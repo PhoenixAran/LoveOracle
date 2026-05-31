@@ -48,8 +48,8 @@ local MenuControl = Class { __includes = GameState,
 
     -- trigger icons
     local gamepadType = Platform.getGamepadType()
-    self.leftShoulderButtonSprite = SpriteBank.getSprite(gamepadType .. '_left_shoulder_button')
-    self.rightShoulderButtonSprite = SpriteBank.getSprite(gamepadType .. '_right_shoulder_button')
+    self.leftShoulderButtonSprite = SpriteBank.getSprite(gamepadType .. '_left_trigger_button')
+    self.rightShoulderButtonSprite = SpriteBank.getSprite(gamepadType .. '_right_trigger_button')
   end
 }
 
@@ -98,9 +98,9 @@ function MenuControl:drawTriggerButtonPrompts()
     -- draw left trigger sprite to the left of the item panel and right trigger sprite to the right of the item panel
   local x, y, w, h = self.menuConstraint:get()
   local leftTriggerX = x - 16 - 4
-  if Platform.getGamepadType() == 'pc' then
-    leftTriggerX = leftTriggerX - 8
-  end
+  -- if Platform.getGamepadType() == 'pc' then
+  --   leftTriggerX = leftTriggerX - 8
+  -- end
   local leftTriggerY = y + h / 2 - self.leftShoulderButtonSprite:getHeight() / 2
   self.leftShoulderButtonSprite:draw(leftTriggerX, leftTriggerY)
 
