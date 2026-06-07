@@ -173,8 +173,18 @@ function ItemData:setMaxAmount(maxAmount)
   self.maxAmount = maxAmount
 end
 
+---set description
+---@param description string
+---@param level integer?
+function ItemData:setDescription(description, level)
+  if level == nil then
+    level = 1
+  end
+  self.descriptions[level] = description
+end
+
 function ItemData:getDescription(level)
-  if lume.count(self.descriptions) == 1 then
+  if lume.count(self.descriptions) == 1 or level == nil then
     return self.descriptions[1]
   else
     return self.descriptions[level]

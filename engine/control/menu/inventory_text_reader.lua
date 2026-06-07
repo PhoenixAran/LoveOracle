@@ -1,5 +1,6 @@
 local Class = require 'lib.class'
 local ColorHelper = require 'engine.utils.color_helper'
+local lume = require 'lib.lume'
 
 
 local COLOR_TOKEN_START = '{'
@@ -10,12 +11,10 @@ local DEFAULT_COLOR = {1, 1, 1}
 --- display text in the details panel
 ---@class InventoryTextReader
 ---@field wrapWidth integer
----@field textPosition integer
----@field textTimer integer
----@field textStart integer
 ---@field description string? the current description being read
 ---@field cleanDescription string? description without color codes
 ---@field colorMap table<integer, integer[]> color changes by description index
+---@field formattedDescription table formatted description
 local InventoryTextReader = Class {
   init = function(self, wrapWidth)
     if wrapWidth == nil then
@@ -25,9 +24,7 @@ local InventoryTextReader = Class {
     self.currentColor = {1, 1, 1}
     self.description = ''
     self.cleanDescription = ''
-    self.textPosition = 0
-    self.textTimer = 32
-    self.textStart = 0
+    self.formattedDescription = { }
   end
 }
 
@@ -36,8 +33,9 @@ function InventoryTextReader:getType()
 end
 
 function InventoryTextReader:setDescription(description)
-  self.colorMap = { }
+  self.colorMap = { DEFAULT_COLOR }
   self.description = description
+  self.cleanDescription = ''
 
   local cleanIndex = 1
   local i = 1
@@ -74,28 +72,61 @@ function InventoryTextReader:setDescription(description)
     end
   end
 
-  -- reset scrolling variables
-  self.textPosition = 0
-  self.textTimer = 32
+  -- use the clean data to build the colord string table
+  self.formattedDescription = { }
+  local currentSegment = ''
+  local activeColor = DEFAULT_COLOR
+  for j = 1, self.cleanDescription:len() do
+    if self.colorMap[j] and j > 1 then
+      -- save chunk of text we've built so far with its color
+      lume.push(self.formattedDescription, activeColor)
+      lume.push(self.formattedDescription, currentSegment)
+
+      activeColor = self.colorMap[j]
+      currentSegment = ''
+    end
+
+    -- accumulate text
+    currentSegment = currentSegment .. self.cleanDescription:sub(j, j)
+  end
+
+  -- catch the final segment after the loop ends
+  if currentSegment ~= '' then
+    lume.push(self.formattedDescription, activeColor)
+    lume.push(self.formattedDescription, currentSegment)
+  end
 end
 
 function InventoryTextReader:update()
-  if self.cleanDescription ~= nil and self.cleanDescription ~= '' then
-    if self.textTimer > 0 then
-      -- update the pause timer
-      self.textTimer = self.textTimer - 1
-    elseif self.textPosition == 0 then
-      -- pause the text
-      self.textTimer = 32
-    else
-      self.textPosition = self.textPosition + 1
+  -- old marquee logic
+  -- if self.cleanDescription ~= nil and self.cleanDescription ~= '' then
+  --   if self.textTimer > 0 then
+  --     -- update the pause timer
+  --     self.textTimer = self.textTimer - 1
+  --   elseif self.textPosition == 0 then
+  --     -- pause the text
+  --     self.textTimer = 32
+  --   else
+  --     self.textPosition = self.textPosition + 1
 
-      if self.textPosition / 8 > self.cleanDescription:len() + self.textStart / 8 then
-        -- wrap the text when it reaches the end
-        self.textPosition = -self.wrapWidth + self.textStart
-      end
-    end
-  end
+  --     if self.textPosition / 8 > self.cleanDescription:len() + self.textStart / 8 then
+  --       -- wrap the text when it reaches the end
+  --       self.textPosition = -self.wrapWidth + self.textStart
+  --     end
+  --   end
+  -- end
+end
+
+local function applyPadding(x,y,w,h, padding)
+  -- Shift the starting coordinates inward by the padding amount
+    local newX = x + padding
+    local newY = y + padding
+    
+    -- Shrink the width and height by padding on both sides (hence * 2)
+    local newW = w - (padding * 2)
+    local newH = h - (padding * 2)
+    
+    return newX, newY, newW, newH
 end
 
 --- draws text to given box dimensions
@@ -105,26 +136,13 @@ end
 ---@param y number
 ---@param w number
 ---@param h number
-function InventoryTextReader:draw(x, y, w, h)
-  local position = self.textPosition - self.textStart
-  local textIndex = position / 8
-  if position < 0 then
-    -- round down always
-    textIndex = math.floor((position - 8 - 1) / 8)
-    position = ((position - 7 - 1) / 8) * 8
-  else
-    position = (position / 8) * 8
+---@param padding number?
+function InventoryTextReader:draw(x, y, w, h, padding)
+  if padding then
+    x,y,w,h = applyPadding(x,y,w,h, padding)
   end
-
-  local startIndex = math.max(1, textIndex + 1)
-  local endIndex = math.max(0, math.min(textIndex + 16 + 1, self.cleanDescription:len()))
-  local textToDraw = self.cleanDescription:sub(startIndex, endIndex)
-
-
-  if position < 0 then
-    love.graphics.print(textToDraw, love.graphics.getFont(), x - (position / 8) * 8, y)
-  else
-    love.graphics.print(textToDraw, love.graphics.getFont(), x, y)
+  if lume.count(self.formattedDescription) > 0 then
+    love.graphics.printf(self.formattedDescription, x, y, w, 'left')
   end
 end
 

@@ -14,7 +14,7 @@ local SlotGroup = require 'engine.control.menu.slot_group'
 local Direction4 = require 'engine.enums.direction4'
 local Platform = require 'engine.platform'
 local Singletons = require 'engine.singletons'
-
+local InventoryTextReader = require 'engine.control.menu.inventory_text_reader'
 
 -- TODO we need to support paging inside panels somehow
 -- TODO support descriptions having simple {color #hex} tags to change the color until the next tag
@@ -37,7 +37,6 @@ end
 ---@field itemPanelRect NLay.Constraint
 ---@field itemDetailsPanel NinePatchSprite the panel that item details are drawn on in the inventory
 ---@field itemDetailsPanelRect NLay.Constraint
----@field currentDescription string the current item description being shown in the details panel
 ---@field inSubMenu boolean
 ---@field textPosition integer
 ---@field textTimer integer
@@ -45,6 +44,8 @@ end
 ---@field description string
 ---@field inventoryItemsPopulated boolean
 ---@field cursorSprite Sprite
+---@field inventoryTextReader InventoryTextReader used for item description display
+---@field lastHoverSlotItem Slot? the last slot hovererd
 local MenuInventoryState = Class { __includes = BaseMenuState,
   ---@param self MenuInventoryState
   ---@param parent NLay.Constraint the constraint to use for the root of the menu layout
@@ -52,6 +53,7 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
     BaseMenuState.init(self)
     self:signal('test')
 
+    self.inventoryTextReader = InventoryTextReader()
     self.slotCursor = SpriteBank.getSprite('inventory_cursor_green')
 
     -- set up NLay layout
@@ -215,8 +217,12 @@ function MenuInventoryState:update()
     self:updateSlotTraversal()
     local buttonSlot = self:getPressedButtonSlot()
     local currentSlot = self.currentSlotGroup:getCurrentSlot()
+    if self.lastHoverSlotItem ~= currentSlot then
+      self.lastHoverSlotItem = currentSlot
+      self:updateDescription()
+    end
     -- TODO maybe if item is two handed, prevent equipping to the last button slot, as it needs to take up two
-    -- and look nice on the hud?
+    -- and look nice on the hud
     if buttonSlot and currentSlot:getItem() then
       self:equipItemFromCursor(buttonSlot)
     end
@@ -234,6 +240,8 @@ function MenuInventoryState:draw()
   --self:debugDrawSlots()
   self:drawSlots()
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
+
+  self:drawDescription()
 end
 
 
@@ -252,8 +260,6 @@ function MenuInventoryState:drawPanelItems()
   end
 end
 
-
-
 function MenuInventoryState:debugDrawSlots()
   local slotGroup = self.slotGroups[1]
   if slotGroup then
@@ -265,26 +271,17 @@ function MenuInventoryState:debugDrawSlots()
   end
 end
 
-
 -- description stuff below here, still need to implement
-
-function MenuInventoryState:resetDescription()
+function MenuInventoryState:updateDescription()
   local slotItem = self.currentSlotGroup:getCurrentSlot():getItem()
   if slotItem then
-    self.currentDescription = slotItem:getDescription()
-  else
-    self.currentDescription = ''
+    self.inventoryTextReader:setDescription(slotItem:getDescription())
   end
-
-  -- TODO handle description
-end
-
-function MenuInventoryState:updateDescription()
-  -- TODO
 end
 
 function MenuInventoryState:drawDescription()
-  -- TODO
+  local x,y,w,h = self.itemDetailsPanelRect:get()
+  self.inventoryTextReader:draw(x, y, w, h, 5)
 end
 
 
