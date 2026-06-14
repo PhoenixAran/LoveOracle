@@ -63,11 +63,12 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
 
     -- top menu box
     local parentX, parentY, parentW, parentH = parent:get()
+    local usableHeight = parentH - (uiPadding * 2)
     self.itemPanelRect = NLay.constraint(parent, parent, parent, nil, parent, uiPadding)
-                            :size(-1, parentH * 0.75)
+                            :size(-1, usableHeight * 0.75)
     -- bottom panel box, used for item description
     self.itemDetailsPanelRect = NLay.constraint(parent, self.itemPanelRect, parent, nil, parent, uiPadding)
-                            :size(-1, parentH * 0.25)
+                            :size(-1, usableHeight * 0.25)
 
     local ipx, ipy, ipw, iph = self.itemPanelRect:get()
     ipw = math.floor(ipw + 0.5)
@@ -241,6 +242,7 @@ function MenuInventoryState:draw()
   self:drawSlots()
   self:drawPanel(self.itemDetailsPanelRect, self.itemDetailsPanel)
 
+  love.graphics.setFont(AssetManager.getFont('game_font'))
   self:drawDescription()
 end
 
@@ -281,10 +283,8 @@ end
 
 function MenuInventoryState:drawDescription()
   local x,y,w,h = self.itemDetailsPanelRect:get()
-  self.inventoryTextReader:draw(x, y, w, h, 5)
+  self.inventoryTextReader:draw(x, y, w, h, 6)
 end
-
-
 
 
 return MenuInventoryState
