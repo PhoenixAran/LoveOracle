@@ -233,8 +233,6 @@ end
 
 function MenuInventoryState:draw()
   self:drawRoom()
-  local font = AssetManager.getFont('game_font')
-  love.graphics.setFont(font)
 
   love.graphics.setFont(AssetManager.getFont('ui_panel_label'))
   self:drawPanel(self.itemPanelRect, self.itemPanel, 'ITEMS', 12)

@@ -30,7 +30,7 @@ end
 ---@field equipmentPanelParentRect NLay.Constraint
 ---@field equipmentPanelLeft NinePatchSprite the panel that items in the 'equipment' group are drawn on in the inventory
 ---@field equipmentPanelLeftRect NLay.Constraint
----@field 
+---@field equipmentPanelRight NinePatchSprite
 ---@field equipmentPanelRightRect NLay.Constraint
 ---@field detailsPanel NinePatchSprite the panel that item descriptions are drawn on in the inventory
 ---@field detailsPanelRect NLay.Constraint 
@@ -44,7 +44,7 @@ local MenuEquipmentState = Class { __includes = BaseMenuState,
     BaseMenuState.init(self)
 
     self.inventoryTextReader = InventoryTextReader()
-    -- set up NLay layout
+    -- set up NLay layout and panel rects
     local parentX, parentY, parentW, parentH = parent:get()
     local uiPadding = 1
     NLay.update(0, 0, GameConfig.window.displayConfig.gameWidth, GameConfig.window.displayConfig.gameHeight)
@@ -61,11 +61,31 @@ local MenuEquipmentState = Class { __includes = BaseMenuState,
     self.detailsPanelRect = NLay.constraint(parent, self.equipmentPanelParentRect, parent, nil, parent, uiPadding)
                             :size(-1, usableHeight * 0.25)
 
-    -- 2/3 menu box left side that will equipement and quest items
-    -- 1/3 menu box right side that will house hear containers and currency count
+    -- 1/3 menu box right side that will house equipment and quest items
+    self.equipmentPanelRightRect = NLay.constraint(self.equipmentPanelParentRect, self.equipmentPanelParentRect, nil, self.equipmentPanelParentRect, self.equipmentPanelParentRect)
+                            :size((parentW - (uiPadding * 2)) * (1/3), -1)
 
-    -- the bottom description box 
+    -- 1/3 menu box left side that will house heart containers and currency count
+    self.equipmentPanelLeftRect = NLay.constraint(self.equipmentPanelParentRect, self.equipmentPanelParentRect, self.equipmentPanelParentRect, self.equipmentPanelParentRect, self.equipmentPanelRightRect)
+                            :size((parentW - (uiPadding * 2)) * (2/3), -1)
+    -- panel sprites
 
+    -- equipement panel left dimensions
+    local eplx, eply, eplw, eplh = self.equipmentPanelLeftRect:get()
+    eplw = math.floor(eplw + 0.5)
+    eplh = math.floor(eplh + 0.5)
+    self.equipmentPanelLeft = SpriteBank.createNinePatchSprite('green_ui_9_patch', eplw, eplh, 0, 0)
+    
+    -- equipment panel right dimensions
+    local eprx, epry, eprw, eprh = self.equipmentPanelRightRect:get()
+    eprw = math.floor(eprw + 0.5)
+    eprh = math.floor(eprh)
+    self.equipmentPanelRight = SpriteBank.createNinePatchSprite('red_ui_9_patch', eprw, eprh, 0, 0)
+
+    local idpx, idpy, idpw, idph = self.detailsPanelRect:get()
+    idpw = math.floor(idpw + 0.5)
+    idph = math.floor(idph + 0.5)
+    self.detailsPanel = SpriteBank.createNinePatchSprite('yellow_ui_9_patch', idpw, idph, 0, 0)
   end
 }
 
@@ -82,7 +102,11 @@ function MenuEquipmentState:update(dt)
 end
 
 function MenuEquipmentState:draw()
-
+  self:drawRoom()
+  love.graphics.setFont(AssetManager.getFont('ui_panel_label'))
+  self:drawPanel(self.equipmentPanelLeftRect, self.equipmentPanelLeft, 'EQUIPMENT', 12)
+  self:drawPanel(self.equipmentPanelRightRect, self.equipmentPanelRight)
+  self:drawPanel(self.detailsPanelRect, self.detailsPanel)
 end
 
 -- TODO implement rest of class
