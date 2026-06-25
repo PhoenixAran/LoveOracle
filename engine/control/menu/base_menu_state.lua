@@ -59,25 +59,50 @@ function BaseMenuState:updateSlotTraversal()
   end
 end
 
+function BaseMenuState:getPressedButtonSlot()
+  if Input:pressed('b') then
+    return 'b'
+  end
+  if Input:pressed('x') then
+    return 'x'
+  end
+  if Input:pressed('y') then
+    return 'y'
+  end
+  return nil
+end
+
+function BaseMenuState:getNextAvailableSlot()
+  local slotGroup = self.slotGroups[1]
+  if slotGroup == nil then 
+    return nil
+  end
+
+  for k, v in ipairs(slotGroup:getSlots()) do
+    if v:getItem() == nil then
+      return v
+    end
+  end
+
+  return nil
+end
+
 ---@param direction4 Direction4
 function BaseMenuState:nextSlot(direction4)
   if self.currentSlotGroup == nil then
     return
   end
 
-  --print '1'
   local currentSlot = self.currentSlotGroup:getCurrentSlot()
   if currentSlot == nil then 
     return
   end
 
-  --print '2'
   local connection = currentSlot:getConnectionAt(direction4)
   if connection == nil then
     return
   end
 
-  --print '3'
   if connection:getType() == 'slot' then
     ---@type Slot
     local slot = connection

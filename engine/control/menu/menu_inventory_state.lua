@@ -136,7 +136,7 @@ local MenuInventoryState = Class { __includes = BaseMenuState,
     group.slots = slots
     lume.push(self.slotGroups, group)
 
-    -- set current slot to first slot that is enabled and has an item
+    -- set current slot to first slot that is enabled
     for k, v in pairs(group.slots) do
       local slot = v
       if slot:isEnabled() then
@@ -151,37 +151,7 @@ function MenuInventoryState:getType()
   return 'menu_inventory'
 end
 
-function MenuInventoryState:getNextAvailableSlot()
-  local slotGroup = self.slotGroups[1]
-  if slotGroup == nil then 
-    return nil
-  end
-
-  for k, v in ipairs(slotGroup:getSlots()) do
-    if v:getItem() == nil then
-      return v
-    end
-  end
-
-  return nil
-end
-
---- get the pressed button slot
----@return string? the button slot that was pressed, or nil if no button slot was pressed
-function MenuInventoryState:getPressedButtonSlot()
-  if Input:pressed('b') then
-    return 'b'
-  end
-  if Input:pressed('x') then
-    return 'x'
-  end
-  if Input:pressed('y') then
-    return 'y'
-  end
-  return nil
-end
-
----@param buttonSlot string
+---@param buttonSlot string?
 function MenuInventoryState:equipItemFromCursor(buttonSlot)
   local inventory = Singletons.gameControl:getInventory()
   local currentSlot = self.currentSlotGroup:getCurrentSlot()
