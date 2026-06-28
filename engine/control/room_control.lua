@@ -119,8 +119,8 @@ function RoomControl:update()
 
     if roomState:getType() == 'room_normal_state' then  -- we have updated a tick from the room normal state
       if Input:pressed('start') then
-        -- self.control:openMenu('inventory')
-        self.control:openMenu('equipment')
+         self.control:openMenu('inventory')
+        --self.control:openMenu('equipment')
       end
     end
   end

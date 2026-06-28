@@ -89,8 +89,10 @@ local MenuEquipmentState = Class { __includes = BaseMenuState,
     idph = math.floor(idph + 0.5)
     self.detailsPanel = SpriteBank.createNinePatchSprite('yellow_ui_9_patch', idpw, idph, 0, 0)
 
+    -- set up right grid slot
 
-    -- create the grid slot in the equipment slot
+
+    -- create the left grid slot in the equipment slot
     ---@type SlotGroup
     local group = SlotGroup()
     self.currentSlotGroup = group
@@ -107,7 +109,6 @@ local MenuEquipmentState = Class { __includes = BaseMenuState,
     local gridTotalWidth = LEFT_GRID_WIDTH * LEFT_GRID_SIZE_X
 
     local gridStartX = rx + (rw - gridTotalWidth) / 2
-
 
     for y = 1, LEFT_GRID_SIZE_Y do
       for x = 1, LEFT_GRID_SIZE_X do

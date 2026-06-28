@@ -149,6 +149,12 @@ return function(spriteBank)
   spriteBank.registerSprite('icon_boomerang_2', spriteBuilder:buildSprite(6, 2, 0, 0, 0, 0))
 
 
+  -- equipment icons
+  spriteBank.registerSprite('green_tunic', spriteBuilder:buildSprite(1, 2, 0, 0, 0, 0))
+  spriteBank.registerSprite('red_tunic', spriteBuilder:buildSprite(2, 2, 0, 0, 0, 0))
+  spriteBank.registerSprite('blue_tunic', spriteBuilder:buildSprite(3, 2, 0, 0, 0, 0))
+
+
   -- icons from ui_large
   --spriteBuilder:setSpriteSheet('ui_large')
   
